@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NLP | Academic</title>
+    <link>https://ihshaish.github.io/tag/nlp/</link>
+      <atom:link href="https://ihshaish.github.io/tag/nlp/index.xml" rel="self" type="application/rss+xml" />
+    <description>NLP</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 27 May 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://ihshaish.github.io/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
+      <title>NLP</title>
+      <link>https://ihshaish.github.io/tag/nlp/</link>
+    </image>
+    
+    <item>
+      <title>AgriTech in Egypt.</title>
+      <link>https://ihshaish.github.io/project/project2/</link>
+      <pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project2/</guid>
+      <description>&lt;p&gt;British Council Newton Fund £250k. AgriTech for Egypt - Exploring the application of NLP and Image Processing for an effective decision support system to enhance farmers&amp;rsquo; decision-making, their routine agricultural practices and prevention actions.  &lt;strong&gt;Co-PI leading the Machine Learning research and development&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;We partner with the Egyptian Ministry of Agriculture and Al-Fayoum Universty.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;👉 &lt;a href=&#34;https://agrosupportanalytics.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Further information here.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ph.D. Projects — Funding from GE Aviation and UWE. - [PI ~£250k].</title>
+      <link>https://ihshaish.github.io/project/project4/</link>
+      <pubDate>Sun, 27 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project4/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;PETER MAYHEW&lt;/strong&gt; (funded by GE AVIATION) works on &amp;ldquo;a new framework to identify a common multilevel structure (event inter-dependency) of maintenance repairs to allow the prediction of the repair outcome of electronic components in avionics. Peter is developing a new framework, MARCONI (eMbeddings frAmework foR Classification Of avioNic repaIrs) based on Word2Vec for a word embedding to model the semantics in language sequence and events recorded in the maintenance records.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;RYAN FELLOWS&lt;/strong&gt; (funded by ITS and CATE) works on conversational agents; the Task-oriented Dialogue Systems or chatobs in particular. His research focuses on  examining and evaluating the sensitivity of TODS (task-oriented dialogue systems / chatbots) performance to conversational quality attributes, and exploring methods to steer their performance on the basis of optimising attributes’ temporal variability in dialogue.&lt;/p&gt;
+&lt;p&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects | Academic</title>
+    <link>https://ihshaish.github.io/project/</link>
+      <atom:link href="https://ihshaish.github.io/project/index.xml" rel="self" type="application/rss+xml" />
+    <description>Projects</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 27 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://ihshaish.github.io/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
+      <title>Projects</title>
+      <link>https://ihshaish.github.io/project/</link>
+    </image>
+    
+    <item>
+      <title>Designing Synthetic Personalities for Intelligent Autonomous Objects.</title>
+      <link>https://ihshaish.github.io/project/project3/</link>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project3/</guid>
+      <description>&lt;p&gt;[internal] VC Inter-dicsiplinary Research Fund UK £25k to explore the design of the new class of ‘intelligent assistants&amp;rsquo; that are appearing in commercial and domestic markets. Aiming to improve usability, user acceptance and user-comprehension wherever intelligent, voice-driven, AI systems are exposed to human users. — &lt;strong&gt;PI&lt;/strong&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>AgriTech in Egypt.</title>
+      <link>https://ihshaish.github.io/project/project2/</link>
+      <pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project2/</guid>
+      <description>&lt;p&gt;British Council Newton Fund £250k. AgriTech for Egypt - Exploring the application of NLP and Image Processing for an effective decision support system to enhance farmers&amp;rsquo; decision-making, their routine agricultural practices and prevention actions.  &lt;strong&gt;Co-PI leading the Machine Learning research and development&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;We partner with the Egyptian Ministry of Agriculture and Al-Fayoum Universty.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;👉 &lt;a href=&#34;https://agrosupportanalytics.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Further information here.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Automation in Construction</title>
+      <link>https://ihshaish.github.io/project/project1/</link>
+      <pubDate>Sat, 27 Apr 2019 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project1/</guid>
+      <description>&lt;p&gt;Innovate UK £1.2M funding to explore the application of Artificial Intelligence and Machine Learning for Infrastructure Project Performance Benchmarking — &lt;strong&gt;Co-PI leading the AI and ML team and development&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Research shows us that up to half of the money invested in infrastructure delivery could be spent more efficiently. Determined to increase the productivity and value-for-money of transport infrastructure projects, a transformative collaboration of 25 partners together with Government, i3P and the Construction Innovation Hub formed TIES Living Lab.
+Using data, technology and Modern Methods of Construction (MMC) within live transport infrastructure projects, the TIES Living Lab will deliver significant value-adding benefits across the transport infrastructure sector.&lt;/p&gt;
+&lt;p&gt;Results of our first models to automate project benchmarking are provided in &lt;a href=&#34;https://ihshaish.github.io/publication/icms-preprint/&#34;&gt;our preprint&lt;/a&gt;. Models have been trained and systematically evaluated from a dataset of more than 50 thousand descriptions of items retrieved from 24 large infrastructure construction (Highways England) projects across the United Kingdom.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ph.D. Projects — Funding from GE Aviation and UWE. - [PI ~£250k].</title>
+      <link>https://ihshaish.github.io/project/project4/</link>
+      <pubDate>Sun, 27 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project4/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;PETER MAYHEW&lt;/strong&gt; (funded by GE AVIATION) works on &amp;ldquo;a new framework to identify a common multilevel structure (event inter-dependency) of maintenance repairs to allow the prediction of the repair outcome of electronic components in avionics. Peter is developing a new framework, MARCONI (eMbeddings frAmework foR Classification Of avioNic repaIrs) based on Word2Vec for a word embedding to model the semantics in language sequence and events recorded in the maintenance records.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;RYAN FELLOWS&lt;/strong&gt; (funded by ITS and CATE) works on conversational agents; the Task-oriented Dialogue Systems or chatobs in particular. His research focuses on  examining and evaluating the sensitivity of TODS (task-oriented dialogue systems / chatbots) performance to conversational quality attributes, and exploring methods to steer their performance on the basis of optimising attributes’ temporal variability in dialogue.&lt;/p&gt;
+&lt;p&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Marie-Curie Initial Training Network (ITN) - Learning about Interacting Networks in Climate</title>
+      <link>https://ihshaish.github.io/project/linc/</link>
+      <pubDate>Fri, 27 Apr 2012 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/linc/</guid>
+      <description>&lt;p&gt;Improving our understanding of the Earth´s complex climate phenomena, such as El Niño-Southern Oscillation (ENSO), has a huge economic and social impact for present and future generations, and can underpin advances in areas as diverse as energy, environment, agricultural and marine sciences. Given the complexity of the inter-relations between the subsystems that constitute our climate, it is important to approach the problem from an interdisciplinary perspective. However,there is a great shortage of qualified workforce to perform this task and a major challenge is the education and training of young qualified researchers that can approach climate phenomena from a complex systems point of view.&lt;/p&gt;
+&lt;p&gt;This requires knowledge from several fields such as physics, dynamical systems theory and computer science, and also requires a detailed understanding of Earth sciences such as meteorology and oceanography. There is also a clear need for improving the coordination and cooperation of the research teams working on these issues.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;👉 &lt;a href=&#34;https://climatelinc.eu/about-linc/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Further information here.&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
