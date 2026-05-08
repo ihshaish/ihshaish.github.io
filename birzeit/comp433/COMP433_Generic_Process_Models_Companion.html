@@ -364,19 +364,19 @@
   <div class="cards">
     <div class="card">
       <div class="ttl">I. Specification</div>
-      <div class="desc">Establishing what functions are required and the constraints on the system's operation and development. Treated by Sommerville and Bruegge in the chapter on requirements engineering.</div>
+      <div class="desc">Establishing what functions are required and the constraints on the system's operation and development. Often called <em>requirements specification</em> when the focus is on the document produced. Treated by Sommerville and Bruegge in the chapter on requirements engineering.</div>
     </div>
     <div class="card">
       <div class="ttl">II. Development</div>
-      <div class="desc">Converting the specification into an executable system. Includes design (architectural, interface, component, data, algorithm) and implementation (programming, debugging).</div>
+      <div class="desc">Converting the specification into an executable system. Includes <em>design</em> (architectural, interface, component, data, algorithm) and <em>implementation</em> (also called <em>coding</em> and <em>programming</em>) along with debugging.</div>
     </div>
     <div class="card">
       <div class="ttl">III. Validation</div>
-      <div class="desc">Showing that the system conforms to its specification and meets the customer's needs. Includes <em>verification</em> (does the system implement the requirements correctly and bug-free?) and <em>evaluation</em> (does the system meet its design goals such as performance and usability?).</div>
+      <div class="desc">Showing that the system conforms to its specification and meets the customer's needs. Almost always called <em>testing</em> in industry, although strictly testing is one technique within validation. Includes <em>verification</em> (does the system implement the requirements correctly?) and <em>evaluation</em> (does it meet design goals such as performance and usability?).</div>
     </div>
     <div class="card">
       <div class="ttl">IV. Evolution</div>
-      <div class="desc">Modifying the system after it is in use. As business circumstances change, the software that supports the business must change too. Increasingly, the line between development and evolution is blurred – fewer and fewer systems are completely new.</div>
+      <div class="desc">Modifying the system after it is in use. Traditionally called <em>maintenance</em>, although the modern term <em>evolution</em> better captures that systems keep changing rather than just being repaired. As business circumstances change, the software must change too.</div>
     </div>
   </div>
 
@@ -397,10 +397,99 @@
   <h3>What is a process model?</h3>
   <p>A <strong>software process model</strong> is an abstract representation of a process. It describes a process from a particular perspective. The same software project can be described by different models that emphasise different things – the order of phases, the flow of artifacts, the management of risk, the role of feedback. No model is the truth; each is a useful lens.</p>
 
-  <div class="callout">
-    <div class="label">Major problems in software development</div>
-    <p>The classic cartoon – what the customer asked for, what the developer understood, what was solved before, what was finally delivered – is funny because it is true. Software process models exist because, without them, projects routinely produce something nobody wanted.</p>
-  </div>
+  <h3>Why we need process models at all</h3>
+  <p>The classic cartoon below is funny because it is true. Without a process that brings the customer, the developer, and the deliverable together at the same level of understanding, projects routinely produce something nobody actually wanted.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A six-panel cartoon showing how a software project goes wrong without a good process. The panels are: how the requirements were specified, how the developer understood it, how the problem was solved before, how the problem is solved now, how marketing describes it, and what the customer actually wanted.">
+
+      <text x="360" y="24" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">Why we need a process: a project told in six pictures</text>
+
+      <!-- Panel 1: How the requirements were specified -->
+      <g transform="translate(20, 50)">
+        <rect width="220" height="120" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <!-- Three big tyres on a vertical pole -->
+        <ellipse cx="60" cy="50" rx="22" ry="6" fill="none" stroke="#1F4459" stroke-width="1.5"/>
+        <ellipse cx="60" cy="68" rx="22" ry="6" fill="none" stroke="#1F4459" stroke-width="1.5"/>
+        <ellipse cx="60" cy="86" rx="22" ry="6" fill="none" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="60" y1="44" x2="60" y2="92" stroke="#1F4459" stroke-width="1"/>
+        <!-- A second similar stack offset -->
+        <ellipse cx="160" cy="60" rx="18" ry="5" fill="none" stroke="#1F4459" stroke-width="1.5"/>
+        <ellipse cx="160" cy="74" rx="18" ry="5" fill="none" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="160" y1="55" x2="160" y2="79" stroke="#1F4459" stroke-width="1"/>
+        <!-- Bench at bottom: a swing -->
+        <line x1="20" y1="100" x2="200" y2="100" stroke="#1F4459" stroke-width="0.8" stroke-dasharray="2 1"/>
+        <text x="110" y="116" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280" font-style="italic">three tyres on a tree-swing rope</text>
+      </g>
+      <text x="130" y="184" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="11" fill="#2C5F7C">1. How the requirements were specified</text>
+
+      <!-- Panel 2: How the developer understood it -->
+      <g transform="translate(250, 50)">
+        <rect width="220" height="120" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <!-- Single tyre suspended awkwardly between two trees -->
+        <ellipse cx="110" cy="80" rx="32" ry="9" fill="none" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="110" y1="40" x2="80" y2="71" stroke="#1F4459" stroke-width="1"/>
+        <line x1="110" y1="40" x2="140" y2="71" stroke="#1F4459" stroke-width="1"/>
+        <!-- Trees -->
+        <line x1="40" y1="20" x2="40" y2="105" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="180" y1="20" x2="180" y2="105" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="40" y1="20" x2="180" y2="20" stroke="#1F4459" stroke-width="1"/>
+        <line x1="110" y1="20" x2="110" y2="40" stroke="#1F4459" stroke-width="1"/>
+        <text x="110" y="116" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280" font-style="italic">tyre swing, but suspended sideways</text>
+      </g>
+      <text x="360" y="184" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="11" fill="#2C5F7C">2. How the developer understood it</text>
+
+      <!-- Panel 3: How the problem was solved before -->
+      <g transform="translate(480, 50)">
+        <rect width="220" height="120" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <!-- A simple wooden plank swing with two ropes -->
+        <line x1="60" y1="20" x2="60" y2="20" stroke="#1F4459"/>
+        <line x1="40" y1="20" x2="180" y2="20" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="80" y1="20" x2="80" y2="80" stroke="#1F4459" stroke-width="1"/>
+        <line x1="140" y1="20" x2="140" y2="80" stroke="#1F4459" stroke-width="1"/>
+        <rect x="65" y="78" width="90" height="8" fill="#F0F4F8" stroke="#1F4459" stroke-width="1.5"/>
+        <text x="110" y="116" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280" font-style="italic">a normal plank swing</text>
+      </g>
+      <text x="590" y="184" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="11" fill="#2C5F7C">3. How it was solved before</text>
+
+      <!-- Panel 4: How the problem is solved now -->
+      <g transform="translate(20, 220)">
+        <rect width="220" height="120" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <!-- Just a piece of rope hanging from a tree, no swing at all -->
+        <line x1="40" y1="20" x2="180" y2="20" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="110" y1="20" x2="110" y2="95" stroke="#1F4459" stroke-width="1"/>
+        <text x="110" y="116" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280" font-style="italic">just a rope</text>
+      </g>
+      <text x="130" y="354" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="11" fill="#2C5F7C">4. How it is solved now</text>
+
+      <!-- Panel 5: How marketing describes it -->
+      <g transform="translate(250, 220)">
+        <rect width="220" height="120" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <!-- An elaborate luxury swing with cushions, canopy etc -->
+        <line x1="40" y1="20" x2="180" y2="20" stroke="#1F4459" stroke-width="1.5"/>
+        <path d="M 60 20 Q 110 8 160 20" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <line x1="80" y1="20" x2="80" y2="65" stroke="#1F4459" stroke-width="1"/>
+        <line x1="140" y1="20" x2="140" y2="65" stroke="#1F4459" stroke-width="1"/>
+        <rect x="60" y="65" width="100" height="20" fill="#A6BACA" stroke="#1F4459" stroke-width="1.5" rx="3"/>
+        <ellipse cx="110" cy="60" rx="35" ry="5" fill="none" stroke="#1F4459" stroke-width="0.8"/>
+        <text x="110" y="116" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280" font-style="italic">cushioned chair-swing with canopy</text>
+      </g>
+      <text x="360" y="354" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="11" fill="#2C5F7C">5. How marketing describes it</text>
+
+      <!-- Panel 6: What the customer actually wanted -->
+      <g transform="translate(480, 220)">
+        <rect width="220" height="120" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <!-- A simple tyre swing -->
+        <line x1="40" y1="20" x2="180" y2="20" stroke="#1F4459" stroke-width="1.5"/>
+        <line x1="110" y1="20" x2="110" y2="65" stroke="#1F4459" stroke-width="1"/>
+        <ellipse cx="110" cy="80" rx="22" ry="14" fill="none" stroke="#1F4459" stroke-width="1.8"/>
+        <ellipse cx="110" cy="80" rx="14" ry="9" fill="none" stroke="#1F4459" stroke-width="1.2"/>
+        <text x="110" y="116" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280" font-style="italic">a single-tyre swing</text>
+      </g>
+      <text x="590" y="354" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="11" fill="#2C5F7C">6. What the customer actually wanted</text>
+    </svg>
+    <figcaption>Figure 2. A long-running cartoon in software engineering, sometimes called the <em>tree-swing cartoon</em>. The customer wanted a simple tyre swing (panel 6). The requirements specification described an over-elaborate stack of tyres (panel 1). The developer built something that did not work (panel 2). The previous solution had been a perfectly fine plank swing (panel 3). What was actually delivered was a piece of rope with nothing on it (panel 4). Marketing described it as a luxury chair-swing with a canopy (panel 5). The point of a process model is to bring these six pictures into alignment.</figcaption>
+  </figure>
 </section>
 
 <!-- ===== THE FIVE GENERIC MODELS ===== -->
@@ -408,18 +497,93 @@
   <h2><span class="num">02</span>The five generic process models</h2>
   <div class="h2-rule"></div>
 
-  <p>Sommerville groups software processes into a small number of generic models. We will examine each in turn, but here is the family at a glance.</p>
+  <h3>The first split: plan-driven or evolutionary</h3>
+  <p>Before naming individual models, it is worth seeing the highest-level division. Almost every software process can be classified along one axis: how much of the work is <em>planned upfront</em> versus how much is <em>discovered as we go</em>.</p>
+
+  <div class="compare">
+    <div>
+      <h4>Plan-driven</h4>
+      <p style="margin:6px 0">Requirements are settled, then design, then code, then test. Each stage produces formal documents that are signed off before the next begins. Change is allowed but expensive. Strong on predictability and audit; weak on responsiveness.</p>
+      <p style="font-size:13px; color:var(--muted); margin:6px 0 0"><em>Examples in this companion:</em> waterfall, formal systems development, the V-model, reuse-oriented development when applied in a phased way.</p>
+    </div>
+    <div>
+      <h4>Evolutionary</h4>
+      <p style="margin:6px 0">An initial version is built quickly, then evolved through repeated cycles in conversation with the customer. Specification, development, and validation overlap in time rather than running in sequence. Strong on responsiveness and learning; weak on predictability and document-heavy sign-off.</p>
+      <p style="font-size:13px; color:var(--muted); margin:6px 0 0"><em>Examples in this companion:</em> evolutionary development, prototype-driven development, and the whole Agile family covered in detail in the second companion.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hierarchy of software process models. The top-level split is plan-driven versus evolutionary. Plan-driven contains Waterfall, Formal systems development, V-model, and Reuse-oriented (when phased). Evolutionary contains Evolutionary development and the Agile family covered in companion 2. Prototyping appears below as a technique that can be used inside either branch.">
+      <defs>
+        <marker id="arrh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3A7CA5"/>
+        </marker>
+      </defs>
+
+      <text x="360" y="26" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">The hierarchy of process models</text>
+
+      <!-- Top: Software process -->
+      <rect x="290" y="46" width="140" height="40" fill="#2C5F7C"/>
+      <text x="360" y="70" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#fff">Software process</text>
+
+      <!-- Two main branches -->
+      <line x1="360" y1="86" x2="180" y2="120" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arrh)"/>
+      <line x1="360" y1="86" x2="540" y2="120" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arrh)"/>
+
+      <rect x="100" y="125" width="160" height="40" fill="#3A7CA5"/>
+      <text x="180" y="149" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#fff">Plan-driven</text>
+
+      <rect x="460" y="125" width="160" height="40" fill="#3A7CA5"/>
+      <text x="540" y="149" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#fff">Evolutionary</text>
+
+      <!-- Plan-driven children -->
+      <line x1="180" y1="165" x2="180" y2="185" stroke="#6FA8C9" stroke-width="1.5"/>
+      <line x1="60" y1="185" x2="300" y2="185" stroke="#6FA8C9" stroke-width="1.5"/>
+      <line x1="60" y1="185" x2="60" y2="200" stroke="#6FA8C9" stroke-width="1.5" marker-end="url(#arrh)"/>
+      <line x1="160" y1="185" x2="160" y2="200" stroke="#6FA8C9" stroke-width="1.5" marker-end="url(#arrh)"/>
+      <line x1="220" y1="185" x2="220" y2="200" stroke="#6FA8C9" stroke-width="1.5" marker-end="url(#arrh)"/>
+      <line x1="300" y1="185" x2="300" y2="200" stroke="#6FA8C9" stroke-width="1.5" marker-end="url(#arrh)"/>
+
+      <text x="60" y="218" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="11" fill="#1F4459">Waterfall</text>
+      <text x="160" y="218" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="11" fill="#1F4459">V-model</text>
+      <text x="220" y="218" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="11" fill="#1F4459">Formal</text>
+      <text x="300" y="218" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="11" fill="#1F4459">Reuse</text>
+      <text x="300" y="232" text-anchor="middle" font-family="Georgia" font-size="10" fill="#6B7280">(phased)</text>
+
+      <!-- Evolutionary children -->
+      <line x1="540" y1="165" x2="540" y2="185" stroke="#6FA8C9" stroke-width="1.5"/>
+      <line x1="430" y1="185" x2="660" y2="185" stroke="#6FA8C9" stroke-width="1.5"/>
+      <line x1="430" y1="185" x2="430" y2="200" stroke="#6FA8C9" stroke-width="1.5" marker-end="url(#arrh)"/>
+      <line x1="540" y1="185" x2="540" y2="200" stroke="#6FA8C9" stroke-width="1.5" marker-end="url(#arrh)"/>
+      <line x1="660" y1="185" x2="660" y2="200" stroke="#6FA8C9" stroke-width="1.5" marker-end="url(#arrh)"/>
+
+      <text x="430" y="218" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="11" fill="#1F4459">Evolutionary</text>
+      <text x="430" y="232" text-anchor="middle" font-family="Georgia" font-size="10" fill="#6B7280">development</text>
+      <text x="540" y="218" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="11" fill="#1F4459">Agile family</text>
+      <text x="540" y="232" text-anchor="middle" font-family="Georgia" font-size="10" fill="#6B7280">(Scrum, XP, Kanban)</text>
+      <text x="660" y="218" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="11" fill="#1F4459">Reuse</text>
+      <text x="660" y="232" text-anchor="middle" font-family="Georgia" font-size="10" fill="#6B7280">(when iterative)</text>
+
+      <!-- Prototyping note across the bottom -->
+      <line x1="40" y1="258" x2="680" y2="258" stroke="#DEE2E6"/>
+      <text x="360" y="274" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#6B7280" font-style="italic">Prototyping sits across both branches – it is a technique used inside whichever model is chosen.</text>
+    </svg>
+    <figcaption>Figure 1. The hierarchy that frames everything that follows. The first decision is plan-driven or evolutionary; the named models are answers to that decision. Reuse-oriented and prototyping appear in both branches because they can be applied either way.</figcaption>
+  </figure>
+
+  <h3>The five named models we will examine</h3>
+  <p>Within the hierarchy above, Sommerville names five generic models. We will examine each in turn:</p>
 
   <div class="bar-list">
-    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Waterfall.</strong> Separate and distinct phases of specification and development, in sequence.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Waterfall.</strong> Separate and distinct phases of specification and development, in sequence. The classical plan-driven model.</div></div>
     <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Evolutionary / Agile development.</strong> Specification and development are interleaved. The system grows by adding features as the customer proposes them.</div></div>
-    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Formal systems development.</strong> A mathematical system specification is formally transformed, step by step, into an implementation.</div></div>
-    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Reuse-oriented development.</strong> The system is assembled from existing components or commercial off-the-shelf (COTS) systems.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Software prototyping.</strong> Strictly a <em>technique</em> rather than a process model, but treated on its own here because of its importance. Used inside either plan-driven or evolutionary processes.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Formal systems development.</strong> A mathematical system specification is formally transformed, step by step, into an implementation. Plan-driven by nature.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Reuse-oriented development.</strong> The system is assembled from existing components or commercial off-the-shelf (COTS) systems. Can be plan-driven or evolutionary depending on how the integration is organised.</div></div>
   </div>
 
   <p>Two further mechanisms – <em>incremental development</em> and <em>spiral development</em> – describe how iteration is layered on top of any of these. They are covered in the second companion in this pair, on iteration and Agile process models.</p>
-
-  <p style="font-size: 13px; color: var(--muted)">Note that prototyping is not itself a process model – it is a <em>technique</em> that can be used inside any of the models, especially the evolutionary one. We treat it on its own here because of its importance.</p>
 </section>
 
 <!-- ===== WATERFALL ===== -->
@@ -895,6 +1059,55 @@
     </svg>
     <figcaption>Figure 4. Formal systems development. The formal specification is transformed step by step (T1, T2, T3, T4) into an executable program. Each transformation is accompanied by a proof of correctness (P1, P2, P3, P4). Adapted from Sommerville (2016).</figcaption>
   </figure>
+
+  <h3>What T1, T2, T3, T4 and P1, P2, P3, P4 actually mean: a worked example</h3>
+  <p>The figure is abstract. To make it concrete, consider a small system: a <strong>traffic-light controller</strong> for a single intersection where two perpendicular roads meet. The safety property that must hold is simple: <em>at no time may both roads show green simultaneously</em>. Here is what the chain of refinements would look like.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="background:#B45309">FS</div>
+      <div class="step-body"><strong>Formal specification.</strong> A mathematical description of what the controller must do. For our example: a state machine with four states (NS-green, NS-amber, EW-green, EW-amber), a clock, and the safety invariant <em>not (NS-green and EW-green)</em>. Often written in Z, B, VDM, or TLA+.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#2C5F7C">T1</div>
+      <div class="step-body"><strong>First transformation.</strong> Refine the abstract state machine into a more concrete one. The clock becomes a discrete tick counter; the four abstract states get explicit timer durations; the transitions become guarded rules. The output is the next-level representation, R1.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#B45309">P1</div>
+      <div class="step-body"><strong>First proof.</strong> Show that R1 preserves what FS specified. Concretely: prove that under the new tick-based representation, no reachable state has both NS-green and EW-green. The safety invariant must survive the refinement.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#2C5F7C">T2</div>
+      <div class="step-body"><strong>Second transformation.</strong> Refine R1 toward an executable shape. The state machine becomes a structured-program skeleton with variables for the current direction and timer, and a main loop that advances on each tick. The output is R2.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#B45309">P2</div>
+      <div class="step-body"><strong>Second proof.</strong> Show that R2 preserves R1's behaviour. The structured-program version reaches the same states in the same order and obeys the same safety invariant.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#2C5F7C">T3</div>
+      <div class="step-body"><strong>Third transformation.</strong> Add concrete data types and resource bindings. The timer becomes a 16-bit integer; the lights become writes to specific hardware addresses; the loop becomes an interrupt handler. The output is R3.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#B45309">P3</div>
+      <div class="step-body"><strong>Third proof.</strong> Show that R3 preserves R2. In particular, prove that integer overflow on the timer cannot cause an unsafe transition, and that hardware writes happen in an order that prevents both lights being green during the switch.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#2C5F7C">T4</div>
+      <div class="step-body"><strong>Fourth transformation.</strong> Translate R3 into the target programming language (typically C, sometimes Ada SPARK or Rust for safety-critical work) and compile to executable code. The output is the executable program.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#B45309">P4</div>
+      <div class="step-body"><strong>Fourth proof.</strong> Show that the compiled code preserves the semantics of R3. In a Cleanroom-style process this might be done by a verified compiler; in less rigorous variants by careful inspection. Either way, by the time we reach this proof, the safety invariant has survived every step from the original mathematical specification down to the binary.</div>
+    </div>
+  </div>
+
+  <p>The point of all this work is the chain of guarantees: if FS is correct, and every Tᵢ–Pᵢ pair is correct, then by construction the executable cannot violate the safety property. This is what we mean by <em>correctness-preserving</em> transformations. The cost is real – every Pᵢ is a proof obligation that someone has to discharge – but for safety-critical systems the alternative is testing alone, and tests can only show the presence of bugs, never their absence.</p>
+
+  <div class="callout">
+    <div class="label">Why the example is small on purpose</div>
+    <p>A real traffic-light controller has more states (yellow flashing for failure modes, pedestrian crossings, emergency-vehicle preemption), more invariants, and far more proof work. The example here has been deliberately stripped to its bare bones so the structure of the T-and-P chain is visible. Each Tᵢ refines the representation toward implementation; each Pᵢ rebuilds the safety guarantee at the new level. The same shape applies to airbag controllers, infusion-pump dosing logic, and railway interlocking systems.</p>
+  </div>
 
   <h3>Problems</h3>
   <div class="bar-list">
