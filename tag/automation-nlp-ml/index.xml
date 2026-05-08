@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Automation, NLP, ML | Academic</title>
+    <link>https://ihshaish.github.io/tag/automation-nlp-ml/</link>
+      <atom:link href="https://ihshaish.github.io/tag/automation-nlp-ml/index.xml" rel="self" type="application/rss+xml" />
+    <description>Automation, NLP, ML</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Sat, 27 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://ihshaish.github.io/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
+      <title>Automation, NLP, ML</title>
+      <link>https://ihshaish.github.io/tag/automation-nlp-ml/</link>
+    </image>
+    
+    <item>
+      <title>Automation in Construction</title>
+      <link>https://ihshaish.github.io/project/project1/</link>
+      <pubDate>Sat, 27 Apr 2019 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project1/</guid>
+      <description>&lt;p&gt;Innovate UK £1.2M funding to explore the application of Artificial Intelligence and Machine Learning for Infrastructure Project Performance Benchmarking — &lt;strong&gt;Co-PI leading the AI and ML team and development&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Research shows us that up to half of the money invested in infrastructure delivery could be spent more efficiently. Determined to increase the productivity and value-for-money of transport infrastructure projects, a transformative collaboration of 25 partners together with Government, i3P and the Construction Innovation Hub formed TIES Living Lab.
+Using data, technology and Modern Methods of Construction (MMC) within live transport infrastructure projects, the TIES Living Lab will deliver significant value-adding benefits across the transport infrastructure sector.&lt;/p&gt;
+&lt;p&gt;Results of our first models to automate project benchmarking are provided in &lt;a href=&#34;https://ihshaish.github.io/publication/icms-preprint/&#34;&gt;our preprint&lt;/a&gt;. Models have been trained and systematically evaluated from a dataset of more than 50 thousand descriptions of items retrieved from 24 large infrastructure construction (Highways England) projects across the United Kingdom.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
