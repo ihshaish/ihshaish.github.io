@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Iteration and Agile process models – COMP433 Teaching Companion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --steel: #2C5F7C;
+    --steel-dark: #1F4459;
+    --accent: #3A7CA5;
+    --ink: #1A1A1A;
+    --body: #333333;
+    --muted: #6B7280;
+    --panel: #F0F4F8;
+    --panel-2: #F8FAFC;
+    --border: #DEE2E6;
+    --border-soft: #E8ECEF;
+    --good: #2E7D5C;
+    --warn: #B45309;
+    --maxw: 1100px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--body);
+    background: #ffffff;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* Top bar */
+  .topbar {
+    height: 6px;
+    background: var(--steel);
+    width: 100%;
+  }
+
+  /* Header */
+  header.page-header {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 36px 28px 12px;
+  }
+  .breadcrumb {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 34px;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 16px;
+    margin: 0 0 0;
+  }
+  .meta {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* Nav */
+  nav.toc {
+    max-width: var(--maxw);
+    margin: 18px auto 8px;
+    padding: 14px 22px;
+    background: var(--panel);
+    border-left: 3px solid var(--steel);
+    font-size: 14px;
+    margin-left: 28px;
+    margin-right: 28px;
+  }
+  nav.toc strong {
+    color: var(--steel-dark);
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  nav.toc a {
+    color: var(--accent);
+    text-decoration: none;
+    margin-right: 16px;
+    display: inline-block;
+    padding: 2px 0;
+  }
+  nav.toc a:hover { text-decoration: underline; }
+
+  /* Sections */
+  main { max-width: var(--maxw); margin: 0 auto; padding: 0 28px 80px; }
+  section { margin-top: 56px; scroll-margin-top: 20px; }
+
+  h2 {
+    font-family: Georgia, serif;
+    color: var(--steel-dark);
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    line-height: 1.25;
+  }
+  h2 .num {
+    color: var(--steel);
+    font-size: 18px;
+    margin-right: 10px;
+    font-weight: 400;
+  }
+  .h2-rule {
+    height: 2px;
+    width: 60px;
+    background: var(--steel);
+    margin: 10px 0 22px;
+  }
+
+  h3 {
+    font-family: Georgia, serif;
+    color: var(--ink);
+    font-size: 19px;
+    font-weight: 700;
+    margin: 28px 0 8px;
+  }
+
+  p { margin: 0 0 14px; }
+
+  /* Definition / quote panel */
+  .panel {
+    background: var(--panel);
+    padding: 18px 22px;
+    border-left: 3px solid var(--steel);
+    margin: 18px 0;
+    font-size: 15px;
+  }
+  .panel .label {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    color: var(--steel-dark);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* Two-column compare */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 18px 0;
+  }
+  .compare > div {
+    background: var(--panel-2);
+    border: 1px solid var(--border-soft);
+    padding: 18px 20px;
+  }
+  .compare h4 {
+    font-family: Georgia, serif;
+    color: var(--steel-dark);
+    margin: 0 0 8px;
+    font-size: 15px;
+  }
+  .compare ul { margin: 0; padding-left: 18px; }
+  .compare li { margin-bottom: 4px; font-size: 14px; }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 18px 0;
+  }
+  .card {
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    background: #fff;
+  }
+  .card .ttl {
+    font-family: Georgia, serif;
+    color: var(--steel-dark);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .card .desc { font-size: 14px; line-height: 1.5; }
+  .card .takeaway {
+    margin-top: 8px;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* Numbered steps */
+  .steps { margin: 18px 0; }
+  .step {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: start;
+  }
+  .step-num {
+    background: var(--steel);
+    color: #fff;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .step-body {
+    background: var(--panel-2);
+    padding: 10px 14px;
+    border-left: 2px solid var(--accent);
+  }
+  .step-body strong {
+    color: var(--steel-dark);
+    font-family: Georgia, serif;
+  }
+
+  /* Accent bar list */
+  .bar-list { margin: 18px 0; }
+  .bar-item {
+    display: grid;
+    grid-template-columns: 4px 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: stretch;
+  }
+  .bar-item .bar { background: var(--accent); }
+  .bar-item .txt { padding: 4px 0; font-size: 14px; }
+  .bar-item .txt strong {
+    color: var(--steel-dark);
+    font-family: Georgia, serif;
+  }
+
+  /* Pros/cons */
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .pros, .cons {
+    padding: 16px 20px;
+    border: 1px solid var(--border-soft);
+  }
+  .pros { background: #F2F8F5; border-left: 3px solid var(--good); }
+  .cons { background: #FBF6EE; border-left: 3px solid var(--warn); }
+  .pros h4, .cons h4 {
+    font-family: Georgia, serif;
+    margin: 0 0 8px;
+    font-size: 15px;
+  }
+  .pros h4 { color: var(--good); }
+  .cons h4 { color: var(--warn); }
+  .pros ul, .cons ul { margin: 0; padding-left: 18px; }
+  .pros li, .cons li { font-size: 14px; margin-bottom: 4px; }
+
+  /* Example callout */
+  .callout {
+    background: var(--panel);
+    padding: 16px 22px;
+    margin: 18px 0;
+    border: 1px solid var(--border-soft);
+  }
+  .callout .label {
+    font-family: Georgia, serif;
+    color: var(--steel);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .callout p { margin: 0; font-size: 14px; }
+
+  /* Section divider */
+  .divider {
+    background: var(--panel);
+    text-align: center;
+    padding: 36px 24px;
+    margin: 56px 0 0;
+    border-top: 2px solid var(--steel);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .divider .eyebrow {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .divider h2 {
+    color: var(--steel-dark);
+    font-size: 28px;
+    margin: 0 0 6px;
+  }
+  .divider p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 15px;
+  }
+
+  /* SVG figure container */
+  figure {
+    margin: 24px 0;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid var(--border-soft);
+  }
+  figcaption {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+  }
+  svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+
+  /* Inline code-ish */
+  .term {
+    background: var(--panel);
+    padding: 1px 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: var(--steel-dark);
+  }
+
+  /* Footer */
+  footer.page-footer {
+    max-width: var(--maxw);
+    margin: 80px auto 0;
+    padding: 24px 28px 40px;
+    border-top: 1px solid var(--border-soft);
+    color: var(--muted);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    .compare, .pros-cons { grid-template-columns: 1fr; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 22px; }
+    nav.toc { margin-left: 16px; margin-right: 16px; }
+    main { padding: 0 16px 60px; }
+  }
+
+  @media print {
+    nav.toc { display: none; }
+    section { page-break-inside: avoid; }
+    .topbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<header class="page-header">
+  <div class="breadcrumb">COMP433 Software Engineering · Lecture 2 Companion (2 of 2)</div>
+  <h1>Iteration and Agile process models</h1>
+  <p class="subtitle">Iterative vs incremental development, and the four named methods that put it into practice: Agile, Scrum, XP, Kanban, and Spiral. Where each came from, what it prioritises, how they relate, and when each one fits.</p>
+  <div class="meta">Hisham Ihshaish · Birzeit University · Sections 5 and 6 · Semester 2 2025/2026</div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <strong>On this page</strong>
+  <a href="#big-picture">The big picture</a>
+  <a href="#iteration">Iteration</a>
+  <a href="#timeline">How they came about</a>
+  <a href="#agile">Agile</a>
+  <a href="#scrum">Scrum</a>
+  <a href="#xp">XP</a>
+  <a href="#kanban">Kanban</a>
+  <a href="#spiral">Spiral</a>
+  <a href="#combined">Used together</a>
+  <a href="#choosing">Choosing one</a>
+  <a href="#references">References</a>
+</nav>
+
+<main>
+
+<!-- ===== BIG PICTURE ===== -->
+<section id="big-picture">
+  <h2><span class="num">01</span>The big picture</h2>
+  <div class="h2-rule"></div>
+
+  <p>Five names appear repeatedly when we talk about iterative software processes: <strong>Agile</strong>, <strong>Scrum</strong>, <strong>XP</strong>, <strong>Kanban</strong>, and <strong>Spiral</strong>. Students often hear them as if they were five alternatives on a menu. They are not. They sit at different levels and were created to solve different problems.</p>
+
+  <div class="panel">
+    <div class="label">Read this first</div>
+    <p style="margin:0">Agile is a <strong>philosophy</strong>, not a process. Scrum, XP, and Kanban are <strong>frameworks or practices</strong> that follow that philosophy. Spiral is an older <strong>risk-driven process model</strong> that pre-dates Agile by more than a decade and prioritises something different – managing risk through repeated planning cycles. Knowing which level you are talking about prevents most of the confusion in this topic.</p>
+  </div>
+
+  <h3>What each one prioritises, in one line</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Agile</strong> – responding to change through frequent delivery of working software (<em>a set of values</em>).</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Scrum</strong> – empirical control of complex work through fixed-length sprints with defined accountabilities (<em>a lightweight framework</em>).</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>XP (Extreme Programming)</strong> – engineering excellence and code quality through disciplined technical practices (<em>a set of practices</em>).</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Kanban</strong> – smooth, predictable flow by visualising work and limiting how much is in progress at once (<em>a method for managing flow</em>).</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Spiral</strong> – surfacing and resolving the biggest project risks first, before committing to building (<em>a risk-driven model</em>).</div></div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hierarchy showing Agile as a philosophy, with Scrum XP Kanban as frameworks underneath, and Spiral as a separate risk-driven model.">
+      <defs>
+        <style>
+          .lab { font: 600 13px Georgia, serif; fill: #1F4459; }
+          .small { font: 12px -apple-system, sans-serif; fill: #6B7280; }
+          .tag { font: 11px -apple-system, sans-serif; fill: #6B7280; letter-spacing: 0.06em; text-transform: uppercase; }
+        </style>
+      </defs>
+      <!-- Agile umbrella -->
+      <rect x="60" y="40" width="440" height="64" fill="#2C5F7C" />
+      <text x="280" y="68" text-anchor="middle" fill="#fff" font-family="Georgia" font-weight="700" font-size="18">Agile philosophy</text>
+      <text x="280" y="90" text-anchor="middle" fill="#E0EBF2" font-family="-apple-system, sans-serif" font-size="12">Values and principles · 2001 Manifesto</text>
+
+      <!-- Three children -->
+      <g>
+        <rect x="60" y="160" width="138" height="120" fill="#F0F4F8" stroke="#DEE2E6" />
+        <text x="129" y="190" text-anchor="middle" class="lab">Scrum</text>
+        <text x="129" y="212" text-anchor="middle" class="small">Framework</text>
+        <text x="129" y="232" text-anchor="middle" class="small">Sprints, roles,</text>
+        <text x="129" y="248" text-anchor="middle" class="small">events, artifacts</text>
+        <text x="129" y="266" text-anchor="middle" class="tag">Process</text>
+      </g>
+      <g>
+        <rect x="211" y="160" width="138" height="120" fill="#F0F4F8" stroke="#DEE2E6" />
+        <text x="280" y="190" text-anchor="middle" class="lab">XP</text>
+        <text x="280" y="212" text-anchor="middle" class="small">Practices</text>
+        <text x="280" y="232" text-anchor="middle" class="small">TDD, pairing,</text>
+        <text x="280" y="248" text-anchor="middle" class="small">refactoring, CI</text>
+        <text x="280" y="266" text-anchor="middle" class="tag">Engineering</text>
+      </g>
+      <g>
+        <rect x="362" y="160" width="138" height="120" fill="#F0F4F8" stroke="#DEE2E6" />
+        <text x="431" y="190" text-anchor="middle" class="lab">Kanban</text>
+        <text x="431" y="212" text-anchor="middle" class="small">Method</text>
+        <text x="431" y="232" text-anchor="middle" class="small">Visualise work,</text>
+        <text x="431" y="248" text-anchor="middle" class="small">limit WIP, flow</text>
+        <text x="431" y="266" text-anchor="middle" class="tag">Flow</text>
+      </g>
+
+      <!-- connectors -->
+      <line x1="129" y1="104" x2="129" y2="160" stroke="#3A7CA5" stroke-width="1.5"/>
+      <line x1="280" y1="104" x2="280" y2="160" stroke="#3A7CA5" stroke-width="1.5"/>
+      <line x1="431" y1="104" x2="431" y2="160" stroke="#3A7CA5" stroke-width="1.5"/>
+
+      <!-- Spiral, separate -->
+      <rect x="540" y="40" width="120" height="240" fill="#fff" stroke="#3A7CA5" stroke-dasharray="4 3"/>
+      <text x="600" y="70" text-anchor="middle" class="lab">Spiral</text>
+      <text x="600" y="92" text-anchor="middle" class="small">Boehm, 1988</text>
+      <text x="600" y="120" text-anchor="middle" class="small">Risk-driven</text>
+      <text x="600" y="138" text-anchor="middle" class="small">process model</text>
+      <text x="600" y="170" text-anchor="middle" class="small">Pre-dates the</text>
+      <text x="600" y="188" text-anchor="middle" class="small">Agile movement</text>
+      <text x="600" y="220" text-anchor="middle" class="small">Iterative but</text>
+      <text x="600" y="238" text-anchor="middle" class="small">plan-driven</text>
+      <text x="600" y="266" text-anchor="middle" class="tag">Different family</text>
+
+      <!-- caption tags -->
+      <text x="60" y="320" class="tag">Same family – Agile branch</text>
+      <text x="540" y="320" class="tag">Older lineage</text>
+    </svg>
+    <figcaption>Figure 1. Agile is a philosophy. Scrum, XP, and Kanban are different ways to put it into practice. Spiral belongs to an earlier, risk-driven tradition.</figcaption>
+  </figure>
+</section>
+
+<!-- ===== ITERATION (NEW) ===== -->
+<section id="iteration">
+  <h2><span class="num">02</span>Iteration is fundamental</h2>
+  <div class="h2-rule"></div>
+
+  <p>Before we look at the named methods, we need a vocabulary for what they all share. Modern software processes take <strong>iteration</strong> as fundamental, and try to provide ways of <em>managing</em>, rather than ignoring, the risk that comes with iteration. System requirements always evolve in the course of a project, so process iteration where earlier stages are reworked is part of the process for any non-trivial system.</p>
+
+  <p>Two related ideas describe how iteration works: <strong>iterative development</strong> and <strong>incremental development</strong>. They are often used interchangeably, but they mean different things. The distinction is one of the most useful clarifications in this chapter.</p>
+
+  <h3>Iterative versus incremental – the Mona Lisa</h3>
+
+  <div class="panel">
+    <div class="label">The clearest analogy</div>
+    <p style="margin:0">Imagine painting the Mona Lisa. <strong>Iterative</strong> means you sketch the whole picture roughly first, then go over the whole picture again refining it, then refine it once more. After each pass, you have a finished version of the whole – just at a lower resolution. <strong>Incremental</strong> means you paint the face fully first, then add the hands, then the background, then the landscape. After each pass you have only part of the painting, but the parts you have are complete.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Iterative versus incremental: iterative shows progressive refinement of the whole picture, incremental shows separate parts being completed in sequence.">
+      <defs>
+        <style>
+          .lab-it { font: 700 14px Georgia, serif; fill: #1F4459; }
+          .small-it { font: 11px -apple-system, sans-serif; fill: #6B7280; }
+          .stage-lab { font: 600 11px -apple-system, sans-serif; fill: #2C5F7C; }
+        </style>
+      </defs>
+
+      <text x="360" y="28" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="16" fill="#1F4459">Iterative versus incremental</text>
+
+      <!-- ITERATIVE row -->
+      <text x="20" y="80" class="lab-it">Iterative</text>
+      <text x="20" y="98" class="small-it">refine the whole, again and again</text>
+
+      <!-- 5 progressive sketches of the same scene, each fuller than the last -->
+      <g transform="translate(180, 60)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 1: rough outline -->
+        <ellipse cx="40" cy="40" rx="18" ry="22" fill="none" stroke="#B0B7BD" stroke-width="0.8"/>
+        <line x1="40" y1="40" x2="40" y2="60" stroke="#B0B7BD" stroke-width="0.8"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">1</text>
+      </g>
+      <g transform="translate(280, 60)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 2: more detail -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#F0F4F8" stroke="#8A9299" stroke-width="0.8"/>
+        <path d="M 22 60 L 22 75 M 58 60 L 58 75 M 22 75 L 58 75" fill="none" stroke="#8A9299" stroke-width="0.8"/>
+        <circle cx="33" cy="32" r="1" fill="#8A9299"/>
+        <circle cx="47" cy="32" r="1" fill="#8A9299"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">2</text>
+      </g>
+      <g transform="translate(380, 60)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 3: more refinement -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#E0E6EC" stroke="#6B7280" stroke-width="0.8"/>
+        <path d="M 22 60 L 22 75 M 58 60 L 58 75 M 22 75 L 58 75" fill="none" stroke="#6B7280" stroke-width="0.8"/>
+        <circle cx="33" cy="32" r="1.5" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="1.5" fill="#1F4459"/>
+        <path d="M 33 44 Q 40 47 47 44" fill="none" stroke="#1F4459" stroke-width="0.8"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">3</text>
+      </g>
+      <g transform="translate(480, 60)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 4: detailed -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#C0CED9" stroke="#1F4459" stroke-width="0.9"/>
+        <path d="M 22 60 L 22 75 M 58 60 L 58 75 M 22 75 L 58 75" fill="none" stroke="#1F4459" stroke-width="0.9"/>
+        <circle cx="33" cy="32" r="2" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="2" fill="#1F4459"/>
+        <path d="M 33 44 Q 40 48 47 44" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <path d="M 40 36 L 40 41 L 38 42" fill="none" stroke="#1F4459" stroke-width="0.7"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">4</text>
+      </g>
+      <g transform="translate(580, 60)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 5: full -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#A6BACA" stroke="#1F4459" stroke-width="1"/>
+        <path d="M 22 60 L 22 75 M 58 60 L 58 75 M 22 75 L 58 75" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <circle cx="33" cy="32" r="2" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="2" fill="#1F4459"/>
+        <path d="M 33 45 Q 40 49 47 45" fill="none" stroke="#1F4459" stroke-width="1.2"/>
+        <path d="M 40 36 L 40 41 L 38 42" fill="none" stroke="#1F4459" stroke-width="0.8"/>
+        <path d="M 14 25 Q 25 12 40 14" fill="none" stroke="#1F4459" stroke-width="0.7"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">5</text>
+      </g>
+
+      <!-- INCREMENTAL row -->
+      <text x="20" y="200" class="lab-it">Incremental</text>
+      <text x="20" y="218" class="small-it">complete one part, then the next</text>
+
+      <!-- 5 sketches: each one adds a complete new region -->
+      <g transform="translate(180, 180)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 1: face only -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#A6BACA" stroke="#1F4459" stroke-width="1"/>
+        <circle cx="33" cy="32" r="2" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="2" fill="#1F4459"/>
+        <path d="M 33 44 Q 40 48 47 44" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">1</text>
+      </g>
+      <g transform="translate(280, 180)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 2: face + neck -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#A6BACA" stroke="#1F4459" stroke-width="1"/>
+        <circle cx="33" cy="32" r="2" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="2" fill="#1F4459"/>
+        <path d="M 33 44 Q 40 48 47 44" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <path d="M 32 56 L 32 70 L 48 70 L 48 56" fill="#A6BACA" stroke="#1F4459"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">2</text>
+      </g>
+      <g transform="translate(380, 180)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 3: face + neck + torso -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#A6BACA" stroke="#1F4459" stroke-width="1"/>
+        <circle cx="33" cy="32" r="2" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="2" fill="#1F4459"/>
+        <path d="M 33 44 Q 40 48 47 44" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <path d="M 32 56 L 32 70 L 48 70 L 48 56" fill="#A6BACA" stroke="#1F4459"/>
+        <path d="M 20 70 L 20 80 L 60 80 L 60 70 Z" fill="#7C9DB0" stroke="#1F4459"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">3</text>
+      </g>
+      <g transform="translate(480, 180)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 4: + hands -->
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#A6BACA" stroke="#1F4459" stroke-width="1"/>
+        <circle cx="33" cy="32" r="2" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="2" fill="#1F4459"/>
+        <path d="M 33 44 Q 40 48 47 44" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <path d="M 32 56 L 32 70 L 48 70 L 48 56" fill="#A6BACA" stroke="#1F4459"/>
+        <path d="M 20 70 L 20 80 L 60 80 L 60 70 Z" fill="#7C9DB0" stroke="#1F4459"/>
+        <ellipse cx="22" cy="76" rx="4" ry="3" fill="#A6BACA" stroke="#1F4459"/>
+        <ellipse cx="58" cy="76" rx="4" ry="3" fill="#A6BACA" stroke="#1F4459"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">4</text>
+      </g>
+      <g transform="translate(580, 180)">
+        <rect width="80" height="80" fill="#fff" stroke="#DEE2E6"/>
+        <!-- Stage 5: + landscape background -->
+        <rect x="0" y="0" width="80" height="20" fill="#D7E0E5"/>
+        <path d="M 0 20 L 25 8 L 50 20 L 80 12 L 80 25 L 0 25 Z" fill="#9AAEB7" stroke="#1F4459" stroke-width="0.4"/>
+        <ellipse cx="40" cy="35" rx="18" ry="22" fill="#A6BACA" stroke="#1F4459" stroke-width="1"/>
+        <circle cx="33" cy="32" r="2" fill="#1F4459"/>
+        <circle cx="47" cy="32" r="2" fill="#1F4459"/>
+        <path d="M 33 44 Q 40 48 47 44" fill="none" stroke="#1F4459" stroke-width="1"/>
+        <path d="M 32 56 L 32 70 L 48 70 L 48 56" fill="#A6BACA" stroke="#1F4459"/>
+        <path d="M 20 70 L 20 80 L 60 80 L 60 70 Z" fill="#7C9DB0" stroke="#1F4459"/>
+        <ellipse cx="22" cy="76" rx="4" ry="3" fill="#A6BACA" stroke="#1F4459"/>
+        <ellipse cx="58" cy="76" rx="4" ry="3" fill="#A6BACA" stroke="#1F4459"/>
+        <text x="40" y="98" text-anchor="middle" class="stage-lab">5</text>
+      </g>
+
+      <text x="360" y="305" text-anchor="middle" class="small-it">Time progresses left to right. Iterative refines what is there; incremental adds what was missing.</text>
+    </svg>
+    <figcaption>Figure 2. Iterative versus incremental development. The pattern is borrowed from a classic illustration used in Sommerville's textbook. In real projects the two are usually combined: iteration refines the parts that have already been built incrementally.</figcaption>
+  </figure>
+
+  <h3>How iterations are organised</h3>
+  <p>An iteration is a fixed-period cycle, usually two weeks long, in which the team carries out the same set of activities – analysis, design, implementation, testing, review – and produces a result that can be inspected. Feedback from one iteration feeds into the next, leading to refinement of requirements, design, or both.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Iteration structure: requirements and analysis precede a chain of fixed-period iterations, each containing design, implementation, testing, review, leading to deployment and maintenance.">
+      <defs>
+        <marker id="arr-it" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/>
+        </marker>
+        <style>
+          .it-h { font: 700 12px Georgia, serif; fill: #fff; }
+          .it-act { font: 600 11px Georgia, serif; fill: #1F4459; }
+          .it-small { font: 11px -apple-system, sans-serif; fill: #6B7280; }
+        </style>
+      </defs>
+
+      <!-- Requirements + Analysis (upfront) -->
+      <rect x="20" y="40" width="120" height="36" fill="#2C5F7C" rx="4"/>
+      <text x="80" y="63" text-anchor="middle" class="it-h">Requirements</text>
+
+      <rect x="20" y="86" width="120" height="36" fill="#2C5F7C" rx="4"/>
+      <text x="80" y="109" text-anchor="middle" class="it-h">Analysis</text>
+
+      <!-- Iteration 1 -->
+      <rect x="170" y="30" width="140" height="200" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="240" y="50" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Iteration 1</text>
+      <text x="240" y="66" text-anchor="middle" class="it-small">2 weeks</text>
+      <rect x="185" y="80" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="240" y="98" text-anchor="middle" class="it-act">Design</text>
+      <rect x="185" y="110" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="240" y="128" text-anchor="middle" class="it-act">Implementation</text>
+      <rect x="185" y="140" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="240" y="158" text-anchor="middle" class="it-act">Testing</text>
+      <rect x="185" y="170" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="240" y="188" text-anchor="middle" class="it-act">Review</text>
+
+      <!-- Iteration 2 -->
+      <rect x="330" y="30" width="140" height="200" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="400" y="50" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Iteration 2</text>
+      <text x="400" y="66" text-anchor="middle" class="it-small">2 weeks</text>
+      <rect x="345" y="80" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="400" y="98" text-anchor="middle" class="it-act">Design</text>
+      <rect x="345" y="110" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="400" y="128" text-anchor="middle" class="it-act">Implementation</text>
+      <rect x="345" y="140" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="400" y="158" text-anchor="middle" class="it-act">Testing</text>
+      <rect x="345" y="170" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="400" y="188" text-anchor="middle" class="it-act">Review</text>
+
+      <!-- Iteration N -->
+      <text x="500" y="135" font-family="Georgia" font-weight="700" font-size="20" fill="#6B7280">…</text>
+
+      <rect x="540" y="30" width="140" height="200" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="610" y="50" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Iteration N</text>
+      <text x="610" y="66" text-anchor="middle" class="it-small">2 weeks</text>
+      <rect x="555" y="80" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="610" y="98" text-anchor="middle" class="it-act">Design</text>
+      <rect x="555" y="110" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="610" y="128" text-anchor="middle" class="it-act">Implementation</text>
+      <rect x="555" y="140" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="610" y="158" text-anchor="middle" class="it-act">Testing</text>
+      <rect x="555" y="170" width="110" height="26" fill="#fff" stroke="#3A7CA5"/>
+      <text x="610" y="188" text-anchor="middle" class="it-act">Review</text>
+
+      <!-- Arrows -->
+      <line x1="140" y1="80" x2="170" y2="120" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr-it)"/>
+      <line x1="310" y1="130" x2="330" y2="130" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr-it)"/>
+      <line x1="470" y1="130" x2="490" y2="130" stroke="#2C5F7C" stroke-width="1.5"/>
+      <line x1="520" y1="130" x2="540" y2="130" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr-it)"/>
+
+      <!-- Output: deployment / maintenance -->
+      <rect x="540" y="244" width="140" height="28" fill="#2E7D5C" rx="4"/>
+      <text x="610" y="263" text-anchor="middle" class="it-h">Deployment</text>
+
+      <line x1="610" y1="230" x2="610" y2="244" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr-it)"/>
+    </svg>
+    <figcaption>Figure 3. The structure of iterations. Requirements and analysis happen upfront (lightly); each iteration is a fixed period, typically two weeks, in which the same activities are repeated; the size of activities shifts as work progresses (less analysis later, more testing). Adapted from Adel Taweel's lecture on software processes.</figcaption>
+  </figure>
+
+  <h3>Two related approaches to iteration</h3>
+  <p>Sommerville distinguishes two related approaches to layering iteration onto a process:</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Incremental development</div>
+      <div class="desc">Rather than deliver as a single delivery, development and delivery are broken down into increments, each delivering part of the required functionality. User requirements are prioritised and the highest-priority requirements are included in early increments. Once the development of an increment has started, its requirements are frozen – though requirements for later increments can continue to evolve.</div>
+      <div class="takeaway">Used by: XP, Scrum.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Spiral development</div>
+      <div class="desc">A risk-driven iteration. Rather than fixed-period cycles, each loop of the spiral is sized by what risks need resolving. Heavyweight by comparison; suited to large, ambitious projects.</div>
+      <div class="takeaway">Used by: programmes with high consequence-of-failure.</div>
+    </div>
+  </div>
+
+  <h3>Why incremental development is the dominant approach</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt">Customer value can be delivered with each increment, so system functionality is available earlier – earlier return on investment.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt">Early increments act as a prototype to help elicit requirements for later increments.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt">Lower risk of overall project failure – if the project is cut short, you still have something working.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt">The highest-priority system services tend to receive the most testing.</div></div>
+  </div>
+
+  <p>This is the foundation on which the named methods we cover next – Agile, Scrum, XP, Kanban, and Spiral – are built. Each is an answer to a different version of "how do we structure iteration?".</p>
+</section>
+
+<!-- ===== TIMELINE ===== -->
+<section id="timeline">
+  <h2><span class="num">03</span>How they came about</h2>
+  <div class="h2-rule"></div>
+
+  <p>The order in which these methods were created tells you something important: each one was a reaction to a problem the previous generation could not solve well.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of Spiral 1988, Scrum 1995, XP 1999, Agile Manifesto 2001, Kanban 2010, Scrum Guide 2020.">
+      <defs>
+        <style>
+          .yr { font: 700 13px Georgia, serif; fill: #2C5F7C; }
+          .ev { font: 600 12px -apple-system, sans-serif; fill: #1A1A1A; }
+          .nt { font: 11px -apple-system, sans-serif; fill: #6B7280; }
+        </style>
+      </defs>
+      <!-- baseline -->
+      <line x1="40" y1="160" x2="680" y2="160" stroke="#2C5F7C" stroke-width="2"/>
+      <!-- ticks and events -->
+      <g>
+        <circle cx="80" cy="160" r="6" fill="#2C5F7C"/>
+        <text x="80" y="135" text-anchor="middle" class="yr">1988</text>
+        <text x="80" y="186" text-anchor="middle" class="ev">Spiral</text>
+        <text x="80" y="202" text-anchor="middle" class="nt">Boehm</text>
+      </g>
+      <g>
+        <circle cx="200" cy="160" r="6" fill="#2C5F7C"/>
+        <text x="200" y="135" text-anchor="middle" class="yr">1995</text>
+        <text x="200" y="186" text-anchor="middle" class="ev">Scrum</text>
+        <text x="200" y="202" text-anchor="middle" class="nt">Schwaber, Sutherland</text>
+      </g>
+      <g>
+        <circle cx="320" cy="160" r="6" fill="#2C5F7C"/>
+        <text x="320" y="135" text-anchor="middle" class="yr">1999</text>
+        <text x="320" y="186" text-anchor="middle" class="ev">XP</text>
+        <text x="320" y="202" text-anchor="middle" class="nt">Beck</text>
+      </g>
+      <g>
+        <circle cx="440" cy="160" r="6" fill="#3A7CA5"/>
+        <text x="440" y="135" text-anchor="middle" class="yr">2001</text>
+        <text x="440" y="186" text-anchor="middle" class="ev">Agile Manifesto</text>
+        <text x="440" y="202" text-anchor="middle" class="nt">17 signatories</text>
+      </g>
+      <g>
+        <circle cx="560" cy="160" r="6" fill="#2C5F7C"/>
+        <text x="560" y="135" text-anchor="middle" class="yr">2010</text>
+        <text x="560" y="186" text-anchor="middle" class="ev">Kanban (book)</text>
+        <text x="560" y="202" text-anchor="middle" class="nt">Anderson</text>
+      </g>
+      <g>
+        <circle cx="660" cy="160" r="6" fill="#2C5F7C"/>
+        <text x="660" y="135" text-anchor="middle" class="yr">2020</text>
+        <text x="660" y="186" text-anchor="middle" class="ev">Scrum Guide</text>
+        <text x="660" y="202" text-anchor="middle" class="nt">latest revision</text>
+      </g>
+      <!-- title -->
+      <text x="360" y="40" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="16" fill="#1F4459">Iterative process methods, in order of arrival</text>
+      <text x="360" y="60" text-anchor="middle" font-family="-apple-system" font-size="12" fill="#6B7280">Each new method addressed a gap the earlier ones left open</text>
+    </svg>
+    <figcaption>Figure 4. Spiral came first and worked at the level of project planning. Scrum and XP appeared in the 1990s, and the Agile Manifesto in 2001 named the shared philosophy behind them. Kanban arrived later as a different way to structure flow.</figcaption>
+  </figure>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>1988 – Spiral.</strong> Barry Boehm published <em>A Spiral Model of Software Development and Enhancement</em>. The waterfall model was failing on large, ambitious projects because risks were only discovered late. Spiral added a risk-analysis cycle and broke development into iterations, but it remained a heavyweight, plan-driven model.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Mid-1990s – Scrum.</strong> Schwaber and Sutherland adapted ideas from a 1986 Harvard Business Review article (Takeuchi and Nonaka, <em>The New New Product Development Game</em>) into a software framework with sprints, a product owner, and a daily check-in. The aim was to manage complex product work empirically rather than by following a long upfront plan.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>1999 – XP.</strong> Kent Beck's <em>Extreme Programming Explained</em> argued that good engineering practices, taken to the extreme, were what actually made iterative development work. Pair programming, test-driven development, refactoring, and continuous integration were combined into a coherent set.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body"><strong>2001 – The Agile Manifesto.</strong> Seventeen practitioners, including the originators of Scrum and XP, met in Snowbird, Utah and named the shared philosophy behind these methods: four values, twelve principles. After this point, Agile became an umbrella term.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body"><strong>2010 – Kanban.</strong> David Anderson's book <em>Kanban: Successful Evolutionary Change for Your Technology Business</em> brought the method, originally from Toyota's manufacturing system, into software. Kanban offered a route to agility for teams whose work did not fit into fixed-length sprints – operations, support, ongoing maintenance.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body"><strong>Today.</strong> Real teams almost never use one of these in isolation. Most combine them. The question is not "which one?" but "what mix fits this work?".</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AGILE ===== -->
+<section id="agile">
+  <h2><span class="num">04</span>Agile – the philosophy</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Agile is a way of thinking about software development. It does not tell you to hold a daily meeting or to use a board with sticky notes. Those are implementations of Agile, not Agile itself. The defining document is the <strong>Manifesto for Agile Software Development</strong> (2001), which states four values and twelve principles.</p>
+
+  <div class="panel">
+    <div class="label">The four values</div>
+    <p style="margin:0">We have come to value:</p>
+    <ul style="margin:8px 0 0; padding-left:22px">
+      <li><strong>Individuals and interactions</strong> over processes and tools</li>
+      <li><strong>Working software</strong> over comprehensive documentation</li>
+      <li><strong>Customer collaboration</strong> over contract negotiation</li>
+      <li><strong>Responding to change</strong> over following a plan</li>
+    </ul>
+    <p style="margin:10px 0 0; font-size:13px; color:var(--muted)">The Manifesto is careful: the items on the right have value, but the items on the left have <em>more</em> value. This is not a rejection of plans or documents.</p>
+  </div>
+
+  <h3>What it really prioritises</h3>
+  <p>Agile bets that on most modern software projects, you cannot fully know the requirements at the start, technology will change while you build, and the customer will see things differently once they have something to use. Given those bets, the rational strategy is to deliver something working as soon as possible, learn from feedback, and adjust. Everything else flows from that.</p>
+
+  <h3>How it works in practice</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Short iterations</div>
+      <div class="desc">Work is sliced into iterations of one to four weeks. Each iteration produces something usable, even if small.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Embedded customer</div>
+      <div class="desc">A real customer or proxy is involved continuously, not only at the start and the end.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Cross-functional teams</div>
+      <div class="desc">A single team has all the skills it needs – analysis, design, coding, testing – to deliver value, without handoffs.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Continuous reflection</div>
+      <div class="desc">The team regularly inspects how it is working and adjusts. Process is a living thing.</div>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Strengths</h4>
+      <ul>
+        <li>Handles changing or unclear requirements well</li>
+        <li>Produces value early; reduces the "big-bang failure" risk</li>
+        <li>Engages users and builds trust through visible progress</li>
+        <li>Surfaces problems quickly rather than at the end</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Limitations</h4>
+      <ul>
+        <li>Hard to use where requirements truly cannot change (regulated, safety-critical)</li>
+        <li>Requires customer availability and a willing organisation</li>
+        <li>Can drift without discipline; "no documentation" is a misreading</li>
+        <li>Less suited to fixed-price, fixed-scope, fixed-date contracts</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="label">Worth saying out loud</div>
+    <p>Agile does not mean "no planning" or "no documentation". It means just enough planning and just enough documentation to do the next useful piece of work. A team that produces nothing usable for three months is not Agile, regardless of how many sticky notes are on its wall.</p>
+  </div>
+
+  <h3>The wider family of named Agile methods</h3>
+  <p>Scrum, XP, and Kanban are the three named methods we will study in detail – they cover most of what teams actually do. But the Agile umbrella is larger. Sommerville and Adel's deck list a wider set you may encounter in industry:</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Adaptive Software Development (ASD)</div>
+      <div class="desc">Speculate–collaborate–learn cycle. Emphasises adapting to complex environments rather than trying to control them.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Dynamic Systems Development Method (DSDM)</div>
+      <div class="desc">Time-boxed delivery with prioritisation by MoSCoW (Must, Should, Could, Won't). Common in larger organisations.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Crystal</div>
+      <div class="desc">A family of methods (Crystal Clear, Crystal Yellow, etc.) calibrated to team size and project criticality. The bigger and more critical, the more rigour.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Feature Driven Development (FDD)</div>
+      <div class="desc">Plan and build by feature. Emphasises a feature list, class ownership, and short feature-implementation cycles.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Lean Software Development (LSD)</div>
+      <div class="desc">Adapts Lean manufacturing principles to software: eliminate waste, build quality in, defer commitment, deliver fast, respect people, optimise the whole. Closely related to Kanban.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Agile Modelling (AM) and Agile Unified Process (AUP)</div>
+      <div class="desc">Lightweight modelling practices, and a streamlined version of the Rational Unified Process (RUP). Useful when teams must produce UML and other formal artifacts but want to keep the discipline lean.</div>
+    </div>
+  </div>
+
+  <p>You do not need to remember the details of these methods – we focus on Scrum, XP, and Kanban for good reasons. But knowing the family exists matters: Agile is wider than the three best-known methods, and different organisations choose different members of the family for different reasons.</p>
+
+  <div class="callout">
+    <div class="label">In your project</div>
+    <p>The course project follows a phased structure that looks plan-driven on its surface – Initiation, Business Definition, Requirements Engineering, Requirements Analysis and Modelling, System Modelling and Design. But notice the customer-developer arrangement: each group plays both roles, and the milestone interview workshops between phases are exactly the "individuals and interactions" and "customer collaboration" the Manifesto talks about. The phases are heavyweight; the conversations between phases are agile in spirit. Pay attention to that conversation – it is where most of the learning happens.</p>
+  </div>
+</section>
+
+<!-- ===== SCRUM ===== -->
+<section id="scrum">
+  <h2><span class="num">05</span>Scrum – the most-used framework</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Scrum is a lightweight framework for managing complex product development. It does not prescribe how to engineer software – it does not tell you to write tests or pair-program. It tells you how to organise the team, the work, and the rhythm of decision-making, so the team can adapt as it learns. The current definition lives in the <em>Scrum Guide</em>, last revised in November 2020.</p>
+
+  <h3>The structure: 3 + 5 + 3</h3>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">3 accountabilities</div>
+      <div class="desc">Product Owner (manages the product backlog and value), Scrum Master (helps the team work effectively, removes impediments), Developers (build the increment).</div>
+      <div class="takeaway">The 2020 Guide replaced "roles" with "accountabilities".</div>
+    </div>
+    <div class="card">
+      <div class="ttl">5 events</div>
+      <div class="desc">The Sprint (the container, one month or less), Sprint Planning, Daily Scrum (15 minutes), Sprint Review, Sprint Retrospective.</div>
+      <div class="takeaway">Each event is an inspect-and-adapt opportunity.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">3 artifacts</div>
+      <div class="desc">Product Backlog (with a Product Goal), Sprint Backlog (with a Sprint Goal), Increment (with a Definition of Done).</div>
+      <div class="takeaway">Each artifact carries a commitment for transparency.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="label">Scrum vocabulary that the diagram uses</div>
+    <ul style="margin:8px 0 0; padding-left:22px; font-size:14px">
+      <li><strong>Product Backlog.</strong> An ordered list of everything that might be needed in the product. The Product Owner is responsible for the order, which expresses what is most valuable to do next.</li>
+      <li><strong>Product Goal.</strong> A single sentence describing what the product is trying to be in the longer term. Anchors the Product Backlog.</li>
+      <li><strong>Sprint Backlog.</strong> The subset of the Product Backlog the team commits to in this Sprint, plus the plan for delivering it.</li>
+      <li><strong>Sprint Goal.</strong> A short statement of why this Sprint is worth running. Gives the team room to negotiate scope while protecting the intent.</li>
+      <li><strong>Increment.</strong> A working slice of the product that meets the Definition of Done at the end of the Sprint. Multiple increments can be produced in one Sprint.</li>
+      <li><strong>Definition of Done.</strong> The shared agreement on what "finished" means – tested, integrated, documented, deployable. An increment that does not meet it is not done.</li>
+    </ul>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scrum cycle: Product Backlog feeds Sprint Planning, which starts the Sprint, which produces the Increment. The Sprint Review inspects the Increment and updates the Product Backlog. The Retrospective inspects how the team worked and feeds improvements into the next Sprint Planning.">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/>
+        </marker>
+        <marker id="arr-fb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3A7CA5"/>
+        </marker>
+      </defs>
+
+      <!-- Product Backlog -->
+      <rect x="20" y="170" width="120" height="80" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="80" y="200" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Product</text>
+      <text x="80" y="216" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Backlog</text>
+      <text x="80" y="236" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">ordered list</text>
+
+      <!-- Sprint Planning -->
+      <rect x="170" y="170" width="120" height="80" fill="#2C5F7C"/>
+      <text x="230" y="200" text-anchor="middle" fill="#fff" font-family="Georgia" font-weight="700" font-size="13">Sprint</text>
+      <text x="230" y="216" text-anchor="middle" fill="#fff" font-family="Georgia" font-weight="700" font-size="13">Planning</text>
+      <text x="230" y="236" text-anchor="middle" fill="#E0EBF2" font-family="-apple-system" font-size="11">what · how · why</text>
+
+      <!-- Sprint loop (1-4 weeks) -->
+      <ellipse cx="430" cy="210" rx="120" ry="80" fill="none" stroke="#3A7CA5" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="430" y="150" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">The Sprint (1–4 weeks)</text>
+      <circle cx="380" cy="200" r="20" fill="#fff" stroke="#3A7CA5"/>
+      <text x="380" y="204" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">Day 1</text>
+      <circle cx="430" cy="200" r="20" fill="#fff" stroke="#3A7CA5"/>
+      <text x="430" y="204" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">Daily</text>
+      <circle cx="480" cy="200" r="20" fill="#fff" stroke="#3A7CA5"/>
+      <text x="480" y="204" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">Day N</text>
+      <text x="430" y="250" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">15-min Daily Scrum</text>
+      <text x="430" y="266" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">developers update plan</text>
+
+      <!-- Increment -->
+      <rect x="580" y="170" width="120" height="80" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="640" y="200" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Increment</text>
+      <text x="640" y="220" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">meets Definition</text>
+      <text x="640" y="234" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">of Done</text>
+
+      <!-- Sprint Review and Retrospective -->
+      <rect x="500" y="320" width="100" height="50" fill="#fff" stroke="#3A7CA5"/>
+      <text x="550" y="342" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="12" fill="#1F4459">Sprint Review</text>
+      <text x="550" y="358" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">inspect product</text>
+
+      <rect x="610" y="320" width="100" height="50" fill="#fff" stroke="#3A7CA5"/>
+      <text x="660" y="342" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="12" fill="#1F4459">Retrospective</text>
+      <text x="660" y="358" text-anchor="middle" font-family="-apple-system" font-size="11" fill="#6B7280">inspect process</text>
+
+      <!-- Forward arrows: Backlog -> Planning -> Sprint -> Increment -->
+      <line x1="140" y1="210" x2="170" y2="210" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="290" y1="210" x2="320" y2="210" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="540" y1="210" x2="580" y2="210" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Increment feeds into Sprint Review -->
+      <line x1="630" y1="250" x2="570" y2="318" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Sprint Review followed by Retrospective -->
+      <line x1="600" y1="345" x2="610" y2="345" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ===== TWO DISTINCT FEEDBACK LOOPS, visually separated ===== -->
+
+      <!-- Loop 1 (UNDER, dashed): Sprint Review -> Product Backlog -->
+      <path d="M 500,355 Q 250,400 80,395 Q 50,390 50,250" fill="none" stroke="#3A7CA5" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr-fb)"/>
+      <text x="290" y="400" text-anchor="middle" font-family="-apple-system" font-size="10" fill="#3A7CA5" font-style="italic">Sprint Review feeds back into the Product Backlog (what to build next)</text>
+
+      <!-- Loop 2 (OVER, dashed): Retrospective -> next Sprint Planning -->
+      <path d="M 660,320 Q 660,80 230,80 Q 200,80 200,170" fill="none" stroke="#3A7CA5" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr-fb)"/>
+      <text x="430" y="68" text-anchor="middle" font-family="-apple-system" font-size="10" fill="#3A7CA5" font-style="italic">Retrospective improvements shape the next Sprint Planning (how to work)</text>
+    </svg>
+    <figcaption>Figure 5. The Scrum cycle. The Sprint is a fixed-length container that ends with a usable Increment. Two distinct feedback loops follow, drawn here in dashed blue: the <em>Sprint Review</em> (above the lower curve) inspects the product and updates the Product Backlog – this answers <em>"what should we build next?"</em>. The <em>Retrospective</em> (above the upper curve) inspects how the team is working and produces process improvements that shape the next Sprint Planning – this answers <em>"how should we work?"</em>. Confusing the two is a common source of trouble.</figcaption>
+  </figure>
+
+  <h3>How it works in practice</h3>
+  <p>A typical Scrum team has around five to nine people working in two-week sprints. The Product Owner orders the Product Backlog by value. At Sprint Planning the team picks items it forecasts can be Done by sprint-end and crafts a Sprint Goal. During the sprint, developers re-plan daily in a 15-minute Daily Scrum. At the end, the Sprint Review shows the Increment to stakeholders and gathers feedback; the Retrospective looks at how the team worked and identifies improvements. A new sprint starts the next day.</p>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Strengths</h4>
+      <ul>
+        <li>Simple, well-known structure; easy to start</li>
+        <li>Fixed cadence creates predictability and rhythm</li>
+        <li>Clear accountabilities reduce confusion</li>
+        <li>Forces frequent inspection of both product and process</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Limitations</h4>
+      <ul>
+        <li>Says nothing about engineering practices – easy to get poor code</li>
+        <li>Sprint boundaries can feel artificial for support or operations work</li>
+        <li>Requires a real Product Owner, often missing in practice</li>
+        <li>Often adopted as ceremony only ("zombie Scrum")</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== XP ===== -->
+<section id="xp">
+  <h2><span class="num">06</span>XP – engineering excellence</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Extreme Programming asks: which engineering practices, if you push them hard, make iterative development actually deliver good software? Kent Beck's answer was to take a small set of practices known to work, and apply each one to its extreme. If code reviews are good, do them constantly – pair programming. If testing is good, write the test before the code – test-driven development. If integration is good, do it many times a day – continuous integration.</p>
+
+  <div class="panel">
+    <div class="label">The five XP values</div>
+    <p style="margin:0">Beck describes XP as built on five values that the practices express in concrete behaviour:</p>
+    <ul style="margin:8px 0 0; padding-left:22px; font-size:14px">
+      <li><strong>Communication.</strong> Talk to each other. Pair programming and on-site customer presence are how XP enforces this.</li>
+      <li><strong>Simplicity.</strong> Do the simplest thing that could possibly work. Refactor when more is needed, not before.</li>
+      <li><strong>Feedback.</strong> Get information about what works as fast as possible – tests, integration, releases, customer reaction.</li>
+      <li><strong>Courage.</strong> Tell hard truths. Throw away code that does not work. Refactor confidently because the tests have your back.</li>
+      <li><strong>Respect.</strong> Care about the work and about each other. Without respect, the other four values do not survive contact with stress.</li>
+    </ul>
+  </div>
+
+  <h3>The core practices</h3>
+  <p>XP defines around a dozen primary practices and a similar number of corollary practices that build on them. The cards below cover the ones you are most likely to encounter in modern software development.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Pair programming</div>
+      <div class="desc">Two developers, one keyboard. The second pair of eyes catches errors and shares knowledge. Continuous review built into the work.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Test-driven development (TDD)</div>
+      <div class="desc">Write a failing automated test first, then the smallest code that passes it, then refactor. Tests document the design and enable safe change.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Continuous integration (CI)</div>
+      <div class="desc">Every change is integrated into the main branch many times a day, with the full test suite running automatically. Integration problems surface in minutes, not weeks.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Refactoring</div>
+      <div class="desc">Improving the structure of code without changing what it does, while the test suite keeps the behaviour stable. Done continuously, never as a separate phase.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Small releases</div>
+      <div class="desc">Release useful versions to real users frequently – weeks, not months. Each release is a feedback opportunity.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Simple design</div>
+      <div class="desc">Build the simplest design that supports today's tests. Resist speculative complexity. Let the design grow as needs emerge.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Collective ownership</div>
+      <div class="desc">Anyone may improve any part of the code. Reduces bottlenecks; spreads knowledge across the team.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Sustainable pace</div>
+      <div class="desc">No regular overtime. Tired developers write bugs. The team's pace must be one it can keep up indefinitely.</div>
+    </div>
+  </div>
+
+  <h3>How it relates to Scrum</h3>
+  <p>Scrum and XP are not competitors. Scrum tells you how to organise sprints and decide what to build; XP tells you how to build it well. Many teams adopt Scrum at the management level and XP practices at the engineering level. The two were created in roughly the same period by people in conversation with each other, and the Agile Manifesto signatories include both Scrum and XP figures.</p>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Strengths</h4>
+      <ul>
+        <li>Produces high-quality, maintainable code</li>
+        <li>Tests act as living documentation</li>
+        <li>Team capacity grows as the code stays clean over time</li>
+        <li>Practices reinforce each other – pair programming makes refactoring safer, tests make pair programming sharper</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Limitations</h4>
+      <ul>
+        <li>Demands significant developer skill and discipline</li>
+        <li>Pair programming is hard to justify to managers without trying it</li>
+        <li>Practices interact – partial adoption ("we do TDD but not refactoring") often fails</li>
+        <li>Less popular as a brand today; the practices live on inside other frameworks</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KANBAN ===== -->
+<section id="kanban">
+  <h2><span class="num">07</span>Kanban – managing flow</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Kanban (a Japanese word meaning "signboard" or "visual signal") came from Toyota's manufacturing system. The software adaptation, described by David Anderson in 2010, treats software work as a flow through stages and asks one core question: <em>how do we make work flow smoothly, without piling up at any stage?</em> Unlike Scrum, Kanban does not introduce sprints, fixed roles, or planning ceremonies. It can be applied on top of an existing process.</p>
+
+  <h3>The core practices</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Visualise the workflow.</strong> Put every work item on a board, in a column representing its current stage (Backlog, Analysis, Build, Test, Done). Make the invisible visible.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Limit work in progress (WIP).</strong> Each column has a maximum number of items. If the limit is reached, no new work enters until something leaves. This is the central mechanism.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Manage flow.</strong> Watch how items move across the board. Look for bottlenecks – columns where work piles up. Address them.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Make policies explicit.</strong> Write down what "Done" means for each column. Reduce ambiguity.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Improve continuously.</strong> Use measurements (lead time, throughput) to make small, evidence-based changes.</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="label">Kanban vocabulary</div>
+    <ul style="margin:8px 0 0; padding-left:22px; font-size:14px">
+      <li><strong>Work item.</strong> A single piece of work that flows across the board – usually represented by one card. Could be a feature, a bug, a request, a bit of investigation.</li>
+      <li><strong>Work in progress (WIP).</strong> The number of items currently being worked on. The whole point of Kanban is that <em>limiting</em> WIP improves flow, because the team finishes things instead of starting them.</li>
+      <li><strong>Lead time.</strong> The clock time from when an item enters the board (first column) to when it leaves the board (Done). What the customer experiences.</li>
+      <li><strong>Cycle time.</strong> The clock time from when work actively <em>starts</em> on an item (it leaves the Backlog) to when it is Done. What the team experiences.</li>
+      <li><strong>Throughput.</strong> The number of items completed per unit of time (per week, per month). The team's rate of finishing things.</li>
+      <li><strong>Value stream.</strong> The whole sequence of activities that turn an idea into delivered value. Each Kanban column is one stage of the team's value stream.</li>
+    </ul>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kanban board with columns Backlog, Analysis, Build, Test, Done, with WIP limits and cards.">
+      <defs>
+        <style>
+          .col-h { font: 700 13px Georgia, serif; fill: #1F4459; }
+          .wip { font: 11px -apple-system, sans-serif; fill: #B45309; }
+          .card-t { font: 11px -apple-system, sans-serif; fill: #1A1A1A; }
+        </style>
+      </defs>
+      <!-- header -->
+      <text x="350" y="28" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">Kanban board</text>
+      <text x="350" y="48" text-anchor="middle" font-family="-apple-system" font-size="12" fill="#6B7280">Each column shows current stage; WIP limits at the top</text>
+
+      <!-- Columns -->
+      <g>
+        <line x1="20" y1="70" x2="20" y2="270" stroke="#DEE2E6"/>
+        <line x1="156" y1="70" x2="156" y2="270" stroke="#DEE2E6"/>
+        <line x1="292" y1="70" x2="292" y2="270" stroke="#DEE2E6"/>
+        <line x1="428" y1="70" x2="428" y2="270" stroke="#DEE2E6"/>
+        <line x1="564" y1="70" x2="564" y2="270" stroke="#DEE2E6"/>
+        <line x1="680" y1="70" x2="680" y2="270" stroke="#DEE2E6"/>
+        <line x1="20" y1="70" x2="680" y2="70" stroke="#2C5F7C" stroke-width="2"/>
+      </g>
+
+      <!-- Headers -->
+      <text x="88" y="92" text-anchor="middle" class="col-h">Backlog</text>
+      <text x="224" y="92" text-anchor="middle" class="col-h">Analysis</text>
+      <text x="224" y="108" text-anchor="middle" class="wip">WIP: 2</text>
+      <text x="360" y="92" text-anchor="middle" class="col-h">Build</text>
+      <text x="360" y="108" text-anchor="middle" class="wip">WIP: 3</text>
+      <text x="496" y="92" text-anchor="middle" class="col-h">Test</text>
+      <text x="496" y="108" text-anchor="middle" class="wip">WIP: 2</text>
+      <text x="622" y="92" text-anchor="middle" class="col-h">Done</text>
+
+      <!-- Cards -->
+      <g>
+        <rect x="36" y="130" width="104" height="34" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <text x="44" y="151" class="card-t">Login fix</text>
+        <rect x="36" y="170" width="104" height="34" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <text x="44" y="191" class="card-t">Search filter</text>
+        <rect x="36" y="210" width="104" height="34" fill="#F0F4F8" stroke="#DEE2E6"/>
+        <text x="44" y="231" class="card-t">CSV export</text>
+
+        <rect x="172" y="130" width="104" height="34" fill="#fff" stroke="#3A7CA5"/>
+        <text x="180" y="151" class="card-t">Payment err.</text>
+        <rect x="172" y="170" width="104" height="34" fill="#fff" stroke="#3A7CA5"/>
+        <text x="180" y="191" class="card-t">Email tmpl.</text>
+
+        <rect x="308" y="130" width="104" height="34" fill="#fff" stroke="#3A7CA5"/>
+        <text x="316" y="151" class="card-t">Cart redesign</text>
+        <rect x="308" y="170" width="104" height="34" fill="#fff" stroke="#3A7CA5"/>
+        <text x="316" y="191" class="card-t">Order API</text>
+        <rect x="308" y="210" width="104" height="34" fill="#fff" stroke="#3A7CA5"/>
+        <text x="316" y="231" class="card-t">Cache layer</text>
+
+        <rect x="444" y="130" width="104" height="34" fill="#fff" stroke="#3A7CA5"/>
+        <text x="452" y="151" class="card-t">SSO login</text>
+
+        <rect x="580" y="130" width="92" height="34" fill="#E8F0EA" stroke="#2E7D5C"/>
+        <text x="588" y="151" class="card-t" fill="#2E7D5C">Profile page</text>
+        <rect x="580" y="170" width="92" height="34" fill="#E8F0EA" stroke="#2E7D5C"/>
+        <text x="588" y="191" class="card-t" fill="#2E7D5C">Reset pwd</text>
+      </g>
+    </svg>
+    <figcaption>Figure 6. A Kanban board. Each card is a unit of work. The WIP limits at the top of columns prevent the team from starting too many things at once.</figcaption>
+  </figure>
+
+  <h3>The big difference from Scrum</h3>
+  <div class="compare">
+    <div>
+      <h4>Scrum</h4>
+      <ul>
+        <li>Time-boxed (sprints of 1–4 weeks)</li>
+        <li>Fixed accountabilities (PO, SM, Devs)</li>
+        <li>Plan and commit per sprint</li>
+        <li>Inspect at sprint boundaries</li>
+        <li>Best for product development</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kanban</h4>
+      <ul>
+        <li>Continuous flow, no sprints</li>
+        <li>No prescribed roles</li>
+        <li>Pull new work when capacity frees up</li>
+        <li>Inspect continuously through metrics</li>
+        <li>Best for ongoing or operational work</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Strengths</h4>
+      <ul>
+        <li>Easy to adopt – overlay on existing process</li>
+        <li>Excellent for support, operations, and varied-priority work</li>
+        <li>WIP limits expose bottlenecks honestly</li>
+        <li>Predictable lead times once flow is stable</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Limitations</h4>
+      <ul>
+        <li>No built-in product planning – needs to be added</li>
+        <li>Less rhythm; harder to align stakeholders to a cadence</li>
+        <li>Can disguise lack of discipline as "flexibility"</li>
+        <li>Not ideal for teams that need a fixed scope and date</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPIRAL ===== -->
+<section id="spiral">
+  <h2><span class="num">08</span>Spiral – the older, risk-driven model</h2>
+  <div class="h2-rule"></div>
+
+  <div class="panel">
+    <div class="label">Why this is in a different category</div>
+    <p style="margin:0">Spiral was published by Barry Boehm in 1988, more than ten years before the Agile Manifesto. It is iterative, but it is not Agile. It belongs to the family of plan-driven process models. It is included here because it is the historical bridge between waterfall and the Agile family – it was the first widely-used model to take iteration and risk seriously.</p>
+  </div>
+
+  <h3>The idea</h3>
+  <p>Boehm observed that the most expensive failures in large software projects came from risks that were ignored or underestimated until late. His solution was to make risk analysis the primary driver of the process. Each loop of the spiral is one iteration; in each loop, you identify the biggest current risks and do whatever is needed (prototyping, modelling, simulation) to resolve them before continuing.</p>
+
+  <h3>The four quadrants of each loop</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Determine objectives.</strong> What are the goals of this iteration? What constraints apply? What alternatives are on the table?</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Identify and resolve risks.</strong> What could go wrong? Build a prototype, run a simulation, do a benchmark – whatever is needed to take the risk down. <em>This is the quadrant that defines the model.</em></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>Develop and verify.</strong> Build the next version of the product, applying whichever development approach fits this iteration's risks (waterfall, prototyping, evolutionary).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body"><strong>Plan the next iteration.</strong> Review what was learned with stakeholders. Plan the next loop, expanding or narrowing scope as appropriate.</div>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 760 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Boehm Spiral model of the software process. Four expanding loops around a central REVIEW point. Top-left quadrant Determine objectives alternatives and constraints. Top-right quadrant Evaluate alternatives identify and resolve risks containing Risk analysis labels and Prototype 1, Prototype 2, Prototype 3, Operational prototype. Right horizontal axis labelled Simulations models benchmarks. Bottom-right quadrant Develop verify next-level product containing the artifact ladder Concept of Operation, S/W requirements, Product design, Detailed design, Code, Unit test, Integration test, Acceptance test, Service, with italic intermediate labels Requirement validation and Design V and V. Bottom-left quadrant Plan next phase containing Requirements plan, Life-cycle plan, Development plan, Integration and test plan. Vertical axis labelled cumulative cost.">
+  <defs><marker id="sp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/></marker></defs>
+  <line x1="380" y1="40" x2="380" y2="580" stroke="#1F4459" stroke-width="1.5"/>
+  <line x1="40" y1="290" x2="720" y2="290" stroke="#1F4459" stroke-width="1.5"/>
+  <polygon points="380,40 374,52 386,52" fill="#1F4459"/>
+  <text x="370" y="36" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280" font-style="italic">cumulative cost</text>
+  <text x="170" y="60" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Determine objectives,</text>
+  <text x="170" y="76" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">alternatives and constraints</text>
+  <text x="600" y="60" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Evaluate alternatives,</text>
+  <text x="600" y="76" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">identify, resolve risks</text>
+  <text x="60" y="608" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Plan next phase</text>
+  <text x="640" y="592" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Develop, verify</text>
+  <text x="640" y="608" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">next-level product</text>
+  <path d="M 388.0 290.0 L 388.6 289.6 L 389.1 289.0 L 389.6 288.5 L 390.1 287.9 L 390.5 287.2 L 390.9 286.5 L 391.2 285.7 L 391.5 284.9 L 391.7 284.0 L 391.9 283.1 L 392.0 282.2 L 392.1 281.2 L 392.0 280.3 L 391.9 279.3 L 391.8 278.2 L 391.5 277.2 L 391.2 276.2 L 390.8 275.1 L 390.3 274.1 L 389.8 273.1 L 389.1 272.1 L 388.4 271.1 L 387.6 270.2 L 386.7 269.2 L 385.8 268.4 L 384.8 267.5 L 383.7 266.7 L 382.5 266.0 L 381.3 265.3 L 380.0 264.7 L 378.6 264.2 L 377.2 263.7 L 375.8 263.3 L 374.3 263.0 L 372.7 262.8 L 371.1 262.7 L 369.5 262.6 L 367.8 262.7 L 366.2 262.9 L 364.5 263.1 L 362.8 263.5 L 361.1 264.0 L 359.4 264.5 L 357.7 265.2 L 356.0 266.0 L 354.4 266.9 L 352.7 267.9 L 351.2 269.0 L 349.6 270.3 L 348.1 271.6 L 346.7 273.0 L 345.3 274.6 L 344.0 276.2 L 342.8 277.9 L 341.7 279.7 L 340.6 281.6 L 339.7 283.6 L 338.8 285.7 L 338.1 287.8 L 337.4 290.0 L 336.9 292.3 L 336.5 294.6 L 336.3 296.9 L 336.1 299.3 L 336.1 301.8 L 336.2 304.2 L 336.5 306.7 L 336.9 309.2 L 337.5 311.7 L 338.2 314.2 L 339.0 316.6 L 340.0 319.1 L 341.1 321.5 L 342.4 323.9 L 343.8 326.2 L 345.4 328.5 L 347.1 330.7 L 348.9 332.8 L 350.9 334.9 L 353.0 336.8 L 355.2 338.7 L 357.5 340.5 L 360.0 342.1 L 362.6 343.6 L 365.3 345.0 L 368.0 346.3 L 370.9 347.4 L 373.9 348.4 L 376.9 349.2 L 380.0 349.8 L 383.2 350.3 L 386.4 350.7 L 389.6 350.8 L 392.9 350.8 L 396.2 350.6 L 399.6 350.2 L 402.9 349.6 L 406.2 348.9 L 409.5 347.9 L 412.8 346.8 L 416.0 345.5 L 419.2 344.0 L 422.4 342.3 L 425.4 340.5 L 428.4 338.4 L 431.3 336.2 L 434.1 333.8 L 436.8 331.3 L 439.4 328.5 L 441.8 325.7 L 444.1 322.7 L 446.2 319.5 L 448.2 316.2 L 450.1 312.8 L 451.7 309.2 L 453.2 305.6 L 454.5 301.8 L 455.5 297.9 L 456.4 294.0 L 457.1 290.0 L 457.6 285.9 L 457.8 281.8 L 457.9 277.7 L 457.7 273.5 L 457.3 269.3 L 456.6 265.1 L 455.8 260.9 L 454.7 256.8 L 453.3 252.6 L 451.8 248.6 L 450.0 244.5 L 448.0 240.6 L 445.7 236.8 L 443.3 233.0 L 440.6 229.4 L 437.8 225.8 L 434.7 222.5 L 431.4 219.2 L 428.0 216.1 L 424.3 213.2 L 420.5 210.5 L 416.5 208.0 L 412.4 205.6 L 408.1 203.5 L 403.7 201.6 L 399.1 199.9 L 394.5 198.5 L 389.7 197.3 L 384.9 196.3 L 380.0 195.6 L 375.0 195.2 L 370.0 195.0 L 365.0 195.1 L 359.9 195.4 L 354.8 196.0 L 349.8 196.9 L 344.7 198.1 L 339.7 199.6 L 334.8 201.3 L 329.9 203.3 L 325.1 205.5 L 320.5 208.0 L 315.9 210.8 L 311.4 213.9 L 307.1 217.1 L 303.0 220.7 L 299.0 224.4 L 295.2 228.4 L 291.7 232.6 L 288.3 237.0 L 285.1 241.7 L 282.2 246.5 L 279.5 251.4 L 277.1 256.6 L 274.9 261.8 L 273.0 267.3 L 271.4 272.8 L 270.1 278.4 L 269.1 284.2 L 268.3 290.0 L 267.9 295.9 L 267.8 301.8 L 268.0 307.7 L 268.5 313.7 L 269.4 319.6 L 270.5 325.6 L 272.0 331.5 L 273.8 337.3 L 275.9 343.1 L 278.3 348.7 L 281.0 354.3 L 284.1 359.7 L 287.4 365.0 L 291.0 370.1 L 294.9 375.1 L 299.1 379.8 L 303.6 384.4 L 308.3 388.7 L 313.2 392.8 L 318.4 396.7 L 323.8 400.3 L 329.4 403.6 L 335.2 406.6 L 341.2 409.4 L 347.4 411.8 L 353.7 413.9 L 360.1 415.7 L 366.6 417.1 L 373.3 418.2 L 380.0 419.0 L 386.8 419.3 L 393.6 419.4 L 400.4 419.1 L 407.3 418.4 L 414.1 417.3 L 420.9 415.9 L 427.7 414.2 L 434.3 412.0 L 440.9 409.5 L 447.4 406.7 L 453.7 403.5 L 459.9 399.9 L 465.9 396.0 L 471.7 391.8 L 477.3 387.3 L 482.7 382.5 L 487.8 377.3 L 492.7 371.9 L 497.3 366.2 L 501.7 360.2 L 505.7 354.0 L 509.4 347.6 L 512.8 341.0 L 515.8 334.1 L 518.5 327.1 L 520.8 319.9 L 522.7 312.6 L 524.3 305.2 L 525.5 297.6 L 526.2 290.0 L 526.6 282.3 L 526.6 274.6 L 526.1 266.9 L 525.3 259.1 L 524.0 251.4 L 522.4 243.7 L 520.3 236.2 L 517.8 228.6 L 514.9 221.3 L 511.6 214.0 L 508.0 206.9 L 503.9 200.0 L 499.5 193.3 L 494.7 186.8 L 489.5 180.5 L 484.0 174.5 L 478.2 168.7 L 472.0 163.3 L 465.6 158.2 L 458.9 153.4 L 451.9 148.9 L 444.6 144.8 L 437.2 141.1 L 429.5 137.8 L 421.6 134.8 L 413.5 132.3 L 405.3 130.2 L 397.0 128.5 L 388.5 127.3 L 380.0 126.5 L 371.4 126.1 L 362.8 126.2 L 354.2 126.8 L 345.5 127.8 L 336.9 129.3 L 328.4 131.2 L 320.0 133.6 L 311.6 136.4 L 303.4 139.7 L 295.4 143.4 L 287.5 147.6 L 279.8 152.1 L 272.4 157.1 L 265.2 162.5 L 258.3 168.3 L 251.6 174.4 L 245.3 180.9 L 239.3 187.8 L 233.7 195.0 L 228.4 202.5 L 223.5 210.3 L 219.1 218.3 L 215.0 226.7 L 211.3 235.2 L 208.2 244.0 L 205.4 252.9 L 203.1 262.0 L 201.3 271.2 L 200.0 280.6 L 199.2 290.0 L 198.9 299.5 L 199.1 309.0 L 199.7 318.6 L 200.9 328.1 L 202.6 337.5 L 204.8 346.9 L 207.5 356.2 L 210.6 365.4 L 214.3 374.4 L 218.4 383.3 L 223.1 391.9 L 228.1 400.3 L 233.7 408.5 L 239.7 416.4 L 246.1 423.9 L 252.9 431.2 L 260.1 438.1 L 267.6 444.6 L 275.6 450.8 L 283.8 456.5 L 292.4 461.9 L 301.3 466.7 L 310.5 471.1 L 319.9 475.1 L 329.5 478.5 L 339.3 481.5 L 349.3 483.9 L 359.4 485.8 L 369.7 487.2 L 380.0 488.1 L 390.4 488.4 L 400.8 488.1 L 411.3 487.3 L 421.7 486.0 L 432.0 484.1 L 442.3 481.7 L 452.4 478.7 L 462.4 475.2 L 472.3 471.1 L 481.9 466.5 L 491.3 461.4 L 500.5 455.8 L 509.4 449.7 L 517.9 443.2 L 526.2 436.2 L 534.0 428.7 L 541.5 420.8 L 548.6 412.5 L 555.3 403.8 L 561.5 394.8 L 567.3 385.4 L 572.5 375.7 L 577.3 365.7 L 581.5 355.5 L 585.2 345.0 L 588.4 334.3 L 591.0 323.4 L 593.0 312.4 L 594.5 301.2 L 595.3 290.0 L 595.6 278.7 L 595.3 267.4 L 594.4 256.0 L 592.9 244.7 L 590.8 233.5 L 588.1 222.4 L 584.8 211.4 L 580.9 200.5 L 576.5 189.9 L 571.5 179.4 L 565.9 169.3 L 559.8 159.4 L 553.2 149.8 L 546.0 140.5 L 538.4 131.6 L 530.3 123.1 L 521.7 115.0 L 512.7 107.4 L 503.2 100.2 L 493.4 93.5 L 483.3 87.3 L 472.7 81.7 L 461.9 76.6 L 450.8 72.0 L 439.5 68.1 L 427.9 64.7 L 416.1 61.9 L 404.2 59.8 L 392.1 58.3 L 380.0 57.4 L 367.8 57.1 L 355.6 57.5 L 343.3 58.5 L 331.2 60.2 L 319.0 62.5 L 307.0 65.5 L 295.2 69.1 L 283.5 73.3 L 272.0 78.1 L 260.8 83.6 L 249.9 89.6 L 239.2 96.2 L 228.9 103.4 L 218.9 111.1 L 209.4 119.4 L 200.3 128.2 L 191.6 137.4 L 183.4 147.2 L 175.7 157.3 L 168.6 167.9 L 162.0 178.9 L 155.9 190.2 L 150.5 201.9 L 145.6 213.8 L 141.4 226.1 L 137.8 238.5 L 134.9 251.2 L 132.6 264.0 L 131.0 277.0 L 130.1 290.0 L 129.9 303.1 L 130.3 316.2 L 131.5 329.4 L 133.3 342.4 L 135.8 355.4 L 139.0 368.3 L 142.9 381.0 L 147.5 393.5 L 152.7 405.8 L 158.6 417.8 L 165.1 429.6 L 172.2 441.0 L 180.0 452.0 L 188.3 462.6 L 197.2 472.8 L 206.6 482.6 L 216.6 491.8 L 227.0 500.6 L 237.9 508.8 L 249.3 516.4 L 261.1 523.4 L 273.2 529.9 L 285.7 535.7 L 298.5 540.8 L 311.6 545.3 L 324.9 549.1 L 338.5 552.2 L 352.2 554.6 L 366.0 556.2 L 380.0 557.2 L 394.0 557.4 L 408.0 556.9 L 422.1 555.6 L 436.0 553.6 L 449.9 550.9 L 463.6 547.4 L 477.2 543.2 L 490.5 538.3 L 503.7 532.7 L 516.5 526.4 L 529.0 519.4 L 541.1 511.7 L 552.9 503.5 L 564.2 494.5 L 575.0 485.0 L 585.4 474.9 L 595.2 464.3 L 604.5 453.1 L 613.3 441.5 L 621.4 429.4 L 628.8 416.8 L 635.7 403.8 L 641.8 390.5 L 647.3 376.8 L 652.0 362.9 L 656.0 348.7 L 659.3 334.2 L 661.8 319.6 L 663.5 304.9 L 664.5 290.0" fill="none" stroke="#2C5F7C" stroke-width="2"/>
+  <polygon points="664.5,290.0 659.7,297.6 667.7,298.3" fill="#2C5F7C"/>
+  <rect x="358" y="283" width="44" height="14" fill="#fff"/>
+  <text x="380" y="293" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="10" fill="#1F4459">REVIEW</text>
+  <rect x="394.1" y="189.9" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="398.1" y="199.9" font-family="Georgia" font-size="10" font-style="italic" fill="#1F4459">Risk analysis</text>
+  <rect x="406.1" y="121.9" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="410.1" y="131.9" font-family="Georgia" font-size="10" font-style="italic" fill="#1F4459">Risk analysis</text>
+  <rect x="418.1" y="53.8" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="422.1" y="63.8" font-family="Georgia" font-size="10" font-style="italic" fill="#1F4459">Risk analysis</text>
+  <rect x="428.0" y="265.0" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="430.0" y="275.0" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Prototype 1</text>
+  <rect x="459.5" y="247.0" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="461.5" y="257.0" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Prototype 2</text>
+  <rect x="522.1" y="217.8" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="524.1" y="227.8" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Prototype 3</text>
+  <rect x="584.8" y="188.6" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="586.8" y="198.6" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Operational</text>
+  <rect x="584.8" y="200.6" width="80" height="13" fill="#fff" opacity="0.85"/>
+  <text x="586.8" y="210.6" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">prototype</text>
+  <text x="710" y="285" text-anchor="end" font-family="Georgia" font-size="10" font-style="italic" fill="#1F4459">Simulations, models, benchmarks</text>
+  <rect x="396.0" y="296.1" width="90" height="13" fill="#fff" opacity="0.85"/>
+  <text x="443.0" y="306.1" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Concept of</text>
+  <rect x="396.0" y="308.1" width="90" height="13" fill="#fff" opacity="0.85"/>
+  <text x="443.0" y="318.1" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Operation</text>
+  <rect x="451.0" y="308.3" width="118" height="13" fill="#fff" opacity="0.85"/>
+  <text x="512.0" y="318.3" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">S/W requirements</text>
+  <rect x="482.3" y="416.1" width="104" height="13" fill="#fff" opacity="0.85"/>
+  <text x="536.3" y="426.1" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Product design</text>
+  <rect x="572.6" y="329.1" width="111" height="13" fill="#fff" opacity="0.85"/>
+  <text x="630.1" y="339.1" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Detailed design</text>
+  <rect x="542.9" y="461.1" width="90" height="13" fill="#fff" opacity="0.85"/>
+  <text x="589.9" y="471.1" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Code</text>
+  <rect x="453.0" y="542.4" width="90" height="13" fill="#fff" opacity="0.85"/>
+  <text x="500.0" y="552.4" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Unit test</text>
+  <rect x="319.0" y="574.0" width="118" height="13" fill="#fff" opacity="0.85"/>
+  <text x="380.0" y="584.0" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Integration test</text>
+  <rect x="200.4" y="546.9" width="111" height="13" fill="#fff" opacity="0.85"/>
+  <text x="257.9" y="556.9" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Acceptance test</text>
+  <rect x="100.4" y="447.9" width="90" height="13" fill="#fff" opacity="0.85"/>
+  <text x="147.4" y="457.9" text-anchor="middle" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Service</text>
+  <rect x="507.7" y="339.1" width="64" height="13" fill="#fff" opacity="0.85"/>
+  <text x="539.7" y="349.1" text-anchor="middle" font-family="Georgia" font-size="10" font-style="italic" fill="#1F4459">Requirement</text>
+  <rect x="507.7" y="351.1" width="64" height="13" fill="#fff" opacity="0.85"/>
+  <text x="539.7" y="361.1" text-anchor="middle" font-family="Georgia" font-size="10" font-style="italic" fill="#1F4459">validation</text>
+  <rect x="553.9" y="376.1" width="60" height="13" fill="#fff" opacity="0.85"/>
+  <text x="583.9" y="386.1" text-anchor="middle" font-family="Georgia" font-size="10" font-style="italic" fill="#1F4459">Design V&amp;V</text>
+  <text x="332.6" y="311.2" text-anchor="end" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Requirements plan</text>
+  <text x="279.7" y="364.2" text-anchor="end" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Life-cycle plan</text>
+  <text x="255.1" y="442.9" text-anchor="end" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Development plan</text>
+  <text x="247.3" y="523.9" text-anchor="end" font-family="Georgia" font-size="10" font-weight="600" fill="#1F4459">Integration and test plan</text>
+</svg>
+    <figcaption>Figure 7. Boehm's Spiral model of the software process, in its full canonical form. Each loop covers all four quadrants – objectives in the top-left, risk analysis with progressively more concrete prototypes in the top-right (Prototype 1 through Operational prototype), development with the artifact ladder (Concept of Operation, S/W requirements, Product design, Detailed design, Code, Unit test, Integration test, Acceptance test, Service) in the bottom-right, and planning artifacts on the left axis. The radial distance from the centre represents cumulative cost; the angular position represents progress through the phases. After Boehm (1988); rendering after Sommerville (2016).</figcaption>
+  </figure>
+
+  <h3>What it shares with Agile, and what it does not</h3>
+  <div class="compare">
+    <div>
+      <h4>Spiral and Agile agree on</h4>
+      <ul>
+        <li>Iteration is essential</li>
+        <li>You cannot plan everything upfront</li>
+        <li>Each iteration should reduce uncertainty</li>
+        <li>Stakeholder involvement matters at every loop</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Spiral and Agile differ on</h4>
+      <ul>
+        <li>Spiral is heavyweight; Agile is lightweight</li>
+        <li>Spiral iterations can be months; Agile iterations are weeks</li>
+        <li>Spiral focuses on managing risk; Agile focuses on delivering value</li>
+        <li>Spiral produces extensive documentation per loop; Agile keeps documentation lean</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Strengths</h4>
+      <ul>
+        <li>Excellent for very large, ambitious, risky projects</li>
+        <li>Forces explicit attention to what could go wrong</li>
+        <li>Each loop can use whichever development style suits its risks</li>
+        <li>Suitable for safety-critical and high-investment systems</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Limitations</h4>
+      <ul>
+        <li>Heavyweight and document-intensive</li>
+        <li>Requires real expertise in risk assessment</li>
+        <li>Long loop times unsuited to small, fast-changing projects</li>
+        <li>Hard to estimate cost and duration upfront</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="label">Why the course project does not use Spiral</div>
+    <p>The course project is a teaching exercise, not a high-stakes industrial system. The risks are bounded (the worst that can happen is a poor grade), the requirements come from a peer customer group rather than a regulator, and the timeline is fixed by the academic calendar. Spiral's strengths – ranking and resolving real project risks before committing further investment – are wasted in this setting. The project's plan-driven phase structure is the right shape for a learning context. But when you graduate and move to projects where money, safety, or reputation are on the line, knowing that Spiral exists, and how it works, is part of being able to choose well.</p>
+  </div>
+</section>
+
+<!-- ===== USED TOGETHER ===== -->
+<section id="combined">
+  <h2><span class="num">09</span>Used together – what really happens in practice</h2>
+  <div class="h2-rule"></div>
+
+  <p>In real teams, you almost never find a textbook implementation of any one of these methods. The interesting question is which combinations are common and why.</p>
+
+  <h3>Common combinations</h3>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Scrum + XP</div>
+      <div class="desc">Scrum at the management level (sprints, planning, review), XP at the engineering level (TDD, pairing, CI, refactoring). The most common modern combination.</div>
+      <div class="takeaway">Scrum tells you what to build; XP tells you how to build it well.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Scrumban</div>
+      <div class="desc">Scrum's roles and ceremonies plus Kanban's WIP limits and visual board. Useful when a Scrum team finds sprint commitments unrealistic because of incoming support work.</div>
+      <div class="takeaway">Keeps the rhythm of Scrum, gains the flow discipline of Kanban.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Kanban + XP practices</div>
+      <div class="desc">Continuous flow with full engineering discipline underneath. Common in mature DevOps and SRE teams.</div>
+      <div class="takeaway">Lean management, engineering excellence.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Spiral wrapping Agile</div>
+      <div class="desc">Some large programmes use a Spiral-style outer loop (with formal risk reviews and gates) while running Agile teams inside each loop.</div>
+      <div class="takeaway">Used in defence, aerospace, and some regulated systems.</div>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Layered diagram showing how Scrum and Kanban sit at management level, XP at engineering level, all under the Agile umbrella, with Spiral as a separate plan-driven model.">
+      <defs>
+        <style>
+          .lab { font: 600 13px Georgia, serif; fill: #1F4459; }
+          .small { font: 11px -apple-system, sans-serif; fill: #6B7280; }
+        </style>
+      </defs>
+
+      <!-- Agile layer -->
+      <rect x="20" y="30" width="500" height="38" fill="#2C5F7C"/>
+      <text x="270" y="55" text-anchor="middle" fill="#fff" font-family="Georgia" font-weight="700" font-size="14">Agile values and principles</text>
+
+      <!-- Mgmt layer -->
+      <rect x="40" y="90" width="220" height="60" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="150" y="115" text-anchor="middle" class="lab">Scrum</text>
+      <text x="150" y="135" text-anchor="middle" class="small">how to organise the team and work</text>
+
+      <rect x="280" y="90" width="220" height="60" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="390" y="115" text-anchor="middle" class="lab">Kanban</text>
+      <text x="390" y="135" text-anchor="middle" class="small">how to manage flow of work</text>
+
+      <!-- Engineering layer -->
+      <rect x="40" y="170" width="460" height="50" fill="#fff" stroke="#3A7CA5"/>
+      <text x="270" y="192" text-anchor="middle" class="lab">XP practices</text>
+      <text x="270" y="208" text-anchor="middle" class="small">TDD · pair programming · CI · refactoring · simple design</text>
+
+      <!-- Spiral on the side -->
+      <rect x="540" y="30" width="140" height="190" fill="#fff" stroke="#3A7CA5" stroke-dasharray="4 3"/>
+      <text x="610" y="60" text-anchor="middle" class="lab">Spiral</text>
+      <text x="610" y="82" text-anchor="middle" class="small">Older, plan-driven</text>
+      <text x="610" y="100" text-anchor="middle" class="small">Risk-focused</text>
+      <text x="610" y="130" text-anchor="middle" class="small">Different family</text>
+      <text x="610" y="160" text-anchor="middle" class="small">Sometimes wraps</text>
+      <text x="610" y="178" text-anchor="middle" class="small">Agile teams in</text>
+      <text x="610" y="196" text-anchor="middle" class="small">large programmes</text>
+    </svg>
+    <figcaption>Figure 8. How they layer in practice. Scrum and Kanban operate at the management level – they answer "how do we organise the work?". XP operates at the engineering level – it answers "how do we build it well?". Spiral sits beside the Agile family as a heavier, risk-driven alternative.</figcaption>
+  </figure>
+</section>
+
+<!-- ===== CHOOSING ===== -->
+<section id="choosing">
+  <h2><span class="num">10</span>Choosing one – short, situated examples</h2>
+  <div class="h2-rule"></div>
+
+  <p>The honest answer to "which one should I use?" is "it depends". The factors that matter are the size and stability of requirements, the criticality of the system, the team's experience, and the regulatory and contractual context. Below are concrete situations and a defensible answer for each. None of these are the only valid answer; they show the kind of reasoning to apply.</p>
+
+  <div class="callout">
+    <div class="label">Example 1 – startup building a new mobile app</div>
+    <p>The market is uncertain, the team is small, and features need to evolve weekly based on user feedback. <strong>Scrum + XP</strong> is the standard fit. Two-week sprints give a rhythm for stakeholder demos; XP practices keep the code base clean enough to keep changing. Pure Kanban would also work if priorities shift faster than a sprint can absorb.</p>
+  </div>
+
+  <div class="callout">
+    <div class="label">Example 2 – internal IT support team</div>
+    <p>Tickets arrive constantly, urgencies vary, and there are no "features" to plan. Sprints feel artificial because next week's work is unknown today. <strong>Kanban</strong> fits. WIP limits prevent overload; lead-time metrics give predictable response expectations.</p>
+  </div>
+
+  <div class="callout">
+    <div class="label">Example 3 – secure ATM sub-system integrating with an existing banking system</div>
+    <p>Reliability target of 99 %, hard security requirements, must be deployed across 1000 ATMs. Mistakes are very expensive and requirements are stable. A pure Agile approach is risky here. <strong>Spiral</strong>, or at minimum a plan-driven model with explicit risk reviews, is more defensible. Engineering practices from XP (especially testing and CI) remain valuable inside whichever model is chosen.</p>
+  </div>
+
+  <div class="callout">
+    <div class="label">Example 4 – university student management system, 75 000 users, 4-year delivery window</div>
+    <p>Long timeline, moderately stable requirements, large user base, multiple stakeholder groups. <strong>Incremental delivery within an Agile framework (Scrum)</strong> is a strong fit: deliver core registration first, then add modules. Spiral could justify itself if the integration risks (with finance, with the ministry) are deemed dominant.</p>
+  </div>
+
+  <div class="callout">
+    <div class="label">Example 5 – health-monitoring mobile app connecting to an external medical decision system</div>
+    <p>The device interface and the external system are the major unknowns. <strong>Spiral with Agile inner loops</strong>: the early loops focus on resolving integration and clinical-safety risks via prototypes; later loops use Scrum-style sprints for the user-facing app once the unknowns are bounded.</p>
+  </div>
+
+  <div class="callout">
+    <div class="label">Example 6 – word-processing app reusing existing components, intended for users with dyslexia</div>
+    <p>Most components exist; the novelty is in the user interface and accessibility. <strong>Component-based development with Agile</strong> (Scrum + XP) fits well. Frequent user testing with the target audience is more valuable than upfront planning.</p>
+  </div>
+
+  <h3>The pattern across the six examples</h3>
+  <p>Notice that the answer is rarely a single named method. Most real situations call for a <em>blend</em>:</p>
+
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The management layer</strong> (Scrum, Kanban, or plan-driven phases) tells you how to organise the work and decide what to do next.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The engineering layer</strong> (XP practices, especially testing, pair work, refactoring, continuous integration) is almost always valuable, regardless of the management layer above.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The risk layer</strong> (Spiral, or risk reviews bolted onto another model) is reserved for situations where the cost of being wrong is large.</div></div>
+  </div>
+
+  <p>The first companion in this pair, on generic process models, looks at this same choice from the other direction – starting from the kind of software being built and working out which model fits. Reading the two together gives you both perspectives: what the methods are, and which methods suit which kind of work.</p>
+
+  <h3>A decision sketch</h3>
+
+  <figure>
+    <svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decision tree: requirements stable vs not, criticality high vs not, leading to recommendations.">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3A7CA5"/>
+        </marker>
+        <style>
+          .q { font: 600 12px Georgia, serif; fill: #1F4459; }
+          .a { font: 11px -apple-system, sans-serif; fill: #6B7280; }
+          .r { font: 700 12px Georgia, serif; fill: #2C5F7C; }
+        </style>
+      </defs>
+
+      <!-- root -->
+      <rect x="270" y="20" width="160" height="46" fill="#F0F4F8" stroke="#2C5F7C"/>
+      <text x="350" y="42" text-anchor="middle" class="q">Are requirements likely</text>
+      <text x="350" y="58" text-anchor="middle" class="q">to change?</text>
+
+      <!-- branch yes -->
+      <line x1="310" y1="66" x2="160" y2="110" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="220" y="92" class="a">yes (typical)</text>
+      <rect x="60" y="120" width="200" height="46" fill="#F0F4F8" stroke="#2C5F7C"/>
+      <text x="160" y="142" text-anchor="middle" class="q">Continuous incoming work,</text>
+      <text x="160" y="158" text-anchor="middle" class="q">no fixed scope per period?</text>
+
+      <line x1="120" y1="166" x2="80" y2="200" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="60" y="186" class="a">yes</text>
+      <rect x="20" y="210" width="160" height="40" fill="#fff" stroke="#3A7CA5"/>
+      <text x="100" y="234" text-anchor="middle" class="r">Kanban (+ XP)</text>
+
+      <line x1="200" y1="166" x2="240" y2="200" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="240" y="186" class="a">no</text>
+      <rect x="200" y="210" width="160" height="40" fill="#fff" stroke="#3A7CA5"/>
+      <text x="280" y="234" text-anchor="middle" class="r">Scrum + XP</text>
+
+      <!-- branch no -->
+      <line x1="390" y1="66" x2="540" y2="110" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="500" y="92" class="a">no (stable, regulated)</text>
+      <rect x="440" y="120" width="220" height="46" fill="#F0F4F8" stroke="#2C5F7C"/>
+      <text x="550" y="142" text-anchor="middle" class="q">High consequence-of-failure</text>
+      <text x="550" y="158" text-anchor="middle" class="q">or large investment?</text>
+
+      <line x1="500" y1="166" x2="460" y2="200" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="440" y="186" class="a">yes</text>
+      <rect x="400" y="210" width="160" height="40" fill="#fff" stroke="#3A7CA5"/>
+      <text x="480" y="234" text-anchor="middle" class="r">Spiral / V-model</text>
+
+      <line x1="600" y1="166" x2="640" y2="200" stroke="#3A7CA5" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="640" y="186" class="a">no</text>
+      <rect x="580" y="210" width="100" height="40" fill="#fff" stroke="#3A7CA5"/>
+      <text x="630" y="234" text-anchor="middle" class="r">Waterfall</text>
+
+      <!-- footer note -->
+      <rect x="60" y="290" width="600" height="50" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="360" y="312" text-anchor="middle" class="a">In practice: XP-style engineering practices apply almost everywhere.</text>
+      <text x="360" y="328" text-anchor="middle" class="a">A poor team with good practices beats a good team with poor practices.</text>
+    </svg>
+    <figcaption>Figure 9. A first-cut decision sketch. Real decisions add further factors – team size, contract type, organisational culture – but this captures the dominant ones.</figcaption>
+  </figure>
+</section>
+
+<!-- ===== REFERENCES ===== -->
+<section id="references">
+  <h2><span class="num">11</span>References</h2>
+  <div class="h2-rule"></div>
+
+  <p>For each method, the most authoritative source is given first.</p>
+
+  <h3>Primary sources</h3>
+  <ul>
+    <li>Beck, K. et al. (2001). <em>Manifesto for Agile Software Development</em>. agilemanifesto.org</li>
+    <li>Schwaber, K. and Sutherland, J. (2020). <em>The Scrum Guide</em>. scrumguides.org</li>
+    <li>Beck, K. and Andres, C. (2004). <em>Extreme Programming Explained: Embrace Change</em>, 2nd edition. Addison-Wesley.</li>
+    <li>Anderson, D. (2010). <em>Kanban: Successful Evolutionary Change for Your Technology Business</em>. Blue Hole Press.</li>
+    <li>Boehm, B. (1988). <em>A Spiral Model of Software Development and Enhancement</em>. IEEE Computer, 21 (5), 61–72.</li>
+  </ul>
+
+  <h3>Course textbooks (where these methods are also covered)</h3>
+  <ul>
+    <li>Sommerville, I. (2016). <em>Software Engineering</em>, 10th edition, Chapters 2 and 3. Pearson. (R2)</li>
+    <li>Pressman, R. and Maxim, B. (2020). <em>Software Engineering: A Practitioner's Approach</em>, 9th edition, Chapters 3–5. McGraw-Hill. (R5)</li>
+    <li>Bruegge, B. and Dutoit, A. (2013). <em>Object-Oriented Software Engineering Using UML, Patterns, and Java</em>, 3rd edition. Prentice Hall. (R1)</li>
+  </ul>
+
+  <h3>Recommended further reading</h3>
+  <ul>
+    <li>Takeuchi, H. and Nonaka, I. (1986). <em>The New New Product Development Game</em>. Harvard Business Review, 64 (1), 137–146. The article that inspired Scrum.</li>
+    <li>Cockburn, A. (2006). <em>Agile Software Development: The Cooperative Game</em>, 2nd edition. Addison-Wesley.</li>
+    <li>Larman, C. and Vodde, B. (2016). <em>Large-Scale Scrum: More with LeSS</em>. Addison-Wesley. For scaling Scrum to large programmes.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <span>COMP433 Software Engineering · Birzeit University</span>
+  <span>Hisham Ihshaish · Spring 2025/2026</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,2719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scrum classroom simulator: Ritaj portal</title>
+<style>
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F0F4F8;
+    --bg-tertiary: #F8F9FB;
+    --bg-info: #E6F1FB;
+    --bg-success: #EAF3DE;
+    --bg-warning: #FAEEDA;
+    --bg-danger: #FCEBEB;
+    --bg-purple: #EEEDFE;
+    --bg-teal: #E1F5EE;
+    --text-primary: #1A1A1A;
+    --text-secondary: #5F5E5A;
+    --text-tertiary: #888780;
+    --text-info: #0C447C;
+    --text-success: #27500A;
+    --text-warning: #633806;
+    --text-danger: #791F1F;
+    --text-purple: #26215C;
+    --text-teal: #085041;
+    --border-tertiary: rgba(26,26,26,0.12);
+    --border-secondary: rgba(26,26,26,0.25);
+    --border-info: rgba(12,68,124,0.3);
+    --border-success: rgba(39,80,10,0.3);
+    --border-purple: rgba(38,33,92,0.3);
+    --border-warning: rgba(99,56,6,0.3);
+    --accent: #2C5F7C;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+  .cs-bar { height: 4px; background: var(--accent); }
+  .cs-header {
+    background: var(--bg-primary);
+    border-bottom: 0.5px solid var(--border-tertiary);
+    padding: 0.85rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cs-header-title { font-size: 16px; font-weight: 500; margin: 0; }
+  .cs-header-sub { font-size: 12px; color: var(--text-secondary); margin: 0; }
+  .cs-header-right { text-align: right; }
+  .cs-header-attr { font-size: 11px; color: var(--text-tertiary); }
+  .cs-header-nav { font-size: 12px; color: var(--text-info); text-decoration: none; }
+  .cs-header-nav:hover { text-decoration: underline; }
+
+  .cs-wrap { max-width: 1020px; margin: 0 auto; padding: 1.5rem 1.5rem 2rem; }
+
+  .cs-setup {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin: 1rem 0;
+  }
+  .cs-setup h2 {
+    font-size: 20px;
+    margin: 0 0 0.25rem;
+    font-weight: 500;
+  }
+  .cs-setup p.lead {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 1.5rem;
+    line-height: 1.6;
+  }
+  .cs-setup-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 1.25rem;
+  }
+  .cs-setup-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cs-setup-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .cs-setup-role {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+  .cs-input {
+    padding: 9px 12px;
+    font-size: 13px;
+    border: 0.5px solid var(--border-secondary);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: inherit;
+    width: 100%;
+  }
+  .cs-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(44,95,124,0.15);
+  }
+  .cs-setup-note {
+    padding: 12px 14px;
+    background: var(--bg-info);
+    color: var(--text-info);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .cs-phases { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 6px; margin-bottom: 1rem; }
+  .cs-phase {
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-weight: 500;
+    border: 0.5px solid var(--border-tertiary);
+  }
+  .cs-phase.active { background: var(--bg-info); color: var(--text-info); border-color: var(--border-info); }
+  .cs-phase.done { background: var(--bg-success); color: var(--text-success); border-color: var(--border-success); }
+  .cs-phase-num {
+    display: block;
+    font-size: 10px;
+    opacity: 0.7;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .cs-sprint-header {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .cs-role-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.5rem;
+    font-size: 12px;
+  }
+  .cs-role-label {
+    color: var(--text-tertiary);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 2px;
+  }
+  .cs-role-pill {
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-weight: 500;
+    font-size: 11px;
+    border: 0.5px solid;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cs-role-pill.leading { background: var(--bg-purple); color: var(--text-purple); border-color: var(--border-purple); }
+  .cs-role-pill.active { background: var(--bg-info); color: var(--text-info); border-color: var(--border-info); }
+  .cs-role-pill.available { background: var(--bg-secondary); color: var(--text-secondary); border-color: var(--border-tertiary); }
+  .cs-role-pill.absent { background: transparent; color: var(--text-tertiary); border-color: var(--border-tertiary); opacity: 0.55; text-decoration: line-through; }
+  .cs-role-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .cs-role-desc {
+    padding: 0 14px 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+  }
+
+  .cs-panel {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .cs-panel-title { font-size: 16px; font-weight: 500; margin: 0 0 0.25rem; }
+  .cs-panel-sub { font-size: 13px; color: var(--text-secondary); margin: 0 0 1.25rem; }
+
+  .cs-teaching {
+    padding: 12px 14px;
+    background: var(--bg-warning);
+    color: var(--text-warning);
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    border: 0.5px solid var(--border-warning);
+  }
+  .cs-teaching-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+    opacity: 0.85;
+  }
+  .cs-forward-ref {
+    font-size: 11px;
+    font-style: italic;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 0.5px dashed currentColor;
+    opacity: 0.85;
+  }
+
+  .cs-class-q {
+    padding: 14px 16px;
+    background: var(--bg-purple);
+    color: var(--text-purple);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    border: 0.5px solid var(--border-purple);
+  }
+  .cs-class-q-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+    opacity: 0.85;
+  }
+  .cs-class-q-q {
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .cs-team { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+  .cs-role-card { padding: 12px 14px; background: var(--bg-secondary); border-radius: var(--radius-md); }
+  .cs-role-card-title {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 4px;
+  }
+  .cs-role-card-name { font-size: 14px; font-weight: 500; margin: 0 0 3px; color: var(--text-primary); }
+  .cs-role-card-desc { font-size: 11.5px; color: var(--text-secondary); line-height: 1.5; margin: 0; }
+
+  .cs-story {
+    padding: 12px 14px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 0.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cs-story:hover:not(.locked) { border-color: var(--border-secondary); }
+  .cs-story.selected { background: var(--bg-info); border-color: var(--border-info); }
+  .cs-story.locked { cursor: default; }
+  .cs-story.new-item { background: var(--bg-warning); border-color: var(--border-warning); }
+  .cs-story-text { flex: 1; font-size: 13px; min-width: 0; }
+  .cs-story-title { font-weight: 500; margin-bottom: 3px; }
+  .cs-story-as { color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+  .cs-story.new-item .cs-story-as { color: var(--text-warning); opacity: 0.85; }
+  .cs-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .cs-badge-high { background: #F7C1C1; color: #501313; }
+  .cs-badge-med { background: #FAC775; color: #412402; }
+  .cs-badge-low { background: #C0DD97; color: #173404; }
+  .cs-badge-new { background: var(--text-warning); color: #FFFFFF; }
+  .cs-pts { font-size: 12px; color: var(--text-secondary); min-width: 46px; text-align: right; font-weight: 500; }
+
+  .cs-capacity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: var(--bg-info);
+    color: var(--text-info);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .cs-capacity.over { background: var(--bg-danger); color: var(--text-danger); }
+
+  .cs-strategies {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .cs-strategy {
+    padding: 14px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-tertiary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cs-strategy:hover { border-color: var(--border-secondary); }
+  .cs-strategy.selected {
+    background: var(--bg-info);
+    border-color: var(--border-info);
+    box-shadow: 0 0 0 1px var(--border-info);
+  }
+  .cs-strategy-name { font-size: 13px; font-weight: 500; margin: 0 0 4px; }
+  .cs-strategy-pts {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .cs-strategy-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin: 0 0 6px; }
+  .cs-strategy-risk {
+    font-size: 11px;
+    color: var(--text-warning);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .cs-goal {
+    padding: 14px 16px;
+    background: var(--bg-purple);
+    color: var(--text-purple);
+    border-radius: var(--radius-md);
+    margin-top: 1rem;
+    font-size: 13px;
+  }
+  .cs-goal-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+    opacity: 0.8;
+  }
+
+  .cs-kanban { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+  .cs-col { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; min-height: 180px; }
+  .cs-col-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 12px;
+    text-align: center;
+  }
+  .cs-card {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    transition: all 0.3s;
+  }
+  .cs-card-points { font-size: 10px; color: var(--text-secondary); margin-top: 3px; }
+  .cs-card-done { background: #EAF3DE; border-color: #97C459; }
+  .cs-card-done .cs-card-points { color: #173404; }
+
+  .cs-progress-row {
+    display: grid;
+    grid-template-columns: minmax(0, 290px) minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .cs-burndown-box {
+    padding: 12px 14px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+  }
+  .cs-burndown-title {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .cs-burndown-legend { display: flex; gap: 14px; font-size: 10px; color: var(--text-tertiary); margin-top: 4px; }
+  .cs-legend-swatch { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 4px; }
+  .cs-burndown-caption {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    line-height: 1.55;
+    margin: 10px 0 0;
+    font-style: italic;
+  }
+  .cs-daily {
+    padding: 12px 14px;
+    background: var(--bg-warning);
+    color: var(--text-warning);
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .cs-daily-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+    opacity: 0.7;
+  }
+  .cs-day-indicator { text-align: center; font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; font-weight: 500; }
+
+  .cs-arch-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,25,40,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 1rem;
+  }
+  .cs-arch-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    max-width: 540px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .cs-arch-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-teal);
+    margin-bottom: 6px;
+  }
+  .cs-arch-title { font-size: 17px; font-weight: 500; margin: 0 0 0.5rem; }
+  .cs-arch-desc { font-size: 13px; color: var(--text-secondary); margin: 0 0 0.9rem; line-height: 1.6; }
+  .cs-arch-system {
+    padding: 10px 12px;
+    background: var(--bg-purple);
+    color: var(--text-purple);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+  .cs-arch-system-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    opacity: 0.85;
+  }
+  .cs-arch-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+  .cs-arch-lesson {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0 0 1rem;
+    line-height: 1.6;
+    font-style: italic;
+    padding: 10px 12px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+  }
+  .cs-arch-opt {
+    padding: 12px 14px;
+    background: var(--bg-teal);
+    color: var(--text-teal);
+    border-radius: var(--radius-md);
+    border: 0.5px solid transparent;
+    cursor: pointer;
+  }
+  .cs-arch-opt:hover { border-color: var(--text-teal); }
+  .cs-arch-opt.chosen { border-color: var(--text-teal); box-shadow: 0 0 0 1px var(--text-teal); }
+  .cs-arch-opt-name { font-size: 13px; font-weight: 500; margin: 0 0 3px; }
+  .cs-arch-opt-trade { font-size: 11px; line-height: 1.5; margin: 0; opacity: 0.85; }
+
+  .cs-retro { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+  .cs-retro-col { padding: 14px; border-radius: var(--radius-md); }
+  .cs-retro-went { background: #EAF3DE; color: #173404; }
+  .cs-retro-not { background: #FCEBEB; color: #501313; }
+  .cs-retro-act { background: #E6F1FB; color: #042C53; }
+  .cs-retro-title {
+    font-size: 11px;
+    font-weight: 500;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .cs-retro-item {
+    font-size: 12px;
+    padding: 7px 9px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 4px;
+    margin-bottom: 5px;
+    line-height: 1.5;
+  }
+
+  .cs-feedback {
+    padding: 14px 16px;
+    background: var(--bg-info);
+    color: var(--text-info);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 1rem;
+  }
+  .cs-quote {
+    font-style: italic;
+    padding: 8px 14px;
+    border-left: 2px solid currentColor;
+    margin: 10px 0 4px;
+  }
+
+  .cs-increment {
+    padding: 12px 14px;
+    background: var(--bg-success);
+    color: var(--text-success);
+    border-radius: var(--radius-md);
+    margin-top: 12px;
+  }
+  .cs-increment-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    opacity: 0.8;
+  }
+  .cs-increment-item { font-size: 13px; padding: 4px 0; font-weight: 500; }
+
+  .cs-new-items {
+    padding: 12px 14px;
+    background: var(--bg-warning);
+    color: var(--text-warning);
+    border-radius: var(--radius-md);
+    margin-top: 12px;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .cs-new-items-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    opacity: 0.85;
+  }
+  .cs-new-items-item { padding: 4px 0 4px 14px; position: relative; }
+  .cs-new-items-item::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }
+
+  .cs-lessons {
+    padding: 14px 16px;
+    background: var(--bg-purple);
+    color: var(--text-purple);
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    font-size: 13px;
+  }
+  .cs-lessons-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+  .cs-lesson-item {
+    padding: 4px 0 4px 22px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .cs-lesson-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    opacity: 0.45;
+  }
+  .cs-lesson-item::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 10px;
+    width: 3px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+  }
+
+  .cs-req-change {
+    padding: 14px 16px;
+    background: #FFF4E0;
+    color: #713E05;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    font-size: 13px;
+    line-height: 1.6;
+    border: 0.5px solid rgba(113,62,5,0.3);
+  }
+  .cs-req-change-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    opacity: 0.85;
+  }
+  .cs-req-change-title { font-weight: 500; margin-bottom: 4px; font-size: 14px; }
+
+  .cs-product {
+    margin-top: 1rem;
+  }
+  .cs-product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cs-product-title {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .cs-product-progress {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+  .cs-product-progress strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  .cs-product-bar {
+    height: 6px;
+    background: var(--bg-secondary);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 14px;
+  }
+  .cs-product-bar-s1 { background: #8EB960; }
+  .cs-product-bar-s2 { background: var(--accent); }
+  .cs-product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  .cs-product-tile {
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border-tertiary);
+    position: relative;
+    min-height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    opacity: 0.45;
+  }
+  .cs-product-tile.delivered-s1 {
+    background: #EAF3DE;
+    border-color: #97C459;
+    opacity: 1;
+  }
+  .cs-product-tile.delivered-s2 {
+    background: var(--bg-info);
+    border-color: var(--border-info);
+    opacity: 1;
+  }
+  .cs-product-tile.added {
+    background: #FFF4E0;
+    border-color: rgba(113,62,5,0.35);
+    opacity: 0.9;
+    border-style: dashed;
+  }
+  .cs-product-tile-title {
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+  }
+  .cs-product-tile.delivered-s1 .cs-product-tile-title { color: #173404; }
+  .cs-product-tile.delivered-s2 .cs-product-tile-title { color: var(--text-info); }
+  .cs-product-tile.added .cs-product-tile-title { color: #713E05; }
+  .cs-product-tile-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .cs-product-tile-tag {
+    font-weight: 500;
+  }
+  .cs-product-tile-pts {
+    opacity: 0.7;
+  }
+  .cs-product-legend {
+    display: flex;
+    gap: 14px;
+    margin-top: 12px;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    flex-wrap: wrap;
+  }
+  .cs-product-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+  .cs-product-legend-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    border: 0.5px solid;
+  }
+
+  .cs-complete-note {
+    margin-top: 1rem;
+    padding: 14px 16px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .cs-complete-note.final { background: var(--bg-success); color: var(--text-success); }
+
+  .cs-summary-hero {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .cs-summary-hero h2 {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.01em;
+  }
+  .cs-summary-hero-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 1.25rem;
+    line-height: 1.6;
+  }
+  .cs-summary-team {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .cs-summary-team-item {
+    padding: 10px 12px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+  }
+  .cs-summary-team-role {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    margin: 0 0 3px;
+  }
+  .cs-summary-team-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .cs-summary-section {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .cs-summary-section-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .cs-sprints-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .cs-sprint-card {
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .cs-sprint-card.s1 { background: #EAF3DE; color: #173404; }
+  .cs-sprint-card.s2 { background: var(--bg-info); color: var(--text-info); }
+  .cs-sprint-card-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+    margin-bottom: 6px;
+  }
+  .cs-sprint-card-goal {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0 0 8px;
+    line-height: 1.45;
+  }
+  .cs-sprint-card-list { margin: 0 0 8px; padding: 0; list-style: none; }
+  .cs-sprint-card-list li {
+    font-size: 12px;
+    padding: 3px 0 3px 14px;
+    position: relative;
+  }
+  .cs-sprint-card-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 1.5px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+  .cs-sprint-card-foot {
+    font-size: 11px;
+    padding-top: 6px;
+    border-top: 0.5px solid currentColor;
+    opacity: 0.85;
+  }
+
+  .cs-timeline {
+    position: relative;
+    padding-left: 20px;
+  }
+  .cs-timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border-tertiary);
+  }
+  .cs-timeline-item {
+    position: relative;
+    padding: 6px 0 10px;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .cs-timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -19px;
+    top: 11px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-primary);
+  }
+  .cs-timeline-item.stakeholder::before { background: #C78930; }
+  .cs-timeline-item.review::before { background: var(--text-info); }
+  .cs-timeline-when {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .cs-timeline-what {
+    color: var(--text-primary);
+    margin-bottom: 3px;
+  }
+  .cs-timeline-detail {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .cs-timeline-detail li {
+    padding: 1px 0;
+    list-style: none;
+  }
+
+  .cs-arch-log {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cs-arch-log-item {
+    padding: 12px 14px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--text-teal);
+  }
+  .cs-arch-log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cs-arch-log-title {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0;
+  }
+  .cs-arch-log-sprint {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+  .cs-arch-log-chosen {
+    font-size: 12px;
+    color: var(--text-teal);
+    font-weight: 500;
+    margin: 0 0 3px;
+  }
+  .cs-arch-log-trade {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .cs-velocity {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .cs-velocity-col {
+    padding: 14px 16px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+  .cs-velocity-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .cs-velocity-num {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 2px;
+    letter-spacing: -0.02em;
+  }
+  .cs-velocity-unit {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin: 0;
+  }
+
+  .cs-learnings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .cs-learning-card {
+    padding: 14px;
+    background: var(--bg-purple);
+    color: var(--text-purple);
+    border-radius: var(--radius-md);
+  }
+  .cs-learning-title {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0 0 5px;
+  }
+  .cs-learning-desc {
+    font-size: 11.5px;
+    line-height: 1.55;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  .cs-summary-restart {
+    text-align: center;
+    margin: 1.5rem 0 0;
+  }
+
+  .cs-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding: 1rem 0;
+  }
+  .cs-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    border: 0.5px solid var(--border-secondary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .cs-btn:hover:not(:disabled) { background: var(--bg-secondary); }
+  .cs-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .cs-btn-primary { background: var(--accent); color: #FFFFFF; border-color: var(--accent); }
+  .cs-btn-primary:hover:not(:disabled) { background: #234B63; border-color: #234B63; }
+  .cs-hint { font-size: 12px; color: var(--text-tertiary); text-align: center; flex: 1; }
+
+  .cs-footer {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  @media (max-width: 680px) {
+    .cs-phases { gap: 3px; }
+    .cs-phase { font-size: 10px; padding: 8px 4px; }
+    .cs-kanban { grid-template-columns: 1fr; }
+    .cs-retro { grid-template-columns: 1fr; }
+    .cs-progress-row { grid-template-columns: 1fr; }
+    .cs-strategies { grid-template-columns: 1fr; }
+    .cs-wrap { padding: 1rem; }
+    .cs-setup { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cs-bar"></div>
+<div class="cs-header">
+  <div>
+    <h1 class="cs-header-title">Scrum classroom simulator</h1>
+    <p class="cs-header-sub">Building a Ritaj-like student portal, sprint by sprint</p>
+  </div>
+  <div class="cs-header-right">
+    <div class="cs-header-attr">COMP433 Software Engineering &middot; Hisham Ihshaish</div>
+    <a class="cs-header-nav" href="/birzeit/comp433/">&larr; Course Page</a> <a class="cs-header-nav" href="xp_kanban.html">XP and Kanban &rarr;</a>
+  </div>
+</div>
+
+<div class="cs-wrap" id="csRoot"></div>
+
+<div class="cs-footer" id="csFooter">
+  Interactive classroom exercise. Open on screen share, invite students to contribute via Teams chat at each prompt.
+</div>
+
+<script>
+(function(){
+
+  const phases = [
+    { num: '1', label: 'Product backlog' },
+    { num: '2', label: 'Sprint planning' },
+    { num: '3', label: 'Sprint execution' },
+    { num: '4', label: 'Sprint review' },
+    { num: '5', label: 'Retrospective' }
+  ];
+
+  const initialBacklog = [
+    { id: 'b01', title: 'Single sign-on login', as: 'As a student, I want to log in once with my university credentials so I can access everything without signing in repeatedly.', priority: 'high', points: 3, tech: 'Authentication against LDAP / OAuth' },
+    { id: 'b02', title: 'View current semester schedule', as: 'As a student, I want to see my weekly timetable so I know where and when my classes are.', priority: 'high', points: 5, tech: 'Read-only view, calendar rendering' },
+    { id: 'b03', title: 'Register for courses', as: 'As a student, I want to add and drop courses during the registration window so I can build my schedule.', priority: 'high', points: 13, tech: 'Transactional, concurrency, prerequisites, conflicts' },
+    { id: 'b04', title: 'View current grades', as: 'As a student, I want to see my grades for this semester as they are published.', priority: 'high', points: 3, tech: 'Read-only view per course' },
+    { id: 'b05', title: 'Download course materials', as: 'As a student, I want to download slides and notes posted by my instructors.', priority: 'med', points: 5, tech: 'File storage, per-course access control' },
+    { id: 'b06', title: 'Message instructors', as: 'As a student, I want to send a message to my course instructor.', priority: 'med', points: 8, tech: 'Threaded messaging, notifications' },
+    { id: 'b07', title: 'View financial statement', as: 'As a student, I want to see my tuition balance and payment history.', priority: 'med', points: 5, tech: 'Integration with finance system' },
+    { id: 'b08', title: 'View official transcript', as: 'As a student, I want to view my cumulative academic record so I can track my progress.', priority: 'med', points: 5, tech: 'Read-only aggregation across semesters' },
+    { id: 'b09', title: 'Announcement board', as: 'As a student, I want to see university-wide announcements on my dashboard.', priority: 'low', points: 3, tech: 'CMS-driven, time-sensitive' },
+    { id: 'b10', title: 'Lecturer evaluation form', as: 'As a student, I want to submit end-of-semester evaluations for my instructors.', priority: 'low', points: 5, tech: 'Form submission, anonymity controls' },
+    { id: 'b11', title: 'Request transcript copy', as: 'As a student, I want to request an official printed transcript to be issued.', priority: 'low', points: 5, tech: 'Workflow, approval, finance integration' },
+    { id: 'b12', title: 'Request leave of absence', as: 'As a student, I want to formally request a semester off through the portal.', priority: 'low', points: 8, tech: 'Multi-step approval workflow' }
+  ];
+
+  const state = {
+    screen: 'setup',
+    names: { po: '', sm: '', d1: '', d2: '', d3: '' },
+    phase: 0,
+    sprint: 1,
+    backlog: JSON.parse(JSON.stringify(initialBacklog)),
+    selected: new Set(),
+    strategy: null,
+    sprintGoal: '',
+    day: 0,
+    boardState: {},
+    burndownHistory: [],
+    archChoice: null,
+    archSeen: false,
+    archModalOpen: false,
+    sprint1Strategy: null,
+    newFeedbackItems: [],
+    reqChangeSeen: false,
+    deliveredFeatures: [],
+    archDecisionsLog: [],
+    reqChangesLog: [],
+    sprint1Velocity: 0,
+    sprint2Velocity: 0,
+    sprintDeliveryCaptured: false
+  };
+
+  const roleStates = {
+    0: {
+      po: 'leading', sm: 'available', dev: 'available', stake: 'absent',
+      desc: po => (po ? po + ' as Product Owner' : 'The Product Owner') + ' leads backlog refinement and ordering. The team is consulted for estimates and clarity.'
+    },
+    1: {
+      po: 'leading', sm: 'active', dev: 'leading', stake: 'absent',
+      desc: (po, sm) => 'All three roles work together. ' + (po || 'The Product Owner') + ' presents the top items, developers estimate and commit, ' + (sm || 'the Scrum Master') + ' facilitates.'
+    },
+    2: {
+      po: 'available', sm: 'active', dev: 'leading', stake: 'absent',
+      desc: (po, sm) => 'Developers own delivery and run the Daily Scrum. ' + (sm || 'The Scrum Master') + ' clears blockers. ' + (po || 'The Product Owner') + ' is available for clarifications.'
+    },
+    3: {
+      po: 'active', sm: 'active', dev: 'leading', stake: 'leading',
+      desc: () => 'Developers demo the increment. Stakeholders inspect and give feedback. The Product Backlog is updated in the same meeting.'
+    },
+    4: {
+      po: 'leading', sm: 'leading', dev: 'leading', stake: 'absent',
+      desc: () => 'Team only. Stakeholders are not invited. The focus is on how the team works together, not what they built.'
+    }
+  };
+
+  function getStrategiesForSprint1() {
+    return [
+      {
+        id: 'safe',
+        name: 'Foundation first',
+        ids: ['b01', 'b02'],
+        goal: 'Students can log in and see their weekly schedule.',
+        desc: 'Start with login and schedule view. Safe, well-understood scope. Every later feature needs login anyway.',
+        risk: 'Risk: stakeholders may find the demo underwhelming. Only two user-visible features at the end.'
+      },
+      {
+        id: 'broad',
+        name: 'Broad thin slice',
+        ids: ['b01', 'b04', 'b09'],
+        goal: 'Students can log in, view announcements, and see any grades posted so far.',
+        desc: 'Ship three smaller features. Stakeholders see breadth early, but none of the complex ones are touched.',
+        risk: 'Risk: the hardest items (registration, messaging) remain unknown. Estimates for them stay theoretical.'
+      },
+      {
+        id: 'bold',
+        name: 'Tackle the hardest first',
+        ids: ['b03'],
+        goal: 'Students can register and drop courses during the registration window.',
+        desc: 'Front-load the complex registration feature. If it works, everything else is easier. De-risks the whole project.',
+        risk: 'Risk: one story for the whole sprint. If it slips, the demo has nothing to show.'
+      }
+    ];
+  }
+
+  function getStrategiesForSprint2(sprint1Id) {
+    if (sprint1Id === 'safe') {
+      return [
+        { id: 'continue', name: 'Build on the foundation', ids: ['b04', 'b05'], goal: 'Students can see grades and download course materials.', desc: 'Stay on the safe path. Deliver another two visible features built on login.', risk: 'Risk: still avoiding the hardest piece. Registration remains untouched.' },
+        { id: 'tackle-hard', name: 'Take on registration now', ids: ['b03'], goal: 'Students can register for courses, building on the auth and schedule already in place.', desc: 'With login and schedule in place, registration integration is better understood. Tackle it now.', risk: 'Risk: registration is still 13 points. The team has done nothing this complex yet.' },
+        { id: 'arabic-must', name: 'Arabic toggle plus grades', ids: ['newArabic', 'b04'], goal: 'The portal is bilingual, and students can see grades.', desc: 'Respond directly to the new urgent request from the Dean. Smaller second item to stay safe.', risk: 'Risk: the new item is under-specified. Arabic RTL layout may surface surprises.' }
+      ];
+    }
+    if (sprint1Id === 'broad') {
+      return [
+        { id: 'deepen', name: 'Deepen what exists', ids: ['b05', 'b08'], goal: 'Students can download course materials and view their transcript.', desc: 'Add depth to the thin slice already shipped. Now students have a more complete experience.', risk: 'Risk: registration still untouched. The biggest unknown remains unresolved.' },
+        { id: 'registration', name: 'Registration now', ids: ['b03'], goal: 'Students can register for courses.', desc: 'Stakeholders liked the breadth but asked for more substance. Registration is that substance.', risk: 'Risk: 13 points. Team has only shipped smaller items so far.' },
+        { id: 'arabic-plus', name: 'Arabic toggle plus materials', ids: ['newArabic', 'b05'], goal: 'The portal works in Arabic and students can download course materials.', desc: 'Address the Dean\'s Arabic request while adding materials download.', risk: 'Risk: Arabic retro-fit may touch all features already shipped.' }
+      ];
+    }
+    return [
+      { id: 'polish', name: 'Polish and broaden', ids: ['b02', 'b04'], goal: 'Students have a schedule view and grade view, alongside the registration already shipped.', desc: 'Registration is done. Add the surrounding features users expect.', risk: 'Risk: team is still recovering from sprint 1 pressure. Morale matters.' },
+      { id: 'arabic-after-reg', name: 'Arabic toggle now', ids: ['newArabic', 'b02'], goal: 'The portal is bilingual and students can view their schedule.', desc: 'Registration already shipped, now make the system accessible to Arabic speakers.', risk: 'Risk: registration was built in English only. RTL rework touches fresh code.' },
+      { id: 'messaging', name: 'Messaging plus announcements', ids: ['b06', 'b09'], goal: 'Students can message instructors and see university announcements.', desc: 'Two user-visible communication features. Clear demo value.', risk: 'Risk: messaging (8 pts) is non-trivial; estimation confidence is untested.' }
+    ];
+  }
+
+  const archDecisions = {
+    b01: {
+      title: 'Login architecture decision',
+      desc: 'Your team is about to implement login. Before writing any code, you need to pick an authentication strategy. This is a point where architectural thinking matters, because this decision will constrain everything built on top of it.',
+      systemNote: 'Every other feature on the portal depends on authenticated identity. The choice here sets the user model the whole system is built around.',
+      options: [
+        { id: 'ldap', name: 'Integrate with university LDAP', trade: 'Consistent with existing systems. Students use the same password as email. But depends on the LDAP team\'s availability and schema.' },
+        { id: 'oauth', name: 'Stand up a new OAuth server', trade: 'Modern, flexible, clean. But two sets of credentials and more to maintain.' },
+        { id: 'local', name: 'Build our own user table', trade: 'Fastest path to a demo. But disconnects from the rest of the university and creates a migration problem later.' }
+      ],
+      lesson: 'In Scrum, architectural decisions do not stop at sprint planning. They surface during the sprint. The Developers decide, but the Product Owner and often the Scrum Master are pulled in. Bigger decisions that affect multiple sprints may need a wider discussion.'
+    },
+    b02: {
+      title: 'Schedule view architecture decision',
+      desc: 'Before building the schedule view, the team needs to decide where schedule data comes from. Ritaj already has a scheduling system. You need to choose how to integrate.',
+      systemNote: 'How you integrate with one existing university system sets the pattern for all the others: grades, finance, library, transcripts. The first integration becomes the template.',
+      options: [
+        { id: 'api', name: 'Call the existing schedule service via API', trade: 'Clean separation. Always fresh data. But depends on an API that may not exist yet.' },
+        { id: 'db', name: 'Read directly from the scheduling database', trade: 'Fast to build. But tightly couples the portal to a schema we do not own.' },
+        { id: 'sync', name: 'Nightly sync into our own store', trade: 'Decoupled and fast to read. But data is up to 24 hours stale, which may confuse users on change days.' }
+      ],
+      lesson: 'Even small features carry architectural weight. "Where does the data come from" is one of the first questions on any story, and the answer shapes testing, performance, and dependencies.'
+    },
+    b03: {
+      title: 'Course registration architecture decision',
+      desc: 'Registration is the riskiest feature in the backlog. It is fundamentally a database problem: hundreds of students may try to claim the last seat in the same course at the same moment, while the database must preserve a correct count of remaining seats. Get this wrong and you have either lost registrations, double-bookings, or a system that freezes under load.',
+      systemNote: 'This decision ripples across the whole system. It shapes the schema (do we need a reservations table? locks? version columns?), the transaction boundaries, the client contract, and what every future feature that touches registration has to work with.',
+      options: [
+        { id: 'lock', name: 'Pessimistic row-level locks in the database', trade: 'The database itself guarantees correctness through SELECT ... FOR UPDATE. Simple code. But creates queues at peak times and can deadlock under load.' },
+        { id: 'optimistic', name: 'Optimistic concurrency with version columns', trade: 'Each course row has a version number. Updates check and fail on conflict. Fast in the common case, but clients must handle retries and users see occasional "please try again" messages.' },
+        { id: 'queue', name: 'Append-only event log, async seat allocation', trade: 'Registrations go onto a queue and a single worker decides who got a seat. Scales beautifully. But the schema changes fundamentally: events become the source of truth, not the current-seat-count row.' }
+      ],
+      lesson: 'This is a database architecture decision, not just a performance tweak. Each option implies a different schema, different transaction model, and different guarantees. Non-functional requirements (consistency, performance, scalability) shape the code you write on day one.'
+    },
+    b04: {
+      title: 'Grades data architecture decision',
+      desc: 'Grades look like a simple read-only view, but they are sensitive data, authoritative records, and they span many systems. The team must decide how the portal stores and accesses them, which is a database architecture question at its core.',
+      systemNote: 'This decision shapes the database schema, the read and write paths, and what the team commits to keeping in sync. Change it later and you are migrating data and rewriting every query that touched it.',
+      options: [
+        { id: 'live', name: 'No local storage. Query the academic records system on every read', trade: 'The portal holds no grade data. Always authoritative. But every page load is a network call, and grades fail to display if the records system is down.' },
+        { id: 'normalised', name: 'Replicated grades table, normalised, refreshed on a schedule', trade: 'A well-designed schema with foreign keys to students and courses. Standard SQL works. But you own a sync job and have to think about stale data.' },
+        { id: 'denormalised', name: 'Denormalised read model, updated by grade-published events', trade: 'Student-centric: one row per student with all grades embedded. Very fast reads and simple queries. But writes are more complex and updates touch many rows.' }
+      ],
+      lesson: 'Database design is not just "make a table and put the data in". Schema shape, normalisation level, and source of truth are architectural decisions with long-term consequences. A feature that seems read-only still forces the team to answer where the data lives.'
+    },
+    newArabic: {
+      title: 'Arabic language toggle architecture decision',
+      desc: 'Adding Arabic is not just translation. It is internationalisation. The team needs to decide how deeply to rework the interface layer, and the database will change too: translatable strings need storage somewhere.',
+      systemNote: 'This touches every existing feature and sets the pattern for every future one. Whatever the team picks now becomes the standard the rest of the system must follow.',
+      options: [
+        { id: 'strings', name: 'Externalise strings into resource files, layout mirrored with CSS', trade: 'Minimum change. Translations live in JSON or properties files. Gets us 80 percent there. But RTL layout issues will linger in hard-coded CSS.' },
+        { id: 'i18n', name: 'Adopt a proper i18n framework, translations in the database', trade: 'Clean and future-proof. A translations table keyed by locale and message ID. But touches every screen already built, adding sprint risk.' },
+        { id: 'rewrite', name: 'Rewrite the UI shell with RTL-first layout from scratch', trade: 'The cleanest result. But the most expensive, and it may not fit in one sprint.' }
+      ],
+      lesson: 'Requirement changes from stakeholders often have larger architectural consequences than they look. The Product Owner asks for "Arabic support"; the Developers have to tell them what that actually means for the codebase, the database, and the layout.'
+    },
+    b05: {
+      title: 'Course materials storage decision',
+      desc: 'Instructors upload slides, notes, and readings. The team needs a plan for where these files live and how access is controlled.',
+      systemNote: 'The choice here sets the pattern for every future upload feature: assignment submissions, thesis PDFs, evaluation attachments. It also shapes how the system scales with the amount of content.',
+      options: [
+        { id: 'fs', name: 'Server file system with application-level access control', trade: 'Simple to implement. But does not scale well and backup is manual.' },
+        { id: 'blob', name: 'Object storage with signed URLs', trade: 'Scales cleanly and integrates with CDNs. But adds a new service dependency.' },
+        { id: 'db', name: 'Store files in the database as BLOBs', trade: 'One place for everything. But database grows fast and backups become slow.' }
+      ],
+      lesson: 'Storage choices look boring but they compound. A decision made in week three determines what is possible in year three.'
+    },
+    b06: {
+      title: 'Messaging architecture decision',
+      desc: 'Students messaging instructors sounds simple, but real messaging needs threading, notifications, and a sense of freshness. The team must choose a model.',
+      systemNote: 'Whichever model is picked becomes the basis for every real-time feature later: announcements push, grade notifications, chat between students. A choice made here is hard to unwind.',
+      options: [
+        { id: 'polling', name: 'Polling-based: client checks for new messages every minute', trade: 'Easy to build with existing tools. But new messages can be delayed and it stresses the server at scale.' },
+        { id: 'websocket', name: 'WebSockets for real-time delivery', trade: 'Instant and modern. But requires sticky sessions or a pub/sub layer, which is new infrastructure.' },
+        { id: 'email', name: 'Use email as the backbone, portal mirrors the thread', trade: 'Reliable and familiar. But timing is weak and thread state can fall out of sync.' }
+      ],
+      lesson: 'Communication features almost always hide a synchronisation problem. Real-time, near-real-time, and async are three very different architectures, not three ways to tune the same system.'
+    },
+    b08: {
+      title: 'Transcript view architecture decision',
+      desc: 'The transcript aggregates data from every semester the student has attended. The team needs to decide how to compose this view reliably.',
+      systemNote: 'The choice ripples through the database schema, the query model, and every page that needs cumulative academic data (GPA, honors list, graduation checks).',
+      options: [
+        { id: 'view', name: 'Database view that joins across semester tables', trade: 'Always fresh, no duplication. But query cost grows with each new semester.' },
+        { id: 'materialised', name: 'Materialised view refreshed on grade publication', trade: 'Very fast reads. But needs an invalidation strategy when grades change.' },
+        { id: 'service', name: 'Dedicated transcript service composes from source systems', trade: 'Clean boundaries. But another service to deploy and monitor.' }
+      ],
+      lesson: 'Aggregated views are where the trade-off between freshness and performance becomes most visible. Every product has this kind of story eventually.'
+    }
+  };
+
+  function teamMembers() {
+    const n = state.names;
+    return [n.d1, n.d2, n.d3].filter(x => x && x.trim());
+  }
+
+  function allNamesEntered() {
+    const n = state.names;
+    return n.po.trim() && n.sm.trim() && n.d1.trim() && n.d2.trim() && n.d3.trim();
+  }
+
+  function priorityBadge(p) {
+    if (p === 'high') return '<span class="cs-badge cs-badge-high">High</span>';
+    if (p === 'med') return '<span class="cs-badge cs-badge-med">Medium</span>';
+    return '<span class="cs-badge cs-badge-low">Low</span>';
+  }
+
+  function storyById(id) {
+    return state.backlog.find(s => s.id === id);
+  }
+
+  function capacity() {
+    return 15;
+  }
+
+  function totalSelected() {
+    return [...state.selected].reduce((sum, id) => {
+      const item = storyById(id);
+      return sum + (item ? item.points : 0);
+    }, 0);
+  }
+
+  function remainingPoints() {
+    return state.backlog
+      .filter(s => state.selected.has(s.id))
+      .filter(s => state.boardState[s.id] !== 'done')
+      .reduce((sum, s) => sum + s.points, 0);
+  }
+
+  function updateBurndownHistory() {
+    const remaining = remainingPoints();
+    const idx = state.burndownHistory.findIndex(e => e.day === state.day);
+    if (idx >= 0) {
+      state.burndownHistory[idx].remaining = remaining;
+    } else {
+      state.burndownHistory.push({ day: state.day, remaining });
+      state.burndownHistory.sort((a, b) => a.day - b.day);
+    }
+  }
+
+  function renderSetup() {
+    const n = state.names;
+    return [
+      '<div class="cs-setup">',
+        '<h2>SE classroom Scrum team</h2>',
+        '<p class="lead">Enter the names of five volunteers (students) from the class. They will take on the roles of Product Owner, Scrum Master, and three Developers. Their names and decisions will drive the simulation.</p>',
+        '<div class="cs-setup-note">The team is building a new version of the Ritaj student portal. The Product Backlog reflects real Ritaj features: login, schedule, grades, registration, and more. The team will plan and run two sprints.</div>',
+        '<div class="cs-setup-grid">',
+          '<div class="cs-setup-field">',
+            '<label class="cs-setup-label">Product owner</label>',
+            '<span class="cs-setup-role">Owns the backlog, decides what matters</span>',
+            '<input class="cs-input" data-role="po" type="text" value="' + n.po + '" placeholder="Student name">',
+          '</div>',
+          '<div class="cs-setup-field">',
+            '<label class="cs-setup-label">Scrum master</label>',
+            '<span class="cs-setup-role">Facilitates, clears blockers, coaches</span>',
+            '<input class="cs-input" data-role="sm" type="text" value="' + n.sm + '" placeholder="Student name">',
+          '</div>',
+          '<div class="cs-setup-field">',
+            '<label class="cs-setup-label">Developer 1</label>',
+            '<span class="cs-setup-role">Builds the increment</span>',
+            '<input class="cs-input" data-role="d1" type="text" value="' + n.d1 + '" placeholder="Student name">',
+          '</div>',
+          '<div class="cs-setup-field">',
+            '<label class="cs-setup-label">Developer 2</label>',
+            '<span class="cs-setup-role">Builds the increment</span>',
+            '<input class="cs-input" data-role="d2" type="text" value="' + n.d2 + '" placeholder="Student name">',
+          '</div>',
+          '<div class="cs-setup-field">',
+            '<label class="cs-setup-label">Developer 3</label>',
+            '<span class="cs-setup-role">Builds the increment</span>',
+            '<input class="cs-input" data-role="d3" type="text" value="' + n.d3 + '" placeholder="Student name">',
+          '</div>',
+        '</div>',
+        '<div style="display:flex; justify-content:flex-end; gap: 10px; align-items:center;">',
+          '<span class="cs-hint" style="text-align:right;">' + (allNamesEntered() ? 'Ready to begin' : 'Enter all five names to begin') + '</span>',
+          '<button class="cs-btn cs-btn-primary" id="csStart"' + (allNamesEntered() ? '' : ' disabled') + '>Start simulation</button>',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderPhases() {
+    return '<div class="cs-phases">' + phases.map((p, i) => {
+      const cls = i === state.phase ? 'active' : (i < state.phase ? 'done' : '');
+      return '<div class="cs-phase ' + cls + '"><span class="cs-phase-num">Step ' + p.num + '</span>' + p.label + '</div>';
+    }).join('') + '</div>';
+  }
+
+  function renderSprintHeader() {
+    return '<div class="cs-sprint-header">Sprint ' + state.sprint + ' of 2</div>';
+  }
+
+  function renderRoleBar() {
+    const r = roleStates[state.phase];
+    const n = state.names;
+    const devSet = state.phase === 3 ? ['leading', 'leading'] : [r.dev];
+    const pill = (stateClass, label) => '<span class="cs-role-pill ' + stateClass + '"><span class="cs-role-dot"></span>' + label + '</span>';
+    const poLabel = n.po ? 'Product owner: ' + n.po : 'Product owner';
+    const smLabel = n.sm ? 'Scrum master: ' + n.sm : 'Scrum master';
+    const members = teamMembers();
+    const devLabel = members.length ? 'Developers: ' + members.join(', ') : 'Developers';
+    const stakeLabel = 'Stakeholders';
+    const desc = r.desc(n.po, n.sm);
+    return [
+      '<div class="cs-role-bar">',
+        '<span class="cs-role-label">Who is involved</span>',
+        pill(r.po, poLabel),
+        pill(r.sm, smLabel),
+        pill(r.dev, devLabel),
+        pill(r.stake, stakeLabel),
+      '</div>',
+      '<div class="cs-role-desc">' + desc + '</div>'
+    ].join('');
+  }
+
+  function renderBurndown() {
+    const selectedStories = state.backlog.filter(s => state.selected.has(s.id));
+    const total = selectedStories.reduce((a, b) => a + b.points, 0);
+    if (total === 0) return '';
+
+    const w = 260, h = 140;
+    const pl = 34, pr = 10, pt = 10, pb = 26;
+    const cw = w - pl - pr;
+    const ch = h - pt - pb;
+    const xForDay = d => pl + (d / 10) * cw;
+    const yForPts = p => pt + (1 - p / total) * ch;
+
+    const step = Math.max(1, Math.ceil(total / 4));
+    let gridLines = '';
+    let yLabels = '';
+    for (let p = 0; p <= total; p += step) {
+      const y = yForPts(p);
+      gridLines += '<line x1="' + pl + '" y1="' + y + '" x2="' + (w - pr) + '" y2="' + y + '" stroke="#E5E8EC" stroke-width="0.5"/>';
+      yLabels += '<text x="' + (pl - 6) + '" y="' + (y + 3) + '" text-anchor="end" font-size="9" fill="#888">' + p + '</text>';
+    }
+    let xLabels = '';
+    for (let d = 0; d <= 10; d += 2) {
+      xLabels += '<text x="' + xForDay(d) + '" y="' + (h - pb + 14) + '" text-anchor="middle" font-size="9" fill="#888">' + d + '</text>';
+    }
+
+    const ideal = '<line x1="' + xForDay(0) + '" y1="' + yForPts(total) + '" x2="' + xForDay(10) + '" y2="' + yForPts(0) + '" stroke="#AAA" stroke-width="1" stroke-dasharray="3,3"/>';
+
+    let actualPath = '';
+    const hist = state.burndownHistory;
+    if (hist.length > 0) {
+      actualPath = 'M ' + xForDay(hist[0].day) + ' ' + yForPts(hist[0].remaining);
+      for (let i = 1; i < hist.length; i++) {
+        const prev = hist[i - 1];
+        const cur = hist[i];
+        actualPath += ' L ' + xForDay(cur.day) + ' ' + yForPts(prev.remaining);
+        actualPath += ' L ' + xForDay(cur.day) + ' ' + yForPts(cur.remaining);
+      }
+    }
+    const actualLine = actualPath ? '<path d="' + actualPath + '" stroke="#2C5F7C" stroke-width="2" fill="none"/>' : '';
+    const dots = hist.map(p => '<circle cx="' + xForDay(p.day) + '" cy="' + yForPts(p.remaining) + '" r="2.5" fill="#2C5F7C"/>').join('');
+
+    const axis =
+      '<line x1="' + pl + '" y1="' + pt + '" x2="' + pl + '" y2="' + (h - pb) + '" stroke="#BBB" stroke-width="0.5"/>' +
+      '<line x1="' + pl + '" y1="' + (h - pb) + '" x2="' + (w - pr) + '" y2="' + (h - pb) + '" stroke="#BBB" stroke-width="0.5"/>';
+    const xAxisLabel = '<text x="' + (pl + cw / 2) + '" y="' + (h - 3) + '" text-anchor="middle" font-size="9" fill="#666">Sprint day</text>';
+
+    return [
+      '<div class="cs-burndown-box">',
+        '<div class="cs-burndown-title">Sprint burndown</div>',
+        '<svg width="100%" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="xMidYMid meet" style="display:block;">',
+          gridLines, axis, ideal, actualLine, dots, yLabels, xLabels, xAxisLabel,
+        '</svg>',
+        '<div class="cs-burndown-legend">',
+          '<span><span class="cs-legend-swatch" style="border-top:1px dashed #AAA;"></span>Ideal pace</span>',
+          '<span><span class="cs-legend-swatch" style="background:#2C5F7C;"></span>Actual</span>',
+        '</div>',
+        '<p class="cs-burndown-caption">The chart tracks story points remaining in the sprint. The dashed line is the ideal pace: a steady decline to zero by the last day. The solid line is actual progress. A flat actual line means work is in progress but nothing is finished yet. A gap between the two lines is a signal, not a verdict: it prompts the team to ask why.</p>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderPhase0() {
+    const n = state.names;
+    const members = teamMembers();
+    const lessons = state.sprint > 1 ? [
+      '<div class="cs-lessons">',
+        '<div class="cs-lessons-label">Carried forward from Sprint 1 retrospective</div>',
+        '<div class="cs-lesson-item">Architecture decisions are discussed with the team before coding starts</div>',
+        '<div class="cs-lesson-item">Acceptance criteria are written on every story before planning</div>',
+        '<div class="cs-lesson-item">Integration work is included in story point estimates</div>',
+      '</div>'
+    ].join('') : '';
+    const reqChange = state.sprint > 1 ? [
+      '<div class="cs-req-change">',
+        '<div class="cs-req-change-label">Requirements change between sprints</div>',
+        '<div class="cs-req-change-title">New urgent request from the Dean\'s office</div>',
+        'Between sprints, the Dean sent a request: the portal must support Arabic. This is now a priority. The Product Owner has added it to the top of the backlog. This is how real Scrum works: the backlog is never frozen. Stakeholders may change direction between sprints, and the framework is designed to absorb that change.',
+      '</div>'
+    ].join('') : '';
+
+    const backlogForPhase = state.sprint > 1 ? state.backlog : state.backlog.filter(s => s.id !== 'newArabic');
+
+    return [
+      lessons,
+      reqChange,
+      '<div class="cs-panel">',
+        '<h3 class="cs-panel-title">The Scrum team</h3>',
+        '<p class="cs-panel-sub">Small, cross-functional, and self-managing. Three accountabilities defined by the Scrum Guide.</p>',
+        '<div class="cs-team">',
+          '<div class="cs-role-card">',
+            '<p class="cs-role-card-title">Product owner</p>',
+            '<p class="cs-role-card-name">' + (n.po || 'Not set') + '</p>',
+            '<p class="cs-role-card-desc">Owns the Product Backlog. Decides what gets built and in what order. Voice of the users and stakeholders.</p>',
+          '</div>',
+          '<div class="cs-role-card">',
+            '<p class="cs-role-card-title">Scrum master</p>',
+            '<p class="cs-role-card-name">' + (n.sm || 'Not set') + '</p>',
+            '<p class="cs-role-card-desc">Coaches the team, removes impediments, protects the sprint from outside interference.</p>',
+          '</div>',
+          '<div class="cs-role-card">',
+            '<p class="cs-role-card-title">Developers</p>',
+            '<p class="cs-role-card-name">' + (members.length ? members.join(', ') : 'Not set') + '</p>',
+            '<p class="cs-role-card-desc">Build the increment. Choose how to deliver the Sprint Goal. Estimate the work.</p>',
+          '</div>',
+        '</div>',
+      '</div>',
+      state.sprint === 1 ? [
+        '<div class="cs-teaching">',
+          '<div class="cs-teaching-label">Note: who writes these stories and estimates the points?</div>',
+          'The Product Owner writes the stories, in the format "As a [role], I want [goal] so that [benefit]". But the story points are estimated by the Developers. Not the Product Owner, not the Scrum Master. The people who will do the work estimate the work. Teams typically estimate together using a technique called Planning Poker.',
+          '<div class="cs-forward-ref">We will cover story-writing formats, INVEST criteria, and estimation in the Requirements Engineering block. For now, treat the numbers as relative sizes, not hours.</div>',
+        '</div>'
+      ].join('') : '',
+      '<div class="cs-panel">',
+        '<h3 class="cs-panel-title">Product backlog</h3>',
+        '<p class="cs-panel-sub">A single ordered list owned by ' + (n.po || 'the Product Owner') + '. The top is what matters most. Built from real Ritaj features.</p>',
+        backlogForPhase.map(s =>
+          '<div class="cs-story locked' + (s.id === 'newArabic' ? ' new-item' : '') + '">' +
+            '<div class="cs-story-text">' +
+              '<div class="cs-story-title">' + (s.id === 'newArabic' ? '<span class="cs-badge cs-badge-new" style="margin-right:6px;">New</span>' : '') + s.title + '</div>' +
+              '<div class="cs-story-as">' + s.as + '</div>' +
+            '</div>' +
+            priorityBadge(s.priority) +
+            '<div class="cs-pts">' + s.points + ' pts</div>' +
+          '</div>'
+        ).join(''),
+      '</div>',
+      state.sprint === 1 ? [
+        '<div class="cs-class-q">',
+          '<div class="cs-class-q-label">Question</div>',
+          '<div class="cs-class-q-q">Look at the backlog. If you were ' + (n.po || 'the Product Owner') + ', would you agree with this ordering?</div>',
+          'Specifically, the "Register for courses" story is marked High priority but estimated at 13 points. It is also the hardest to build. What would you do first? Type your answer in Teams chat.',
+        '</div>'
+      ].join('') : ''
+    ].join('');
+  }
+
+  function renderPhase1() {
+    const n = state.names;
+    const strategies = state.sprint === 1
+      ? getStrategiesForSprint1()
+      : getStrategiesForSprint2(state.sprint1Strategy);
+
+    const chosen = state.strategy ? strategies.find(s => s.id === state.strategy) : null;
+    const goal = chosen ? chosen.goal : '';
+    state.sprintGoal = goal;
+
+    const total = totalSelected();
+    const cap = capacity();
+    const over = total > cap;
+    const capClass = over ? 'cs-capacity over' : 'cs-capacity';
+    const capacityMsg = over ? 'Over capacity. The team cannot commit to this much.' : 'Team capacity for a 2-week sprint';
+
+    const strategyHtml = strategies.map(s => {
+      const names = s.ids.map(id => {
+        if (id === 'newArabic') return 'Arabic language toggle';
+        const item = storyById(id);
+        return item ? item.title : id;
+      }).join(', ');
+      const pts = s.ids.reduce((sum, id) => {
+        if (id === 'newArabic') return sum + 5;
+        const item = storyById(id);
+        return sum + (item ? item.points : 0);
+      }, 0);
+      return [
+        '<div class="cs-strategy' + (state.strategy === s.id ? ' selected' : '') + '" data-strategy="' + s.id + '">',
+          '<p class="cs-strategy-name">' + s.name + '</p>',
+          '<p class="cs-strategy-pts">' + names + ' &middot; ' + pts + ' pts total</p>',
+          '<p class="cs-strategy-desc">' + s.desc + '</p>',
+          '<p class="cs-strategy-risk">' + s.risk + '</p>',
+        '</div>'
+      ].join('');
+    }).join('');
+
+    const backlogForDisplay = state.sprint > 1 ? state.backlog : state.backlog.filter(s => s.id !== 'newArabic');
+
+    return [
+      '<div class="cs-panel">',
+        '<h3 class="cs-panel-title">Sprint planning</h3>',
+        '<p class="cs-panel-sub">' + (n.po || 'The Product Owner') + ' presents the top items. ' + (teamMembers().length ? teamMembers().join(', ') : 'The developers') + ' choose a strategy and commit.</p>',
+        '<div class="cs-teaching">',
+          '<div class="cs-teaching-label">There is no single right answer</div>',
+          'Different teams would plan this sprint very differently. The three strategies below are all legitimate. Each trades off something. Pick one and see how the sprint plays out. You can restart and try another.',
+        '</div>',
+        '<p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 10px; font-weight: 500;">Choose a sprint strategy</p>',
+        '<div class="cs-strategies">',
+          strategyHtml,
+        '</div>',
+        state.strategy ? [
+          '<div class="' + capClass + '">',
+            '<span>' + capacityMsg + '</span>',
+            '<span>' + total + ' / ' + cap + ' story points committed</span>',
+          '</div>',
+          '<p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 8px;">Stories pulled into the sprint backlog:</p>',
+          backlogForDisplay.filter(s => state.selected.has(s.id)).map(s =>
+            '<div class="cs-story locked selected">' +
+              '<div class="cs-story-text">' +
+                '<div class="cs-story-title">' + s.title + '</div>' +
+                '<div class="cs-story-as">' + s.as + '</div>' +
+              '</div>' +
+              priorityBadge(s.priority) +
+              '<div class="cs-pts">' + s.points + ' pts</div>' +
+            '</div>'
+          ).join(''),
+          '<div class="cs-goal">',
+            '<div class="cs-goal-label">Sprint goal</div>',
+            state.sprintGoal,
+          '</div>'
+        ].join('') : '',
+      '</div>',
+      state.strategy && state.sprint === 1 ? [
+        '<div class="cs-class-q">',
+          '<div class="cs-class-q-label">Question</div>',
+          '<div class="cs-class-q-q">Why might ' + (n.po || 'the Product Owner') + ' push for a different strategy?</div>',
+          'Consider: stakeholders want to see visible progress. Developers want to de-risk the hardest work first. Both are valid. Discussion in Teams chat.',
+        '</div>'
+      ].join('') : ''
+    ].join('');
+  }
+
+  function getDailyEvents() {
+    const n = state.names;
+    const sm = n.sm || 'The Scrum Master';
+    const po = n.po || 'The Product Owner';
+    const members = teamMembers();
+    const d1 = members[0] || 'Developer 1';
+    const d2 = members[1] || 'Developer 2';
+    const d3 = members[2] || 'Developer 3';
+
+    if (state.sprint === 1) {
+      if (state.strategy === 'safe') {
+        return [
+          { day: 1, text: 'Day 1. Sprint kicks off. Login and schedule stories pulled into To do. ' + d1 + ' and ' + d2 + ' pair on login, ' + d3 + ' explores the schedule data.' },
+          { day: 2, text: 'Day 2 Daily Scrum. ' + d1 + ': "We need to decide where users authenticate against. Options on the table." ' + sm + ' calls an architecture huddle for after standup.' },
+          { day: 4, text: 'Day 4 Daily Scrum. Login architecture chosen. Implementation underway. ' + d3 + ' finds the schedule system has no public API, flags it.' },
+          { day: 6, text: 'Day 6 Daily Scrum. Login done. Schedule view started. ' + d3 + ': "I am reading directly from the scheduling database for now. We should revisit this." ' + po + ' accepts the trade-off to keep pace.' },
+          { day: 8, text: 'Day 8 Daily Scrum. Schedule view in review. ' + d2 + ' notices the weekly grid does not handle classes that span multiple hours. Small fix in progress.' },
+          { day: 9, text: 'Day 9. Schedule view reaches Done. Both stories ready. Demo prep for day 10.' }
+        ];
+      }
+      if (state.strategy === 'broad') {
+        return [
+          { day: 1, text: 'Day 1. Sprint kicks off. Login, grades view, and announcement board in To do. ' + d1 + ' takes login, ' + d2 + ' grades, ' + d3 + ' announcements.' },
+          { day: 2, text: 'Day 2 Daily Scrum. ' + d1 + ' flags the login architecture question. Team agrees to discuss it jointly. ' + d2 + ' reports the grades data model is simpler than expected.' },
+          { day: 4, text: 'Day 4 Daily Scrum. Login architecture decided. Grades view coming together quickly. ' + d3 + ': "Announcements is basically a CMS. I can wire it up by day 5."' },
+          { day: 6, text: 'Day 6 Daily Scrum. Announcements done. Login in review. Grades waiting on login to integrate. ' + sm + ' notes: "We should have sequenced login first."' },
+          { day: 8, text: 'Day 8 Daily Scrum. Login done, grades integrated. Minor UI inconsistencies between the three features. Team decides consistency can wait for next sprint.' },
+          { day: 9, text: 'Day 9. All three stories reach Done, with known inconsistencies. Demo prep for day 10.' }
+        ];
+      }
+      return [
+        { day: 1, text: 'Day 1. Sprint kicks off. The single story, "Register for courses", goes to To do. The whole team swarms on it. ' + sm + ': "This is one story but we treat it as five tasks. Let\'s break it down."' },
+        { day: 2, text: 'Day 2 Daily Scrum. Task breakdown complete. ' + d1 + ' on data model, ' + d2 + ' on business rules (prerequisites, conflicts), ' + d3 + ' on UI. Concurrency strategy flagged as an architectural question.' },
+        { day: 4, text: 'Day 4 Daily Scrum. Data model and UI skeleton in place. Concurrency decision discussed at length. ' + d2 + ': "We have not even started the business rules. The prerequisites checker alone is a week of work."' },
+        { day: 6, text: 'Day 6 Daily Scrum. Core flow works for happy path. No prerequisite checks yet. ' + po + ': "Can we demo what exists and mark prerequisites as a follow-up?" Team agrees.' },
+        { day: 8, text: 'Day 8 Daily Scrum. Happy-path registration works. Concurrency testing starts. ' + d1 + ': "Two browser windows can still double-register. We need to tighten the locking." Scrum Master helps triage.' },
+        { day: 9, text: 'Day 9. Concurrency fix in place but not fully tested. Story is functionally complete but not robust. ' + sm + ': "We need to be honest about this at the review."' }
+      ];
+    }
+
+    if (state.strategy === 'arabic-must' || state.strategy === 'arabic-plus' || state.strategy === 'arabic-after-reg') {
+      return [
+        { day: 1, text: 'Day 1. Sprint 2 kicks off with the carry-forward lessons in place. Architecture huddle happens first thing. RTL layout strategy agreed before any coding.' },
+        { day: 2, text: 'Day 2 Daily Scrum. ' + d1 + ' prototypes Arabic text rendering. The grid layout needs mirroring. ' + d2 + ' picks up the second story.' },
+        { day: 4, text: 'Day 4 Daily Scrum. Arabic rendering works in isolation. Integrating it into the schedule view reveals ten hard-coded English strings. Team refactors as they go.' },
+        { day: 6, text: 'Day 6 Daily Scrum. Arabic toggle functional end to end. Second story on track.' },
+        { day: 8, text: 'Day 8 Daily Scrum. Both stories in review. Minor alignment issues on the login screen in Arabic. ' + sm + ': "Worth fixing before the demo."' },
+        { day: 9, text: 'Day 9. Both stories reach Done. The portal now flips between Arabic and English. Demo prep for day 10.' }
+      ];
+    }
+    return [
+      { day: 1, text: 'Day 1. Sprint 2 starts. Stronger start than last sprint: acceptance criteria are clearer, shared dev environment already set up.' },
+      { day: 2, text: 'Day 2 Daily Scrum. Steady progress. Fewer clarifying questions than Sprint 1. No blockers raised.' },
+      { day: 4, text: 'Day 4 Daily Scrum. Both stories in progress. Team is in a rhythm. ' + po + ' drops in for a clarification on edge cases.' },
+      { day: 6, text: 'Day 6 Daily Scrum. First story moves to Done. Carry-forward lessons are paying off: no rework cycle.' },
+      { day: 8, text: 'Day 8 Daily Scrum. Second story in final testing. On track for a smooth finish.' },
+      { day: 9, text: 'Day 9. Second story reaches Done. Demo prep for day 10.' }
+    ];
+  }
+
+  function renderPhase2() {
+    const selectedStories = state.backlog.filter(s => state.selected.has(s.id));
+    const events = getDailyEvents();
+    const currentEvent = events.filter(e => e.day <= state.day).slice(-1)[0];
+    const board = { todo: [], doing: [], done: [] };
+    selectedStories.forEach(s => {
+      const status = state.boardState[s.id] || 'todo';
+      board[status].push(s);
+    });
+    const dailyBlock = currentEvent
+      ? '<div class="cs-daily"><div class="cs-daily-label">Daily scrum</div>' + currentEvent.text + '</div>'
+      : '<div class="cs-daily"><div class="cs-daily-label">Before the sprint starts</div>Click Advance day to run the sprint. Watch the board, the burndown, and listen to what the team surfaces each day.</div>';
+    const cardHtml = (s, done) =>
+      '<div class="cs-card' + (done ? ' cs-card-done' : '') + '">' +
+        s.title +
+        '<div class="cs-card-points">' + s.points + ' pts</div>' +
+      '</div>';
+
+    const archPrompt = (state.day === 2 && !state.archSeen) ? [
+      '<div class="cs-class-q">',
+        '<div class="cs-class-q-label">Architecture moment</div>',
+        '<div class="cs-class-q-q">An architectural decision needs to be made</div>',
+        'Before more code is written, the team needs to choose. Click the button below to see the options.',
+        '<div style="margin-top:10px;"><button class="cs-btn" id="csArchOpen">Open decision</button></div>',
+      '</div>'
+    ].join('') : '';
+
+    return [
+      '<div class="cs-panel">',
+        '<h3 class="cs-panel-title">Sprint execution</h3>',
+        '<p class="cs-panel-sub">The Sprint Backlog as a board. Developers pull items through daily. The burndown shows pace.</p>',
+        archPrompt,
+        '<div class="cs-day-indicator">Sprint day ' + state.day + ' of 10</div>',
+        '<div class="cs-kanban">',
+          '<div class="cs-col"><p class="cs-col-title">To do</p>' + board.todo.map(s => cardHtml(s, false)).join('') + '</div>',
+          '<div class="cs-col"><p class="cs-col-title">In progress</p>' + board.doing.map(s => cardHtml(s, false)).join('') + '</div>',
+          '<div class="cs-col"><p class="cs-col-title">Done</p>' + board.done.map(s => cardHtml(s, true)).join('') + '</div>',
+        '</div>',
+        '<div class="cs-progress-row">',
+          renderBurndown(),
+          dailyBlock,
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderProductGrid(options) {
+    options = options || {};
+    const showLegend = options.showLegend !== false;
+    const showProgress = options.showProgress !== false;
+    const titleText = options.title || 'The product so far';
+
+    const universe = [];
+    initialBacklog.forEach(s => {
+      universe.push({
+        id: s.id,
+        title: s.title,
+        points: s.points,
+        priority: s.priority,
+        originalBacklog: true
+      });
+    });
+
+    if (state.backlog.find(s => s.id === 'newArabic') || state.deliveredFeatures.find(d => d.id === 'newArabic')) {
+      universe.push({
+        id: 'newArabic',
+        title: 'Arabic language toggle',
+        points: 5,
+        priority: 'high',
+        originalBacklog: false,
+        addedVia: 'Dean request, between sprints'
+      });
+    }
+
+    state.reqChangesLog.forEach(log => {
+      if (log.source === 'review') {
+        const sprintItems = state.newFeedbackItems && log.sprint === state.sprint ? state.newFeedbackItems : [];
+        state.backlog.forEach(b => {
+          if (b.id && b.id.startsWith('fb') && !universe.find(u => u.id === b.id)) {
+            universe.push({
+              id: b.id,
+              title: b.title,
+              points: b.points,
+              priority: b.priority,
+              originalBacklog: false,
+              addedVia: 'Sprint ' + log.sprint + ' review feedback'
+            });
+          }
+        });
+      }
+    });
+
+    state.deliveredFeatures.forEach(d => {
+      if (!universe.find(u => u.id === d.id)) {
+        universe.push({
+          id: d.id,
+          title: d.title,
+          points: d.points,
+          priority: d.priority,
+          originalBacklog: false
+        });
+      }
+    });
+
+    const totalPts = universe.reduce((sum, u) => sum + u.points, 0);
+    const s1Pts = state.deliveredFeatures.filter(d => d.sprint === 1).reduce((sum, d) => sum + d.points, 0);
+    const s2Pts = state.deliveredFeatures.filter(d => d.sprint === 2).reduce((sum, d) => sum + d.points, 0);
+    const deliveredPts = s1Pts + s2Pts;
+    const s1Pct = totalPts ? (s1Pts / totalPts) * 100 : 0;
+    const s2Pct = totalPts ? (s2Pts / totalPts) * 100 : 0;
+
+    const tiles = universe.map(u => {
+      const delivery = state.deliveredFeatures.find(d => d.id === u.id);
+      let cls = 'cs-product-tile';
+      let tag = 'Pending';
+      if (delivery) {
+        cls += delivery.sprint === 1 ? ' delivered-s1' : ' delivered-s2';
+        tag = 'Sprint ' + delivery.sprint;
+      } else if (!u.originalBacklog) {
+        cls += ' added';
+        tag = 'Added';
+      }
+      return [
+        '<div class="' + cls + '">',
+          '<p class="cs-product-tile-title">' + u.title + '</p>',
+          '<div class="cs-product-tile-meta">',
+            '<span class="cs-product-tile-tag">' + tag + '</span>',
+            '<span class="cs-product-tile-pts">' + u.points + ' pts</span>',
+          '</div>',
+        '</div>'
+      ].join('');
+    }).join('');
+
+    const progressBar = showProgress ? [
+      '<div class="cs-product-bar">',
+        s1Pct > 0 ? '<div class="cs-product-bar-s1" style="width: ' + s1Pct + '%"></div>' : '',
+        s2Pct > 0 ? '<div class="cs-product-bar-s2" style="width: ' + s2Pct + '%"></div>' : '',
+      '</div>'
+    ].join('') : '';
+
+    const legend = showLegend ? [
+      '<div class="cs-product-legend">',
+        '<span class="cs-product-legend-item"><span class="cs-product-legend-swatch" style="background:#EAF3DE; border-color:#97C459;"></span>Sprint 1</span>',
+        '<span class="cs-product-legend-item"><span class="cs-product-legend-swatch" style="background:var(--bg-info); border-color:var(--border-info);"></span>Sprint 2</span>',
+        '<span class="cs-product-legend-item"><span class="cs-product-legend-swatch" style="background:#FFF4E0; border: 1px dashed rgba(113,62,5,0.5);"></span>Added to backlog</span>',
+        '<span class="cs-product-legend-item"><span class="cs-product-legend-swatch" style="background:var(--bg-secondary); border-color:var(--border-tertiary); opacity:0.5;"></span>Pending</span>',
+      '</div>'
+    ].join('') : '';
+
+    return [
+      '<div class="cs-product">',
+        '<div class="cs-product-header">',
+          '<p class="cs-product-title">' + titleText + '</p>',
+          '<span class="cs-product-progress"><strong>' + deliveredPts + '</strong> of <strong>' + totalPts + '</strong> story points delivered</span>',
+        '</div>',
+        progressBar,
+        '<div class="cs-product-grid">', tiles, '</div>',
+        legend,
+      '</div>'
+    ].join('');
+  }
+
+  function renderSummary() {
+    const n = state.names;
+    const members = teamMembers();
+
+    const sprint1Goal = 'Sprint 1 goal was: ' + (getSprintGoalById(state.sprint1Strategy, 1) || 'not recorded');
+    const sprint2Goal = 'Sprint 2 goal was: ' + (getSprintGoalById(state.strategy, 2) || 'not recorded');
+
+    const sprint1Features = state.deliveredFeatures.filter(d => d.sprint === 1);
+    const sprint2Features = state.deliveredFeatures.filter(d => d.sprint === 2);
+
+    const timelineItems = [];
+    timelineItems.push({
+      when: 'Start of sprint 1',
+      type: 'start',
+      what: 'Initial product backlog agreed',
+      detail: 'Twelve user stories covering login, schedule, registration, grades, and more.'
+    });
+    timelineItems.push({
+      when: 'Sprint 1 planning',
+      type: 'review',
+      what: 'Team committed to a sprint strategy',
+      detail: sprint1Goal
+    });
+    state.archDecisionsLog.filter(a => a.sprint === 1).forEach(a => {
+      timelineItems.push({
+        when: 'During sprint 1',
+        type: 'review',
+        what: 'Architectural decision: ' + a.title,
+        detail: 'Chose: ' + a.chosenName
+      });
+    });
+    state.reqChangesLog.filter(c => c.sprint === 1 && c.source === 'review').forEach(c => {
+      timelineItems.push({
+        when: c.when,
+        type: 'review',
+        what: c.summary,
+        detail: c.items.join(' &middot; ')
+      });
+    });
+    state.reqChangesLog.filter(c => c.sprint === 2 && c.source === 'stakeholder').forEach(c => {
+      timelineItems.push({
+        when: c.when,
+        type: 'stakeholder',
+        what: c.summary,
+        detail: c.items.join(' &middot; ')
+      });
+    });
+    timelineItems.push({
+      when: 'Sprint 2 planning',
+      type: 'review',
+      what: 'Team adapted and re-planned',
+      detail: sprint2Goal + '. Carry-forward lessons from the first retrospective were applied.'
+    });
+    state.archDecisionsLog.filter(a => a.sprint === 2).forEach(a => {
+      timelineItems.push({
+        when: 'During sprint 2',
+        type: 'review',
+        what: 'Architectural decision: ' + a.title,
+        detail: 'Chose: ' + a.chosenName
+      });
+    });
+    state.reqChangesLog.filter(c => c.sprint === 2 && c.source === 'review').forEach(c => {
+      timelineItems.push({
+        when: c.when,
+        type: 'review',
+        what: c.summary,
+        detail: c.items.join(' &middot; ')
+      });
+    });
+    timelineItems.push({
+      when: 'End of sprint 2',
+      type: 'start',
+      what: 'Two increments delivered, backlog alive and growing',
+      detail: 'The product has shape. Work remains. The cycle continues.'
+    });
+
+    const timelineHtml = timelineItems.map(t =>
+      '<div class="cs-timeline-item ' + t.type + '">' +
+        '<div class="cs-timeline-when">' + t.when + '</div>' +
+        '<div class="cs-timeline-what">' + t.what + '</div>' +
+        '<div class="cs-timeline-detail">' + t.detail + '</div>' +
+      '</div>'
+    ).join('');
+
+    const archLogHtml = state.archDecisionsLog.length > 0
+      ? state.archDecisionsLog.map(a =>
+          '<div class="cs-arch-log-item">' +
+            '<div class="cs-arch-log-header">' +
+              '<p class="cs-arch-log-title">' + a.title + '</p>' +
+              '<span class="cs-arch-log-sprint">Sprint ' + a.sprint + '</span>' +
+            '</div>' +
+            '<p class="cs-arch-log-chosen">Chose: ' + a.chosenName + '</p>' +
+            '<p class="cs-arch-log-trade">' + a.chosenTrade + '</p>' +
+          '</div>'
+        ).join('')
+      : '<p style="font-size: 12px; color: var(--text-tertiary); margin: 0;">No architecture decisions were logged.</p>';
+
+    const sprint1Summary = sprint1Features.map(f =>
+      '<li>' + f.title + ' (' + f.points + ' pts)</li>'
+    ).join('') || '<li style="opacity:0.7;">No features delivered</li>';
+
+    const sprint2Summary = sprint2Features.map(f =>
+      '<li>' + f.title + ' (' + f.points + ' pts)</li>'
+    ).join('') || '<li style="opacity:0.7;">No features delivered</li>';
+
+    const learnings = [
+      {
+        title: 'The backlog was never frozen',
+        desc: 'Between sprints, a new Arabic requirement arrived from the Dean. Stakeholder feedback at each review also added items. A plan-driven approach would have fought this. Scrum absorbed it.'
+      },
+      {
+        title: 'Architecture surfaces during the work',
+        desc: 'Decisions about authentication, database design, and integration did not sit in a separate document. They emerged as the team needed them, and were discussed with the right people at the right time.'
+      },
+      {
+        title: 'The team learned about itself',
+        desc: 'Two retrospectives produced concrete changes to how the team worked. Sprint 2 was calmer because Sprint 1\'s lessons were applied.'
+      },
+      {
+        title: 'Value reached users early',
+        desc: 'By the end of sprint 1, students had working software. They did not wait for the full system to be ready to get any benefit.'
+      }
+    ];
+
+    const learningsHtml = learnings.map(l =>
+      '<div class="cs-learning-card">' +
+        '<p class="cs-learning-title">' + l.title + '</p>' +
+        '<p class="cs-learning-desc">' + l.desc + '</p>' +
+      '</div>'
+    ).join('');
+
+    return [
+      '<div class="cs-summary-hero">',
+        '<h2>Two sprints complete: the Ritaj portal so far</h2>',
+        '<p class="cs-summary-hero-sub">The team delivered working software twice, absorbed a mid-course stakeholder change, made architectural decisions in context, and adapted its process. Here is the whole journey at a glance.</p>',
+        '<div class="cs-summary-team">',
+          '<div class="cs-summary-team-item"><p class="cs-summary-team-role">Product owner</p><p class="cs-summary-team-name">' + (n.po || '-') + '</p></div>',
+          '<div class="cs-summary-team-item"><p class="cs-summary-team-role">Scrum master</p><p class="cs-summary-team-name">' + (n.sm || '-') + '</p></div>',
+          '<div class="cs-summary-team-item"><p class="cs-summary-team-role">Developers</p><p class="cs-summary-team-name">' + (members.join(', ') || '-') + '</p></div>',
+          '<div class="cs-summary-team-item"><p class="cs-summary-team-role">Stakeholder</p><p class="cs-summary-team-name">Head of Student Services</p></div>',
+        '</div>',
+      '</div>',
+
+      '<div class="cs-summary-section">',
+        '<p class="cs-summary-section-title">What was delivered, and what remains</p>',
+        renderProductGrid({ title: '', showLegend: true, showProgress: true }),
+      '</div>',
+
+      '<div class="cs-summary-section">',
+        '<p class="cs-summary-section-title">Sprint by sprint</p>',
+        '<div class="cs-sprints-row">',
+          '<div class="cs-sprint-card s1">',
+            '<div class="cs-sprint-card-label">Sprint 1</div>',
+            '<p class="cs-sprint-card-goal">' + (getSprintGoalById(state.sprint1Strategy, 1) || 'Goal not recorded') + '</p>',
+            '<ul class="cs-sprint-card-list">' + sprint1Summary + '</ul>',
+            '<div class="cs-sprint-card-foot">' + state.sprint1Velocity + ' points delivered</div>',
+          '</div>',
+          '<div class="cs-sprint-card s2">',
+            '<div class="cs-sprint-card-label">Sprint 2</div>',
+            '<p class="cs-sprint-card-goal">' + (getSprintGoalById(state.strategy, 2) || 'Goal not recorded') + '</p>',
+            '<ul class="cs-sprint-card-list">' + sprint2Summary + '</ul>',
+            '<div class="cs-sprint-card-foot">' + state.sprint2Velocity + ' points delivered</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+
+      '<div class="cs-summary-section">',
+        '<p class="cs-summary-section-title">Velocity across sprints</p>',
+        '<div class="cs-velocity">',
+          '<div class="cs-velocity-col">',
+            '<div class="cs-velocity-label">Sprint 1</div>',
+            '<p class="cs-velocity-num">' + state.sprint1Velocity + '</p>',
+            '<p class="cs-velocity-unit">story points delivered</p>',
+          '</div>',
+          '<div class="cs-velocity-col">',
+            '<div class="cs-velocity-label">Sprint 2</div>',
+            '<p class="cs-velocity-num">' + state.sprint2Velocity + '</p>',
+            '<p class="cs-velocity-unit">story points delivered</p>',
+          '</div>',
+        '</div>',
+        '<p style="font-size: 11.5px; color: var(--text-tertiary); margin: 10px 0 0; line-height: 1.55; font-style: italic;">Velocity is an empirical, team-specific measure. It only becomes meaningful after a few sprints of data. It is used by the team to forecast what they can realistically take on next, not as a productivity target imposed from outside.</p>',
+      '</div>',
+
+      '<div class="cs-summary-section">',
+        '<p class="cs-summary-section-title">Timeline of what happened</p>',
+        '<div class="cs-timeline">' + timelineHtml + '</div>',
+      '</div>',
+
+      '<div class="cs-summary-section">',
+        '<p class="cs-summary-section-title">Architectural decisions made along the way</p>',
+        '<div class="cs-arch-log">' + archLogHtml + '</div>',
+      '</div>',
+
+      '<div class="cs-summary-section">',
+        '<p class="cs-summary-section-title">What Scrum did for this team</p>',
+        '<div class="cs-learnings">' + learningsHtml + '</div>',
+      '</div>',
+
+      '<div class="cs-summary-restart">',
+        '<button class="cs-btn cs-btn-primary" id="csRestart">Restart simulation</button>',
+      '</div>'
+    ].join('');
+  }
+
+  function getSprintGoalById(strategyId, sprintNum) {
+    if (!strategyId) return '';
+    const strategies = sprintNum === 1 ? getStrategiesForSprint1() : getStrategiesForSprint2(state.sprint1Strategy);
+    const s = strategies.find(x => x.id === strategyId);
+    return s ? s.goal : '';
+  }
+
+  function sprintStrategyName(strategyId, sprintNum) {
+    if (!strategyId) return 'unknown';
+    const strategies = sprintNum === 1 ? getStrategiesForSprint1() : getStrategiesForSprint2(state.sprint1Strategy);
+    const s = strategies.find(x => x.id === strategyId);
+    return s ? s.name : strategyId;
+  }
+
+  function attachSummaryHandlers() {
+    const restart = document.getElementById('csRestart');
+    if (restart) {
+      restart.addEventListener('click', () => {
+        resetAll();
+      });
+    }
+  }
+
+  function renderArchModal() {
+    if (!state.archModalOpen) return '';
+    const primaryStoryId = [...state.selected][0];
+    const decision = archDecisions[primaryStoryId] || archDecisions.b01;
+    const options = decision.options.map(o =>
+      '<div class="cs-arch-opt' + (state.archChoice === o.id ? ' chosen' : '') + '" data-arch="' + o.id + '">' +
+        '<p class="cs-arch-opt-name">' + o.name + '</p>' +
+        '<p class="cs-arch-opt-trade">' + o.trade + '</p>' +
+      '</div>'
+    ).join('');
+    const systemNote = decision.systemNote
+      ? '<div class="cs-arch-system"><span class="cs-arch-system-label">Why this matters system-wide</span>' + decision.systemNote + '</div>'
+      : '';
+    return [
+      '<div class="cs-arch-modal" id="csArchModal">',
+        '<div class="cs-arch-content">',
+          '<div class="cs-arch-label">Architectural decision</div>',
+          '<h3 class="cs-arch-title">' + decision.title + '</h3>',
+          '<p class="cs-arch-desc">' + decision.desc + '</p>',
+          systemNote,
+          '<div class="cs-arch-options">', options, '</div>',
+          '<p class="cs-arch-lesson">' + decision.lesson + '</p>',
+          '<div style="display:flex; gap: 10px; justify-content:flex-end;">',
+            '<button class="cs-btn" id="csArchClose">Close</button>',
+            '<button class="cs-btn cs-btn-primary" id="csArchConfirm"' + (state.archChoice ? '' : ' disabled') + '>Confirm and continue</button>',
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function renderPhase3() {
+    const n = state.names;
+    const doneStories = state.backlog.filter(s => state.boardState[s.id] === 'done' && state.selected.has(s.id));
+    const deliveredTitles = doneStories.map(s => s.title);
+    const hasDelivered = id => doneStories.some(s => s.id === id);
+
+    let feedbackText = '';
+    let newItems = [];
+
+    if (state.sprint === 1) {
+      const s1 = state.strategy;
+      if (s1 === 'safe') {
+        feedbackText = 'Login and the schedule view are what students open on day one, so this is a sensible start. But the schedule only shows classes, not exam periods or room changes, and students will notice that immediately. And we still have not touched registration, which is the real pain point.';
+        newItems = [
+          { id: 'fb-s1-exam', title: 'Show exam periods in schedule', priority: 'med', points: 3 },
+          { id: 'fb-s1-room', title: 'Display room changes and cancellations', priority: 'med', points: 3 }
+        ];
+      } else if (s1 === 'broad') {
+        feedbackText = 'Three features at once is impressive, and students can already see grades and announcements. But the visual styles do not match, the login flow feels separate from the rest, and urgent announcements get buried under older ones. We need a way to pin important news.';
+        newItems = [
+          { id: 'fb-s1-pin', title: 'Pin urgent announcements to the top', priority: 'med', points: 3 },
+          { id: 'fb-s1-style', title: 'Shared visual component library', priority: 'med', points: 5 }
+        ];
+      } else {
+        feedbackText = 'Bold move tackling registration head-on. The happy path works, but what about prerequisites? A student cannot register for a 400-level course without the prerequisite. And if two students click Register at the same moment for the last seat, what happens? These are not edge cases, they are the core of the feature.';
+        newItems = [
+          { id: 'fb-s1-prereq', title: 'Prerequisite validation on registration', priority: 'high', points: 8 },
+          { id: 'fb-s1-concurrency', title: 'Harden concurrency for seat allocation', priority: 'high', points: 5 }
+        ];
+      }
+    } else {
+      const s2 = state.strategy;
+      const aftermath = 'Sprint 1 chose "' + sprintStrategyName(state.sprint1Strategy, 1) + '", and this sprint built on that. ';
+
+      if (s2 === 'arabic-must') {
+        feedbackText = aftermath + 'Arabic toggle works and the Dean is relieved. But students visiting the grades page see some labels in English still. We also want Arabic and Western numerals to be consistent within a view.';
+        newItems = [
+          { id: 'fb-s2-numerals', title: 'Consistent Arabic / Western numerals setting', priority: 'med', points: 3 },
+          { id: 'fb-s2-audit', title: 'Audit every page for untranslated strings', priority: 'med', points: 5 }
+        ];
+      } else if (s2 === 'arabic-plus') {
+        feedbackText = aftermath + 'The Arabic toggle is a big step, and students can now download course materials. But filenames on uploaded materials are in mixed scripts, and some files are showing as unreadable because the encoding was not checked on upload.';
+        newItems = [
+          { id: 'fb-s2-encoding', title: 'UTF-8 handling for uploaded filenames', priority: 'high', points: 3 },
+          { id: 'fb-s2-numerals', title: 'Consistent Arabic / Western numerals setting', priority: 'med', points: 3 }
+        ];
+      } else if (s2 === 'arabic-after-reg') {
+        feedbackText = aftermath + 'Arabic now works and students can see their schedule. But the registration screens built in Sprint 1 still show only in English, so Arabic-preferring students bounce between languages. Retro-fit is now unavoidable.';
+        newItems = [
+          { id: 'fb-s2-regarabic', title: 'Retrofit Arabic across registration screens', priority: 'high', points: 5 },
+          { id: 'fb-s2-numerals', title: 'Consistent Arabic / Western numerals setting', priority: 'med', points: 3 }
+        ];
+      } else if (s2 === 'continue') {
+        feedbackText = aftermath + 'Grades and materials both working is a big step forward. But students want to know when a grade is posted rather than having to check the portal, and the materials page shows all files at once instead of grouped by course.';
+        newItems = [
+          { id: 'fb-s2-notify', title: 'Grade posting notifications', priority: 'med', points: 5 },
+          { id: 'fb-s2-group', title: 'Group materials by course', priority: 'low', points: 3 }
+        ];
+      } else if (s2 === 'tackle-hard' || s2 === 'registration') {
+        feedbackText = aftermath + 'Registration is a huge milestone and the happy path works. But as we feared, we are still missing the prerequisite checks and seat-contention handling, and students will hit these on the first day of the registration window. These are no longer edge cases, they are blockers.';
+        newItems = [
+          { id: 'fb-s2-prereq', title: 'Prerequisite validation on registration', priority: 'high', points: 8 },
+          { id: 'fb-s2-concurrency', title: 'Harden concurrency for seat allocation', priority: 'high', points: 5 }
+        ];
+      } else if (s2 === 'deepen') {
+        feedbackText = aftermath + 'Materials downloads and the transcript view fill real gaps. But the transcript does not yet show cumulative GPA, and it takes a few seconds to load for senior students. Useful as-is, but not yet ready for the next open day.';
+        newItems = [
+          { id: 'fb-s2-gpa', title: 'Show cumulative GPA on transcript', priority: 'med', points: 5 },
+          { id: 'fb-s2-transperf', title: 'Speed up transcript load time', priority: 'med', points: 3 }
+        ];
+      } else if (s2 === 'polish') {
+        feedbackText = aftermath + 'The schedule view and grades view round out the registration experience nicely. But students report that the three pages look inconsistent in typography and spacing, and the schedule does not yet show exam periods.';
+        newItems = [
+          { id: 'fb-s2-style', title: 'Consistent typography and spacing across pages', priority: 'med', points: 3 },
+          { id: 'fb-s2-exam', title: 'Show exam periods in schedule', priority: 'med', points: 3 }
+        ];
+      } else if (s2 === 'messaging') {
+        feedbackText = aftermath + 'Students can now message instructors and see announcements. But instructors complain they get no notification when a student replies, and the announcement list buries urgent items under older ones.';
+        newItems = [
+          { id: 'fb-s2-msgnotify', title: 'Instructor notification on student reply', priority: 'high', points: 5 },
+          { id: 'fb-s2-pin', title: 'Pin urgent announcements to the top', priority: 'med', points: 3 }
+        ];
+      } else {
+        feedbackText = aftermath + 'The team has found a rhythm and the sprint delivered on its goal. Students are asking for more.';
+        newItems = [
+          { id: 'fb-s2-generic', title: 'Gather more user feedback in production', priority: 'med', points: 3 }
+        ];
+      }
+    }
+
+    state.newFeedbackItems = newItems;
+    if (!state.sprintDeliveryCaptured) captureSprintDelivery();
+
+    return [
+      '<div class="cs-panel">',
+        '<h3 class="cs-panel-title">Sprint review</h3>',
+        '<p class="cs-panel-sub">The team demos the increment to stakeholders. Feedback reshapes the Product Backlog in the same meeting.</p>',
+        '<div class="cs-increment">',
+          '<div class="cs-increment-label">Increment delivered this sprint</div>',
+          doneStories.map(s => '<div class="cs-increment-item">' + s.title + '</div>').join(''),
+        '</div>',
+        '<div class="cs-feedback">',
+          'Head of Student Services (stakeholder), watching the demo:',
+          '<div class="cs-quote">' + feedbackText + '</div>',
+        '</div>',
+        '<div class="cs-new-items">',
+          '<div class="cs-new-items-label">Added to the Product Backlog</div>',
+          newItems.map(item =>
+            '<div class="cs-new-items-item">' + item.title + ' (' + item.points + ' pts, ' + item.priority + ' priority)</div>'
+          ).join(''),
+        '</div>',
+        renderProductGrid({ title: 'The product so far', showLegend: true, showProgress: true }),
+        state.sprint === 1 ? [
+          '<div class="cs-class-q" style="margin-top: 1rem;">',
+            '<div class="cs-class-q-label">Question</div>',
+            '<div class="cs-class-q-q">How does the strategy chosen in planning shape the review?</div>',
+            'The three strategies led to very different demos and very different feedback. Which strategy would you pick in Sprint 2, knowing what you know now?',
+          '</div>'
+        ].join('') : '',
+      '</div>'
+    ].join('');
+  }
+
+  function renderPhase4() {
+    const s1 = state.strategy;
+    const s2 = state.strategy;
+    const reflections = state.sprint === 1 ? (
+      s1 === 'safe' ? {
+        went: ['Low-risk start let the team find its rhythm', 'Login architecture discussion was valuable', 'Both stories shipped on time'],
+        not: ['Schedule reads directly from another team\'s database, which is technical debt', 'Tempting to always pick the safe path next time too', 'Nothing learned yet about the hardest part of the system'],
+        act: ['Architecture decisions discussed with the team before coding starts', 'Flag technical debt explicitly and add to the backlog', 'Next sprint must include at least one hard item']
+      } : s1 === 'broad' ? {
+        went: ['Three features shipped, good breadth', 'Stakeholders saw visible progress across the whole product', 'Announcements was genuinely quick to build'],
+        not: ['Visual inconsistency between the three features', 'Integration left to the last day', 'Acceptance criteria were not written clearly for all three'],
+        act: ['Acceptance criteria written on every story before planning', 'Integrate continuously, not at the end', 'Create a shared style guide early']
+      } : {
+        went: ['The hardest feature is no longer a mystery', 'Happy path works, architecture decisions are made', 'Team learned a lot about the domain'],
+        not: ['Sprint felt stressful with only one demo item', 'Concurrency still not fully tested', 'Prerequisites not implemented, still a known gap'],
+        act: ['Break big stories into smaller pieces before planning', 'Include integration and testing work in estimates', 'Identify non-functional requirements up-front']
+      }
+    ) : (
+      s2 === 'arabic-must' ? {
+        went: ['Arabic toggle shipped cleanly', 'Dean\'s request answered in one sprint', 'Team adapted fast to a requirements change'],
+        not: ['Retrofit revealed many hard-coded strings', 'Numerals inconsistency surprised us', 'Grades page still mostly English'],
+        act: ['Add a translation audit to the Definition of Done', 'Maintain a shared glossary for key terms']
+      } : s2 === 'arabic-plus' ? {
+        went: ['Arabic works end-to-end', 'Materials download was well-understood and low-risk'],
+        not: ['File encoding issues surfaced late', 'Mixed-script filenames broke downloads for some users'],
+        act: ['Validate file encoding at upload time', 'Add UTF-8 handling to the file service contract']
+      } : s2 === 'arabic-after-reg' ? {
+        went: ['Arabic toggle and schedule view both shipped', 'Team managed two different kinds of change in one sprint'],
+        not: ['Registration screens from Sprint 1 now need Arabic retrofit', 'Doing i18n after the fact is costly'],
+        act: ['Internationalise new stories from the start, not later', 'Treat i18n as a quality attribute, not a feature']
+      } : s2 === 'continue' ? {
+        went: ['Grades and materials both shipped', 'Sprint felt calmer than Sprint 1', 'Carry-forward lessons paid off'],
+        not: ['Still no progress on registration, which is the core pain', 'Notification gap surprised us: students expected push'],
+        act: ['Plan a registration-focused sprint next', 'Treat notifications as a cross-cutting concern, not feature-by-feature']
+      } : (s2 === 'tackle-hard' || s2 === 'registration') ? {
+        went: ['Registration happy path is done', 'Team pulled through a big technical story'],
+        not: ['Prerequisite checks still missing', 'Seat-contention handling not fully tested under load', 'Single-story sprint felt tense again'],
+        act: ['Break registration follow-ups into smaller stories', 'Load-test concurrency before calling it Done']
+      } : s2 === 'deepen' ? {
+        went: ['Materials and transcript both shipped', 'Read-only features are clearly the team\'s comfort zone'],
+        not: ['Transcript performance became an issue for senior students', 'GPA calculation not included, an obvious gap'],
+        act: ['Include non-functional requirements (performance) in acceptance criteria', 'Think about the target users for each story, not average users']
+      } : s2 === 'polish' ? {
+        went: ['Schedule and grades views complement the already-shipped registration', 'Users have a more complete portal'],
+        not: ['Inconsistencies across pages became obvious', 'Schedule still missing exam periods'],
+        act: ['Adopt a small shared component set before adding more pages', 'Discuss visual design reviews in the Definition of Done']
+      } : s2 === 'messaging' ? {
+        went: ['Messaging and announcements both shipped', 'Real-time-ish patterns now in the codebase'],
+        not: ['Instructor notifications on replies missing', 'Announcement ordering exposed a UX gap'],
+        act: ['Treat notifications as part of messaging, not a separate story', 'Gather instructor feedback before committing to messaging patterns']
+      } : {
+        went: ['Team carried forward its lessons visibly', 'Sprint felt calmer than the first one', 'The increment is genuinely usable'],
+        not: ['Still some underestimation of edge-case work', 'Feedback from stakeholders uncovered new gaps'],
+        act: ['Plan an edge-case pass on each story before calling it Done']
+      }
+    );
+    const noteClass = state.sprint < 2 ? 'cs-complete-note' : 'cs-complete-note final';
+    const noteText = state.sprint < 2
+      ? 'Sprint 1 complete. The team is ready to plan Sprint 2 with an updated backlog and new ways of working.'
+      : 'Two sprints complete. The team has delivered working software, adapted its product, and adapted its process. This is empirical process control. The framework does not prevent mistakes; it makes mistakes visible early and cheap to correct.';
+    return [
+      '<div class="cs-panel">',
+        '<h3 class="cs-panel-title">Sprint retrospective</h3>',
+        '<p class="cs-panel-sub">The team inspects how it worked together and commits to one or two improvements for the next sprint. Stakeholders are not in the room.</p>',
+        '<div class="cs-retro">',
+          '<div class="cs-retro-col cs-retro-went">',
+            '<p class="cs-retro-title">What went well</p>',
+            reflections.went.map(r => '<div class="cs-retro-item">' + r + '</div>').join(''),
+          '</div>',
+          '<div class="cs-retro-col cs-retro-not">',
+            '<p class="cs-retro-title">What did not</p>',
+            reflections.not.map(r => '<div class="cs-retro-item">' + r + '</div>').join(''),
+          '</div>',
+          '<div class="cs-retro-col cs-retro-act">',
+            '<p class="cs-retro-title">Action items for next sprint</p>',
+            reflections.act.map(r => '<div class="cs-retro-item">' + r + '</div>').join(''),
+          '</div>',
+        '</div>',
+        '<div class="' + noteClass + '">' + noteText + '</div>',
+        state.sprint >= 2 ? [
+          '<div class="cs-class-q" style="margin-top: 1rem;">',
+            '<div class="cs-class-q-label">Question: wrap-up</div>',
+            '<div class="cs-class-q-q">Two sprints, two retrospectives, two different products at the end. What did Scrum give this team that a plan-driven approach would not have?</div>',
+            'Think about the Dean\'s mid-sprint request, the stakeholder feedback, the architecture decisions that surfaced during execution. Then share your answer in Teams chat.',
+          '</div>'
+        ].join('') : '',
+      '</div>'
+    ].join('');
+  }
+
+  function render() {
+    const root = document.getElementById('csRoot');
+
+    if (state.screen === 'setup') {
+      root.innerHTML = renderSetup();
+      attachSetupHandlers();
+      return;
+    }
+
+    if (state.screen === 'summary') {
+      root.innerHTML = renderSummary();
+      attachSummaryHandlers();
+      return;
+    }
+
+    let inner = renderPhases() + renderSprintHeader() + renderRoleBar();
+
+    if (state.phase === 0) inner += renderPhase0();
+    else if (state.phase === 1) inner += renderPhase1();
+    else if (state.phase === 2) {
+      updateBurndownHistory();
+      inner += renderPhase2();
+    }
+    else if (state.phase === 3) inner += renderPhase3();
+    else if (state.phase === 4) inner += renderPhase4();
+
+    inner += [
+      '<div class="cs-actions">',
+        '<button class="cs-btn" id="csBack">Back</button>',
+        '<div class="cs-hint" id="csHint"></div>',
+        '<button class="cs-btn cs-btn-primary" id="csNext">Next</button>',
+      '</div>'
+    ].join('');
+
+    inner += renderArchModal();
+
+    root.innerHTML = inner;
+
+    updateButtons();
+    attachSimHandlers();
+  }
+
+  function updateButtons() {
+    const backBtn = document.getElementById('csBack');
+    const nextBtn = document.getElementById('csNext');
+    const hint = document.getElementById('csHint');
+    if (!backBtn || !nextBtn || !hint) return;
+
+    backBtn.disabled = state.phase === 0 && state.sprint === 1;
+
+    if (state.phase === 1) {
+      const total = totalSelected();
+      const cap = capacity();
+      if (!state.strategy) {
+        nextBtn.disabled = true;
+        hint.textContent = 'Choose a sprint strategy to commit';
+        nextBtn.textContent = 'Start sprint';
+      } else if (total > cap) {
+        nextBtn.disabled = true;
+        hint.textContent = 'Over capacity';
+        nextBtn.textContent = 'Start sprint';
+      } else {
+        nextBtn.disabled = false;
+        hint.textContent = 'Sprint committed. Ready to execute.';
+        nextBtn.textContent = 'Start sprint';
+      }
+    } else if (state.phase === 2) {
+      if (state.day < 10) {
+        nextBtn.textContent = 'Advance day';
+        hint.textContent = state.day === 2 && !state.archSeen ? 'Open the architecture decision first' : 'Click to move the sprint forward';
+        nextBtn.disabled = state.day === 2 && !state.archSeen;
+      } else {
+        nextBtn.textContent = 'Go to sprint review';
+        hint.textContent = 'Sprint complete';
+        nextBtn.disabled = false;
+      }
+    } else if (state.phase === 4) {
+      nextBtn.textContent = state.sprint < 2 ? 'Plan sprint 2' : 'Show project summary';
+      hint.textContent = state.sprint < 2 ? 'Backlog updated. Team adapts.' : 'See the full cycle laid out end to end';
+      nextBtn.disabled = false;
+    } else {
+      nextBtn.textContent = 'Next';
+      hint.textContent = '';
+      nextBtn.disabled = false;
+    }
+  }
+
+  function attachSetupHandlers() {
+    document.querySelectorAll('.cs-input[data-role]').forEach(input => {
+      input.addEventListener('input', e => {
+        const role = e.target.getAttribute('data-role');
+        state.names[role] = e.target.value;
+        const startBtn = document.getElementById('csStart');
+        if (startBtn) startBtn.disabled = !allNamesEntered();
+      });
+    });
+    const startBtn = document.getElementById('csStart');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        if (!allNamesEntered()) return;
+        state.screen = 'sim';
+        render();
+      });
+    }
+  }
+
+  function attachSimHandlers() {
+    document.querySelectorAll('.cs-strategy[data-strategy]').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.getAttribute('data-strategy');
+        const strategies = state.sprint === 1
+          ? getStrategiesForSprint1()
+          : getStrategiesForSprint2(state.sprint1Strategy);
+        const chosen = strategies.find(s => s.id === id);
+        if (!chosen) return;
+        state.strategy = id;
+        state.selected = new Set();
+        chosen.ids.forEach(storyId => {
+          if (storyId === 'newArabic') {
+            if (!state.backlog.find(s => s.id === 'newArabic')) {
+              state.backlog.unshift({ id: 'newArabic', title: 'Arabic language toggle', as: 'As a student, I want to use the portal in Arabic so I can understand the interface in my language.', priority: 'high', points: 5, tech: 'Internationalisation, RTL layout' });
+            }
+          }
+          state.selected.add(storyId);
+        });
+        render();
+      });
+    });
+
+    const nextBtn = document.getElementById('csNext');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (state.phase === 2 && state.day < 10) {
+          if (state.day === 2 && !state.archSeen) return;
+          advanceDay();
+          return;
+        }
+        if (state.phase === 2 && state.day >= 10 && !state.sprintDeliveryCaptured) {
+          captureSprintDelivery();
+        }
+        if (state.phase === 3) {
+          captureStakeholderFeedback();
+        }
+        if (state.phase === 4) {
+          if (state.sprint < 2) startSprint2();
+          else {
+            state.screen = 'summary';
+            render();
+          }
+          return;
+        }
+        state.phase = Math.min(4, state.phase + 1);
+        render();
+      });
+    }
+
+    const backBtn = document.getElementById('csBack');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        if (state.phase === 0 && state.sprint > 1) {
+          state.sprint = 1;
+          state.phase = 4;
+          render();
+          return;
+        }
+        state.phase = Math.max(0, state.phase - 1);
+        render();
+      });
+    }
+
+    const archOpen = document.getElementById('csArchOpen');
+    if (archOpen) {
+      archOpen.addEventListener('click', () => {
+        state.archModalOpen = true;
+        render();
+      });
+    }
+    const archClose = document.getElementById('csArchClose');
+    if (archClose) {
+      archClose.addEventListener('click', () => {
+        state.archModalOpen = false;
+        render();
+      });
+    }
+    const archConfirm = document.getElementById('csArchConfirm');
+    if (archConfirm) {
+      archConfirm.addEventListener('click', () => {
+        const primaryStoryId = [...state.selected][0];
+        const decision = archDecisions[primaryStoryId] || archDecisions.b01;
+        const chosenOption = decision.options.find(o => o.id === state.archChoice);
+        if (chosenOption) {
+          state.archDecisionsLog.push({
+            sprint: state.sprint,
+            title: decision.title,
+            storyId: primaryStoryId,
+            chosenName: chosenOption.name,
+            chosenTrade: chosenOption.trade
+          });
+        }
+        state.archModalOpen = false;
+        state.archSeen = true;
+        render();
+      });
+    }
+    document.querySelectorAll('.cs-arch-opt[data-arch]').forEach(el => {
+      el.addEventListener('click', () => {
+        state.archChoice = el.getAttribute('data-arch');
+        render();
+      });
+    });
+  }
+
+  function captureSprintDelivery() {
+    const doneStories = state.backlog.filter(s => state.boardState[s.id] === 'done' && state.selected.has(s.id));
+    let velocityThisSprint = 0;
+    doneStories.forEach(s => {
+      if (!state.deliveredFeatures.find(d => d.id === s.id)) {
+        state.deliveredFeatures.push({
+          id: s.id,
+          title: s.title,
+          points: s.points,
+          priority: s.priority,
+          sprint: state.sprint
+        });
+        velocityThisSprint += s.points;
+      }
+    });
+    if (state.sprint === 1) state.sprint1Velocity = velocityThisSprint;
+    else state.sprint2Velocity = velocityThisSprint;
+    state.sprintDeliveryCaptured = true;
+  }
+
+  function captureStakeholderFeedback() {
+    const alreadyLogged = state.reqChangesLog.some(c => c.sprint === state.sprint && c.source === 'review');
+    if (alreadyLogged) return;
+    if (state.newFeedbackItems && state.newFeedbackItems.length > 0) {
+      state.reqChangesLog.push({
+        sprint: state.sprint,
+        source: 'review',
+        when: 'After sprint ' + state.sprint + ' review',
+        summary: 'Stakeholder feedback added ' + state.newFeedbackItems.length + ' item' + (state.newFeedbackItems.length === 1 ? '' : 's') + ' to the backlog',
+        items: state.newFeedbackItems.map(i => i.title)
+      });
+    }
+  }
+
+  function advanceDay() {
+    const selectedIds = [...state.selected];
+    if (state.day === 0) {
+      selectedIds.forEach(id => { state.boardState[id] = 'todo'; });
+      state.day = 1;
+    } else if (state.day === 1) {
+      if (selectedIds[0]) state.boardState[selectedIds[0]] = 'doing';
+      state.day = 2;
+    } else if (state.day === 2) {
+      state.day = 4;
+    } else if (state.day === 4) {
+      if (selectedIds.length > 1 && selectedIds[1]) state.boardState[selectedIds[1]] = 'doing';
+      state.day = 6;
+    } else if (state.day === 6) {
+      if (selectedIds[0]) state.boardState[selectedIds[0]] = 'done';
+      if (selectedIds.length > 2 && selectedIds[2]) state.boardState[selectedIds[2]] = 'doing';
+      state.day = 8;
+    } else if (state.day === 8) {
+      if (selectedIds.length > 1 && selectedIds[1]) state.boardState[selectedIds[1]] = 'done';
+      state.day = 9;
+    } else if (state.day === 9) {
+      if (selectedIds.length > 2 && selectedIds[2]) state.boardState[selectedIds[2]] = 'done';
+      state.day = 10;
+    }
+    render();
+  }
+
+  function startSprint2() {
+    state.sprint1Strategy = state.strategy;
+    const arabicExists = state.backlog.find(s => s.id === 'newArabic');
+    if (!arabicExists) {
+      state.backlog.unshift({ id: 'newArabic', title: 'Arabic language toggle', as: 'As a student, I want to use the portal in Arabic so I can understand the interface in my language.', priority: 'high', points: 5, tech: 'Internationalisation, RTL layout' });
+      state.reqChangesLog.push({
+        sprint: 2,
+        source: 'stakeholder',
+        when: 'Between sprint 1 and sprint 2',
+        summary: 'Dean\'s office requested Arabic language support',
+        items: ['Arabic language toggle (5 pts, high priority)']
+      });
+    }
+    state.backlog = state.backlog.filter(s => !state.selected.has(s.id) || s.id === 'newArabic');
+    state.newFeedbackItems.forEach(item => {
+      if (!state.backlog.find(s => s.id === item.id)) {
+        const rewritten = {
+          id: item.id,
+          title: item.title,
+          as: 'As a stakeholder, I raised this in the last sprint review.',
+          priority: item.priority,
+          points: item.points,
+          tech: 'From stakeholder feedback'
+        };
+        state.backlog.splice(1, 0, rewritten);
+      }
+    });
+    state.selected = new Set();
+    state.strategy = null;
+    state.day = 0;
+    state.boardState = {};
+    state.burndownHistory = [];
+    state.archChoice = null;
+    state.archSeen = false;
+    state.archModalOpen = false;
+    state.sprintDeliveryCaptured = false;
+    state.sprint = 2;
+    state.phase = 0;
+    render();
+  }
+
+  function resetAll() {
+    state.phase = 0;
+    state.sprint = 1;
+    state.screen = 'sim';
+    state.backlog = JSON.parse(JSON.stringify(initialBacklog));
+    state.selected = new Set();
+    state.strategy = null;
+    state.sprint1Strategy = null;
+    state.day = 0;
+    state.boardState = {};
+    state.burndownHistory = [];
+    state.archChoice = null;
+    state.archSeen = false;
+    state.archModalOpen = false;
+    state.newFeedbackItems = [];
+    state.reqChangeSeen = false;
+    state.deliveredFeatures = [];
+    state.archDecisionsLog = [];
+    state.reqChangesLog = [];
+    state.sprint1Velocity = 0;
+    state.sprint2Velocity = 0;
+    state.sprintDeliveryCaptured = false;
+    render();
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
