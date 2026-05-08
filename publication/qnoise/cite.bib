@@ -1,0 +1,13 @@
+@article{DEZA2022101034,
+title = {qNoise: A generator of non-Gaussian colored noise},
+journal = {SoftwareX},
+volume = {18},
+pages = {101034},
+year = {2022},
+issn = {2352-7110},
+doi = {https://doi.org/10.1016/j.softx.2022.101034},
+url = {https://www.sciencedirect.com/science/article/pii/S2352711022000346},
+author = {Juan Ignacio Deza and Hisham Ihshaish},
+keywords = {Non-Gaussian, Random process generator, Stochastic differential equations},
+abstract = {We introduce a software generator for a class of colored (self-correlated) and non-Gaussian noise, whose statistics and spectrum depend on two parameters, q and τ. Inspired by Tsallis’ nonextensive formulation of statistical physics, the so-called q-distribution is a handy source of self-correlated noise for a large range of applications. The q-noise—which tends smoothly for q=1 to Ornstein–Uhlenbeck noise with autocorrelation τ—is generated via a stochastic differential equation, using the Heun method (a second order Runge–Kutta type integration scheme). The algorithm is implemented as a stand-alone library in C++, and is made available as open source in the Github repository. Noise’ statistics can be specified handily; by only varying parameter q: it has compact support for q<1 (sub-Gaussian regime) and finite variance up to q=5/3 (supra-Gaussian regime). Once q is fixed, noise’ autocorrelation can be tuned independently by means of parameter τ. The presented qNoise generator provides a readily tool to modeling wide range of real-world noise types, and is suitable to study the effects of correlation and deviations from the normal distribution in systems of stochastic differential equations, key to understand system dynamics in numerous applications. The effect of noises’ statistics on the response of a range of nonlinear systems is briefly discussed. In many of these examples, the systems’ response turns optimal for some q≠1. Hence, this paper aims to introduce qNoise generator for C++ at the class level and evaluate the kind of noise it generates, alongside their use in a range of applications.}
+}

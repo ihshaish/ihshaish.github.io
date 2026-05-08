@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI | Academic</title>
+    <link>https://ihshaish.github.io/tag/ai/</link>
+      <atom:link href="https://ihshaish.github.io/tag/ai/index.xml" rel="self" type="application/rss+xml" />
+    <description>AI</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 27 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://ihshaish.github.io/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
+      <title>AI</title>
+      <link>https://ihshaish.github.io/tag/ai/</link>
+    </image>
+    
+    <item>
+      <title>Designing Synthetic Personalities for Intelligent Autonomous Objects.</title>
+      <link>https://ihshaish.github.io/project/project3/</link>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://ihshaish.github.io/project/project3/</guid>
+      <description>&lt;p&gt;[internal] VC Inter-dicsiplinary Research Fund UK £25k to explore the design of the new class of ‘intelligent assistants&amp;rsquo; that are appearing in commercial and domestic markets. Aiming to improve usability, user acceptance and user-comprehension wherever intelligent, voice-driven, AI systems are exposed to human users. — &lt;strong&gt;PI&lt;/strong&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
