@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Generic software process models – COMP433 Teaching Companion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --steel: #2C5F7C;
+    --steel-dark: #1F4459;
+    --accent: #3A7CA5;
+    --accent-soft: #6FA8C9;
+    --ink: #1A1A1A;
+    --body: #333333;
+    --muted: #6B7280;
+    --panel: #F0F4F8;
+    --panel-2: #F8FAFC;
+    --border: #DEE2E6;
+    --border-soft: #E8ECEF;
+    --good: #2E7D5C;
+    --good-bg: #F2F8F5;
+    --warn: #B45309;
+    --warn-bg: #FBF6EE;
+    --maxw: 1100px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--body);
+    background: #ffffff;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  .topbar { height: 6px; background: var(--steel); width: 100%; }
+
+  header.page-header { max-width: var(--maxw); margin: 0 auto; padding: 36px 28px 12px; }
+  .breadcrumb {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 34px;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+  .subtitle { color: var(--muted); font-size: 16px; margin: 0; }
+  .meta { margin-top: 14px; font-size: 13px; color: var(--muted); }
+
+  nav.toc {
+    max-width: var(--maxw);
+    margin: 18px auto 8px;
+    padding: 14px 22px;
+    background: var(--panel);
+    border-left: 3px solid var(--steel);
+    font-size: 14px;
+    margin-left: 28px;
+    margin-right: 28px;
+  }
+  nav.toc strong {
+    color: var(--steel-dark);
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  nav.toc a {
+    color: var(--accent);
+    text-decoration: none;
+    margin-right: 16px;
+    display: inline-block;
+    padding: 2px 0;
+  }
+  nav.toc a:hover { text-decoration: underline; }
+
+  main { max-width: var(--maxw); margin: 0 auto; padding: 0 28px 80px; }
+  section { margin-top: 56px; scroll-margin-top: 20px; }
+
+  h2 {
+    font-family: Georgia, serif;
+    color: var(--steel-dark);
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    line-height: 1.25;
+  }
+  h2 .num { color: var(--steel); font-size: 18px; margin-right: 10px; font-weight: 400; }
+  .h2-rule { height: 2px; width: 60px; background: var(--steel); margin: 10px 0 22px; }
+
+  h3 {
+    font-family: Georgia, serif;
+    color: var(--ink);
+    font-size: 19px;
+    font-weight: 700;
+    margin: 28px 0 8px;
+  }
+  h4 { font-family: Georgia, serif; font-size: 15px; margin: 18px 0 6px; color: var(--steel-dark); }
+
+  p { margin: 0 0 14px; }
+
+  .panel {
+    background: var(--panel);
+    padding: 18px 22px;
+    border-left: 3px solid var(--steel);
+    margin: 18px 0;
+    font-size: 15px;
+  }
+  .panel .label {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    color: var(--steel-dark);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 18px 0;
+  }
+  .compare > div {
+    background: var(--panel-2);
+    border: 1px solid var(--border-soft);
+    padding: 18px 20px;
+  }
+  .compare h4 {
+    font-family: Georgia, serif;
+    color: var(--steel-dark);
+    margin: 0 0 8px;
+    font-size: 15px;
+  }
+  .compare ul { margin: 0; padding-left: 18px; }
+  .compare li { margin-bottom: 4px; font-size: 14px; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 18px 0;
+  }
+  .card {
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    background: #fff;
+  }
+  .card .ttl {
+    font-family: Georgia, serif;
+    color: var(--steel-dark);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .card .desc { font-size: 14px; line-height: 1.5; }
+  .card .takeaway {
+    margin-top: 8px;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .steps { margin: 18px 0; }
+  .step {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: start;
+  }
+  .step-num {
+    background: var(--steel);
+    color: #fff;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .step-body {
+    background: var(--panel-2);
+    padding: 10px 14px;
+    border-left: 2px solid var(--accent);
+  }
+  .step-body strong { color: var(--steel-dark); font-family: Georgia, serif; }
+
+  .bar-list { margin: 18px 0; }
+  .bar-item {
+    display: grid;
+    grid-template-columns: 4px 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: stretch;
+  }
+  .bar-item .bar { background: var(--accent); }
+  .bar-item .txt { padding: 4px 0; font-size: 14px; }
+  .bar-item .txt strong { color: var(--steel-dark); font-family: Georgia, serif; }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .pros, .cons { padding: 16px 20px; border: 1px solid var(--border-soft); }
+  .pros { background: var(--good-bg); border-left: 3px solid var(--good); }
+  .cons { background: var(--warn-bg); border-left: 3px solid var(--warn); }
+  .pros h4, .cons h4 { font-family: Georgia, serif; margin: 0 0 8px; font-size: 15px; }
+  .pros h4 { color: var(--good); }
+  .cons h4 { color: var(--warn); }
+  .pros ul, .cons ul { margin: 0; padding-left: 18px; }
+  .pros li, .cons li { font-size: 14px; margin-bottom: 4px; }
+
+  .callout {
+    background: var(--panel);
+    padding: 16px 22px;
+    margin: 18px 0;
+    border: 1px solid var(--border-soft);
+  }
+  .callout .label {
+    font-family: Georgia, serif;
+    color: var(--steel);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .callout p { margin: 0; font-size: 14px; }
+
+  figure {
+    margin: 24px 0;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid var(--border-soft);
+  }
+  figcaption {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+  }
+  svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+
+  table.comp {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  table.comp th, table.comp td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.comp th {
+    background: var(--steel);
+    color: #fff;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    border-bottom: none;
+  }
+  table.comp tr:nth-child(even) td { background: var(--panel-2); }
+  table.comp td.row-h {
+    font-family: Georgia, serif;
+    color: var(--steel-dark);
+    font-weight: 700;
+    background: var(--panel) !important;
+  }
+
+  footer.page-footer {
+    max-width: var(--maxw);
+    margin: 80px auto 0;
+    padding: 24px 28px 40px;
+    border-top: 1px solid var(--border-soft);
+    color: var(--muted);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 720px) {
+    .compare, .pros-cons { grid-template-columns: 1fr; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 22px; }
+    nav.toc { margin-left: 16px; margin-right: 16px; }
+    main { padding: 0 16px 60px; }
+  }
+
+  @media print {
+    nav.toc { display: none; }
+    section { page-break-inside: avoid; }
+    .topbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<header class="page-header">
+  <div class="breadcrumb">COMP433 Software Engineering · Lecture 2 Companion (1 of 2)</div>
+  <h1>Generic software process models</h1>
+  <p class="subtitle">Waterfall, evolutionary, prototyping, formal, and reuse-oriented development. The five models that frame the rest of the chapter, with side-by-side strengths, problems, and applicability.</p>
+  <div class="meta">Hisham Ihshaish · Birzeit University · Sections 5 and 6 · Semester 2 2025/2026</div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <strong>On this page</strong>
+  <a href="#what-is-a-process">What is a process?</a>
+  <a href="#the-five-models">The five generic models</a>
+  <a href="#waterfall">1. Waterfall</a>
+  <a href="#evolutionary">2. Evolutionary / Agile</a>
+  <a href="#prototyping">Software prototyping</a>
+  <a href="#formal">3. Formal systems</a>
+  <a href="#reuse">4. Reuse-oriented</a>
+  <a href="#side-by-side">Side by side</a>
+  <a href="#what-process">What process for what software?</a>
+  <a href="#whats-next">What is next</a>
+  <a href="#references">References</a>
+</nav>
+
+<main>
+
+<!-- ===== WHAT IS A PROCESS ===== -->
+<section id="what-is-a-process">
+  <h2><span class="num">01</span>What is a process?</h2>
+  <div class="h2-rule"></div>
+
+  <p>Whenever we provide a service or build a product, we follow a sequence of steps to accomplish a set of tasks. We do not paint the wall before the wiring of a house is installed. That ordered series of activities is what we call a <strong>process</strong>.</p>
+
+  <div class="panel">
+    <div class="label">Defining characteristics of any process</div>
+    <ul style="margin:8px 0 0; padding-left:22px">
+      <li>It prescribes all the major activities</li>
+      <li>It uses resources and produces intermediate and final products</li>
+      <li>It may include sub-processes, with entry and exit criteria</li>
+      <li>The activities are organised in a sequence</li>
+      <li>Constraints or controls may apply (budget, availability of resources)</li>
+    </ul>
+  </div>
+
+  <h3>From process to software life cycle</h3>
+  <p>When the process involves the building of a product, we refer to it as a <strong>life cycle</strong>. The <em>software development process</em>, also called the <em>software life cycle</em>, is a coherent set of activities for specifying, developing (designing and implementing), and validating (testing) software systems.</p>
+
+  <h3>The four fundamental activities</h3>
+  <p>Every software process, regardless of model, contains four core activities. Different models arrange them differently and revisit them at different cadences, but the activities themselves are universal.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">I. Specification</div>
+      <div class="desc">Establishing what functions are required and the constraints on the system's operation and development. Treated by Sommerville and Bruegge in the chapter on requirements engineering.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">II. Development</div>
+      <div class="desc">Converting the specification into an executable system. Includes design (architectural, interface, component, data, algorithm) and implementation (programming, debugging).</div>
+    </div>
+    <div class="card">
+      <div class="ttl">III. Validation</div>
+      <div class="desc">Showing that the system conforms to its specification and meets the customer's needs. Includes <em>verification</em> (does the system implement the requirements correctly and bug-free?) and <em>evaluation</em> (does the system meet its design goals such as performance and usability?).</div>
+    </div>
+    <div class="card">
+      <div class="ttl">IV. Evolution</div>
+      <div class="desc">Modifying the system after it is in use. As business circumstances change, the software that supports the business must change too. Increasingly, the line between development and evolution is blurred – fewer and fewer systems are completely new.</div>
+    </div>
+  </div>
+
+  <p style="font-size: 13px; color: var(--muted)">These four activities are studied in depth in the third companion in this series. Here we focus on how the different process models organise them.</p>
+
+  <div class="panel">
+    <div class="label">Key vocabulary used throughout this companion</div>
+    <ul style="margin:8px 0 0; padding-left:22px; font-size:14px">
+      <li><strong>Stakeholder.</strong> Anyone affected by, or who can affect, the system: customers, end users, regulators, the development team, support staff. The plural matters – different stakeholders often want different things.</li>
+      <li><strong>Requirement.</strong> A statement of what the system must do, or a constraint on how it must do it. Split into <em>user requirements</em> (high-level, in the customer's language) and <em>system requirements</em> (detailed, technical, used by developers).</li>
+      <li><strong>Component.</strong> A self-contained unit of software with well-defined interfaces. May be developed in-house, bought as commercial off-the-shelf (COTS), or taken from an open-source library.</li>
+      <li><strong>Architecture.</strong> The high-level structure of a system: which components exist, how they are arranged, how they communicate. The decisions hardest to change later.</li>
+      <li><strong>Increment.</strong> A working slice of the final system, delivered partway through development, that adds value on top of what was delivered before.</li>
+      <li><strong>Iteration.</strong> A repeated pass through the development activities. Each iteration may produce an increment, refine an existing increment, or both.</li>
+    </ul>
+  </div>
+
+  <h3>What is a process model?</h3>
+  <p>A <strong>software process model</strong> is an abstract representation of a process. It describes a process from a particular perspective. The same software project can be described by different models that emphasise different things – the order of phases, the flow of artifacts, the management of risk, the role of feedback. No model is the truth; each is a useful lens.</p>
+
+  <div class="callout">
+    <div class="label">Major problems in software development</div>
+    <p>The classic cartoon – what the customer asked for, what the developer understood, what was solved before, what was finally delivered – is funny because it is true. Software process models exist because, without them, projects routinely produce something nobody wanted.</p>
+  </div>
+</section>
+
+<!-- ===== THE FIVE GENERIC MODELS ===== -->
+<section id="the-five-models">
+  <h2><span class="num">02</span>The five generic process models</h2>
+  <div class="h2-rule"></div>
+
+  <p>Sommerville groups software processes into a small number of generic models. We will examine each in turn, but here is the family at a glance.</p>
+
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Waterfall.</strong> Separate and distinct phases of specification and development, in sequence.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Evolutionary / Agile development.</strong> Specification and development are interleaved. The system grows by adding features as the customer proposes them.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Formal systems development.</strong> A mathematical system specification is formally transformed, step by step, into an implementation.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Reuse-oriented development.</strong> The system is assembled from existing components or commercial off-the-shelf (COTS) systems.</div></div>
+  </div>
+
+  <p>Two further mechanisms – <em>incremental development</em> and <em>spiral development</em> – describe how iteration is layered on top of any of these. They are covered in the second companion in this pair, on iteration and Agile process models.</p>
+
+  <p style="font-size: 13px; color: var(--muted)">Note that prototyping is not itself a process model – it is a <em>technique</em> that can be used inside any of the models, especially the evolutionary one. We treat it on its own here because of its importance.</p>
+</section>
+
+<!-- ===== WATERFALL ===== -->
+<section id="waterfall">
+  <h2><span class="num">03</span>1. Waterfall model</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Waterfall partitions a project's development into distinct sequential stages. Each stage produces a definitive output that is the input to the next. The model is named for the way work flows downward from one stage to the next, with little expectation of going back upstream once a stage is complete.</p>
+
+  <p>The model is based on hardware engineering practice and was widely used in military and aerospace industries – environments where requirements are typically well defined early and change is minimal.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Waterfall model with five stages cascading from Requirements definition to Operation and maintenance, with bidirectional feedback arrows between adjacent stages.">
+      <defs>
+        <marker id="arrwf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/>
+        </marker>
+        <style>
+          .stage { font: 600 12px Georgia, serif; fill: #fff; }
+        </style>
+      </defs>
+
+      <text x="360" y="30" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">Waterfall: stages cascade in sequence, with feedback between adjacent stages</text>
+
+      <!-- Stage 1: Requirements definition -->
+      <rect x="40" y="60" width="170" height="50" fill="#2C5F7C"/>
+      <text x="125" y="82" text-anchor="middle" class="stage">Requirements</text>
+      <text x="125" y="98" text-anchor="middle" class="stage">definition</text>
+
+      <!-- Stage 2: System and software design -->
+      <rect x="170" y="130" width="170" height="50" fill="#2C5F7C"/>
+      <text x="255" y="152" text-anchor="middle" class="stage">System and</text>
+      <text x="255" y="168" text-anchor="middle" class="stage">software design</text>
+
+      <!-- Stage 3: Implementation and unit testing -->
+      <rect x="300" y="200" width="170" height="50" fill="#2C5F7C"/>
+      <text x="385" y="222" text-anchor="middle" class="stage">Implementation</text>
+      <text x="385" y="238" text-anchor="middle" class="stage">and unit testing</text>
+
+      <!-- Stage 4: Integration and system testing -->
+      <rect x="430" y="270" width="170" height="50" fill="#2C5F7C"/>
+      <text x="515" y="292" text-anchor="middle" class="stage">Integration and</text>
+      <text x="515" y="308" text-anchor="middle" class="stage">system testing</text>
+
+      <!-- Stage 5: Operation and maintenance -->
+      <rect x="540" y="340" width="170" height="50" fill="#2C5F7C"/>
+      <text x="625" y="362" text-anchor="middle" class="stage">Operation and</text>
+      <text x="625" y="378" text-anchor="middle" class="stage">maintenance</text>
+
+      <!-- Forward arrows (down) -->
+      <line x1="170" y1="110" x2="170" y2="130" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+      <line x1="300" y1="180" x2="300" y2="200" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+      <line x1="430" y1="250" x2="430" y2="270" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+      <line x1="540" y1="320" x2="540" y2="340" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+
+      <!-- Feedback arrows (up) – solid, full-width arrows showing each stage can feed back to the previous -->
+      <line x1="200" y1="130" x2="200" y2="110" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+      <line x1="330" y1="200" x2="330" y2="180" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+      <line x1="460" y1="270" x2="460" y2="250" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+      <line x1="570" y1="340" x2="570" y2="320" stroke="#2C5F7C" stroke-width="1.8" marker-end="url(#arrwf)"/>
+
+      <text x="40" y="392" font-family="-apple-system, sans-serif" font-size="11" fill="#6B7280">Each stage feeds the next. Going back to a previous stage is possible but expensive once the next stage is committed.</text>
+    </svg>
+    <figcaption>Figure 1. The waterfall model after Sommerville. Solid arrows in both directions between adjacent stages show that feedback exists, but going back is rare and expensive once a stage has been signed off.</figcaption>
+  </figure>
+
+  <h3>The problems</h3>
+  <p>Waterfall partitions projects rigidly. The drawback is the difficulty of accommodating change once the process is underway. More fundamentally, software is unlike hardware in ways that strain the model:</p>
+
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>No fabrication step.</strong> Program code is itself another design level. There is no "commit" point – software can always be changed, so the discipline that makes waterfall work in hardware does not apply.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>No sufficient body of design analysis.</strong> Most analysis is done on the running code. Problems are therefore not detected until late in the process.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Static view of requirements.</strong> Slow and expensive to respond to changing needs. User involvement is minimal once the specification is written.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Unrealistic separation of specification from design.</strong> In practice, design decisions clarify what the requirements should have said.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Cannot easily use prototyping or reuse.</strong> The model assumes everything is designed from scratch in sequence.</div></div>
+  </div>
+
+  <h3>Where waterfall still fits</h3>
+  <p>Despite its limitations, waterfall is the right choice in some circumstances:</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Requirements are well understood at project start</div>
+      <div class="desc">If the customer truly knows what they want and that will not change, the predictability of waterfall is a strength, not a weakness.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Large and complex critical systems</div>
+      <div class="desc">For systems where formal sign-off and exhaustive documentation are required at each stage (regulated, safety-critical), waterfall's stage gates are appropriate. It is too expensive to use for small systems.</div>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Strengths</h4>
+      <ul>
+        <li>Simple, well-known structure</li>
+        <li>Each stage produces formal documentation</li>
+        <li>Easy to manage and audit</li>
+        <li>Suitable for stable, well-understood domains</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Limitations</h4>
+      <ul>
+        <li>Inflexible to change once stages are committed</li>
+        <li>Working software not visible until late</li>
+        <li>Risks discovered late are expensive to fix</li>
+        <li>Poor fit for most modern software contexts</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EVOLUTIONARY ===== -->
+<section id="evolutionary">
+  <h2><span class="num">04</span>2. Evolutionary / Agile development</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Evolutionary development reverses waterfall's central assumption. Rather than fixing requirements upfront, the system evolves toward a final form by repeatedly producing versions that are shown to the customer. The customer reacts; the team adjusts; the next version goes further. Specification and development are interleaved rather than sequential.</p>
+
+  <p>Sommerville distinguishes two kinds:</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Exploratory development</div>
+      <div class="desc">Work with customers to evolve a final system from an initial outline specification. Start with some well-understood requirements; the system grows as new features are proposed by the customer.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Evolutionary and incremental development</div>
+      <div class="desc">Use evolutionary and incremental techniques (such as prototyping) to control changing customer requirements. Aims to support the twelve principles of the Agile Manifesto, which focus on the customer, their changing requirements, and the development team and their interactions, for early and continuous delivery.</div>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Evolutionary development with concurrent activities Specification, Development, Validation feeding initial, intermediate, and final versions.">
+      <defs>
+        <marker id="arrev" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/>
+        </marker>
+        <marker id="arrev2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3A7CA5"/>
+        </marker>
+      </defs>
+
+      <text x="360" y="28" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">Evolutionary development</text>
+      <text x="360" y="48" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#6B7280">Specification, development, and validation are concurrent, not sequential</text>
+
+      <!-- Outline description (input) -->
+      <rect x="20" y="130" width="140" height="60" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="90" y="158" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Outline</text>
+      <text x="90" y="176" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">description</text>
+
+      <!-- Concurrent activities frame -->
+      <rect x="200" y="80" width="220" height="200" fill="#F0F4F8" stroke="#2C5F7C" stroke-width="1.5"/>
+      <text x="310" y="105" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#6B7280" font-style="italic">Concurrent activities</text>
+
+      <!-- Three activity blocks -->
+      <rect x="230" y="120" width="160" height="40" fill="#fff" stroke="#3A7CA5"/>
+      <text x="310" y="144" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Specification</text>
+
+      <rect x="230" y="180" width="160" height="40" fill="#fff" stroke="#3A7CA5"/>
+      <text x="310" y="204" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Development</text>
+
+      <rect x="230" y="240" width="160" height="40" fill="#fff" stroke="#3A7CA5"/>
+      <text x="310" y="264" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Validation</text>
+
+      <!-- Bidirectional arrows between activities -->
+      <line x1="310" y1="160" x2="310" y2="180" stroke="#3A7CA5" stroke-width="1.5"/>
+      <polygon points="310,180 305,172 315,172" fill="#3A7CA5"/>
+      <polygon points="310,160 305,168 315,168" fill="#3A7CA5"/>
+
+      <line x1="310" y1="220" x2="310" y2="240" stroke="#3A7CA5" stroke-width="1.5"/>
+      <polygon points="310,240 305,232 315,232" fill="#3A7CA5"/>
+      <polygon points="310,220 305,228 315,228" fill="#3A7CA5"/>
+
+      <!-- Outputs -->
+      <rect x="470" y="120" width="160" height="40" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="550" y="144" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Initial version</text>
+
+      <rect x="470" y="180" width="160" height="40" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="550" y="200" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Intermediate</text>
+      <text x="550" y="214" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#6B7280">versions</text>
+
+      <rect x="470" y="240" width="160" height="40" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="550" y="264" text-anchor="middle" font-family="Georgia" font-weight="600" font-size="13" fill="#1F4459">Final version</text>
+
+      <!-- Connecting arrows -->
+      <line x1="160" y1="160" x2="200" y2="140" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrev)"/>
+
+      <line x1="390" y1="140" x2="470" y2="140" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrev)"/>
+      <line x1="470" y1="150" x2="390" y2="150" stroke="#3A7CA5" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrev)"/>
+
+      <line x1="390" y1="200" x2="470" y2="200" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrev)"/>
+      <line x1="470" y1="210" x2="390" y2="210" stroke="#3A7CA5" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrev)"/>
+
+      <line x1="390" y1="260" x2="470" y2="260" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrev)"/>
+    </svg>
+    <figcaption>Figure 2. Evolutionary development. The three core activities run concurrently and feed each other. Each pass produces a version that goes back to the customer for feedback. Adapted from Sommerville (2016).</figcaption>
+  </figure>
+
+  <h3>Problems</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Lack of process visibility.</strong> Without distinct stages, managers cannot easily track progress through traditional milestones.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Systems are often poorly structured.</strong> Continuous change tends to erode architectural integrity unless the team actively refactors.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Special skills may be required.</strong> Rapid prototyping, continuous integration, and similar techniques demand experienced developers.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Higher communication overhead.</strong> Continuous interaction with the customer and within the team can be expensive.</div></div>
+  </div>
+
+  <h3>Applicability</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Small or medium-size interactive systems</div>
+      <div class="desc">Where requirements are not possible to detail at the start, and rapid feedback from real users provides the clearest signal.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Parts of large systems</div>
+      <div class="desc">For example, the user interface of a large system, where the form needs to evolve in response to user testing.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Short-lifetime systems</div>
+      <div class="desc">When the system will not be in use long enough to justify heavyweight specification.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Where powerful tools are available</div>
+      <div class="desc">Visual development environments, frameworks, and prototyping tools make the cost of evolutionary change much lower than in raw coding.</div>
+    </div>
+  </div>
+
+  <h3>Examples of agile process models</h3>
+  <p>Evolutionary / Agile is itself a family. Specific named models that fit under it include:</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Extreme Programming (XP)</div>
+      <div class="desc">Engineering-focused; pair programming, TDD, refactoring, simple design.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Scrum</div>
+      <div class="desc">Lightweight management framework with sprints, accountabilities, and inspect-and-adapt events.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Adaptive Software Development (ASD)</div>
+      <div class="desc">Speculate-collaborate-learn cycle; emphasises adapting to complexity rather than controlling it.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Dynamic Systems Development Method (DSDM)</div>
+      <div class="desc">Time-boxed delivery with prioritisation by MoSCoW (Must, Should, Could, Won't).</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Crystal</div>
+      <div class="desc">A family of methods (Crystal Clear, Crystal Yellow, etc.) calibrated to team size and criticality.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Feature Driven Development (FDD)</div>
+      <div class="desc">Plan and build by feature; emphasises a feature list and class ownership.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Lean Software Development (LSD)</div>
+      <div class="desc">Adapts Lean manufacturing principles (eliminate waste, build quality in, defer commitment) to software.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Agile Modeling (AM) and Agile Unified Process (AUP)</div>
+      <div class="desc">Lightweight modelling practices, and a streamlined version of the Rational Unified Process.</div>
+    </div>
+  </div>
+
+  <p style="font-size: 13px; color: var(--muted)">The second companion in this pair, on iteration and Agile process models, covers Scrum, XP, Kanban, and the Spiral model in detail. The other names listed here are mentioned for completeness – students may encounter them in industry but they are less commonly used than Scrum or XP.</p>
+</section>
+
+<!-- ===== PROTOTYPING ===== -->
+<section id="prototyping">
+  <h2><span class="num">05</span>Software prototyping</h2>
+  <div class="h2-rule"></div>
+
+  <h3>What it is</h3>
+  <p>Software prototyping is a development <em>technique</em>, not a process model. It is used to help understand system requirements, especially when the requirements are poorly understood at the start. The pattern is simple: develop a quick-and-dirty version of the system; expose it to user feedback; refine and re-develop. Repeat until an adequate system is developed, or until enough has been learned to specify the real system properly.</p>
+
+  <div class="panel">
+    <div class="label">A prototype is</div>
+    <p style="margin:0">an initial version of a system used to demonstrate concepts and try out design options. It is not the system that ships – it is a tool for learning.</p>
+  </div>
+
+  <h3>Where prototyping is used</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>In the requirements engineering process</strong> – to help with elicitation and validation. Showing customers something concrete is often more effective than asking them to imagine.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>In the design process</strong> – to explore options and develop the user interface design.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>In the testing process</strong> – to run back-to-back tests against an existing reference system.</div></div>
+  </div>
+
+  <h3>The four-step prototyping process</h3>
+  <figure>
+    <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prototyping process: Establish prototype objectives, Define prototype functionality, Develop prototype, Evaluate prototype, with outputs prototyping plan, outline definition, executable prototype, evaluation report.">
+      <defs>
+        <marker id="arrpr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/>
+        </marker>
+        <style>
+          .lab { font: 600 12px Georgia, serif; fill: #1F4459; }
+          .out { font: 11px -apple-system, sans-serif; fill: #1A1A1A; }
+        </style>
+      </defs>
+
+      <text x="360" y="28" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">The process of prototype development</text>
+
+      <!-- Top row: activities -->
+      <rect x="20" y="60" width="150" height="50" fill="#2C5F7C" rx="4"/>
+      <text x="95" y="82" text-anchor="middle" class="lab" fill="#fff">Establish</text>
+      <text x="95" y="98" text-anchor="middle" class="lab" fill="#fff">prototype objectives</text>
+
+      <rect x="190" y="60" width="150" height="50" fill="#2C5F7C" rx="4"/>
+      <text x="265" y="82" text-anchor="middle" class="lab" fill="#fff">Define prototype</text>
+      <text x="265" y="98" text-anchor="middle" class="lab" fill="#fff">functionality</text>
+
+      <rect x="360" y="60" width="150" height="50" fill="#2C5F7C" rx="4"/>
+      <text x="435" y="90" text-anchor="middle" class="lab" fill="#fff">Develop prototype</text>
+
+      <rect x="530" y="60" width="150" height="50" fill="#2C5F7C" rx="4"/>
+      <text x="605" y="90" text-anchor="middle" class="lab" fill="#fff">Evaluate prototype</text>
+
+      <!-- Arrows between activities -->
+      <line x1="170" y1="85" x2="190" y2="85" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrpr)"/>
+      <line x1="340" y1="85" x2="360" y2="85" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrpr)"/>
+      <line x1="510" y1="85" x2="530" y2="85" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrpr)"/>
+
+      <!-- Down arrows to outputs -->
+      <line x1="95" y1="110" x2="95" y2="140" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrpr)"/>
+      <line x1="265" y1="110" x2="265" y2="140" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrpr)"/>
+      <line x1="435" y1="110" x2="435" y2="140" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrpr)"/>
+      <line x1="605" y1="110" x2="605" y2="140" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrpr)"/>
+
+      <!-- Bottom row: outputs -->
+      <rect x="20" y="150" width="150" height="40" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="95" y="174" text-anchor="middle" class="out">Prototyping plan</text>
+
+      <rect x="190" y="150" width="150" height="40" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="265" y="174" text-anchor="middle" class="out">Outline definition</text>
+
+      <rect x="360" y="150" width="150" height="40" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="435" y="174" text-anchor="middle" class="out">Executable prototype</text>
+
+      <rect x="530" y="150" width="150" height="40" fill="#F0F4F8" stroke="#DEE2E6"/>
+      <text x="605" y="174" text-anchor="middle" class="out">Evaluation report</text>
+    </svg>
+    <figcaption>Figure 3. Prototyping is a four-step technique. Each step produces an artifact that feeds the next, ending with an evaluation report that informs whether to iterate, refine, or move on.</figcaption>
+  </figure>
+
+  <h3>Benefits</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Improved system usability.</strong> Real users react to a real prototype.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>A closer match to users' real needs.</strong> Prototypes surface unstated requirements.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Improved design quality.</strong> Design choices are tested against a working artifact rather than speculation.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Improved maintainability.</strong> Issues caught early are cheaper to fix.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Reduced development effort.</strong> Counter-intuitively, throwing away a prototype is often cheaper than building the wrong thing first time.</div></div>
+  </div>
+
+  <div class="callout">
+    <div class="label">A teaching note on KISS</div>
+    <p>Prototyping work is often described with the principle <em>KISS – Keep It Simple and Stupid</em>. The point is not that the prototype must be unsophisticated; it is that the goal of the prototype is to learn, and any complexity beyond what is needed for that learning is waste.</p>
+  </div>
+
+  <div class="callout">
+    <div class="label">In your project</div>
+    <p>Phase 1 of the project asks the customer group to write a 1–2 page business outline, followed by an interview workshop with the developer group. That interview is, in effect, a chance to use prototyping techniques in their lightest form. If the developer group finds the customer's outline ambiguous, drawing a quick paper sketch of a screen, or describing a concrete user scenario, often surfaces hidden requirements faster than re-reading the document. You do not need to build software to prototype; sketches, mock screens, and scenario walk-throughs all count.</p>
+  </div>
+</section>
+
+<!-- ===== FORMAL ===== -->
+<section id="formal">
+  <h2><span class="num">06</span>3. Formal systems development</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Formal systems development is based on the transformation of a mathematical specification through different representations to an executable program. Each transformation is <em>correctness-preserving</em>, so showing that the program conforms to its specification is straightforward – the proof is built in.</p>
+
+  <p>This approach is embodied in the <strong>Cleanroom approach</strong>, originally developed by IBM. Some authors consider it a variant of the waterfall model, with the development phase replaced by a chain of formal transformations. The classic variant is sometimes called the V-model when test planning is mirrored onto each specification stage.</p>
+
+  <figure>
+    <svg viewBox="0 0 740 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Formal systems development: Requirements definition leads to Formal specification leads to Formal transformation chain T1 T2 T3 T4 with proofs P1 P2 P3 P4, ending in Integration and system testing.">
+      <defs>
+        <marker id="arrf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/>
+        </marker>
+        <style>
+          .lab { font: 600 11px Georgia, serif; fill: #fff; }
+          .lab2 { font: 600 12px Georgia, serif; fill: #1F4459; }
+          .small { font: 11px -apple-system, sans-serif; fill: #6B7280; }
+          .tform { font: 700 13px Georgia, serif; fill: #B45309; }
+        </style>
+      </defs>
+
+      <text x="370" y="28" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">Formal systems development</text>
+      <text x="370" y="48" text-anchor="middle" class="small">Specification is transformed into code through correctness-preserving steps</text>
+
+      <!-- Top-level flow -->
+      <rect x="10" y="80" width="160" height="50" fill="#2C5F7C" rx="6"/>
+      <text x="90" y="100" text-anchor="middle" class="lab">Requirements</text>
+      <text x="90" y="116" text-anchor="middle" class="lab">definition</text>
+
+      <rect x="190" y="80" width="160" height="50" fill="#2C5F7C" rx="6"/>
+      <text x="270" y="100" text-anchor="middle" class="lab">Formal</text>
+      <text x="270" y="116" text-anchor="middle" class="lab">specification</text>
+
+      <rect x="370" y="80" width="170" height="50" fill="#2C5F7C" rx="6"/>
+      <text x="455" y="100" text-anchor="middle" class="lab">Formal</text>
+      <text x="455" y="116" text-anchor="middle" class="lab">transformation</text>
+
+      <rect x="560" y="80" width="170" height="50" fill="#2C5F7C" rx="6"/>
+      <text x="645" y="100" text-anchor="middle" class="lab">Integration and</text>
+      <text x="645" y="116" text-anchor="middle" class="lab">system testing</text>
+
+      <line x1="170" y1="105" x2="190" y2="105" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrf)"/>
+      <line x1="350" y1="105" x2="370" y2="105" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrf)"/>
+      <line x1="540" y1="105" x2="560" y2="105" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrf)"/>
+
+      <!-- Expanded view of formal transformation -->
+      <text x="370" y="158" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="13" fill="#1F4459">Formal transformations</text>
+
+      <!-- T1, T2, T3, T4 labels -->
+      <text x="120" y="180" text-anchor="middle" class="tform">T1</text>
+      <text x="240" y="180" text-anchor="middle" class="tform">T2</text>
+      <text x="360" y="180" text-anchor="middle" class="tform">T3</text>
+      <text x="480" y="180" text-anchor="middle" class="tform">T4</text>
+
+      <!-- R chain at y=210 -->
+      <rect x="40" y="200" width="100" height="40" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="90" y="218" text-anchor="middle" class="lab2">Formal</text>
+      <text x="90" y="232" text-anchor="middle" class="lab2">specification</text>
+
+      <rect x="160" y="200" width="100" height="40" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="210" y="226" text-anchor="middle" class="lab2">R1</text>
+
+      <rect x="280" y="200" width="100" height="40" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="330" y="226" text-anchor="middle" class="lab2">R2</text>
+
+      <rect x="400" y="200" width="100" height="40" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="450" y="226" text-anchor="middle" class="lab2">R3</text>
+
+      <rect x="520" y="200" width="120" height="40" fill="#F0F4F8" stroke="#3A7CA5"/>
+      <text x="580" y="218" text-anchor="middle" class="lab2">Executable</text>
+      <text x="580" y="232" text-anchor="middle" class="lab2">program</text>
+
+      <!-- Forward arrows -->
+      <line x1="140" y1="220" x2="160" y2="220" stroke="#2C5F7C" marker-end="url(#arrf)"/>
+      <line x1="260" y1="220" x2="280" y2="220" stroke="#2C5F7C" marker-end="url(#arrf)"/>
+      <line x1="380" y1="220" x2="400" y2="220" stroke="#2C5F7C" marker-end="url(#arrf)"/>
+      <line x1="500" y1="220" x2="520" y2="220" stroke="#2C5F7C" marker-end="url(#arrf)"/>
+
+      <!-- Vertical lines from P boxes up to R boxes -->
+      <line x1="90" y1="280" x2="90" y2="240" stroke="#B45309" stroke-width="1"/>
+      <line x1="210" y1="280" x2="210" y2="240" stroke="#B45309" stroke-width="1"/>
+      <line x1="330" y1="280" x2="330" y2="240" stroke="#B45309" stroke-width="1"/>
+      <line x1="450" y1="280" x2="450" y2="240" stroke="#B45309" stroke-width="1"/>
+
+      <!-- P proof boxes -->
+      <rect x="65" y="280" width="50" height="30" fill="#fff" stroke="#B45309"/>
+      <text x="90" y="300" text-anchor="middle" class="lab2" fill="#B45309">P1</text>
+
+      <rect x="185" y="280" width="50" height="30" fill="#fff" stroke="#B45309"/>
+      <text x="210" y="300" text-anchor="middle" class="lab2" fill="#B45309">P2</text>
+
+      <rect x="305" y="280" width="50" height="30" fill="#fff" stroke="#B45309"/>
+      <text x="330" y="300" text-anchor="middle" class="lab2" fill="#B45309">P3</text>
+
+      <rect x="425" y="280" width="50" height="30" fill="#fff" stroke="#B45309"/>
+      <text x="450" y="300" text-anchor="middle" class="lab2" fill="#B45309">P4</text>
+
+      <!-- Caption to the right, away from the chain -->
+      <text x="580" y="290" class="small" font-style="italic">Proofs of</text>
+      <text x="580" y="304" class="small" font-style="italic">transformation</text>
+      <text x="580" y="318" class="small" font-style="italic">correctness</text>
+    </svg>
+    <figcaption>Figure 4. Formal systems development. The formal specification is transformed step by step (T1, T2, T3, T4) into an executable program. Each transformation is accompanied by a proof of correctness (P1, P2, P3, P4). Adapted from Sommerville (2016).</figcaption>
+  </figure>
+
+  <h3>Problems</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Specialised skills required.</strong> Formal methods demand training in mathematical logic and specification languages (Z, B, VDM, TLA+).</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Difficult to formally specify some aspects.</strong> User interfaces and other behaviour involving humans are hard to capture mathematically.</div></div>
+  </div>
+
+  <h3>Applicability</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Critical systems</div>
+      <div class="desc">Especially those where a safety or security case must be made before the system is put into operation. Avionics, nuclear control systems, secure cryptographic protocols.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Small systems or parts of large systems</div>
+      <div class="desc">Formal methods scale poorly. They are typically applied to the safety-critical core of a larger system rather than the whole.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REUSE-ORIENTED ===== -->
+<section id="reuse">
+  <h2><span class="num">07</span>4. Reuse-oriented development</h2>
+  <div class="h2-rule"></div>
+
+  <h3>The idea</h3>
+  <p>Reuse-oriented development is based on systematic reuse: systems are integrated from existing components or commercial off-the-shelf (COTS) systems. Rather than build from scratch, the team finds, evaluates, and assembles. This approach is becoming more important and popular, but we still have limited experience with its wide use across different domains.</p>
+
+  <h3>Process stages</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Component analysis.</strong> Given the requirements specification, search for components that could provide the needed functionality. There is rarely an exact match – the components found will provide some of what is needed.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Requirements modification.</strong> Adjust the requirements to reflect what the available components actually provide. Where adjustment is impossible, the components must be searched again or a build-versus-buy decision made.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>System design with reuse.</strong> Design the system framework around the chosen components. New software must be designed if reusable components are not available.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body"><strong>Development and integration.</strong> Software not bought is developed; components are integrated to form the system. Integration is part of development, not an addition to it.</div>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reuse-oriented development pipeline: Requirements specification, Component analysis, Requirements modification, System design with reuse, Development and integration, System validation.">
+      <defs>
+        <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7C"/>
+        </marker>
+        <style>
+          .lab { font: 600 12px Georgia, serif; fill: #fff; }
+        </style>
+      </defs>
+
+      <text x="360" y="28" text-anchor="middle" font-family="Georgia" font-weight="700" font-size="15" fill="#1F4459">Reuse-oriented development</text>
+
+      <!-- Top row -->
+      <rect x="20" y="60" width="150" height="50" fill="#2C5F7C" rx="20"/>
+      <text x="95" y="82" text-anchor="middle" class="lab">Requirements</text>
+      <text x="95" y="98" text-anchor="middle" class="lab">specification</text>
+
+      <rect x="200" y="60" width="150" height="50" fill="#2C5F7C" rx="20"/>
+      <text x="275" y="82" text-anchor="middle" class="lab">Component</text>
+      <text x="275" y="98" text-anchor="middle" class="lab">analysis</text>
+
+      <rect x="380" y="60" width="150" height="50" fill="#2C5F7C" rx="20"/>
+      <text x="455" y="82" text-anchor="middle" class="lab">Requirements</text>
+      <text x="455" y="98" text-anchor="middle" class="lab">modification</text>
+
+      <rect x="560" y="60" width="150" height="50" fill="#2C5F7C" rx="20"/>
+      <text x="635" y="82" text-anchor="middle" class="lab">System design</text>
+      <text x="635" y="98" text-anchor="middle" class="lab">with reuse</text>
+
+      <line x1="170" y1="85" x2="200" y2="85" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrr)"/>
+      <line x1="350" y1="85" x2="380" y2="85" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrr)"/>
+      <line x1="530" y1="85" x2="560" y2="85" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrr)"/>
+
+      <!-- Bottom row -->
+      <rect x="380" y="160" width="170" height="50" fill="#2C5F7C" rx="20"/>
+      <text x="465" y="182" text-anchor="middle" class="lab">Development</text>
+      <text x="465" y="198" text-anchor="middle" class="lab">and integration</text>
+
+      <rect x="200" y="160" width="160" height="50" fill="#2C5F7C" rx="20"/>
+      <text x="280" y="190" text-anchor="middle" class="lab">System validation</text>
+
+      <!-- Connector path: right side of System design, down, then left across to Development, then continuing left to Validation -->
+      <line x1="690" y1="110" x2="690" y2="185" stroke="#2C5F7C" stroke-width="1.5"/>
+      <line x1="690" y1="185" x2="555" y2="185" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrr)"/>
+      <line x1="380" y1="185" x2="360" y2="185" stroke="#2C5F7C" stroke-width="1.5" marker-end="url(#arrr)"/>
+    </svg>
+    <figcaption>Figure 5. Reuse-oriented development. Requirements drive a search for components, the requirements then adjust to fit what is available, design wraps the components, and the system is integrated and validated. Adapted from Sommerville (2016).</figcaption>
+  </figure>
+
+  <h3>Problems</h3>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Specialised analysis and integration skills.</strong> Selecting components for both functionality and quality requires real expertise.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Some aspects do not reuse easily.</strong> User interfaces, in particular, are highly project-specific.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Maintainability concerns.</strong> Reused components may not be supported by their suppliers indefinitely.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Evolution constrained by component suppliers.</strong> The team's ability to change the system is limited by what the component suppliers do.</div></div>
+  </div>
+
+  <h3>Applicability</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Non-critical systems with common functionality</div>
+      <div class="desc">Where reusable components exist for the common parts (authentication, payment, mapping, document handling), reuse is a strong default.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">Large systems</div>
+      <div class="desc">Component analysis and integration may be too expensive for small or mid-size projects, but pay off when the project is large.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="label">In your project</div>
+    <p>The course project does not reach the implementation phase – it ends with system modelling and design (component, architecture, deployment diagrams). Even so, when you draw your component diagram in Phase 4, you should think about which components you would write yourself and which you would buy or take from a library: a payment component, an authentication component, a mapping component. The component diagram is more honest – and more realistic – when it acknowledges what would actually be reused. The point of reuse-oriented thinking is to make that reuse a deliberate design decision, not an afterthought.</p>
+  </div>
+</section>
+
+<!-- ===== SIDE BY SIDE ===== -->
+<section id="side-by-side">
+  <h2><span class="num">08</span>Side by side</h2>
+  <div class="h2-rule"></div>
+
+  <p>A single-page comparison of the four generic models, with prototyping shown as a technique that can be applied within any of them.</p>
+
+  <table class="comp">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Waterfall</th>
+        <th>Evolutionary / Agile</th>
+        <th>Formal</th>
+        <th>Reuse-oriented</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="row-h">Core idea</td>
+        <td>Distinct sequential phases</td>
+        <td>Specification and development interleaved</td>
+        <td>Specification transformed into code by correctness-preserving steps</td>
+        <td>System assembled from existing components</td>
+      </tr>
+      <tr>
+        <td class="row-h">Best when</td>
+        <td>Requirements are stable and well understood</td>
+        <td>Requirements will evolve during the project</td>
+        <td>Failure is unacceptable; correctness must be proven</td>
+        <td>Common functionality already exists as components</td>
+      </tr>
+      <tr>
+        <td class="row-h">Worst when</td>
+        <td>Requirements will change</td>
+        <td>Process visibility and formal sign-off are needed</td>
+        <td>System has heavy human-interface content</td>
+        <td>Project is small; integration costs dominate</td>
+      </tr>
+      <tr>
+        <td class="row-h">Documentation</td>
+        <td>Heavy, per stage</td>
+        <td>Lean, evolves with the system</td>
+        <td>Heavy, formal specifications and proofs</td>
+        <td>Component contracts, integration design</td>
+      </tr>
+      <tr>
+        <td class="row-h">Customer involvement</td>
+        <td>Mostly at start (specification) and end (acceptance)</td>
+        <td>Continuous</td>
+        <td>At specification; less during transformation</td>
+        <td>At requirements and at adjustment of requirements</td>
+      </tr>
+      <tr>
+        <td class="row-h">Risk profile</td>
+        <td>Late discovery of problems</td>
+        <td>Drift if not disciplined</td>
+        <td>Specialist skill bottleneck</td>
+        <td>Component suppliers' future</td>
+      </tr>
+      <tr>
+        <td class="row-h">Typical domain</td>
+        <td>Aerospace, defence, regulated</td>
+        <td>Most modern commercial software</td>
+        <td>Safety-critical, security-critical kernels</td>
+        <td>Enterprise applications, ERP, integration projects</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>How to choose at the broadest level</h3>
+  <p>The honest answer is that real projects rarely use a pure form. A safety-critical project will use formal methods for the kernel, waterfall-like discipline for the structure, and prototyping for the user-facing parts. A start-up will use evolutionary development for the application, reuse-oriented development for non-differentiating parts, and prototyping for the user interface. The model is a lens, not a cage.</p>
+
+  <p>The factors that drive the choice:</p>
+
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>How stable are the requirements?</strong> Stable → waterfall-friendly. Volatile → evolutionary.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>How critical is the system?</strong> Safety-critical → formal methods for the core. Routine → reuse and evolutionary.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>How much already exists?</strong> Lots of components → reuse-oriented. Greenfield → build from scratch.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>How available is the customer?</strong> Continuously available → evolutionary. Hard to reach → waterfall, with all the risks that implies.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>What does the contract say?</strong> Fixed-price, fixed-scope, fixed-date → some kind of plan-driven model. Time-and-materials with discovery → evolutionary.</div></div>
+  </div>
+
+  <p style="font-size: 13px; color: var(--muted)">The next section makes these factors concrete with four worked examples.</p>
+</section>
+
+<!-- ===== WHAT PROCESS FOR WHAT SOFTWARE ===== -->
+<section id="what-process">
+  <h2><span class="num">09</span>What process for what software?</h2>
+  <div class="h2-rule"></div>
+
+  <p>To make the choice tangible, here are four examples drawn from systems you may know. Each example states the problem, names the dominant factors, and proposes a process – usually a blend of models, not a pure one. The reasoning matters more than the conclusion.</p>
+
+  <h3>Example 1 – A university course registration portal</h3>
+  <div class="panel">
+    <div class="label">The system</div>
+    <p style="margin:0">A web application where students browse the catalogue, enrol in courses, drop or add up to the deadline, and view their schedule. Faculty manage class lists; the registrar approves overrides. Replaces a paper-and-spreadsheet system.</p>
+  </div>
+  <p><strong>Dominant factors.</strong> Requirements are well understood (every university already has a registration process); the organisation is bureaucratic and prefers to sign off documents; the system must integrate with existing student records; security and audit are important; the user community is captive (students must use it).</p>
+  <p><strong>Proposed process.</strong> A largely <em>plan-driven</em> approach with a waterfall-like backbone for the integration and audit work, but with <em>prototyping</em> heavily used for the student-facing interface. The reason: the back end (catalogue, enrolment rules, transcript integration) maps cleanly onto a stable specification, but the user interface is where students will actually judge the system, and there the only reliable way to get it right is to put a prototype in front of real students. Reuse-oriented thinking applies to authentication, payment, and notification components – none of which the team should build from scratch.</p>
+  <p><strong>What you would not do.</strong> Pure agile with no upfront documentation – the registrar will not sign off on anything that has not been specified. Pure waterfall – the user interface will be wrong on the first try.</p>
+
+  <h3>Example 2 – A food-delivery mobile app start-up</h3>
+  <div class="panel">
+    <div class="label">The system</div>
+    <p style="margin:0">A mobile app and back end where customers order food from local restaurants, pay in-app, and track delivery. Drivers use a separate app to accept jobs and navigate. Restaurants use a dashboard to manage their menu and incoming orders.</p>
+  </div>
+  <p><strong>Dominant factors.</strong> Requirements are <em>not</em> well understood at the start – the team needs to discover what users will actually pay for, what makes drivers stay, and what restaurants tolerate. The market changes faster than any specification document can keep up with. The team is small and co-located. There is no regulator to satisfy. Speed to market is critical.</p>
+  <p><strong>Proposed process.</strong> Strongly <em>evolutionary / agile</em>, with two-week iterations and continuous customer feedback. <em>Prototyping</em> is used at the start to validate the core flows before any real engineering. <em>Reuse-oriented</em> for the parts that are not differentiators – maps, payments, push notifications, identity – buy or use third-party APIs rather than build. Waterfall would actively damage this project; the team needs to learn from real users in weeks, not produce a specification document over months.</p>
+  <p><strong>What you would not do.</strong> Lock the specification before the first release. Build in-house what already exists as a paid API. Skip user testing because "we know what users want".</p>
+
+  <h3>Example 3 – A medical infusion-pump controller</h3>
+  <div class="panel">
+    <div class="label">The system</div>
+    <p style="margin:0">Embedded software that controls the rate at which a hospital infusion pump delivers medication to a patient. A failure can kill. The software must be approved by a regulator before deployment.</p>
+  </div>
+  <p><strong>Dominant factors.</strong> Failure consequences are catastrophic. Requirements come from a regulator and from clinical experts, and they are stable but voluminous. Documentation must be exhaustive – every requirement must be traceable to a design decision, to code, and to a test. Cost is a secondary concern; correctness is primary.</p>
+  <p><strong>Proposed process.</strong> A <em>formal systems development</em> approach for the safety-critical control loop (drug-rate calculation, alarm logic), surrounded by a <em>waterfall-like</em> structure with full V&amp;V (verification and validation) at every stage for the rest of the system. <em>Prototyping</em> may be used for the operator interface (which is where most clinical errors actually originate), but the prototype is then re-specified and re-built rigorously, not handed over as a finished product. Agile and Spiral are unsuitable here: the regulator does not accept "we will refine the requirements as we go".</p>
+  <p><strong>What you would not do.</strong> Use evolutionary development for the safety kernel. Skip the formal proof obligations. Treat documentation as overhead.</p>
+
+  <h3>Example 4 – A national tax-filing system being modernised</h3>
+  <div class="panel">
+    <div class="label">The system</div>
+    <p style="margin:0">A government department wants to replace a thirty-year-old mainframe tax-filing system with a modern web-based one. The new system must integrate with banks, employers, and existing audit databases. It must handle millions of submissions during the filing window.</p>
+  </div>
+  <p><strong>Dominant factors.</strong> Requirements are mostly fixed by tax law (and change yearly when the law changes). Integration with legacy systems dominates the technical effort. The timeline is constrained by the tax year. The user base is enormous and politically visible – any failure makes the news. The procurement process favours fixed-price contracts and formal sign-off.</p>
+  <p><strong>Proposed process.</strong> A primarily <em>reuse-oriented</em> approach – very little of this system should be written from scratch when commercial tax-engine components, identity-verification services, and government-cloud platforms exist. <em>Plan-driven</em> structure to satisfy procurement and political accountability. <em>Incremental</em> rollout (covered in detail in the second companion): launch first to a small pilot region, then expand. <em>Prototyping</em> for the citizen-facing forms, where errors translate into a flood of help-desk calls. Pure agile would not survive the procurement process; pure waterfall would deliver too late and too rigid to absorb annual tax-law changes.</p>
+  <p><strong>What you would not do.</strong> Build a tax engine from scratch when several mature ones exist. Promise a single big-bang launch on a fixed date for the whole country.</p>
+
+  <h3>The pattern across the four examples</h3>
+  <p>Notice that none of the four answers was a single pure model. Every real project blends. The dominant model usually comes from the dominant factor – criticality drives the medical pump toward formal methods; market uncertainty drives the start-up toward agile; integration cost drives the tax system toward reuse; institutional process drives the registration portal toward plan-driven. But every project also borrows from the others where it makes sense.</p>
+
+  <div class="callout">
+    <div class="label">In your project</div>
+    <p>The course project follows a structure that is closest to a <em>plan-driven</em> approach – fixed phases (Initiation, Business Definition, Requirements Engineering, Requirements Analysis and Modelling, System Modelling and Design), each with defined outputs, and a milestone interview between phases. This is deliberate: it gives you the chance to practise each activity carefully. But the milestone interviews themselves are evolutionary in spirit – they exist to surface misunderstandings and let the customer-developer pair correct course before the next phase. So even your project, at the activity level, is a small blend.</p>
+  </div>
+</section>
+
+<!-- ===== WHAT'S NEXT ===== -->
+<section id="whats-next">
+  <h2><span class="num">10</span>What is next</h2>
+  <div class="h2-rule"></div>
+
+  <p>The four generic models above describe how a project is organised at the highest level. They do not yet say how iteration is structured, how risk is managed, or how Agile teams actually work day to day.</p>
+
+  <p>The second companion in this pair, <em>Iteration and Agile process models – Agile, Scrum, XP, Kanban and Spiral</em>, takes that next step. It covers:</p>
+
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Process iteration:</strong> the difference between iterative and incremental development, and how iterations are structured.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The Agile philosophy:</strong> the four values and twelve principles of the 2001 Manifesto.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Scrum:</strong> the most-used Agile framework, with its accountabilities, events, and artifacts.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>XP:</strong> the engineering practices that make iterative development actually work – pair programming, TDD, continuous integration, refactoring.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Kanban:</strong> a flow-based alternative for work that does not fit fixed sprints.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The Spiral model:</strong> Boehm's risk-driven process model that pre-dates Agile and remains the right choice for some large, risky projects.</div></div>
+  </div>
+
+  <p>Beyond this companion, the four core activities – Specification, Design, Validation, and Evolution – each become the focus of subsequent topics in the course. Requirements engineering covers specification in depth. The system modelling block covers design through UML. Validation is interleaved throughout and revisited in the design block.</p>
+</section>
+
+<!-- ===== REFERENCES ===== -->
+<section id="references">
+  <h2><span class="num">11</span>References</h2>
+  <div class="h2-rule"></div>
+
+  <h3>Primary sources for this lecture</h3>
+  <ul>
+    <li>Sommerville, I. (2016). <em>Software Engineering</em>, 10th edition, Chapter 3 (Software Processes). Pearson. (R2)</li>
+    <li>Bruegge, B. and Dutoit, A. (2013). <em>Object-Oriented Software Engineering Using UML, Patterns, and Java</em>, 3rd edition, Chapter 2. Prentice Hall. (R1)</li>
+  </ul>
+
+  <h3>Foundational papers and books</h3>
+  <ul>
+    <li>Royce, W. (1970). <em>Managing the Development of Large Software Systems</em>. Proceedings of IEEE WESCON, August 1970. The paper that defined the waterfall model – and warned against using it as a strict sequence.</li>
+    <li>Mills, H., Dyer, M. and Linger, R. (1987). <em>Cleanroom Software Engineering</em>. IEEE Software, 4 (5), 19–25. The foundational paper on the formal-methods-based Cleanroom approach.</li>
+    <li>Beck, K. et al. (2001). <em>Manifesto for Agile Software Development</em>. agilemanifesto.org</li>
+  </ul>
+
+  <h3>Recommended further reading</h3>
+  <ul>
+    <li>Pressman, R. and Maxim, B. (2020). <em>Software Engineering: A Practitioner's Approach</em>, 9th edition, Chapters 3 and 4. McGraw-Hill. (R5) Treats the same models with somewhat different framing, especially Pressman's process taxonomy.</li>
+    <li>Szyperski, C. (2002). <em>Component Software: Beyond Object-Oriented Programming</em>, 2nd edition. Addison-Wesley. The standard reference on reuse-oriented and component-based development.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <span>COMP433 Software Engineering · Birzeit University</span>
+  <span>Hisham Ihshaish · Spring 2025/2026</span>
+</footer>
+
+</body>
+</html>
