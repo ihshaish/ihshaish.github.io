@@ -1059,6 +1059,11 @@
         .poster-track::-webkit-scrollbar { height: 6px; }
         .poster-track::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
         .poster-card { scroll-snap-align: start; flex: 0 0 300px; border-radius: 10px; overflow: hidden; background: #111; position: relative; box-shadow: 0 4px 16px rgba(0,0,0,0.15); transition: transform 0.2s; }
+        @media (max-width: 576px) {
+          .poster-card { flex: 0 0 260px; }
+          .poster-card img { height: 280px; }
+          .poster-caption { font-size: 0.78rem; padding: 30px 12px 12px; }
+        }
         .poster-card:hover { transform: translateY(-4px); }
         .poster-card img { width: 100%; height: 340px; object-fit: cover; display: block; }
         .poster-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 40px 16px 14px; color: #fff; font-size: 0.82rem; line-height: 1.4; font-style: italic; }
