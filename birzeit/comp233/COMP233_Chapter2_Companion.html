@@ -125,54 +125,71 @@
     .howto-card .mono-inline { font-size: 0.88em; }
 
     .toc {
-      background: var(--c-card-bg);
-      border: 1px solid var(--c-border);
-      border-radius: 8px;
-      padding: 4px 0 8px;
-      margin: 14px 0 36px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 0;
+      background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-primary);
+      border-radius: 12px;
+      padding: 18px 24px 14px;
+      margin: 26px 0 18px;
+      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
     }
-    .toc-col {
-      padding: 14px 20px 6px;
-      border-left: 1px solid var(--c-border);
+    body.dark .toc {
+      background: linear-gradient(180deg, rgba(100,181,246,0.10) 0%, var(--c-card-bg) 100%);
     }
-    .toc-col:first-child { border-left: none; }
-    .toc-col h5 {
-      margin: 0 0 8px;
+    .toc-title {
+      margin: 0 0 12px;
       font-size: 0.78rem;
       font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
       color: var(--c-primary);
-      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .toc-col ul { list-style: none; margin: 0; padding: 0; }
-    .toc-col li { margin: 0; }
-    .toc-col a {
-      display: block;
-      font-size: 0.86rem;
-      color: var(--c-text);
-      text-decoration: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background 0.12s, color 0.12s;
-    }
-    .toc-col a:hover {
-      background: var(--c-primary-light);
-      color: var(--c-primary);
-      text-decoration: none;
-    }
-    .toc-col a .sec {
-      display: inline-block;
-      width: 36px;
-      font-family: 'Roboto Mono', monospace;
+    .toc-title i { font-size: 0.92rem; }
+    .toc-section { margin-bottom: 10px; }
+    .toc-section:last-child { margin-bottom: 0; }
+    .toc-section h5 {
+      margin: 0 0 6px;
+      font-size: 0.9rem;
       font-weight: 700;
-      color: var(--c-primary);
-      font-size: 0.82rem;
+      color: var(--c-text);
+      line-height: 1.4;
     }
-    @media (max-width: 720px) {
-      .toc-col { border-left: none; border-top: 1px solid var(--c-border); }
-      .toc-col:first-child { border-top: none; }
+    .toc-section h5 .toc-num {
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 800;
+      color: var(--c-primary);
+      margin-right: 8px;
+    }
+    .toc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 8px;
+      padding-left: 14px;
+      border-left: 2px solid var(--c-border);
+    }
+    body.dark .toc-links { border-left-color: #2a3a4a; }
+    .toc-links a {
+      display: inline-block;
+      font-size: 0.84rem;
+      color: var(--c-primary);
+      background: var(--c-card-bg);
+      text-decoration: none;
+      padding: 4px 12px;
+      border: 1px solid var(--c-border);
+      border-radius: 16px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .toc-links a:hover {
+      background: var(--c-primary);
+      color: #fff;
+      border-color: var(--c-primary);
+      text-decoration: none;
+    }
+    @media (max-width: 640px) {
+      .toc { padding: 16px 18px 12px; }
+      .toc-links { padding-left: 10px; }
     }
 
     .chapter-section {
@@ -702,8 +719,9 @@
       content: attr(data-tip);
       position: absolute;
       bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
+      /* Anchor tooltip box to the LEFT edge of the term so it can't be clipped by the page-left.
+         The arrow above points to the term's left edge to keep visual association. */
+      left: 0;
       background: #263238;
       color: #fff;
       padding: 9px 13px;
@@ -726,8 +744,7 @@
       content: '';
       position: absolute;
       bottom: calc(100% + 3px);
-      left: 50%;
-      transform: translateX(-50%);
+      left: 14px;
       border: 5px solid transparent;
       border-top-color: #263238;
       opacity: 0;
@@ -735,6 +752,10 @@
       transition: opacity 0.15s;
       z-index: 50;
     }
+    /* Variant: when the term is near the right edge of the viewport, the page can also
+       clip on the right. Authors can add class="term term-right" to flip the anchor. */
+    .term.term-right::after { left: auto; right: 0; }
+    .term.term-right::before { left: auto; right: 14px; }
     .term:hover::after,
     .term:focus::after,
     .term:hover::before,
@@ -793,116 +814,69 @@
     }
     body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
 
-    /* Tarski preview — Chapter 3 teaser */
-    .tarski-card {
-      background: var(--c-card-bg);
-      border: 1px solid var(--c-border);
-      border-radius: 10px;
-      padding: 22px 26px;
-      margin-top: 22px;
-    }
-    .tarski-card h3 {
-      margin: 0 0 4px;
-      font-size: 1.05rem;
-      color: var(--c-primary);
-      font-weight: 700;
+    /* Floating "How to use" side widget */
+    .howto-fab {
+      position: fixed;
+      top: 100px;
+      right: 18px;
+      z-index: 30;
+      max-width: 300px;
       display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .howto-fab-toggle {
+      background: var(--c-primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 0.84rem;
+      font-weight: 700;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+      display: inline-flex;
       align-items: center;
       gap: 8px;
+      transition: background 0.15s;
     }
-    .tarski-card .ch3-tag {
-      display: inline-block;
-      padding: 2px 10px;
-      font-size: 0.66rem;
-      font-weight: 800;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      background: #fff3e0;
-      color: #e65100;
-      border-radius: 10px;
-    }
-    body.dark .tarski-card .ch3-tag { background: #3a2410; color: #ffb74d; }
-    .tarski-card p {
-      font-size: 0.92rem;
-      line-height: 1.6;
-      margin: 8px 0 0;
-    }
-    .tarski-card p.caption {
-      font-size: 0.85rem;
-      color: var(--c-muted);
-      margin-top: 12px;
-      line-height: 1.55;
-    }
-    .tarski-layout {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 24px;
-      align-items: start;
-      margin-top: 14px;
-    }
-    .tarski-grid {
-      display: grid;
-      grid-template-columns: 80px 80px;
-      grid-template-rows: 80px 80px;
-      gap: 6px;
-      background: var(--c-page-bg);
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid var(--c-border);
-    }
-    .tarski-cell {
-      position: relative;
+    .howto-fab-toggle:hover,
+    .howto-fab-toggle:focus { background: var(--c-primary-dark); outline: none; }
+    .howto-fab-toggle .chev { font-size: 0.72rem; transition: transform 0.2s; }
+    .howto-fab[data-open="true"] .howto-fab-toggle .chev { transform: rotate(180deg); }
+    .howto-fab-body {
+      width: 300px;
+      margin-top: 8px;
       background: var(--c-card-bg);
-      border: 1px solid var(--c-border);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.2rem;
-      line-height: 1;
+      border: 1px solid var(--c-primary);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.86rem;
+      line-height: 1.55;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
     }
-    .tarski-cell .tarski-name {
-      position: absolute;
-      top: 4px;
-      left: 6px;
-      font-family: 'Roboto Mono', monospace;
-      font-size: 0.74rem;
-      color: var(--c-muted);
-      font-weight: 700;
-    }
-    .tarski-shape.blue   { color: #1976d2; }
-    .tarski-shape.red    { color: #c62828; }
-    .tarski-shape.green  { color: #2e7d32; }
-    .tarski-shape.yellow { color: #f9a825; }
-    body.dark .tarski-shape.blue   { color: #64b5f6; }
-    body.dark .tarski-shape.red    { color: #ef5350; }
-    body.dark .tarski-shape.green  { color: #81c784; }
-    body.dark .tarski-shape.yellow { color: #ffd54f; }
-    .tarski-props {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-    .tarski-props td {
-      padding: 6px 12px;
-      border-bottom: 1px solid var(--c-border);
-    }
-    .tarski-props tr:last-child td { border-bottom: none; }
-    .tarski-props td.prop {
-      font-family: 'Roboto Mono', monospace;
-      color: var(--c-text);
-    }
-    .tarski-props td.val {
-      width: 36px;
-      text-align: center;
+    .howto-fab-body[hidden] { display: none; }
+    .howto-fab-body h5 {
+      margin: 0 0 8px;
+      font-size: 0.72rem;
       font-weight: 800;
-      font-family: 'Roboto Mono', monospace;
+      color: var(--c-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
     }
-    .tarski-props td.val.t { color: var(--c-true); background: var(--c-true-bg); }
-    .tarski-props td.val.f { color: var(--c-false); background: var(--c-false-bg); }
-    @media (max-width: 640px) {
-      .tarski-layout { grid-template-columns: 1fr; }
-      .tarski-grid { justify-content: center; }
+    .howto-fab-body ul { margin: 0; padding-left: 20px; }
+    .howto-fab-body li { margin-bottom: 8px; }
+    .howto-fab-body li:last-child { margin-bottom: 0; }
+    .howto-fab-body .mono-inline { font-size: 0.86em; }
+    @media (max-width: 980px) {
+      .howto-fab {
+        position: static;
+        max-width: 100%;
+        align-items: stretch;
+        margin: 18px 0 0;
+      }
+      .howto-fab-toggle { align-self: flex-start; }
+      .howto-fab-body { width: auto; }
     }
 
     @media (max-width: 640px) {
@@ -943,6 +917,24 @@
     </header>
   </div>
 
+  <!-- Floating "How to use" widget (collapsed by default; expandable). -->
+  <aside class="howto-fab" id="howto-fab" data-open="false">
+    <button type="button" class="howto-fab-toggle" aria-expanded="false" aria-controls="howto-fab-body">
+      <i class="fas fa-question-circle"></i>
+      <span>How to use</span>
+      <i class="fas fa-chevron-down chev"></i>
+    </button>
+    <div class="howto-fab-body" id="howto-fab-body" hidden>
+      <h5>Using this companion</h5>
+      <ul>
+        <li><strong>Enter formulas</strong> by clicking the symbol palette or typing: Unicode (<span class="mono-inline">∼ ∧ ∨ → ↔</span>), words (<span class="mono-inline">not, and, or, implies, iff</span>), or ASCII (<span class="mono-inline">~ &amp; | -&gt; &lt;-&gt;</span>). Variables are single letters: <span class="mono-inline">p, q, r, s</span>.</li>
+        <li><strong>Truth tables build column by column.</strong> Sub-expressions appear as their own columns so the construction is visible.</li>
+        <li><strong>Hover any underlined term</strong> for its symbol and the Arabic name from the slides.</li>
+        <li><strong>Try every practice exercise</strong> before clicking <em>Show solution</em>.</li>
+      </ul>
+    </div>
+  </aside>
+
   <div class="page-body">
     <section class="home-section wg-blank" style="padding-top: 80px;">
       <div class="container">
@@ -955,57 +947,51 @@
         </div>
 
         <div class="intro-card">
-          <h4><i class="fas fa-compass"></i> What this chapter is about</h4>
-          <p><strong>Propositional logic</strong> is the grammar of mathematical reasoning. It gives precise rules for combining true/false statements with <span class="mono-inline">∼ ∧ ∨ → ↔</span>, deciding when two compound statements <em>mean the same thing</em>, and testing whether an argument's form <em>forces</em> its conclusion to follow from its premises.</p>
-          <p><strong>Why it matters.</strong> These rules are the foundation for every later chapter: predicates and quantifiers (Ch 3), proofs (Ch 4), set theory (Ch 6), and induction (Ch 5) all stand on the logic you build here. They also map directly onto programming (<code>if/else</code>, boolean expressions), digital circuits (AND/OR/NOT gates), and database queries (<code>WHERE</code> clauses).</p>
+          <h4><i class="fas fa-compass"></i> About this chapter</h4>
+          <p><strong>Propositional logic</strong> is the grammar of mathematical reasoning. It gives precise rules for combining true/false statements with <span class="mono-inline">∼ ∧ ∨ → ↔</span>, deciding when two compound statements have the same truth value, and testing whether an argument's form forces its conclusion to follow from its premises.</p>
+          <p><strong>Where it is used.</strong> These rules are the foundation for every later chapter: predicates and quantifiers (Ch 3), proofs (Ch 4), set theory (Ch 6), and induction (Ch 5) all stand on the logic you build here. They also map directly onto programming (<code>if/else</code>, boolean expressions), digital circuits (AND/OR/NOT gates), and database queries (<code>WHERE</code> clauses).</p>
         </div>
 
-        <div class="howto-card">
-          <h4><i class="fas fa-keyboard"></i> Using this companion</h4>
-          <ul>
-            <li><strong>Enter formulas</strong> by clicking the symbol palette or typing &mdash; Unicode (<span class="mono-inline">∼ ∧ ∨ → ↔</span>), words (<span class="mono-inline">not, and, or, implies, iff</span>), or ASCII (<span class="mono-inline">~ &amp; | -&gt; &lt;-&gt;</span>). Variables are single letters: <span class="mono-inline">p, q, r, s</span>.</li>
-            <li><strong>Truth tables build column by column</strong> &mdash; sub-expressions appear as their own columns so the build-up is visible.</li>
-            <li><strong>Hover any <span class="term" data-tip="∼ نفي · turns T into F · this is what a tooltip looks like — Arabic from the slides on the right">underlined term</span></strong> for its symbol and Arabic name from the slides.</li>
-            <li><strong>Try every practice exercise</strong> before clicking <em>Show solution</em>.</li>
-          </ul>
-        </div>
+        <nav class="toc" aria-label="Companion contents">
+          <div class="toc-title"><i class="fas fa-list"></i> Contents</div>
 
-        <nav class="toc" aria-label="Section contents">
-          <div class="toc-col">
-            <h5>§ 2.1 &middot; Logical form &amp; equivalence</h5>
-            <ul>
-              <li><a href="#sec211"><span class="sec">2.1.1</span>Connectives</a></li>
-              <li><a href="#sec212"><span class="sec">2.1.2</span>Truth tables</a></li>
-              <li><a href="#sec213"><span class="sec">2.1.3</span>Equivalence</a></li>
-              <li><a href="#sec214"><span class="sec">2.1.4</span>De Morgan's laws</a></li>
-              <li><a href="#sec215"><span class="sec">2.1.5</span>Tautology &amp; contradiction</a></li>
-            </ul>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 2.1</span>Logical form &amp; logical equivalence</h5>
+            <div class="toc-links">
+              <a href="#sec211">Connectives</a>
+              <a href="#sec212">Truth tables</a>
+              <a href="#sec213">Equivalence</a>
+              <a href="#sec214">De Morgan's laws</a>
+              <a href="#sec215">Tautology &amp; contradiction</a>
+            </div>
           </div>
-          <div class="toc-col">
-            <h5>§ 2.2 &middot; Conditional statements</h5>
-            <ul>
-              <li><a href="#section-22"><span class="sec">→</span>Conditional sandbox</a></li>
-              <li><a href="#sec221"><span class="sec">2.2.1</span>Contrapositive, converse, inverse</a></li>
-              <li><a href="#sec222"><span class="sec">2.2.2</span>Biconditional</a></li>
-              <li><a href="#sec223"><span class="sec">2.2.3</span>Necessary &amp; sufficient</a></li>
-            </ul>
+
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 2.2</span>Conditional statements</h5>
+            <div class="toc-links">
+              <a href="#section-22">Conditional sandbox</a>
+              <a href="#sec221">Contrapositive, converse, inverse</a>
+              <a href="#sec222">Biconditional</a>
+              <a href="#sec223">Necessary &amp; sufficient</a>
+            </div>
           </div>
-          <div class="toc-col">
-            <h5>§ 2.3 &middot; Valid arguments</h5>
-            <ul>
-              <li><a href="#sec231"><span class="sec">2.3.1</span>Argument validity checker</a></li>
-              <li><a href="#sec232"><span class="sec">2.3.2</span>Standard valid forms</a></li>
-              <li><a href="#recap"><span class="sec">∎</span>Chapter recap &amp; next</a></li>
-            </ul>
+
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 2.3</span>Valid arguments</h5>
+            <div class="toc-links">
+              <a href="#sec231">Argument validity checker</a>
+              <a href="#sec232">Standard valid forms</a>
+              <a href="#recap">Recap</a>
+            </div>
           </div>
         </nav>
 
         <!-- ===================== SECTION 2.1 ===================== -->
         <div class="chapter-section" id="section-21">
-          <h2><span class="ch-num">§ 2.1</span>Logical form and logical equivalence</h2>
+          <h2><span class="ch-num">Section 2.1</span>Logical form and logical equivalence</h2>
 
           <div class="section-intro">
-            <p>A <span class="term" data-tip="العبارة / القضية · a sentence that is unambiguously true or false (not both)"><strong>statement</strong> (or proposition)</span> is a sentence that is either true or false, but not both. Statements built from simple statements joined by connectives (<span class="mono-inline">∼ ∧ ∨ → ↔</span>) are <span class="term" data-tip="A statement built from one or more simpler statements joined by connectives"><strong>compound statements</strong></span> &mdash; the focus of this chapter.</p>
+            <p>A <span class="term" data-tip="العبارة / القضية · a sentence that is unambiguously true or false (not both)"><strong>statement</strong> (or proposition)</span> is a sentence that is either true or false, but not both. Statements built from simple statements joined by connectives (<span class="mono-inline">∼ ∧ ∨ → ↔</span>) are <span class="term" data-tip="A statement built from one or more simpler statements joined by connectives"><strong>compound statements</strong></span>, the focus of this chapter.</p>
             <p><strong>Statements:</strong></p>
             <ul>
               <li>"2 + 2 = 4" &rarr; true</li>
@@ -1026,10 +1012,10 @@
             <h3>2.1.1 The basic connectives</h3>
             <div class="widget-desc">Toggle the variables and watch each connective evaluate. Symbols come from the slides. Hover any term for the Arabic name.
               <ul style="margin:8px 0 0; padding-left:22px; line-height:1.7;">
-                <li><span class="term" data-tip="∼ · نفي · turns T into F (and vice versa)"><strong>∼p</strong> Negation</span> &mdash; flips a single value.</li>
-                <li><span class="term" data-tip="∧ · عطف · true only when both inputs are true"><strong>p ∧ q</strong> Conjunction</span> &mdash; true only when both inputs are true.</li>
-                <li><span class="term" data-tip="∨ · فصل · true when at least one is true (inclusive or)"><strong>p ∨ q</strong> Disjunction</span> &mdash; true when at least one is true (inclusive or).</li>
-                <li><span class="term" data-tip="⊕ · أو حصري · true when exactly one is true"><strong>p ⊕ q</strong> Exclusive or</span> <span class="optional-tag" title="In the slides, not always covered in the lecture flow">in slides &middot; optional</span> &mdash; true when exactly one of p, q is true. Equivalent to <span class="mono-inline">(p ∨ q) ∧ ∼(p ∧ q)</span>.</li>
+                <li><span class="term" data-tip="∼ · نفي · turns T into F (and vice versa)"><strong>∼p</strong> Negation</span>, flips a single value.</li>
+                <li><span class="term" data-tip="∧ · عطف · true only when both inputs are true"><strong>p ∧ q</strong> Conjunction</span>, true only when both inputs are true.</li>
+                <li><span class="term" data-tip="∨ · فصل · true when at least one is true (inclusive or)"><strong>p ∨ q</strong> Disjunction</span>, true when at least one is true (inclusive or).</li>
+                <li><span class="term" data-tip="⊕ · أو حصري · true when exactly one is true"><strong>p ⊕ q</strong> Exclusive or</span> <span class="optional-tag" title="In the slides, not always covered in the lecture flow">in slides &middot; optional</span>, true when exactly one of p, q is true. Equivalent to <span class="mono-inline">(p ∨ q) ∧ ∼(p ∧ q)</span>.</li>
               </ul>
             </div>
             <div class="toggle-row" data-widget="connectives">
@@ -1042,7 +1028,7 @@
           <!-- 2.1.2 Truth tables -->
           <div class="widget-card" id="sec212">
             <h3>2.1.2 Truth tables</h3>
-            <div class="widget-desc">A <span class="term" data-tip="A complete enumeration: every combination of T/F for the inputs · with n variables, 2^n rows · the slides call this the 'numeration method'"><strong>truth table</strong></span> lists every possible combination of truth values for the inputs and shows the result for each row. With <em>n</em> variables there are 2<sup>n</sup> rows. Enter any formula below &mdash; the table builds each sub-expression as its own column, so you can read the construction step by step.</div>
+            <div class="widget-desc">A <span class="term" data-tip="A complete enumeration: every combination of T/F for the inputs · with n variables, 2^n rows · the slides call this the 'numeration method'"><strong>truth table</strong></span> lists every possible combination of truth values for the inputs and shows the result for each row. With <em>n</em> variables there are 2<sup>n</sup> rows. Enter any formula below, the table builds each sub-expression as its own column, so you can read the construction step by step.</div>
 
             <div class="formula-row">
               <div class="formula-input-wrap">
@@ -1171,7 +1157,7 @@
               <ul style="padding-left:20px; margin:0 0 6px;">
                 <li>A <span class="term" data-tip="التطابق · always true · the slides denote any tautology by the letter t"><strong>tautology</strong></span> is a statement form that is true in <em>every</em> row of its truth table. Example: <span class="mono-inline">p ∨ ∼p</span>.</li>
                 <li>A <span class="term" data-tip="التناقض · always false · the slides denote any contradiction by the letter c"><strong>contradiction</strong></span> is false in <em>every</em> row. Example: <span class="mono-inline">p ∧ ∼p</span>.</li>
-                <li>Anything else is a <span class="term" data-tip="Sometimes true, sometimes false · neither tautology nor contradiction · the typical case"><strong>contingency</strong></span> &mdash; sometimes true, sometimes false.</li>
+                <li>Anything else is a <span class="term" data-tip="Sometimes true, sometimes false · neither tautology nor contradiction · the typical case"><strong>contingency</strong></span>, sometimes true, sometimes false.</li>
               </ul>
             </div>
             <div class="formula-row">
@@ -1198,8 +1184,8 @@
 
           <!-- Exercises 2.1 -->
           <div class="exercises-block">
-            <h3>Practice exercises &mdash; Section 2.1</h3>
-            <div class="ex-source">Adapted from Epp §2.1, suggested questions: 15, 24, 33.</div>
+            <h3>Practice exercises &middot; Section 2.1</h3>
+            <div class="ex-source">Adapted from Epp Section 2.1, suggested questions: 15, 24, 33.</div>
 
             <div class="exercise">
               <div class="ex-label">Exercise 2.1.A</div>
@@ -1208,8 +1194,8 @@
               <div class="solution" id="sol-2-1-A">
                 <p>They are <strong>not equivalent.</strong> Build both truth tables side by side and look at the row where they disagree:</p>
                 <div data-sol-equiv="p ∧ (q ∨ r)|(p ∧ q) ∨ r"></div>
-                <p>The row <span class="mono">p = F, q = F, r = T</span> makes the left side F and the right side T &mdash; that single mismatch is enough to fail equivalence.</p>
-                <p><strong>Lesson.</strong> ∧ does <em>not</em> distribute the way you might guess. The correct distributive law is <span class="mono">p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)</span> &mdash; note the second ∧ on the right. Check it below; every row matches:</p>
+                <p>The row <span class="mono">p = F, q = F, r = T</span> makes the left side F and the right side T. That single mismatch is enough to fail equivalence.</p>
+                <p><strong>Lesson.</strong> ∧ does <em>not</em> distribute the way you might guess. The correct distributive law is <span class="mono">p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)</span>, note the second ∧ on the right. Check it below; every row matches:</p>
                 <div data-sol-equiv="p ∧ (q ∨ r)|(p ∧ q) ∨ (p ∧ r)"></div>
               </div>
             </div>
@@ -1241,7 +1227,7 @@
               </div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-2-1-C">Show solution</button>
               <div class="solution" id="sol-2-1-C">
-                <p><strong>(1)</strong> <span class="mono">(p ∧ q) ∨ (∼p ∨ ∼q)</span>. By De Morgan, <span class="mono">∼p ∨ ∼q ≡ ∼(p ∧ q)</span>, so the form is <span class="mono">X ∨ ∼X</span> &mdash; always true. The truth table confirms:</p>
+                <p><strong>(1)</strong> <span class="mono">(p ∧ q) ∨ (∼p ∨ ∼q)</span>. By De Morgan, <span class="mono">∼p ∨ ∼q ≡ ∼(p ∧ q)</span>, so the form is <span class="mono">X ∨ ∼X</span>, always true. The truth table confirms:</p>
                 <div data-sol-classify="(p ∧ q) ∨ (∼p ∨ ∼q)"></div>
                 <p><strong>(2)</strong> <span class="mono">p ∧ (∼p ∨ q)</span>. Sometimes T, sometimes F:</p>
                 <div data-sol-classify="p ∧ (∼p ∨ q)"></div>
@@ -1273,7 +1259,7 @@
               <div class="ex-body">Build the truth table for <span class="mono-inline">(p ∧ ∼q) ∨ (∼p ∧ q)</span>. What standard connective does it equal?</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-2-1-E">Show solution</button>
               <div class="solution" id="sol-2-1-E">
-                <p>This form is true precisely when <em>exactly one</em> of <span class="mono">p, q</span> is true — that is the exclusive or <span class="mono">p ⊕ q</span>:</p>
+                <p>This form is true precisely when <em>exactly one</em> of <span class="mono">p, q</span> is true. That is the exclusive or <span class="mono">p ⊕ q</span>:</p>
                 <div data-sol-equiv="(p ∧ ∼q) ∨ (∼p ∧ q)|p ⊕ q"></div>
                 <p>In other words: <span class="mono">p ⊕ q ≡ (p ∧ ∼q) ∨ (∼p ∧ q)</span>. This is one of the standard equivalent forms for XOR (the slides give the other: <span class="mono">(p ∨ q) ∧ ∼(p ∧ q)</span>).</p>
               </div>
@@ -1283,10 +1269,10 @@
 
         <!-- ===================== SECTION 2.2 ===================== -->
         <div class="chapter-section" id="section-22">
-          <h2><span class="ch-num">§ 2.2</span>Conditional statements</h2>
+          <h2><span class="ch-num">Section 2.2</span>Conditional statements</h2>
 
           <div class="section-intro">
-            <p>The <span class="term" data-tip="→ · شرطية · 'if p then q' · p is the hypothesis (antecedent), q is the conclusion (consequent)"><strong>conditional</strong> (→)</span> <span class="mono-inline">p → q</span> (read <em>"if p then q"</em>) is the workhorse of mathematical reasoning. The only way <span class="mono-inline">p → q</span> is false is when <span class="mono-inline">p</span> is true but <span class="mono-inline">q</span> is false. The rows where <span class="mono-inline">p</span> is false make the conditional <span class="term" data-tip="The hypothesis is false, so the conditional is automatically true — there is no broken promise to point to"><strong>vacuously true</strong></span>, a topic revisited in 3.2.</p>
+            <p>The <span class="term" data-tip="→ · شرطية · 'if p then q' · p is the hypothesis (antecedent), q is the conclusion (consequent)"><strong>conditional</strong> (→)</span> <span class="mono-inline">p → q</span> (read <em>"if p then q"</em>) is the workhorse of mathematical reasoning. The only way <span class="mono-inline">p → q</span> is false is when <span class="mono-inline">p</span> is true but <span class="mono-inline">q</span> is false. The rows where <span class="mono-inline">p</span> is false make the conditional <span class="term" data-tip="The hypothesis is false, so the conditional is automatically true, there is no broken promise to point to"><strong>vacuously true</strong></span>, a topic revisited in 3.2.</p>
           </div>
 
           <div class="widget-card">
@@ -1304,9 +1290,9 @@
             <h3>2.2.1 Contrapositive, converse, inverse</h3>
             <div class="widget-desc">Given the conditional <span class="mono-inline">p → q</span>, three related forms come up constantly:
               <ul style="margin:8px 0 0; padding-left:22px; line-height:1.7;">
-                <li><span class="term" data-tip="∼q → ∼p · عكس النقيض · always equivalent to the original p → q"><strong>Contrapositive</strong></span> &mdash; <span class="mono-inline">∼q → ∼p</span>. Equivalent to the original.</li>
-                <li><span class="term" data-tip="q → p · المقلوب · NOT equivalent to the original — common student trap"><strong>Converse</strong></span> &mdash; <span class="mono-inline">q → p</span>. <em>Not</em> equivalent.</li>
-                <li><span class="term" data-tip="∼p → ∼q · المعكوس · NOT equivalent to the original (but equivalent to the converse)"><strong>Inverse</strong></span> &mdash; <span class="mono-inline">∼p → ∼q</span>. <em>Not</em> equivalent.</li>
+                <li><span class="term" data-tip="∼q → ∼p · عكس النقيض · always equivalent to the original p → q"><strong>Contrapositive</strong></span>: <span class="mono-inline">∼q → ∼p</span>. Equivalent to the original.</li>
+                <li><span class="term" data-tip="q → p · المقلوب · NOT equivalent to the original, common student trap"><strong>Converse</strong></span>: <span class="mono-inline">q → p</span>. <em>Not</em> equivalent.</li>
+                <li><span class="term" data-tip="∼p → ∼q · المعكوس · NOT equivalent to the original (but equivalent to the converse)"><strong>Inverse</strong></span>: <span class="mono-inline">∼p → ∼q</span>. <em>Not</em> equivalent.</li>
               </ul>
               The biggest student trap is mixing up contrapositive with converse. The truth table below settles it.
             </div>
@@ -1319,18 +1305,18 @@
                 <li><span class="mono-inline">p → q</span> vs <span class="mono-inline">∼q → ∼p</span> &nbsp;&rarr;&nbsp; identical in every row &nbsp;&rarr;&nbsp; <strong style="color:var(--c-true)">equivalent</strong> (the contrapositive).</li>
                 <li><span class="mono-inline">p → q</span> vs <span class="mono-inline">q → p</span> &nbsp;&rarr;&nbsp; differ in row <span class="mono-inline">F | T</span> &nbsp;&rarr;&nbsp; <strong style="color:var(--c-false)">not equivalent</strong> (converse).</li>
                 <li><span class="mono-inline">p → q</span> vs <span class="mono-inline">∼p → ∼q</span> &nbsp;&rarr;&nbsp; differ in row <span class="mono-inline">F | T</span> &nbsp;&rarr;&nbsp; <strong style="color:var(--c-false)">not equivalent</strong> (inverse).</li>
-                <li>Also: <span class="mono-inline">q → p ≡ ∼p → ∼q</span> &mdash; converse and inverse are equivalent to <em>each other</em>.</li>
+                <li>Also: <span class="mono-inline">q → p ≡ ∼p → ∼q</span>, converse and inverse are equivalent to <em>each other</em>.</li>
               </ul>
             </div>
 
             <div style="margin-top:16px; padding:12px 16px; border-left:3px solid var(--c-primary); background:var(--c-primary-light); border-radius:0 6px 6px 0;">
-              <p style="margin:0 0 6px; font-size:0.86rem; font-weight:700; color:var(--c-primary); text-transform:uppercase; letter-spacing:0.5px;">Worked example (Epp §2.2)</p>
+              <p style="margin:0 0 6px; font-size:0.86rem; font-weight:700; color:var(--c-primary); text-transform:uppercase; letter-spacing:0.5px;">Worked example (Epp Section 2.2)</p>
               <p style="margin:0 0 6px; font-size:0.94rem;"><em>"If it is raining, then the ground is wet."</em></p>
               <ul style="margin:0; padding-left:22px; font-size:0.9rem; line-height:1.65;">
                 <li><strong>Original:</strong> rain → wet</li>
-                <li><strong>Contrapositive:</strong> ∼wet → ∼rain &mdash; <em>"If the ground is not wet, then it is not raining."</em> <span style="color:var(--c-true)">✓ logically the same</span>.</li>
-                <li><strong>Converse:</strong> wet → rain &mdash; <em>"If the ground is wet, then it is raining."</em> <span style="color:var(--c-false)">✗ could be wet from a sprinkler</span>.</li>
-                <li><strong>Inverse:</strong> ∼rain → ∼wet &mdash; <em>"If it is not raining, then the ground is not wet."</em> <span style="color:var(--c-false)">✗ same flaw as converse</span>.</li>
+                <li><strong>Contrapositive:</strong> ∼wet → ∼rain,<em>"If the ground is not wet, then it is not raining."</em> <span style="color:var(--c-true)">✓ logically the same</span>.</li>
+                <li><strong>Converse:</strong> wet → rain,<em>"If the ground is wet, then it is raining."</em> <span style="color:var(--c-false)">✗ could be wet from a sprinkler</span>.</li>
+                <li><strong>Inverse:</strong> ∼rain → ∼wet,<em>"If it is not raining, then the ground is not wet."</em> <span style="color:var(--c-false)">✗ same flaw as converse</span>.</li>
               </ul>
             </div>
           </div>
@@ -1369,8 +1355,8 @@
 
           <!-- Exercises 2.2 -->
           <div class="exercises-block">
-            <h3>Practice exercises &mdash; Section 2.2</h3>
-            <div class="ex-source">Adapted from Epp §2.2, suggested questions: 14(a), 17, 25.</div>
+            <h3>Practice exercises &middot; Section 2.2</h3>
+            <div class="ex-source">Adapted from Epp Section 2.2, suggested questions: 14(a), 17, 25.</div>
 
             <div class="exercise">
               <div class="ex-label">Exercise 2.2.A</div>
@@ -1412,9 +1398,9 @@
               <div class="solution" id="sol-2-2-C">
                 <p>Build both truth tables. Identical columns confirm equivalence:</p>
                 <div data-sol-equiv="p → q|∼p ∨ q"></div>
-                <p><strong>Why it matters.</strong> This is the bridge from conditional reasoning to the basic connectives. It lets us apply De Morgan to negate conditionals:<br>
+                <p><strong>How we use it.</strong> This is the bridge from conditional reasoning to the basic connectives. It lets us apply De Morgan to negate conditionals:<br>
                   <span class="mono">∼(p → q) ≡ ∼(∼p ∨ q) ≡ p ∧ ∼q</span></p>
-                <p>So the negation of <em>"if p then q"</em> is <em>"p and not q"</em> &mdash; used constantly in proofs.</p>
+                <p>So the negation of <em>"if p then q"</em> is <em>"p and not q"</em>, used constantly in proofs.</p>
               </div>
             </div>
 
@@ -1428,7 +1414,7 @@
                 <p>In words: <em>"Sara studies hard and she does not pass the exam."</em></p>
                 <p>Confirm with the equivalence checker:</p>
                 <div data-sol-equiv="∼(p → q)|p ∧ ∼q"></div>
-                <p><strong>Caution.</strong> A common mistake is to negate as <em>"If Sara studies hard, then she does not pass"</em>. That has the wrong logical shape &mdash; it is still an "if &hellip; then" statement, not its negation.</p>
+                <p><strong>Caution.</strong> A common mistake is to negate as <em>"If Sara studies hard, then she does not pass"</em>. That has the wrong logical shape, it is still an "if &hellip; then" statement, not its negation.</p>
               </div>
             </div>
 
@@ -1443,10 +1429,10 @@
               </div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-2-2-E">Show solution</button>
               <div class="solution" id="sol-2-2-E">
-                <p><strong>(1) "p if q"</strong> &mdash; <em>if</em> introduces the hypothesis, so q is the hypothesis: <span class="mono">q → p</span>. (Passing is sufficient for the diploma.)</p>
-                <p><strong>(2) "p only if q"</strong> &mdash; p cannot happen without q, so <span class="mono">p → q</span>. (Passing is necessary for the diploma.) Equivalently <span class="mono">∼q → ∼p</span> — no passing means no diploma.</p>
-                <p><strong>(3) "p if and only if q"</strong> &mdash; both directions: <span class="mono">p ↔ q ≡ (q → p) ∧ (p → q)</span>.</p>
-                <p>Notice the arrows in (1) and (2) point in <em>opposite</em> directions — that is the most common confusion in §2.2.</p>
+                <p><strong>(1) "p if q"</strong>,<em>if</em> introduces the hypothesis, so q is the hypothesis: <span class="mono">q → p</span>. (Passing is sufficient for the diploma.)</p>
+                <p><strong>(2) "p only if q"</strong>, p cannot happen without q, so <span class="mono">p → q</span>. (Passing is necessary for the diploma.) Equivalently <span class="mono">∼q → ∼p</span>, no passing means no diploma.</p>
+                <p><strong>(3) "p if and only if q"</strong>, both directions: <span class="mono">p ↔ q ≡ (q → p) ∧ (p → q)</span>.</p>
+                <p>Notice the arrows in (1) and (2) point in <em>opposite</em> directions. That is the most common confusion in Section 2.2.</p>
               </div>
             </div>
           </div>
@@ -1454,12 +1440,12 @@
 
         <!-- ===================== SECTION 2.3 ===================== -->
         <div class="chapter-section" id="section-23">
-          <h2><span class="ch-num">§ 2.3</span>Valid arguments and rules of inference</h2>
+          <h2><span class="ch-num">Section 2.3</span>Valid arguments and rules of inference</h2>
 
           <div class="section-intro">
             <p>An <span class="term" data-tip="A sequence of premises followed by ∴ and a conclusion · syllogism = two premises + conclusion"><strong>argument</strong></span> is a sequence of statements: some <span class="term" data-tip="المقدمة · the given starting statements that lead to the conclusion"><strong>premises</strong></span> followed by a <span class="term" data-tip="النتيجة · introduced by ∴ (therefore) · the statement claimed to follow from the premises"><strong>conclusion</strong></span>.</p>
             <p>An argument form is <span class="term" data-tip="الحجة الصحيحة · in every row where all premises are true, the conclusion is also true"><strong>valid</strong></span> when, in <em>every</em> row of the truth table where all premises are true, the conclusion is also true. If there is even one row where every premise is true but the conclusion is false, the argument form is <span class="term" data-tip="الحجة الباطلة · at least one row makes all premises true but the conclusion false"><strong>invalid</strong></span>.</p>
-            <p><strong>Important.</strong> Validity is about <em>form</em>, not about whether the premises happen to be true. An argument can be valid with false premises and an absurd conclusion. What matters is that the form preserves truth.</p>
+            <p><strong>Important.</strong> Validity is about <em>form</em>, not about whether the premises happen to be true. An argument can be valid with false premises and an absurd conclusion. What we check is whether the form preserves truth.</p>
           </div>
 
           <!-- 2.3.1 Argument validity checker -->
@@ -1536,13 +1522,13 @@
                 <div class="form-reads">Denying the antecedent. Confuses p → q with its inverse.</div>
               </div>
             </div>
-            <p style="margin-top:14px; font-size:0.88rem; color:var(--c-muted);">Both fallacies are invalid &mdash; verify each in the checker above.</p>
+            <p style="margin-top:14px; font-size:0.88rem; color:var(--c-muted);">Both fallacies are invalid, verify each in the checker above.</p>
           </div>
 
           <!-- Exercises 2.3 -->
           <div class="exercises-block">
-            <h3>Practice exercises &mdash; Section 2.3</h3>
-            <div class="ex-source">Adapted from Epp §2.3, suggested questions: 9, 11, 13.</div>
+            <h3>Practice exercises &middot; Section 2.3</h3>
+            <div class="ex-source">Adapted from Epp Section 2.3, suggested questions: 9, 11, 13.</div>
 
             <div class="exercise">
               <div class="ex-label">Exercise 2.3.A</div>
@@ -1556,9 +1542,9 @@
               <button type="button" class="solution-btn" data-toggle-sol="sol-2-3-A">Show solution</button>
               <div class="solution" id="sol-2-3-A">
                 <p>Let <span class="mono">p</span> = "today is a holiday", <span class="mono">q</span> = "the library is closed".</p>
-                <p>Form: <span class="mono">p → q, &nbsp;∼p &nbsp;∴ ∼q</span>. This is the <strong style="color:var(--c-false)">inverse error</strong> &mdash; <strong>invalid</strong>. The truth table shows the breakage:</p>
+                <p>Form: <span class="mono">p → q, &nbsp;∼p &nbsp;∴ ∼q</span>. This is the <strong style="color:var(--c-false)">inverse error</strong>,<strong>invalid</strong>. The truth table shows the breakage:</p>
                 <div data-sol-argument="p -> q|not p|not q"></div>
-                <p>Read the red row: <span class="mono">p = F, q = T</span>. Both premises are true (<span class="mono">p → q</span> is vacuously true; <span class="mono">∼p</span> is true) but the conclusion <span class="mono">∼q</span> is false. The library could be closed for other reasons (Sunday, renovation) &mdash; the form does not rule that out.</p>
+                <p>Read the red row: <span class="mono">p = F, q = T</span>. Both premises are true (<span class="mono">p → q</span> is vacuously true; <span class="mono">∼p</span> is true) but the conclusion <span class="mono">∼q</span> is false. The library could be closed for other reasons (Sunday, renovation),the form does not rule that out.</p>
                 <p>Verify by selecting <em>"Inverse error"</em> in the checker above.</p>
               </div>
             </div>
@@ -1574,7 +1560,7 @@
               </div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-2-3-B">Show solution</button>
               <div class="solution" id="sol-2-3-B">
-                <p>Let <span class="mono">p</span> = "2 + 2 = 5", <span class="mono">q</span> = "1 = 0". Form: <span class="mono">p → q, &nbsp;∼p &nbsp;∴ ∼q</span> &mdash; the <strong style="color:var(--c-false)">inverse error</strong> again. <strong>Invalid.</strong></p>
+                <p>Let <span class="mono">p</span> = "2 + 2 = 5", <span class="mono">q</span> = "1 = 0". Form: <span class="mono">p → q, &nbsp;∼p &nbsp;∴ ∼q</span>, the <strong style="color:var(--c-false)">inverse error</strong> again. <strong>Invalid.</strong></p>
                 <div data-sol-argument="p -> q|not p|not q"></div>
                 <p>Even though the conclusion happens to be true in the real world (1 ≠ 0 is correct), validity is about <em>form</em>, not content. The form does not <em>force</em> the conclusion.</p>
                 <p><strong>Key lesson.</strong> An argument can have a true conclusion and still be invalid. Validity asks: does the form guarantee the conclusion is true whenever the premises are?</p>
@@ -1602,7 +1588,7 @@
                   <span class="mono">c → d, &nbsp;d → p &nbsp;∴ c → p</span></p>
                 <p><strong>Step 2.</strong> Apply <strong>Modus Ponens</strong> to the result and (3):<br>
                   <span class="mono">c → p, &nbsp;c &nbsp;∴ p</span></p>
-                <p>Therefore <span class="mono">p</span> &mdash; "Ahmad learns about proofs". <strong style="color:var(--c-true)">✓ Valid.</strong></p>
+                <p>Therefore <span class="mono">p</span>,"Ahmad learns about proofs". <strong style="color:var(--c-true)">✓ Valid.</strong></p>
               </div>
             </div>
 
@@ -1617,7 +1603,7 @@
               </div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-2-3-D">Show solution</button>
               <div class="solution" id="sol-2-3-D">
-                <p>Let <span class="mono">p</span> = "today is Friday", <span class="mono">q</span> = "today is a holiday". Form: <span class="mono">p → q, &nbsp;∼q &nbsp;∴ ∼p</span>. This is <strong>Modus Tollens</strong> (Rule 2) — <strong style="color:var(--c-true)">valid</strong>.</p>
+                <p>Let <span class="mono">p</span> = "today is Friday", <span class="mono">q</span> = "today is a holiday". Form: <span class="mono">p → q, &nbsp;∼q &nbsp;∴ ∼p</span>. This is <strong>Modus Tollens</strong> (Rule 2), <strong style="color:var(--c-true)">valid</strong>.</p>
                 <div data-sol-argument="p -> q|not q|not p"></div>
                 <p>Read the yellow row: the single critical row (both premises T) also makes the conclusion T. The form preserves truth.</p>
               </div>
@@ -1642,7 +1628,7 @@
                   <li><strong>Elimination</strong> on (d) and the step-2 result: &nbsp; <span class="mono">RL ∨ RK, &nbsp;∼RK &nbsp;∴ RL</span></li>
                   <li><strong>Modus Ponens</strong> on (e) and the step-3 result: &nbsp; <span class="mono">RL → GC, &nbsp;RL &nbsp;∴ GC</span></li>
                 </ol>
-                <p><strong>Conclusion.</strong> The glasses are on the coffee table. Four short rules replace a 32-row truth table (five variables). That is why inference rules matter once you leave Chapter 2.</p>
+                <p><strong>Conclusion.</strong> The glasses are on the coffee table. Four short rules replace a 32-row truth table (five variables). That is the value of inference rules once you leave Chapter 2.</p>
               </div>
             </div>
           </div>
@@ -1650,7 +1636,7 @@
 
         <!-- Recap -->
         <div class="recap-card" id="recap">
-          <h3>Recap &mdash; Chapter 2</h3>
+          <h3>Recap: Chapter 2</h3>
           <ul>
             <li>Build a truth table for any compound statement.</li>
             <li>Test whether two statement forms are <strong>logically equivalent</strong>.</li>
@@ -1661,34 +1647,7 @@
             <li>Check the <strong>validity</strong> of an argument by inspecting its critical rows.</li>
             <li>Recognise the nine rules of inference (<strong>Modus Ponens</strong>, <strong>Modus Tollens</strong>, <strong>Generalization</strong>, <strong>Specialization</strong>, <strong>Conjunction</strong>, <strong>Elimination</strong>, <strong>Transitivity</strong>, <strong>Division into cases</strong>, <strong>Contradiction rule</strong>) and the two classic fallacies (<strong>converse error</strong>, <strong>inverse error</strong>).</li>
           </ul>
-          <div class="preview"><strong>What's next.</strong> Chapter 3 &mdash; The Logic of Quantified Statements. Predicates, the universal and existential quantifiers, and a Tarski-style playground for evaluating quantified statements like $\forall x\, (\mathrm{Triangle}(x) \to \mathrm{Blue}(x))$ and $\forall x\, \exists y\, (\mathrm{Square}(x) \wedge \mathrm{Circle}(y) \wedge \mathrm{SameColor}(x, y))$.</div>
-        </div>
-
-        <!-- Tarski preview (bridge to Ch 3) -->
-        <div class="tarski-card">
-          <h3><i class="fas fa-shapes" style="color: var(--c-primary);"></i> Tarski preview <span class="ch3-tag">Chapter 3</span></h3>
-          <p>Tarski-style exercises live in Ch 3 because they need predicates and quantifiers (<span class="mono-inline">∀x</span>, <span class="mono-inline">∃y</span>). But the Ch 2 connectives already handle one piece of the picture &mdash; statements about <em>specific</em> labelled objects in a scene. Hover the underlined terms for the new vocabulary.</p>
-
-          <div class="tarski-layout">
-            <div class="tarski-grid" aria-label="Tarski-style scene with four labelled shapes">
-              <div class="tarski-cell"><span class="tarski-name">a</span><span class="tarski-shape blue">▲</span></div>
-              <div class="tarski-cell"><span class="tarski-name">b</span><span class="tarski-shape red">●</span></div>
-              <div class="tarski-cell"><span class="tarski-name">c</span><span class="tarski-shape green">■</span></div>
-              <div class="tarski-cell"><span class="tarski-name">d</span><span class="tarski-shape blue">▲</span></div>
-            </div>
-
-            <table class="tarski-props">
-              <tbody>
-                <tr><td class="prop">Triangle(a) ∧ Blue(a)</td><td class="val t">T</td></tr>
-                <tr><td class="prop">Square(c) ∨ Square(b)</td><td class="val t">T</td></tr>
-                <tr><td class="prop">Red(b) ∧ ∼Red(d)</td><td class="val t">T</td></tr>
-                <tr><td class="prop">Triangle(a) ↔ Triangle(d)</td><td class="val t">T</td></tr>
-                <tr><td class="prop">Circle(a) ∨ Square(d)</td><td class="val f">F</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <p class="caption">In Ch 2, <span class="term" data-tip="A statement about a specific named object, like Triangle(a) · in Ch 2 it is just a proposition with a fixed T/F value"><strong>predicates</strong></span> like <span class="mono-inline">Triangle(a)</span> are propositions with a fixed truth value &mdash; you combine them with the connectives you already know. In Ch 3 we'll add a <span class="term" data-tip="Variables stand for any object in the scene · combined with quantifiers ∀ (for all) and ∃ (there exists)"><strong>variable</strong></span> like <span class="mono-inline">x</span> and <span class="term" data-tip="∀ universal · ∃ existential · let us claim something about all objects, or about at least one object"><strong>quantifiers</strong></span> <span class="mono-inline">∀x</span>, <span class="mono-inline">∃y</span>, so we can speak about the whole scene at once. For instance, <em>"every triangle is blue"</em> ($\forall x (\mathrm{Triangle}(x) \to \mathrm{Blue}(x))$) is <strong style="color:var(--c-true)">true</strong> here (both triangles, <span class="mono-inline">a</span> and <span class="mono-inline">d</span>, are blue), while <em>"some shape is yellow"</em> ($\exists x\, \mathrm{Yellow}(x)$) is <strong style="color:var(--c-false)">false</strong> (no yellow shapes in this scene).</p>
+          <div class="preview"><strong>What's next.</strong> Chapter 3: The Logic of Quantified Statements. Predicates, plus the universal and existential quantifiers <span class="mono-inline">∀</span> and <span class="mono-inline">∃</span>, which let us reason about <em>all</em> or <em>some</em> objects at once instead of one statement at a time.</div>
         </div>
 
       </div>
@@ -1920,9 +1879,9 @@
     /* ---------------------------------------------------------
        Unified truth-table HTML renderer.
        Modes:
-         'plain'    — just shows the build-up table.
-         'equiv'    — two main ASTs (left, right); highlights rows where the mains disagree.
-         'argument' — last AST is the conclusion (∴); others are premises; highlights critical / broken rows.
+         'plain'   , just shows the build-up table.
+         'equiv'   , two main ASTs (left, right); highlights rows where the mains disagree.
+         'argument', last AST is the conclusion (∴); others are premises; highlights critical / broken rows.
        --------------------------------------------------------- */
     function renderTTHTML(asts, mode) {
       mode = mode || 'plain';
@@ -2004,7 +1963,7 @@
             const envStr = vars.map(function (v) { return v + '=' + (env[v] ? 'T' : 'F'); }).join(', ');
             const lv = allRows[firstDiffIdx].values[mainIdx[0]];
             const rv = allRows[firstDiffIdx].values[mainIdx[1]];
-            detail = '<div class="verdict-detail"><strong>Row where they differ:</strong> <code>' + envStr + '</code> &mdash; left is <code>' + (lv ? 'T' : 'F') + '</code>, right is <code>' + (rv ? 'T' : 'F') + '</code>.</div>';
+            detail = '<div class="verdict-detail"><strong>Row where they differ:</strong> <code>' + envStr + '</code>, left is <code>' + (lv ? 'T' : 'F') + '</code>, right is <code>' + (rv ? 'T' : 'F') + '</code>.</div>';
           }
           verdict = '<div class="verdict no"><i class="fas fa-times-circle"></i> Not equivalent.</div>' + detail;
         }
@@ -2012,15 +1971,15 @@
         const anyCritical = rowFlags.some(function (f) { return f.critical; });
         const valid = !rowFlags.some(function (f) { return f.broken; });
         if (!anyCritical) {
-          verdict = '<div class="verdict warn"><i class="fas fa-info-circle"></i> Vacuously valid &mdash; no row makes all premises simultaneously true.</div>';
+          verdict = '<div class="verdict warn"><i class="fas fa-info-circle"></i> Vacuously valid, no row makes all premises simultaneously true.</div>';
         } else if (valid) {
-          verdict = '<div class="verdict ok"><i class="fas fa-check-circle"></i> Valid &mdash; in every critical row (yellow), the conclusion is true.</div>' +
+          verdict = '<div class="verdict ok"><i class="fas fa-check-circle"></i> Valid, in every critical row (yellow), the conclusion is true.</div>' +
                     '<div class="verdict-detail">The <strong>critical rows</strong> are the ones where every premise is true. For a valid form the conclusion must be true in every one of them.</div>';
         } else {
           const firstBroken = rowFlags.findIndex(function (f) { return f.broken; });
           const env = allRows[firstBroken].env;
           const envStr = vars.map(function (v) { return v + '=' + (env[v] ? 'T' : 'F'); }).join(', ');
-          verdict = '<div class="verdict no"><i class="fas fa-times-circle"></i> Invalid &mdash; a critical row makes the conclusion false.</div>' +
+          verdict = '<div class="verdict no"><i class="fas fa-times-circle"></i> Invalid, a critical row makes the conclusion false.</div>' +
                     '<div class="verdict-detail">Red row at <code>' + envStr + '</code>: all premises true, conclusion false. That row breaks the form.</div>';
         }
       }
@@ -2256,7 +2215,7 @@
           `<div class="e-row"><div class="e-expr">p</div><div class="e-val ${p ? 't' : 'f'}">${p ? 'T' : 'F'}</div></div>` +
           `<div class="e-row"><div class="e-expr">q</div><div class="e-val ${q ? 't' : 'f'}">${q ? 'T' : 'F'}</div></div>` +
           `<div class="e-row"><div class="e-expr">p → q</div><div class="e-val ${cond ? 't' : 'f'}">${cond ? 'T' : 'F'}</div></div>` +
-          (!p ? `<div class="vacuous">Vacuously true &mdash; the hypothesis is false.</div>` : '');
+          (!p ? `<div class="vacuous">Vacuously true: the hypothesis is false.</div>` : '');
       }
       root.querySelectorAll('input[type=checkbox]').forEach(c => c.addEventListener('change', render));
       render();
@@ -2296,13 +2255,13 @@
       const items = [
         {statement: 'Being a square is sufficient for being a rectangle.',
          symbolic: 'square → rectangle',
-         note: 'If a shape is a square, then it is a rectangle. (True &mdash; squares are special rectangles.)'},
+         note: 'If a shape is a square, then it is a rectangle. (True, squares are special rectangles.)'},
         {statement: 'Having a valid ID is necessary for entering the exam hall.',
          symbolic: 'enter → has_valid_ID',
          note: 'You can enter the exam hall only if you have a valid ID. Equivalently: if you enter, you have an ID.'},
         {statement: 'You pass only if you score at least 60.',
          symbolic: 'pass → score ≥ 60',
-         note: 'Passing requires scoring at least 60. Note: scoring 60+ alone does not guarantee passing &mdash; attendance might matter too.'},
+         note: 'Passing requires scoring at least 60. Note: scoring 60+ alone does not guarantee passing, attendance might be a factor too.'},
         {statement: 'A number is divisible by 4 if it is divisible by 8.',
          symbolic: 'divisible_by_8 → divisible_by_4',
          note: '"if" introduces the hypothesis. So: divisible by 8 implies divisible by 4. (True.)'},
@@ -2422,6 +2381,26 @@
         if (isOpen) populateSolutionTables(sol);
       });
     });
+
+    /* Floating "How to use" widget toggle. */
+    (function () {
+      const root = document.getElementById('howto-fab');
+      if (!root) return;
+      const toggle = root.querySelector('.howto-fab-toggle');
+      const body = root.querySelector('.howto-fab-body');
+      toggle.addEventListener('click', function () {
+        const willOpen = body.hasAttribute('hidden');
+        if (willOpen) {
+          body.removeAttribute('hidden');
+          root.setAttribute('data-open', 'true');
+          toggle.setAttribute('aria-expanded', 'true');
+        } else {
+          body.setAttribute('hidden', '');
+          root.setAttribute('data-open', 'false');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
 
   </script>
 </body>
