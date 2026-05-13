@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true}, {left:'$',right:'$',display:false}], throwOnError: false });"></script>
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#e65100" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Quiz #1 (Section 9, 2025/2026) with worked solutions." />
+
+  <title>COMP233 Quiz #1 &amp; Answers</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-accent: #e65100;
+      --c-accent-dark: #bf360c;
+      --c-accent-light: #fff3e0;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-accent: #ffb74d;
+      --c-accent-dark: #ffd54f;
+      --c-accent-light: #3a2410;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .exam-hero { text-align: center; padding: 30px 0 12px; }
+    .exam-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-accent);
+      text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px;
+    }
+    .exam-hero h1 { font-size: 1.9rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .exam-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .exam-hero .back-link {
+      font-size: 0.88rem; color: var(--c-accent); text-decoration: none; font-weight: 700;
+    }
+    .exam-hero .back-link:hover { text-decoration: underline; }
+
+    .meta-card {
+      background: linear-gradient(180deg, var(--c-accent-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-accent); border-radius: 12px;
+      padding: 18px 24px; margin: 26px 0 28px;
+      box-shadow: 0 2px 12px rgba(230, 81, 0, 0.10);
+    }
+    body.dark .meta-card { background: linear-gradient(180deg, rgba(255,183,77,0.10) 0%, var(--c-card-bg) 100%); }
+    .meta-card h4 {
+      margin: 0 0 8px; font-size: 0.78rem; font-weight: 800;
+      color: var(--c-accent); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .meta-card .meta-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px 22px; font-size: 0.92rem; line-height: 1.55;
+    }
+    .meta-card .meta-item .meta-label {
+      font-size: 0.72rem; font-weight: 700; color: var(--c-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .meta-card .meta-item .meta-value { color: var(--c-text); font-weight: 600; }
+
+    .question-block { margin-top: 38px; }
+    .question-block .q-head {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 3px solid var(--c-accent);
+    }
+    .question-block .q-num {
+      background: var(--c-accent); color: #fff;
+      padding: 6px 14px; border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      font-size: 0.9rem; letter-spacing: 0.5px;
+    }
+    .question-block .q-title { flex: 1; font-size: 1.15rem; font-weight: 700; color: var(--c-text); }
+    .question-block .q-marks { font-size: 0.84rem; color: var(--c-muted); font-weight: 600; }
+
+    .subq {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-accent);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin-bottom: 16px;
+    }
+    .subq .subq-head {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .subq .subq-label {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-accent);
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .subq .subq-marks {
+      font-size: 0.74rem; font-weight: 600;
+      padding: 1px 8px; background: var(--c-accent-light); color: var(--c-accent);
+      border-radius: 9px;
+    }
+    .subq .subq-stmt {
+      font-size: 0.96rem; color: var(--c-text); line-height: 1.65; margin-bottom: 12px;
+    }
+    .subq .subq-stmt code, .subq .subq-stmt .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+    .subq blockquote {
+      margin: 8px 0; padding: 6px 14px;
+      border-left: 3px solid var(--c-border); font-style: italic;
+      color: var(--c-text); font-size: 0.92rem; line-height: 1.55;
+    }
+
+    .solution-btn {
+      background: var(--c-accent-light); color: var(--c-accent);
+      border: 1px solid var(--c-accent); padding: 7px 16px; border-radius: 6px;
+      font-size: 0.86rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-accent); color: #fff; }
+    .solution-btn.open { background: var(--c-accent); color: #fff; }
+    .solution {
+      margin-top: 14px; padding: 16px 20px;
+      background: var(--c-page-bg); border-radius: 8px;
+      border-left: 3px solid var(--c-true);
+      font-size: 0.92rem; line-height: 1.7; color: var(--c-text); display: none;
+    }
+    .solution.open { display: block; }
+    .solution h5 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-true); text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .solution p { margin: 6px 0; }
+    .solution .mono, .solution code {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+    .solution .step {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 10px 14px; border-radius: 6px;
+      margin: 8px 0; font-size: 0.9rem; line-height: 1.85;
+      overflow-x: auto;
+    }
+    .solution .step-row {
+      display: grid; grid-template-columns: minmax(180px, auto) 1fr; gap: 14px;
+      padding: 3px 0;
+    }
+    .solution .step-row .form {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 4px 10px; border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .solution .step-row .reason {
+      font-style: italic; color: var(--c-muted); font-size: 0.86rem;
+      align-self: center;
+    }
+    .solution .end-of-proof { font-weight: 800; color: var(--c-true); float: right; }
+    .solution strong { color: var(--c-accent); }
+
+    .truth-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86rem;
+      margin: 10px 0;
+    }
+    .truth-table th, .truth-table td {
+      padding: 6px 10px; border: 1px solid var(--c-border);
+      text-align: center;
+    }
+    .truth-table th {
+      background: var(--c-page-bg); color: var(--c-text); font-weight: 800;
+      font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .truth-table th.final { background: var(--c-accent-light); color: var(--c-accent); }
+    .truth-table td.t { background: var(--c-true-bg); color: var(--c-true); font-weight: 700; }
+    .truth-table td.f { background: var(--c-false-bg); color: var(--c-false); font-weight: 700; }
+    .truth-table tr.final-row td { font-weight: 800; }
+
+    .verdict {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 16px;
+      font-size: 0.88rem; font-weight: 700; margin-top: 10px;
+    }
+    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
+
+    /* Variation grid for Q2.a contrapositive/converse/inverse/negation */
+    .var-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+      margin: 10px 0;
+    }
+    .var-card {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 6px; padding: 12px 14px;
+    }
+    .var-card h6 {
+      margin: 0 0 6px; font-size: 0.78rem; font-weight: 800;
+      color: var(--c-accent); text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .var-card .formal {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg); padding: 6px 10px; border-radius: 4px;
+      margin: 6px 0; font-size: 0.9rem;
+    }
+    .var-card .verbal {
+      font-size: 0.88rem; color: var(--c-text); font-style: italic; line-height: 1.55;
+    }
+
+    .nav-fab {
+      position: fixed; top: 100px; right: 18px; z-index: 30;
+      display: flex; flex-direction: column; gap: 6px;
+      max-width: 220px;
+    }
+    .nav-fab a {
+      display: inline-block; padding: 6px 12px;
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 6px; font-size: 0.82rem;
+      color: var(--c-text); text-decoration: none; text-align: left;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .nav-fab a:hover { background: var(--c-accent); color: #fff; border-color: var(--c-accent); text-decoration: none; }
+    .nav-fab .nav-fab-label {
+      font-size: 0.66rem; font-weight: 800; color: var(--c-accent);
+      text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 0 8px 4px;
+    }
+    @media (max-width: 980px) { .nav-fab { position: static; max-width: 100%; flex-direction: row; flex-wrap: wrap; margin: 18px 0 0; } }
+
+    @media (max-width: 640px) {
+      .exam-hero h1 { font-size: 1.4rem; }
+      .subq { padding: 14px 16px; }
+    }
+  </style>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <aside class="nav-fab" id="nav-fab">
+    <div class="nav-fab-label">Jump to</div>
+    <a href="#q1a">Q1.a · Simplify</a>
+    <a href="#q1b">Q1.b · Tautology</a>
+    <a href="#q1c">Q1.c · Inference rule</a>
+    <a href="#q2a">Q2.a · Sara statement</a>
+    <a href="#q2b">Q2.b · Predicates on D</a>
+    <a href="#q2c">Q2.c · Five short answers</a>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="exam-hero">
+          <div class="eyebrow"><i class="fas fa-clipboard-check"></i> &nbsp;COMP233 &middot; Quiz #1 &amp; Answers</div>
+          <h1>Quiz #1: Worked Solutions</h1>
+          <div class="subtitle">Chapters 1, 2, 3 &middot; Section 9 &middot; Second Semester 2025/2026</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="meta-card">
+          <h4><i class="fas fa-info-circle"></i> About this Quiz</h4>
+          <p style="margin: 0 0 14px; font-size: 0.95rem; line-height: 1.65; color: var(--c-text);">This is Quiz #1 from the start of the term, covering material from Chapters 1, 2, and 3. Below you will find every question reproduced exactly as it appeared on the paper, with my worked solutions and the marking criteria for each part. Work each question on paper first, then click <em>Show solution</em>.</p>
+          <div class="meta-grid">
+            <div class="meta-item"><div class="meta-label">Course</div><div class="meta-value">Discrete Mathematics (COMP 233)</div></div>
+            <div class="meta-item"><div class="meta-label">Section</div><div class="meta-value">9</div></div>
+            <div class="meta-item"><div class="meta-label">Semester</div><div class="meta-value">Second Semester 2025/2026</div></div>
+            <div class="meta-item"><div class="meta-label">Covers</div><div class="meta-value">Chapters 1, 2, 3</div></div>
+            <div class="meta-item"><div class="meta-label">Questions</div><div class="meta-value">2 (Q1: 45 pts, Q2: 55 pts)</div></div>
+            <div class="meta-item"><div class="meta-label">Total</div><div class="meta-value">100 pts &middot; weight 10% of course grade</div></div>
+          </div>
+        </div>
+
+        <!-- ==================== Q1 ==================== -->
+        <div class="question-block" id="q1">
+          <div class="q-head">
+            <div class="q-num">Q1</div>
+            <div class="q-title">Logical equivalence, tautology, and an inference rule</div>
+            <div class="q-marks">[ 45 marks ]</div>
+          </div>
+
+          <!-- Q1.a -->
+          <div class="subq" id="q1a">
+            <div class="subq-head"><div class="subq-label">Q1.a</div><div class="subq-marks">15 pts</div></div>
+            <div class="subq-stmt">Simplify the following logical expression to an equivalent expression:
+              <div style="margin-top:8px; padding:10px 14px; background:var(--c-page-bg); border-radius:6px; font-family:'Roboto Mono', monospace; font-size:1rem;">¬(p ∧ ¬q) ∧ (p ∨ q)</div>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q1a">Show solution</button>
+            <div class="solution" id="sol-q1a">
+              <h5>Worked solution</h5>
+              <p>Apply equivalence laws step by step:</p>
+              <div class="step">
+                <div class="step-row"><span class="form">¬(p ∧ ¬q) ∧ (p ∨ q)</span><span class="reason">given</span></div>
+                <div class="step-row"><span class="form">≡ (¬p ∨ ¬(¬q)) ∧ (p ∨ q)</span><span class="reason">De Morgan's law</span></div>
+                <div class="step-row"><span class="form">≡ (¬p ∨ q) ∧ (p ∨ q)</span><span class="reason">double negation</span></div>
+                <div class="step-row"><span class="form">≡ q ∨ (¬p ∧ p)</span><span class="reason">distributive law (factor out q)</span></div>
+                <div class="step-row"><span class="form">≡ q ∨ c</span><span class="reason">negation law (¬p ∧ p ≡ c)</span></div>
+                <div class="step-row"><span class="form">≡ q</span><span class="reason">identity law (q ∨ c ≡ q)</span></div>
+              </div>
+              <p><strong>Final simplification:</strong> <code>¬(p ∧ ¬q) ∧ (p ∨ q) ≡ q</code>.</p>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (15 pts, 3 pts per correct step over 5 steps).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>3 pts</strong>: De Morgan applied to <code>¬(p ∧ ¬q)</code>.</li>
+                <li><strong>3 pts</strong>: double negation applied to <code>¬(¬q)</code>.</li>
+                <li><strong>3 pts</strong>: distributive law to factor out <code>q</code>.</li>
+                <li><strong>3 pts</strong>: negation law identifying <code>¬p ∧ p ≡ c</code>.</li>
+                <li><strong>3 pts</strong>: identity law to reach <code>q</code>.</li>
+              </ul>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 6px;">Accept equivalent orderings. Equivalent if students use <em>NOT</em>, <em>~</em>, or <em>∼</em> instead of <em>¬</em>.</p>
+            </div>
+          </div>
+
+          <!-- Q1.b -->
+          <div class="subq" id="q1b">
+            <div class="subq-head"><div class="subq-label">Q1.b</div><div class="subq-marks">25 pts</div></div>
+            <div class="subq-stmt">Show that the following expression is a <strong>tautology</strong> by proving the logical equivalence using a <strong>truth table</strong>:
+              <div style="margin-top:8px; padding:10px 14px; background:var(--c-page-bg); border-radius:6px; font-family:'Roboto Mono', monospace; font-size:1rem;">(p ∧ (p → q)) → q  ≡  T</div>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q1b">Show solution</button>
+            <div class="solution" id="sol-q1b">
+              <h5>Worked solution</h5>
+              <p>Build the truth table column by column. Four rows for two variables <code>p, q</code>:</p>
+              <div style="overflow-x:auto;">
+              <table class="truth-table">
+                <thead>
+                  <tr>
+                    <th>p</th><th>q</th>
+                    <th>p → q</th>
+                    <th>p ∧ (p → q)</th>
+                    <th class="final">(p ∧ (p → q)) → q</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="final-row"><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr>
+                  <tr class="final-row"><td class="t">T</td><td class="f">F</td><td class="f">F</td><td class="f">F</td><td class="t">T</td></tr>
+                  <tr class="final-row"><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr>
+                  <tr class="final-row"><td class="f">F</td><td class="f">F</td><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr>
+                </tbody>
+              </table>
+              </div>
+              <p>The final column is <strong>T in every row</strong>, so the expression evaluates to <em>true</em> for every assignment of truth values to <code>p</code> and <code>q</code>.</p>
+              <div class="verdict ok"><i class="fas fa-check-circle"></i> <code>(p ∧ (p → q)) → q ≡ T</code>. The expression is a <strong>tautology</strong>.</div>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (25 pts).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>3 pts</strong>: correct column headers (the five columns above).</li>
+                <li><strong>3 pts</strong>: correctly computed intermediate columns (<code>p → q</code> and <code>p ∧ (p → q)</code>).</li>
+                <li><strong>16 pts</strong>: 4 pts per correct row (4 rows). Lose 1 pt per wrong cell.</li>
+                <li><strong>3 pts</strong>: correct conclusion stating the expression is a tautology and equivalent to <code>T</code>.</li>
+              </ul>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 6px;">If the table is missing entirely: 0 pts.</p>
+            </div>
+          </div>
+
+          <!-- Q1.c -->
+          <div class="subq" id="q1c">
+            <div class="subq-head"><div class="subq-label">Q1.c</div><div class="subq-marks">5 pts</div></div>
+            <div class="subq-stmt">Which <strong>Rule of Inference</strong> is represented by the tautology in part (b)? Write its <strong>formal argument form</strong>.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q1c">Show solution</button>
+            <div class="solution" id="sol-q1c">
+              <h5>Worked solution</h5>
+              <p>The tautology <code>(p ∧ (p → q)) → q</code> says: <em>if both <code>p</code> and <code>p → q</code> are true, then <code>q</code> is true</em>. That is exactly <strong>Modus Ponens</strong>.</p>
+              <div class="step">
+                <div style="display:grid; grid-template-columns: auto; gap:2px;">
+                  <span>p</span>
+                  <span>p → q</span>
+                  <span style="border-top: 1px solid var(--c-text); padding-top:2px;">∴ q</span>
+                </div>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (5 pts).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>2 pts</strong>: correctly naming <strong>Modus Ponens</strong>.</li>
+                <li><strong>3 pts</strong>: correct formal argument form (two premises <code>p</code> and <code>p → q</code>, conclusion <code>q</code>).</li>
+              </ul>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 6px;">Accept equivalent notations for the conclusion (<code>∴ q</code>, <code>⊢ q</code>, "therefore q"). 0 pts if the rule name is wrong (any other rule).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== Q2 ==================== -->
+        <div class="question-block" id="q2">
+          <div class="q-head">
+            <div class="q-num">Q2</div>
+            <div class="q-title">Conditional variations, predicates &amp; quantifiers, short answers</div>
+            <div class="q-marks">[ 55 marks ]</div>
+          </div>
+
+          <!-- Q2.a -->
+          <div class="subq" id="q2a">
+            <div class="subq-head"><div class="subq-label">Q2.a</div><div class="subq-marks">20 pts</div></div>
+            <div class="subq-stmt">Write the <strong>contrapositive</strong>, <strong>converse</strong>, <strong>inverse</strong>, and <strong>negation</strong> of the following statement:
+              <blockquote style="margin-top:8px;">If Sara passes Discrete Math, then she will register for Data Structures and she will take Algorithms.</blockquote>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2a">Show solution</button>
+            <div class="solution" id="sol-q2a">
+              <h5>Worked solution</h5>
+              <p>Let <code>p</code> = "Sara passes Discrete Math", <code>q</code> = "Sara registers for Data Structures", <code>r</code> = "Sara takes Algorithms". The original statement is <code>p → (q ∧ r)</code>.</p>
+
+              <div class="var-grid">
+                <div class="var-card">
+                  <h6>Contrapositive</h6>
+                  <div class="formal">¬(q ∧ r) → ¬p  &nbsp;≡&nbsp;  (¬q ∨ ¬r) → ¬p</div>
+                  <div class="verbal">"If Sara does not register for Data Structures or does not take Algorithms, then she does not pass Discrete Math."</div>
+                </div>
+                <div class="var-card">
+                  <h6>Converse</h6>
+                  <div class="formal">(q ∧ r) → p</div>
+                  <div class="verbal">"If Sara registers for Data Structures and takes Algorithms, then she passes Discrete Math."</div>
+                </div>
+                <div class="var-card">
+                  <h6>Inverse</h6>
+                  <div class="formal">¬p → ¬(q ∧ r)  &nbsp;≡&nbsp;  ¬p → (¬q ∨ ¬r)</div>
+                  <div class="verbal">"If Sara does not pass Discrete Math, then she does not register for Data Structures or does not take Algorithms."</div>
+                </div>
+                <div class="var-card">
+                  <h6>Negation</h6>
+                  <div class="formal">¬(p → (q ∧ r))  &nbsp;≡&nbsp;  p ∧ (¬q ∨ ¬r)</div>
+                  <div class="verbal">"Sara passes Discrete Math, and she does not register for Data Structures or does not take Algorithms."</div>
+                </div>
+              </div>
+
+              <p style="margin-top: 12px;"><strong>Important.</strong> The negation is <em>not</em> a conditional (no "if&hellip;then"). It is a conjunction: the hypothesis holds and the conclusion fails.</p>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (20 pts, 5 pts per variation).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>3 pts</strong>: correct symbolic form for that variation.</li>
+                <li><strong>2 pts</strong>: correct verbal sentence in English.</li>
+              </ul>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 6px;">Must apply De Morgan to <code>¬(q ∧ r)</code> when writing the contrapositive, inverse, and negation. <strong>Deduct 2 pts</strong> if missing. Accept <code>¬q ∨ ¬r</code> or equivalently <code>¬r ∨ ¬q</code>. The negation must <strong>not</strong> be a conditional.</p>
+            </div>
+          </div>
+
+          <!-- Q2.b -->
+          <div class="subq" id="q2b">
+            <div class="subq-head"><div class="subq-label">Q2.b</div><div class="subq-marks">20 pts</div></div>
+            <div class="subq-stmt">Consider the following predicates defined on the domain <code>D = {2, 3, 5, 6, 8}</code>:
+              <ul style="margin: 6px 0 8px 22px;">
+                <li><code>E(x):</code> "x is even"</li>
+                <li><code>P(x):</code> "x is prime"</li>
+              </ul>
+              For each of the following, write the statement <strong>formally</strong> using quantifiers and predicates, then determine its <strong>truth value</strong>. Justify your answer.
+              <ol style="margin: 8px 0 6px; padding-left: 22px;">
+                <li><em>Every element in <code>D</code> is even.</em> &nbsp;<span style="color:var(--c-muted); font-size:0.84rem;">[5 pts]</span></li>
+                <li><em>There exists an element in <code>D</code> that is both even and prime.</em> &nbsp;<span style="color:var(--c-muted); font-size:0.84rem;">[5 pts]</span></li>
+              </ol>
+              <p style="margin: 10px 0 0;"><strong>Rewrite</strong> the following formal statement as a complete <strong>English sentence</strong>, then determine its <strong>truth value</strong> with justification: &nbsp;<span style="color:var(--c-muted); font-size:0.84rem;">[10 pts]</span></p>
+              <div style="margin-top: 6px; padding: 10px 14px; background: var(--c-page-bg); border-radius: 6px; font-family: 'Roboto Mono', monospace;">∀x ∈ D, (E(x) → P(x))</div>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2b">Show solution</button>
+            <div class="solution" id="sol-q2b">
+              <h5>Worked solution</h5>
+
+              <p><strong>(i)</strong> Every element in <code>D</code> is even.</p>
+              <p>Formal: <code>∀x ∈ D, E(x)</code>.</p>
+              <p>Truth value: <strong style="color: var(--c-false)">False</strong>. Counterexample: <code>x = 3</code> is in <code>D</code> but is not even. (Also <code>5</code> works.)</p>
+
+              <p style="margin-top: 14px;"><strong>(ii)</strong> There exists an element in <code>D</code> that is both even and prime.</p>
+              <p>Formal: <code>∃x ∈ D, (E(x) ∧ P(x))</code>.</p>
+              <p>Truth value: <strong style="color: var(--c-true)">True</strong>. Witness: <code>x = 2</code> is both even (<code>2 = 2·1</code>) and prime.</p>
+
+              <p style="margin-top: 14px;"><strong>Rewrite</strong>: <code>∀x ∈ D, (E(x) → P(x))</code></p>
+              <p>English: <em>"For every element <code>x</code> in <code>D</code>, if <code>x</code> is even then <code>x</code> is prime."</em></p>
+              <p>Truth value: <strong style="color: var(--c-false)">False</strong>. Counterexample: <code>x = 6</code> is even (<code>6 = 2·3</code>) but is not prime (<code>6 = 2·3</code>). The hypothesis holds and the conclusion fails. (<code>x = 8</code> is another counterexample.)</p>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (20 pts).</strong></p>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0;"><strong style="color: var(--c-text)">Part (i) &middot; 5 pts:</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>2 pts</strong>: correct formal statement <code>∀x ∈ D, E(x)</code>.</li>
+                <li><strong>1 pt</strong>: correct truth value (False).</li>
+                <li><strong>2 pts</strong>: justification with a specific counterexample.</li>
+              </ul>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin: 6px 0 0;"><strong style="color: var(--c-text)">Part (ii) &middot; 5 pts:</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>2 pts</strong>: correct formal statement <code>∃x ∈ D, (E(x) ∧ P(x))</code>.</li>
+                <li><strong>1 pt</strong>: correct truth value (True).</li>
+                <li><strong>2 pts</strong>: justification with a specific witness (<code>x = 2</code>).</li>
+              </ul>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin: 6px 0 0;"><strong style="color: var(--c-text)">Rewrite &middot; 10 pts:</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>4 pts</strong>: correct English sentence (universal conditional read aloud).</li>
+                <li><strong>2 pts</strong>: correct truth value (False).</li>
+                <li><strong>4 pts</strong>: justification with a specific counterexample where the hypothesis holds but the conclusion fails (<code>x = 6</code> or <code>x = 8</code>).</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Q2.c -->
+          <div class="subq" id="q2c">
+            <div class="subq-head"><div class="subq-label">Q2.c</div><div class="subq-marks">15 pts</div></div>
+            <div class="subq-stmt">Provide the direct logical equivalent or operation for each of the following (write the formal expression). <em>[3 pts each]</em>
+              <ol style="margin: 8px 0 0; padding-left: 22px;">
+                <li>Write the <strong>negation</strong> of the conditional statement: <code>p → q</code>.</li>
+                <li>Which variation of the conditional <code>p → q</code> is logically equivalent to its <strong>Converse</strong>?</li>
+                <li>Given <code>p ↔ q</code>, write it as a conjunction of two conditional statements.</li>
+                <li>Write the <strong>formal argument form</strong> of Modus Tollens (using <code>p</code> and <code>q</code>).</li>
+                <li>Let <code>D = {1, 2, 3, 4}</code> and let <code>P(x)</code> be "x is a factor of 8." Write the <strong>truth set</strong> of <code>P(x)</code>.</li>
+              </ol>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2c">Show solution</button>
+            <div class="solution" id="sol-q2c">
+              <h5>Worked solution</h5>
+
+              <p><strong>1)</strong> Negation of <code>p → q</code>:</p>
+              <div class="step">¬(p → q)  ≡  p ∧ ¬q</div>
+              <p>Reading: <em>"p is true and q is false."</em> The negation of a conditional is <em>not</em> itself a conditional.</p>
+
+              <p style="margin-top: 12px;"><strong>2)</strong> The variation equivalent to the converse (<code>q → p</code>) is the <strong>Inverse</strong>:</p>
+              <div class="step">Inverse:  ¬p → ¬q  &nbsp;≡&nbsp;  Converse:  q → p</div>
+              <p>The converse and inverse are <em>contrapositives</em> of each other, so they are logically equivalent.</p>
+
+              <p style="margin-top: 12px;"><strong>3)</strong> The biconditional as a conjunction of two conditionals:</p>
+              <div class="step">p ↔ q  ≡  (p → q) ∧ (q → p)</div>
+              <p>(<em>p</em> implies <em>q</em>) and (<em>q</em> implies <em>p</em>) read together as "<em>p</em> if and only if <em>q</em>".</p>
+
+              <p style="margin-top: 12px;"><strong>4)</strong> Formal argument form of Modus Tollens:</p>
+              <div class="step">
+                <div style="display:grid; grid-template-columns: auto; gap:2px;">
+                  <span>p → q</span>
+                  <span>¬q</span>
+                  <span style="border-top: 1px solid var(--c-text); padding-top:2px;">∴ ¬p</span>
+                </div>
+              </div>
+              <p>Reading: <em>"If p then q. Not q. Therefore not p."</em></p>
+
+              <p style="margin-top: 12px;"><strong>5)</strong> Truth set of <code>P(x)</code> on <code>D = {1, 2, 3, 4}</code>:</p>
+              <p>Check each element. The factors of 8 are <code>1, 2, 4, 8</code>. Of these, the ones in <code>D</code> are:</p>
+              <div class="step">Truth set = {1, 2, 4}</div>
+              <p>Note: <code>8</code> is a factor of <code>8</code>, but <code>8 ∉ D</code>, so <code>8</code> is excluded.</p>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 14px;"><strong style="color: var(--c-text)">Marking guide (15 pts, 3 pts each).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1)</strong> 3 pts for <code>p ∧ ¬q</code>. Accept <code>¬(p → q)</code> directly but only 1 pt if no simplification.</li>
+                <li><strong>2)</strong> 3 pts for naming the <strong>Inverse</strong>. 1 pt if only the symbolic form <code>¬p → ¬q</code> is given without naming it.</li>
+                <li><strong>3)</strong> 3 pts for <code>(p → q) ∧ (q → p)</code>. Accept equivalent ordering. 0 pts if disjunction or wrong connective.</li>
+                <li><strong>4)</strong> 3 pts: 1 pt per premise (<code>p → q</code>, <code>¬q</code>), 1 pt for conclusion <code>∴ ¬p</code>. All three must be present for full marks.</li>
+                <li><strong>5)</strong> 3 pts for <code>{1, 2, 4}</code>. Deduct 1 pt if <code>8</code> is included (forgetting the domain restriction). Deduct 1 pt per wrong or missing element.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 38px; padding: 18px 22px; background: var(--c-accent-light); border-left: 4px solid var(--c-accent); border-radius: 0 8px 8px 0; font-size: 0.92rem; line-height: 1.65;">
+          <strong style="color: var(--c-accent);">Summary of marks.</strong>
+          Q1.a Simplification (15) &middot; Q1.b Truth-table tautology (25) &middot; Q1.c Rule of inference (5) &middot; Q2.a Conditional variations (20) &middot; Q2.b Predicates and truth values (20) &middot; Q2.c Five short answers (15). <strong>Total: 100 pts</strong>. Weight: 10% of the final grade.
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+    /* Solution toggles */
+    document.querySelectorAll('[data-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const sol = document.getElementById(btn.dataset.toggle);
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+  </script>
+</body>
+</html>
