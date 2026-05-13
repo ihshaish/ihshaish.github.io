@@ -404,23 +404,10 @@
       background: var(--c-card-bg); border-left: 4px solid var(--c-primary);
       border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px;
     }
-    .exercise.exam {
-      border-left-color: #e65100;
-    }
-    body.dark .exercise.exam { border-left-color: #ffb74d; }
     .exercise .ex-label {
       font-size: 0.78rem; font-weight: 800; color: var(--c-primary);
       text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
     }
-    .exercise.exam .ex-label { color: #e65100; }
-    body.dark .exercise.exam .ex-label { color: #ffb74d; }
-    .exam-tag {
-      display: inline-block; margin-left: 8px;
-      padding: 1px 8px; font-size: 0.66rem; font-weight: 800;
-      letter-spacing: 0.4px; text-transform: uppercase;
-      background: #fff3e0; color: #e65100; border-radius: 9px;
-    }
-    body.dark .exam-tag { background: #3a2410; color: #ffb74d; }
     .exercise .ex-body {
       font-size: 0.94rem; color: var(--c-text); line-height: 1.6; margin-bottom: 10px;
     }
@@ -443,41 +430,6 @@
       background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px;
     }
     .solution strong { color: var(--c-primary); }
-
-    /* Multiple-choice quiz */
-    .mcq {
-      background: var(--c-card-bg); border: 1px solid var(--c-border);
-      border-radius: 8px; padding: 14px 18px; margin-bottom: 14px;
-    }
-    .mcq .mcq-num {
-      font-size: 0.72rem; font-weight: 800; color: var(--c-primary);
-      letter-spacing: 0.5px; margin-bottom: 6px;
-    }
-    .mcq .mcq-stmt {
-      font-size: 0.94rem; color: var(--c-text); line-height: 1.55; margin-bottom: 10px;
-    }
-    .mcq .mcq-options { display: flex; flex-direction: column; gap: 6px; }
-    .mcq-option {
-      display: flex; align-items: center; gap: 10px;
-      padding: 8px 12px; border: 1px solid var(--c-border); border-radius: 6px;
-      cursor: pointer; transition: background 0.12s, border-color 0.12s;
-      font-size: 0.9rem; user-select: none;
-    }
-    .mcq-option:hover { background: var(--c-primary-light); border-color: var(--c-primary); }
-    .mcq-option .letter {
-      font-family: 'Roboto Mono', monospace; font-weight: 800;
-      width: 22px; text-align: center; color: var(--c-muted);
-    }
-    .mcq-option.correct { background: var(--c-true-bg); border-color: var(--c-true); color: var(--c-true); }
-    .mcq-option.correct .letter { color: var(--c-true); }
-    .mcq-option.wrong { background: var(--c-false-bg); border-color: var(--c-false); color: var(--c-false); }
-    .mcq-option.wrong .letter { color: var(--c-false); }
-    .mcq-explain {
-      margin-top: 10px; padding: 10px 14px;
-      background: var(--c-page-bg); border-radius: 6px;
-      font-size: 0.88rem; line-height: 1.6; display: none;
-    }
-    .mcq-explain.open { display: block; }
 
     .recap-card {
       background: var(--c-primary-light); border-radius: 10px;
@@ -538,7 +490,7 @@
         <li><strong>Number-theory widgets</strong>: type or pick an integer, the panel reports definitions, witnesses, and counterexamples in real time.</li>
         <li><strong>Conjecture lab in Section 4.1</strong>: search small ranges for counterexamples. <em>Finding none is not a proof</em>; the lab makes that distinction explicit.</li>
         <li><strong>Hover any underlined term</strong> for its symbol, Arabic name, and definition.</li>
-        <li><strong>Section 5 (Exam-style practice)</strong> mirrors the first exam: MCQ questions and proof-writing prompts with full worked solutions.</li>
+        <li><strong>Practice exercises at the end of each section</strong> use Epp's recommended problems. Write each on paper first; reveal the worked solution only after attempting.</li>
       </ul>
     </div>
   </aside>
@@ -557,7 +509,7 @@
         <div class="intro-card">
           <h4><i class="fas fa-compass"></i> About this chapter</h4>
           <p>Chapter 4 is where the logic of Chapters 2 and 3 starts paying back: we use it to prove and disprove real <strong>claims about integers</strong>. The objects are familiar (even, odd, prime, rational, divisible), but the discipline is new. Every claim is either proved by the <span class="term" data-tip="البرهان · suppose an arbitrary element of the domain, apply definitions and known results, derive the conclusion"><strong>generic-particular method</strong></span> or disproved by a single <span class="term" data-tip="المثال المضاد · one specific x in the domain that makes the hypothesis true and the conclusion false"><strong>counterexample</strong></span>.</p>
-          <p><strong>Where it is used.</strong> Number theory is the foundation of cryptography (RSA, Diffie-Hellman), hashing, error-correcting codes, and modular arithmetic in every CPU. More immediately, the proof techniques here are the toolkit you will use in every later chapter: induction (Chapter 5), set theory (Chapter 6), functions and relations (Chapters 7-8). The first exam tests these techniques directly.</p>
+          <p><strong>Where it is used.</strong> Number theory is the foundation of cryptography (RSA, Diffie-Hellman), hashing, error-correcting codes, and modular arithmetic in every CPU. More immediately, the proof techniques here are the toolkit you will use in every later chapter: induction (Chapter 5), set theory (Chapter 6), functions and relations (Chapters 7 and 8).</p>
         </div>
 
         <nav class="toc" aria-label="Companion contents">
@@ -605,11 +557,9 @@
             </div>
           </div>
           <div class="toc-section">
-            <h5><span class="toc-num">Section 5</span>Exam-style practice</h5>
+            <h5><span class="toc-num">Recap</span>What we covered</h5>
             <div class="toc-links">
-              <a href="#exam-mcq">Multiple choice (Q1)</a>
-              <a href="#exam-proofs">Proof problems (Q2, Q3)</a>
-              <a href="#recap">Recap</a>
+              <a href="#recap">Chapter recap</a>
             </div>
           </div>
         </nav>
@@ -746,6 +696,37 @@
                 <p><strong>False.</strong> The conjecture lab cannot settle this by failing to find a witness; we need an argument that <em>no</em> integer works.</p>
                 <p><strong>Proof.</strong> Suppose, for contradiction, that <span class="mono">6n² + 27</span> is prime for some integer <span class="mono">n</span>. Notice <span class="mono">6n² + 27 = 3(2n² + 9)</span>. Since <span class="mono">2n² + 9 ≥ 9 &gt; 1</span> is an integer, <span class="mono">6n² + 27</span> has <span class="mono">3</span> as a divisor different from itself, so it is composite. Contradiction. Hence no such <span class="mono">n</span> exists. ∎</p>
                 <p>Sample values: <span class="mono">n = 0</span> gives <span class="mono">27 = 3·9</span>; <span class="mono">n = 1</span> gives <span class="mono">33 = 3·11</span>; <span class="mono">n = 2</span> gives <span class="mono">51 = 3·17</span>. All composite.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.1.D (Epp 4.1.24)</div>
+              <div class="ex-body">Prove directly: <em>For all integers <span class="mono-inline">m</span> and <span class="mono-inline">n</span>, if <span class="mono-inline">m + n</span> is even, then <span class="mono-inline">m − n</span> is even.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-1-D">Show solution</button>
+              <div class="solution" id="sol-4-1-D">
+                <p>Suppose <span class="mono">m, n</span> are particular but arbitrarily chosen integers with <span class="mono">m + n</span> even. <em>[We must show <span class="mono">m − n</span> is even.]</em></p>
+                <p>By definition of even, <span class="mono">m + n = 2k</span> for some integer <span class="mono">k</span>. Then <span class="mono">m = 2k − n</span>, so</p>
+                <p class="mono">m − n = (2k − n) − n = 2k − 2n = 2(k − n).</p>
+                <p>Let <span class="mono">t = k − n</span>. Then <span class="mono">t</span> is an integer (difference of integers is an integer), and <span class="mono">m − n = 2t</span>. Therefore <span class="mono">m − n</span> is even by definition. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.1.E &middot; Find the mistake (Epp 4.1.38-style)</div>
+              <div class="ex-body">The following proof of a true statement contains an error. Identify the mistake and write the correct proof.
+                <div style="margin:10px 0; padding:12px 16px; background:var(--c-page-bg); border-left:3px solid var(--c-false); border-radius:0 6px 6px 0; font-size:0.9rem; line-height:1.65;">
+                  <p style="margin:0 0 6px;"><strong>Theorem.</strong> The sum of any two even integers is even.</p>
+                  <p style="margin:0;"><strong>"Proof".</strong> Suppose <span class="mono-inline">m</span> and <span class="mono-inline">n</span> are even integers. By definition of even, <span class="mono-inline">m = 2k</span> and <span class="mono-inline">n = 2k</span> for some integer <span class="mono-inline">k</span>. Then <span class="mono-inline">m + n = 2k + 2k = 4k = 2(2k)</span>, which is even, with witness <span class="mono-inline">2k</span>. ∎</p>
+                </div>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-1-E">Show solution</button>
+              <div class="solution" id="sol-4-1-E">
+                <p><strong>The mistake.</strong> The flawed "proof" uses the <em>same</em> letter <span class="mono">k</span> for two independent witnesses. The definition of even says <em>n = 2k for <strong>some</strong> integer k</em>; the <span class="mono">k</span> that witnesses <span class="mono">m</span> need not be the same as the <span class="mono">k</span> that witnesses <span class="mono">n</span>.</p>
+                <p>For example, <span class="mono">m = 2</span> has witness <span class="mono">k = 1</span>, but <span class="mono">n = 6</span> has witness <span class="mono">k = 3</span>. Forcing both to use the same <span class="mono">k</span> shrinks the claim from "any two even integers" to "any two <em>identical</em> even integers", which is much weaker.</p>
+                <p><strong>Correct proof.</strong> Suppose <span class="mono">m</span> and <span class="mono">n</span> are particular but arbitrarily chosen even integers. By definition of even, <span class="mono">m = 2r</span> and <span class="mono">n = 2s</span> for some integers <span class="mono">r</span> and <span class="mono">s</span> (possibly different).</p>
+                <p class="mono">m + n = 2r + 2s = 2(r + s).</p>
+                <p>Let <span class="mono">t = r + s</span> (an integer, sum of integers). Then <span class="mono">m + n = 2t</span>, so <span class="mono">m + n</span> is even. ∎</p>
+                <p><em>Why we drill on this.</em> "Find the mistake" exercises catch the most common error in proof writing: collapsing two independent existential witnesses into one. The slides flag these as high-value for the midterm.</p>
               </div>
             </div>
           </div>
@@ -916,6 +897,34 @@
                 <p><em>Sharper insight.</em> <span class="mono">a² + a = a(a + 1)</span> is the product of two consecutive integers, one of which is always even. The proof above only handles <span class="mono">a</span> odd; the general fact follows from Theorem 4.4.2 (Section 4.4).</p>
               </div>
             </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.2.D (Epp 4.2.15)</div>
+              <div class="ex-body">Prove: <em>The product of any two rational numbers is a rational number.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-2-D">Show solution</button>
+              <div class="solution" id="sol-4-2-D">
+                <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are rational. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for some integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>. Then</p>
+                <p class="mono">r · s = (a/b) · (c/d) = (a · c) / (b · d) = ac / bd.</p>
+                <p>Let <span class="mono">p = ac</span> and <span class="mono">q = bd</span>. Both are integers (products of integers are integers), and <span class="mono">q = bd ≠ 0</span> by the zero-product property. Hence <span class="mono">r · s = p/q</span> with <span class="mono">q ≠ 0</span>, so <span class="mono">r · s</span> is rational. ∎</p>
+                <p><em>Together with Exercises 4.2.A and 4.2.B</em>: the rationals are closed under all four basic operations (with division requiring a nonzero divisor). This is the closure result that makes <span class="mono">ℚ</span> a <em>field</em>.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.2.E (Epp 4.2.22, uses Property 1 and Property 3)</div>
+              <div class="ex-body">Use the seven even/odd properties (Section 4.2.5) to prove: <em>If <span class="mono-inline">m</span> is any even integer and <span class="mono-inline">n</span> is any odd integer, then <span class="mono-inline">5m + 3n</span> is odd.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-2-E">Show solution</button>
+              <div class="solution" id="sol-4-2-E">
+                <p>Suppose <span class="mono">m</span> is even and <span class="mono">n</span> is odd.</p>
+                <ul>
+                  <li><span class="mono">5m</span> is a product of an even and odd integer (5 is odd), so <span class="mono">5m</span> is even by <strong>property 4</strong>.</li>
+                  <li><span class="mono">3n</span> is the product of two odd integers (3 and n), so <span class="mono">3n</span> is odd by <strong>property 3</strong>.</li>
+                  <li><span class="mono">5m + 3n</span> is the sum of an even integer and an odd integer, so it is odd by <strong>property 5</strong>.</li>
+                </ul>
+                <p>Therefore <span class="mono">5m + 3n</span> is odd. ∎</p>
+                <p><em>What this exercises.</em> Citing pre-proved results by number, instead of re-expanding the definitions of even and odd. Once the seven properties are established, every later proof reads as a short chain of citations.</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1053,6 +1062,36 @@
                 </ul>
                 <p>The hypothesis is true and the conclusion is false, so the universal claim is disproved.</p>
                 <p><em>Why this happens.</em> <span class="mono">6 = 2·3</span> splits its prime factors between <span class="mono">b</span> (which has a factor of 2) and <span class="mono">c</span> (which has a factor of 3). The product gathers both, but neither side alone has both. The statement <em>does</em> hold when <span class="mono">a</span> is prime (Euclid's lemma); composite <span class="mono">a</span> can fail.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.3.D (Epp 4.3.8)</div>
+              <div class="ex-body">Write <span class="mono-inline">3,300</span> in standard factored form (primes in ascending order, each with its multiplicity).</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-3-D">Show solution</button>
+              <div class="solution" id="sol-4-3-D">
+                <p>Strip out one prime at a time.</p>
+                <p class="mono">3,300 = 100 · 33 = 4 · 25 · 3 · 11 = 2 · 2 · 5 · 5 · 3 · 11.</p>
+                <p>Sort the primes ascending and collect powers:</p>
+                <p class="mono">3,300 = 2² · 3 · 5² · 11.</p>
+                <p>Verify: <span class="mono">4 · 3 · 25 · 11 = 4 · 3 · 275 = 12 · 275 = 3,300</span>. ✓</p>
+                <p><em>The factorisation explorer above produces the same result for any <span class="mono">n ≥ 2</span>. By the unique factorisation theorem, this representation is the only one.</em></p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.3.E (Epp 4.3 style, similar to Example 4.3.9)</div>
+              <div class="ex-body">Suppose <span class="mono-inline">m</span> is an integer with <span class="mono-inline">14 · 13 · 12 · 11 · 10 · m = 30 · 29 · 28 · 27 · 26 · 25</span>. Does <span class="mono-inline">29 | m</span>?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-3-E">Show solution</button>
+              <div class="solution" id="sol-4-3-E">
+                <p><strong>Yes.</strong> Argue by unique factorisation.</p>
+                <ul>
+                  <li><span class="mono">29</span> is prime, and it appears on the right (as <span class="mono">29</span> itself).</li>
+                  <li>By the unique factorisation theorem, <span class="mono">29</span> must also appear among the prime factors of the left side.</li>
+                  <li>Each of <span class="mono">14, 13, 12, 11, 10</span> is strictly less than <span class="mono">29</span>, so none of them has <span class="mono">29</span> as a factor.</li>
+                  <li>Therefore <span class="mono">29</span> must appear in the factorisation of <span class="mono">m</span>, which means <span class="mono">29 | m</span>. ∎</li>
+                </ul>
+                <p><em>Pattern.</em> This is the same argument as Epp's <span class="mono">17 | m</span> worked example. Whenever a prime <span class="mono">p</span> appears on one side of an equation but is "too large" to be hidden in any of the other factors on the other side, it must show up in the unknown.</p>
               </div>
             </div>
           </div>
@@ -1225,141 +1264,34 @@
                 <p><em>Quicker insight.</em> <span class="mono">n² + n = n(n + 1)</span> is the product of two consecutive integers, one of which is even by Theorem 4.4.2.</p>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- ===================== SECTION 5: EXAM PRACTICE ===================== -->
-        <div class="chapter-section" id="section-exam">
-          <h2><span class="ch-num">Section 5</span>Exam-style practice (First Exam, Section 9)</h2>
-
-          <div class="section-intro">
-            <p>Mirrors the first exam in the course: five multiple-choice items (Q1), proof-writing in Q2 and Q3, and a logic question combining Chapters 2 and 3 in Q4. Click any answer to see whether it is correct, with the reasoning.</p>
-          </div>
-
-          <!-- MCQ -->
-          <div class="widget-card" id="exam-mcq">
-            <h3>Question 1 &middot; Multiple choice (10 marks)</h3>
-            <div class="widget-desc">Click an option to check it. The reasoning unlocks below.</div>
-            <div id="mcq-host"></div>
-          </div>
-
-          <!-- Proof problems -->
-          <div class="widget-card" id="exam-proofs">
-            <h3>Questions 2 and 3 &middot; Proof problems</h3>
-            <div class="widget-desc">Write each proof on paper first; click <em>Show solution</em> only after attempting.</div>
-
-            <div class="exercise exam">
-              <div class="ex-label">Q2.A <span class="exam-tag">first exam · 4 marks</span></div>
-              <div class="ex-body">Prove that for every odd integer <span class="mono-inline">n</span>, <span class="mono-inline">n² + 3</span> is divisible by 4.</div>
-              <button type="button" class="solution-btn" data-toggle-sol="sol-q2a">Show solution</button>
-              <div class="solution" id="sol-q2a">
-                <p>Suppose <span class="mono">n</span> is a particular but arbitrarily chosen odd integer. By definition of odd, <span class="mono">n = 2k + 1</span> for some integer <span class="mono">k</span>. Then</p>
-                <p class="mono">n² + 3 = (2k + 1)² + 3 = 4k² + 4k + 1 + 3 = 4k² + 4k + 4 = 4(k² + k + 1).</p>
-                <p>Let <span class="mono">t = k² + k + 1</span>. Then <span class="mono">t</span> is an integer (sums and products of integers are integers), and <span class="mono">n² + 3 = 4t</span>. So <span class="mono">4 | (n² + 3)</span>. ∎</p>
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.4.D (Epp Example 4.4.4 generalised)</div>
+              <div class="ex-body">Suppose <span class="mono-inline">a</span> is an integer with <span class="mono-inline">a mod 7 = 3</span>. What is <span class="mono-inline">5a mod 7</span>? (Show the derivation step by step.)</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-4-D">Show solution</button>
+              <div class="solution" id="sol-4-4-D">
+                <p>Translate the hypothesis using the quotient-remainder theorem:</p>
+                <p class="mono">a mod 7 = 3   ⇔   a = 7q + 3   for some integer q.</p>
+                <p>Multiply by 5:</p>
+                <p class="mono">5a = 5(7q + 3) = 35q + 15.</p>
+                <p>Rewrite <span class="mono">15</span> as a multiple of 7 plus a remainder in <span class="mono">[0, 7)</span>: <span class="mono">15 = 7·2 + 1</span>.</p>
+                <p class="mono">5a = 35q + 14 + 1 = 7(5q + 2) + 1.</p>
+                <p><span class="mono">5q + 2</span> is an integer, and <span class="mono">0 ≤ 1 &lt; 7</span>. So <span class="mono">5a mod 7 = 1</span>. ∎</p>
+                <p><em>Method.</em> Same template as Epp Example 4.4.4 (the <span class="mono">m mod 11</span> problem): translate the hypothesis to <span class="mono">a = dq + r</span>, do the algebra, then rewrite the constant term as <span class="mono">d · (something) + (new remainder in [0, d))</span>.</p>
               </div>
             </div>
 
-            <div class="exercise exam">
-              <div class="ex-label">Q2.B <span class="exam-tag">first exam · 3 marks</span></div>
-              <div class="ex-body">Prove that for all integers <span class="mono-inline">a, b, c</span>, if <span class="mono-inline">a | b</span> and <span class="mono-inline">b | c</span>, then <span class="mono-inline">a | c</span>.</div>
-              <button type="button" class="solution-btn" data-toggle-sol="sol-q2b">Show solution</button>
-              <div class="solution" id="sol-q2b">
-                <p>This is Theorem 4.3.3. Suppose <span class="mono">a | b</span> and <span class="mono">b | c</span>. By definition, <span class="mono">b = ar</span> and <span class="mono">c = bs</span> for some integers <span class="mono">r, s</span>. Substituting,</p>
-                <p class="mono">c = bs = (ar)s = a(rs).</p>
-                <p>Let <span class="mono">k = rs</span> (an integer, product of integers). Then <span class="mono">c = ak</span>, so <span class="mono">a | c</span> by definition. ∎</p>
-              </div>
-            </div>
-
-            <div class="exercise exam">
-              <div class="ex-label">Q2.C <span class="exam-tag">first exam · 3 marks</span></div>
-              <div class="ex-body">Use the quotient-remainder theorem with <span class="mono-inline">d = 3</span> to prove that for every integer <span class="mono-inline">n</span>, the integer <span class="mono-inline">n² + 2n</span> has the form <span class="mono-inline">3k</span> or <span class="mono-inline">3k + 2</span> for some integer <span class="mono-inline">k</span>.</div>
-              <button type="button" class="solution-btn" data-toggle-sol="sol-q2c">Show solution</button>
-              <div class="solution" id="sol-q2c">
-                <p>By the quotient-remainder theorem with <span class="mono">d = 3</span>, every integer <span class="mono">n</span> has exactly one of the three forms <span class="mono">3q</span>, <span class="mono">3q + 1</span>, or <span class="mono">3q + 2</span> for some integer <span class="mono">q</span>.</p>
-                <p><strong>Case 1: <span class="mono">n = 3q</span>.</strong></p>
-                <p class="mono">n² + 2n = 9q² + 6q = 3(3q² + 2q).</p>
-                <p>Let <span class="mono">k = 3q² + 2q</span> (an integer). Then <span class="mono">n² + 2n = 3k</span>. ✓</p>
-                <p><strong>Case 2: <span class="mono">n = 3q + 1</span>.</strong></p>
-                <p class="mono">n² + 2n = (3q+1)² + 2(3q+1) = 9q² + 6q + 1 + 6q + 2 = 9q² + 12q + 3 = 3(3q² + 4q + 1).</p>
-                <p>Let <span class="mono">k = 3q² + 4q + 1</span>. Then <span class="mono">n² + 2n = 3k</span>. ✓</p>
-                <p><strong>Case 3: <span class="mono">n = 3q + 2</span>.</strong></p>
-                <p class="mono">n² + 2n = (3q+2)² + 2(3q+2) = 9q² + 12q + 4 + 6q + 4 = 9q² + 18q + 8 = 3(3q² + 6q + 2) + 2.</p>
-                <p>Let <span class="mono">k = 3q² + 6q + 2</span>. Then <span class="mono">n² + 2n = 3k + 2</span>. ✓</p>
-                <p>In every case, <span class="mono">n² + 2n</span> has the form <span class="mono">3k</span> or <span class="mono">3k + 2</span>. ∎</p>
-              </div>
-            </div>
-
-            <div class="exercise exam">
-              <div class="ex-label">Q3.A <span class="exam-tag">first exam · 4 marks</span></div>
-              <div class="ex-body">Consider: <em>"For all integers <span class="mono-inline">m, n</span>, if <span class="mono-inline">m</span> and <span class="mono-inline">n</span> are both odd, then <span class="mono-inline">m + n</span> is odd."</em>
-                <ol style="margin-top:6px;">
-                  <li>Disprove the statement with a counterexample.</li>
-                  <li>State the correct conclusion about <span class="mono-inline">m + n</span> when both are odd, and prove it.</li>
-                </ol>
-              </div>
-              <button type="button" class="solution-btn" data-toggle-sol="sol-q3a">Show solution</button>
-              <div class="solution" id="sol-q3a">
-                <p><strong>(1) Counterexample.</strong> Take <span class="mono">m = 3, n = 5</span>. Both odd. Their sum: <span class="mono">m + n = 8 = 2·4</span>, even, not odd. The hypothesis is true and the conclusion fails, so the statement is disproved.</p>
-                <p><strong>(2) Correct conclusion.</strong> <em>"For all integers <span class="mono">m, n</span>, if <span class="mono">m</span> and <span class="mono">n</span> are both odd, then <span class="mono">m + n</span> is <strong>even</strong>."</em></p>
-                <p><strong>Proof.</strong> Suppose <span class="mono">m</span> and <span class="mono">n</span> are particular but arbitrarily chosen odd integers. By definition, <span class="mono">m = 2r + 1</span> and <span class="mono">n = 2s + 1</span> for some integers <span class="mono">r, s</span>. Then</p>
-                <p class="mono">m + n = (2r + 1) + (2s + 1) = 2r + 2s + 2 = 2(r + s + 1).</p>
-                <p>Let <span class="mono">t = r + s + 1</span> (an integer). Then <span class="mono">m + n = 2t</span>, hence even. ∎</p>
-              </div>
-            </div>
-
-            <div class="exercise exam">
-              <div class="ex-label">Q3.B <span class="exam-tag">first exam · 6 marks</span></div>
-              <div class="ex-body">Prove that for all rational numbers <span class="mono-inline">r</span> and <span class="mono-inline">s</span>, the number <span class="mono-inline">r² + s²</span> is a rational number.</div>
-              <button type="button" class="solution-btn" data-toggle-sol="sol-q3b">Show solution</button>
-              <div class="solution" id="sol-q3b">
-                <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are particular but arbitrarily chosen rational numbers. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for some integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>.</p>
-                <p><strong>Step 1: <span class="mono">r²</span> is rational.</strong></p>
-                <p class="mono">r² = (a/b)² = a²/b².</p>
-                <p>Let <span class="mono">p₁ = a²</span> and <span class="mono">q₁ = b²</span>. Both are integers (products of integers), and <span class="mono">q₁ = b² ≠ 0</span> since <span class="mono">b ≠ 0</span>. So <span class="mono">r² = p₁/q₁</span> is rational. Similarly <span class="mono">s² = c²/d²</span> is rational.</p>
-                <p><strong>Step 2: <span class="mono">r² + s²</span> is rational.</strong></p>
-                <p>By Theorem 4.2.2 (sum of two rationals is rational), <span class="mono">r² + s²</span> is rational. ∎</p>
-                <p><em>Alternative (compute directly):</em> <span class="mono">r² + s² = a²/b² + c²/d² = (a²d² + b²c²) / (bd)²</span>, where the numerator and denominator are integers and the denominator is nonzero, giving the same conclusion without citing Theorem 4.2.2.</p>
-              </div>
-            </div>
-
-            <div class="exercise exam">
-              <div class="ex-label">Q4.A <span class="exam-tag">first exam · 6 marks · Chapter 3</span></div>
-              <div class="ex-body">Let <span class="mono-inline">S</span> be the set of students at a university, <span class="mono-inline">C</span> the set of courses, and <span class="mono-inline">E(s, c)</span> mean "student <span class="mono-inline">s</span> is enrolled in course <span class="mono-inline">c</span>".
-                <ol style="margin-top:6px;">
-                  <li>Symbolically: <em>"There is a course that every student is enrolled in."</em></li>
-                  <li>Negate (with no negation symbol before any quantifier): <span class="mono-inline">∀s ∈ S, ∃c ∈ C such that E(s, c)</span>.</li>
-                </ol>
-              </div>
-              <button type="button" class="solution-btn" data-toggle-sol="sol-q4a">Show solution</button>
-              <div class="solution" id="sol-q4a">
-                <p><strong>(1)</strong> <span class="mono">∃c ∈ C such that ∀s ∈ S, E(s, c)</span>. The course is fixed first; every student is enrolled in that one course.</p>
-                <p><strong>(2)</strong> Walk left to right, flipping each quantifier:</p>
-                <p class="mono">∼(∀s ∈ S, ∃c ∈ C, E(s, c))<br>
-                  ≡ ∃s ∈ S such that ∼(∃c ∈ C, E(s, c))<br>
-                  ≡ ∃s ∈ S such that ∀c ∈ C, ∼E(s, c).</p>
-                <p>In English: <em>"there is a student who is enrolled in no course at all."</em></p>
-              </div>
-            </div>
-
-            <div class="exercise exam">
-              <div class="ex-label">Q4.B <span class="exam-tag">first exam · 4 marks · Chapter 2</span></div>
-              <div class="ex-body">Use a truth table to test the validity of: <span class="mono-inline">p ∨ q, &nbsp;p → r, &nbsp;q → r ∴ r</span>. Indicate the premise columns, the conclusion column, the verdict, and a short explanation.</div>
-              <button type="button" class="solution-btn" data-toggle-sol="sol-q4b">Show solution</button>
-              <div class="solution" id="sol-q4b">
-                <p>This is the <strong>division into cases</strong> rule (Chapter 2.3, Rule 8). Eight rows for three variables <span class="mono">p, q, r</span>:</p>
-                <pre style="font-family:'Roboto Mono',monospace; font-size:0.84rem; line-height:1.6; padding:10px 14px; background:var(--c-card-bg); border-radius:6px; margin:8px 0; overflow-x:auto;">
- p | q | r | p∨q | p→r | q→r | ∴ r
-─────────────────────────────────────
- T | T | T |  T  |  T  |  T  |  T   ← critical row, conclusion T ✓
- T | T | F |  T  |  F  |  F  |  F   not critical
- T | F | T |  T  |  T  |  T  |  T   ← critical row, conclusion T ✓
- T | F | F |  T  |  F  |  T  |  F   not critical
- F | T | T |  T  |  T  |  T  |  T   ← critical row, conclusion T ✓
- F | T | F |  T  |  T  |  F  |  F   not critical
- F | F | T |  F  |  T  |  T  |  T   not critical (premise p∨q is F)
- F | F | F |  F  |  T  |  T  |  F   not critical (premise p∨q is F)</pre>
-                <p>Premise columns: <span class="mono">p ∨ q</span>, <span class="mono">p → r</span>, <span class="mono">q → r</span>. Conclusion: <span class="mono">r</span>. Critical rows (all three premises T): rows 1, 3, 5. In every critical row the conclusion is also T.</p>
-                <p><strong>Verdict: VALID</strong>, by the division-into-cases inference rule.</p>
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.4.E (Epp 4.4.22)</div>
+              <div class="ex-body">Prove: <em>For every integer <span class="mono-inline">n</span>, the product <span class="mono-inline">n(n + 1)(n + 2)</span> is divisible by 3.</em> Use division into cases mod 3.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-4-E">Show solution</button>
+              <div class="solution" id="sol-4-4-E">
+                <p>Suppose <span class="mono">n</span> is any integer. By the quotient-remainder theorem with <span class="mono">d = 3</span>, exactly one of the following holds: <span class="mono">n = 3q</span>, <span class="mono">n = 3q + 1</span>, or <span class="mono">n = 3q + 2</span>, for some integer <span class="mono">q</span>.</p>
+                <p><strong>Case 1: <span class="mono">n = 3q</span>.</strong> Then <span class="mono">n</span> itself is a multiple of 3, so <span class="mono">n(n+1)(n+2) = 3q · (n+1)(n+2) = 3 · [q(n+1)(n+2)]</span>. The bracket is an integer, so the product is divisible by 3.</p>
+                <p><strong>Case 2: <span class="mono">n = 3q + 1</span>.</strong> Then <span class="mono">n + 2 = 3q + 3 = 3(q + 1)</span> is a multiple of 3, so <span class="mono">n(n+1)(n+2) = n(n+1) · 3(q+1) = 3 · [n(n+1)(q+1)]</span>. Divisible by 3.</p>
+                <p><strong>Case 3: <span class="mono">n = 3q + 2</span>.</strong> Then <span class="mono">n + 1 = 3q + 3 = 3(q + 1)</span> is a multiple of 3, so <span class="mono">n(n+1)(n+2) = n · 3(q+1) · (n+2) = 3 · [n(q+1)(n+2)]</span>. Divisible by 3.</p>
+                <p>In every case <span class="mono">3 | n(n+1)(n+2)</span>. ∎</p>
+                <p><em>Intuition.</em> Three consecutive integers always include one multiple of 3. Cases mod 3 makes the argument formal.</p>
               </div>
             </div>
           </div>
@@ -1868,91 +1800,6 @@
       render();
     })();
 
-    /* =====================================================
-       Exam MCQ widget
-       ===================================================== */
-    (function mcq() {
-      const host = document.getElementById('mcq-host');
-      if (!host) return;
-      const questions = [
-        {
-          stmt: 'If n = 5k + 2 for some integer k, what is the value of n² mod 5?',
-          options: ['0', '1', '4', '2'],
-          correct: 2,
-          why: 'n² = (5k + 2)² = 25k² + 20k + 4 = 5(5k² + 4k) + 4. The remainder when divided by 5 is 4. (Answer: c.)'
-        },
-        {
-          stmt: 'What is the largest power of 6 that divides 30⁵ · 40³?',
-          options: ['6³', '6⁵', '6⁷', '6⁹'],
-          correct: 1,
-          why: '6 = 2·3, so each factor of 6 needs one 2 and one 3. Factorise: 30⁵ = (2·3·5)⁵ = 2⁵·3⁵·5⁵; 40³ = (2³·5)³ = 2⁹·5³. Product: 2¹⁴·3⁵·5⁸. Powers of 2: 14. Powers of 3: 5. The bottleneck is 3. So largest power of 6 dividing the product is 6⁵. (Answer: b.)'
-        },
-        {
-          stmt: 'Suppose m and n are integers with m mod 6 = 3 and n mod 6 = 4. What is (m + n) mod 6?',
-          options: ['7', '1', '0', '5'],
-          correct: 1,
-          why: 'Write m = 6a + 3 and n = 6b + 4. Then m + n = 6(a + b) + 7 = 6(a + b + 1) + 1. So (m + n) mod 6 = 1. (Answer: b.)'
-        },
-        {
-          stmt: 'Which is NOT equivalent to: "∀ integers n, if n is divisible by 4, then n is divisible by 2"?',
-          options: [
-            'Every integer divisible by 4 is also divisible by 2.',
-            'There is no integer divisible by 4 that is not divisible by 2.',
-            'Being divisible by 4 is a sufficient condition for an integer to be divisible by 2.',
-            'Some integer divisible by 4 is divisible by 2.'
-          ],
-          correct: 3,
-          why: 'The original is a universal statement. Option (d) is an existential, much weaker, so it is not equivalent. Options (a), (b), and (c) are standard rewordings of the same universal claim. (Answer: d.)'
-        },
-        {
-          stmt: 'Consider: "∃ a real number x such that x² + 1 = 0". Which best describes this statement?',
-          options: [
-            'The statement is true; x = 0 satisfies it.',
-            'The statement is false; for every real x, x² ≥ 0, so x² + 1 ≥ 1 > 0.',
-            'The statement is true; x = −1 satisfies it.',
-            'The statement is undefined since x² + 1 has no real solution.'
-          ],
-          correct: 1,
-          why: 'For every real x, x² ≥ 0, so x² + 1 ≥ 1 > 0. No real x can make x² + 1 = 0. The statement is false. (Answer: b.) The complex roots ±i are not real numbers.'
-        }
-      ];
-
-      const letters = ['a', 'b', 'c', 'd'];
-      let html = '';
-      questions.forEach(function (q, i) {
-        html += '<div class="mcq" data-q="' + i + '">';
-        html += '<div class="mcq-num">Question 1.' + (i + 1) + '</div>';
-        html += '<div class="mcq-stmt">' + q.stmt + '</div>';
-        html += '<div class="mcq-options">';
-        q.options.forEach(function (opt, j) {
-          html += '<div class="mcq-option" data-i="' + j + '"><span class="letter">' + letters[j] + '.</span><span>' + opt + '</span></div>';
-        });
-        html += '</div>';
-        html += '<div class="mcq-explain"></div>';
-        html += '</div>';
-      });
-      host.innerHTML = html;
-
-      host.querySelectorAll('.mcq').forEach(function (card) {
-        const qIdx = +card.dataset.q;
-        const q = questions[qIdx];
-        const explain = card.querySelector('.mcq-explain');
-        card.querySelectorAll('.mcq-option').forEach(function (opt) {
-          opt.addEventListener('click', function () {
-            const choice = +opt.dataset.i;
-            card.querySelectorAll('.mcq-option').forEach(function (o) { o.classList.remove('correct'); o.classList.remove('wrong'); });
-            if (choice === q.correct) opt.classList.add('correct');
-            else {
-              opt.classList.add('wrong');
-              const right = card.querySelectorAll('.mcq-option')[q.correct];
-              right.classList.add('correct');
-            }
-            explain.innerHTML = '<strong>' + (choice === q.correct ? 'Correct.' : 'Not quite.') + '</strong> ' + q.why;
-            explain.classList.add('open');
-          });
-        });
-      });
-    })();
 
     /* =====================================================
        Solution reveal buttons
