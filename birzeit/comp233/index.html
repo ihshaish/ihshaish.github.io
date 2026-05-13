@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233: Discrete Mathematics, Second Semester 2025/26, Birzeit University" />
+
+  <title>COMP233: Discrete Mathematics</title>
+
+  <style>
+    .course-header {
+      text-align: center;
+      padding: 30px 0 10px;
+    }
+    .course-header img.course-logo {
+      max-width: 90px;
+      margin-bottom: 16px;
+    }
+    .course-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1565c0;
+      margin-bottom: 6px;
+    }
+    .course-header .semester {
+      font-size: 1.05rem;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .course-header .instructor {
+      font-size: 1.05rem;
+      color: #333;
+      margin-bottom: 2px;
+    }
+    .course-header .dept {
+      font-size: 0.95rem;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .section-heading {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1565c0;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 8px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .outline-card {
+      background: #fafbfc;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 28px;
+    }
+    .outline-card h4 {
+      margin: 0 0 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .outline-card .outline-body {
+      font-size: 0.92rem;
+      color: #333;
+      line-height: 1.45;
+    }
+    .outline-card .outline-body em {
+      color: #555;
+    }
+    .outline-card ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 0.9rem;
+      color: #444;
+      line-height: 1.55;
+    }
+    @media (max-width: 640px) {
+      .outline-card { grid-template-columns: 1fr; }
+    }
+
+    .chapter-block {
+      border-left: 4px solid #1565c0;
+      background: #fafbfc;
+      border-radius: 0 8px 8px 0;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+    }
+    .chapter-block.pending {
+      border-left-color: #b0bec5;
+      background: #fafafa;
+    }
+    .chapter-block h3 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+      color: #1565c0;
+    }
+    .chapter-block.pending h3 {
+      color: #607d8b;
+    }
+    .chapter-block .ch-meta {
+      font-size: 0.82rem;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .section-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      flex-wrap: wrap;
+    }
+    .section-row + .section-row {
+      border-top: 1px dashed #e8e8e8;
+    }
+    .section-label {
+      flex: 1;
+      min-width: 240px;
+      font-size: 0.92rem;
+      color: #333;
+    }
+    .section-label .sec-num {
+      font-weight: 700;
+      color: #1565c0;
+      margin-right: 6px;
+    }
+    .pdf-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: #333;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .pdf-link:hover {
+      background: #f5f9ff;
+      border-color: #1565c0;
+      text-decoration: none;
+      color: #1565c0;
+    }
+    .pdf-link i { color: #c62828; }
+    .coming-tag {
+      font-size: 0.78rem;
+      color: #999;
+      font-style: italic;
+      padding: 4px 10px;
+      background: #fff;
+      border: 1px dashed #cfd8dc;
+      border-radius: 6px;
+    }
+
+    .companion-row {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .companion-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e3f2fd;
+      color: #1565c0;
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .companion-btn:hover {
+      background: #bbdefb;
+      color: #0d47a1;
+      text-decoration: none;
+    }
+    .companion-btn.pending {
+      background: transparent;
+      color: #90a4ae;
+      border: 1.5px dashed #b0bec5;
+      padding: 5.5px 14px;
+      cursor: not-allowed;
+      pointer-events: none;
+      font-style: italic;
+      font-weight: 500;
+    }
+    .pending-badge {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 8px;
+      font-size: 0.66rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      background: #fff3e0;
+      color: #e65100;
+      border-radius: 10px;
+      font-style: normal;
+    }
+    .companion-note {
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    .assessment-list, .reference-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.9rem;
+      color: #444;
+    }
+    .assessment-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px dotted #ddd;
+    }
+    .assessment-list li:last-child { border-bottom: none; }
+    .assessment-list li span:last-child {
+      font-weight: 700;
+      color: #1565c0;
+    }
+    .reference-list li {
+      padding: 4px 0;
+      line-height: 1.45;
+    }
+
+    .outline-subheading {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #555;
+      margin: 28px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+    .schedule-table thead th {
+      background: #f5f9ff;
+      color: #1565c0;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-bottom: 2px solid #1565c0;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: left;
+    }
+    .schedule-table thead th:first-child,
+    .schedule-table thead th:last-child { text-align: center; }
+    .schedule-table tbody td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #eee;
+      color: #333;
+    }
+    .schedule-table tbody td:first-child {
+      text-align: center;
+      font-weight: 700;
+      color: #1565c0;
+      width: 56px;
+    }
+    .schedule-table tbody td:last-child {
+      text-align: center;
+      color: #666;
+      width: 90px;
+      font-variant-numeric: tabular-nums;
+    }
+    .schedule-table tbody tr:hover { background: #fafbfc; }
+    .schedule-table tbody tr.opt td { color: #777; font-style: italic; }
+
+    /* Dark mode */
+    body.dark .section-heading { color: #64b5f6; border-color: #333; }
+    body.dark .course-header h1 { color: #64b5f6; }
+    body.dark .course-header .semester,
+    body.dark .course-header .instructor { color: #ccc; }
+    body.dark .course-header .dept { color: #999; }
+    body.dark .outline-card { background: #1a1a2e; border-color: #333; }
+    body.dark .outline-card .outline-body,
+    body.dark .outline-card ul { color: #cfd8dc; }
+    body.dark .chapter-block { background: #1a1a2e; }
+    body.dark .chapter-block.pending { background: #161624; border-left-color: #455a64; }
+    body.dark .chapter-block h3 { color: #64b5f6; }
+    body.dark .chapter-block.pending h3 { color: #90a4ae; }
+    body.dark .section-label { color: #e0e0e0; }
+    body.dark .pdf-link { background: #2a2a3e; border-color: #444; color: #e0e0e0; }
+    body.dark .pdf-link:hover { background: #1e3a5f; border-color: #64b5f6; color: #64b5f6; }
+    body.dark .coming-tag { background: #2a2a3e; border-color: #455a64; color: #90a4ae; }
+    body.dark .companion-btn { background: #1e3a5f; color: #90caf9; }
+    body.dark .companion-btn.pending {
+      background: transparent;
+      color: #78909c;
+      border-color: #455a64;
+    }
+    body.dark .pending-badge { background: #3e2723; color: #ffb74d; }
+    body.dark .companion-row { border-color: #333; }
+    body.dark .assessment-list,
+    body.dark .reference-list { color: #cfd8dc; }
+    body.dark .assessment-list li { border-color: #333; }
+    body.dark .assessment-list li span:last-child { color: #64b5f6; }
+    body.dark .outline-subheading { color: #b0bec5; }
+    body.dark .schedule-table thead th { background: #1a2a3a; color: #64b5f6; border-color: #64b5f6; }
+    body.dark .schedule-table tbody td { color: #e0e0e0; border-color: #333; }
+    body.dark .schedule-table tbody td:first-child { color: #64b5f6; }
+    body.dark .schedule-table tbody td:last-child { color: #999; }
+    body.dark .schedule-table tbody tr:hover { background: #1a1a2e; }
+  </style>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item">
+                <a class="nav-link" href="/#about"><span>Home</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/#posts"><span>News</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/#projects"><span>Projects</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <!-- Course Header -->
+        <div class="course-header">
+          <a href="https://www.birzeit.edu/" target="_blank" rel="noopener">
+            <img src="/media/birzeit-university-logo.svg" alt="Birzeit University" class="course-logo">
+          </a>
+          <h1>COMP233: Discrete Mathematics</h1>
+          <div class="semester">Second Semester 2025/2026</div>
+          <div class="instructor">Instructor: Dr Hisham Ihshaish</div>
+          <div class="dept">Department of Computer Science, Birzeit University</div>
+        </div>
+
+        <!-- Course Outline -->
+        <h2 class="section-heading"><i class="fas fa-clipboard-list" style="margin-right: 8px;"></i>Course Outline</h2>
+        <div class="outline-card">
+          <div>
+            <h4>Primary Text</h4>
+            <div class="outline-body">
+              <em>Discrete Mathematics with Applications</em>, 4th Edition<br>
+              Susanna S. Epp &middot; Brooks/Cole
+            </div>
+          </div>
+          <div>
+            <h4>Assessment</h4>
+            <ul class="assessment-list">
+              <li><span>Three Quizzes</span><span>30%</span></li>
+              <li><span>Midterm Exam</span><span>30%</span></li>
+              <li><span>Final Exam</span><span>40%</span></li>
+            </ul>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <h4>References</h4>
+            <ul class="reference-list">
+              <li>Barnier &amp; Chan, <em>Discrete Mathematics with Applications</em></li>
+              <li>Kenneth H. Rosen, <em>Discrete Mathematics and its Applications</em></li>
+              <li>Aho &amp; Ullman, <em>Foundations of Computer Science</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="outline-subheading">Lecture Schedule</h3>
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>Ch.</th>
+              <th>Topic</th>
+              <th>Sections</th>
+              <th>Lectures</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Speaking Mathematics: variables, sets, relations, functions</td><td>1.1</td><td>1</td></tr>
+            <tr><td>2</td><td>The Logic of Compound Statements (Propositional Logic)</td><td>2.1, 2.2, 2.3</td><td>3</td></tr>
+            <tr><td>3</td><td>The Logic of Quantified Statements (First-Order Logic)</td><td>3.1, 3.2, 3.3</td><td>3</td></tr>
+            <tr><td>4</td><td>Number Theory &amp; Methods of Proof</td><td>4.1, 4.2, 4.3, 4.4</td><td>4</td></tr>
+            <tr><td>5</td><td>Sequences &amp; Mathematical Induction</td><td>5.1, 5.2, 5.3</td><td>3</td></tr>
+            <tr><td>6</td><td>Set Theory</td><td>6.1, 6.2, 6.3 (+ 6.4 algebra)</td><td>4</td></tr>
+            <tr><td>7</td><td>Functions</td><td>7.1, 7.2</td><td>2</td></tr>
+            <tr><td>8</td><td>Relations</td><td>8.1, 8.2, 8.3</td><td>4</td></tr>
+            <tr><td>9</td><td>Counting Theory</td><td>9.1, 9.2, 9.3, 9.5, 9.6</td><td>5</td></tr>
+            <tr class="opt"><td>10</td><td>Graphs &amp; Trees (if time permits)</td><td>10.1, 10.2</td><td>3</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Lecture Material -->
+        <h2 class="section-heading"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Lecture Material</h2>
+
+        <!-- Chapter 1 -->
+        <div class="chapter-block">
+          <h3>Chapter 1: Speaking Mathematics</h3>
+          <div class="ch-meta">Introduction &middot; variables, sets, relations, functions &middot; the language of mathematics</div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">1</span> Outline &amp; Speaking Mathematics</div>
+            <a class="pdf-link" href="/birzeit/comp233/Intro_and_Speaking%20Mathematics_DiscreteM%20.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="chapter-block">
+          <h3>Chapter 2: The Logic of Compound Statements</h3>
+          <div class="ch-meta">Propositional logic &middot; sections 2.1&ndash;2.3</div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">2.1</span> Logical Form &amp; Logical Equivalence</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch2_1_LogicalForms.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">2.2</span> Conditional Statements</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch2_2_ConditionalStatements.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">2.3</span> Valid &amp; Invalid Arguments</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch2_3_ValidInvalidArguments.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="companion-row">
+            <span class="companion-btn pending" aria-disabled="true" title="Not yet available">
+              <i class="fas fa-hourglass-half"></i> Chapter 2 Interactive Companion
+              <span class="pending-badge">In build</span>
+            </span>
+            <span class="companion-note">Static HTML build coming in the next pass: reproduces the Jupyter notebook in-browser.</span>
+          </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="chapter-block">
+          <h3>Chapter 3: The Logic of Quantified Statements</h3>
+          <div class="ch-meta">First-order logic &middot; sections 3.1&ndash;3.3</div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">3.1</span> Predicates &amp; Quantified Statements I</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch3_1_PredicatesQuantifiers.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">3.2</span> Predicates &amp; Quantified Statements II</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch3_2_NegationConditional.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">3.3</span> Statements with Multiple Quantifiers</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch3_3_MultipleQuantifiers.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="companion-row">
+            <span class="companion-note"><i class="fas fa-hourglass-half" style="margin-right:4px; color:#999;"></i>Chapter 3 companion arrives after Chapter 2 is reviewed.</span>
+          </div>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="chapter-block">
+          <h3>Chapter 4: Elementary Number Theory &amp; Methods of Proof</h3>
+          <div class="ch-meta">Direct proof, counterexample, divisibility &middot; sections 4.1&ndash;4.4</div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">4.1</span> Direct Proof &amp; Counterexample I: Introduction</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch4_1_DirectProofIntroduction.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">4.2</span> Direct Proof &amp; Counterexample II: Rational Numbers</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch4_2_RationalNumbers.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">4.3</span> Direct Proof &amp; Counterexample III: Divisibility</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch4_3_Divisibility.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="section-row">
+            <div class="section-label"><span class="sec-num">4.4</span> Direct Proof &amp; Counterexample IV: Quotient-Remainder &amp; Division into Cases</div>
+            <a class="pdf-link" href="/birzeit/comp233/Ch4_4_QuotientRemainder.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+          </div>
+          <div class="companion-row">
+            <span class="companion-note"><i class="fas fa-hourglass-half" style="margin-right:4px; color:#999;"></i>Chapter 4 companion to follow.</span>
+          </div>
+        </div>
+
+        <!-- Chapter 5 -->
+        <div class="chapter-block pending">
+          <h3>Chapter 5: Sequences &amp; Mathematical Induction</h3>
+          <div class="ch-meta">Sections 5.1&ndash;5.3 &middot; sequences, weak &amp; strong induction</div>
+          <div class="section-row"><div class="section-label"><span class="sec-num">5.1&ndash;5.3</span> Sequences and Mathematical Induction</div><span class="coming-tag">Slides coming</span></div>
+        </div>
+
+        <!-- Chapter 6 -->
+        <div class="chapter-block pending">
+          <h3>Chapter 6: Set Theory</h3>
+          <div class="ch-meta">Sections 6.1&ndash;6.3 (+ 6.4 algebra of sets) &middot; element method, set identities</div>
+          <div class="section-row"><div class="section-label"><span class="sec-num">6.1&ndash;6.4</span> Sets, Properties, Algebra</div><span class="coming-tag">Slides coming</span></div>
+        </div>
+
+        <!-- Chapter 7 -->
+        <div class="chapter-block pending">
+          <h3>Chapter 7: Functions</h3>
+          <div class="ch-meta">Sections 7.1&ndash;7.2 &middot; functions on general sets, one-to-one, onto, inverses</div>
+          <div class="section-row"><div class="section-label"><span class="sec-num">7.1&ndash;7.2</span> Functions, One-to-One, Onto, Inverse</div><span class="coming-tag">Slides coming</span></div>
+        </div>
+
+        <!-- Chapter 8 -->
+        <div class="chapter-block pending">
+          <h3>Chapter 8: Relations</h3>
+          <div class="ch-meta">Sections 8.1&ndash;8.3 &middot; relations on sets, properties, equivalence relations</div>
+          <div class="section-row"><div class="section-label"><span class="sec-num">8.1&ndash;8.3</span> Relations &amp; Equivalence Relations</div><span class="coming-tag">Slides coming</span></div>
+        </div>
+
+        <!-- Chapter 9 -->
+        <div class="chapter-block pending">
+          <h3>Chapter 9: Counting &amp; Probability</h3>
+          <div class="ch-meta">Sections 9.1, 9.2, 9.3, 9.5, 9.6 &middot; multiplication rule, permutations, combinations</div>
+          <div class="section-row"><div class="section-label"><span class="sec-num">9.1&ndash;9.6</span> Counting Theory</div><span class="coming-tag">Slides coming</span></div>
+        </div>
+
+        <!-- Chapter 10 -->
+        <div class="chapter-block pending">
+          <h3>Chapter 10: Graphs &amp; Trees</h3>
+          <div class="ch-meta">Sections 10.1&ndash;10.2 &middot; basic graph theory &middot; <em>if time permits</em></div>
+          <div class="section-row"><div class="section-label"><span class="sec-num">10.1&ndash;10.2</span> Graphs, Trails, Paths, Circuits</div><span class="coming-tag">Slides coming</span></div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/" style="color: #999;">Back to course listing</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+</body>
+</html>
