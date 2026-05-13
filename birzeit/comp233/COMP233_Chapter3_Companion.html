@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true}, {left:'$',right:'$',display:false}], throwOnError: false });"></script>
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Chapter 3 Interactive Companion: predicates, quantifiers, Tarski's World, and multiple quantifiers." />
+
+  <title>COMP233 Ch.3 Companion: Predicates and Quantified Statements</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-critical: #fff9c4;
+      --c-broken-bg: #ffcdd2;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-critical: #4e4322;
+      --c-broken-bg: #5a2727;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .companion-hero { text-align: center; padding: 30px 0 12px; }
+    .companion-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 700; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .companion-hero h1 { font-size: 1.8rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .companion-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .companion-hero .back-link { font-size: 0.88rem; color: var(--c-primary); text-decoration: none; font-weight: 600; }
+    .companion-hero .back-link:hover { text-decoration: underline; }
+
+    .intro-card {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-primary); border-radius: 8px;
+      padding: 16px 22px; margin: 24px 0 0;
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
+    }
+    .intro-card h4 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .intro-card p { margin: 0 0 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    .toc {
+      background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-primary); border-radius: 12px;
+      padding: 18px 24px 14px; margin: 22px 0 18px;
+      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
+    }
+    body.dark .toc { background: linear-gradient(180deg, rgba(100,181,246,0.10) 0%, var(--c-card-bg) 100%); }
+    .toc-title {
+      margin: 0 0 12px; font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-primary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toc-section { margin-bottom: 10px; }
+    .toc-section:last-child { margin-bottom: 0; }
+    .toc-section h5 {
+      margin: 0 0 6px; font-size: 0.9rem; font-weight: 700;
+      color: var(--c-text); line-height: 1.4;
+    }
+    .toc-section h5 .toc-num {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      color: var(--c-primary); margin-right: 8px;
+    }
+    .toc-links {
+      display: flex; flex-wrap: wrap; gap: 6px 8px;
+      padding-left: 14px; border-left: 2px solid var(--c-border);
+    }
+    body.dark .toc-links { border-left-color: #2a3a4a; }
+    .toc-links a {
+      display: inline-block; font-size: 0.84rem;
+      color: var(--c-primary); background: var(--c-card-bg);
+      text-decoration: none; padding: 4px 12px;
+      border: 1px solid var(--c-border); border-radius: 16px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .toc-links a:hover { background: var(--c-primary); color: #fff; border-color: var(--c-primary); text-decoration: none; }
+    @media (max-width: 640px) { .toc { padding: 16px 18px 12px; } .toc-links { padding-left: 10px; } }
+
+    .chapter-section { margin-top: 44px; }
+    .chapter-section > h2 {
+      font-size: 1.45rem; font-weight: 700; color: var(--c-primary);
+      border-bottom: 2px solid var(--c-border); padding-bottom: 10px; margin: 0 0 22px;
+    }
+    .chapter-section > h2 .ch-num {
+      font-family: 'Roboto Mono', monospace; font-size: 1.15rem;
+      margin-right: 10px; color: var(--c-muted);
+    }
+
+    .section-intro {
+      font-size: 0.96rem; line-height: 1.65; color: var(--c-text); margin-bottom: 22px;
+    }
+    .section-intro ul { padding-left: 22px; }
+    .section-intro li { margin-bottom: 4px; }
+    .section-intro code {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86em;
+    }
+
+    .widget-card {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 22px 26px; margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .widget-card h3 {
+      font-size: 1.05rem; font-weight: 700; color: var(--c-primary); margin: 0 0 6px;
+    }
+    .widget-card .widget-desc {
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.55; margin-bottom: 16px;
+    }
+    .widget-card .widget-desc code,
+    .widget-card .widget-desc .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.88em;
+    }
+
+    /* Hover terms */
+    .term {
+      position: relative; cursor: help;
+      border-bottom: 1px dotted var(--c-primary);
+      color: inherit; font-weight: 700;
+    }
+    .term::after {
+      content: attr(data-tip); position: absolute;
+      bottom: calc(100% + 8px); left: 0;
+      background: #263238; color: #fff;
+      padding: 9px 13px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 400; line-height: 1.55;
+      white-space: normal; word-wrap: break-word; width: max-content;
+      max-width: min(360px, calc(100vw - 32px));
+      text-align: left; opacity: 0; pointer-events: none;
+      transition: opacity 0.15s; z-index: 50;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .term::before {
+      content: ''; position: absolute;
+      bottom: calc(100% + 3px); left: 14px;
+      border: 5px solid transparent; border-top-color: #263238;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50;
+    }
+    .term:hover::after, .term:focus::after,
+    .term:hover::before, .term:focus::before { opacity: 1; }
+    .term.term-right::after { left: auto; right: 0; }
+    .term.term-right::before { left: auto; right: 14px; }
+
+    .mono-inline {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg);
+      padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+
+    /* Floating "How to use" widget */
+    .howto-fab {
+      position: fixed; top: 100px; right: 18px; z-index: 30;
+      max-width: 300px; display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .howto-fab-toggle {
+      background: var(--c-primary); color: #fff; border: none;
+      border-radius: 8px; padding: 10px 16px; cursor: pointer;
+      font-size: 0.84rem; font-weight: 700;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    .howto-fab-toggle:hover, .howto-fab-toggle:focus { background: var(--c-primary-dark); outline: none; }
+    .howto-fab-toggle .chev { font-size: 0.72rem; transition: transform 0.2s; }
+    .howto-fab[data-open="true"] .howto-fab-toggle .chev { transform: rotate(180deg); }
+    .howto-fab-body {
+      width: 300px; margin-top: 8px;
+      background: var(--c-card-bg); border: 1px solid var(--c-primary);
+      border-radius: 10px; padding: 14px 18px;
+      font-size: 0.86rem; line-height: 1.55;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+    .howto-fab-body[hidden] { display: none; }
+    .howto-fab-body h5 {
+      margin: 0 0 8px; font-size: 0.72rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+    }
+    .howto-fab-body ul { margin: 0; padding-left: 20px; }
+    .howto-fab-body li { margin-bottom: 8px; }
+    .howto-fab-body li:last-child { margin-bottom: 0; }
+    @media (max-width: 980px) {
+      .howto-fab { position: static; max-width: 100%; align-items: stretch; margin: 18px 0 0; }
+      .howto-fab-toggle { align-self: flex-start; }
+      .howto-fab-body { width: auto; }
+    }
+
+    /* Formula input + palette (reused from Ch 2) */
+    .formula-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 10px; }
+    .formula-label { font-weight: 700; font-size: 0.9rem; color: var(--c-text); padding-top: 9px; min-width: 50px; }
+    .formula-input-wrap { flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 6px; }
+    .formula-input {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--c-border); border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.95rem;
+      background: var(--c-card-bg); color: var(--c-text); outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .formula-input:focus { border-color: var(--c-primary); box-shadow: 0 0 0 2px rgba(21,101,192,0.13); }
+    .formula-input.err { border-color: var(--c-false); box-shadow: 0 0 0 2px rgba(198,40,40,0.13); }
+    .symbol-palette { display: flex; flex-wrap: wrap; gap: 4px; }
+    .symbol-palette button {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      color: var(--c-text); padding: 4px 10px; border-radius: 4px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.9rem;
+      cursor: pointer; transition: background 0.12s, border-color 0.12s; min-width: 32px;
+    }
+    .symbol-palette button:hover { background: var(--c-primary-light); border-color: var(--c-primary); }
+    .symbol-palette .preset {
+      font-family: 'Roboto', sans-serif; font-size: 0.78rem;
+      padding: 4px 10px; color: var(--c-muted);
+    }
+    .palette-hint { font-size: 0.74rem; color: var(--c-muted); margin-left: 4px; }
+    .formula-error {
+      font-size: 0.82rem; color: var(--c-false);
+      font-family: 'Roboto Mono', monospace; min-height: 1em;
+    }
+
+    /* Verdict pill */
+    .verdict {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 16px;
+      font-size: 0.88rem; font-weight: 700; margin-top: 14px;
+    }
+    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
+    .verdict.warn { background: #fff3e0; color: #e65100; }
+    body.dark .verdict.warn { background: #3a2410; color: #ffb74d; }
+    .verdict-detail {
+      display: block; margin-top: 8px;
+      font-size: 0.88rem; color: var(--c-text); line-height: 1.55;
+    }
+    .verdict-detail code {
+      background: var(--c-page-bg); padding: 1px 5px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    /* Domain chips for universal/existential evaluator */
+    .domain-chips {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin: 12px 0;
+    }
+    .domain-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 10px; border: 1.5px solid var(--c-border);
+      border-radius: 18px; background: var(--c-card-bg);
+      cursor: pointer; user-select: none;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86rem;
+      transition: all 0.12s;
+    }
+    .domain-chip.t { background: var(--c-true-bg); border-color: var(--c-true); color: var(--c-true); }
+    .domain-chip.f { background: var(--c-false-bg); border-color: var(--c-false); color: var(--c-false); }
+    .domain-chip .marker { font-weight: 800; }
+
+    .eval-rows {
+      background: var(--c-page-bg); border-radius: 6px;
+      padding: 12px 16px; font-family: 'Roboto Mono', monospace;
+      font-size: 0.88rem; line-height: 1.7;
+    }
+    .eval-rows .e-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .eval-rows .e-row + .e-row { border-top: 1px dotted var(--c-border); padding-top: 6px; margin-top: 6px; }
+    .eval-rows .e-expr { color: var(--c-text); }
+    .eval-rows .e-val { font-weight: 800; padding: 2px 8px; border-radius: 4px; }
+    .eval-rows .e-val.t { background: var(--c-true-bg); color: var(--c-true); }
+    .eval-rows .e-val.f { background: var(--c-false-bg); color: var(--c-false); }
+
+    /* Tarski scene */
+    .tarski-card {
+      display: grid;
+      grid-template-columns: minmax(280px, auto) 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+    @media (max-width: 720px) { .tarski-card { grid-template-columns: 1fr; } }
+
+    .tarski-scene {
+      background: var(--c-page-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 12px;
+      position: relative;
+    }
+    .tarski-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 58px);
+      grid-template-rows: repeat(4, 58px);
+      gap: 6px;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .tarski-cell {
+      position: relative;
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.9rem; line-height: 1;
+    }
+    .tarski-cell .tarski-name {
+      position: absolute; top: 2px; left: 4px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.7rem; color: var(--c-muted); font-weight: 700;
+    }
+    .tarski-shape { display: inline-block; line-height: 1; }
+    .tarski-shape.blue   { color: #1976d2; }
+    .tarski-shape.red    { color: #c62828; }
+    .tarski-shape.green  { color: #2e7d32; }
+    .tarski-shape.gray   { color: #757575; }
+    .tarski-shape.black  { color: #212121; }
+    body.dark .tarski-shape.blue   { color: #64b5f6; }
+    body.dark .tarski-shape.red    { color: #ef5350; }
+    body.dark .tarski-shape.green  { color: #81c784; }
+    body.dark .tarski-shape.gray   { color: #9e9e9e; }
+    body.dark .tarski-shape.black  { color: #cfd8dc; }
+    .tarski-cell.empty { background: transparent; border: 1px dashed var(--c-border); }
+    .tarski-scene .legend {
+      margin-top: 12px; font-size: 0.78rem; color: var(--c-muted); line-height: 1.6;
+    }
+    .tarski-scene .legend strong { color: var(--c-text); }
+
+    .tarski-controls .palette-hint { display: block; margin: 8px 0 4px; }
+    .tarski-controls .symbol-palette { margin-bottom: 8px; }
+
+    .tarski-step {
+      background: var(--c-page-bg); border-radius: 6px;
+      padding: 10px 14px; margin-top: 12px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.86rem; line-height: 1.7;
+    }
+    .tarski-step .step-label {
+      font-weight: 800; color: var(--c-primary); margin-right: 8px;
+    }
+    .tarski-step .e-val { font-weight: 800; }
+    .tarski-step .e-val.t { color: var(--c-true); }
+    .tarski-step .e-val.f { color: var(--c-false); }
+
+    /* Negation flipper */
+    .neg-card { background: var(--c-page-bg); padding: 14px 18px; border-radius: 8px; }
+    .neg-card .row {
+      display: flex; gap: 10px; align-items: baseline;
+      padding: 6px 0; border-bottom: 1px dashed var(--c-border);
+    }
+    .neg-card .row:last-child { border-bottom: none; }
+    .neg-card .row .lbl {
+      min-width: 110px; font-size: 0.78rem; font-weight: 700;
+      color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .neg-card .row .val { font-family: 'Roboto Mono', monospace; color: var(--c-text); }
+
+    /* Cafeteria table */
+    .cafe-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    .cafe-table th, .cafe-table td {
+      padding: 8px 10px; border-bottom: 1px solid var(--c-border);
+      text-align: center;
+    }
+    .cafe-table th {
+      background: var(--c-page-bg); color: var(--c-primary);
+      font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .cafe-table td:first-child { text-align: left; font-weight: 700; color: var(--c-text); }
+    .cafe-table td.y { background: var(--c-true-bg); color: var(--c-true); font-weight: 800; }
+    .cafe-table td.n { color: var(--c-muted); }
+
+    .cafe-statements {
+      margin-top: 18px; padding: 12px 16px;
+      background: var(--c-page-bg); border-radius: 8px;
+    }
+    .cafe-statements .stmt + .stmt { margin-top: 10px; padding-top: 10px; border-top: 1px dotted var(--c-border); }
+    .cafe-statements .stmt .formal {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.86rem; color: var(--c-text);
+    }
+    .cafe-statements .stmt .info { font-size: 0.84rem; color: var(--c-muted); margin-top: 4px; }
+    .cafe-statements .stmt .verdict { margin-top: 6px; }
+
+    /* Comparison-style cards (∀∃ vs ∃∀ etc.) */
+    .compare {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; margin: 14px 0;
+    }
+    @media (max-width: 640px) { .compare { grid-template-columns: 1fr; } }
+    .compare-card {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 14px 16px;
+    }
+    .compare-card.left { border-left: 4px solid var(--c-primary); }
+    .compare-card.right { border-left: 4px solid #e65100; }
+    body.dark .compare-card.right { border-left-color: #ffb74d; }
+    .compare-card h5 {
+      margin: 0 0 6px; font-size: 0.84rem; font-weight: 800;
+      color: var(--c-primary); font-family: 'Roboto Mono', monospace;
+    }
+    .compare-card.right h5 { color: #e65100; }
+    body.dark .compare-card.right h5 { color: #ffb74d; }
+    .compare-card p { margin: 4px 0; font-size: 0.88rem; line-height: 1.55; }
+
+    /* Loves table (8 orderings) */
+    .loves-table {
+      width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 8px 0;
+    }
+    .loves-table th, .loves-table td {
+      padding: 8px 12px; border-bottom: 1px solid var(--c-border); text-align: left;
+    }
+    .loves-table th {
+      background: var(--c-page-bg); color: var(--c-primary);
+      font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .loves-table td.formal {
+      font-family: 'Roboto Mono', monospace; color: var(--c-text); width: 36%;
+    }
+    .loves-table td.english { color: var(--c-text); font-size: 0.88rem; }
+    .loves-table tr:hover { background: var(--c-page-bg); }
+
+    /* Forms grid for cards */
+    .forms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .form-card {
+      border: 1px solid var(--c-border); border-radius: 8px;
+      padding: 14px 16px; background: var(--c-page-bg);
+    }
+    .form-card h4 {
+      margin: 0 0 4px; font-size: 0.92rem; color: var(--c-primary); font-weight: 700;
+    }
+    .form-card .form-formula {
+      font-family: 'Roboto Mono', monospace; font-size: 0.92rem;
+      color: var(--c-text); margin: 6px 0;
+    }
+    .form-card .form-reads {
+      font-size: 0.84rem; color: var(--c-muted); font-style: italic; line-height: 1.5;
+    }
+
+    /* Exercises */
+    .exercises-block { margin-top: 18px; }
+    .exercises-block > h3 { font-size: 1.05rem; color: var(--c-primary); margin: 0 0 6px; }
+    .exercises-block .ex-source { font-size: 0.82rem; color: var(--c-muted); font-style: italic; margin-bottom: 16px; }
+    .exercise {
+      background: var(--c-card-bg); border-left: 4px solid var(--c-primary);
+      border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px;
+    }
+    .exercise .ex-label {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+    .exercise .ex-body {
+      font-size: 0.94rem; color: var(--c-text); line-height: 1.6; margin-bottom: 10px;
+    }
+    .solution-btn {
+      background: var(--c-primary-light); color: var(--c-primary);
+      border: 1px solid var(--c-primary); padding: 5px 14px; border-radius: 6px;
+      font-size: 0.84rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-primary); color: #fff; }
+    .solution-btn.open { background: var(--c-primary); color: #fff; }
+    .solution {
+      margin-top: 12px; padding: 14px 18px;
+      background: var(--c-page-bg); border-radius: 6px;
+      font-size: 0.9rem; line-height: 1.65; color: var(--c-text); display: none;
+    }
+    .solution.open { display: block; }
+    .solution code, .solution .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px;
+    }
+    .solution strong { color: var(--c-primary); }
+
+    .recap-card {
+      background: var(--c-primary-light); border-radius: 10px;
+      padding: 22px 28px; margin-top: 36px;
+    }
+    .recap-card h3 { color: var(--c-primary); margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; }
+    .recap-card ul { margin: 0 0 12px; padding-left: 22px; line-height: 1.75; font-size: 0.92rem; }
+    .recap-card .preview {
+      font-size: 0.88rem; color: var(--c-text);
+      padding-top: 12px; border-top: 1px solid rgba(21,101,192,0.2); line-height: 1.6;
+    }
+    body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
+
+    @media (max-width: 640px) {
+      .formula-label { padding-top: 0; }
+      .companion-hero h1 { font-size: 1.4rem; }
+      .widget-card { padding: 16px 18px; }
+    }
+  </style>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <!-- Floating "How to use" widget. -->
+  <aside class="howto-fab" id="howto-fab" data-open="false">
+    <button type="button" class="howto-fab-toggle" aria-expanded="false" aria-controls="howto-fab-body">
+      <i class="fas fa-question-circle"></i>
+      <span>How to use</span>
+      <i class="fas fa-chevron-down chev"></i>
+    </button>
+    <div class="howto-fab-body" id="howto-fab-body" hidden>
+      <h5>Using this companion</h5>
+      <ul>
+        <li><strong>Enter quantified statements</strong> with the symbol palette or by typing. Use <span class="mono-inline">∀ ∃ ∼ ∧ ∨ → ↔</span>, or ASCII (<span class="mono-inline">forall, exists, not, and, or, -&gt;, &lt;-&gt;</span>). Variables are lowercase single letters (<span class="mono-inline">x, y, z</span>); predicates are capitalized words (<span class="mono-inline">Triangle, Blue, RightOf</span>).</li>
+        <li><strong>Quantifier syntax:</strong> <span class="mono-inline">∀x P(x)</span> or <span class="mono-inline">∀x (P(x) → Q(x))</span>. The comma and domain notation (<span class="mono-inline">∀x ∈ D,</span>) are optional sugar.</li>
+        <li><strong>Hover any underlined term</strong> for its symbol, Arabic name, and tight definition.</li>
+        <li><strong>Try every practice exercise</strong> before clicking <em>Show solution</em>.</li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="companion-hero">
+          <div class="eyebrow">COMP233 &middot; Chapter 3 Interactive Companion</div>
+          <h1>The Logic of Quantified Statements</h1>
+          <div class="subtitle">Predicates, the quantifiers ∀ and ∃, Tarski's World, and multiple quantifiers.</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="intro-card">
+          <h4><i class="fas fa-compass"></i> About this chapter</h4>
+          <p><strong>First-order logic</strong> extends the propositional logic of Chapter 2 with two new tools: <span class="term" data-tip="المُسند / المحمول · a sentence with variables that becomes a true/false statement once specific values are substituted. Example: Person(x), StudyAt(x, y)."><strong>predicates</strong></span> like <span class="mono-inline">Triangle(x)</span> or <span class="mono-inline">StudyAt(p, BZU)</span>, and <span class="term" data-tip="المُسوِّر · ∀ universal ('for all') and ∃ existential ('there exists') turn a predicate into a true/false claim about the entire domain."><strong>quantifiers</strong></span> <span class="mono-inline">∀</span> (for all) and <span class="mono-inline">∃</span> (there exists). The pair lets us reason about an entire domain in a single statement.</p>
+          <p><strong>Where it is used.</strong> Quantified statements appear in every later definition and theorem in this course: <em>every integer is rational</em>, <em>some prime is even</em>, <em>for every ε &gt; 0 there exists δ &gt; 0 such that &hellip;</em>. They are the language of mathematics, of SQL aggregation, of program contracts, and of model checking.</p>
+        </div>
+
+        <nav class="toc" aria-label="Companion contents">
+          <div class="toc-title"><i class="fas fa-list"></i> Contents</div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 3.1</span>Predicates and quantified statements</h5>
+            <div class="toc-links">
+              <a href="#sec311">Predicates &amp; truth sets</a>
+              <a href="#sec312">∀ and ∃</a>
+              <a href="#sec313">Formalize &amp; verbalize</a>
+              <a href="#sec314">Tarski's World</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 3.2</span>Negation &amp; conditional with quantifiers</h5>
+            <div class="toc-links">
+              <a href="#sec321">Negation laws</a>
+              <a href="#sec322">Negation of a universal conditional</a>
+              <a href="#sec323">Vacuous truth</a>
+              <a href="#sec324">Contrapositive, converse, inverse</a>
+              <a href="#sec325">Necessary &amp; sufficient</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 3.3</span>Multiple quantifiers</h5>
+            <div class="toc-links">
+              <a href="#sec331">Order of quantifiers</a>
+              <a href="#sec332">The loves table</a>
+              <a href="#sec333">Cafeteria example</a>
+              <a href="#sec334">Tarski with multiple quantifiers</a>
+              <a href="#sec335">Negating multiple quantifiers</a>
+              <a href="#recap">Recap</a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- ===================== SECTION 3.1 ===================== -->
+        <div class="chapter-section" id="section-31">
+          <h2><span class="ch-num">Section 3.1</span>Predicates and quantified statements</h2>
+
+          <div class="section-intro">
+            <p>A <strong>statement</strong> from Chapter 2 was either true or false. A <span class="term" data-tip="المُسند / المحمول · a sentence containing one or more variables, written P(x), Q(x, y), … · becomes a statement once specific values are substituted"><strong>predicate</strong></span> <span class="mono-inline">P(x₁, x₂, …, xₙ)</span> waits to become one until its variables receive values. The number of variables is the predicate's <em>arity</em>.</p>
+            <p>Two new pieces of vocabulary make the jump from propositional to first-order logic possible:</p>
+            <ul>
+              <li><span class="term" data-tip="∀ · المُسوِّر الكُلِّي · universal quantifier ('for all') · ∀x ∈ D, Q(x) is true when Q(x) holds for every x in D · one counterexample kills it"><strong>∀ universal</strong></span>: <em>"for all x in D, Q(x)"</em>. A big AND across the domain.</li>
+              <li><span class="term" data-tip="∃ · المُسوِّر الوجودي · existential quantifier ('there exists') · ∃x ∈ D, Q(x) is true when Q(x) holds for at least one x in D · one witness proves it"><strong>∃ existential</strong></span>: <em>"there exists x in D such that Q(x)"</em>. A big OR across the domain.</li>
+            </ul>
+          </div>
+
+          <!-- 3.1.1 Predicates and truth sets -->
+          <div class="widget-card" id="sec311">
+            <h3>3.1.1 Predicates and truth sets</h3>
+            <div class="widget-desc">Pick a predicate over a small domain. The companion lists every element together with the truth value of the predicate, and collects the <span class="term" data-tip="مجموعة الصدق · {x ∈ D | P(x)} · the set of all elements of D that make P(x) true"><strong>truth set</strong></span> automatically.</div>
+
+            <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
+              <label style="font-size:0.88rem;">Predicate:
+                <select id="ts-pred" style="margin-left:6px; padding:6px 10px; border:1px solid var(--c-border); border-radius:6px; background:var(--c-card-bg); color:var(--c-text);">
+                  <option value="even">Even(n) · n is even</option>
+                  <option value="prime">Prime(n) · n is prime</option>
+                  <option value="square">Square(n) · n is a perfect square</option>
+                  <option value="factor8">Factor8(n) · n divides 8</option>
+                  <option value="gt5">GreaterThan5(n) · n &gt; 5</option>
+                </select>
+              </label>
+              <label style="font-size:0.88rem;">Domain:
+                <select id="ts-dom" style="margin-left:6px; padding:6px 10px; border:1px solid var(--c-border); border-radius:6px; background:var(--c-card-bg); color:var(--c-text);">
+                  <option value="z1to10">{1, 2, …, 10}</option>
+                  <option value="z1to20">{1, 2, …, 20}</option>
+                  <option value="primes">{2, 3, 5, 7, 11, 13}</option>
+                  <option value="even10">{2, 4, 6, 8, 10}</option>
+                </select>
+              </label>
+            </div>
+
+            <div id="ts-out"></div>
+          </div>
+
+          <!-- 3.1.2 Universal and existential -->
+          <div class="widget-card" id="sec312">
+            <h3>3.1.2 Universal (∀) and existential (∃) statements</h3>
+            <div class="widget-desc">Toggle each domain element to choose whether the predicate holds for it. The verdicts for <span class="mono-inline">∀x Q(x)</span> and <span class="mono-inline">∃x Q(x)</span> update together: <span class="mono-inline">∀</span> is one big conjunction, <span class="mono-inline">∃</span> is one big disjunction.</div>
+
+            <p style="font-size:0.88rem; color:var(--c-muted); margin:6px 0 4px;">Click each element to toggle whether the predicate <span class="mono-inline">Q</span> holds:</p>
+            <div class="domain-chips" id="qe-chips"></div>
+
+            <div class="eval-rows" id="qe-verdicts"></div>
+
+            <p style="margin-top:14px; font-size:0.88rem; color:var(--c-muted);"><strong style="color:var(--c-text);">Try this.</strong> Switch every chip to T: both ∀ and ∃ are true. Switch every chip to F: both are false. Flip a single chip to T: ∃ is true, ∀ is false. One <span class="term" data-tip="المثال المضاد · a single element of the domain where the predicate fails · enough to disprove a universal"><strong>counterexample</strong></span> kills ∀; one witness proves ∃.</p>
+          </div>
+
+          <!-- 3.1.3 Formalize / verbalize -->
+          <div class="widget-card" id="sec313">
+            <h3>3.1.3 Formalize and verbalize</h3>
+            <div class="widget-desc">Statements rarely arrive in formal notation. Slide examples in both directions:</div>
+
+            <table class="loves-table">
+              <thead>
+                <tr><th>English</th><th>Formal</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="english">All triangles have three sides.</td><td class="formal">∀t ∈ Triangle, ThreeSided(t)</td></tr>
+                <tr><td class="english">No dogs have wings.</td><td class="formal">∀d ∈ Dog, ∼HasWings(d)</td></tr>
+                <tr><td class="english">Some programs are structured.</td><td class="formal">∃p ∈ Program, Structured(p)</td></tr>
+                <tr><td class="english">All bytes have eight bits.</td><td class="formal">∀b ∈ Byte, EightBits(b)</td></tr>
+                <tr><td class="english">No fire trucks are green.</td><td class="formal">∀t ∈ FireTruck, ∼Green(t)</td></tr>
+                <tr><td class="english">If a person is born in Hebron then they are Khalili.</td><td class="formal">∀x ∈ Person, BornIn(x, Hebron) → Khalili(x)</td></tr>
+                <tr><td class="english">People who like hummus are smart.</td><td class="formal">∀x ∈ Person, Likes(x, Hummus) → Smart(x)</td></tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top:14px; padding:12px 16px; background:var(--c-primary-light); border-radius:8px; font-size:0.88rem; line-height:1.6;">
+              <strong>Watch the trap.</strong> <em>"No X are Y"</em> formalizes as <span class="mono-inline">∀x ∈ X, ∼Y(x)</span> (a universal with negation), <strong>not</strong> as <span class="mono-inline">∃</span>. The everyday word <em>"a"</em> or <em>"any"</em> often hides an implicit <span class="mono-inline">∀</span>; <em>"some"</em> or <em>"there is"</em> signals <span class="mono-inline">∃</span>.
+            </div>
+          </div>
+
+          <!-- 3.1.4 Tarski's World -->
+          <div class="widget-card" id="sec314">
+            <h3>3.1.4 Tarski's World (Figure 3.1.1)</h3>
+            <div class="widget-desc">A finite world of named shapes with colors and positions, built to match <strong>Epp Figure 3.1.1</strong>. Eleven objects named <span class="mono-inline">a, b, …, k</span>. Predicates available: <span class="mono-inline">Triangle(x), Square(x), Circle(x), Blue(x), Gray(x), Black(x), RightOf(x, y), Above(x, y), SameColor(x, y)</span>. Type any quantified statement; the companion evaluates it against the scene and walks the evaluation step by step.</div>
+
+            <div class="tarski-card">
+              <div class="tarski-scene">
+                <div class="tarski-grid" id="tw-grid-1"></div>
+                <div class="legend">
+                  <strong>Domain:</strong> all eleven objects in the scene.<br>
+                  <em>RightOf(x, y)</em>: x is in a column to the right of y. <em>Above(x, y)</em>: x is in a row above y (row 4 is the top of the figure).
+                </div>
+              </div>
+
+              <div class="tarski-controls">
+                <div class="formula-input-wrap">
+                  <input class="formula-input" id="tw-input" value="∀t (Triangle(t) → Blue(t))">
+                  <div class="symbol-palette" data-for="tw-input">
+                    <button type="button" data-insert="∀">∀</button>
+                    <button type="button" data-insert="∃">∃</button>
+                    <button type="button" data-insert="∼">∼</button>
+                    <button type="button" data-insert="∧">∧</button>
+                    <button type="button" data-insert="∨">∨</button>
+                    <button type="button" data-insert="→">→</button>
+                    <button type="button" data-insert="↔">↔</button>
+                    <button type="button" data-insert="(">(</button>
+                    <button type="button" data-insert=")">)</button>
+                  </div>
+                  <div class="symbol-palette" style="margin-top:6px;">
+                    <span class="palette-hint" style="margin: 0 6px 0 0;">Variables:</span>
+                    <button type="button" data-insert="x" data-for-input="tw-input">x</button>
+                    <button type="button" data-insert="y" data-for-input="tw-input">y</button>
+                    <button type="button" data-insert="z" data-for-input="tw-input">z</button>
+                    <button type="button" data-insert="t" data-for-input="tw-input">t</button>
+                  </div>
+                  <div class="formula-error" id="tw-err"></div>
+                </div>
+
+                <span class="palette-hint">Try these (Epp Section 3.1.13 worked examples):</span>
+                <div class="symbol-palette" style="margin-top:4px;">
+                  <button type="button" class="preset" data-tw-preset="∀t (Triangle(t) → Blue(t))">∀t (Triangle(t) → Blue(t))</button>
+                  <button type="button" class="preset" data-tw-preset="∀x (Blue(x) → Triangle(x))">∀x (Blue(x) → Triangle(x))</button>
+                  <button type="button" class="preset" data-tw-preset="∃y (Square(y) ∧ RightOf(d, y))">∃y (Square(y) ∧ RightOf(d, y))</button>
+                  <button type="button" class="preset" data-tw-preset="∃z (Square(z) ∧ Gray(z))">∃z (Square(z) ∧ Gray(z))</button>
+                  <button type="button" class="preset" data-tw-preset="∀x (Square(x) → Blue(x) ∨ Black(x))">∀x (Square(x) → Blue(x) ∨ Black(x))</button>
+                  <button type="button" class="preset" data-tw-preset="∃x (Circle(x) ∧ Blue(x))">∃x (Circle(x) ∧ Blue(x))</button>
+                </div>
+
+                <div id="tw-out" style="margin-top:14px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exercises 3.1 -->
+          <div class="exercises-block">
+            <h3>Practice exercises &middot; Section 3.1</h3>
+            <div class="ex-source">Adapted from Epp Section 3.1, suggested questions: 10, 16(b), 19.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.1.A</div>
+              <div class="ex-body">Let <span class="mono-inline">D = {−2, −1, 0, 1, 2}</span>. Determine the truth value of each:
+                <ol style="margin-top:6px;">
+                  <li><span class="mono-inline">∀x ∈ D, x² ≥ 0</span></li>
+                  <li><span class="mono-inline">∀x ∈ D, x² &gt; 0</span></li>
+                  <li><span class="mono-inline">∃x ∈ D such that x³ = 1</span></li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-1-A">Show solution</button>
+              <div class="solution" id="sol-3-1-A">
+                <p><strong>(1)</strong> <span class="mono">∀x ∈ D, x² ≥ 0</span>. Squares: <span class="mono">(−2)² = 4, (−1)² = 1, 0² = 0, 1² = 1, 2² = 4</span>. All ≥ 0. <strong style="color:var(--c-true)">True.</strong></p>
+                <p><strong>(2)</strong> <span class="mono">∀x ∈ D, x² &gt; 0</span>. <strong style="color:var(--c-false)">False.</strong> Counterexample: <span class="mono">x = 0</span> gives <span class="mono">x² = 0</span>, which is not strictly greater than 0.</p>
+                <p><strong>(3)</strong> <span class="mono">∃x ∈ D, x³ = 1</span>. <strong style="color:var(--c-true)">True.</strong> Witness: <span class="mono">x = 1</span>, since <span class="mono">1³ = 1</span>.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.1.B</div>
+              <div class="ex-body">Rewrite each statement in the form <span class="mono-inline">∀x, …</span>:
+                <ol style="margin-top:6px;">
+                  <li>"Every real number is positive, negative, or zero."</li>
+                  <li>"No irrational numbers are integers."</li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-1-B">Show solution</button>
+              <div class="solution" id="sol-3-1-B">
+                <p><strong>(1)</strong> <span class="mono">∀x ∈ ℝ, (x &gt; 0) ∨ (x &lt; 0) ∨ (x = 0)</span>.</p>
+                <p><strong>(2)</strong> <em>"No P is a Q"</em> is equivalent to <em>"every P is not a Q"</em>:<br><span class="mono">∀x, Irrational(x) → ∼Integer(x)</span><br>Equivalently: <span class="mono">∀x ∈ ℝ, Irrational(x) → x ∉ ℤ</span>.</p>
+                <p>Reminder: <em>"No X are Y"</em> is the Section 3.1 trap. The formalization is a universal with a negated conclusion, never an existential.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.1.C &middot; Tarski's World</div>
+              <div class="ex-body">Using Tarski's World (Figure 3.1.1 above), decide each. Verify with the evaluator widget.
+                <ol style="margin-top:6px;">
+                  <li><span class="mono-inline">∀x, Square(x) → Blue(x)</span></li>
+                  <li><span class="mono-inline">∃x, Circle(x) ∧ Blue(x)</span></li>
+                  <li><span class="mono-inline">∀x, Triangle(x) → Blue(x)</span></li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-1-C">Show solution</button>
+              <div class="solution" id="sol-3-1-C">
+                <p><strong>(1)</strong> <span class="mono">∀x, Square(x) → Blue(x)</span>. Squares in the world: <span class="mono">e, g, h, j</span>. <strong style="color:var(--c-false)">False.</strong> Counterexample: <span class="mono">h</span> is a square but its colour is black, not blue.</p>
+                <p><strong>(2)</strong> <span class="mono">∃x, Circle(x) ∧ Blue(x)</span>. <strong style="color:var(--c-true)">True.</strong> Witness: <span class="mono">b</span> is a blue circle.</p>
+                <p><strong>(3)</strong> <span class="mono">∀x, Triangle(x) → Blue(x)</span>. Triangles in the world: <span class="mono">d, f, i, k</span>. All blue. <strong style="color:var(--c-true)">True.</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 3.2 ===================== -->
+        <div class="chapter-section" id="section-32">
+          <h2><span class="ch-num">Section 3.2</span>Negation, conditional statements, and quantifiers</h2>
+
+          <div class="section-intro">
+            <p>How do we deny a quantified claim? The first instinct, <em>"no X are Y"</em> to negate <em>"all X are Y"</em>, is wrong. One <em>counterexample</em> is enough to break a universal, and one <em>witness</em> is enough to make an existential true.</p>
+            <p>The two negation theorems for quantifiers are the workhorses of this section. They look like De Morgan's laws and behave like them.</p>
+          </div>
+
+          <!-- 3.2.1 Negation laws -->
+          <div class="widget-card" id="sec321">
+            <h3>3.2.1 Negation of quantified statements</h3>
+            <div class="widget-desc">Two equivalence laws govern every negation that appears in this chapter.</div>
+
+            <div style="margin: 10px 0; padding: 12px 16px; background: var(--c-page-bg); border-radius: 8px;">
+              <div style="margin-bottom: 8px;"><strong>Theorem 3.2.1.</strong> $$\sim(\forall x \in D,\; Q(x)) \;\equiv\; \exists x \in D,\; \sim\! Q(x)$$</div>
+              <div><strong>Theorem 3.2.2.</strong> $$\sim(\exists x \in D,\; Q(x)) \;\equiv\; \forall x \in D,\; \sim\! Q(x)$$</div>
+            </div>
+
+            <p style="font-size:0.92rem;"><em>"All are"</em> becomes <em>"some are not"</em>; <em>"some are"</em> becomes <em>"none are"</em>. Side-by-side examples from the slides:</p>
+
+            <table class="loves-table">
+              <thead>
+                <tr><th>Original</th><th>Correct negation</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="english">All Palestinians like Zaatar.<br><span class="mono-inline">∀p ∈ Palestinian, Likes(p, Zaatar)</span></td>
+                  <td class="english">Some Palestinians do not like Zaatar.<br><span class="mono-inline">∃p ∈ Palestinian, ∼Likes(p, Zaatar)</span></td>
+                </tr>
+                <tr>
+                  <td class="english">Some Palestinians like Zaatar.<br><span class="mono-inline">∃p ∈ Palestinian, Likes(p, Zaatar)</span></td>
+                  <td class="english">No Palestinian likes Zaatar.<br><span class="mono-inline">∀p ∈ Palestinian, ∼Likes(p, Zaatar)</span></td>
+                </tr>
+                <tr>
+                  <td class="english">Every prime is odd.<br><span class="mono-inline">∀p ∈ Prime, Odd(p)</span></td>
+                  <td class="english">There is a prime that is not odd.<br><span class="mono-inline">∃p ∈ Prime, ∼Odd(p)</span> &nbsp;(witness: 2)</td>
+                </tr>
+                <tr>
+                  <td class="english">No computer hacker is over 40.<br><span class="mono-inline">∀h ∈ Hacker, ∼Over40(h)</span></td>
+                  <td class="english">Some computer hacker is over 40.<br><span class="mono-inline">∃h ∈ Hacker, Over40(h)</span></td>
+                </tr>
+                <tr>
+                  <td class="english">All computer programs are finite.<br><span class="mono-inline">∀c ∈ Program, Finite(c)</span></td>
+                  <td class="english">Some computer program is not finite.<br><span class="mono-inline">∃c ∈ Program, ∼Finite(c)</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p style="margin-top:12px; padding:10px 14px; background:#fff3e0; color:#e65100; border-radius:6px; font-size:0.88rem;">
+              <strong>Common mistake.</strong> Negating <em>"all mathematicians wear glasses"</em> as <em>"no mathematicians wear glasses"</em> is wrong. The correct negation only asks for <em>at least one</em> mathematician without glasses.
+            </p>
+          </div>
+
+          <!-- 3.2.2 Negation of universal conditional -->
+          <div class="widget-card" id="sec322">
+            <h3>3.2.2 Negating a universal conditional</h3>
+            <div class="widget-desc">Most statements in mathematics have the shape <span class="mono-inline">∀x, P(x) → Q(x)</span>. Pushing <span class="mono-inline">∼</span> through gives a useful pattern.</div>
+
+            <div style="margin: 10px 0; padding: 14px 18px; background: var(--c-page-bg); border-radius: 8px; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; line-height: 2;">
+              <div>∼(∀x, P(x) → Q(x))</div>
+              <div style="padding-left: 20px;">≡ ∃x, ∼(P(x) → Q(x))    <span style="color:var(--c-muted);">by Theorem 3.2.1</span></div>
+              <div style="padding-left: 20px;">≡ ∃x, P(x) ∧ ∼Q(x)     <span style="color:var(--c-muted);">since ∼(P → Q) ≡ P ∧ ∼Q from Ch 2</span></div>
+            </div>
+
+            <p style="font-size:0.92rem;">In words: <em>"there is at least one x that satisfies the hypothesis but fails the conclusion."</em></p>
+
+            <table class="loves-table">
+              <thead><tr><th>Original (universal conditional)</th><th>Negation</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td class="english">If a computer program has more than 10,000 lines, then it contains a bug.<br><span class="mono-inline">∀c, ManyLines(c) → HasBug(c)</span></td>
+                  <td class="english">There is a computer program with more than 10,000 lines and no bug.<br><span class="mono-inline">∃c, ManyLines(c) ∧ ∼HasBug(c)</span></td>
+                </tr>
+                <tr>
+                  <td class="english">If a person is blond, then they have blue eyes.<br><span class="mono-inline">∀p, Blond(p) → BlueEyes(p)</span></td>
+                  <td class="english">There is a blond person who does not have blue eyes.<br><span class="mono-inline">∃p, Blond(p) ∧ ∼BlueEyes(p)</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p style="margin-top:10px; font-size:0.88rem; color:var(--c-muted);"><strong style="color:var(--c-text);">Watch the shape.</strong> The negation of <em>"if P then Q"</em> does not start with <em>"if"</em>. It starts with <em>"there is"</em>.</p>
+          </div>
+
+          <!-- 3.2.3 Vacuous truth -->
+          <div class="widget-card" id="sec323">
+            <h3>3.2.3 Vacuous truth</h3>
+            <div class="widget-desc">A universal conditional <span class="mono-inline">∀x ∈ D, P(x) → Q(x)</span> is <span class="term" data-tip="الصدق الفارغ · true by default · the hypothesis P(x) is false for every x in D, so no x can witness a violation"><strong>vacuously true</strong></span> when <span class="mono-inline">P(x)</span> is false for every x in D. Toggle the demo: an empty bowl satisfies <em>"all the balls in the bowl are blue"</em>. In Tarski's World, <span class="mono-inline">∀x, Pentagon(x) → Yellow(x)</span> is vacuously true: there are no pentagons (and no yellow objects) anywhere.</div>
+
+            <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap;">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+                <div style="font-size:0.78rem; color:var(--c-muted);">Bowl contents</div>
+                <div id="vac-bowl" style="width:220px; height:110px; border:2px solid var(--c-border); border-radius:0 0 110px 110px; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:center; gap:6px; padding:8px;"></div>
+                <div style="display:flex; gap:6px;">
+                  <button type="button" id="vac-add-blue" style="padding:5px 12px; border:1px solid var(--c-border); border-radius:6px; background:var(--c-card-bg); cursor:pointer; font-size:0.84rem;"><span style="color:#1976d2;">●</span> Add blue</button>
+                  <button type="button" id="vac-add-red" style="padding:5px 12px; border:1px solid var(--c-border); border-radius:6px; background:var(--c-card-bg); cursor:pointer; font-size:0.84rem;"><span style="color:#c62828;">●</span> Add red</button>
+                  <button type="button" id="vac-clear" style="padding:5px 12px; border:1px solid var(--c-border); border-radius:6px; background:var(--c-card-bg); cursor:pointer; font-size:0.84rem;">Empty</button>
+                </div>
+              </div>
+              <div style="flex:1; min-width:260px;">
+                <div style="font-family: 'Roboto Mono', monospace; font-size:0.92rem; margin-bottom:8px;"><strong>Claim:</strong> ∀b ∈ Bowl, Blue(b)</div>
+                <div id="vac-verdict"></div>
+                <p style="margin-top:12px; font-size:0.86rem; color:var(--c-muted); line-height:1.6;"><strong style="color:var(--c-text);">Empty the bowl.</strong> With no balls at all, the claim has no non-blue ball to contradict it, so it is vacuously true. Add a red ball and the claim immediately becomes false.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3.2.4 Contrapositive / converse / inverse for FOL -->
+          <div class="widget-card" id="sec324">
+            <h3>3.2.4 Contrapositive, converse, and inverse</h3>
+            <div class="widget-desc">Given a universal conditional <span class="mono-inline">∀x ∈ D, P(x) → Q(x)</span>, the same three derived forms appear as in Ch 2, now under a universal quantifier.</div>
+
+            <div class="forms-grid">
+              <div class="form-card">
+                <h4>Original</h4>
+                <div class="form-formula">$\forall x \in D,\; P(x) \to Q(x)$</div>
+                <div class="form-reads">"for every x in D, if P(x) then Q(x)"</div>
+              </div>
+              <div class="form-card">
+                <h4>Contrapositive · equivalent</h4>
+                <div class="form-formula">$\forall x \in D,\; \sim\! Q(x) \to \sim\! P(x)$</div>
+                <div class="form-reads">Flip and negate. Always equivalent to the original.</div>
+              </div>
+              <div class="form-card" style="border-left: 3px solid var(--c-false);">
+                <h4 style="color: var(--c-false);">Converse · not equivalent</h4>
+                <div class="form-formula">$\forall x \in D,\; Q(x) \to P(x)$</div>
+                <div class="form-reads">Just flip. <em>Not</em> equivalent in general.</div>
+              </div>
+              <div class="form-card" style="border-left: 3px solid var(--c-false);">
+                <h4 style="color: var(--c-false);">Inverse · not equivalent</h4>
+                <div class="form-formula">$\forall x \in D,\; \sim\! P(x) \to \sim\! Q(x)$</div>
+                <div class="form-reads">Just negate. Not equivalent, but equivalent to the <em>converse</em>.</div>
+              </div>
+            </div>
+
+            <div style="margin-top:16px; padding:12px 16px; border-left:3px solid var(--c-primary); background:var(--c-primary-light); border-radius:0 6px 6px 0;">
+              <p style="margin:0 0 6px; font-size:0.86rem; font-weight:700; color:var(--c-primary); text-transform:uppercase; letter-spacing:0.5px;">Worked example: squares greater than 4</p>
+              <p style="margin:0 0 6px; font-size:0.92rem;">Original: <span class="mono-inline">∀x ∈ ℝ, x &gt; 2 → x² &gt; 4</span>. <strong style="color:var(--c-true)">True.</strong></p>
+              <p style="margin:0 0 4px; font-size:0.92rem;">Converse: <span class="mono-inline">∀x ∈ ℝ, x² &gt; 4 → x &gt; 2</span>. <strong style="color:var(--c-false)">False</strong>, pick <span class="mono-inline">x = −3</span>: <span class="mono-inline">x² = 9 &gt; 4</span> yet <span class="mono-inline">x = −3</span> is not greater than 2.</p>
+              <p style="margin:0; font-size:0.84rem; color:var(--c-muted);">This single witness shows the original and its converse are not equivalent.</p>
+            </div>
+          </div>
+
+          <!-- 3.2.5 Necessary, sufficient, only if -->
+          <div class="widget-card" id="sec325">
+            <h3>3.2.5 Necessary and sufficient conditions, "only if"</h3>
+            <div class="widget-desc">The Ch 2 vocabulary returns under a universal:</div>
+
+            <ul style="font-size:0.92rem; line-height:1.7; padding-left:22px;">
+              <li><em>"r(x) is <span class="term" data-tip="∀x, r(x) → s(x) · having r is enough to guarantee s"><strong>sufficient</strong></span> for s(x)"</em>: <span class="mono-inline">∀x, r(x) → s(x)</span>.</li>
+              <li><em>"r(x) is <span class="term" data-tip="∀x, ∼r(x) → ∼s(x), equivalently ∀x, s(x) → r(x) · without r, s cannot happen"><strong>necessary</strong></span> for s(x)"</em>: <span class="mono-inline">∀x, ∼r(x) → ∼s(x)</span>, equivalently <span class="mono-inline">∀x, s(x) → r(x)</span>.</li>
+              <li><em>"r(x) only if s(x)"</em>: <span class="mono-inline">∀x, ∼s(x) → ∼r(x)</span>, equivalently <span class="mono-inline">∀x, r(x) → s(x)</span>.</li>
+            </ul>
+
+            <p style="margin: 14px 0 8px; font-size:0.88rem; color:var(--c-muted);">Pick a statement to see the symbolic form:</p>
+            <select id="ns-select" style="padding:8px 10px; border:1px solid var(--c-border); border-radius:6px; font-size:0.9rem; width:100%; max-width:600px; background:var(--c-card-bg); color:var(--c-text);">
+              <option value="0">Being a square is sufficient for being a rectangle.</option>
+              <option value="1">To get a job, it is sufficient to be loyal.</option>
+              <option value="2">Being smart is necessary for getting a job.</option>
+              <option value="3">Being at least 35 years old is necessary for being President of the United States.</option>
+              <option value="4">You get the job only if you are at the top.</option>
+              <option value="5">A product of two real numbers is 0 only if one of them is 0.</option>
+            </select>
+            <div id="ns-out" style="margin-top:14px;"></div>
+          </div>
+
+          <!-- Exercises 3.2 -->
+          <div class="exercises-block">
+            <h3>Practice exercises &middot; Section 3.2</h3>
+            <div class="ex-source">Adapted from Epp Section 3.2, suggested questions: 14, 17, 23.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.2.A</div>
+              <div class="ex-body">Write a careful negation of each statement.
+                <ol style="margin-top:6px;">
+                  <li><span class="mono-inline">∀ real numbers x, x &gt; 1/x</span></li>
+                  <li><span class="mono-inline">∃ an integer n such that n is prime and n is even</span></li>
+                  <li><span class="mono-inline">∀ integers a, (a − 1)/a is not an integer</span></li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-2-A">Show solution</button>
+              <div class="solution" id="sol-3-2-A">
+                <p><strong>(1)</strong> <span class="mono">∼(∀x ∈ ℝ, x &gt; 1/x) ≡ ∃x ∈ ℝ such that x ≤ 1/x</span>.<br><em>(The predicate's domain implicitly excludes x = 0 for 1/x to be defined.)</em></p>
+                <p><strong>(2)</strong> <span class="mono">∼(∃n ∈ ℤ, Prime(n) ∧ Even(n)) ≡ ∀n ∈ ℤ, ∼Prime(n) ∨ ∼Even(n)</span>. In words: every integer is either not prime or not even (or both).</p>
+                <p><strong>(3)</strong> <span class="mono">∼(∀a ∈ ℤ, (a − 1)/a is not an integer) ≡ ∃a ∈ ℤ such that (a − 1)/a is an integer</span>. Witness: <span class="mono">a = 1</span> gives <span class="mono">(1 − 1)/1 = 0</span>, which is an integer. So the original is <strong style="color:var(--c-false)">false</strong> and its negation is true.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.2.B</div>
+              <div class="ex-body">Write the contrapositive, converse, and inverse of: <em>"For all integers n, if n is even then n² is even."</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-2-B">Show solution</button>
+              <div class="solution" id="sol-3-2-B">
+                <p>Original: <span class="mono">∀n ∈ ℤ, P(n) → Q(n)</span> where <span class="mono">P(n)</span> is "n is even" and <span class="mono">Q(n)</span> is "n² is even". <strong style="color:var(--c-true)">True.</strong></p>
+                <p><strong>Contrapositive</strong>: <span class="mono">∀n ∈ ℤ, ∼Q(n) → ∼P(n)</span> &middot; <em>"if n² is not even, then n is not even"</em>, equivalently <em>"if n² is odd, then n is odd."</em> <strong style="color:var(--c-true)">True &middot; equivalent to the original.</strong></p>
+                <p><strong>Converse</strong>: <span class="mono">∀n ∈ ℤ, Q(n) → P(n)</span> &middot; <em>"if n² is even, then n is even."</em> Happens to be true, but does <em>not</em> follow from the original; a separate proof is needed.</p>
+                <p><strong>Inverse</strong>: <span class="mono">∀n ∈ ℤ, ∼P(n) → ∼Q(n)</span> &middot; <em>"if n is not even, then n² is not even."</em> Also true, also separate; equivalent to the converse, not to the original.</p>
+                <p><strong>Key point.</strong> Equivalence between the original and its variants is a question of logical <em>form</em>, not whether each individual variant happens to be true. <span class="mono">Original ≡ contrapositive</span> always.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.2.C &middot; vacuous truth</div>
+              <div class="ex-body">Why is the following vacuously true in Tarski's World (Figure 3.1.1)?<br>
+                <span class="mono-inline">∀x, (Pentagon(x) ∧ Red(x)) → SameColor(x, a)</span>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-2-C">Show solution</button>
+              <div class="solution" id="sol-3-2-C">
+                <p>The hypothesis <span class="mono">Pentagon(x) ∧ Red(x)</span> requires <span class="mono">x</span> to be both a pentagon <em>and</em> red.</p>
+                <ul>
+                  <li>Pentagons in this world: <strong>none</strong>. Only triangles, squares, and circles exist.</li>
+                  <li>Red objects in this world: <strong>none</strong>. Only blue, gray, and black.</li>
+                </ul>
+                <p>So the hypothesis is false for every <span class="mono">x</span> in the domain. A conditional with a false hypothesis is automatically true (vacuously true), regardless of what the conclusion says.</p>
+                <p><strong>Sanity check.</strong> The statement remains vacuously true even if we replace the conclusion: <span class="mono">∀x, (Pentagon(x) ∧ Red(x)) → ∼SameColor(x, a)</span> is also vacuously true. Both hold at once, because no <span class="mono">x</span> ever triggers the hypothesis.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 3.3 ===================== -->
+        <div class="chapter-section" id="section-33">
+          <h2><span class="ch-num">Section 3.3</span>Statements with multiple quantifiers</h2>
+
+          <div class="section-intro">
+            <p>So far one quantifier at a time. Real definitions in mathematics nest them: <em>"for every ε &gt; 0 there exists δ &gt; 0 such that &hellip;"</em>. The two big ideas of Section 3.3:</p>
+            <ul>
+              <li><strong>Order counts.</strong> <span class="mono-inline">∀x ∃y P(x, y)</span> and <span class="mono-inline">∃y ∀x P(x, y)</span> usually mean different things.</li>
+              <li><strong>Negation pushes inward.</strong> To negate, flip every quantifier (∀↔∃) and negate the innermost predicate.</li>
+            </ul>
+          </div>
+
+          <!-- 3.3.1 Order counts -->
+          <div class="widget-card" id="sec331">
+            <h3>3.3.1 Order of quantifiers, and the challenge game</h3>
+            <div class="widget-desc">From the slides: <em>"There is a person supervising every detail of the production process."</em> Two readings, two formal statements, very different meanings.</div>
+
+            <div style="margin: 8px 0 14px; padding: 14px 18px; background: var(--c-primary-light); border-radius: 8px; font-size: 0.92rem; line-height: 1.6;">
+              <p style="margin:0 0 6px; font-weight:700; color:var(--c-primary); text-transform:uppercase; letter-spacing:0.5px; font-size:0.78rem;">The challenge game</p>
+              <p style="margin:0 0 6px;">Read nested quantifiers as a two-player game.</p>
+              <ul style="margin:0; padding-left:22px;">
+                <li><strong>∀x ∃y, P(x, y)</strong>: the opponent picks any x they want from D. You then respond with some y that makes P(x, y) hold. The y is allowed to <em>depend</em> on x. The statement is true if you have a winning strategy.</li>
+                <li><strong>∃x ∀y, P(x, y)</strong>: you commit to one specific x first. The opponent picks any y. Your x is fixed, so it must work against every y.</li>
+              </ul>
+              <p style="margin:6px 0 0; font-size:0.86rem; color:var(--c-muted);">The order of moves changes everything. ∃∀ is generally stronger than ∀∃.</p>
+            </div>
+
+            <div class="compare">
+              <div class="compare-card left">
+                <h5>∃p ∀d, Supervises(p, d)</h5>
+                <p><strong>Reading A.</strong> One supervisor oversees every detail.</p>
+                <p style="color:var(--c-muted); font-size:0.85rem;">A single fixed person handles all details.</p>
+              </div>
+              <div class="compare-card right">
+                <h5>∀d ∃p, Supervises(p, d)</h5>
+                <p><strong>Reading B.</strong> Every detail has someone supervising it.</p>
+                <p style="color:var(--c-muted); font-size:0.85rem;">Possibly a different person for each detail.</p>
+              </div>
+            </div>
+
+            <div class="compare">
+              <div class="compare-card left">
+                <h5>∀x ∃y P(x, y)</h5>
+                <p>To prove it true: opponent picks any x; you must find a y that works for that x.</p>
+                <p style="font-size:0.85rem; color:var(--c-muted);"><strong>The y is allowed to depend on x.</strong></p>
+              </div>
+              <div class="compare-card right">
+                <h5>∃x ∀y P(x, y)</h5>
+                <p>To prove it true: you pick one specific x; it must work for every y.</p>
+                <p style="font-size:0.85rem; color:var(--c-muted);"><strong>The x is fixed before anyone gives you a y.</strong></p>
+              </div>
+            </div>
+            <p style="margin-top:8px; font-size:0.88rem;"><strong>Adjacent same-type quantifiers commute</strong> (<span class="mono-inline">∀x ∀y ≡ ∀y ∀x</span>, and similarly for ∃). <strong>Mixed quantifiers do not.</strong></p>
+          </div>
+
+          <!-- 3.3.2 Loves table -->
+          <div class="widget-card" id="sec332">
+            <h3>3.3.2 The loves table</h3>
+            <div class="widget-desc">Slide-faithful list of every way to combine ∀ and ∃ with the binary predicate <span class="mono-inline">Loves(x, y)</span>. Reading the formal version aloud is the easiest way to internalise the meaning.</div>
+
+            <table class="loves-table">
+              <thead><tr><th>Formal</th><th>Informal meaning</th></tr></thead>
+              <tbody>
+                <tr><td class="formal">∀x ∀y · Loves(x, y)</td><td class="english">Everything loves everything.</td></tr>
+                <tr><td class="formal">∃x ∃y · Loves(x, y)</td><td class="english">Something loves something.</td></tr>
+                <tr><td class="formal">∀x ∃y · Loves(x, y)</td><td class="english">Everything loves something (possibly different y for each x).</td></tr>
+                <tr><td class="formal">∃y ∀x · Loves(x, y)</td><td class="english">Something is loved by everything (one fixed y).</td></tr>
+                <tr><td class="formal">∃x ∀y · Loves(x, y)</td><td class="english">Something loves everything (one lover, many loved).</td></tr>
+                <tr><td class="formal">∀y ∃x · Loves(x, y)</td><td class="english">Everything is loved by something (possibly different x for each y).</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 3.3.3 Cafeteria -->
+          <div class="widget-card" id="sec333">
+            <h3>3.3.3 Cafeteria worked example</h3>
+            <div class="widget-desc">From Epp Example 3.3.3. Three students go through a four-station line. The table records who chose what. The four quantified statements below show how nesting changes everything.</div>
+
+            <table class="cafe-table">
+              <thead>
+                <tr><th>Student</th><th>green salad</th><th>fruit salad</th><th>spaghetti</th><th>fish</th><th>pie</th><th>cake</th><th>milk</th><th>soda</th><th>coffee</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Uta</td><td class="y">✓</td><td class="n">–</td><td class="y">✓</td><td class="n">–</td><td class="y">✓</td><td class="n">–</td><td class="y">✓</td><td class="n">–</td><td class="n">–</td></tr>
+                <tr><td>Tim</td><td class="n">–</td><td class="y">✓</td><td class="n">–</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">–</td><td class="y">✓</td></tr>
+                <tr><td>Yuen</td><td class="n">–</td><td class="n">–</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">–</td><td class="n">–</td><td class="y">✓</td><td class="n">–</td></tr>
+              </tbody>
+            </table>
+
+            <div class="cafe-statements">
+              <div class="stmt">
+                <div class="formal">(a) &nbsp;∃I ∈ Item, ∀S ∈ Student, Chose(S, I)</div>
+                <div class="info">"There is an item every student chose."</div>
+                <div class="verdict"><span class="verdict ok"><i class="fas fa-check-circle"></i> True &middot; every student chose <strong>pie</strong>.</span></div>
+              </div>
+              <div class="stmt">
+                <div class="formal">(b) &nbsp;∃S ∈ Student, ∀I ∈ Item, Chose(S, I)</div>
+                <div class="info">"There is a student who chose every available item."</div>
+                <div class="verdict"><span class="verdict no"><i class="fas fa-times-circle"></i> False &middot; no student chose all nine items.</span></div>
+              </div>
+              <div class="stmt">
+                <div class="formal">(c) &nbsp;∃S ∈ Student, ∀Z ∈ Station, ∃I ∈ Z, Chose(S, I)</div>
+                <div class="info">"There is a student who chose at least one item from every station."</div>
+                <div class="verdict"><span class="verdict ok"><i class="fas fa-check-circle"></i> True &middot; both Uta and Tim chose from every station.</span></div>
+              </div>
+              <div class="stmt">
+                <div class="formal">(d) &nbsp;∀S ∈ Student, ∀Z ∈ Station, ∃I ∈ Z, Chose(S, I)</div>
+                <div class="info">"Every student chose at least one item from every station."</div>
+                <div class="verdict"><span class="verdict no"><i class="fas fa-times-circle"></i> False &middot; Yuen did not choose any salad.</span></div>
+              </div>
+            </div>
+
+            <p style="margin-top:12px; font-size:0.88rem; color:var(--c-muted); line-height:1.6;"><strong style="color:var(--c-text);">What to watch.</strong> In (a) one item must satisfy <em>every</em> student. In (c) the inner <span class="mono-inline">∃I</span> sits inside <span class="mono-inline">∀Z</span>, so the chosen item can depend on the station. In (d) the inner <span class="mono-inline">∃I</span> sits inside <em>both</em> <span class="mono-inline">∀S</span> and <span class="mono-inline">∀Z</span>, so it can depend on both the student and the station.</p>
+          </div>
+
+          <!-- 3.3.4 Tarski with multi quantifiers -->
+          <div class="widget-card" id="sec334">
+            <h3>3.3.4 Tarski's World with multiple quantifiers (Figure 3.3.1)</h3>
+            <div class="widget-desc">A second scene matching <strong>Epp Figure 3.3.1</strong> &middot; built specifically for the multi-quantifier examples (Epp Section 3.3.1, 3.3.2, 3.3.8). Try nested quantifiers like <span class="mono-inline">∀x (Circle(x) → ∃y (Square(y) ∧ SameColor(x, y)))</span>. The companion expands every ∀ over the domain (big AND) and every ∃ (big OR), reporting the verdict step by step.</div>
+
+            <div class="tarski-card">
+              <div class="tarski-scene">
+                <div class="tarski-grid" id="tw-grid-2"></div>
+                <div class="legend">
+                  <strong>Domain:</strong> ten objects, <span class="mono-inline">a, b, …, j</span>. <strong>Different scene from 3.1.4</strong> &middot; layout tuned for the Section 3.3 worked examples.
+                </div>
+              </div>
+
+              <div class="tarski-controls">
+                <div class="formula-input-wrap">
+                  <input class="formula-input" id="tw2-input" value="∀x (Circle(x) → ∃y (Square(y) ∧ SameColor(x, y)))">
+                  <div class="symbol-palette" data-for="tw2-input">
+                    <button type="button" data-insert="∀">∀</button>
+                    <button type="button" data-insert="∃">∃</button>
+                    <button type="button" data-insert="∼">∼</button>
+                    <button type="button" data-insert="∧">∧</button>
+                    <button type="button" data-insert="∨">∨</button>
+                    <button type="button" data-insert="→">→</button>
+                    <button type="button" data-insert="↔">↔</button>
+                    <button type="button" data-insert="(">(</button>
+                    <button type="button" data-insert=")">)</button>
+                  </div>
+                  <div class="formula-error" id="tw2-err"></div>
+                </div>
+
+                <span class="palette-hint">Try these (Epp Section 3.3 worked examples):</span>
+                <div class="symbol-palette" style="margin-top:4px;">
+                  <button type="button" class="preset" data-tw2-preset="∀x (Triangle(x) → ∃y (Square(y) ∧ SameColor(x, y)))">∀x (Triangle(x) → ∃y (Square(y) ∧ SameColor(x, y)))</button>
+                  <button type="button" class="preset" data-tw2-preset="∃x (Triangle(x) ∧ ∀y (Circle(y) → RightOf(x, y)))">∃x (Triangle(x) ∧ ∀y (Circle(y) → RightOf(x, y)))</button>
+                  <button type="button" class="preset" data-tw2-preset="∀x (Circle(x) → ∃y (Square(y) ∧ SameColor(x, y)))">∀x (Circle(x) → ∃y (Square(y) ∧ SameColor(x, y)))</button>
+                  <button type="button" class="preset" data-tw2-preset="∃x (Square(x) ∧ ∀y (Triangle(y) → RightOf(x, y)))">∃x (Square(x) ∧ ∀y (Triangle(y) → RightOf(x, y)))</button>
+                </div>
+
+                <div id="tw2-out" style="margin-top:14px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3.3.5 Formal logical notation -->
+          <div class="widget-card">
+            <h3>3.3.5 Formal logical notation</h3>
+            <div class="widget-desc">Domain restrictions like <em>"for all circles x"</em> are sugar. The fully formal first-order shape uses the connectives differently for ∀ and ∃:</div>
+
+            <div class="compare">
+              <div class="compare-card left">
+                <h5>∀x ∈ D, P(x)</h5>
+                <p>Formal: <span class="mono-inline">∀x (D(x) → P(x))</span></p>
+                <p style="font-size:0.85rem; color:var(--c-muted);">Universal restrictions attach with <strong>→</strong>: <em>"if x is in D, then P(x)"</em>. Outside the restriction the conditional is vacuously true.</p>
+              </div>
+              <div class="compare-card right">
+                <h5>∃x ∈ D, P(x)</h5>
+                <p>Formal: <span class="mono-inline">∃x (D(x) ∧ P(x))</span></p>
+                <p style="font-size:0.85rem; color:var(--c-muted);">Existential restrictions attach with <strong>∧</strong>: <em>"x is in D and P(x) holds"</em>. Outside the restriction the conjunction fails.</p>
+              </div>
+            </div>
+
+            <p style="margin-top:10px; font-size:0.92rem;">Four Tarski-style examples (Epp Section 3.3.10):</p>
+            <ul style="font-size:0.9rem; line-height:1.75; padding-left:22px;">
+              <li><em>For all circles x, x is above f.</em><br><span class="mono-inline">∀x (Circle(x) → Above(x, f))</span></li>
+              <li><em>There is a square x such that x is black.</em><br><span class="mono-inline">∃x (Square(x) ∧ Black(x))</span></li>
+              <li><em>For all circles x, there is a square y such that x and y have the same colour.</em><br><span class="mono-inline">∀x (Circle(x) → ∃y (Square(y) ∧ SameColor(x, y)))</span></li>
+              <li><em>There is a square x such that for all triangles y, x is to the right of y.</em><br><span class="mono-inline">∃x (Square(x) ∧ ∀y (Triangle(y) → RightOf(x, y)))</span></li>
+            </ul>
+          </div>
+
+          <!-- 3.3.6 Negating multiple quantifiers -->
+          <div class="widget-card" id="sec335">
+            <h3>3.3.6 Negating multiply-quantified statements</h3>
+            <div class="widget-desc">The mechanical rule: <strong>flip every outer quantifier</strong> (∀ ↔ ∃) and negate the innermost predicate. Type any quantified statement; the companion applies the negation step by step.</div>
+
+            <div class="formula-row">
+              <div class="formula-input-wrap">
+                <input class="formula-input" id="neg-input" value="∀x ∃y Loves(x, y)">
+                <div class="symbol-palette" data-for="neg-input">
+                  <button type="button" data-insert="∀">∀</button>
+                  <button type="button" data-insert="∃">∃</button>
+                  <button type="button" data-insert="∼">∼</button>
+                  <button type="button" data-insert="∧">∧</button>
+                  <button type="button" data-insert="∨">∨</button>
+                  <button type="button" data-insert="→">→</button>
+                  <button type="button" data-insert="(">(</button>
+                  <button type="button" data-insert=")">)</button>
+                </div>
+                <div class="formula-error" id="neg-err"></div>
+              </div>
+            </div>
+
+            <span class="palette-hint">Try these:</span>
+            <div class="symbol-palette" style="margin-top:4px;">
+              <button type="button" class="preset" data-neg-preset="∀x ∃y Loves(x, y)">∀x ∃y Loves(x, y)</button>
+              <button type="button" class="preset" data-neg-preset="∃x ∀y Loves(x, y)">∃x ∀y Loves(x, y)</button>
+              <button type="button" class="preset" data-neg-preset="∀p (Blond(p) → BlueEyes(p))">∀p (Blond(p) → BlueEyes(p))</button>
+              <button type="button" class="preset" data-neg-preset="∀x ∃y (Square(y) ∧ SameColor(x, y))">∀x ∃y (Square(y) ∧ SameColor(x, y))</button>
+            </div>
+
+            <div id="neg-out" style="margin-top:14px;"></div>
+          </div>
+
+          <!-- Exercises 3.3 -->
+          <div class="exercises-block">
+            <h3>Practice exercises &middot; Section 3.3</h3>
+            <div class="ex-source">Adapted from Epp Section 3.3, suggested questions: 11, 22, 46.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.3.A &middot; challenge game</div>
+              <div class="ex-body">Let <span class="mono-inline">D = {−2, −1, 0, 1, 2}</span>. Explain why each is true (use the challenge-game framing).
+                <ol style="margin-top:6px;">
+                  <li><span class="mono-inline">∀x ∈ D, ∃y ∈ D such that x + y = 0</span></li>
+                  <li><span class="mono-inline">∃x ∈ D such that ∀y ∈ D, x · y = 0</span></li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-3-A">Show solution</button>
+              <div class="solution" id="sol-3-3-A">
+                <p><strong>(1)</strong> Opponent picks any <span class="mono">x</span> from <span class="mono">D</span>. You respond with <span class="mono">y = −x</span>. Check every case:</p>
+                <pre style="font-family:'Roboto Mono',monospace; font-size:0.86rem; line-height:1.7; padding:8px 14px; background:var(--c-page-bg); border-radius:6px; margin:6px 0;">x = −2  →  y = 2,  x + y = 0
+x = −1  →  y = 1,  x + y = 0
+x =  0  →  y = 0,  x + y = 0
+x =  1  →  y = −1, x + y = 0
+x =  2  →  y = −2, x + y = 0</pre>
+                <p>Every x has a partner. <strong style="color:var(--c-true)">True.</strong> The y depends on x: that is what ∀∃ allows.</p>
+                <p><strong>(2)</strong> You commit to one <span class="mono">x</span> before any y is offered. Pick <span class="mono">x = 0</span>. Then <span class="mono">0 · y = 0</span> for every y in D. <strong style="color:var(--c-true)">True.</strong> Here x is fixed first, the hallmark of ∃∀.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.3.B &middot; negation</div>
+              <div class="ex-body">Write a formal negation of each statement.
+                <ol style="margin-top:6px;">
+                  <li><span class="mono-inline">∀ real numbers x, ∃ a real number y such that x + y = 0</span></li>
+                  <li><span class="mono-inline">∃ a real number y such that ∀ real numbers x, x + y = 0</span></li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-3-B">Show solution</button>
+              <div class="solution" id="sol-3-3-B">
+                <p><strong>(1)</strong> Walk through left-to-right, flipping each quantifier:</p>
+                <div style="font-family:'Roboto Mono',monospace; font-size:0.86rem; line-height:2; padding-left:14px;">
+                  ∼(∀x ∈ ℝ, ∃y ∈ ℝ, x + y = 0)<br>
+                  ≡ ∃x ∈ ℝ, ∼(∃y ∈ ℝ, x + y = 0)<br>
+                  ≡ ∃x ∈ ℝ, ∀y ∈ ℝ, x + y ≠ 0
+                </div>
+                <p>The original is <strong style="color:var(--c-true)">true</strong> (every x has additive inverse <span class="mono">−x</span>), so its negation is false.</p>
+                <p><strong>(2)</strong></p>
+                <div style="font-family:'Roboto Mono',monospace; font-size:0.86rem; line-height:2; padding-left:14px;">
+                  ∼(∃y ∈ ℝ, ∀x ∈ ℝ, x + y = 0)<br>
+                  ≡ ∀y ∈ ℝ, ∼(∀x ∈ ℝ, x + y = 0)<br>
+                  ≡ ∀y ∈ ℝ, ∃x ∈ ℝ, x + y ≠ 0
+                </div>
+                <p>The original claims one universal <span class="mono">y</span> zeros out every <span class="mono">x</span>, <strong style="color:var(--c-false)">false</strong>. The negation is true.</p>
+                <p><strong>Compare the originals.</strong> (1) says <em>"every x has some inverse"</em> (true). (2) says <em>"one y is the inverse of every x"</em> (false). Same predicate, different quantifier order, opposite truth values.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 3.3.C &middot; Tarski Figure 3.3.1</div>
+              <div class="ex-body">Refer to Tarski's World in Figure 3.3.1 (the second scene above).<br><em>"There is a triangle x such that for all squares y, x is above y."</em><br>
+                <ol style="margin-top:6px;">
+                  <li>Is the statement true or false? Justify by inspecting the figure.</li>
+                  <li>Write the statement in formal logical notation.</li>
+                  <li>Write the formal negation.</li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-3-3-C">Show solution</button>
+              <div class="solution" id="sol-3-3-C">
+                <p><strong>(a) Truth value.</strong> Triangles in Figure 3.3.1: <span class="mono">d, f, i</span>. Squares: <span class="mono">e, g, h, j</span>. Try each triangle:</p>
+                <ul style="font-family:'Roboto Mono',monospace; font-size:0.86rem;">
+                  <li><span class="mono">d</span> (row 3): square <span class="mono">e</span> is also in row 3, so <span class="mono">d</span> is <em>not</em> above <span class="mono">e</span>. Fails.</li>
+                  <li><span class="mono">f</span> (row 2): squares <span class="mono">e</span> (row 3) and below sit above or alongside, <span class="mono">f</span> is not above <span class="mono">e</span>. Fails.</li>
+                  <li><span class="mono">i</span> (row 2): same story, <span class="mono">e</span> is in row 3 above. Fails.</li>
+                </ul>
+                <p><strong style="color:var(--c-false)">False.</strong> No single triangle is above every square.</p>
+                <p><strong>(b) Formal notation.</strong> <span class="mono">∃x (Triangle(x) ∧ ∀y (Square(y) → Above(x, y)))</span></p>
+                <p><strong>(c) Negation</strong> &middot; push <span class="mono">∼</span> all the way in:</p>
+                <div style="font-family:'Roboto Mono',monospace; font-size:0.86rem; line-height:2; padding-left:14px;">
+                  ∼∃x (Triangle(x) ∧ ∀y (Square(y) → Above(x, y)))<br>
+                  ≡ ∀x ∼(Triangle(x) ∧ ∀y (Square(y) → Above(x, y)))    <span style="color:var(--c-muted);">flip ∃</span><br>
+                  ≡ ∀x (∼Triangle(x) ∨ ∼∀y (Square(y) → Above(x, y)))   <span style="color:var(--c-muted);">De Morgan</span><br>
+                  ≡ ∀x (Triangle(x) → ∼∀y (Square(y) → Above(x, y)))    <span style="color:var(--c-muted);">∼A ∨ B ≡ A → B</span><br>
+                  ≡ ∀x (Triangle(x) → ∃y ∼(Square(y) → Above(x, y)))    <span style="color:var(--c-muted);">flip ∀</span><br>
+                  ≡ ∀x (Triangle(x) → ∃y (Square(y) ∧ ∼Above(x, y)))    <span style="color:var(--c-muted);">negate conditional</span>
+                </div>
+                <p>In English: <em>"for every triangle x, there is a square y such that x is not above y."</em> This matches the falsity of the original.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recap -->
+        <div class="recap-card" id="recap">
+          <h3>Recap: Chapter 3</h3>
+          <ul>
+            <li>A <strong>predicate</strong> waits for variable values to become a statement; its <strong>truth set</strong> is the set of values that make it true.</li>
+            <li><strong>∀ universal</strong> is a big AND across the domain; one counterexample kills it. <strong>∃ existential</strong> is a big OR; one witness proves it.</li>
+            <li>The domain decides truth. The same predicate can be true over one set and false over another.</li>
+            <li><em>"No X are Y"</em> formalizes as <span class="mono-inline">∀x ∈ X, ∼Y(x)</span>, not as an existential.</li>
+            <li><strong>Negation laws</strong> (Theorems 3.2.1 and 3.2.2): <span class="mono-inline">∼∀x Q(x) ≡ ∃x ∼Q(x)</span> and <span class="mono-inline">∼∃x Q(x) ≡ ∀x ∼Q(x)</span>.</li>
+            <li><strong>Negation of a universal conditional</strong>: <span class="mono-inline">∼∀x (P(x) → Q(x)) ≡ ∃x (P(x) ∧ ∼Q(x))</span>.</li>
+            <li><strong>Vacuous truth</strong>: a universal conditional with no x satisfying the hypothesis is true by default.</li>
+            <li>The Ch 2 trio, <strong>contrapositive, converse, inverse</strong>, carry over under a universal quantifier, with the same equivalence rules.</li>
+            <li><strong>Order of quantifiers counts.</strong> ∀x ∃y lets y depend on x; ∃x ∀y fixes x first. ∃∀ is stronger than ∀∃.</li>
+            <li><strong>Multi-quantifier negation</strong>: flip every quantifier and negate the innermost predicate.</li>
+          </ul>
+          <div class="preview"><strong>What's next.</strong> Chapter 4: Elementary Number Theory and Methods of Proof. Direct proof, counterexample (now formally introduced), rational numbers, divisibility, and the Quotient-Remainder theorem, all built on the quantified statements practised here.</div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+
+    /* =====================================================
+       LEXER + PARSER + EVALUATOR for first-order logic.
+       Extends the Ch 2 propositional engine with:
+         - quantifier nodes (forall, exists) over a single variable
+         - predicate-application nodes P(arg1, arg2, ...)
+         - environment-based eval with bound variables
+       ===================================================== */
+
+    function tokenize(s) {
+      const tokens = [];
+      let i = 0;
+      while (i < s.length) {
+        const ch = s[i];
+        if (/\s/.test(ch)) { i++; continue; }
+        if (s.startsWith('<->', i)) { tokens.push({type:'IFF', text:'<->'}); i+=3; continue; }
+        if (s.startsWith('<=>', i)) { tokens.push({type:'IFF', text:'<=>'}); i+=3; continue; }
+        if (s.startsWith('->', i))  { tokens.push({type:'IMP', text:'->'});  i+=2; continue; }
+        if (s.startsWith('=>', i))  { tokens.push({type:'IMP', text:'=>'});  i+=2; continue; }
+        if (s.startsWith('&&', i))  { tokens.push({type:'AND', text:'&&'});  i+=2; continue; }
+        if (s.startsWith('||', i))  { tokens.push({type:'OR',  text:'||'});  i+=2; continue; }
+        if (ch === '∼' || ch === '¬' || ch === '~' || ch === '!') { tokens.push({type:'NOT', text:ch}); i++; continue; }
+        if (ch === '∧' || ch === '&') { tokens.push({type:'AND', text:ch}); i++; continue; }
+        if (ch === '∨' || ch === '|') { tokens.push({type:'OR',  text:ch}); i++; continue; }
+        if (ch === '⊕' || ch === '^') { tokens.push({type:'XOR', text:ch}); i++; continue; }
+        if (ch === '→') { tokens.push({type:'IMP', text:ch}); i++; continue; }
+        if (ch === '↔') { tokens.push({type:'IFF', text:ch}); i++; continue; }
+        if (ch === '∀') { tokens.push({type:'FORALL', text:ch}); i++; continue; }
+        if (ch === '∃') { tokens.push({type:'EXISTS', text:ch}); i++; continue; }
+        if (ch === '(') { tokens.push({type:'LP',  text:'('}); i++; continue; }
+        if (ch === ')') { tokens.push({type:'RP',  text:')'}); i++; continue; }
+        if (ch === ',') { tokens.push({type:'COMMA', text:','}); i++; continue; }
+        if (ch === '∈') { tokens.push({type:'IN', text:'∈'}); i++; continue; }
+        if (/[a-zA-Z]/.test(ch)) {
+          let j = i;
+          while (j < s.length && /[a-zA-Z0-9]/.test(s[j])) j++;
+          const word = s.slice(i, j);
+          const lower = word.toLowerCase();
+          if (lower === 'forall')                            tokens.push({type:'FORALL', text:word});
+          else if (lower === 'exists')                       tokens.push({type:'EXISTS', text:word});
+          else if (lower === 'not')                          tokens.push({type:'NOT', text:word});
+          else if (lower === 'and')                          tokens.push({type:'AND', text:word});
+          else if (lower === 'or')                           tokens.push({type:'OR',  text:word});
+          else if (lower === 'xor')                          tokens.push({type:'XOR', text:word});
+          else if (lower === 'implies' || lower === 'imp')   tokens.push({type:'IMP', text:word});
+          else if (lower === 'iff')                          tokens.push({type:'IFF', text:word});
+          else                                               tokens.push({type:'IDENT', text:word});
+          i = j; continue;
+        }
+        throw new Error(`Unexpected character "${ch}" at position ${i}`);
+      }
+      tokens.push({type:'EOF', text:''});
+      return tokens;
+    }
+
+    function parse(input) {
+      const tokens = tokenize(input);
+      let pos = 0;
+      const peek = (off) => tokens[pos + (off || 0)];
+      const eat = (type) => {
+        if (tokens[pos].type !== type) throw new Error(`Expected ${type}, got "${tokens[pos].text}"`);
+        return tokens[pos++];
+      };
+
+      // identifier is lowercase-leading? => variable / constant.
+      // identifier is uppercase-leading? => predicate name.
+      function isLowerIdent(name) { return /^[a-z]/.test(name); }
+
+      function parseIdentArg() {
+        const t = eat('IDENT');
+        return { kind: 'ref', name: t.text };
+      }
+
+      function parseAtom() {
+        const t = peek();
+        if (t.type === 'IDENT') {
+          // Predicate (uppercase) or bare propositional variable (single lowercase).
+          if (isLowerIdent(t.text) && peek(1).type !== 'LP') {
+            // Treat as a propositional variable (Ch 2 compatibility: p, q, r, t).
+            pos++;
+            return { kind: 'var', name: t.text };
+          }
+          pos++;
+          if (peek().type === 'LP') {
+            // Predicate application: NAME(arg1, arg2, ...)
+            eat('LP');
+            const args = [];
+            if (peek().type !== 'RP') {
+              args.push(parseIdentArg());
+              while (peek().type === 'COMMA') { pos++; args.push(parseIdentArg()); }
+            }
+            eat('RP');
+            return { kind: 'pred', name: t.text, args: args };
+          }
+          // Bare uppercase identifier without parentheses: treat as a 0-ary predicate / propositional letter.
+          return { kind: 'pred', name: t.text, args: [] };
+        }
+        if (t.type === 'LP') { pos++; const e = parseIff(); eat('RP'); return e; }
+        if (t.type === 'EOF') throw new Error('Unexpected end of input');
+        throw new Error(`Unexpected token "${t.text}"`);
+      }
+
+      function parseQuantifier() {
+        const qType = peek().type;
+        const kind = qType === 'FORALL' ? 'forall' : 'exists';
+        pos++;
+        if (peek().type !== 'IDENT') throw new Error(`Expected variable after ${kind === 'forall' ? '∀' : '∃'}`);
+        const v = eat('IDENT').text;
+        // Optional domain restriction "∈ Domain"
+        let domain = null;
+        if (peek().type === 'IN') {
+          pos++;
+          domain = eat('IDENT').text;
+        }
+        // Optional comma
+        if (peek().type === 'COMMA') pos++;
+        // Body is a unary (binds tightly). For lower precedence the user uses parentheses.
+        const body = parseUnary();
+        return { kind, var: v, domain, body };
+      }
+
+      function parseUnary() {
+        if (peek().type === 'NOT') { pos++; return { kind: 'not', expr: parseUnary() }; }
+        if (peek().type === 'FORALL' || peek().type === 'EXISTS') return parseQuantifier();
+        return parseAtom();
+      }
+      function parseAnd() {
+        let left = parseUnary();
+        while (peek().type === 'AND') { pos++; left = { kind: 'and', left, right: parseUnary() }; }
+        return left;
+      }
+      function parseOr() {
+        let left = parseAnd();
+        while (peek().type === 'OR' || peek().type === 'XOR') {
+          const k = peek().type === 'OR' ? 'or' : 'xor';
+          pos++;
+          left = { kind: k, left, right: parseAnd() };
+        }
+        return left;
+      }
+      function parseImp() {
+        const left = parseOr();
+        if (peek().type === 'IMP') { pos++; return { kind: 'imp', left, right: parseImp() }; }
+        return left;
+      }
+      function parseIff() {
+        const left = parseImp();
+        if (peek().type === 'IFF') { pos++; return { kind: 'iff', left, right: parseIff() }; }
+        return left;
+      }
+
+      const ast = parseIff();
+      if (peek().type !== 'EOF') throw new Error(`Unexpected token "${peek().text}" after formula`);
+      return ast;
+    }
+
+    function evalAST(node, env, scene) {
+      env = env || {};
+      switch (node.kind) {
+        case 'var': {
+          // Propositional variable: look up in env (boolean).
+          const v = env[node.name];
+          if (typeof v === 'boolean') return v;
+          // If bound to an object name and the prop variable matches a unary predicate of the same name, the user is mixing levels, disallowed.
+          throw new Error(`Variable "${node.name}" is not bound or not propositional`);
+        }
+        case 'pred': {
+          if (!scene) throw new Error(`Predicate ${node.name}() needs a scene`);
+          const resolved = node.args.map(a => {
+            // If a.name is bound in env as an object, use that; otherwise it's a constant (object name).
+            if (env[a.name] !== undefined && typeof env[a.name] !== 'boolean') return env[a.name];
+            return a.name;
+          });
+          return scene.evalPredicate(node.name, resolved);
+        }
+        case 'not': return !evalAST(node.expr, env, scene);
+        case 'and': return evalAST(node.left, env, scene) && evalAST(node.right, env, scene);
+        case 'or':  return evalAST(node.left, env, scene) || evalAST(node.right, env, scene);
+        case 'xor': return evalAST(node.left, env, scene) !== evalAST(node.right, env, scene);
+        case 'imp': return !evalAST(node.left, env, scene) || evalAST(node.right, env, scene);
+        case 'iff': return evalAST(node.left, env, scene) === evalAST(node.right, env, scene);
+        case 'forall': {
+          if (!scene) throw new Error('Quantifier needs a scene/domain');
+          for (const o of scene.objects.map(x => x.name)) {
+            const env2 = Object.assign({}, env); env2[node.var] = o;
+            if (!evalAST(node.body, env2, scene)) return false;
+          }
+          return true;
+        }
+        case 'exists': {
+          if (!scene) throw new Error('Quantifier needs a scene/domain');
+          for (const o of scene.objects.map(x => x.name)) {
+            const env2 = Object.assign({}, env); env2[node.var] = o;
+            if (evalAST(node.body, env2, scene)) return true;
+          }
+          return false;
+        }
+      }
+      throw new Error(`Unknown node kind: ${node.kind}`);
+    }
+
+    /* Pretty-printer for FOL AST. */
+    const PREC = { iff: 1, imp: 2, or: 3, and: 4, not: 5, atom: 6, quant: 5 };
+    function prettyPrint(node, parentPrec = 0) {
+      switch (node.kind) {
+        case 'var': return node.name;
+        case 'pred': {
+          if (node.args.length === 0) return node.name;
+          return node.name + '(' + node.args.map(a => a.name).join(', ') + ')';
+        }
+        case 'not': return '∼' + prettyPrint(node.expr, PREC.not);
+        case 'and': {
+          const s = prettyPrint(node.left, PREC.and) + ' ∧ ' + prettyPrint(node.right, PREC.and);
+          return PREC.and < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'or': {
+          const s = prettyPrint(node.left, PREC.or) + ' ∨ ' + prettyPrint(node.right, PREC.or);
+          return PREC.or < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'xor': {
+          const s = prettyPrint(node.left, PREC.or) + ' ⊕ ' + prettyPrint(node.right, PREC.or);
+          return PREC.or < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'imp': {
+          const s = prettyPrint(node.left, PREC.imp + 1) + ' → ' + prettyPrint(node.right, PREC.imp);
+          return PREC.imp < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'iff': {
+          const s = prettyPrint(node.left, PREC.iff + 1) + ' ↔ ' + prettyPrint(node.right, PREC.iff);
+          return PREC.iff < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'forall': return '∀' + node.var + ' ' + prettyPrint(node.body, PREC.quant);
+        case 'exists': return '∃' + node.var + ' ' + prettyPrint(node.body, PREC.quant);
+      }
+    }
+
+    /* Push ∼ through quantifiers and connectives (negation normal form helper). */
+    function pushNeg(node) {
+      switch (node.kind) {
+        case 'pred':   return { kind: 'not', expr: node };
+        case 'var':    return { kind: 'not', expr: node };
+        case 'not':    return node.expr; // double negation
+        case 'and':    return { kind: 'or',  left: pushNeg(node.left), right: pushNeg(node.right) };
+        case 'or':     return { kind: 'and', left: pushNeg(node.left), right: pushNeg(node.right) };
+        case 'imp':    return { kind: 'and', left: node.left, right: pushNeg(node.right) }; // ∼(P→Q) ≡ P ∧ ∼Q
+        case 'iff':    return { kind: 'not', expr: node }; // leave biconditional negation as-is
+        case 'forall': return { kind: 'exists', var: node.var, domain: node.domain, body: pushNeg(node.body) };
+        case 'exists': return { kind: 'forall', var: node.var, domain: node.domain, body: pushNeg(node.body) };
+      }
+      throw new Error('pushNeg: unknown node ' + node.kind);
+    }
+
+    /* =====================================================
+       TARSKI SCENE ENGINE
+       ===================================================== */
+    class Scene {
+      constructor(objects) {
+        // objects: array of { name, shape, color, row, col }
+        this.objects = objects;
+        this.byName = {};
+        for (const o of objects) this.byName[o.name] = o;
+      }
+      getObject(name) {
+        if (!this.byName[name]) throw new Error(`Unknown object "${name}" in this scene`);
+        return this.byName[name];
+      }
+      evalPredicate(name, argNames) {
+        const args = argNames.map(n => this.getObject(n));
+        const key = name.toLowerCase();
+        if (args.length === 1) {
+          const o = args[0];
+          if (['triangle', 'square', 'circle'].includes(key)) return o.shape === key;
+          if (['blue', 'red', 'green', 'gray', 'black'].includes(key)) return o.color === key;
+        } else if (args.length === 2) {
+          const [a, b] = args;
+          if (key === 'samecolor' || key === 'samecolour') return a.color === b.color;
+          if (key === 'rightof') return a.col > b.col;
+          if (key === 'leftof')  return a.col < b.col;
+          // Slide / notebook convention: row 4 = top, row 1 = bottom. So Above(x, y) when x.row > y.row.
+          if (key === 'above')   return a.row > b.row;
+          if (key === 'below')   return a.row < b.row;
+        }
+        throw new Error(`Unknown predicate ${name}/${args.length}`);
+      }
+    }
+
+    /* Tarski scenes from Hisham's notebook.
+       Coordinates use (col, row) with row 4 = top, row 1 = bottom, matching the slides and Epp's figures.
+       We translate to a 4×4 grid for rendering (row index = 4 − row, so row 4 → top of grid). */
+
+    /* Figure 3.1.1, used in Section 3.1 examples. */
+    const TARSKI_311 = new Scene([
+      { name: 'a', shape: 'circle',   color: 'gray',  col: 1, row: 4 },
+      { name: 'b', shape: 'circle',   color: 'blue',  col: 3, row: 4 },
+      { name: 'c', shape: 'circle',   color: 'gray',  col: 4, row: 4 },
+      { name: 'd', shape: 'triangle', color: 'blue',  col: 4, row: 3 },
+      { name: 'e', shape: 'square',   color: 'blue',  col: 1, row: 3 },
+      { name: 'f', shape: 'triangle', color: 'blue',  col: 1, row: 2 },
+      { name: 'g', shape: 'square',   color: 'blue',  col: 3, row: 2 },
+      { name: 'h', shape: 'square',   color: 'black', col: 2, row: 2 },
+      { name: 'i', shape: 'triangle', color: 'blue',  col: 4, row: 2 },
+      { name: 'j', shape: 'square',   color: 'blue',  col: 2, row: 1 },
+      { name: 'k', shape: 'triangle', color: 'blue',  col: 4, row: 1 },
+    ]);
+
+    /* Figure 3.3.1, used in Section 3.3 worked examples (Epp Section 3.3.1, 3.3.2, 3.3.8). */
+    const TARSKI_331 = new Scene([
+      { name: 'a', shape: 'circle',   color: 'blue',  col: 1, row: 4 },
+      { name: 'b', shape: 'circle',   color: 'blue',  col: 2, row: 4 },
+      { name: 'c', shape: 'circle',   color: 'blue',  col: 3, row: 4 },
+      { name: 'd', shape: 'triangle', color: 'black', col: 4, row: 3 },
+      { name: 'e', shape: 'square',   color: 'black', col: 1, row: 3 },
+      { name: 'f', shape: 'triangle', color: 'gray',  col: 2, row: 2 },
+      { name: 'g', shape: 'square',   color: 'gray',  col: 1, row: 2 },
+      { name: 'h', shape: 'square',   color: 'gray',  col: 3, row: 2 },
+      { name: 'i', shape: 'triangle', color: 'gray',  col: 4, row: 2 },
+      { name: 'j', shape: 'square',   color: 'blue',  col: 2, row: 1 },
+    ]);
+
+    function shapeGlyph(shape) {
+      if (shape === 'triangle') return '▲';
+      if (shape === 'square')   return '■';
+      if (shape === 'circle')   return '●';
+      return '?';
+    }
+
+    function renderSceneGrid(container, scene) {
+      // 4 columns × 4 rows, with row 4 at the top of the grid (matches the slide / notebook orientation).
+      let html = '';
+      for (let r = 4; r >= 1; r--) {
+        for (let c = 1; c <= 4; c++) {
+          const obj = scene.objects.find(o => o.row === r && o.col === c);
+          if (obj) {
+            html += '<div class="tarski-cell"><span class="tarski-name">' + obj.name + '</span><span class="tarski-shape ' + obj.color + '">' + shapeGlyph(obj.shape) + '</span></div>';
+          } else {
+            html += '<div class="tarski-cell empty"></div>';
+          }
+        }
+      }
+      container.innerHTML = html;
+    }
+
+    /* =====================================================
+       FORMULA INPUT WIRING (palette + parsing + presets)
+       ===================================================== */
+    function setupPalette(inputId) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const palettes = document.querySelectorAll('.symbol-palette[data-for="' + inputId + '"], .symbol-palette button[data-for-input="' + inputId + '"]');
+      // Both the wrapper palette buttons and any standalone buttons referencing this input
+      function insert(sym) {
+        const start = (input.selectionStart != null) ? input.selectionStart : input.value.length;
+        const end   = (input.selectionEnd   != null) ? input.selectionEnd   : input.value.length;
+        const before = input.value.slice(0, start);
+        const after  = input.value.slice(end);
+        const padded = (before && !before.endsWith(' ') && !/[(]/.test(before.slice(-1))) ? ' ' + sym : sym;
+        input.value = before + padded + after;
+        input.focus();
+        const caret = (before + padded).length;
+        input.setSelectionRange(caret, caret);
+        input.dispatchEvent(new Event('input'));
+      }
+      document.querySelectorAll('.symbol-palette[data-for="' + inputId + '"] button[data-insert]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.preventDefault(); insert(btn.dataset.insert); });
+      });
+      document.querySelectorAll('button[data-for-input="' + inputId + '"]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.preventDefault(); insert(btn.dataset.insert); });
+      });
+    }
+
+    function parseInputSafely(input, errBox) {
+      try {
+        const ast = parse(input.value);
+        input.classList.remove('err');
+        if (errBox) errBox.textContent = '';
+        return ast;
+      } catch (e) {
+        input.classList.add('err');
+        if (errBox) errBox.textContent = e.message;
+        return null;
+      }
+    }
+
+    /* =====================================================
+       3.1.1 TRUTH SET EXPLORER
+       ===================================================== */
+    (function truthSetExplorer() {
+      const predSel = document.getElementById('ts-pred');
+      const domSel  = document.getElementById('ts-dom');
+      const out     = document.getElementById('ts-out');
+      if (!predSel || !domSel || !out) return;
+
+      const preds = {
+        even:    { label: 'Even(n)',     fn: n => n % 2 === 0 },
+        prime:   { label: 'Prime(n)',    fn: n => { if (n < 2) return false; for (let i = 2; i*i <= n; i++) if (n%i === 0) return false; return true; } },
+        square:  { label: 'Square(n)',   fn: n => Math.sqrt(n) === Math.floor(Math.sqrt(n)) },
+        factor8: { label: 'Factor8(n)',  fn: n => n > 0 && (8 % n === 0) },
+        gt5:     { label: 'GreaterThan5(n)', fn: n => n > 5 },
+      };
+      const doms = {
+        z1to10: { label: '{1, 2, …, 10}', els: [1,2,3,4,5,6,7,8,9,10] },
+        z1to20: { label: '{1, 2, …, 20}', els: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20] },
+        primes: { label: '{2, 3, 5, 7, 11, 13}', els: [2,3,5,7,11,13] },
+        even10: { label: '{2, 4, 6, 8, 10}', els: [2,4,6,8,10] },
+      };
+
+      function render() {
+        const p = preds[predSel.value];
+        const d = doms[domSel.value];
+        const truthSet = d.els.filter(p.fn);
+        let html = '<div class="domain-chips">';
+        for (const n of d.els) {
+          const ok = p.fn(n);
+          html += '<span class="domain-chip ' + (ok ? 't' : 'f') + '"><span class="marker">' + (ok ? 'T' : 'F') + '</span>' + n + '</span>';
+        }
+        html += '</div>';
+        html += '<div class="eval-rows">';
+        html += '<div class="e-row"><span class="e-expr">Truth set: { n ∈ ' + d.label + ' | ' + p.label + ' }</span><span class="e-val t">' + (truthSet.length ? '{ ' + truthSet.join(', ') + ' }' : '∅') + '</span></div>';
+        html += '<div class="e-row"><span class="e-expr">∀n ∈ ' + d.label + ', ' + p.label + '</span><span class="e-val ' + (truthSet.length === d.els.length ? 't' : 'f') + '">' + (truthSet.length === d.els.length ? 'T' : 'F') + '</span></div>';
+        html += '<div class="e-row"><span class="e-expr">∃n ∈ ' + d.label + ', ' + p.label + '</span><span class="e-val ' + (truthSet.length > 0 ? 't' : 'f') + '">' + (truthSet.length > 0 ? 'T' : 'F') + '</span></div>';
+        html += '</div>';
+        out.innerHTML = html;
+      }
+      predSel.addEventListener('change', render);
+      domSel.addEventListener('change', render);
+      render();
+    })();
+
+    /* =====================================================
+       3.1.2 UNIVERSAL / EXISTENTIAL TOGGLE DEMO
+       ===================================================== */
+    (function quantToggleDemo() {
+      const chipsEl = document.getElementById('qe-chips');
+      const out     = document.getElementById('qe-verdicts');
+      if (!chipsEl || !out) return;
+      const labels = ['1', '2', '3', '4', '5'];
+      const state = [true, true, true, true, true];
+
+      function render() {
+        chipsEl.innerHTML = state.map(function (v, i) {
+          return '<span class="domain-chip ' + (v ? 't' : 'f') + '" data-idx="' + i + '"><span class="marker">' + (v ? 'T' : 'F') + '</span>Q(' + labels[i] + ')</span>';
+        }).join('');
+        chipsEl.querySelectorAll('.domain-chip').forEach(function (el) {
+          el.addEventListener('click', function () {
+            const i = +el.dataset.idx;
+            state[i] = !state[i];
+            render();
+          });
+        });
+        const allT = state.every(Boolean);
+        const someT = state.some(Boolean);
+        out.innerHTML =
+          '<div class="e-row"><span class="e-expr">∀x ∈ D, Q(x)  ≡  Q(1) ∧ Q(2) ∧ Q(3) ∧ Q(4) ∧ Q(5)</span><span class="e-val ' + (allT ? 't' : 'f') + '">' + (allT ? 'T' : 'F') + '</span></div>' +
+          '<div class="e-row"><span class="e-expr">∃x ∈ D, Q(x)  ≡  Q(1) ∨ Q(2) ∨ Q(3) ∨ Q(4) ∨ Q(5)</span><span class="e-val ' + (someT ? 't' : 'f') + '">' + (someT ? 'T' : 'F') + '</span></div>';
+      }
+      render();
+    })();
+
+    /* =====================================================
+       3.1.4 + 3.3.4 TARSKI'S WORLD WIDGETS
+       ===================================================== */
+    function substituteVarForDisplay(node, vname, oname) {
+      // Returns a copy of node with every reference to vname replaced by oname (display only).
+      switch (node.kind) {
+        case 'var': return node;
+        case 'pred': return { kind: 'pred', name: node.name, args: node.args.map(a => a.name === vname ? { kind: 'ref', name: oname } : a) };
+        case 'not': return { kind: 'not', expr: substituteVarForDisplay(node.expr, vname, oname) };
+        case 'and':
+        case 'or':
+        case 'imp':
+        case 'iff':
+        case 'xor':
+          return { kind: node.kind, left: substituteVarForDisplay(node.left, vname, oname), right: substituteVarForDisplay(node.right, vname, oname) };
+        case 'forall':
+        case 'exists':
+          if (node.var === vname) return node; // shadowed
+          return { kind: node.kind, var: node.var, domain: node.domain, body: substituteVarForDisplay(node.body, vname, oname) };
+      }
+      return node;
+    }
+
+    function tarskiWidget(inputId, errId, outId, gridId, presetAttr, scene) {
+      const input = document.getElementById(inputId);
+      const errBox = document.getElementById(errId);
+      const outBox = document.getElementById(outId);
+      const grid = document.getElementById(gridId);
+      if (!input || !grid) return;
+      renderSceneGrid(grid, scene);
+      setupPalette(inputId);
+
+      function explain(node, env, depth) {
+        env = env || {}; depth = depth || 0;
+        const indent = '&nbsp;&nbsp;'.repeat(depth);
+        let result;
+        try { result = evalAST(node, env, scene); }
+        catch (e) { return [indent + '<span class="formula-error">' + e.message + '</span>']; }
+        const valHtml = '<span class="e-val ' + (result ? 't' : 'f') + '">' + (result ? 'T' : 'F') + '</span>';
+        const steps = [];
+        if (node.kind === 'forall' || node.kind === 'exists') {
+          const q = node.kind === 'forall' ? '∀' : '∃';
+          steps.push(indent + q + node.var + ' ' + prettyPrint(node.body) + '   →   ' + valHtml);
+          for (const o of scene.objects.map(x => x.name)) {
+            const env2 = Object.assign({}, env); env2[node.var] = o;
+            let inner;
+            try { inner = evalAST(node.body, env2, scene); }
+            catch (e) { continue; }
+            const innerVal = '<span class="e-val ' + (inner ? 't' : 'f') + '">' + (inner ? 'T' : 'F') + '</span>';
+            steps.push(indent + '&nbsp;&nbsp;' + node.var + ' = ' + o + ':  ' + prettyPrint(substituteVarForDisplay(node.body, node.var, o)) + ' = ' + innerVal);
+            if ((node.kind === 'forall' && !inner) || (node.kind === 'exists' && inner)) break;
+          }
+        } else {
+          steps.push(indent + prettyPrint(node) + '   =   ' + valHtml);
+        }
+        return steps;
+      }
+
+      function render() {
+        const ast = parseInputSafely(input, errBox);
+        if (!ast) { outBox.innerHTML = ''; return; }
+        let result;
+        try { result = evalAST(ast, {}, scene); }
+        catch (e) {
+          outBox.innerHTML = '<div class="formula-error">' + e.message + '</div>';
+          return;
+        }
+        const verdictHtml = '<div class="verdict ' + (result ? 'ok' : 'no') + '"><i class="fas ' + (result ? 'fa-check-circle' : 'fa-times-circle') + '"></i> ' + (result ? 'True in this scene' : 'False in this scene') + '</div>';
+        let stepHtml = '<div class="tarski-step"><div class="step-label">Evaluation</div>';
+        for (const line of explain(ast, {}, 0)) stepHtml += '<div>' + line + '</div>';
+        stepHtml += '</div>';
+        outBox.innerHTML = verdictHtml + stepHtml;
+      }
+      input.addEventListener('input', render);
+      const camelKey = presetAttr.replace(/-./g, m => m[1].toUpperCase());
+      document.querySelectorAll('[data-' + presetAttr + ']').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          input.value = btn.dataset[camelKey];
+          render();
+        });
+      });
+      render();
+    }
+    tarskiWidget('tw-input',  'tw-err',  'tw-out',  'tw-grid-1',  'tw-preset',  TARSKI_311);
+    tarskiWidget('tw2-input', 'tw2-err', 'tw2-out', 'tw-grid-2',  'tw2-preset', TARSKI_331);
+
+    /* =====================================================
+       3.2.3 VACUOUS TRUTH (empty-bowl demo)
+       ===================================================== */
+    (function vacuousTruth() {
+      const bowl = document.getElementById('vac-bowl');
+      const out  = document.getElementById('vac-verdict');
+      const addB = document.getElementById('vac-add-blue');
+      const addR = document.getElementById('vac-add-red');
+      const clr  = document.getElementById('vac-clear');
+      if (!bowl) return;
+      const balls = []; // strings: 'blue' or 'red'
+
+      function render() {
+        bowl.innerHTML = balls.map(function (c) {
+          return '<span style="font-size:1.8rem; line-height:1; color:' + (c === 'blue' ? '#1976d2' : '#c62828') + ';">●</span>';
+        }).join('');
+        const total = balls.length;
+        const allBlue = balls.every(function (c) { return c === 'blue'; });
+        let v;
+        if (total === 0) v = '<div class="verdict warn"><i class="fas fa-info-circle"></i> Vacuously true · the bowl is empty</div><div class="verdict-detail">No ball can act as a counterexample, so ∀b ∈ Bowl, Blue(b) holds by default.</div>';
+        else if (allBlue) v = '<div class="verdict ok"><i class="fas fa-check-circle"></i> True · every ball in the bowl is blue</div>';
+        else v = '<div class="verdict no"><i class="fas fa-times-circle"></i> False · at least one non-blue ball is a witness against the claim</div>';
+        out.innerHTML = v;
+      }
+      addB.addEventListener('click', function () { balls.push('blue'); render(); });
+      addR.addEventListener('click', function () { balls.push('red'); render(); });
+      clr.addEventListener('click', function () { balls.length = 0; render(); });
+      render();
+    })();
+
+    /* =====================================================
+       3.2.5 NECESSARY / SUFFICIENT DROPDOWN
+       ===================================================== */
+    (function necSuff() {
+      const items = [
+        { en: 'Being a square is sufficient for being a rectangle.', sym: '∀x, Square(x) → Rectangle(x)', note: 'Squareness guarantees rectangularity. The arrow goes from condition to consequence.' },
+        { en: 'To get a job, it is sufficient to be loyal.',         sym: '∀p, Loyal(p) → GetsJob(p)',     note: 'Loyalty alone suffices. Others might still get the job through other paths.' },
+        { en: 'Being smart is necessary for getting a job.',         sym: '∀p, GetsJob(p) → Smart(p)',     note: 'Equivalent form: ∀p, ∼Smart(p) → ∼GetsJob(p). Smartness is required, not enough on its own.' },
+        { en: 'Being at least 35 years old is necessary for being President of the United States.', sym: '∀p, President(p) → Age35Plus(p)', note: 'You cannot be President without being 35+; many people are 35+ without being President.' },
+        { en: 'You get the job only if you are at the top.',         sym: '∀p, GetsJob(p) → Top(p)',       note: '"Only if" gives an implication from the subject to the condition. Equivalently ∼Top(p) → ∼GetsJob(p).' },
+        { en: 'A product of two real numbers is 0 only if one of them is 0.', sym: '∀a, b ∈ ℝ, ab = 0 → (a = 0 ∨ b = 0)', note: 'This is Example 3.2.7 from Epp.' },
+      ];
+      const sel = document.getElementById('ns-select');
+      const out = document.getElementById('ns-out');
+      if (!sel || !out) return;
+      function render() {
+        const item = items[+sel.value];
+        out.innerHTML =
+          '<div class="eval-rows" style="font-family:\'Roboto\', sans-serif;">' +
+          '<div style="margin-bottom:6px;"><strong>Statement.</strong> ' + item.en + '</div>' +
+          '<div style="margin-bottom:6px; font-family:\'Roboto Mono\', monospace;"><strong style="font-family:\'Roboto\', sans-serif;">Symbolic.</strong> ' + item.sym + '</div>' +
+          '<div style="font-size:0.88rem; color:var(--c-muted);"><strong style="color:var(--c-text);">Note.</strong> ' + item.note + '</div>' +
+          '</div>';
+      }
+      sel.addEventListener('change', render);
+      render();
+    })();
+
+    /* =====================================================
+       3.3.5 NEGATION FLIPPER
+       ===================================================== */
+    (function negationFlipper() {
+      const input = document.getElementById('neg-input');
+      const err   = document.getElementById('neg-err');
+      const out   = document.getElementById('neg-out');
+      if (!input) return;
+      setupPalette('neg-input');
+
+      function render() {
+        const ast = parseInputSafely(input, err);
+        if (!ast) { out.innerHTML = ''; return; }
+        const original = prettyPrint(ast);
+        const negPushed = pushNeg(ast);
+        const negPushedStr = prettyPrint(negPushed);
+        const negRaw = '∼(' + original + ')';
+        out.innerHTML =
+          '<div class="neg-card">' +
+          '<div class="row"><div class="lbl">Original</div><div class="val">' + original + '</div></div>' +
+          '<div class="row"><div class="lbl">Negation</div><div class="val">' + negRaw + '</div></div>' +
+          '<div class="row"><div class="lbl">Simplified</div><div class="val">' + negPushedStr + '</div></div>' +
+          '</div>';
+      }
+      input.addEventListener('input', render);
+      document.querySelectorAll('[data-neg-preset]').forEach(function (btn) {
+        btn.addEventListener('click', function () { input.value = btn.dataset.negPreset; render(); });
+      });
+      render();
+    })();
+
+    /* =====================================================
+       SOLUTION REVEAL BUTTONS
+       ===================================================== */
+    document.querySelectorAll('[data-toggle-sol]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const sol = document.getElementById(btn.dataset.toggleSol);
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+
+    /* Floating "How to use" widget toggle. */
+    (function () {
+      const root = document.getElementById('howto-fab');
+      if (!root) return;
+      const toggle = root.querySelector('.howto-fab-toggle');
+      const body   = root.querySelector('.howto-fab-body');
+      toggle.addEventListener('click', function () {
+        const willOpen = body.hasAttribute('hidden');
+        if (willOpen) {
+          body.removeAttribute('hidden');
+          root.setAttribute('data-open', 'true');
+          toggle.setAttribute('aria-expanded', 'true');
+        } else {
+          body.setAttribute('hidden', '');
+          root.setAttribute('data-open', 'false');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+
+  </script>
+</body>
+</html>
