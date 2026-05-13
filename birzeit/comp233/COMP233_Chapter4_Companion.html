@@ -644,7 +644,7 @@
               <div class="proof-step">By definition of even, <span class="mono">m = 2r</span> and <span class="mono">n = 2s</span> for some integers <span class="mono">r</span> and <span class="mono">s</span>.</div>
               <div class="proof-step mono">m + n  =  2r + 2s  =  2(r + s)        by the distributive law.</div>
               <div class="proof-step">Let <span class="mono">t = r + s</span>. Then <span class="mono">t</span> is an integer (sum of integers is an integer), and <span class="mono">m + n = 2t</span>.</div>
-              <div class="proof-step">Therefore <span class="mono">m + n</span> equals 2 times an integer, so by definition of even, <span class="mono">m + n</span> is even. <span class="end-of-proof">∎</span></div>
+              <div class="proof-step">Therefore <span class="mono">m + n</span> equals 2 times an integer, so by definition of even, <span class="mono">m + n</span> is even.</div>
             </div>
 
             <div class="widget-desc" style="margin-top:18px;">Try it numerically. Pick any two even integers; the panel walks the algebraic step from the proof (it <em>illustrates</em> the result, but the proof above is what makes it certain).</div>
@@ -684,7 +684,7 @@
                 <p>Suppose <span class="mono">n</span> is a particular but arbitrarily chosen odd integer. <em>[We must show <span class="mono">n²</span> is odd.]</em></p>
                 <p>By definition of odd, <span class="mono">n = 2k + 1</span> for some integer <span class="mono">k</span>. Then</p>
                 <p class="mono">n² = (2k + 1)² = 4k² + 4k + 1 = 2(2k² + 2k) + 1.</p>
-                <p>Let <span class="mono">t = 2k² + 2k</span>. Then <span class="mono">t</span> is an integer (products and sums of integers are integers). So <span class="mono">n² = 2t + 1</span>, hence odd by definition. ∎</p>
+                <p>Let <span class="mono">t = 2k² + 2k</span>. Then <span class="mono">t</span> is an integer (products and sums of integers are integers). So <span class="mono">n² = 2t + 1</span>, hence odd by definition.</p>
               </div>
             </div>
 
@@ -694,7 +694,7 @@
               <button type="button" class="solution-btn" data-toggle-sol="sol-4-1-C">Show solution</button>
               <div class="solution" id="sol-4-1-C">
                 <p><strong>False.</strong> The conjecture lab cannot settle this by failing to find a witness; we need an argument that <em>no</em> integer works.</p>
-                <p><strong>Proof.</strong> Suppose, for contradiction, that <span class="mono">6n² + 27</span> is prime for some integer <span class="mono">n</span>. Notice <span class="mono">6n² + 27 = 3(2n² + 9)</span>. Since <span class="mono">2n² + 9 ≥ 9 &gt; 1</span> is an integer, <span class="mono">6n² + 27</span> has <span class="mono">3</span> as a divisor different from itself, so it is composite. Contradiction. Hence no such <span class="mono">n</span> exists. ∎</p>
+                <p><strong>Proof.</strong> Suppose, for contradiction, that <span class="mono">6n² + 27</span> is prime for some integer <span class="mono">n</span>. Notice <span class="mono">6n² + 27 = 3(2n² + 9)</span>. Since <span class="mono">2n² + 9 ≥ 9 &gt; 1</span> is an integer, <span class="mono">6n² + 27</span> has <span class="mono">3</span> as a divisor different from itself, so it is composite. Contradiction. Hence no such <span class="mono">n</span> exists.</p>
                 <p>Sample values: <span class="mono">n = 0</span> gives <span class="mono">27 = 3·9</span>; <span class="mono">n = 1</span> gives <span class="mono">33 = 3·11</span>; <span class="mono">n = 2</span> gives <span class="mono">51 = 3·17</span>. All composite.</p>
               </div>
             </div>
@@ -707,7 +707,7 @@
                 <p>Suppose <span class="mono">m, n</span> are particular but arbitrarily chosen integers with <span class="mono">m + n</span> even. <em>[We must show <span class="mono">m − n</span> is even.]</em></p>
                 <p>By definition of even, <span class="mono">m + n = 2k</span> for some integer <span class="mono">k</span>. Then <span class="mono">m = 2k − n</span>, so</p>
                 <p class="mono">m − n = (2k − n) − n = 2k − 2n = 2(k − n).</p>
-                <p>Let <span class="mono">t = k − n</span>. Then <span class="mono">t</span> is an integer (difference of integers is an integer), and <span class="mono">m − n = 2t</span>. Therefore <span class="mono">m − n</span> is even by definition. ∎</p>
+                <p>Let <span class="mono">t = k − n</span>. Then <span class="mono">t</span> is an integer (difference of integers is an integer), and <span class="mono">m − n = 2t</span>. Therefore <span class="mono">m − n</span> is even by definition.</p>
               </div>
             </div>
 
@@ -716,7 +716,7 @@
               <div class="ex-body">The following proof of a true statement contains an error. Identify the mistake and write the correct proof.
                 <div style="margin:10px 0; padding:12px 16px; background:var(--c-page-bg); border-left:3px solid var(--c-false); border-radius:0 6px 6px 0; font-size:0.9rem; line-height:1.65;">
                   <p style="margin:0 0 6px;"><strong>Theorem.</strong> The sum of any two even integers is even.</p>
-                  <p style="margin:0;"><strong>"Proof".</strong> Suppose <span class="mono-inline">m</span> and <span class="mono-inline">n</span> are even integers. By definition of even, <span class="mono-inline">m = 2k</span> and <span class="mono-inline">n = 2k</span> for some integer <span class="mono-inline">k</span>. Then <span class="mono-inline">m + n = 2k + 2k = 4k = 2(2k)</span>, which is even, with witness <span class="mono-inline">2k</span>. ∎</p>
+                  <p style="margin:0;"><strong>"Proof".</strong> Suppose <span class="mono-inline">m</span> and <span class="mono-inline">n</span> are even integers. By definition of even, <span class="mono-inline">m = 2k</span> and <span class="mono-inline">n = 2k</span> for some integer <span class="mono-inline">k</span>. Then <span class="mono-inline">m + n = 2k + 2k = 4k = 2(2k)</span>, which is even, with witness <span class="mono-inline">2k</span>.</p>
                 </div>
               </div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-4-1-E">Show solution</button>
@@ -725,7 +725,7 @@
                 <p>For example, <span class="mono">m = 2</span> has witness <span class="mono">k = 1</span>, but <span class="mono">n = 6</span> has witness <span class="mono">k = 3</span>. Forcing both to use the same <span class="mono">k</span> shrinks the claim from "any two even integers" to "any two <em>identical</em> even integers", which is much weaker.</p>
                 <p><strong>Correct proof.</strong> Suppose <span class="mono">m</span> and <span class="mono">n</span> are particular but arbitrarily chosen even integers. By definition of even, <span class="mono">m = 2r</span> and <span class="mono">n = 2s</span> for some integers <span class="mono">r</span> and <span class="mono">s</span> (possibly different).</p>
                 <p class="mono">m + n = 2r + 2s = 2(r + s).</p>
-                <p>Let <span class="mono">t = r + s</span> (an integer, sum of integers). Then <span class="mono">m + n = 2t</span>, so <span class="mono">m + n</span> is even. ∎</p>
+                <p>Let <span class="mono">t = r + s</span> (an integer, sum of integers). Then <span class="mono">m + n = 2t</span>, so <span class="mono">m + n</span> is even.</p>
                 <p><em>Why we drill on this.</em> "Find the mistake" exercises catch the most common error in proof writing: collapsing two independent existential witnesses into one. The slides flag these as high-value for the midterm.</p>
               </div>
             </div>
@@ -830,7 +830,7 @@
               <div class="proof-step">By definition of rational, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for some integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>.</div>
               <div class="proof-step mono">r + s  =  a/b + c/d  =  (ad + bc) / bd        by basic algebra.</div>
               <div class="proof-step">Let <span class="mono">p = ad + bc</span> and <span class="mono">q = bd</span>. Then <span class="mono">p, q</span> are integers, and <span class="mono">q = bd ≠ 0</span> by the zero-product property (since <span class="mono">b, d ≠ 0</span>).</div>
-              <div class="proof-step">So <span class="mono">r + s = p/q</span> with <span class="mono">p, q</span> integers and <span class="mono">q ≠ 0</span>. Therefore <span class="mono">r + s</span> is rational. <span class="end-of-proof">∎</span></div>
+              <div class="proof-step">So <span class="mono">r + s = p/q</span> with <span class="mono">p, q</span> integers and <span class="mono">q ≠ 0</span>. Therefore <span class="mono">r + s</span> is rational.</div>
             </div>
 
             <div class="thm-box" style="margin-top:8px;">
@@ -871,7 +871,7 @@
                 <p><strong>True.</strong></p>
                 <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are rational. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>. Then</p>
                 <p class="mono">r − s = a/b − c/d = (ad − bc) / bd.</p>
-                <p>Let <span class="mono">p = ad − bc</span> and <span class="mono">q = bd</span>. Both are integers (differences and products of integers are integers), and <span class="mono">q ≠ 0</span> by the zero-product property. Hence <span class="mono">r − s = p/q</span> is rational. ∎</p>
+                <p>Let <span class="mono">p = ad − bc</span> and <span class="mono">q = bd</span>. Both are integers (differences and products of integers are integers), and <span class="mono">q ≠ 0</span> by the zero-product property. Hence <span class="mono">r − s = p/q</span> is rational.</p>
               </div>
             </div>
 
@@ -882,7 +882,7 @@
               <div class="solution" id="sol-4-2-B">
                 <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are rational and <span class="mono">s ≠ 0</span>. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>. Since <span class="mono">s ≠ 0</span>, also <span class="mono">c ≠ 0</span> (otherwise <span class="mono">s = 0/d = 0</span>). Then</p>
                 <p class="mono">r / s = (a/b) / (c/d) = (a · d) / (b · c) = ad / bc.</p>
-                <p>Let <span class="mono">p = ad</span> and <span class="mono">q = bc</span>. Both are integers; <span class="mono">q = bc ≠ 0</span> by the zero-product property. Hence <span class="mono">r/s = p/q</span> with <span class="mono">q ≠ 0</span>, so <span class="mono">r/s</span> is rational. ∎</p>
+                <p>Let <span class="mono">p = ad</span> and <span class="mono">q = bc</span>. Both are integers; <span class="mono">q = bc ≠ 0</span> by the zero-product property. Hence <span class="mono">r/s = p/q</span> with <span class="mono">q ≠ 0</span>, so <span class="mono">r/s</span> is rational.</p>
               </div>
             </div>
 
@@ -893,7 +893,7 @@
               <div class="solution" id="sol-4-2-C">
                 <p><strong>True.</strong> Suppose <span class="mono">a</span> is any odd integer. Then <span class="mono">a = 2k + 1</span> for some integer <span class="mono">k</span>. So</p>
                 <p class="mono">a² + a = (2k + 1)² + (2k + 1) = 4k² + 4k + 1 + 2k + 1 = 4k² + 6k + 2 = 2(2k² + 3k + 1).</p>
-                <p>Let <span class="mono">t = 2k² + 3k + 1</span> (an integer). Then <span class="mono">a² + a = 2t</span>, hence even by definition. ∎</p>
+                <p>Let <span class="mono">t = 2k² + 3k + 1</span> (an integer). Then <span class="mono">a² + a = 2t</span>, hence even by definition.</p>
                 <p><em>Sharper insight.</em> <span class="mono">a² + a = a(a + 1)</span> is the product of two consecutive integers, one of which is always even. The proof above only handles <span class="mono">a</span> odd; the general fact follows from Theorem 4.4.2 (Section 4.4).</p>
               </div>
             </div>
@@ -905,7 +905,7 @@
               <div class="solution" id="sol-4-2-D">
                 <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are rational. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for some integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>. Then</p>
                 <p class="mono">r · s = (a/b) · (c/d) = (a · c) / (b · d) = ac / bd.</p>
-                <p>Let <span class="mono">p = ac</span> and <span class="mono">q = bd</span>. Both are integers (products of integers are integers), and <span class="mono">q = bd ≠ 0</span> by the zero-product property. Hence <span class="mono">r · s = p/q</span> with <span class="mono">q ≠ 0</span>, so <span class="mono">r · s</span> is rational. ∎</p>
+                <p>Let <span class="mono">p = ac</span> and <span class="mono">q = bd</span>. Both are integers (products of integers are integers), and <span class="mono">q = bd ≠ 0</span> by the zero-product property. Hence <span class="mono">r · s = p/q</span> with <span class="mono">q ≠ 0</span>, so <span class="mono">r · s</span> is rational.</p>
                 <p><em>Together with Exercises 4.2.A and 4.2.B</em>: the rationals are closed under all four basic operations (with division requiring a nonzero divisor). This is the closure result that makes <span class="mono">ℚ</span> a <em>field</em>.</p>
               </div>
             </div>
@@ -921,7 +921,7 @@
                   <li><span class="mono">3n</span> is the product of two odd integers (3 and n), so <span class="mono">3n</span> is odd by <strong>property 3</strong>.</li>
                   <li><span class="mono">5m + 3n</span> is the sum of an even integer and an odd integer, so it is odd by <strong>property 5</strong>.</li>
                 </ul>
-                <p>Therefore <span class="mono">5m + 3n</span> is odd. ∎</p>
+                <p>Therefore <span class="mono">5m + 3n</span> is odd.</p>
                 <p><em>What this exercises.</em> Citing pre-proved results by number, instead of re-expanding the definitions of even and odd. Once the seven properties are established, every later proof reads as a short chain of citations.</p>
               </div>
             </div>
@@ -977,7 +977,7 @@
               <div class="proof-step">Suppose <span class="mono">a, b, c</span> are integers with <span class="mono">a | b</span> and <span class="mono">b | c</span>. <em>[We must show <span class="mono">a | c</span>.]</em></div>
               <div class="proof-step">By definition, <span class="mono">b = ar</span> for some integer <span class="mono">r</span>, and <span class="mono">c = bs</span> for some integer <span class="mono">s</span>.</div>
               <div class="proof-step mono">c = bs = (ar)s = a(rs).</div>
-              <div class="proof-step">Let <span class="mono">k = rs</span>. Then <span class="mono">k</span> is an integer, and <span class="mono">c = ak</span>, so <span class="mono">a | c</span> by definition. <span class="end-of-proof">∎</span></div>
+              <div class="proof-step">Let <span class="mono">k = rs</span>. Then <span class="mono">k</span> is an integer, and <span class="mono">c = ak</span>, so <span class="mono">a | c</span> by definition.</div>
             </div>
 
             <p style="font-size:0.92rem; margin-top:14px;"><strong>Live demo.</strong> Pick three integers and watch the transitivity check.</p>
@@ -1019,7 +1019,7 @@
             <div class="proof-callout" style="margin-top:12px;">
               <div class="proof-label">Worked example (Epp Example 4.3.9, p. 175)</div>
               <div class="proof-step">Suppose <span class="mono">m</span> is an integer with <span class="mono">8·7·6·5·4·3·2·m = 17·16·15·14·13·12·11·10</span>. Does <span class="mono">17 | m</span>?</div>
-              <div class="proof-step"><strong>Yes.</strong> The prime <span class="mono">17</span> appears on the right (as <span class="mono">17</span> itself). By unique factorisation, it must also appear on the left. Each of <span class="mono">2, 3, 4, 5, 6, 7, 8</span> is less than <span class="mono">17</span>, so none of their prime factors is <span class="mono">17</span>. Hence <span class="mono">17</span> must appear in <span class="mono">m</span>: <span class="mono">17 | m</span>. <span class="end-of-proof">∎</span></div>
+              <div class="proof-step"><strong>Yes.</strong> The prime <span class="mono">17</span> appears on the right (as <span class="mono">17</span> itself). By unique factorisation, it must also appear on the left. Each of <span class="mono">2, 3, 4, 5, 6, 7, 8</span> is less than <span class="mono">17</span>, so none of their prime factors is <span class="mono">17</span>. Hence <span class="mono">17</span> must appear in <span class="mono">m</span>: <span class="mono">17 | m</span>.</div>
             </div>
           </div>
 
@@ -1035,7 +1035,7 @@
               <div class="solution" id="sol-4-3-A">
                 <p>Suppose <span class="mono">a, b, c</span> are integers with <span class="mono">a | b</span> and <span class="mono">a | c</span>. By definition, <span class="mono">b = ar</span> and <span class="mono">c = as</span> for some integers <span class="mono">r, s</span>. Then</p>
                 <p class="mono">b − c = ar − as = a(r − s).</p>
-                <p>Let <span class="mono">t = r − s</span> (an integer). Then <span class="mono">b − c = at</span>, so <span class="mono">a | (b − c)</span> by definition. ∎</p>
+                <p>Let <span class="mono">t = r − s</span> (an integer). Then <span class="mono">b − c = at</span>, so <span class="mono">a | (b − c)</span> by definition.</p>
               </div>
             </div>
 
@@ -1046,7 +1046,7 @@
               <div class="solution" id="sol-4-3-B">
                 <p><strong>True.</strong> Suppose <span class="mono">a, b</span> are integers with <span class="mono">a | b</span>. Then <span class="mono">b = ak</span> for some integer <span class="mono">k</span>. So</p>
                 <p class="mono">b² = (ak)² = a² k² = a · (ak²).</p>
-                <p>Let <span class="mono">t = ak²</span> (an integer). Then <span class="mono">b² = at</span>, hence <span class="mono">a | b²</span>. ∎</p>
+                <p>Let <span class="mono">t = ak²</span> (an integer). Then <span class="mono">b² = at</span>, hence <span class="mono">a | b²</span>.</p>
               </div>
             </div>
 
@@ -1089,7 +1089,7 @@
                   <li><span class="mono">29</span> is prime, and it appears on the right (as <span class="mono">29</span> itself).</li>
                   <li>By the unique factorisation theorem, <span class="mono">29</span> must also appear among the prime factors of the left side.</li>
                   <li>Each of <span class="mono">14, 13, 12, 11, 10</span> is strictly less than <span class="mono">29</span>, so none of them has <span class="mono">29</span> as a factor.</li>
-                  <li>Therefore <span class="mono">29</span> must appear in the factorisation of <span class="mono">m</span>, which means <span class="mono">29 | m</span>. ∎</li>
+                  <li>Therefore <span class="mono">29</span> must appear in the factorisation of <span class="mono">m</span>, which means <span class="mono">29 | m</span>.</li>
                 </ul>
                 <p><em>Pattern.</em> This is the same argument as Epp's <span class="mono">17 | m</span> worked example. Whenever a prime <span class="mono">p</span> appears on one side of an equation but is "too large" to be hidden in any of the other factors on the other side, it must show up in the unknown.</p>
               </div>
@@ -1136,7 +1136,7 @@
               <div class="proof-label">Solution (Epp Example 4.4.4)</div>
               <div class="proof-step">Translate: <span class="mono">m mod 11 = 6  ⇔  m = 11q + 6</span> for some integer <span class="mono">q</span>.</div>
               <div class="proof-step mono">4m = 4(11q + 6) = 44q + 24 = 44q + 22 + 2 = 11(4q + 2) + 2.</div>
-              <div class="proof-step"><span class="mono">4q + 2</span> is an integer, and <span class="mono">0 ≤ 2 &lt; 11</span>. Therefore <span class="mono">4m mod 11 = 2</span>. <span class="end-of-proof">∎</span></div>
+              <div class="proof-step"><span class="mono">4q + 2</span> is an integer, and <span class="mono">0 ≤ 2 &lt; 11</span>. Therefore <span class="mono">4m mod 11 = 2</span>.</div>
             </div>
 
             <p style="font-size:0.86rem; color:var(--c-muted); margin-top:14px;"><strong style="color:var(--c-text)">Watch (language note).</strong> In Python, <span class="mono-inline">%</span> returns a non-negative remainder when the divisor is positive (matches Epp). In C, C++, and Java, <span class="mono-inline">%</span> can return a negative result when <span class="mono-inline">n &lt; 0</span>. The companion uses Python-style mod throughout.</p>
@@ -1157,7 +1157,7 @@
               <div class="proof-step">Suppose <span class="mono">m, m + 1</span> are two consecutive integers. By the parity property, either <span class="mono">m</span> is even or <span class="mono">m</span> is odd.</div>
               <div class="proof-step"><strong>Case 1.</strong> <span class="mono">m</span> is even. Then <span class="mono">m = 2k</span> for some integer <span class="mono">k</span>. So <span class="mono">m + 1 = 2k + 1</span>, which is odd by definition.</div>
               <div class="proof-step"><strong>Case 2.</strong> <span class="mono">m</span> is odd. Then <span class="mono">m = 2k + 1</span> for some integer <span class="mono">k</span>. So <span class="mono">m + 1 = (2k + 1) + 1 = 2(k + 1)</span>, which is even.</div>
-              <div class="proof-step">In both cases, exactly one of <span class="mono">m, m + 1</span> is even and the other is odd. <span class="end-of-proof">∎</span></div>
+              <div class="proof-step">In both cases, exactly one of <span class="mono">m, m + 1</span> is even and the other is odd.</div>
             </div>
 
             <div class="thm-box" style="margin-top:14px;">
@@ -1170,7 +1170,7 @@
               <div class="proof-step">Every odd integer <span class="mono">n</span> has the form <span class="mono">n = 4q + 1</span> or <span class="mono">n = 4q + 3</span> for some integer <span class="mono">q</span>.</div>
               <div class="proof-step"><strong>Case 1.</strong> <span class="mono">n = 4q + 1</span>:<br><span class="mono">n² = 16q² + 8q + 1 = 8(2q² + q) + 1</span>. Let <span class="mono">m = 2q² + q</span>.</div>
               <div class="proof-step"><strong>Case 2.</strong> <span class="mono">n = 4q + 3</span>:<br><span class="mono">n² = 16q² + 24q + 9 = 8(2q² + 3q + 1) + 1</span>. Let <span class="mono">m = 2q² + 3q + 1</span>.</div>
-              <div class="proof-step">In both cases <span class="mono">n² = 8m + 1</span>. <span class="end-of-proof">∎</span></div>
+              <div class="proof-step">In both cases <span class="mono">n² = 8m + 1</span>.</div>
             </div>
           </div>
 
@@ -1260,7 +1260,7 @@
                 <p>Suppose <span class="mono">n</span> is any integer. By the quotient-remainder theorem with <span class="mono">d = 2</span>, either <span class="mono">n = 2q</span> or <span class="mono">n = 2q + 1</span> for some integer <span class="mono">q</span>.</p>
                 <p><strong>Case 1: <span class="mono">n = 2q</span>.</strong> <span class="mono">n² + n = 4q² + 2q = 2(2q² + q)</span>. Let <span class="mono">t = 2q² + q</span> (an integer). Then <span class="mono">n² + n = 2t</span>, hence even.</p>
                 <p><strong>Case 2: <span class="mono">n = 2q + 1</span>.</strong> <span class="mono">n² + n = (2q+1)² + (2q+1) = 4q² + 4q + 1 + 2q + 1 = 4q² + 6q + 2 = 2(2q² + 3q + 1)</span>. Let <span class="mono">t = 2q² + 3q + 1</span> (an integer). Then <span class="mono">n² + n = 2t</span>, hence even.</p>
-                <p>In both cases <span class="mono">n² + n</span> is even. ∎</p>
+                <p>In both cases <span class="mono">n² + n</span> is even.</p>
                 <p><em>Quicker insight.</em> <span class="mono">n² + n = n(n + 1)</span> is the product of two consecutive integers, one of which is even by Theorem 4.4.2.</p>
               </div>
             </div>
@@ -1276,7 +1276,7 @@
                 <p class="mono">5a = 5(7q + 3) = 35q + 15.</p>
                 <p>Rewrite <span class="mono">15</span> as a multiple of 7 plus a remainder in <span class="mono">[0, 7)</span>: <span class="mono">15 = 7·2 + 1</span>.</p>
                 <p class="mono">5a = 35q + 14 + 1 = 7(5q + 2) + 1.</p>
-                <p><span class="mono">5q + 2</span> is an integer, and <span class="mono">0 ≤ 1 &lt; 7</span>. So <span class="mono">5a mod 7 = 1</span>. ∎</p>
+                <p><span class="mono">5q + 2</span> is an integer, and <span class="mono">0 ≤ 1 &lt; 7</span>. So <span class="mono">5a mod 7 = 1</span>.</p>
                 <p><em>Method.</em> Same template as Epp Example 4.4.4 (the <span class="mono">m mod 11</span> problem): translate the hypothesis to <span class="mono">a = dq + r</span>, do the algebra, then rewrite the constant term as <span class="mono">d · (something) + (new remainder in [0, d))</span>.</p>
               </div>
             </div>
@@ -1290,7 +1290,7 @@
                 <p><strong>Case 1: <span class="mono">n = 3q</span>.</strong> Then <span class="mono">n</span> itself is a multiple of 3, so <span class="mono">n(n+1)(n+2) = 3q · (n+1)(n+2) = 3 · [q(n+1)(n+2)]</span>. The bracket is an integer, so the product is divisible by 3.</p>
                 <p><strong>Case 2: <span class="mono">n = 3q + 1</span>.</strong> Then <span class="mono">n + 2 = 3q + 3 = 3(q + 1)</span> is a multiple of 3, so <span class="mono">n(n+1)(n+2) = n(n+1) · 3(q+1) = 3 · [n(n+1)(q+1)]</span>. Divisible by 3.</p>
                 <p><strong>Case 3: <span class="mono">n = 3q + 2</span>.</strong> Then <span class="mono">n + 1 = 3q + 3 = 3(q + 1)</span> is a multiple of 3, so <span class="mono">n(n+1)(n+2) = n · 3(q+1) · (n+2) = 3 · [n(q+1)(n+2)]</span>. Divisible by 3.</p>
-                <p>In every case <span class="mono">3 | n(n+1)(n+2)</span>. ∎</p>
+                <p>In every case <span class="mono">3 | n(n+1)(n+2)</span>.</p>
                 <p><em>Intuition.</em> Three consecutive integers always include one multiple of 3. Cases mod 3 makes the argument formal.</p>
               </div>
             </div>

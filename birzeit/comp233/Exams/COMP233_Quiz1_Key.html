@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8" />
+  <title>COMP 233 Quiz #1: Answers &amp; Marking Scheme</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+    body {
+      font-family: 'Cambria', 'Georgia', 'Times New Roman', serif;
+      font-size: 11pt;
+      line-height: 1.45;
+      color: #000;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .doc-title { text-align: center; margin-bottom: 16pt; }
+    .doc-title .u { font-size: 14pt; font-weight: bold; }
+    .doc-title .t { font-size: 13pt; margin-top: 2pt; }
+    .doc-title .s { font-size: 11pt; font-weight: bold; margin-top: 6pt; }
+    .doc-title .y { font-size: 11pt; margin-top: 2pt; color: #333; }
+
+    h2 {
+      font-size: 12.5pt;
+      margin: 16pt 0 8pt;
+      padding-bottom: 3pt;
+      border-bottom: 1.5pt solid #000;
+      page-break-after: avoid;
+    }
+    .part-block { page-break-inside: avoid; margin-bottom: 12pt; }
+    .part-head {
+      font-size: 11.5pt;
+      font-weight: bold;
+      margin: 12pt 0 6pt;
+      page-break-after: avoid;
+    }
+    .label {
+      display: inline-block;
+      font-size: 9.5pt;
+      font-weight: bold;
+      letter-spacing: 0.4pt;
+      text-transform: uppercase;
+      color: #444;
+      background: #ececec;
+      padding: 1pt 7pt;
+      margin-right: 6pt;
+      vertical-align: 1pt;
+    }
+    .stmt {
+      margin: 4pt 0 8pt;
+      padding: 5pt 10pt;
+      border-left: 2pt solid #888;
+      background: #fafafa;
+    }
+    .stmt p { margin: 2pt 0; }
+    .stmt .formula {
+      display: block;
+      margin: 4pt 0;
+      padding: 5pt 10pt;
+      background: #f0f0f0;
+      font-family: 'Cambria Math', 'Cambria', serif;
+      font-size: 11pt;
+    }
+    .stmt .quoted {
+      margin: 4pt 0 4pt 10pt;
+      padding-left: 8pt;
+      border-left: 2pt solid #888;
+      font-style: italic;
+    }
+
+    .soln { margin: 4pt 0 8pt; }
+    .soln p { margin: 3pt 0; text-align: justify; }
+    .soln p.center { text-align: center; }
+    code, .mono {
+      font-family: 'Cambria Math', 'STIX Two Math', 'Cambria', 'Times New Roman', serif;
+      font-style: italic;
+    }
+
+    table.steps {
+      border-collapse: collapse;
+      margin: 6pt 0 10pt;
+      width: 100%;
+      font-family: 'Cambria Math', 'Cambria', serif;
+      font-size: 10.5pt;
+      page-break-inside: avoid;
+    }
+    table.steps th, table.steps td {
+      border: 0.5pt solid #999;
+      padding: 4pt 8pt;
+      vertical-align: top;
+      text-align: left;
+    }
+    table.steps th { background: #ececec; font-weight: bold; font-family: 'Cambria', serif; }
+    table.steps td.step-no {
+      width: 28pt;
+      text-align: center;
+      font-weight: bold;
+      font-family: 'Cambria', serif;
+    }
+    table.steps td.reason {
+      width: 38%;
+      font-family: 'Cambria', serif;
+      color: #444;
+      font-style: italic;
+    }
+
+    .variations {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8pt;
+      margin: 6pt 0 10pt;
+    }
+    .variations .vc {
+      border: 0.5pt solid #999;
+      padding: 6pt 9pt;
+      page-break-inside: avoid;
+    }
+    .variations .vc h6 {
+      margin: 0 0 3pt;
+      font-size: 10.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.4pt;
+      color: #444;
+      font-weight: bold;
+    }
+    .variations .vc .formal {
+      font-family: 'Cambria Math', 'Cambria', serif;
+      font-size: 10.5pt;
+      margin-bottom: 3pt;
+    }
+    .variations .vc .verbal { font-size: 10pt; color: #333; }
+
+    table.marking {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 4pt 0 12pt;
+      font-size: 10.5pt;
+      page-break-inside: avoid;
+    }
+    table.marking caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      padding-bottom: 3pt;
+      font-size: 10.5pt;
+    }
+    table.marking th, table.marking td {
+      border: 0.5pt solid #000;
+      padding: 4pt 8pt;
+      vertical-align: top;
+      text-align: left;
+    }
+    table.marking th { background: #ececec; font-weight: bold; }
+    table.marking td.m {
+      width: 46pt;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    table.tt {
+      border-collapse: collapse;
+      margin: 6pt auto 10pt;
+      font-family: 'Cambria Math', 'Cambria', 'Times New Roman', serif;
+      font-size: 10.5pt;
+    }
+    table.tt th, table.tt td {
+      border: 0.5pt solid #000;
+      padding: 2.5pt 9pt;
+      text-align: center;
+    }
+    table.tt th { background: #ececec; font-weight: bold; }
+    table.tt td.t { color: #1b5e20; font-weight: bold; }
+    table.tt td.f { color: #b71c1c; font-weight: bold; }
+
+    .verdict {
+      margin: 8pt 0;
+      padding: 5pt 10pt;
+      border-left: 2pt solid #1b5e20;
+      background: #f1f8e9;
+      font-size: 10.5pt;
+    }
+
+    .argform {
+      display: inline-block;
+      padding: 5pt 14pt;
+      margin: 4pt 0;
+      border: 0.5pt solid #999;
+      font-family: 'Cambria Math', 'Cambria', serif;
+      font-size: 11pt;
+      background: #fafafa;
+    }
+    .argform .premise { display: block; }
+    .argform .concl { display: block; border-top: 0.5pt solid #000; padding-top: 2pt; }
+
+    ul.principles {
+      font-size: 10.5pt;
+      margin: 4pt 0 0;
+      padding-left: 18pt;
+    }
+    ul.principles li { margin-bottom: 4pt; text-align: justify; }
+
+    .summary {
+      margin-top: 10pt;
+      padding: 8pt 10pt;
+      border-top: 1pt solid #000;
+      border-bottom: 1pt solid #000;
+      font-size: 11pt;
+    }
+    .summary table { border: 0; width: 100%; }
+    .summary td { padding: 2pt 6pt; border: 0; }
+    .summary td.q { width: 28%; }
+    .summary td.calc { font-family: 'Cambria Math', 'Cambria', serif; }
+    .summary td.total { width: 18%; text-align: right; font-weight: bold; }
+    .summary tr.grand td {
+      border-top: 0.5pt solid #000;
+      padding-top: 5pt;
+      font-weight: bold;
+      font-size: 11.5pt;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="doc-title">
+    <div class="u">Birzeit University</div>
+    <div class="t">Discrete Mathematics (COMP 233): Quiz #1</div>
+    <div class="s">Section 9: Answers &amp; Marking Scheme</div>
+    <div class="y">Second Semester 2025/2026 &middot; Coverage: Chapters 1, 2, 3</div>
+  </div>
+
+  <h2>Question One [45 pts]: Logical equivalence, tautology, and an inference rule</h2>
+
+  <div class="part-block">
+    <div class="part-head">Q1.a [15 pts]</div>
+    <div class="stmt">
+      <p>Simplify the following logical expression to an equivalent expression:</p>
+      <span class="formula">&not;(p &and; &not;q) &and; (p &or; q)</span>
+    </div>
+    <div class="soln">
+      <p><span class="label">Solution</span> Apply equivalence laws step by step. The target equivalent expression is <code>q</code>.</p>
+      <table class="steps">
+        <thead>
+          <tr><th>#</th><th>Form</th><th>Law used</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="step-no">0</td><td>&not;(p &and; &not;q) &and; (p &or; q)</td><td class="reason">given</td></tr>
+          <tr><td class="step-no">1</td><td>&equiv; (&not;p &or; &not;(&not;q)) &and; (p &or; q)</td><td class="reason">De Morgan's law on <code>&not;(p &and; &not;q)</code></td></tr>
+          <tr><td class="step-no">2</td><td>&equiv; (&not;p &or; q) &and; (p &or; q)</td><td class="reason">double negation: <code>&not;(&not;q) &equiv; q</code></td></tr>
+          <tr><td class="step-no">3</td><td>&equiv; q &or; (&not;p &and; p)</td><td class="reason">distributive law (factor out <code>q</code>)</td></tr>
+          <tr><td class="step-no">4</td><td>&equiv; q &or; c</td><td class="reason">negation law: <code>&not;p &and; p &equiv; c</code></td></tr>
+          <tr><td class="step-no">5</td><td>&equiv; q</td><td class="reason">identity law: <code>q &or; c &equiv; q</code></td></tr>
+        </tbody>
+      </table>
+      <p><span class="label">Final</span> <code>&not;(p &and; &not;q) &and; (p &or; q) &equiv; q</code>.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q1.a [15 pts, 3 pts per correct step]</caption>
+      <thead><tr><th class="m">Pts</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">3</td><td>Step 1: De Morgan applied correctly to <code>&not;(p &and; &not;q)</code>.</td></tr>
+        <tr><td class="m">3</td><td>Step 2: double negation applied to <code>&not;(&not;q)</code>.</td></tr>
+        <tr><td class="m">3</td><td>Step 3: distributive law to factor out <code>q</code>.</td></tr>
+        <tr><td class="m">3</td><td>Step 4: negation law identifying <code>&not;p &and; p &equiv; c</code>.</td></tr>
+        <tr><td class="m">3</td><td>Step 5: identity law reaching <code>q</code>.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:10pt; color:#555;"><span class="label">Notes</span> Accept equivalent orderings of the laws. Accept <em>NOT</em>, <em>~</em>, or <em>&sim;</em> in place of <em>&not;</em>. If the student names a different law that yields the same intermediate form correctly, award full marks for that step.</p>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q1.b [25 pts]</div>
+    <div class="stmt">
+      <p>Show that the following expression is a <strong>tautology</strong> by proving the logical equivalence using a <strong>truth table</strong>:</p>
+      <span class="formula">(p &and; (p &rarr; q)) &rarr; q &nbsp;&equiv;&nbsp; T</span>
+    </div>
+    <div class="soln">
+      <p><span class="label">Solution</span> Build the truth table column by column. Four rows for two variables <code>p, q</code>:</p>
+      <table class="tt">
+        <thead>
+          <tr><th>p</th><th>q</th><th>p &rarr; q</th><th>p &and; (p &rarr; q)</th><th>(p &and; (p &rarr; q)) &rarr; q</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr>
+          <tr><td class="t">T</td><td class="f">F</td><td class="f">F</td><td class="f">F</td><td class="t">T</td></tr>
+          <tr><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr>
+          <tr><td class="f">F</td><td class="f">F</td><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr>
+        </tbody>
+      </table>
+      <p>The final column is <strong>T in every row</strong>, so the expression evaluates to true for every assignment of truth values to <code>p</code> and <code>q</code>.</p>
+      <div class="verdict"><span class="label">Verdict</span> <code>(p &and; (p &rarr; q)) &rarr; q &equiv; T</code>. The expression is a <strong>tautology</strong>.</div>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q1.b [25 pts]</caption>
+      <thead><tr><th class="m">Pts</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">3</td><td>Correct column headers (the five columns above).</td></tr>
+        <tr><td class="m">3</td><td>Correctly computed intermediate columns: <code>p &rarr; q</code> and <code>p &and; (p &rarr; q)</code>.</td></tr>
+        <tr><td class="m">16</td><td>4 pts per correct row (4 rows). Lose 1 pt per wrong cell.</td></tr>
+        <tr><td class="m">3</td><td>Correct conclusion stating the expression is a tautology and equivalent to <code>T</code>.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:10pt; color:#555;"><span class="label">Notes</span> Award 0 pts if the truth table is missing entirely. If only the final column is given without intermediate columns, cap at 8 pts.</p>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q1.c [5 pts]</div>
+    <div class="stmt">
+      <p>Which Rule of Inference is represented by the tautology in part (b)? Write its <strong>formal argument form</strong>.</p>
+    </div>
+    <div class="soln">
+      <p><span class="label">Rule</span> <strong>Modus Ponens</strong>. The tautology <code>(p &and; (p &rarr; q)) &rarr; q</code> says: <em>if both <code>p</code> and <code>p &rarr; q</code> are true, then <code>q</code> is true</em>.</p>
+      <p><span class="label">Form</span></p>
+      <div class="argform">
+        <span class="premise">p</span>
+        <span class="premise">p &rarr; q</span>
+        <span class="concl">&there4; q</span>
+      </div>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q1.c [5 pts]</caption>
+      <thead><tr><th class="m">Pts</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">2</td><td>Correctly naming <strong>Modus Ponens</strong>.</td></tr>
+        <tr><td class="m">3</td><td>Correct formal argument form: two premises (<code>p</code> and <code>p &rarr; q</code>) and conclusion <code>&there4; q</code>. All three lines must be present.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:10pt; color:#555;"><span class="label">Notes</span> Accept equivalent notations for the conclusion (<code>&there4; q</code>, <code>&#8866; q</code>, "therefore q"). 0 pts if the rule name is wrong.</p>
+  </div>
+
+  <h2>Question Two [55 pts]: Conditional variations, predicates &amp; quantifiers, short answers</h2>
+
+  <div class="part-block">
+    <div class="part-head">Q2.a [20 pts]</div>
+    <div class="stmt">
+      <p>Write the <strong>contrapositive</strong>, <strong>converse</strong>, <strong>inverse</strong>, and <strong>negation</strong> of the following statement:</p>
+      <p class="quoted">"If Sara passes Discrete Math, then she will register for Data Structures and she will take Algorithms."</p>
+    </div>
+    <div class="soln">
+      <p><span class="label">Setup</span> Let <code>p</code> = "Sara passes Discrete Math", <code>q</code> = "Sara registers for Data Structures", <code>r</code> = "Sara takes Algorithms". The original statement is <code>p &rarr; (q &and; r)</code>.</p>
+      <div class="variations">
+        <div class="vc">
+          <h6>Contrapositive</h6>
+          <div class="formal">&not;(q &and; r) &rarr; &not;p &nbsp;&equiv;&nbsp; (&not;q &or; &not;r) &rarr; &not;p</div>
+          <div class="verbal">"If Sara does not register for Data Structures or does not take Algorithms, then she does not pass Discrete Math."</div>
+        </div>
+        <div class="vc">
+          <h6>Converse</h6>
+          <div class="formal">(q &and; r) &rarr; p</div>
+          <div class="verbal">"If Sara registers for Data Structures and takes Algorithms, then she passes Discrete Math."</div>
+        </div>
+        <div class="vc">
+          <h6>Inverse</h6>
+          <div class="formal">&not;p &rarr; &not;(q &and; r) &nbsp;&equiv;&nbsp; &not;p &rarr; (&not;q &or; &not;r)</div>
+          <div class="verbal">"If Sara does not pass Discrete Math, then she does not register for Data Structures or does not take Algorithms."</div>
+        </div>
+        <div class="vc">
+          <h6>Negation</h6>
+          <div class="formal">&not;(p &rarr; (q &and; r)) &nbsp;&equiv;&nbsp; p &and; (&not;q &or; &not;r)</div>
+          <div class="verbal">"Sara passes Discrete Math, and she does not register for Data Structures or does not take Algorithms."</div>
+        </div>
+      </div>
+      <p><span class="label">Important</span> The negation is <em>not</em> a conditional. It is a conjunction: the hypothesis holds and the conclusion fails.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q2.a [20 pts, 5 pts per variation]</caption>
+      <thead><tr><th class="m">Pts</th><th>Criterion (apply to each of the four variations)</th></tr></thead>
+      <tbody>
+        <tr><td class="m">3</td><td>Correct symbolic form for the variation.</td></tr>
+        <tr><td class="m">2</td><td>Correct verbal sentence in English.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:10pt; color:#555;"><span class="label">Notes</span> De Morgan must be applied to <code>&not;(q &and; r)</code> in the contrapositive, inverse, and negation. <strong>Deduct 2 pts</strong> overall if missing throughout. Accept <code>&not;q &or; &not;r</code> or <code>&not;r &or; &not;q</code>. <strong>0 pts</strong> for the negation if it is written as a conditional.</p>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q2.b [20 pts]</div>
+    <div class="stmt">
+      <p>Predicates on the domain <code>D = {2, 3, 5, 6, 8}</code>:</p>
+      <p style="margin-left: 16pt;"><code>E(x)</code> = "<code>x</code> is even"; &nbsp;<code>P(x)</code> = "<code>x</code> is prime".</p>
+      <p>For each of (i)&ndash;(ii), write the statement formally with quantifiers and predicates, then give its truth value with justification. For the Rewrite, give the English sentence and the truth value with justification.</p>
+      <p style="margin-left: 16pt;">(i) Every element in <code>D</code> is even. &nbsp;<strong>[5 pts]</strong><br>
+      (ii) There exists an element in <code>D</code> that is both even and prime. &nbsp;<strong>[5 pts]</strong></p>
+      <p>Rewrite the following formal statement as a complete English sentence and give its truth value with justification: &nbsp;<strong>[10 pts]</strong></p>
+      <span class="formula">&forall;x &isin; D, (E(x) &rarr; P(x))</span>
+    </div>
+    <div class="soln">
+      <p><span class="label">(i)</span> Formal: <code>&forall;x &isin; D, E(x)</code>. &nbsp; Truth value: <strong>False</strong>. &nbsp; Justification: <code>x = 3 &isin; D</code> is not even. (Also <code>x = 5</code>.)</p>
+      <p><span class="label">(ii)</span> Formal: <code>&exist;x &isin; D, (E(x) &and; P(x))</code>. &nbsp; Truth value: <strong>True</strong>. &nbsp; Justification: <code>x = 2 &isin; D</code> is even and prime.</p>
+      <p><span class="label">Rewrite</span> English: "For every element <code>x</code> in <code>D</code>, if <code>x</code> is even then <code>x</code> is prime."</p>
+      <p>Truth value: <strong>False</strong>. &nbsp; Justification: <code>x = 6 &isin; D</code> is even (<code>6 = 2 &middot; 3</code>) but is not prime; the hypothesis holds and the conclusion fails. (<code>x = 8</code> is another counterexample.)</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q2.b [20 pts]</caption>
+      <thead><tr><th class="m">Pts</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">2</td><td>(i) Correct formal statement <code>&forall;x &isin; D, E(x)</code>.</td></tr>
+        <tr><td class="m">1</td><td>(i) Correct truth value (False).</td></tr>
+        <tr><td class="m">2</td><td>(i) Justification with a specific counterexample (<code>x = 3</code> or <code>x = 5</code>).</td></tr>
+        <tr><td class="m">2</td><td>(ii) Correct formal statement <code>&exist;x &isin; D, (E(x) &and; P(x))</code>.</td></tr>
+        <tr><td class="m">1</td><td>(ii) Correct truth value (True).</td></tr>
+        <tr><td class="m">2</td><td>(ii) Justification with a specific witness (<code>x = 2</code>).</td></tr>
+        <tr><td class="m">4</td><td>Rewrite: correct English sentence (universal conditional read aloud).</td></tr>
+        <tr><td class="m">2</td><td>Rewrite: correct truth value (False).</td></tr>
+        <tr><td class="m">4</td><td>Rewrite: justification with a specific counterexample where the hypothesis holds but the conclusion fails (<code>x = 6</code> or <code>x = 8</code>).</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:10pt; color:#555;"><span class="label">Notes</span> A bare truth value with no specific witness/counterexample loses the justification marks. Generic claims ("there is one") without a named element score 0 for that step.</p>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q2.c [15 pts, 3 pts each]</div>
+    <div class="stmt">
+      <p>Provide the direct logical equivalent or operation for each of the following.</p>
+      <p style="margin-left: 16pt;">
+        (1) Write the <strong>negation</strong> of <code>p &rarr; q</code>.<br>
+        (2) Which variation of <code>p &rarr; q</code> is logically equivalent to its <strong>Converse</strong>?<br>
+        (3) Given <code>p &harr; q</code>, write it as a conjunction of two conditional statements.<br>
+        (4) Write the <strong>formal argument form</strong> of Modus Tollens (using <code>p</code> and <code>q</code>).<br>
+        (5) Let <code>D = {1, 2, 3, 4}</code> and let <code>P(x)</code> = "<code>x</code> is a factor of 8." Write the <strong>truth set</strong> of <code>P(x)</code>.
+      </p>
+    </div>
+    <div class="soln">
+      <p><span class="label">(1)</span> <code>&not;(p &rarr; q) &equiv; p &and; &not;q</code>. Reading: "<code>p</code> is true and <code>q</code> is false." The negation of a conditional is not itself a conditional.</p>
+      <p><span class="label">(2)</span> <strong>Inverse</strong>: <code>&not;p &rarr; &not;q &equiv; q &rarr; p</code>. The converse and inverse are contrapositives of each other and are therefore logically equivalent.</p>
+      <p><span class="label">(3)</span> <code>p &harr; q &equiv; (p &rarr; q) &and; (q &rarr; p)</code>.</p>
+      <p><span class="label">(4)</span> Modus Tollens:</p>
+      <div class="argform">
+        <span class="premise">p &rarr; q</span>
+        <span class="premise">&not;q</span>
+        <span class="concl">&there4; &not;p</span>
+      </div>
+      <p style="font-size:10pt; color:#555;">Reading: "If <code>p</code> then <code>q</code>. Not <code>q</code>. Therefore not <code>p</code>."</p>
+      <p><span class="label">(5)</span> Truth set: <code>{1, 2, 4}</code>. The factors of 8 are <code>1, 2, 4, 8</code>; intersect with <code>D = {1, 2, 3, 4}</code>. <code>8</code> is a factor of 8 but <code>8 &notin; D</code>, so it is excluded.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q2.c [15 pts, 3 pts each]</caption>
+      <thead><tr><th class="m">Pts</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">3</td><td>(1) Correct answer <code>p &and; &not;q</code>. Accept <code>&not;(p &rarr; q)</code> written as-is but only 1 pt if not simplified.</td></tr>
+        <tr><td class="m">3</td><td>(2) Correctly naming the <strong>Inverse</strong>. 1 pt if only the symbolic form <code>&not;p &rarr; &not;q</code> is given without naming it.</td></tr>
+        <tr><td class="m">3</td><td>(3) Correct answer <code>(p &rarr; q) &and; (q &rarr; p)</code>. Accept equivalent ordering. 0 pts if disjunction or wrong connective is used.</td></tr>
+        <tr><td class="m">3</td><td>(4) Modus Tollens: 1 pt for premise <code>p &rarr; q</code>, 1 pt for premise <code>&not;q</code>, 1 pt for conclusion <code>&there4; &not;p</code>. All three lines must appear for full marks.</td></tr>
+        <tr><td class="m">3</td><td>(5) Correct truth set <code>{1, 2, 4}</code>. Deduct 1 pt if <code>8</code> is included (domain restriction missed). Deduct 1 pt per other wrong or missing element.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <strong>Marks summary</strong>
+    <table>
+      <tr><td class="q">Question One</td><td class="calc">15 + 25 + 5</td><td class="total">45</td></tr>
+      <tr><td class="q">Question Two</td><td class="calc">20 + 20 + 15</td><td class="total">55</td></tr>
+      <tr class="grand"><td class="q">Total</td><td></td><td class="total">100</td></tr>
+    </table>
+  </div>
+
+  <h2>General Marking Principles</h2>
+  <ul class="principles">
+    <li>For proof-style and equivalence-step questions, marking is sequential: students lose individual marks for missing or incorrect steps, not the whole question.</li>
+    <li>Accept either negation glyph throughout: <code>&not;</code>, <code>~</code>, or <code>&sim;</code>.</li>
+    <li>In Q2.a, the negation must not be expressed as a conditional. De Morgan must be applied to <code>&not;(q &and; r)</code> in the contrapositive, inverse, and negation.</li>
+    <li>In Q2.b, justifications without a specific witness or counterexample score 0 for the justification step.</li>
+    <li>In Q2.c, item 4 (Modus Tollens) requires all three lines (two premises and the conclusion) for full marks.</li>
+    <li>If a student names a different law in Q1.a that yields the same intermediate form correctly, award full marks for that step.</li>
+  </ul>
+
+</body>
+</html>

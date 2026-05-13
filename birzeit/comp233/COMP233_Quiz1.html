@@ -21,7 +21,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
 
-  <meta name="theme-color" content="#e65100" />
+  <meta name="theme-color" content="#bf360c" />
   <meta name="author" content="Hisham Ihshaish" />
   <meta name="description" content="COMP233 Quiz #1 (Section 9, 2025/2026) with worked solutions." />
 
@@ -32,9 +32,9 @@
       --c-primary: #1565c0;
       --c-primary-dark: #0d47a1;
       --c-primary-light: #e3f2fd;
-      --c-accent: #e65100;
-      --c-accent-dark: #bf360c;
-      --c-accent-light: #fff3e0;
+      --c-accent: #bf360c;
+      --c-accent-dark: #7f1f06;
+      --c-accent-light: #fbe9e7;
       --c-true: #2e7d32;
       --c-true-bg: #e8f5e9;
       --c-false: #c62828;
@@ -49,9 +49,9 @@
       --c-primary: #64b5f6;
       --c-primary-dark: #90caf9;
       --c-primary-light: #1e3a5f;
-      --c-accent: #ffb74d;
-      --c-accent-dark: #ffd54f;
-      --c-accent-light: #3a2410;
+      --c-accent: #ff8a65;
+      --c-accent-dark: #ffab91;
+      --c-accent-light: #bf360c;
       --c-true: #81c784;
       --c-true-bg: #1b3a23;
       --c-false: #ef9a9a;
@@ -79,9 +79,9 @@
       background: linear-gradient(180deg, var(--c-accent-light) 0%, var(--c-card-bg) 100%);
       border: 2px solid var(--c-accent); border-radius: 12px;
       padding: 18px 24px; margin: 26px 0 28px;
-      box-shadow: 0 2px 12px rgba(230, 81, 0, 0.10);
+      box-shadow: 0 2px 12px rgba(191, 54, 12, 0.10);
     }
-    body.dark .meta-card { background: linear-gradient(180deg, rgba(255,183,77,0.10) 0%, var(--c-card-bg) 100%); }
+    body.dark .meta-card { background: linear-gradient(180deg, rgba(255,138,101,0.10) 0%, var(--c-card-bg) 100%); }
     .meta-card h4 {
       margin: 0 0 8px; font-size: 0.78rem; font-weight: 800;
       color: var(--c-accent); text-transform: uppercase; letter-spacing: 0.7px;
@@ -265,6 +265,24 @@
       .exam-hero h1 { font-size: 1.4rem; }
       .subq { padding: 14px 16px; }
     }
+
+    @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+    @media print {
+      .page-header, .page-footer, .nav-fab, .solution-btn, .exam-hero .back-link { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .page-body { padding-top: 0 !important; }
+      .home-section { padding-top: 0 !important; }
+      .question-block { break-inside: avoid; page-break-inside: avoid; }
+      .subq { break-inside: avoid; page-break-inside: avoid; }
+      .solution { display: block !important; }
+      a { color: inherit !important; text-decoration: none !important; }
+      .exam-hero h1 { font-size: 1.6rem; }
+    }
+    body.key-mode .page-header,
+    body.key-mode .page-footer,
+    body.key-mode .nav-fab,
+    body.key-mode .exam-hero .back-link { display: none !important; }
+    body.key-mode .page-body { padding-top: 20px !important; }
   </style>
 </head>
 
@@ -630,6 +648,12 @@
         btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
       });
     });
+
+    if (/[?&]key=1/.test(window.location.search)) {
+      document.body.classList.add('key-mode');
+      document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('open'); });
+      document.querySelectorAll('.solution-btn').forEach(function (b) { b.style.display = 'none'; });
+    }
   </script>
 </body>
 </html>

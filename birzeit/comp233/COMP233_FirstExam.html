@@ -21,7 +21,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
 
-  <meta name="theme-color" content="#e65100" />
+  <meta name="theme-color" content="#bf360c" />
   <meta name="author" content="Hisham Ihshaish" />
   <meta name="description" content="COMP233 First Exam (Section 9, 2025/2026) with worked solutions." />
 
@@ -32,9 +32,9 @@
       --c-primary: #1565c0;
       --c-primary-dark: #0d47a1;
       --c-primary-light: #e3f2fd;
-      --c-accent: #e65100;
-      --c-accent-dark: #bf360c;
-      --c-accent-light: #fff3e0;
+      --c-accent: #bf360c;
+      --c-accent-dark: #7f1f06;
+      --c-accent-light: #fbe9e7;
       --c-true: #2e7d32;
       --c-true-bg: #e8f5e9;
       --c-false: #c62828;
@@ -49,9 +49,9 @@
       --c-primary: #64b5f6;
       --c-primary-dark: #90caf9;
       --c-primary-light: #1e3a5f;
-      --c-accent: #ffb74d;
-      --c-accent-dark: #ffd54f;
-      --c-accent-light: #3a2410;
+      --c-accent: #ff8a65;
+      --c-accent-dark: #ffab91;
+      --c-accent-light: #bf360c;
       --c-true: #81c784;
       --c-true-bg: #1b3a23;
       --c-false: #ef9a9a;
@@ -83,9 +83,9 @@
       background: linear-gradient(180deg, var(--c-accent-light) 0%, var(--c-card-bg) 100%);
       border: 2px solid var(--c-accent); border-radius: 12px;
       padding: 18px 24px; margin: 26px 0 28px;
-      box-shadow: 0 2px 12px rgba(230, 81, 0, 0.10);
+      box-shadow: 0 2px 12px rgba(191, 54, 12, 0.10);
     }
-    body.dark .meta-card { background: linear-gradient(180deg, rgba(255,183,77,0.10) 0%, var(--c-card-bg) 100%); }
+    body.dark .meta-card { background: linear-gradient(180deg, rgba(255,138,101,0.10) 0%, var(--c-card-bg) 100%); }
     .meta-card h4 {
       margin: 0 0 8px; font-size: 0.78rem; font-weight: 800;
       color: var(--c-accent); text-transform: uppercase; letter-spacing: 0.7px;
@@ -189,6 +189,10 @@
     }
     .mcq-feedback.open { display: block; }
     .mcq-feedback strong { color: var(--c-accent); }
+    .mcq-feedback.fb-correct strong { color: var(--c-true); }
+    .mcq-feedback.fb-wrong strong { color: var(--c-false); }
+    .mcq-feedback.fb-correct { border-left: 3px solid var(--c-true); padding-left: 12px; }
+    .mcq-feedback.fb-wrong { border-left: 3px solid var(--c-false); padding-left: 12px; }
 
     /* Solution */
     .solution-btn {
@@ -293,6 +297,26 @@
       .exam-hero h1 { font-size: 1.4rem; }
       .subq { padding: 14px 16px; }
     }
+
+    /* Print / key-mode layout */
+    @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+    @media print {
+      .page-header, .page-footer, .nav-fab, .solution-btn, .exam-hero .back-link { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .page-body { padding-top: 0 !important; }
+      .home-section { padding-top: 0 !important; }
+      .question-block { break-inside: avoid; page-break-inside: avoid; }
+      .subq { break-inside: avoid; page-break-inside: avoid; }
+      .solution { display: block !important; }
+      .mcq-feedback { display: block !important; }
+      a { color: inherit !important; text-decoration: none !important; }
+      .exam-hero h1 { font-size: 1.6rem; }
+    }
+    body.key-mode .page-header,
+    body.key-mode .page-footer,
+    body.key-mode .nav-fab,
+    body.key-mode .exam-hero .back-link { display: none !important; }
+    body.key-mode .page-body { padding-top: 20px !important; }
   </style>
 </head>
 
@@ -448,7 +472,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 4k² + 4k + 4<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 4(k² + k + 1).</div>
               <p>Let <code>t = k² + k + 1</code>. Then <code>t</code> is an integer (sums and products of integers are integers), and <code>n² + 3 = 4t</code>.</p>
-              <p>By definition of divisibility, <code>4 | (n² + 3)</code>. <span class="end-of-proof">∎</span></p>
+              <p>By definition of divisibility, <code>4 | (n² + 3)</code>.</p>
               <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (4 marks, 1 per criterion).</strong></p>
               <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
                 <li><strong>1 mark</strong>: correct setup, introducing the witness via the definition of odd (<code>n = 2k + 1</code>).</li>
@@ -472,7 +496,7 @@ c = b · s &nbsp;&nbsp;for some integer s &nbsp;&nbsp;(from b | c)</div>
               <p>Substituting the first into the second:</p>
               <div class="step">c = b · s = (a · r) · s = a · (r · s).</div>
               <p>Let <code>k = r · s</code>. Then <code>k</code> is an integer (product of integers is an integer), and <code>c = a · k</code>.</p>
-              <p>By definition of divisibility, <code>a | c</code>. <span class="end-of-proof">∎</span></p>
+              <p>By definition of divisibility, <code>a | c</code>.</p>
               <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (3 marks, 1 per criterion).</strong></p>
               <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
                 <li><strong>1 mark</strong>: correct application of the definition of divisibility to both givens (<code>b = ar</code> and <code>c = bs</code>).</li>
@@ -512,7 +536,7 @@ c = b · s &nbsp;&nbsp;for some integer s &nbsp;&nbsp;(from b | c)</div>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 3(3q² + 6q + 2) + 2.</div>
               <p>Let <code>k = 3q² + 6q + 2</code> (an integer). Then <code>n² + 2n = 3k + 2</code>. <span style="color: var(--c-true)">Has the form 3k + 2. ✓</span></p>
 
-              <p>In every case <code>n² + 2n</code> has the form <code>3k</code> or <code>3k + 2</code> for some integer <code>k</code>. <span class="end-of-proof">∎</span></p>
+              <p>In every case <code>n² + 2n</code> has the form <code>3k</code> or <code>3k + 2</code> for some integer <code>k</code>.</p>
 
               <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (3 marks, 1 per criterion).</strong></p>
               <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
@@ -562,7 +586,7 @@ n = 2s + 1 &nbsp;&nbsp;for some integer s.</div>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 2r + 2s + 2<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 2(r + s + 1).</div>
               <p>Let <code>t = r + s + 1</code>. Then <code>t</code> is an integer (sum of integers is an integer), and <code>m + n = 2t</code>.</p>
-              <p>By definition of even, <code>m + n</code> is even. <span class="end-of-proof">∎</span></p>
+              <p>By definition of even, <code>m + n</code> is even.</p>
               <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (4 marks total, 1 per criterion).</strong></p>
               <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
                 <li><strong>1 mark</strong>: valid counterexample, any specific pair of odd integers whose sum is even.</li>
@@ -594,7 +618,7 @@ s = c / d &nbsp;&nbsp;for some integers c, d with d ≠ 0.</div>
                 <li><code>p</code> is an integer because products and sums of integers are integers.</li>
                 <li><code>q = b² · d²</code> is an integer for the same reason, and <code>q ≠ 0</code> because <code>b ≠ 0</code> and <code>d ≠ 0</code> imply <code>b² ≠ 0</code> and <code>d² ≠ 0</code>, hence <code>b²d² ≠ 0</code> by the zero-product property.</li>
               </ul>
-              <p>So <code>r² + s² = p / q</code> with <code>p, q</code> integers and <code>q ≠ 0</code>. By definition of rational, <code>r² + s²</code> is rational. <span class="end-of-proof">∎</span></p>
+              <p>So <code>r² + s² = p / q</code> with <code>p, q</code> integers and <code>q ≠ 0</code>. By definition of rational, <code>r² + s²</code> is rational.</p>
 
               <p style="margin-top: 14px;"><strong>Alternative (cite Theorem 4.2.2).</strong> Once <code>r²</code> and <code>s²</code> are each shown rational (numerator a square of an integer; denominator a nonzero square), Theorem 4.2.2 (sum of two rationals is rational) finishes the argument in one line.</p>
 
@@ -765,14 +789,17 @@ s = c / d &nbsp;&nbsp;for some integers c, d with d ≠ 0.</div>
         opt.addEventListener('click', function () {
           const choice = +opt.dataset.i;
           group.querySelectorAll('.mcq-option').forEach(function (o) { o.classList.remove('correct'); o.classList.remove('wrong'); });
-          if (choice === ans.correct) {
+          const isCorrect = choice === ans.correct;
+          if (isCorrect) {
             opt.classList.add('correct');
           } else {
             opt.classList.add('wrong');
             const right = group.querySelectorAll('.mcq-option')[ans.correct];
             right.classList.add('correct');
           }
-          feedback.innerHTML = '<strong>' + (choice === ans.correct ? '✓ Correct.' : '✗ Not quite.') + '</strong> ' + ans.why;
+          feedback.classList.remove('fb-correct', 'fb-wrong');
+          feedback.classList.add(isCorrect ? 'fb-correct' : 'fb-wrong');
+          feedback.innerHTML = '<strong>' + (isCorrect ? '✓ Correct.' : '✗ Incorrect.') + '</strong> ' + ans.why;
           feedback.classList.add('open');
         });
       });
@@ -787,6 +814,24 @@ s = c / d &nbsp;&nbsp;for some integers c, d with d ≠ 0.</div>
         btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
       });
     });
+
+    /* Key/print mode: ?key=1 expands every solution and marks the correct MCQ. */
+    if (/[?&]key=1/.test(window.location.search)) {
+      document.body.classList.add('key-mode');
+      document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('open'); });
+      document.querySelectorAll('.solution-btn').forEach(function (b) { b.style.display = 'none'; });
+      document.querySelectorAll('.mcq-options').forEach(function (group) {
+        const qNum = +group.dataset.q;
+        const ans = ANSWERS[qNum];
+        if (!ans) return;
+        const feedback = group.parentElement.querySelector('.mcq-feedback');
+        const right = group.querySelectorAll('.mcq-option')[ans.correct];
+        right.classList.add('correct');
+        feedback.classList.add('fb-correct');
+        feedback.innerHTML = '<strong>✓ Answer.</strong> ' + ans.why;
+        feedback.classList.add('open');
+      });
+    }
   </script>
 </body>
 </html>
