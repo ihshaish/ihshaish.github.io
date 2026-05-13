@@ -409,35 +409,26 @@
     .exam-block .exam-features i { color: #e65100; }
     body.dark .exam-block .exam-features i { color: #ffb74d; }
 
-    .exam-date-pill {
+    .exam-date-pill, .exam-weight-pill {
       display: inline-block;
       padding: 3px 12px;
       font-size: 0.7rem; font-weight: 800;
       letter-spacing: 0.6px; text-transform: uppercase;
+      border-radius: 14px;
+      white-space: nowrap;
+    }
+    .exam-date-pill {
       background: #fff; color: #e65100;
-      border: 1.5px solid #e65100; border-radius: 14px;
+      border: 1.5px solid #e65100;
       margin-left: auto;
     }
+    .exam-weight-pill {
+      background: #e65100; color: #fff;
+      border: 1.5px solid #e65100;
+    }
     body.dark .exam-date-pill { background: #1a1a2e; color: #ffb74d; border-color: #ffb74d; }
+    body.dark .exam-weight-pill { background: #ffb74d; color: #2a1a05; border-color: #ffb74d; }
     .exam-heading { justify-content: flex-start; flex-wrap: wrap; }
-
-    .exam-weights {
-      margin: 16px 0 6px;
-      padding: 12px 18px;
-      background: #fff;
-      border: 1px solid #ffcc80;
-      border-radius: 8px;
-      display: flex; align-items: center; gap: 12px;
-      font-size: 0.88rem; color: #555;
-      line-height: 1.55;
-    }
-    body.dark .exam-weights {
-      background: #1a1a2e; border-color: #5d3a10; color: #b0bec5;
-    }
-    .exam-weights i { color: #e65100; font-size: 1.1rem; flex-shrink: 0; }
-    body.dark .exam-weights i { color: #ffb74d; }
-    .exam-weights strong { color: #e65100; }
-    body.dark .exam-weights strong { color: #ffb74d; }
   </style>
 </head>
 
@@ -595,6 +586,7 @@
           <i class="fas fa-clipboard-check" style="font-size: 1.2rem;"></i>
           <span>Quiz #1</span>
           <span class="exam-date-pill">Released 14 May 2026</span>
+          <span class="exam-weight-pill">Weight 10%</span>
         </h2>
 
         <div class="exam-block">
@@ -611,11 +603,6 @@
             <span><i class="fas fa-check-circle"></i> Worked truth-table tautology</span>
             <span><i class="fas fa-check-circle"></i> Marking guide aligned with the official key</span>
           </div>
-        </div>
-
-        <div class="exam-weights">
-          <i class="fas fa-balance-scale"></i>
-          <span><strong>Course weighting in this block:</strong> Quiz #1 is <strong>10%</strong> of the final grade (100 pts total: Q1 = 45, Q2 = 55).</span>
         </div>
 
         <hr class="exam-divider">
@@ -656,6 +643,7 @@
           <i class="fas fa-file-signature" style="font-size: 1.2rem;"></i>
           <span>First Exam</span>
           <span class="exam-date-pill">Released 14 May 2026</span>
+          <span class="exam-weight-pill">Weight 30%</span>
         </h2>
 
         <div class="exam-block">
@@ -672,11 +660,6 @@
             <span><i class="fas fa-check-circle"></i> Step-by-step worked proofs</span>
             <span><i class="fas fa-check-circle"></i> Marking guide aligned with the official key</span>
           </div>
-        </div>
-
-        <div class="exam-weights">
-          <i class="fas fa-balance-scale"></i>
-          <span><strong>Course weighting in this block:</strong> First Exam is <strong>30%</strong> of the final grade. (See the Quiz block after Chapter 3 for the 10% Quiz.)</span>
         </div>
 
         <hr class="exam-divider">
