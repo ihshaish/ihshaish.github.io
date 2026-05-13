@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true}, {left:'$',right:'$',display:false}], throwOnError: false });"></script>
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#e65100" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 First Exam (Section 9, 2025/2026) with worked solutions." />
+
+  <title>COMP233 First Exam &amp; Answers</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-accent: #e65100;
+      --c-accent-dark: #bf360c;
+      --c-accent-light: #fff3e0;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-accent: #ffb74d;
+      --c-accent-dark: #ffd54f;
+      --c-accent-light: #3a2410;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .exam-hero {
+      text-align: center; padding: 30px 0 12px;
+    }
+    .exam-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-accent);
+      text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px;
+    }
+    .exam-hero h1 {
+      font-size: 1.9rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px;
+    }
+    .exam-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .exam-hero .back-link {
+      font-size: 0.88rem; color: var(--c-accent); text-decoration: none; font-weight: 700;
+    }
+    .exam-hero .back-link:hover { text-decoration: underline; }
+
+    .meta-card {
+      background: linear-gradient(180deg, var(--c-accent-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-accent); border-radius: 12px;
+      padding: 18px 24px; margin: 26px 0 28px;
+      box-shadow: 0 2px 12px rgba(230, 81, 0, 0.10);
+    }
+    body.dark .meta-card { background: linear-gradient(180deg, rgba(255,183,77,0.10) 0%, var(--c-card-bg) 100%); }
+    .meta-card h4 {
+      margin: 0 0 8px; font-size: 0.78rem; font-weight: 800;
+      color: var(--c-accent); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .meta-card .meta-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px 22px;
+      font-size: 0.92rem; line-height: 1.55;
+    }
+    .meta-card .meta-item .meta-label {
+      font-size: 0.72rem; font-weight: 700; color: var(--c-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .meta-card .meta-item .meta-value {
+      color: var(--c-text); font-weight: 600;
+    }
+
+    .question-block {
+      margin-top: 38px;
+    }
+    .question-block .q-head {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 3px solid var(--c-accent);
+    }
+    .question-block .q-num {
+      background: var(--c-accent); color: #fff;
+      padding: 6px 14px; border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      font-size: 0.9rem; letter-spacing: 0.5px;
+    }
+    .question-block .q-title {
+      flex: 1;
+      font-size: 1.15rem; font-weight: 700; color: var(--c-text);
+    }
+    .question-block .q-marks {
+      font-size: 0.84rem; color: var(--c-muted); font-weight: 600;
+    }
+
+    .q-instruction {
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    /* Sub-question card */
+    .subq {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-accent);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin-bottom: 16px;
+    }
+    .subq .subq-head {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .subq .subq-label {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-accent);
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .subq .subq-marks {
+      font-size: 0.74rem; color: var(--c-muted); font-weight: 600;
+      padding: 1px 8px; background: var(--c-accent-light); color: var(--c-accent);
+      border-radius: 9px;
+    }
+    body.dark .subq .subq-marks { background: var(--c-accent-light); }
+    .subq .subq-stmt {
+      font-size: 0.96rem; color: var(--c-text); line-height: 1.65; margin-bottom: 12px;
+    }
+    .subq .subq-stmt code, .subq .subq-stmt .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.9em;
+    }
+    .subq blockquote {
+      margin: 8px 0; padding: 6px 14px;
+      border-left: 3px solid var(--c-border); font-style: italic;
+      color: var(--c-text); font-size: 0.92rem; line-height: 1.55;
+    }
+
+    /* MCQ */
+    .mcq-options { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 0; }
+    .mcq-option {
+      display: flex; align-items: center; gap: 12px;
+      padding: 9px 14px; border: 1px solid var(--c-border); border-radius: 6px;
+      cursor: pointer; transition: background 0.12s, border-color 0.12s;
+      font-size: 0.92rem; user-select: none;
+    }
+    .mcq-option:hover { background: var(--c-accent-light); border-color: var(--c-accent); }
+    .mcq-option .letter {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      width: 24px; text-align: center; color: var(--c-muted); flex-shrink: 0;
+    }
+    .mcq-option.correct { background: var(--c-true-bg); border-color: var(--c-true); color: var(--c-true); }
+    .mcq-option.correct .letter { color: var(--c-true); }
+    .mcq-option.wrong { background: var(--c-false-bg); border-color: var(--c-false); color: var(--c-false); }
+    .mcq-option.wrong .letter { color: var(--c-false); }
+    .mcq-feedback {
+      margin-top: 12px; padding: 12px 16px;
+      background: var(--c-page-bg); border-radius: 6px;
+      font-size: 0.9rem; line-height: 1.65; display: none;
+    }
+    .mcq-feedback.open { display: block; }
+    .mcq-feedback strong { color: var(--c-accent); }
+
+    /* Solution */
+    .solution-btn {
+      background: var(--c-accent-light); color: var(--c-accent);
+      border: 1px solid var(--c-accent); padding: 7px 16px; border-radius: 6px;
+      font-size: 0.86rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-accent); color: #fff; }
+    .solution-btn.open { background: var(--c-accent); color: #fff; }
+    .solution {
+      margin-top: 14px; padding: 16px 20px;
+      background: var(--c-page-bg); border-radius: 8px;
+      border-left: 3px solid var(--c-true);
+      font-size: 0.92rem; line-height: 1.7; color: var(--c-text); display: none;
+    }
+    .solution.open { display: block; }
+    .solution h5 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-true); text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .solution p { margin: 6px 0; }
+    .solution .mono, .solution code {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+    .solution .step {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 8px 12px; border-radius: 6px;
+      margin: 6px 0; font-size: 0.88rem; line-height: 1.7;
+      overflow-x: auto;
+    }
+    .solution .step-block {
+      display: flex; gap: 12px; align-items: baseline;
+      padding: 4px 0;
+    }
+    .solution .step-block .step-tag {
+      min-width: 90px;
+      font-size: 0.72rem; font-weight: 700; color: var(--c-muted);
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .solution .end-of-proof {
+      font-weight: 800; color: var(--c-true); float: right;
+    }
+    .solution strong { color: var(--c-accent); }
+
+    /* Truth table for Q4.B */
+    .truth-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86rem;
+      margin: 10px 0;
+    }
+    .truth-table th, .truth-table td {
+      padding: 6px 10px; border: 1px solid var(--c-border);
+      text-align: center;
+    }
+    .truth-table th {
+      background: var(--c-page-bg); color: var(--c-text); font-weight: 800;
+      font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .truth-table th.prem { background: var(--c-accent-light); color: var(--c-accent); }
+    .truth-table th.concl { background: var(--c-primary-light); color: var(--c-primary); }
+    .truth-table td.t { background: var(--c-true-bg); color: var(--c-true); font-weight: 700; }
+    .truth-table td.f { background: var(--c-false-bg); color: var(--c-false); font-weight: 700; }
+    .truth-table tr.critical td { box-shadow: inset 0 0 0 9999px #fff9c4; color: #5d4037 !important; }
+    body.dark .truth-table tr.critical td { box-shadow: inset 0 0 0 9999px #4e4322; color: #ffe082 !important; }
+    .truth-table tr.critical td.t { background: var(--c-true-bg); color: var(--c-true) !important; box-shadow: none; }
+
+    .verdict {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 16px;
+      font-size: 0.88rem; font-weight: 700; margin-top: 10px;
+    }
+    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
+
+    .nav-fab {
+      position: fixed; top: 100px; right: 18px; z-index: 30;
+      display: flex; flex-direction: column; gap: 6px;
+      max-width: 220px;
+    }
+    .nav-fab a {
+      display: inline-block; padding: 6px 12px;
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 6px; font-size: 0.82rem;
+      color: var(--c-text); text-decoration: none; text-align: left;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .nav-fab a:hover {
+      background: var(--c-accent); color: #fff; border-color: var(--c-accent);
+      text-decoration: none;
+    }
+    .nav-fab .nav-fab-label {
+      font-size: 0.66rem; font-weight: 800; color: var(--c-accent);
+      text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 0 8px 4px;
+    }
+    @media (max-width: 980px) { .nav-fab { position: static; max-width: 100%; flex-direction: row; flex-wrap: wrap; margin: 18px 0 0; } }
+
+    @media (max-width: 640px) {
+      .exam-hero h1 { font-size: 1.4rem; }
+      .subq { padding: 14px 16px; }
+    }
+  </style>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <aside class="nav-fab" id="nav-fab">
+    <div class="nav-fab-label">Jump to</div>
+    <a href="#q1">Question 1 · MCQ</a>
+    <a href="#q2">Question 2 · Proofs</a>
+    <a href="#q3">Question 3 · Counterexample &amp; proof</a>
+    <a href="#q4">Question 4 · FOL &amp; truth table</a>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="exam-hero">
+          <div class="eyebrow"><i class="fas fa-file-signature"></i> &nbsp;COMP233 &middot; First Exam &amp; Answers</div>
+          <h1>First Exam: Worked Solutions</h1>
+          <div class="subtitle">Discrete Mathematics (COMP 233) &middot; Section 9 &middot; Second Semester 2025/2026</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="meta-card">
+          <h4><i class="fas fa-info-circle"></i> About this paper</h4>
+          <p style="margin: 0 0 14px; font-size: 0.95rem; line-height: 1.65; color: var(--c-text);">This is the First Exam you sat on <strong>12 May 2026</strong>, together with my worked solutions to every question and the marking criteria. Solutions released <strong>14 May 2026</strong>. Work each question on paper first, then click <em>Show solution</em>; for Q1 click any option to check your answer.</p>
+          <div class="meta-grid">
+            <div class="meta-item"><div class="meta-label">Course</div><div class="meta-value">Discrete Mathematics (COMP 233)</div></div>
+            <div class="meta-item"><div class="meta-label">Section</div><div class="meta-value">9</div></div>
+            <div class="meta-item"><div class="meta-label">Semester</div><div class="meta-value">Second Semester 2025/2026</div></div>
+            <div class="meta-item"><div class="meta-label">Exam date</div><div class="meta-value">12 May 2026</div></div>
+            <div class="meta-item"><div class="meta-label">Solutions released</div><div class="meta-value">14 May 2026</div></div>
+            <div class="meta-item"><div class="meta-label">Questions</div><div class="meta-value">4 (10 marks each)</div></div>
+            <div class="meta-item"><div class="meta-label">Total</div><div class="meta-value">40 marks &middot; weight 30% of course grade</div></div>
+          </div>
+        </div>
+
+        <!-- ==================== Q1 MCQ ==================== -->
+        <div class="question-block" id="q1">
+          <div class="q-head">
+            <div class="q-num">Q1</div>
+            <div class="q-title">Multiple choice</div>
+            <div class="q-marks">[ 10 marks ]</div>
+          </div>
+          <div class="q-instruction">Select the correct answer for each of the following. Click any option to check it.</div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.1</div><div class="subq-marks">2 marks</div></div>
+            <div class="subq-stmt">If <code>n = 5k + 2</code> for some integer <code>k</code>, what is the value of <code>n² mod 5</code>?</div>
+            <div class="mcq-options" data-q="1">
+              <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>0</span></div>
+              <div class="mcq-option" data-i="1"><span class="letter">b.</span><span>1</span></div>
+              <div class="mcq-option" data-i="2"><span class="letter">c.</span><span>4</span></div>
+              <div class="mcq-option" data-i="3"><span class="letter">d.</span><span>2</span></div>
+            </div>
+            <div class="mcq-feedback"></div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.2</div><div class="subq-marks">2 marks</div></div>
+            <div class="subq-stmt">What is the largest power of 6 that divides <code>30⁵ · 40³</code>?</div>
+            <div class="mcq-options" data-q="2">
+              <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>6³</span></div>
+              <div class="mcq-option" data-i="1"><span class="letter">b.</span><span>6⁵</span></div>
+              <div class="mcq-option" data-i="2"><span class="letter">c.</span><span>6⁷</span></div>
+              <div class="mcq-option" data-i="3"><span class="letter">d.</span><span>6⁹</span></div>
+            </div>
+            <div class="mcq-feedback"></div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.3</div><div class="subq-marks">2 marks</div></div>
+            <div class="subq-stmt">Suppose <code>m</code> and <code>n</code> are integers with <code>m mod 6 = 3</code> and <code>n mod 6 = 4</code>. What is <code>(m + n) mod 6</code>?</div>
+            <div class="mcq-options" data-q="3">
+              <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>7</span></div>
+              <div class="mcq-option" data-i="1"><span class="letter">b.</span><span>1</span></div>
+              <div class="mcq-option" data-i="2"><span class="letter">c.</span><span>0</span></div>
+              <div class="mcq-option" data-i="3"><span class="letter">d.</span><span>5</span></div>
+            </div>
+            <div class="mcq-feedback"></div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.4</div><div class="subq-marks">2 marks</div></div>
+            <div class="subq-stmt">Which of the following is <strong>NOT</strong> equivalent to the statement: <em>"∀ integers <code>n</code>, if <code>n</code> is divisible by 4, then <code>n</code> is divisible by 2"</em>?</div>
+            <div class="mcq-options" data-q="4">
+              <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>Every integer divisible by 4 is also divisible by 2.</span></div>
+              <div class="mcq-option" data-i="1"><span class="letter">b.</span><span>There is no integer divisible by 4 that is not divisible by 2.</span></div>
+              <div class="mcq-option" data-i="2"><span class="letter">c.</span><span>Being divisible by 4 is a sufficient condition for an integer to be divisible by 2.</span></div>
+              <div class="mcq-option" data-i="3"><span class="letter">d.</span><span>Some integer divisible by 4 is divisible by 2.</span></div>
+            </div>
+            <div class="mcq-feedback"></div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.5</div><div class="subq-marks">2 marks</div></div>
+            <div class="subq-stmt">Consider the statement: <em>"∃ a real number <code>x</code> such that <code>x² + 1 = 0</code>"</em>. Which of the following best describes this statement?</div>
+            <div class="mcq-options" data-q="5">
+              <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>The statement is true; <code>x = 0</code> satisfies it.</span></div>
+              <div class="mcq-option" data-i="1"><span class="letter">b.</span><span>The statement is false; for every real number <code>x</code>, <code>x² ≥ 0</code>, so <code>x² + 1 ≥ 1 &gt; 0</code>.</span></div>
+              <div class="mcq-option" data-i="2"><span class="letter">c.</span><span>The statement is true; <code>x = −1</code> satisfies it.</span></div>
+              <div class="mcq-option" data-i="3"><span class="letter">d.</span><span>The statement is undefined since <code>x² + 1</code> has no real solution.</span></div>
+            </div>
+            <div class="mcq-feedback"></div>
+          </div>
+        </div>
+
+        <!-- ==================== Q2 ==================== -->
+        <div class="question-block" id="q2">
+          <div class="q-head">
+            <div class="q-num">Q2</div>
+            <div class="q-title">Direct proofs</div>
+            <div class="q-marks">[ 10 marks ]</div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q2.A</div><div class="subq-marks">4 marks</div></div>
+            <div class="subq-stmt">Prove that for every odd integer <code>n</code>, <code>n² + 3</code> is divisible by 4.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2a">Show solution</button>
+            <div class="solution" id="sol-q2a">
+              <h5>Worked solution</h5>
+              <p><strong>Proof.</strong> Suppose <code>n</code> is a particular but arbitrarily chosen odd integer. <em>[We must show <code>4 | (n² + 3)</code>.]</em></p>
+              <p>By definition of odd, <code>n = 2k + 1</code> for some integer <code>k</code>.</p>
+              <div class="step">n² + 3 = (2k + 1)² + 3<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 4k² + 4k + 1 + 3<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 4k² + 4k + 4<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 4(k² + k + 1).</div>
+              <p>Let <code>t = k² + k + 1</code>. Then <code>t</code> is an integer (sums and products of integers are integers), and <code>n² + 3 = 4t</code>.</p>
+              <p>By definition of divisibility, <code>4 | (n² + 3)</code>. <span class="end-of-proof">∎</span></p>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (4 marks, 1 per criterion).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: correct setup, introducing the witness via the definition of odd (<code>n = 2k + 1</code>).</li>
+                <li><strong>1 mark</strong>: correct algebraic expansion to <code>(2k + 1)² + 3 = 4k² + 4k + 4</code>.</li>
+                <li><strong>1 mark</strong>: factoring out 4 to get <code>4(k² + k + 1)</code>.</li>
+                <li><strong>1 mark</strong>: clean conclusion citing the definition of divisibility.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q2.B</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">Prove that for all integers <code>a</code>, <code>b</code>, and <code>c</code>, if <code>a | b</code> and <code>b | c</code>, then <code>a | c</code>.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2b">Show solution</button>
+            <div class="solution" id="sol-q2b">
+              <h5>Worked solution (transitivity of divisibility, Theorem 4.3.3)</h5>
+              <p><strong>Proof.</strong> Suppose <code>a</code>, <code>b</code>, <code>c</code> are particular but arbitrarily chosen integers with <code>a | b</code> and <code>b | c</code>. <em>[We must show <code>a | c</code>.]</em></p>
+              <p>By definition of divisibility:</p>
+              <div class="step">b = a · r &nbsp;&nbsp;for some integer r &nbsp;&nbsp;(from a | b)<br>
+c = b · s &nbsp;&nbsp;for some integer s &nbsp;&nbsp;(from b | c)</div>
+              <p>Substituting the first into the second:</p>
+              <div class="step">c = b · s = (a · r) · s = a · (r · s).</div>
+              <p>Let <code>k = r · s</code>. Then <code>k</code> is an integer (product of integers is an integer), and <code>c = a · k</code>.</p>
+              <p>By definition of divisibility, <code>a | c</code>. <span class="end-of-proof">∎</span></p>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (3 marks, 1 per criterion).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: correct application of the definition of divisibility to both givens (<code>b = ar</code> and <code>c = bs</code>).</li>
+                <li><strong>1 mark</strong>: correct substitution to express <code>c = a(rs)</code>.</li>
+                <li><strong>1 mark</strong>: clean conclusion that <code>rs</code> is an integer, so <code>a | c</code>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q2.C</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">Use the quotient-remainder theorem with <code>d = 3</code> to prove that for every integer <code>n</code>, the integer <code>n² + 2n</code> has the form <code>3k</code> or <code>3k + 2</code> for some integer <code>k</code>.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2c">Show solution</button>
+            <div class="solution" id="sol-q2c">
+              <h5>Worked solution (proof by division into cases)</h5>
+              <p><strong>Proof.</strong> Let <code>n</code> be a particular but arbitrarily chosen integer. By the quotient-remainder theorem with <code>d = 3</code>, exactly one of the following holds for some integer <code>q</code>:</p>
+              <div class="step">n = 3q &nbsp;&nbsp;or&nbsp;&nbsp; n = 3q + 1 &nbsp;&nbsp;or&nbsp;&nbsp; n = 3q + 2.</div>
+
+              <p><strong>Case 1: <code>n = 3q</code>.</strong></p>
+              <div class="step">n² + 2n = (3q)² + 2(3q)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9q² + 6q<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 3(3q² + 2q).</div>
+              <p>Let <code>k = 3q² + 2q</code> (an integer). Then <code>n² + 2n = 3k</code>. <span style="color: var(--c-true)">Has the form 3k. ✓</span></p>
+
+              <p><strong>Case 2: <code>n = 3q + 1</code>.</strong></p>
+              <div class="step">n² + 2n = (3q + 1)² + 2(3q + 1)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9q² + 6q + 1 + 6q + 2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9q² + 12q + 3<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 3(3q² + 4q + 1).</div>
+              <p>Let <code>k = 3q² + 4q + 1</code> (an integer). Then <code>n² + 2n = 3k</code>. <span style="color: var(--c-true)">Has the form 3k. ✓</span></p>
+
+              <p><strong>Case 3: <code>n = 3q + 2</code>.</strong></p>
+              <div class="step">n² + 2n = (3q + 2)² + 2(3q + 2)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9q² + 12q + 4 + 6q + 4<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9q² + 18q + 8<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9q² + 18q + 6 + 2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 3(3q² + 6q + 2) + 2.</div>
+              <p>Let <code>k = 3q² + 6q + 2</code> (an integer). Then <code>n² + 2n = 3k + 2</code>. <span style="color: var(--c-true)">Has the form 3k + 2. ✓</span></p>
+
+              <p>In every case <code>n² + 2n</code> has the form <code>3k</code> or <code>3k + 2</code> for some integer <code>k</code>. <span class="end-of-proof">∎</span></p>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (3 marks, 1 per criterion).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: correct setup applying the quotient-remainder theorem with <code>d = 3</code> to split <code>n</code> into the three cases.</li>
+                <li><strong>1 mark</strong>: correct algebraic computation of <code>n² + 2n</code> in all three cases.</li>
+                <li><strong>1 mark</strong>: correct identification of the target form (<code>3k</code> or <code>3k + 2</code>) for each case and a clean overall conclusion.</li>
+              </ul>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 10px;"><strong style="color: var(--c-text)">Observation.</strong> The form <code>3k + 1</code> never arises. So in fact a stronger statement holds: <code>n² + 2n mod 3 ∈ {0, 2}</code> for every integer <code>n</code>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== Q3 ==================== -->
+        <div class="question-block" id="q3">
+          <div class="q-head">
+            <div class="q-num">Q3</div>
+            <div class="q-title">Counterexample &amp; rational closure</div>
+            <div class="q-marks">[ 10 marks ]</div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q3.A</div><div class="subq-marks">4 marks total</div></div>
+            <div class="subq-stmt">Consider the following statement: <em>"For all integers <code>m</code> and <code>n</code>, if <code>m</code> and <code>n</code> are both odd, then <code>m + n</code> is odd"</em>.
+              <ol style="margin: 8px 0 0; padding-left: 22px;">
+                <li>Disprove the statement by providing a counterexample.</li>
+                <li>State the correct conclusion about <code>m + n</code> when <code>m</code> and <code>n</code> are both odd, and prove it.</li>
+              </ol>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3a">Show solution</button>
+            <div class="solution" id="sol-q3a">
+              <h5>Worked solution</h5>
+              <p><strong>(1) Counterexample.</strong> Take <code>m = 1</code> and <code>n = 3</code>. Both are odd. Their sum is</p>
+              <div class="step">m + n = 1 + 3 = 4 = 2 · 2,</div>
+              <p>which is even by definition (witness <code>k = 2</code>), <em>not odd</em>. The hypothesis is true (both are odd) and the conclusion is false (the sum is not odd). One such pair is enough to disprove the universal claim.</p>
+              <p>Acceptable variants: any specific pair of odd integers whose sum is even, e.g. <code>(1, 1)</code>, <code>(3, 5)</code>, <code>(−1, 7)</code>.</p>
+
+              <p style="margin-top: 14px;"><strong>(2) Correct conclusion.</strong> <em>"For all integers <code>m</code> and <code>n</code>, if <code>m</code> and <code>n</code> are both odd, then <code>m + n</code> is <strong>even</strong>."</em></p>
+
+              <p><strong>Proof.</strong> Suppose <code>m</code> and <code>n</code> are particular but arbitrarily chosen odd integers. <em>[We must show <code>m + n</code> is even.]</em></p>
+              <p>By definition of odd:</p>
+              <div class="step">m = 2r + 1 &nbsp;&nbsp;for some integer r,<br>
+n = 2s + 1 &nbsp;&nbsp;for some integer s.</div>
+              <p><strong>Watch.</strong> The two witnesses <code>r</code> and <code>s</code> need not be the same. Calling both <code>k</code> is the classic find-the-mistake error.</p>
+              <p>Then</p>
+              <div class="step">m + n = (2r + 1) + (2s + 1)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 2r + 2s + 2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 2(r + s + 1).</div>
+              <p>Let <code>t = r + s + 1</code>. Then <code>t</code> is an integer (sum of integers is an integer), and <code>m + n = 2t</code>.</p>
+              <p>By definition of even, <code>m + n</code> is even. <span class="end-of-proof">∎</span></p>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (4 marks total, 1 per criterion).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: valid counterexample, any specific pair of odd integers whose sum is even.</li>
+                <li><strong>1 mark</strong>: correct statement of the corrected conclusion (<em>m + n</em> is even when both are odd).</li>
+                <li><strong>1 mark</strong>: correct setup using the definition of odd, with <em>different</em> witnesses (<code>m = 2j + 1</code>, <code>n = 2k + 1</code>). Reusing the same letter is the classic trap.</li>
+                <li><strong>1 mark</strong>: completing the proof, showing <code>m + n = 2 · (integer)</code> and concluding even.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q3.B</div><div class="subq-marks">6 marks</div></div>
+            <div class="subq-stmt">Prove that for all rational numbers <code>r</code> and <code>s</code>, the number <code>r² + s²</code> is a rational number.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3b">Show solution</button>
+            <div class="solution" id="sol-q3b">
+              <h5>Worked solution</h5>
+              <p><strong>Proof.</strong> Suppose <code>r</code> and <code>s</code> are particular but arbitrarily chosen rational numbers. <em>[We must show <code>r² + s²</code> is rational.]</em></p>
+              <p>By definition of rational,</p>
+              <div class="step">r = a / b &nbsp;&nbsp;for some integers a, b with b ≠ 0,<br>
+s = c / d &nbsp;&nbsp;for some integers c, d with d ≠ 0.</div>
+              <p>Square each:</p>
+              <div class="step">r² = a² / b²&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;&nbsp;s² = c² / d².</div>
+              <p>Combine over a common denominator:</p>
+              <div class="step">r² + s² = a²/b² + c²/d²<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= (a²·d² + b²·c²) / (b² · d²).</div>
+
+              <p>Let <code>p = a²d² + b²c²</code> and <code>q = b²d²</code>.</p>
+              <ul style="margin: 6px 0 6px 22px;">
+                <li><code>p</code> is an integer because products and sums of integers are integers.</li>
+                <li><code>q = b² · d²</code> is an integer for the same reason, and <code>q ≠ 0</code> because <code>b ≠ 0</code> and <code>d ≠ 0</code> imply <code>b² ≠ 0</code> and <code>d² ≠ 0</code>, hence <code>b²d² ≠ 0</code> by the zero-product property.</li>
+              </ul>
+              <p>So <code>r² + s² = p / q</code> with <code>p, q</code> integers and <code>q ≠ 0</code>. By definition of rational, <code>r² + s²</code> is rational. <span class="end-of-proof">∎</span></p>
+
+              <p style="margin-top: 14px;"><strong>Alternative (cite Theorem 4.2.2).</strong> Once <code>r²</code> and <code>s²</code> are each shown rational (numerator a square of an integer; denominator a nonzero square), Theorem 4.2.2 (sum of two rationals is rational) finishes the argument in one line.</p>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (6 marks, 1 per criterion).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: setup using the definition of rational, with separate witnesses (<code>r = a/b</code>, <code>s = c/d</code>, <code>b, d ≠ 0</code>).</li>
+                <li><strong>1 mark</strong>: correct squaring (<code>r² = a²/b²</code> and <code>s² = c²/d²</code>).</li>
+                <li><strong>1 mark</strong>: correct combination into a single fraction with common denominator <code>b²d²</code>.</li>
+                <li><strong>1 mark</strong>: justifying that the numerator <code>a²d² + b²c²</code> is an integer.</li>
+                <li><strong>1 mark</strong>: justifying that the denominator <code>b²d²</code> is a nonzero integer. <em>This is the point most often missed.</em></li>
+                <li><strong>1 mark</strong>: clean conclusion citing the definition of rational.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== Q4 ==================== -->
+        <div class="question-block" id="q4">
+          <div class="q-head">
+            <div class="q-num">Q4</div>
+            <div class="q-title">Quantifiers and truth-table validity</div>
+            <div class="q-marks">[ 10 marks ]</div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q4.A</div><div class="subq-marks">6 marks total</div></div>
+            <div class="subq-stmt">Let <code>S</code> be the set of students at a university and <code>C</code> the set of courses offered. Let <code>E(s, c)</code> denote <em>"student <code>s</code> is enrolled in course <code>c</code>"</em>.
+              <ol style="margin: 8px 0 0; padding-left: 22px;">
+                <li>Express the following statement symbolically using <code>∀</code>, <code>∃</code>, and the predicate <code>E</code>: <em>"There is a course that every student is enrolled in"</em>. [3 marks]</li>
+                <li>Write the negation of the following statement, in a form where no negation symbol appears before any quantifier: <code>∀ s ∈ S, ∃ c ∈ C such that E(s, c)</code>. [3 marks]</li>
+              </ol>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q4a">Show solution</button>
+            <div class="solution" id="sol-q4a">
+              <h5>Worked solution</h5>
+
+              <p><strong>(1) Symbolic form.</strong></p>
+              <div class="step">∃ c ∈ C such that ∀ s ∈ S, E(s, c).</div>
+              <p>Read: <em>"there exists a course <code>c</code> such that for every student <code>s</code>, <code>s</code> is enrolled in <code>c</code>."</em></p>
+              <p><strong>Why this order counts.</strong> The course must be <em>fixed first</em> (∃ first), and then it must work for every student (∀ inside). Swapping the order to <code>∀ s ∃ c, E(s, c)</code> would only say <em>"every student is enrolled in at least one course"</em>, a much weaker claim. The two statements have completely different meanings (see Section 3.3, the loves-table examples).</p>
+
+              <p style="margin-top: 14px;"><strong>(2) Negation, with no ∼ before any quantifier.</strong></p>
+              <p>Walk the negation left-to-right, flipping each quantifier and pushing <code>∼</code> inside as we go.</p>
+              <div class="step-block"><span class="step-tag">start</span><span class="mono">∼(∀ s ∈ S, ∃ c ∈ C, E(s, c))</span></div>
+              <div class="step-block"><span class="step-tag">step 1</span><span class="mono">≡ ∃ s ∈ S such that ∼(∃ c ∈ C, E(s, c))</span> &nbsp;<em style="color: var(--c-muted)">flip outer ∀ to ∃ (Theorem 3.2.1)</em></div>
+              <div class="step-block"><span class="step-tag">step 2</span><span class="mono">≡ ∃ s ∈ S such that ∀ c ∈ C, ∼E(s, c)</span> &nbsp;<em style="color: var(--c-muted)">flip ∃ to ∀ (Theorem 3.2.2)</em></div>
+
+              <p><strong>Final form:</strong></p>
+              <div class="step">∃ s ∈ S such that ∀ c ∈ C, ∼E(s, c).</div>
+              <p>Read: <em>"there is a student who is not enrolled in any course"</em>, equivalently, <em>"some student is enrolled in no course at all"</em>.</p>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 12px;"><strong style="color: var(--c-text)">Marking guide (6 marks total).</strong></p>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0;"><strong style="color: var(--c-text)">Part (1) &middot; 3 marks, 1 per criterion:</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: correct outer quantifier <code>∃ c ∈ C</code>.</li>
+                <li><strong>1 mark</strong>: correct inner quantifier <code>∀ s ∈ S</code>, with proper scope.</li>
+                <li><strong>1 mark</strong>: correct predicate <code>E(s, c)</code> with arguments in the right order.</li>
+              </ul>
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin: 8px 0 0;"><strong style="color: var(--c-text)">Part (2) &middot; 3 marks, 1 per criterion:</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: correct conversion of the outer <code>∀</code> to <code>∃</code>.</li>
+                <li><strong>1 mark</strong>: correct conversion of the inner <code>∃</code> to <code>∀</code>.</li>
+                <li><strong>1 mark</strong>: correct negation of the predicate to <code>∼E(s, c)</code> in the innermost position.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q4.B</div><div class="subq-marks">4 marks</div></div>
+            <div class="subq-stmt">Use a truth table to determine whether the following argument form is valid. Clearly indicate which columns represent the premises, which represents the conclusion, whether the argument is valid or invalid, and a short explanation based on the truth table.
+              <blockquote style="margin-top: 10px;">
+                <code>p ∨ q</code><br>
+                <code>p → r</code><br>
+                <code>q → r</code><br>
+                <code>∴ r</code>
+              </blockquote>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q4b">Show solution</button>
+            <div class="solution" id="sol-q4b">
+              <h5>Worked solution</h5>
+              <p>Three variables <code>p, q, r</code> give <code>2³ = 8</code> rows. The premise columns are <code>p ∨ q</code>, <code>p → r</code>, and <code>q → r</code>; the conclusion column is <code>r</code>. A row is <strong>critical</strong> when all three premises are true. The argument is valid iff the conclusion is true in every critical row.</p>
+
+              <div style="overflow-x: auto;">
+              <table class="truth-table">
+                <thead>
+                  <tr>
+                    <th>p</th><th>q</th><th>r</th>
+                    <th class="prem">p ∨ q</th>
+                    <th class="prem">p → r</th>
+                    <th class="prem">q → r</th>
+                    <th class="concl">∴ r</th>
+                    <th>critical?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="critical"><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td>yes &middot; conclusion T ✓</td></tr>
+                  <tr><td class="t">T</td><td class="t">T</td><td class="f">F</td><td class="t">T</td><td class="f">F</td><td class="f">F</td><td class="f">F</td><td>no</td></tr>
+                  <tr class="critical"><td class="t">T</td><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td>yes &middot; conclusion T ✓</td></tr>
+                  <tr><td class="t">T</td><td class="f">F</td><td class="f">F</td><td class="t">T</td><td class="f">F</td><td class="t">T</td><td class="f">F</td><td>no</td></tr>
+                  <tr class="critical"><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td>yes &middot; conclusion T ✓</td></tr>
+                  <tr><td class="f">F</td><td class="t">T</td><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="f">F</td><td class="f">F</td><td>no</td></tr>
+                  <tr><td class="f">F</td><td class="f">F</td><td class="t">T</td><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="t">T</td><td>no &middot; <code>p ∨ q</code> is F</td></tr>
+                  <tr><td class="f">F</td><td class="f">F</td><td class="f">F</td><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="f">F</td><td>no &middot; <code>p ∨ q</code> is F</td></tr>
+                </tbody>
+              </table>
+              </div>
+
+              <p style="margin-top: 12px;"><strong>Premise columns:</strong> <code>p ∨ q</code>, <code>p → r</code>, <code>q → r</code>.</p>
+              <p><strong>Conclusion column:</strong> <code>∴ r</code>.</p>
+              <p><strong>Critical rows</strong> (all three premises T): rows 1, 3, and 5. In each of those rows the conclusion <code>r</code> is also T.</p>
+
+              <div class="verdict ok"><i class="fas fa-check-circle"></i> The argument is <strong>valid</strong>.</div>
+
+              <p style="margin-top: 12px;"><strong>Explanation.</strong> In every row where all three premises hold simultaneously, the conclusion <code>r</code> is also true. There is no critical row in which the conclusion fails, so no counterexample exists. The argument therefore preserves truth.</p>
+
+              <p style="font-size: 0.88rem; color: var(--c-muted); margin-top: 10px;"><strong style="color: var(--c-text)">Recognise the form.</strong> This is the inference rule <strong>Division into cases</strong> (Chapter 2.3, Rule 8): from <code>p ∨ q</code> together with <code>p → r</code> and <code>q → r</code>, conclude <code>r</code>. Once the rule is proven valid by truth table (as above), it can be cited by name in later proofs without re-deriving.</p>
+
+              <p style="font-size: 0.84rem; color: var(--c-muted); margin-top: 10px;"><strong style="color: var(--c-text)">Marking guide (4 marks, 1 per criterion).</strong></p>
+              <ul style="font-size: 0.84rem; color: var(--c-muted); margin: 4px 0 0; padding-left: 22px; line-height: 1.6;">
+                <li><strong>1 mark</strong>: complete and correct 8-row truth table with all premise and conclusion columns computed correctly.</li>
+                <li><strong>1 mark</strong>: correct identification of which columns are the premises (<code>p ∨ q</code>, <code>p → r</code>, <code>q → r</code>) and which is the conclusion (<code>r</code>).</li>
+                <li><strong>1 mark</strong>: correct identification of the three critical rows where all premises are true.</li>
+                <li><strong>1 mark</strong>: correct validity verdict with an explanation referencing the critical rows.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+
+    /* MCQ interactivity */
+    const ANSWERS = {
+      // Q1.1: n² mod 5 where n = 5k+2. n² = 25k² + 20k + 4 = 5(5k²+4k) + 4. So mod 5 = 4. Answer index 2 (option c).
+      1: { correct: 2, why: 'Square: <code>n² = (5k + 2)² = 25k² + 20k + 4 = 5(5k² + 4k) + 4</code>. The first term <code>5(5k² + 4k)</code> is a multiple of 5; the leftover is <code>4</code>. So <code>n² mod 5 = 4</code>. The correct answer is <strong>(c) 4</strong>.' },
+      // Q1.2: 30⁵ · 40³ = (2·3·5)⁵ · (2³·5)³ = 2⁵·3⁵·5⁵ · 2⁹·5³ = 2¹⁴·3⁵·5⁸. 6 = 2·3 needs one 2 and one 3 per factor. min(14, 5) = 5. Answer index 1 (option b: 6⁵).
+      2: { correct: 1, why: 'Factorise each base: <code>30 = 2 · 3 · 5</code>, so <code>30⁵ = 2⁵ · 3⁵ · 5⁵</code>. <code>40 = 2³ · 5</code>, so <code>40³ = 2⁹ · 5³</code>. Multiplying: <code>30⁵ · 40³ = 2¹⁴ · 3⁵ · 5⁸</code>. Each factor of <code>6 = 2 · 3</code> needs one <code>2</code> and one <code>3</code>. We have <code>14</code> twos but only <code>5</code> threes, so the limiting factor is <code>3</code>. Largest power of 6 that divides: <code>6⁵</code>. The correct answer is <strong>(b) 6⁵</strong>.' },
+      // Q1.3: m = 6a+3, n = 6b+4. m+n = 6(a+b) + 7 = 6(a+b+1) + 1. So mod 6 = 1. Answer index 1 (option b).
+      3: { correct: 1, why: 'Write <code>m = 6a + 3</code> and <code>n = 6b + 4</code>. Add: <code>m + n = 6a + 3 + 6b + 4 = 6(a + b) + 7 = 6(a + b + 1) + 1</code>. The first part is divisible by 6; the remainder is <code>1</code>. So <code>(m + n) mod 6 = 1</code>. The correct answer is <strong>(b) 1</strong>. Note: option (a) "7" is a common trap, students stop at <code>6(a+b) + 7</code> and forget that the remainder must lie in <code>[0, 6)</code>.' },
+      // Q1.4: All of a, b, c are equivalent universal restatements. d is existential, much weaker, NOT equivalent. Answer index 3 (option d).
+      4: { correct: 3, why: 'Options (a), (b), and (c) are standard rewordings of the universal claim, they each rule out a non-divisible-by-2 multiple of 4. Option (d) is <em>existential</em> and much weaker: it only claims at least one such integer exists. A universal claim cannot be equivalent to a "some" claim. The correct answer is <strong>(d)</strong>.' },
+      // Q1.5: x² ≥ 0 for every real x, so x²+1 ≥ 1 > 0. Statement is false. Answer index 1 (option b).
+      5: { correct: 1, why: 'For every real number <code>x</code>, <code>x² ≥ 0</code>, hence <code>x² + 1 ≥ 1 > 0</code>. No real <code>x</code> can satisfy <code>x² + 1 = 0</code>. The statement is false. The correct answer is <strong>(b)</strong>. Note: (a) is wrong because <code>0² + 1 = 1</code>, not 0; (c) is wrong because <code>(−1)² + 1 = 2</code>, not 0; (d) is poorly worded, the statement is well-defined (and false), not undefined. The complex roots <code>±i</code> are not real numbers.' },
+    };
+
+    document.querySelectorAll('.mcq-options').forEach(function (group) {
+      const qNum = +group.dataset.q;
+      const ans = ANSWERS[qNum];
+      const feedback = group.parentElement.querySelector('.mcq-feedback');
+      group.querySelectorAll('.mcq-option').forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          const choice = +opt.dataset.i;
+          group.querySelectorAll('.mcq-option').forEach(function (o) { o.classList.remove('correct'); o.classList.remove('wrong'); });
+          if (choice === ans.correct) {
+            opt.classList.add('correct');
+          } else {
+            opt.classList.add('wrong');
+            const right = group.querySelectorAll('.mcq-option')[ans.correct];
+            right.classList.add('correct');
+          }
+          feedback.innerHTML = '<strong>' + (choice === ans.correct ? '✓ Correct.' : '✗ Not quite.') + '</strong> ' + ans.why;
+          feedback.classList.add('open');
+        });
+      });
+    });
+
+    /* Solution toggles */
+    document.querySelectorAll('[data-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const sol = document.getElementById(btn.dataset.toggle);
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+  </script>
+</body>
+</html>
