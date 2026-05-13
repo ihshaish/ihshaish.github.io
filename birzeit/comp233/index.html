@@ -335,6 +335,109 @@
     body.dark .schedule-table tbody td:first-child { color: #64b5f6; }
     body.dark .schedule-table tbody td:last-child { color: #999; }
     body.dark .schedule-table tbody tr:hover { background: #1a1a2e; }
+
+    /* Exam section (visually distinct from chapter blocks). */
+    .exam-divider {
+      border: 0;
+      height: 0;
+      border-top: 2px dashed #ffb74d;
+      margin: 48px 0 28px;
+    }
+    body.dark .exam-divider { border-top-color: #5d3a10; }
+    .exam-heading {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 1.35rem; font-weight: 800; color: #e65100;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      margin: 0 0 18px;
+    }
+    .exam-heading::before {
+      content: ''; flex: 0 0 28px; height: 4px;
+      background: #e65100; border-radius: 2px;
+    }
+    body.dark .exam-heading { color: #ffb74d; }
+    body.dark .exam-heading::before { background: #ffb74d; }
+    .exam-block {
+      border-left: 5px solid #e65100;
+      background: linear-gradient(180deg, #fff3e0 0%, #fff 80%);
+      border-radius: 0 10px 10px 0;
+      padding: 22px 26px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 10px rgba(230, 81, 0, 0.10);
+    }
+    body.dark .exam-block {
+      background: linear-gradient(180deg, #3a2410 0%, #1a1a2e 100%);
+      border-left-color: #ffb74d;
+    }
+    .exam-block .exam-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      font-size: 0.68rem; font-weight: 800;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      background: #e65100; color: #fff;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    body.dark .exam-block .exam-tag { background: #ffb74d; color: #2a1a05; }
+    .exam-block h3 {
+      margin: 0 0 6px; font-size: 1.1rem; color: #e65100; font-weight: 700;
+    }
+    body.dark .exam-block h3 { color: #ffb74d; }
+    .exam-block .exam-meta {
+      font-size: 0.84rem; color: #777; margin-bottom: 14px; line-height: 1.55;
+    }
+    body.dark .exam-block .exam-meta { color: #999; }
+    .exam-block .exam-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px;
+      background: #e65100; color: #fff;
+      border-radius: 6px; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .exam-block .exam-btn:hover {
+      background: #bf360c; color: #fff; text-decoration: none;
+    }
+    body.dark .exam-block .exam-btn { background: #ffb74d; color: #2a1a05; }
+    body.dark .exam-block .exam-btn:hover { background: #ffd54f; }
+    .exam-block .exam-features {
+      display: flex; flex-wrap: wrap; gap: 6px 14px;
+      margin-top: 12px; font-size: 0.82rem; color: #555;
+    }
+    body.dark .exam-block .exam-features { color: #aaa; }
+    .exam-block .exam-features span {
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .exam-block .exam-features i { color: #e65100; }
+    body.dark .exam-block .exam-features i { color: #ffb74d; }
+
+    .exam-date-pill {
+      display: inline-block;
+      padding: 3px 12px;
+      font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      background: #fff; color: #e65100;
+      border: 1.5px solid #e65100; border-radius: 14px;
+      margin-left: auto;
+    }
+    body.dark .exam-date-pill { background: #1a1a2e; color: #ffb74d; border-color: #ffb74d; }
+    .exam-heading { justify-content: flex-start; flex-wrap: wrap; }
+
+    .exam-weights {
+      margin: 16px 0 6px;
+      padding: 12px 18px;
+      background: #fff;
+      border: 1px solid #ffcc80;
+      border-radius: 8px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.88rem; color: #555;
+      line-height: 1.55;
+    }
+    body.dark .exam-weights {
+      background: #1a1a2e; border-color: #5d3a10; color: #b0bec5;
+    }
+    .exam-weights i { color: #e65100; font-size: 1.1rem; flex-shrink: 0; }
+    body.dark .exam-weights i { color: #ffb74d; }
+    .exam-weights strong { color: #e65100; }
+    body.dark .exam-weights strong { color: #ffb74d; }
   </style>
 </head>
 
@@ -512,6 +615,39 @@
             <span class="companion-note">Definitions tester, conjecture lab for counterexamples, divisibility and prime factorisation explorers, quotient-remainder calculator, congruence checker, division into cases, plus a find-the-mistake exercise.</span>
           </div>
         </div>
+
+        <!-- =============== FIRST EXAM SEPARATOR =============== -->
+        <hr class="exam-divider">
+
+        <h2 class="exam-heading">
+          <i class="fas fa-file-signature" style="font-size: 1.2rem;"></i>
+          <span>First Exam</span>
+          <span class="exam-date-pill">Released 14 May 2026</span>
+        </h2>
+
+        <div class="exam-block">
+          <div class="exam-tag">Section 9 &middot; Second Semester 2025/2026</div>
+          <h3>First Exam &amp; Answers</h3>
+          <div class="exam-meta">
+            Here is the First Exam paper you sat on <strong>12 May 2026</strong>, with my worked solutions to every question and the full marking criteria for each part. Solutions released on <strong>14 May 2026</strong>. Work each question on paper first, then click <em>Show solution</em>; for Q1 click any option to check your answer.
+          </div>
+          <a class="exam-btn" href="/birzeit/comp233/COMP233_FirstExam.html" target="_blank" rel="noopener">
+            <i class="fas fa-arrow-right"></i> View questions &amp; solutions
+          </a>
+          <div class="exam-features">
+            <span><i class="fas fa-check-circle"></i> MCQ with click-to-check answers</span>
+            <span><i class="fas fa-check-circle"></i> Step-by-step worked proofs</span>
+            <span><i class="fas fa-check-circle"></i> Marking guide aligned with the official key</span>
+          </div>
+        </div>
+
+        <div class="exam-weights">
+          <i class="fas fa-balance-scale"></i>
+          <span><strong>Course weighting in this block:</strong> Quiz <strong>10%</strong> &middot; First Exam <strong>30%</strong>. The Quiz paper (covering Chapters 1&ndash;3) will appear in its own block after Chapter 3 once released.</span>
+        </div>
+
+        <hr class="exam-divider">
+        <!-- =============== END FIRST EXAM SEPARATOR =============== -->
 
         <!-- Chapter 5 -->
         <div class="chapter-block pending">
