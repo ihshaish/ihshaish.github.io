@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true}, {left:'$',right:'$',display:false}], throwOnError: false });"></script>
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Chapter 2 Interactive Companion: propositional logic, truth tables, equivalence, conditional statements, and argument validity." />
+
+  <title>COMP233 Ch.2 Companion: The Logic of Compound Statements</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-critical: #fff9c4;
+      --c-broken-bg: #ffcdd2;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-critical: #4e4322;
+      --c-broken-bg: #5a2727;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .companion-hero {
+      text-align: center;
+      padding: 30px 0 12px;
+    }
+    .companion-hero .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--c-primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .companion-hero h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--c-text);
+      margin-bottom: 8px;
+    }
+    .companion-hero .subtitle {
+      font-size: 1rem;
+      color: var(--c-muted);
+      margin-bottom: 14px;
+    }
+    .companion-hero .back-link {
+      font-size: 0.88rem;
+      color: var(--c-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .companion-hero .back-link:hover { text-decoration: underline; }
+
+    .howto-card {
+      background: var(--c-primary-light);
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin: 24px 0 30px;
+      font-size: 0.9rem;
+      color: var(--c-text);
+      line-height: 1.55;
+    }
+    .howto-card h4 {
+      margin: 0 0 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--c-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .howto-card ul { margin: 0; padding-left: 20px; }
+
+    .toc {
+      background: var(--c-page-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-bottom: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      align-items: center;
+    }
+    .toc h4 {
+      margin: 0 12px 0 0;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--c-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .toc a {
+      font-size: 0.85rem;
+      color: var(--c-primary);
+      text-decoration: none;
+      padding: 3px 9px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .toc a:hover { background: var(--c-primary-light); text-decoration: none; }
+
+    .chapter-section {
+      margin-top: 44px;
+    }
+    .chapter-section > h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--c-primary);
+      border-bottom: 2px solid var(--c-border);
+      padding-bottom: 10px;
+      margin: 0 0 22px;
+    }
+    .chapter-section > h2 .ch-num {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.15rem;
+      margin-right: 10px;
+      color: var(--c-muted);
+    }
+
+    .section-intro {
+      font-size: 0.96rem;
+      line-height: 1.65;
+      color: var(--c-text);
+      margin-bottom: 22px;
+    }
+    .section-intro ul { padding-left: 22px; }
+    .section-intro li { margin-bottom: 4px; }
+    .section-intro code {
+      background: var(--c-page-bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.86em;
+    }
+
+    .widget-card {
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      padding: 22px 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .widget-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--c-primary);
+      margin: 0 0 6px;
+    }
+    .widget-card h3 .ar { color: var(--c-muted); font-weight: 400; font-size: 0.92rem; margin-left: 4px; }
+    .widget-card .widget-desc {
+      font-size: 0.92rem;
+      color: var(--c-text);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .widget-card .widget-desc code {
+      background: var(--c-page-bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.88em;
+    }
+
+    /* Toggle switches */
+    .toggle-row {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--c-text);
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggle input { display: none; }
+    .toggle .switch {
+      position: relative;
+      width: 44px;
+      height: 22px;
+      background: #cfd8dc;
+      border-radius: 11px;
+      transition: background 0.18s;
+    }
+    .toggle .switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left 0.18s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .toggle input:checked + .switch { background: var(--c-true); }
+    .toggle input:checked + .switch::after { left: 24px; }
+    .toggle .label-name {
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--c-primary);
+    }
+    .toggle .label-value {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--c-muted);
+      min-width: 14px;
+    }
+
+    /* Evaluation output panel */
+    .eval-panel {
+      background: var(--c-page-bg);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+    .eval-panel .e-row { display: flex; gap: 12px; }
+    .eval-panel .e-expr { color: var(--c-text); min-width: 100px; }
+    .eval-panel .e-val.t { color: var(--c-true); font-weight: 700; }
+    .eval-panel .e-val.f { color: var(--c-false); font-weight: 700; }
+    .eval-panel .vacuous {
+      margin-top: 6px;
+      font-style: italic;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.85rem;
+      color: var(--c-muted);
+    }
+
+    /* Formula input + palette */
+    .formula-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .formula-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--c-text);
+      padding-top: 9px;
+      min-width: 50px;
+    }
+    .formula-input-wrap {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .formula-input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--c-border);
+      border-radius: 6px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.95rem;
+      background: var(--c-card-bg);
+      color: var(--c-text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .formula-input:focus {
+      border-color: var(--c-primary);
+      box-shadow: 0 0 0 2px rgba(21,101,192,0.13);
+    }
+    .formula-input.err {
+      border-color: var(--c-false);
+      box-shadow: 0 0 0 2px rgba(198,40,40,0.13);
+    }
+    .symbol-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .symbol-palette button {
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      color: var(--c-text);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+      min-width: 32px;
+    }
+    .symbol-palette button:hover {
+      background: var(--c-primary-light);
+      border-color: var(--c-primary);
+    }
+    .symbol-palette .preset {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      color: var(--c-muted);
+    }
+    .palette-hint {
+      font-size: 0.74rem;
+      color: var(--c-muted);
+      margin-left: 4px;
+    }
+    .formula-error {
+      font-size: 0.82rem;
+      color: var(--c-false);
+      font-family: 'Roboto Mono', monospace;
+      min-height: 1em;
+    }
+
+    /* Truth table */
+    .tt-wrap {
+      margin-top: 14px;
+      overflow-x: auto;
+    }
+    .truth-table {
+      border-collapse: collapse;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    .truth-table th {
+      background: var(--c-page-bg);
+      color: var(--c-text);
+      font-weight: 700;
+      padding: 8px 14px;
+      border-bottom: 2px solid var(--c-primary);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .truth-table th.var-col {
+      color: var(--c-primary);
+      min-width: 34px;
+    }
+    .truth-table th.expr-col {
+      color: var(--c-text);
+      border-left: 1px solid var(--c-border);
+    }
+    .truth-table th.sep { border-left: 2px solid var(--c-primary); }
+    .truth-table td {
+      padding: 6px 14px;
+      text-align: center;
+      font-weight: 700;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .truth-table td.tt-T { background: var(--c-true-bg); color: var(--c-true); }
+    .truth-table td.tt-F { background: var(--c-false-bg); color: var(--c-false); }
+    .truth-table td.sep { border-left: 2px solid var(--c-primary); }
+    .truth-table td.col-sep { border-left: 1px solid var(--c-border); }
+    .truth-table tr.critical td { box-shadow: inset 0 0 0 9999px var(--c-critical); }
+    .truth-table tr.critical td.tt-T,
+    .truth-table tr.critical td.tt-F { box-shadow: inset 0 0 0 9999px transparent; }
+    .truth-table tr.critical-marker td {
+      background: var(--c-critical);
+      font-weight: 700;
+      color: var(--c-text);
+    }
+    .truth-table tr.broken-marker td {
+      background: var(--c-broken-bg);
+      color: var(--c-false);
+      font-weight: 700;
+    }
+    .truth-table tr.differ td.diff-mark {
+      background: var(--c-broken-bg) !important;
+      color: var(--c-false) !important;
+      font-weight: 800;
+    }
+
+    /* Verdict pill */
+    .verdict {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-top: 14px;
+    }
+    .verdict.ok    { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no    { background: var(--c-false-bg); color: var(--c-false); }
+    .verdict.warn  { background: #fff3e0; color: #e65100; }
+    body.dark .verdict.warn { background: #3a2410; color: #ffb74d; }
+    .verdict-detail {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.88rem;
+      color: var(--c-text);
+      line-height: 1.55;
+    }
+    .verdict-detail code {
+      background: var(--c-page-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    /* De Morgan: student filter */
+    .slider-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .slider-row label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+      color: var(--c-text);
+      min-width: 200px;
+    }
+    .slider-row .slabel {
+      font-weight: 600;
+      color: var(--c-muted);
+    }
+    .slider-row .svalue {
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 700;
+      color: var(--c-primary);
+      font-size: 1rem;
+    }
+    .slider-row input[type=range] {
+      width: 100%;
+      accent-color: var(--c-primary);
+    }
+    .filter-rule {
+      background: var(--c-page-bg);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .student-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+    .student-table th {
+      background: var(--c-page-bg);
+      color: var(--c-muted);
+      font-weight: 700;
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--c-border);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .student-table th.center { text-align: center; }
+    .student-table td {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .student-table td.num {
+      font-family: 'Roboto Mono', monospace;
+      text-align: center;
+    }
+    .student-table td.bool { text-align: center; font-weight: 700; }
+    .student-table td.bool.t { color: var(--c-true); }
+    .student-table td.bool.f { color: var(--c-false); }
+    .student-table tr.qualifies { background: var(--c-true-bg); }
+    body.dark .student-table tr.qualifies { background: rgba(46,125,50,0.18); }
+    .dm-note {
+      font-size: 0.82rem;
+      color: var(--c-muted);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Standard forms reference card */
+    .forms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .form-card {
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: var(--c-page-bg);
+    }
+    .form-card.invalid { border-color: var(--c-false); background: var(--c-false-bg); }
+    .form-card h4 {
+      margin: 0 0 4px;
+      font-size: 0.92rem;
+      color: var(--c-primary);
+      font-weight: 700;
+    }
+    .form-card.invalid h4 { color: var(--c-false); }
+    .form-card .form-formula {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--c-text);
+      margin: 6px 0;
+    }
+    .form-card .form-reads {
+      font-size: 0.84rem;
+      color: var(--c-muted);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* Exercises */
+    .exercises-block { margin-top: 18px; }
+    .exercises-block > h3 {
+      font-size: 1.05rem;
+      color: var(--c-primary);
+      margin: 0 0 6px;
+    }
+    .exercises-block .ex-source {
+      font-size: 0.82rem;
+      color: var(--c-muted);
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+    .exercise {
+      background: var(--c-card-bg);
+      border-left: 4px solid var(--c-primary);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 20px;
+      margin-bottom: 14px;
+    }
+    .exercise .ex-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--c-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+    }
+    .exercise .ex-body {
+      font-size: 0.94rem;
+      color: var(--c-text);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .exercise .ex-body code {
+      background: var(--c-page-bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.88em;
+    }
+    .solution-btn {
+      background: var(--c-primary-light);
+      color: var(--c-primary);
+      border: 1px solid var(--c-primary);
+      padding: 5px 14px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-primary); color: #fff; }
+    .solution-btn.open { background: var(--c-primary); color: #fff; }
+    .solution {
+      margin-top: 12px;
+      padding: 14px 18px;
+      background: var(--c-page-bg);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--c-text);
+      display: none;
+    }
+    .solution.open { display: block; }
+    .solution code, .solution .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .solution strong { color: var(--c-primary); }
+
+    /* Helper: inline mono fragment */
+    .mono-inline {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.92em;
+    }
+
+    /* Recap */
+    .recap-card {
+      background: var(--c-primary-light);
+      border-radius: 10px;
+      padding: 22px 28px;
+      margin-top: 36px;
+    }
+    .recap-card h3 {
+      color: var(--c-primary);
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .recap-card ul {
+      margin: 0 0 12px;
+      padding-left: 22px;
+      line-height: 1.75;
+      font-size: 0.92rem;
+    }
+    .recap-card .preview {
+      font-size: 0.88rem;
+      color: var(--c-text);
+      padding-top: 12px;
+      border-top: 1px solid rgba(21,101,192,0.2);
+      line-height: 1.6;
+    }
+    body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
+
+    @media (max-width: 640px) {
+      .formula-label { padding-top: 0; }
+      .companion-hero h1 { font-size: 1.4rem; }
+      .widget-card { padding: 16px 18px; }
+    }
+  </style>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="companion-hero">
+          <div class="eyebrow">COMP233 &middot; Chapter 2 Interactive Companion</div>
+          <h1>The Logic of Compound Statements</h1>
+          <div class="subtitle">Propositional logic, truth tables, equivalence, and argument validity.</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="howto-card">
+          <h4>How to use this companion</h4>
+          <ul>
+            <li>Each section has explanatory notes followed by interactive widgets. Type a formula or click symbols from the palette: <span class="mono-inline">p ∧ (q ∨ r)</span>, <span class="mono-inline">¬p → q</span>, <span class="mono-inline">p ↔ ¬q</span>.</li>
+            <li>Accepted operators: Unicode (<span class="mono-inline">¬ ∧ ∨ → ↔</span>), words (<span class="mono-inline">not, and, or, implies, iff</span>), or ASCII (<span class="mono-inline">~ &amp; | -&gt; &lt;-&gt;</span>). Variables are single letters: <span class="mono-inline">p, q, r, s</span>.</li>
+            <li>Try the practice exercises at the end of each section. Click <em>Show solution</em> only after attempting.</li>
+          </ul>
+        </div>
+
+        <div class="toc">
+          <h4>Jump to</h4>
+          <a href="#sec211">2.1.1 Connectives</a>
+          <a href="#sec212">2.1.2 Truth tables</a>
+          <a href="#sec213">2.1.3 Equivalence</a>
+          <a href="#sec214">2.1.4 De Morgan</a>
+          <a href="#sec215">2.1.5 Tautology</a>
+          <a href="#sec221">2.2.1 Contrapositive</a>
+          <a href="#sec222">2.2.2 Biconditional</a>
+          <a href="#sec223">2.2.3 Necessary &amp; sufficient</a>
+          <a href="#sec231">2.3.1 Argument validity</a>
+          <a href="#sec232">2.3.2 Standard forms</a>
+        </div>
+
+        <!-- ===================== SECTION 2.1 ===================== -->
+        <div class="chapter-section" id="section-21">
+          <h2><span class="ch-num">§ 2.1</span>Logical form and logical equivalence</h2>
+
+          <div class="section-intro">
+            <p>A <strong>statement</strong> (or proposition, <em>العبارة / القضية</em>) is a sentence that is either true or false, but not both.</p>
+            <p><strong>Statements:</strong></p>
+            <ul>
+              <li>"2 + 2 = 4" &rarr; true</li>
+              <li>"It is raining in Nablus right now" &rarr; either true or false</li>
+              <li>"The number 17 is prime" &rarr; true</li>
+            </ul>
+            <p><strong>Not statements:</strong></p>
+            <ul>
+              <li>"What time is it?" (a question)</li>
+              <li>"Close the door." (a command)</li>
+              <li>"x + 1 = 5" (depends on x; this is a <em>predicate</em>, treated in Chapter 3)</li>
+            </ul>
+            <p>In propositional logic we label statements with letters like <code>p</code>, <code>q</code>, <code>r</code> and combine them with the connectives below.</p>
+          </div>
+
+          <!-- 2.1.1 Basic connectives -->
+          <div class="widget-card" id="sec211">
+            <h3>2.1.1 The basic connectives</h3>
+            <div class="widget-desc">Toggle the variables to see how each connective evaluates. Negation flips a single value; conjunction is true only when both inputs are true; disjunction is true when at least one is.</div>
+            <div class="toggle-row" data-widget="connectives">
+              <label class="toggle"><input type="checkbox" data-var="p" checked><span class="switch"></span><span class="label-name">p</span> <span class="label-value" data-show="p"></span></label>
+              <label class="toggle"><input type="checkbox" data-var="q" checked><span class="switch"></span><span class="label-name">q</span> <span class="label-value" data-show="q"></span></label>
+            </div>
+            <div class="eval-panel" data-widget="connectives-out"></div>
+          </div>
+
+          <!-- 2.1.2 Truth tables -->
+          <div class="widget-card" id="sec212">
+            <h3>2.1.2 Truth tables</h3>
+            <div class="widget-desc">A <strong>truth table</strong> lists every possible combination of truth values for the inputs and shows the result for each row. With <em>n</em> variables there are 2<sup>n</sup> rows. Enter any formula below.</div>
+
+            <div class="formula-row">
+              <div class="formula-input-wrap">
+                <input class="formula-input" id="tt-input" value="p ∧ (q ∨ r)" placeholder="e.g. p ∧ (q ∨ r)">
+                <div class="symbol-palette" data-for="tt-input">
+                  <button data-insert="¬">¬</button>
+                  <button data-insert="∧">∧</button>
+                  <button data-insert="∨">∨</button>
+                  <button data-insert="→">→</button>
+                  <button data-insert="↔">↔</button>
+                  <button data-insert="(">(</button>
+                  <button data-insert=")">)</button>
+                  <button data-insert="p">p</button>
+                  <button data-insert="q">q</button>
+                  <button data-insert="r">r</button>
+                  <span class="palette-hint">click to insert</span>
+                </div>
+                <div class="formula-error" id="tt-err"></div>
+              </div>
+            </div>
+
+            <div class="symbol-palette" style="margin: 6px 0 0;">
+              <span class="palette-hint" style="margin: 0 6px 0 0;">Quick presets:</span>
+              <button class="preset" data-tt-preset="p ∧ q">p ∧ q</button>
+              <button class="preset" data-tt-preset="p ∨ q">p ∨ q</button>
+              <button class="preset" data-tt-preset="¬p">¬p</button>
+              <button class="preset" data-tt-preset="¬(p ∧ q)">¬(p ∧ q)</button>
+              <button class="preset" data-tt-preset="¬p ∨ ¬q">¬p ∨ ¬q</button>
+              <button class="preset" data-tt-preset="p ∧ (q ∨ r)">p ∧ (q ∨ r)</button>
+              <button class="preset" data-tt-preset="(p ∧ q) ∨ (p ∧ r)">(p ∧ q) ∨ (p ∧ r)</button>
+            </div>
+
+            <div class="tt-wrap" id="tt-out"></div>
+            <p style="margin-top:14px; font-size:0.88rem; color:var(--c-muted); line-height:1.55;"><strong style="color:var(--c-text)">Try this.</strong> Build the tables for <span class="mono-inline">p ∧ (q ∨ r)</span> and <span class="mono-inline">(p ∧ q) ∨ (p ∧ r)</span>. Identical columns: that is the <em>distributive law</em>, and it is the first example of <strong>logical equivalence</strong>, the topic of the next widget.</p>
+          </div>
+
+          <!-- 2.1.3 Logical equivalence -->
+          <div class="widget-card" id="sec213">
+            <h3>2.1.3 Logical equivalence <span class="ar">(التكافؤ المنطقي)</span></h3>
+            <div class="widget-desc">Two statement forms are <strong>logically equivalent</strong> if they have the same truth value in every row of the truth table. We write <span class="mono-inline">P ≡ Q</span>. Enter two formulas. The companion builds both truth tables side by side, marks any differing row, and reports the verdict.</div>
+
+            <div class="formula-row">
+              <div class="formula-label">Left:</div>
+              <div class="formula-input-wrap">
+                <input class="formula-input" id="eq-left" value="p ∧ (q ∨ r)">
+                <div class="symbol-palette" data-for="eq-left">
+                  <button data-insert="¬">¬</button><button data-insert="∧">∧</button><button data-insert="∨">∨</button><button data-insert="→">→</button><button data-insert="↔">↔</button><button data-insert="(">(</button><button data-insert=")">)</button><button data-insert="p">p</button><button data-insert="q">q</button><button data-insert="r">r</button>
+                </div>
+                <div class="formula-error" id="eq-left-err"></div>
+              </div>
+            </div>
+            <div class="formula-row">
+              <div class="formula-label">Right:</div>
+              <div class="formula-input-wrap">
+                <input class="formula-input" id="eq-right" value="(p ∧ q) ∨ (p ∧ r)">
+                <div class="symbol-palette" data-for="eq-right">
+                  <button data-insert="¬">¬</button><button data-insert="∧">∧</button><button data-insert="∨">∨</button><button data-insert="→">→</button><button data-insert="↔">↔</button><button data-insert="(">(</button><button data-insert=")">)</button><button data-insert="p">p</button><button data-insert="q">q</button><button data-insert="r">r</button>
+                </div>
+                <div class="formula-error" id="eq-right-err"></div>
+              </div>
+            </div>
+
+            <div class="symbol-palette" style="margin-top: 4px;">
+              <span class="palette-hint" style="margin: 0 6px 0 0;">Equivalence pairs to try:</span>
+              <button class="preset" data-eq-preset="¬(p ∧ q)|¬p ∨ ¬q">¬(p ∧ q) ≡ ¬p ∨ ¬q</button>
+              <button class="preset" data-eq-preset="¬(p ∨ q)|¬p ∧ ¬q">¬(p ∨ q) ≡ ¬p ∧ ¬q</button>
+              <button class="preset" data-eq-preset="p → q|¬p ∨ q">p → q ≡ ¬p ∨ q</button>
+              <button class="preset" data-eq-preset="p ↔ q|(p → q) ∧ (q → p)">p ↔ q ≡ (p→q) ∧ (q→p)</button>
+              <button class="preset" data-eq-preset="p ∧ q|q ∧ p">commutativity</button>
+            </div>
+
+            <div id="eq-out" class="tt-wrap"></div>
+          </div>
+
+          <!-- 2.1.4 De Morgan -->
+          <div class="widget-card" id="sec214">
+            <h3>2.1.4 De Morgan's laws <span class="ar">(قوانين دي مورغان)</span></h3>
+            <div class="widget-desc">Two of the most useful equivalences in this course. They appear constantly in proofs, set theory, programming, and circuit design.</div>
+            <div style="margin: 10px 0; text-align:center;">
+              $$\neg(p \wedge q) \;\equiv\; \neg p \vee \neg q$$
+              $$\neg(p \vee q) \;\equiv\; \neg p \wedge \neg q$$
+            </div>
+            <p style="font-size:0.92rem; line-height:1.6;"><strong>Memory aid.</strong> <em>"Break the bar, change the sign."</em> When ¬ moves inside the parentheses, ∧ flips to ∨ (and vice versa), and each part gets negated.</p>
+            <p style="font-size:0.9rem; color:var(--c-muted); margin-top:14px;">Verify by typing <span class="mono-inline">¬(p ∧ q)</span> and <span class="mono-inline">¬p ∨ ¬q</span> into the equivalence checker above.</p>
+
+            <h4 style="margin-top:22px; font-size:0.96rem; color:var(--c-text);">Application: filtering student records</h4>
+            <p style="font-size:0.9rem; line-height:1.6; margin-bottom:14px;">A student <em>qualifies</em> when their grade reaches the pass threshold <strong>and</strong> their attendance reaches the minimum. Drag the sliders. The <em>qualifies</em> column applies the rule directly; the <em>¬ qualifies (DM)</em> column applies its De Morgan negation. The two should always agree (one is the negation of the other).</p>
+
+            <div class="slider-row">
+              <label>
+                <span class="slabel">Pass grade</span>
+                <input type="range" id="dm-grade" min="0" max="100" step="5" value="60">
+                <span class="svalue"><span id="dm-grade-v">60</span></span>
+              </label>
+              <label>
+                <span class="slabel">Min attendance</span>
+                <input type="range" id="dm-att" min="0" max="100" step="5" value="75">
+                <span class="svalue"><span id="dm-att-v">75</span></span>
+              </label>
+            </div>
+
+            <div class="filter-rule" id="dm-rule"></div>
+
+            <table class="student-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th class="center">Grade</th>
+                  <th class="center">Attend.</th>
+                  <th class="center">passes</th>
+                  <th class="center">att_ok</th>
+                  <th class="center">qualifies</th>
+                  <th class="center">¬ qualifies (DM)</th>
+                </tr>
+              </thead>
+              <tbody id="dm-tbody"></tbody>
+            </table>
+            <div class="dm-note">The <em>qualifies</em> column and the negation of the <em>¬ qualifies (DM)</em> column always agree, in every row, for every threshold setting.</div>
+          </div>
+
+          <!-- 2.1.5 Tautology and contradiction -->
+          <div class="widget-card" id="sec215">
+            <h3>2.1.5 Tautology and contradiction</h3>
+            <div class="widget-desc">
+              <ul style="padding-left:20px; margin:0 0 6px;">
+                <li>A <strong>tautology</strong> (<em>التطابق</em>) is a statement form that is true in <em>every</em> row of its truth table. Example: <span class="mono-inline">p ∨ ¬p</span>.</li>
+                <li>A <strong>contradiction</strong> (<em>التناقض</em>) is false in <em>every</em> row. Example: <span class="mono-inline">p ∧ ¬p</span>.</li>
+                <li>Anything else is a <strong>contingency</strong> &mdash; sometimes true, sometimes false.</li>
+              </ul>
+            </div>
+            <div class="formula-row">
+              <div class="formula-input-wrap">
+                <input class="formula-input" id="cl-input" value="p ∨ ¬p">
+                <div class="symbol-palette" data-for="cl-input">
+                  <button data-insert="¬">¬</button><button data-insert="∧">∧</button><button data-insert="∨">∨</button><button data-insert="→">→</button><button data-insert="↔">↔</button><button data-insert="(">(</button><button data-insert=")">)</button><button data-insert="p">p</button><button data-insert="q">q</button><button data-insert="r">r</button>
+                </div>
+                <div class="formula-error" id="cl-err"></div>
+              </div>
+            </div>
+
+            <div class="symbol-palette" style="margin-top:4px;">
+              <span class="palette-hint" style="margin: 0 6px 0 0;">Try:</span>
+              <button class="preset" data-cl-preset="p ∨ ¬p">p ∨ ¬p</button>
+              <button class="preset" data-cl-preset="p ∧ ¬p">p ∧ ¬p</button>
+              <button class="preset" data-cl-preset="(p ∧ q) ∨ (¬p ∨ ¬q)">(p ∧ q) ∨ (¬p ∨ ¬q)</button>
+              <button class="preset" data-cl-preset="p ∧ (¬p ∨ q)">p ∧ (¬p ∨ q)</button>
+              <button class="preset" data-cl-preset="¬(p ∧ ¬p)">¬(p ∧ ¬p)</button>
+            </div>
+
+            <div id="cl-out" style="margin-top:14px;"></div>
+          </div>
+
+          <!-- Exercises 2.1 -->
+          <div class="exercises-block">
+            <h3>Practice exercises &mdash; Section 2.1</h3>
+            <div class="ex-source">Adapted from Epp §2.1, suggested questions: 15, 24, 33.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.1.A</div>
+              <div class="ex-body">Use the equivalence checker (or build the truth table by hand) to determine whether the following pair is logically equivalent: $p \wedge (q \vee r) \;\;\text{ and }\;\; (p \wedge q) \vee r$.</div>
+              <button class="solution-btn" data-toggle-sol="sol-2-1-A">Show solution</button>
+              <div class="solution" id="sol-2-1-A">
+                <p>They are <strong>NOT equivalent.</strong></p>
+                <p><strong>Counterexample row:</strong> <span class="mono">p = F, q = F, r = T</span>.<br>
+                  <span class="mono">p ∧ (q ∨ r) = F ∧ (F ∨ T) = F ∧ T = F</span><br>
+                  <span class="mono">(p ∧ q) ∨ r = (F ∧ F) ∨ T = F ∨ T = T</span></p>
+                <p>Different values in this row, so the formulas are not equivalent.</p>
+                <p><strong>Lesson.</strong> ∧ does <em>not</em> distribute the way you might guess. The correct distributive law is $p \wedge (q \vee r) \equiv (p \wedge q) \vee (p \wedge r)$ (note the second ∧ on the right).</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.1.B</div>
+              <div class="ex-body">Write the negation of: <em>"It is hot and humid."</em> Then write the negation of: <em>"It is hot or humid."</em> Which De Morgan law did you use for each?</div>
+              <button class="solution-btn" data-toggle-sol="sol-2-1-B">Show solution</button>
+              <div class="solution" id="sol-2-1-B">
+                <p>Let <span class="mono">h</span> = "it is hot" and <span class="mono">m</span> = "it is humid".</p>
+                <p><strong>(i)</strong> Negation of <span class="mono">h ∧ m</span>:<br>
+                  <span class="mono">¬(h ∧ m) ≡ ¬h ∨ ¬m</span> &nbsp; <em>(first De Morgan law)</em><br>
+                  In words: <em>"It is not hot, or it is not humid."</em></p>
+                <p><strong>(ii)</strong> Negation of <span class="mono">h ∨ m</span>:<br>
+                  <span class="mono">¬(h ∨ m) ≡ ¬h ∧ ¬m</span> &nbsp; <em>(second De Morgan law)</em><br>
+                  In words: <em>"It is not hot, and it is not humid."</em></p>
+                <p>Watch the connective flip: ∧ becomes ∨ in (i), and ∨ becomes ∧ in (ii).</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.1.C</div>
+              <div class="ex-body">Classify each of the following as a tautology, contradiction, or contingency. Use the classifier above or work by hand.
+                <ol style="margin-top:6px;">
+                  <li><span class="mono-inline">(p ∧ q) ∨ (¬p ∨ ¬q)</span></li>
+                  <li><span class="mono-inline">p ∧ (¬p ∨ q)</span></li>
+                  <li><span class="mono-inline">¬(p ∧ ¬p)</span></li>
+                </ol>
+              </div>
+              <button class="solution-btn" data-toggle-sol="sol-2-1-C">Show solution</button>
+              <div class="solution" id="sol-2-1-C">
+                <p><strong>(1)</strong> <span class="mono">(p ∧ q) ∨ (¬p ∨ ¬q)</span>. Rewrite the right disjunct using De Morgan: <span class="mono">¬p ∨ ¬q ≡ ¬(p ∧ q)</span>. So we have <span class="mono">(p ∧ q) ∨ ¬(p ∧ q)</span>, which is of the form <span class="mono">X ∨ ¬X</span> &mdash; always true. &rarr; <strong>Tautology.</strong></p>
+                <p><strong>(2)</strong> <span class="mono">p ∧ (¬p ∨ q)</span>. Row <span class="mono">p=T, q=T</span>: <span class="mono">T ∧ (F ∨ T) = T</span>. Row <span class="mono">p=F, q=T</span>: <span class="mono">F ∧ (T ∨ T) = F</span>. &rarr; <strong>Contingency.</strong></p>
+                <p><strong>(3)</strong> <span class="mono">¬(p ∧ ¬p)</span>. <span class="mono">p ∧ ¬p</span> is a contradiction (always false), so its negation is always true. &rarr; <strong>Tautology.</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 2.2 ===================== -->
+        <div class="chapter-section" id="section-22">
+          <h2><span class="ch-num">§ 2.2</span>Conditional statements</h2>
+
+          <div class="section-intro">
+            <p>The conditional <span class="mono-inline">p → q</span> (read <em>"if p then q"</em>) is the workhorse of mathematical reasoning. The only way <span class="mono-inline">p → q</span> is false is when <span class="mono-inline">p</span> is true but <span class="mono-inline">q</span> is false. The rows where <span class="mono-inline">p</span> is false make the conditional <strong>vacuously true</strong>, a topic revisited in 3.2.</p>
+          </div>
+
+          <div class="widget-card">
+            <h3>Conditional sandbox</h3>
+            <div class="widget-desc">Toggle the inputs. Notice when the conditional is <em>vacuously true</em>.</div>
+            <div class="toggle-row" data-widget="cond">
+              <label class="toggle"><input type="checkbox" data-var="p" checked><span class="switch"></span><span class="label-name">p</span> <span class="label-value" data-show="p"></span></label>
+              <label class="toggle"><input type="checkbox" data-var="q" checked><span class="switch"></span><span class="label-name">q</span> <span class="label-value" data-show="q"></span></label>
+            </div>
+            <div class="eval-panel" data-widget="cond-out"></div>
+          </div>
+
+          <!-- 2.2.1 Contrapositive / Converse / Inverse -->
+          <div class="widget-card" id="sec221">
+            <h3>2.2.1 Contrapositive, converse, inverse</h3>
+            <div class="widget-desc">Given the conditional <span class="mono-inline">p → q</span>, three related forms come up constantly. The biggest source of student confusion in this chapter is mixing up the contrapositive with the converse. The truth table below settles it for any input.</div>
+
+            <div class="tt-wrap" id="cp-out"></div>
+
+            <div style="margin-top:16px; font-size:0.9rem; line-height:1.65; padding:12px 16px; background:var(--c-page-bg); border-radius:6px;">
+              <p style="margin:0 0 6px;"><strong>What the columns show.</strong></p>
+              <ul style="margin:0; padding-left:20px;">
+                <li><span class="mono-inline">p → q</span> vs <span class="mono-inline">¬q → ¬p</span> &nbsp;&rarr;&nbsp; identical in every row &nbsp;&rarr;&nbsp; <strong style="color:var(--c-true)">equivalent</strong> (the contrapositive).</li>
+                <li><span class="mono-inline">p → q</span> vs <span class="mono-inline">q → p</span> &nbsp;&rarr;&nbsp; differ in row <span class="mono-inline">F | T</span> &nbsp;&rarr;&nbsp; <strong style="color:var(--c-false)">not equivalent</strong> (converse).</li>
+                <li><span class="mono-inline">p → q</span> vs <span class="mono-inline">¬p → ¬q</span> &nbsp;&rarr;&nbsp; differ in row <span class="mono-inline">F | T</span> &nbsp;&rarr;&nbsp; <strong style="color:var(--c-false)">not equivalent</strong> (inverse).</li>
+                <li>Also: <span class="mono-inline">q → p ≡ ¬p → ¬q</span> &mdash; converse and inverse are equivalent to <em>each other</em>.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:16px; padding:12px 16px; border-left:3px solid var(--c-primary); background:var(--c-primary-light); border-radius:0 6px 6px 0;">
+              <p style="margin:0 0 6px; font-size:0.86rem; font-weight:700; color:var(--c-primary); text-transform:uppercase; letter-spacing:0.5px;">Worked example (Epp §2.2)</p>
+              <p style="margin:0 0 6px; font-size:0.94rem;"><em>"If it is raining, then the ground is wet."</em></p>
+              <ul style="margin:0; padding-left:22px; font-size:0.9rem; line-height:1.65;">
+                <li><strong>Original:</strong> rain → wet</li>
+                <li><strong>Contrapositive:</strong> ¬wet → ¬rain &mdash; <em>"If the ground is not wet, then it is not raining."</em> <span style="color:var(--c-true)">✓ logically the same</span>.</li>
+                <li><strong>Converse:</strong> wet → rain &mdash; <em>"If the ground is wet, then it is raining."</em> <span style="color:var(--c-false)">✗ could be wet from a sprinkler</span>.</li>
+                <li><strong>Inverse:</strong> ¬rain → ¬wet &mdash; <em>"If it is not raining, then the ground is not wet."</em> <span style="color:var(--c-false)">✗ same flaw as converse</span>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 2.2.2 Biconditional -->
+          <div class="widget-card" id="sec222">
+            <h3>2.2.2 Biconditional</h3>
+            <div class="widget-desc">The <strong>biconditional</strong> <span class="mono-inline">p ↔ q</span> (read <em>"p if and only if q"</em>, abbreviated <em>iff</em>) is true exactly when <span class="mono-inline">p</span> and <span class="mono-inline">q</span> have the same truth value.</div>
+            <div style="margin: 6px 0 12px; text-align:center;">
+              $$p \leftrightarrow q \;\equiv\; (p \to q) \wedge (q \to p)$$
+            </div>
+            <div class="tt-wrap" id="bicond-out"></div>
+            <p style="margin-top:12px; font-size:0.88rem; color:var(--c-muted);">Identical columns &rarr; equivalent. The biconditional is exactly the conjunction of the two one-way conditionals.</p>
+          </div>
+
+          <!-- 2.2.3 Necessary / sufficient -->
+          <div class="widget-card" id="sec223">
+            <h3>2.2.3 Necessary and sufficient conditions</h3>
+            <div class="widget-desc">These two phrases are crucial, and easy to swap by mistake.</div>
+            <ul style="font-size:0.92rem; line-height:1.7; padding-left:22px;">
+              <li><em>"p is <strong>sufficient</strong> for q"</em> means <span class="mono-inline">p → q</span>. (Having <span class="mono-inline">p</span> is enough to guarantee <span class="mono-inline">q</span>.)</li>
+              <li><em>"p is <strong>necessary</strong> for q"</em> means <span class="mono-inline">q → p</span>. (Without <span class="mono-inline">p</span>, <span class="mono-inline">q</span> cannot happen.)</li>
+              <li><em>"p <strong>only if</strong> q"</em> means <span class="mono-inline">p → q</span>.</li>
+              <li><em>"p <strong>if</strong> q"</em> means <span class="mono-inline">q → p</span>.</li>
+            </ul>
+
+            <p style="margin: 16px 0 8px; font-size:0.88rem; color:var(--c-muted);">Pick a statement to see its symbolic translation:</p>
+            <select id="ns-select" style="padding:8px 10px; border:1px solid var(--c-border); border-radius:6px; font-size:0.9rem; width:100%; max-width:600px; background:var(--c-card-bg); color:var(--c-text);">
+              <option value="0">Being a square is sufficient for being a rectangle.</option>
+              <option value="1">Having a valid ID is necessary for entering the exam hall.</option>
+              <option value="2">You pass only if you score at least 60.</option>
+              <option value="3">A number is divisible by 4 if it is divisible by 8.</option>
+            </select>
+            <div id="ns-out" style="margin-top:14px;"></div>
+          </div>
+
+          <!-- Exercises 2.2 -->
+          <div class="exercises-block">
+            <h3>Practice exercises &mdash; Section 2.2</h3>
+            <div class="ex-source">Adapted from Epp §2.2, suggested questions: 14(a), 17, 25.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.2.A</div>
+              <div class="ex-body">Write the contrapositive, converse, and inverse of the statement: <em>"If today is Friday, then I have an exam."</em></div>
+              <button class="solution-btn" data-toggle-sol="sol-2-2-A">Show solution</button>
+              <div class="solution" id="sol-2-2-A">
+                <p>Let <span class="mono">p</span> = "today is Friday", <span class="mono">q</span> = "I have an exam".</p>
+                <p><strong>Original</strong> (p → q): If today is Friday, then I have an exam.</p>
+                <p><strong>Contrapositive</strong> (¬q → ¬p): <em>"If I do not have an exam, then today is not Friday."</em> &nbsp;<span style="color:var(--c-true)">✓ logically equivalent</span>.</p>
+                <p><strong>Converse</strong> (q → p): <em>"If I have an exam, then today is Friday."</em> &nbsp;<span style="color:var(--c-false)">✗ not equivalent</span>; exams happen on other days too.</p>
+                <p><strong>Inverse</strong> (¬p → ¬q): <em>"If today is not Friday, then I do not have an exam."</em> &nbsp;<span style="color:var(--c-false)">✗ not equivalent</span>; same flaw as converse.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.2.B</div>
+              <div class="ex-body">Rewrite each statement in the form <em>if p then q</em>:
+                <ol style="margin-top:6px;">
+                  <li>"Being divisible by 6 is sufficient for being divisible by 2."</li>
+                  <li>"A polygon is a triangle only if it has exactly 3 sides."</li>
+                  <li>"Compiling is necessary for running the program."</li>
+                </ol>
+              </div>
+              <button class="solution-btn" data-toggle-sol="sol-2-2-B">Show solution</button>
+              <div class="solution" id="sol-2-2-B">
+                <p><strong>(1)</strong> "p sufficient for q" translates to <span class="mono">p → q</span>:<br>
+                  <em>"If a number is divisible by 6, then it is divisible by 2."</em></p>
+                <p><strong>(2)</strong> "p only if q" translates to <span class="mono">p → q</span>:<br>
+                  <em>"If a polygon is a triangle, then it has exactly 3 sides."</em></p>
+                <p><strong>(3)</strong> "p necessary for q" translates to <span class="mono">q → p</span>:<br>
+                  <em>"If the program runs, then it has been compiled."</em></p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.2.C</div>
+              <div class="ex-body">Use the equivalence checker (in section 2.1.3) or a hand truth table to verify: $p \to q \;\equiv\; \neg p \vee q$. Why is this useful?</div>
+              <button class="solution-btn" data-toggle-sol="sol-2-2-C">Show solution</button>
+              <div class="solution" id="sol-2-2-C">
+                <p>Identical truth values in every row &rarr; equivalent.</p>
+                <p><strong>Why it matters.</strong> This is the bridge from conditional reasoning to the basic connectives. It lets us apply De Morgan to negate conditionals:<br>
+                  <span class="mono">¬(p → q) ≡ ¬(¬p ∨ q) ≡ p ∧ ¬q</span></p>
+                <p>So the negation of <em>"if p then q"</em> is <em>"p AND not q"</em> &mdash; used constantly in proofs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 2.3 ===================== -->
+        <div class="chapter-section" id="section-23">
+          <h2><span class="ch-num">§ 2.3</span>Valid arguments and rules of inference</h2>
+
+          <div class="section-intro">
+            <p>An <strong>argument</strong> is a sequence of statements: some <strong>premises</strong> followed by a <strong>conclusion</strong>.</p>
+            <p>An argument is <strong>valid</strong> (<em>الحجة الصحيحة</em>) when, in <em>every</em> row of the truth table where all premises are true, the conclusion is also true. If there is even one row where every premise is true but the conclusion is false, the argument is <strong>invalid</strong> &mdash; that row is a <em>counterexample</em>.</p>
+            <p><strong>Important.</strong> Validity is about <em>form</em>, not about whether the premises happen to be true. An argument can be valid with false premises and an absurd conclusion. What matters is that the form preserves truth.</p>
+          </div>
+
+          <!-- 2.3.1 Argument validity checker -->
+          <div class="widget-card" id="sec231">
+            <h3>2.3.1 The argument validity checker</h3>
+            <div class="widget-desc">Pick an argument form. The checker builds the truth table, highlights the <em>critical rows</em> (those where every premise is true), and reports the verdict.</div>
+
+            <p style="margin: 8px 0 6px; font-size:0.88rem; color:var(--c-muted);">Argument:</p>
+            <select id="arg-select" style="padding:8px 10px; border:1px solid var(--c-border); border-radius:6px; font-size:0.9rem; width:100%; max-width:600px; background:var(--c-card-bg); color:var(--c-text);"></select>
+
+            <div id="arg-out" class="tt-wrap" style="margin-top:14px;"></div>
+            <div id="arg-verdict"></div>
+          </div>
+
+          <!-- 2.3.2 Standard forms -->
+          <div class="widget-card" id="sec232">
+            <h3>2.3.2 Standard valid forms to memorise</h3>
+            <div class="widget-desc">Six valid forms used constantly throughout this course (and in proofs in every later chapter), followed by two classic fallacies.</div>
+
+            <div class="forms-grid">
+              <div class="form-card">
+                <h4>Modus Ponens</h4>
+                <div class="form-formula">$p \to q,\;\; p \;\vdash\; q$</div>
+                <div class="form-reads">"If p then q. p. Therefore q."</div>
+              </div>
+              <div class="form-card">
+                <h4>Modus Tollens</h4>
+                <div class="form-formula">$p \to q,\;\; \neg q \;\vdash\; \neg p$</div>
+                <div class="form-reads">"If p then q. Not q. Therefore not p."</div>
+              </div>
+              <div class="form-card">
+                <h4>Disjunctive Syllogism</h4>
+                <div class="form-formula">$p \vee q,\;\; \neg p \;\vdash\; q$</div>
+                <div class="form-reads">"p or q. Not p. Therefore q."</div>
+              </div>
+              <div class="form-card">
+                <h4>Hypothetical Syllogism</h4>
+                <div class="form-formula">$p \to q,\;\; q \to r \;\vdash\; p \to r$</div>
+                <div class="form-reads">"If p then q. If q then r. Therefore if p then r."</div>
+              </div>
+              <div class="form-card">
+                <h4>Conjunction</h4>
+                <div class="form-formula">$p,\;\; q \;\vdash\; p \wedge q$</div>
+                <div class="form-reads">From two truths, conclude their combination.</div>
+              </div>
+              <div class="form-card">
+                <h4>Simplification</h4>
+                <div class="form-formula">$p \wedge q \;\vdash\; p$</div>
+                <div class="form-reads">From a conjunction, extract either conjunct.</div>
+              </div>
+              <div class="form-card invalid">
+                <h4>Converse Error (INVALID)</h4>
+                <div class="form-formula">$p \to q,\;\; q \;\vdash\; p$</div>
+                <div class="form-reads">Confuses the conditional with its converse.</div>
+              </div>
+              <div class="form-card invalid">
+                <h4>Inverse Error (INVALID)</h4>
+                <div class="form-formula">$p \to q,\;\; \neg p \;\vdash\; \neg q$</div>
+                <div class="form-reads">Confuses the conditional with its inverse.</div>
+              </div>
+            </div>
+            <p style="margin-top:14px; font-size:0.88rem; color:var(--c-muted);">Both fallacies are invalid &mdash; verify each in the checker above.</p>
+          </div>
+
+          <!-- Exercises 2.3 -->
+          <div class="exercises-block">
+            <h3>Practice exercises &mdash; Section 2.3</h3>
+            <div class="ex-source">Adapted from Epp §2.3, suggested questions: 9, 11, 13.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.3.A</div>
+              <div class="ex-body">Determine whether the following argument is valid, and identify it by name.
+                <blockquote style="margin:8px 0; padding-left:16px; border-left:3px solid var(--c-border); font-style:italic;">
+                  If today is a holiday, the library is closed.<br>
+                  Today is not a holiday.<br>
+                  ∴ The library is not closed.
+                </blockquote>
+              </div>
+              <button class="solution-btn" data-toggle-sol="sol-2-3-A">Show solution</button>
+              <div class="solution" id="sol-2-3-A">
+                <p>Let <span class="mono">h</span> = "today is a holiday", <span class="mono">c</span> = "the library is closed".</p>
+                <p>Form:<br>
+                  <span class="mono">h → c</span><br>
+                  <span class="mono">¬h</span><br>
+                  <span class="mono">∴ ¬c</span></p>
+                <p>This is the <strong style="color:var(--c-false)">inverse error</strong> &mdash; <strong>invalid</strong>.</p>
+                <p><strong>Counterexample.</strong> The library could be closed for other reasons (Sunday, renovation). So <span class="mono">h</span> is false but <span class="mono">c</span> is true. That row makes both premises true (<span class="mono">h → c</span> is vacuously true and <span class="mono">¬h</span> is true) while the conclusion <span class="mono">¬c</span> is false. Validity broken.</p>
+                <p>Verify by picking <em>"Inverse error"</em> from the checker above.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.3.B</div>
+              <div class="ex-body">Is the following argument valid?
+                <blockquote style="margin:8px 0; padding-left:16px; border-left:3px solid var(--c-border); font-style:italic;">
+                  If 2 + 2 = 5, then 1 = 0.<br>
+                  2 + 2 ≠ 5.<br>
+                  ∴ 1 ≠ 0.
+                </blockquote>
+              </div>
+              <button class="solution-btn" data-toggle-sol="sol-2-3-B">Show solution</button>
+              <div class="solution" id="sol-2-3-B">
+                <p>Let <span class="mono">p</span> = "2 + 2 = 5", <span class="mono">q</span> = "1 = 0". Form: <span class="mono">p → q, ¬p ⊢ ¬q</span>. This is again the <strong style="color:var(--c-false)">inverse error</strong> &mdash; <strong>invalid</strong>.</p>
+                <p>Even though the conclusion happens to be true in the real world (1 ≠ 0 is correct), validity is about <em>form</em>, not content. The form does not <em>guarantee</em> the conclusion follows.</p>
+                <p><strong>Key lesson.</strong> An argument can have a true conclusion and still be invalid. Validity asks: does the form <em>force</em> the conclusion to be true whenever the premises are?</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 2.3.C</div>
+              <div class="ex-body">Use a chain of valid argument forms to justify the following:
+                <blockquote style="margin:8px 0; padding-left:16px; border-left:3px solid var(--c-border); font-style:italic;">
+                  If Ahmad is in COMP233, then he studies discrete math.<br>
+                  If Ahmad studies discrete math, then he learns about proofs.<br>
+                  Ahmad is in COMP233.<br>
+                  ∴ Ahmad learns about proofs.
+                </blockquote>
+              </div>
+              <button class="solution-btn" data-toggle-sol="sol-2-3-C">Show solution</button>
+              <div class="solution" id="sol-2-3-C">
+                <p>Let <span class="mono">c</span> = "Ahmad is in COMP233", <span class="mono">d</span> = "Ahmad studies discrete math", <span class="mono">p</span> = "Ahmad learns about proofs".</p>
+                <p>Premises:<br>
+                  <span class="mono">(1) c → d</span><br>
+                  <span class="mono">(2) d → p</span><br>
+                  <span class="mono">(3) c</span></p>
+                <p><strong>Step 1.</strong> Apply <strong>hypothetical syllogism</strong> to (1) and (2):<br>
+                  <span class="mono">c → d, d → p ⊢ c → p</span></p>
+                <p><strong>Step 2.</strong> Apply <strong>modus ponens</strong> to the result and (3):<br>
+                  <span class="mono">c → p, c ⊢ p</span></p>
+                <p>Therefore <span class="mono">p</span> &mdash; "Ahmad learns about proofs". <strong style="color:var(--c-true)">✓ Valid.</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recap -->
+        <div class="recap-card">
+          <h3>Recap &mdash; Chapter 2</h3>
+          <ul>
+            <li>Build a truth table for any compound statement.</li>
+            <li>Test whether two statement forms are <strong>logically equivalent</strong>.</li>
+            <li>Apply the <strong>De Morgan laws</strong> to negate conjunctions and disjunctions.</li>
+            <li>Classify a statement as <strong>tautology</strong>, <strong>contradiction</strong>, or <strong>contingency</strong>.</li>
+            <li>Distinguish the <strong>conditional</strong>, its <strong>contrapositive</strong> (equivalent), <strong>converse</strong>, and <strong>inverse</strong> (not equivalent).</li>
+            <li>Translate <strong>necessary</strong> and <strong>sufficient</strong> conditions into symbolic form.</li>
+            <li>Check the <strong>validity</strong> of an argument by inspecting its critical rows.</li>
+            <li>Recognise standard valid forms (<strong>modus ponens</strong>, <strong>modus tollens</strong>, <strong>disjunctive syllogism</strong>, <strong>hypothetical syllogism</strong>) and classic fallacies (<strong>converse error</strong>, <strong>inverse error</strong>).</li>
+          </ul>
+          <div class="preview"><strong>What's next.</strong> Chapter 3 &mdash; The Logic of Quantified Statements. Predicates, the universal and existential quantifiers, and a Tarski-style playground for evaluating quantified statements like $\forall x\, (\mathrm{Triangle}(x) \to \mathrm{Blue}(x))$ and $\forall x\, \exists y\, (\mathrm{Square}(x) \wedge \mathrm{Circle}(y) \wedge \mathrm{SameColor}(x, y))$.</div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+
+    /* =====================================================
+       LEXER + PARSER + EVALUATOR for propositional logic
+       ===================================================== */
+    function tokenize(s) {
+      const tokens = [];
+      let i = 0;
+      while (i < s.length) {
+        const ch = s[i];
+        if (/\s/.test(ch)) { i++; continue; }
+        if (s.startsWith('<->', i)) { tokens.push({type:'IFF', text:'<->'}); i+=3; continue; }
+        if (s.startsWith('<=>', i)) { tokens.push({type:'IFF', text:'<=>'}); i+=3; continue; }
+        if (s.startsWith('->', i))  { tokens.push({type:'IMP', text:'->'});  i+=2; continue; }
+        if (s.startsWith('=>', i))  { tokens.push({type:'IMP', text:'=>'});  i+=2; continue; }
+        if (s.startsWith('&&', i))  { tokens.push({type:'AND', text:'&&'});  i+=2; continue; }
+        if (s.startsWith('||', i))  { tokens.push({type:'OR',  text:'||'});  i+=2; continue; }
+        if (ch === '¬' || ch === '~' || ch === '!') { tokens.push({type:'NOT', text:ch}); i++; continue; }
+        if (ch === '∧' || ch === '&') { tokens.push({type:'AND', text:ch}); i++; continue; }
+        if (ch === '∨' || ch === '|') { tokens.push({type:'OR',  text:ch}); i++; continue; }
+        if (ch === '→') { tokens.push({type:'IMP', text:ch}); i++; continue; }
+        if (ch === '↔') { tokens.push({type:'IFF', text:ch}); i++; continue; }
+        if (ch === '(') { tokens.push({type:'LP',  text:'('}); i++; continue; }
+        if (ch === ')') { tokens.push({type:'RP',  text:')'}); i++; continue; }
+        if (/[a-zA-Z]/.test(ch)) {
+          let j = i;
+          while (j < s.length && /[a-zA-Z]/.test(s[j])) j++;
+          const word = s.slice(i, j);
+          const lower = word.toLowerCase();
+          if (lower === 'not')                              tokens.push({type:'NOT', text:word});
+          else if (lower === 'and')                         tokens.push({type:'AND', text:word});
+          else if (lower === 'or')                          tokens.push({type:'OR',  text:word});
+          else if (lower === 'implies' || lower === 'imp')  tokens.push({type:'IMP', text:word});
+          else if (lower === 'iff')                         tokens.push({type:'IFF', text:word});
+          else if (word === 'T' || lower === 'true')        tokens.push({type:'TRUE', text:word});
+          else if (word === 'F' || lower === 'false')       tokens.push({type:'FALSE', text:word});
+          else if (word.length === 1)                       tokens.push({type:'VAR', name:word, text:word});
+          else throw new Error(`Unknown identifier "${word}" (use single letters p, q, r, s for variables)`);
+          i = j; continue;
+        }
+        throw new Error(`Unexpected character "${ch}" at position ${i}`);
+      }
+      tokens.push({type:'EOF', text:''});
+      return tokens;
+    }
+
+    function parse(input) {
+      const tokens = tokenize(input);
+      let pos = 0;
+      const peek = () => tokens[pos];
+      const eat  = (type) => {
+        if (tokens[pos].type !== type) throw new Error(`Expected ${type}, got "${tokens[pos].text}"`);
+        return tokens[pos++];
+      };
+      function parseAtom() {
+        const t = peek();
+        if (t.type === 'VAR')   { pos++; return { kind: 'var', name: t.name }; }
+        if (t.type === 'TRUE')  { pos++; return { kind: 'const', value: true  }; }
+        if (t.type === 'FALSE') { pos++; return { kind: 'const', value: false }; }
+        if (t.type === 'LP')    { pos++; const e = parseIff(); eat('RP'); return e; }
+        if (t.type === 'EOF')   { throw new Error('Unexpected end of input'); }
+        throw new Error(`Unexpected token "${t.text}"`);
+      }
+      function parseUnary() {
+        if (peek().type === 'NOT') { pos++; return { kind: 'not', expr: parseUnary() }; }
+        return parseAtom();
+      }
+      function parseAnd() {
+        let left = parseUnary();
+        while (peek().type === 'AND') { pos++; left = { kind: 'and', left, right: parseUnary() }; }
+        return left;
+      }
+      function parseOr() {
+        let left = parseAnd();
+        while (peek().type === 'OR') { pos++; left = { kind: 'or', left, right: parseAnd() }; }
+        return left;
+      }
+      function parseImp() {
+        const left = parseOr();
+        if (peek().type === 'IMP') { pos++; return { kind: 'imp', left, right: parseImp() }; }
+        return left;
+      }
+      function parseIff() {
+        const left = parseImp();
+        if (peek().type === 'IFF') { pos++; return { kind: 'iff', left, right: parseIff() }; }
+        return left;
+      }
+      const ast = parseIff();
+      if (peek().type !== 'EOF') throw new Error(`Unexpected token "${peek().text}" after formula`);
+      return ast;
+    }
+
+    function evalAST(node, env) {
+      switch (node.kind) {
+        case 'var':   return env[node.name];
+        case 'const': return node.value;
+        case 'not':   return !evalAST(node.expr, env);
+        case 'and':   return evalAST(node.left, env) && evalAST(node.right, env);
+        case 'or':    return evalAST(node.left, env) || evalAST(node.right, env);
+        case 'imp':   return !evalAST(node.left, env) || evalAST(node.right, env);
+        case 'iff':   return evalAST(node.left, env) === evalAST(node.right, env);
+      }
+    }
+
+    function getVars(node, set) {
+      set = set || new Set();
+      switch (node.kind) {
+        case 'var':   set.add(node.name); break;
+        case 'const': break;
+        case 'not':   getVars(node.expr, set); break;
+        default:      getVars(node.left, set); getVars(node.right, set);
+      }
+      return set;
+    }
+
+    const PREC = { iff: 1, imp: 2, or: 3, and: 4, not: 5, atom: 6 };
+    function prettyPrint(node, parentPrec = 0) {
+      switch (node.kind) {
+        case 'var':   return node.name;
+        case 'const': return node.value ? 'T' : 'F';
+        case 'not':   return '¬' + prettyPrint(node.expr, PREC.not);
+        case 'and': {
+          const s = prettyPrint(node.left, PREC.and) + ' ∧ ' + prettyPrint(node.right, PREC.and);
+          return PREC.and < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'or': {
+          const s = prettyPrint(node.left, PREC.or) + ' ∨ ' + prettyPrint(node.right, PREC.or);
+          return PREC.or < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'imp': {
+          const s = prettyPrint(node.left, PREC.imp + 1) + ' → ' + prettyPrint(node.right, PREC.imp);
+          return PREC.imp < parentPrec ? '(' + s + ')' : s;
+        }
+        case 'iff': {
+          const s = prettyPrint(node.left, PREC.iff + 1) + ' ↔ ' + prettyPrint(node.right, PREC.iff);
+          return PREC.iff < parentPrec ? '(' + s + ')' : s;
+        }
+      }
+    }
+
+    /* =====================================================
+       TRUTH TABLE
+       ===================================================== */
+    function buildAssignments(vars) {
+      const n = vars.length;
+      const rows = [];
+      // Match the textbook ordering: most-significant variable changes slowest, T precedes F.
+      for (let i = 0; i < (1 << n); i++) {
+        const env = {};
+        for (let j = 0; j < n; j++) {
+          env[vars[j]] = !(i >> (n - 1 - j) & 1);
+        }
+        rows.push(env);
+      }
+      return rows;
+    }
+
+    function ttCell(value) {
+      return `<td class="${value ? 'tt-T' : 'tt-F'}">${value ? 'T' : 'F'}</td>`;
+    }
+
+    /* =====================================================
+       FORMULA INPUT WIRING (palette + parsing + presets)
+       ===================================================== */
+    function setupPalette(inputId) {
+      const input = document.getElementById(inputId);
+      const palettes = document.querySelectorAll(`.symbol-palette[data-for="${inputId}"]`);
+      palettes.forEach(p => {
+        p.querySelectorAll('button[data-insert]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sym = btn.dataset.insert;
+            const start = input.selectionStart ?? input.value.length;
+            const end   = input.selectionEnd   ?? input.value.length;
+            const before = input.value.slice(0, start);
+            const after  = input.value.slice(end);
+            const insert = (before && !before.endsWith(' ') && !/[(¬]/.test(before.slice(-1))) ? ' ' + sym : sym;
+            input.value = before + insert + after;
+            input.focus();
+            const caret = (before + insert).length;
+            input.setSelectionRange(caret, caret);
+            input.dispatchEvent(new Event('input'));
+          });
+        });
+      });
+    }
+
+    function parseInputSafely(input, errBox) {
+      try {
+        const ast = parse(input.value);
+        input.classList.remove('err');
+        if (errBox) errBox.textContent = '';
+        return ast;
+      } catch (e) {
+        input.classList.add('err');
+        if (errBox) errBox.textContent = e.message;
+        return null;
+      }
+    }
+
+    /* =====================================================
+       2.1.1 BASIC CONNECTIVES
+       ===================================================== */
+    (function connectives() {
+      const root = document.querySelector('[data-widget="connectives"]');
+      const out  = document.querySelector('[data-widget="connectives-out"]');
+      function render() {
+        const p = root.querySelector('[data-var="p"]').checked;
+        const q = root.querySelector('[data-var="q"]').checked;
+        root.querySelector('[data-show="p"]').textContent = p ? 'T' : 'F';
+        root.querySelector('[data-show="q"]').textContent = q ? 'T' : 'F';
+        const rows = [
+          ['p',     p],
+          ['q',     q],
+          ['¬p',    !p],
+          ['¬q',    !q],
+          ['p ∧ q', p && q],
+          ['p ∨ q', p || q],
+        ];
+        out.innerHTML = rows.map(([lbl, v]) =>
+          `<div class="e-row"><div class="e-expr">${lbl}</div><div class="e-val ${v ? 't' : 'f'}">${v ? 'T' : 'F'}</div></div>`
+        ).join('');
+      }
+      root.querySelectorAll('input[type=checkbox]').forEach(c => c.addEventListener('change', render));
+      render();
+    })();
+
+    /* =====================================================
+       2.1.2 TRUTH TABLE BUILDER
+       ===================================================== */
+    (function truthTableBuilder() {
+      const input  = document.getElementById('tt-input');
+      const errBox = document.getElementById('tt-err');
+      const outBox = document.getElementById('tt-out');
+      setupPalette('tt-input');
+
+      function render() {
+        const ast = parseInputSafely(input, errBox);
+        if (!ast) { outBox.innerHTML = ''; return; }
+        const vars = [...getVars(ast)].sort();
+        if (vars.length > 4) {
+          errBox.textContent = `Too many variables (${vars.length}); please limit to at most 4.`;
+          outBox.innerHTML = '';
+          return;
+        }
+        const label = prettyPrint(ast);
+        const assignments = buildAssignments(vars);
+        let html = '<table class="truth-table"><thead><tr>';
+        vars.forEach(v => { html += `<th class="var-col">${v}</th>`; });
+        html += `<th class="expr-col sep">${label}</th></tr></thead><tbody>`;
+        for (const env of assignments) {
+          const v = evalAST(ast, env);
+          html += '<tr>';
+          vars.forEach(name => { html += ttCell(env[name]); });
+          html += `<td class="${v ? 'tt-T' : 'tt-F'} sep">${v ? 'T' : 'F'}</td>`;
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+        outBox.innerHTML = html;
+      }
+
+      input.addEventListener('input', render);
+      document.querySelectorAll('[data-tt-preset]').forEach(btn => {
+        btn.addEventListener('click', () => { input.value = btn.dataset.ttPreset; render(); });
+      });
+      render();
+    })();
+
+    /* =====================================================
+       2.1.3 EQUIVALENCE CHECKER
+       ===================================================== */
+    (function equivChecker() {
+      const lInput = document.getElementById('eq-left');
+      const rInput = document.getElementById('eq-right');
+      const lErr   = document.getElementById('eq-left-err');
+      const rErr   = document.getElementById('eq-right-err');
+      const out    = document.getElementById('eq-out');
+      setupPalette('eq-left');
+      setupPalette('eq-right');
+
+      function render() {
+        const lAst = parseInputSafely(lInput, lErr);
+        const rAst = parseInputSafely(rInput, rErr);
+        if (!lAst || !rAst) { out.innerHTML = ''; return; }
+        const vars = [...new Set([...getVars(lAst), ...getVars(rAst)])].sort();
+        if (vars.length > 4) {
+          out.innerHTML = '<div class="formula-error">Combined formulas use too many variables (>4).</div>';
+          return;
+        }
+        const lLabel = prettyPrint(lAst);
+        const rLabel = prettyPrint(rAst);
+        const assignments = buildAssignments(vars);
+
+        let html = '<table class="truth-table"><thead><tr>';
+        vars.forEach(v => { html += `<th class="var-col">${v}</th>`; });
+        html += `<th class="expr-col sep">${lLabel}</th>`;
+        html += `<th class="expr-col">${rLabel}</th>`;
+        html += '</tr></thead><tbody>';
+        let allEqual = true;
+        let firstDiff = null;
+        for (const env of assignments) {
+          const lv = evalAST(lAst, env);
+          const rv = evalAST(rAst, env);
+          const diff = (lv !== rv);
+          if (diff) {
+            allEqual = false;
+            if (!firstDiff) firstDiff = {env: {...env}, lv, rv};
+          }
+          html += `<tr${diff ? ' class="differ"' : ''}>`;
+          vars.forEach(name => { html += ttCell(env[name]); });
+          html += `<td class="${lv ? 'tt-T' : 'tt-F'} sep ${diff ? 'diff-mark' : ''}">${lv ? 'T' : 'F'}</td>`;
+          html += `<td class="${rv ? 'tt-T' : 'tt-F'} ${diff ? 'diff-mark' : ''}">${rv ? 'T' : 'F'}</td>`;
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+        let verdict = '';
+        if (allEqual) {
+          verdict = `<div class="verdict ok"><i class="fas fa-check-circle"></i> Equivalent &mdash; identical values in every row.</div>`;
+          verdict += `<div class="verdict-detail"><code>${lLabel}</code> ≡ <code>${rLabel}</code></div>`;
+        } else {
+          verdict = `<div class="verdict no"><i class="fas fa-times-circle"></i> Not equivalent.</div>`;
+          const env = firstDiff.env;
+          const envStr = vars.map(v => `${v} = ${env[v] ? 'T' : 'F'}`).join(', ');
+          verdict += `<div class="verdict-detail"><strong>Counterexample row:</strong> <code>${envStr}</code> &mdash; left is <code>${firstDiff.lv ? 'T' : 'F'}</code>, right is <code>${firstDiff.rv ? 'T' : 'F'}</code>.</div>`;
+        }
+        out.innerHTML = html + verdict;
+      }
+
+      [lInput, rInput].forEach(el => el.addEventListener('input', render));
+      document.querySelectorAll('[data-eq-preset]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [l, r] = btn.dataset.eqPreset.split('|');
+          lInput.value = l; rInput.value = r; render();
+        });
+      });
+      render();
+    })();
+
+    /* =====================================================
+       2.1.4 DE MORGAN STUDENT FILTER
+       ===================================================== */
+    (function deMorganFilter() {
+      const students = [
+        {name:'Ali',    grade:85, attendance:90},
+        {name:'Sara',   grade:55, attendance:80},
+        {name:'Omar',   grade:72, attendance:60},
+        {name:'Lina',   grade:91, attendance:95},
+        {name:'Khaled', grade:60, attendance:75},
+        {name:'Nour',   grade:45, attendance:40},
+      ];
+      const gSlider = document.getElementById('dm-grade');
+      const aSlider = document.getElementById('dm-att');
+      const gOut    = document.getElementById('dm-grade-v');
+      const aOut    = document.getElementById('dm-att-v');
+      const ruleBox = document.getElementById('dm-rule');
+      const tbody   = document.getElementById('dm-tbody');
+
+      function render() {
+        const g = +gSlider.value, a = +aSlider.value;
+        gOut.textContent = g; aOut.textContent = a;
+        ruleBox.innerHTML =
+          `<div><strong>Rule.</strong> qualifies &nbsp;≡&nbsp; (grade ≥ ${g}) &nbsp;∧&nbsp; (attendance ≥ ${a})</div>` +
+          `<div><strong>De Morgan.</strong> ¬ qualifies &nbsp;≡&nbsp; (grade &lt; ${g}) &nbsp;∨&nbsp; (attendance &lt; ${a})</div>`;
+        tbody.innerHTML = students.map(s => {
+          const passes = s.grade >= g;
+          const attOK  = s.attendance >= a;
+          const qual   = passes && attOK;
+          const notQual_DM = (!passes) || (!attOK);
+          const bool = (v) => `<td class="bool ${v ? 't' : 'f'}">${v ? 'T' : 'F'}</td>`;
+          return `<tr${qual ? ' class="qualifies"' : ''}>` +
+            `<td>${s.name}</td><td class="num">${s.grade}</td><td class="num">${s.attendance}</td>` +
+            bool(passes) + bool(attOK) + bool(qual) + bool(notQual_DM) +
+            `</tr>`;
+        }).join('');
+      }
+      [gSlider, aSlider].forEach(el => el.addEventListener('input', render));
+      render();
+    })();
+
+    /* =====================================================
+       2.1.5 TAUTOLOGY / CONTRADICTION / CONTINGENCY
+       ===================================================== */
+    (function tautologyClassifier() {
+      const input  = document.getElementById('cl-input');
+      const errBox = document.getElementById('cl-err');
+      const outBox = document.getElementById('cl-out');
+      setupPalette('cl-input');
+
+      function render() {
+        const ast = parseInputSafely(input, errBox);
+        if (!ast) { outBox.innerHTML = ''; return; }
+        const vars = [...getVars(ast)].sort();
+        const assignments = buildAssignments(vars);
+        const values = assignments.map(env => evalAST(ast, env));
+        const all = values.every(Boolean);
+        const none = values.every(v => !v);
+        let html = '<table class="truth-table"><thead><tr>';
+        vars.forEach(v => { html += `<th class="var-col">${v}</th>`; });
+        const label = prettyPrint(ast);
+        html += `<th class="expr-col sep">${label}</th></tr></thead><tbody>`;
+        assignments.forEach((env, i) => {
+          html += '<tr>';
+          vars.forEach(name => { html += ttCell(env[name]); });
+          html += `<td class="${values[i] ? 'tt-T' : 'tt-F'} sep">${values[i] ? 'T' : 'F'}</td>`;
+          html += '</tr>';
+        });
+        html += '</tbody></table>';
+
+        let pill;
+        if (all)        pill = `<div class="verdict ok"><i class="fas fa-check-circle"></i> Tautology &mdash; التطابق &mdash; always true.</div>`;
+        else if (none)  pill = `<div class="verdict no"><i class="fas fa-times-circle"></i> Contradiction &mdash; التناقض &mdash; always false.</div>`;
+        else            pill = `<div class="verdict warn"><i class="fas fa-info-circle"></i> Contingency &mdash; sometimes true, sometimes false.</div>`;
+        outBox.innerHTML = html + pill;
+      }
+      input.addEventListener('input', render);
+      document.querySelectorAll('[data-cl-preset]').forEach(btn => {
+        btn.addEventListener('click', () => { input.value = btn.dataset.clPreset; render(); });
+      });
+      render();
+    })();
+
+    /* =====================================================
+       2.2 CONDITIONAL SANDBOX
+       ===================================================== */
+    (function conditional() {
+      const root = document.querySelector('[data-widget="cond"]');
+      const out  = document.querySelector('[data-widget="cond-out"]');
+      function render() {
+        const p = root.querySelector('[data-var="p"]').checked;
+        const q = root.querySelector('[data-var="q"]').checked;
+        root.querySelector('[data-show="p"]').textContent = p ? 'T' : 'F';
+        root.querySelector('[data-show="q"]').textContent = q ? 'T' : 'F';
+        const cond = (!p) || q;
+        out.innerHTML =
+          `<div class="e-row"><div class="e-expr">p</div><div class="e-val ${p ? 't' : 'f'}">${p ? 'T' : 'F'}</div></div>` +
+          `<div class="e-row"><div class="e-expr">q</div><div class="e-val ${q ? 't' : 'f'}">${q ? 'T' : 'F'}</div></div>` +
+          `<div class="e-row"><div class="e-expr">p → q</div><div class="e-val ${cond ? 't' : 'f'}">${cond ? 'T' : 'F'}</div></div>` +
+          (!p ? `<div class="vacuous">Vacuously true &mdash; the hypothesis is false.</div>` : '');
+      }
+      root.querySelectorAll('input[type=checkbox]').forEach(c => c.addEventListener('change', render));
+      render();
+    })();
+
+    /* =====================================================
+       2.2.1 CONTRAPOSITIVE / CONVERSE / INVERSE TABLE
+       ===================================================== */
+    (function contrapositiveTable() {
+      const ast_orig   = parse('p -> q');
+      const ast_contra = parse('(not q) -> (not p)');
+      const ast_conv   = parse('q -> p');
+      const ast_inv    = parse('(not p) -> (not q)');
+      const vars = ['p', 'q'];
+      const labels = ['p → q', '¬q → ¬p (contra)', 'q → p (conv)', '¬p → ¬q (inv)'];
+      const asts = [ast_orig, ast_contra, ast_conv, ast_inv];
+      const out = document.getElementById('cp-out');
+      let html = '<table class="truth-table"><thead><tr>';
+      vars.forEach(v => { html += `<th class="var-col">${v}</th>`; });
+      labels.forEach((l, i) => { html += `<th class="expr-col${i === 0 ? ' sep' : ''}">${l}</th>`; });
+      html += '</tr></thead><tbody>';
+      for (const env of buildAssignments(vars)) {
+        const vals = asts.map(a => evalAST(a, env));
+        html += '<tr>';
+        vars.forEach(v => { html += ttCell(env[v]); });
+        vals.forEach((v, i) => { html += `<td class="${v ? 'tt-T' : 'tt-F'}${i === 0 ? ' sep' : ''}">${v ? 'T' : 'F'}</td>`; });
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      out.innerHTML = html;
+    })();
+
+    /* =====================================================
+       2.2.2 BICONDITIONAL VERIFICATION
+       ===================================================== */
+    (function biconditionalTable() {
+      const a1 = parse('p <-> q');
+      const a2 = parse('(p -> q) and (q -> p)');
+      const vars = ['p', 'q'];
+      const out = document.getElementById('bicond-out');
+      let html = '<table class="truth-table"><thead><tr>';
+      vars.forEach(v => { html += `<th class="var-col">${v}</th>`; });
+      html += '<th class="expr-col sep">p ↔ q</th>';
+      html += '<th class="expr-col">(p → q) ∧ (q → p)</th>';
+      html += '</tr></thead><tbody>';
+      for (const env of buildAssignments(vars)) {
+        const v1 = evalAST(a1, env);
+        const v2 = evalAST(a2, env);
+        html += '<tr>';
+        vars.forEach(v => { html += ttCell(env[v]); });
+        html += `<td class="${v1 ? 'tt-T' : 'tt-F'} sep">${v1 ? 'T' : 'F'}</td>`;
+        html += `<td class="${v2 ? 'tt-T' : 'tt-F'}">${v2 ? 'T' : 'F'}</td>`;
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      out.innerHTML = html;
+    })();
+
+    /* =====================================================
+       2.2.3 NECESSARY / SUFFICIENT
+       ===================================================== */
+    (function necSuff() {
+      const items = [
+        {statement: 'Being a square is sufficient for being a rectangle.',
+         symbolic: 'square → rectangle',
+         note: 'If a shape is a square, then it is a rectangle. (True &mdash; squares are special rectangles.)'},
+        {statement: 'Having a valid ID is necessary for entering the exam hall.',
+         symbolic: 'enter → has_valid_ID',
+         note: 'You can enter the exam hall only if you have a valid ID. Equivalently: if you enter, you have an ID.'},
+        {statement: 'You pass only if you score at least 60.',
+         symbolic: 'pass → score ≥ 60',
+         note: 'Passing requires scoring at least 60. Note: scoring 60+ alone does not guarantee passing &mdash; attendance might matter too.'},
+        {statement: 'A number is divisible by 4 if it is divisible by 8.',
+         symbolic: 'divisible_by_8 → divisible_by_4',
+         note: '"if" introduces the hypothesis. So: divisible by 8 implies divisible by 4. (True.)'},
+      ];
+      const sel = document.getElementById('ns-select');
+      const out = document.getElementById('ns-out');
+      function render() {
+        const item = items[+sel.value];
+        out.innerHTML =
+          `<div class="eval-panel" style="font-family:'Roboto', sans-serif;">
+             <div style="margin-bottom:6px;"><strong>Statement.</strong> ${item.statement}</div>
+             <div style="margin-bottom:6px;"><strong>Symbolic.</strong> <span class="mono-inline">${item.symbolic}</span></div>
+             <div style="font-size:0.88rem; color:var(--c-muted);"><strong style="color:var(--c-text);">Note.</strong> ${item.note}</div>
+           </div>`;
+      }
+      sel.addEventListener('change', render);
+      render();
+    })();
+
+    /* =====================================================
+       2.3.1 ARGUMENT VALIDITY CHECKER
+       ===================================================== */
+    (function argumentChecker() {
+      const arguments_ = [
+        {key: 'mp',     name: 'Modus Ponens  (p → q,  p ⊢ q)',                       premises: ['p -> q', 'p'],            pLabels: ['p → q', 'p'],     concl: 'q',           cLabel: 'q'},
+        {key: 'mt',     name: 'Modus Tollens  (p → q,  ¬q ⊢ ¬p)',                    premises: ['p -> q', 'not q'],        pLabels: ['p → q', '¬q'],    concl: 'not p',       cLabel: '¬p'},
+        {key: 'ds',     name: 'Disjunctive Syllogism  (p ∨ q,  ¬p ⊢ q)',             premises: ['p or q', 'not p'],        pLabels: ['p ∨ q', '¬p'],    concl: 'q',           cLabel: 'q'},
+        {key: 'hs',     name: 'Hypothetical Syllogism  (p → q,  q → r ⊢ p → r)',     premises: ['p -> q', 'q -> r'],       pLabels: ['p → q', 'q → r'], concl: 'p -> r',      cLabel: 'p → r'},
+        {key: 'conj',   name: 'Conjunction  (p,  q ⊢ p ∧ q)',                        premises: ['p', 'q'],                 pLabels: ['p', 'q'],         concl: 'p and q',     cLabel: 'p ∧ q'},
+        {key: 'simp',   name: 'Simplification  (p ∧ q ⊢ p)',                         premises: ['p and q'],                pLabels: ['p ∧ q'],          concl: 'p',           cLabel: 'p'},
+        {key: 'conv',   name: 'Converse error (INVALID)  (p → q,  q ⊢ p)',           premises: ['p -> q', 'q'],            pLabels: ['p → q', 'q'],     concl: 'p',           cLabel: 'p'},
+        {key: 'inv',    name: 'Inverse error (INVALID)  (p → q,  ¬p ⊢ ¬q)',          premises: ['p -> q', 'not p'],        pLabels: ['p → q', '¬p'],    concl: 'not q',       cLabel: '¬q'},
+      ];
+      const sel       = document.getElementById('arg-select');
+      const tableBox  = document.getElementById('arg-out');
+      const verdictBox= document.getElementById('arg-verdict');
+      arguments_.forEach((a, i) => {
+        const opt = document.createElement('option');
+        opt.value = i; opt.textContent = a.name;
+        sel.appendChild(opt);
+      });
+
+      function render() {
+        const arg = arguments_[+sel.value];
+        const pAsts = arg.premises.map(parse);
+        const cAst  = parse(arg.concl);
+        const vars  = [...new Set([...pAsts.flatMap(a => [...getVars(a)]), ...getVars(cAst)])].sort();
+
+        let html = '<table class="truth-table"><thead><tr>';
+        vars.forEach(v => { html += `<th class="var-col">${v}</th>`; });
+        arg.pLabels.forEach((l, i) => { html += `<th class="expr-col${i === 0 ? ' sep' : ''}">${l}</th>`; });
+        html += `<th class="expr-col sep">∴ ${arg.cLabel}</th>`;
+        html += '</tr></thead><tbody>';
+
+        let valid = true;
+        let anyCritical = false;
+        let counter = null;
+        for (const env of buildAssignments(vars)) {
+          const pVals = pAsts.map(a => evalAST(a, env));
+          const cVal  = evalAST(cAst, env);
+          const critical = pVals.every(Boolean);
+          const broken = critical && !cVal;
+          if (critical) anyCritical = true;
+          if (broken)   { valid = false; if (!counter) counter = {env: {...env}}; }
+
+          html += `<tr class="${critical ? (broken ? 'broken-marker' : 'critical-marker') : ''}">`;
+          vars.forEach(v => { html += ttCell(env[v]); });
+          pVals.forEach((v, i) => { html += `<td class="${v ? 'tt-T' : 'tt-F'}${i === 0 ? ' sep' : ''}">${v ? 'T' : 'F'}</td>`; });
+          html += `<td class="${cVal ? 'tt-T' : 'tt-F'} sep">${cVal ? 'T' : 'F'}</td>`;
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+        tableBox.innerHTML = html;
+
+        let verdict;
+        if (!anyCritical) {
+          verdict = `<div class="verdict warn"><i class="fas fa-info-circle"></i> Vacuously valid &mdash; no row makes all premises simultaneously true.</div>` +
+                    `<div class="verdict-detail">Yellow rows would be the <em>critical rows</em>; here none exist for this form.</div>`;
+        } else if (valid) {
+          verdict = `<div class="verdict ok"><i class="fas fa-check-circle"></i> Valid &mdash; in every critical row the conclusion is true.</div>` +
+                    `<div class="verdict-detail">Yellow rows are the <strong>critical rows</strong> (every premise is true). For a valid argument, the conclusion must be true in <em>all</em> of them.</div>`;
+        } else {
+          const envStr = vars.map(v => `${v}=${counter.env[v] ? 'T' : 'F'}`).join(', ');
+          verdict = `<div class="verdict no"><i class="fas fa-times-circle"></i> Invalid &mdash; a critical row makes the conclusion false.</div>` +
+                    `<div class="verdict-detail">Red rows show the <strong>counterexample</strong>: premises all true, conclusion false. Here at <code>${envStr}</code>.</div>`;
+        }
+        verdictBox.innerHTML = verdict;
+      }
+      sel.addEventListener('change', render);
+      render();
+    })();
+
+    /* =====================================================
+       SOLUTION REVEAL BUTTONS
+       ===================================================== */
+    document.querySelectorAll('[data-toggle-sol]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sol = document.getElementById(btn.dataset.toggleSol);
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+
+  </script>
+</body>
+</html>
