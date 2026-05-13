@@ -93,53 +93,87 @@
     }
     .companion-hero .back-link:hover { text-decoration: underline; }
 
+    .intro-card,
     .howto-card {
-      background: var(--c-primary-light);
-      border-radius: 8px;
-      padding: 14px 20px;
-      margin: 24px 0 30px;
-      font-size: 0.9rem;
-      color: var(--c-text);
-      line-height: 1.55;
-    }
-    .howto-card h4 {
-      margin: 0 0 6px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      color: var(--c-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-    }
-    .howto-card ul { margin: 0; padding-left: 20px; }
-
-    .toc {
       background: var(--c-page-bg);
       border: 1px solid var(--c-border);
       border-radius: 8px;
-      padding: 14px 20px;
-      margin-bottom: 36px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 16px;
-      align-items: center;
+      padding: 16px 22px;
+      margin: 18px 0 0;
+      font-size: 0.92rem;
+      color: var(--c-text);
+      line-height: 1.6;
     }
-    .toc h4 {
-      margin: 0 12px 0 0;
+    .intro-card { margin-top: 24px; border-left: 4px solid var(--c-primary); }
+    .howto-card { margin-top: 12px; margin-bottom: 6px; }
+    .intro-card h4,
+    .howto-card h4 {
+      margin: 0 0 8px;
       font-size: 0.74rem;
       font-weight: 800;
-      color: var(--c-muted);
+      color: var(--c-primary);
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.7px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .toc a {
-      font-size: 0.85rem;
+    .intro-card p { margin: 0 0 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+    .howto-card ul { margin: 0; padding-left: 20px; }
+    .howto-card li + li { margin-top: 4px; }
+    .howto-card .mono-inline { font-size: 0.88em; }
+
+    .toc {
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 4px 0 8px;
+      margin: 14px 0 36px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+    }
+    .toc-col {
+      padding: 14px 20px 6px;
+      border-left: 1px solid var(--c-border);
+    }
+    .toc-col:first-child { border-left: none; }
+    .toc-col h5 {
+      margin: 0 0 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--c-primary);
+      letter-spacing: 0.4px;
+    }
+    .toc-col ul { list-style: none; margin: 0; padding: 0; }
+    .toc-col li { margin: 0; }
+    .toc-col a {
+      display: block;
+      font-size: 0.86rem;
+      color: var(--c-text);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .toc-col a:hover {
+      background: var(--c-primary-light);
       color: var(--c-primary);
       text-decoration: none;
-      padding: 3px 9px;
-      border-radius: 4px;
-      transition: background 0.15s;
     }
-    .toc a:hover { background: var(--c-primary-light); text-decoration: none; }
+    .toc-col a .sec {
+      display: inline-block;
+      width: 36px;
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 700;
+      color: var(--c-primary);
+      font-size: 0.82rem;
+    }
+    @media (max-width: 720px) {
+      .toc-col { border-left: none; border-top: 1px solid var(--c-border); }
+      .toc-col:first-child { border-top: none; }
+    }
 
     .chapter-section {
       margin-top: 44px;
@@ -667,28 +701,31 @@
     .term::after {
       content: attr(data-tip);
       position: absolute;
-      bottom: calc(100% + 6px);
+      bottom: calc(100% + 8px);
       left: 50%;
       transform: translateX(-50%);
       background: #263238;
       color: #fff;
-      padding: 7px 11px;
+      padding: 9px 13px;
       border-radius: 6px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 400;
-      line-height: 1.5;
-      white-space: nowrap;
-      max-width: 320px;
+      line-height: 1.55;
+      white-space: normal;
+      word-wrap: break-word;
+      width: max-content;
+      max-width: min(360px, calc(100vw - 32px));
+      text-align: left;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.15s, transform 0.15s;
+      transition: opacity 0.15s;
       z-index: 50;
       box-shadow: 0 4px 16px rgba(0,0,0,0.18);
     }
     .term::before {
       content: '';
       position: absolute;
-      bottom: calc(100% + 1px);
+      bottom: calc(100% + 3px);
       left: 50%;
       transform: translateX(-50%);
       border: 5px solid transparent;
@@ -702,7 +739,6 @@
     .term:focus::after,
     .term:hover::before,
     .term:focus::before { opacity: 1; }
-    .term[data-tip*="·"]::after { white-space: pre-wrap; min-width: 220px; }
 
     .optional-tag {
       display: inline-block;
@@ -757,6 +793,118 @@
     }
     body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
 
+    /* Tarski preview — Chapter 3 teaser */
+    .tarski-card {
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      padding: 22px 26px;
+      margin-top: 22px;
+    }
+    .tarski-card h3 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+      color: var(--c-primary);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tarski-card .ch3-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      background: #fff3e0;
+      color: #e65100;
+      border-radius: 10px;
+    }
+    body.dark .tarski-card .ch3-tag { background: #3a2410; color: #ffb74d; }
+    .tarski-card p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin: 8px 0 0;
+    }
+    .tarski-card p.caption {
+      font-size: 0.85rem;
+      color: var(--c-muted);
+      margin-top: 12px;
+      line-height: 1.55;
+    }
+    .tarski-layout {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: start;
+      margin-top: 14px;
+    }
+    .tarski-grid {
+      display: grid;
+      grid-template-columns: 80px 80px;
+      grid-template-rows: 80px 80px;
+      gap: 6px;
+      background: var(--c-page-bg);
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--c-border);
+    }
+    .tarski-cell {
+      position: relative;
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+    .tarski-cell .tarski-name {
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--c-muted);
+      font-weight: 700;
+    }
+    .tarski-shape.blue   { color: #1976d2; }
+    .tarski-shape.red    { color: #c62828; }
+    .tarski-shape.green  { color: #2e7d32; }
+    .tarski-shape.yellow { color: #f9a825; }
+    body.dark .tarski-shape.blue   { color: #64b5f6; }
+    body.dark .tarski-shape.red    { color: #ef5350; }
+    body.dark .tarski-shape.green  { color: #81c784; }
+    body.dark .tarski-shape.yellow { color: #ffd54f; }
+    .tarski-props {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .tarski-props td {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .tarski-props tr:last-child td { border-bottom: none; }
+    .tarski-props td.prop {
+      font-family: 'Roboto Mono', monospace;
+      color: var(--c-text);
+    }
+    .tarski-props td.val {
+      width: 36px;
+      text-align: center;
+      font-weight: 800;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .tarski-props td.val.t { color: var(--c-true); background: var(--c-true-bg); }
+    .tarski-props td.val.f { color: var(--c-false); background: var(--c-false-bg); }
+    @media (max-width: 640px) {
+      .tarski-layout { grid-template-columns: 1fr; }
+      .tarski-grid { justify-content: center; }
+    }
+
     @media (max-width: 640px) {
       .formula-label { padding-top: 0; }
       .companion-hero h1 { font-size: 1.4rem; }
@@ -806,35 +954,58 @@
           <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
         </div>
 
+        <div class="intro-card">
+          <h4><i class="fas fa-compass"></i> What this chapter is about</h4>
+          <p><strong>Propositional logic</strong> is the grammar of mathematical reasoning. It gives precise rules for combining true/false statements with <span class="mono-inline">∼ ∧ ∨ → ↔</span>, deciding when two compound statements <em>mean the same thing</em>, and testing whether an argument's form <em>forces</em> its conclusion to follow from its premises.</p>
+          <p><strong>Why it matters.</strong> These rules are the foundation for every later chapter: predicates and quantifiers (Ch 3), proofs (Ch 4), set theory (Ch 6), and induction (Ch 5) all stand on the logic you build here. They also map directly onto programming (<code>if/else</code>, boolean expressions), digital circuits (AND/OR/NOT gates), and database queries (<code>WHERE</code> clauses).</p>
+        </div>
+
         <div class="howto-card">
-          <h4>How to use this companion</h4>
+          <h4><i class="fas fa-keyboard"></i> Using this companion</h4>
           <ul>
-            <li>Each section has explanatory notes followed by interactive widgets. Type a formula or click symbols from the palette: <span class="mono-inline">p ∧ (q ∨ r)</span>, <span class="mono-inline">∼p → q</span>, <span class="mono-inline">p ↔ ∼q</span>.</li>
-            <li>Accepted operators: Unicode (<span class="mono-inline">∼ ∧ ∨ → ↔</span>), words (<span class="mono-inline">not, and, or, implies, iff</span>), or ASCII (<span class="mono-inline">~ &amp; | -&gt; &lt;-&gt;</span>). Variables are single letters: <span class="mono-inline">p, q, r, s</span>.</li>
-            <li>Try the practice exercises at the end of each section. Click <em>Show solution</em> only after attempting.</li>
+            <li><strong>Enter formulas</strong> by clicking the symbol palette or typing &mdash; Unicode (<span class="mono-inline">∼ ∧ ∨ → ↔</span>), words (<span class="mono-inline">not, and, or, implies, iff</span>), or ASCII (<span class="mono-inline">~ &amp; | -&gt; &lt;-&gt;</span>). Variables are single letters: <span class="mono-inline">p, q, r, s</span>.</li>
+            <li><strong>Truth tables build column by column</strong> &mdash; sub-expressions appear as their own columns so the build-up is visible.</li>
+            <li><strong>Hover any <span class="term" data-tip="∼ نفي · turns T into F · this is what a tooltip looks like — Arabic from the slides on the right">underlined term</span></strong> for its symbol and Arabic name from the slides.</li>
+            <li><strong>Try every practice exercise</strong> before clicking <em>Show solution</em>.</li>
           </ul>
         </div>
 
-        <div class="toc">
-          <h4>Jump to</h4>
-          <a href="#sec211">2.1.1 Connectives</a>
-          <a href="#sec212">2.1.2 Truth tables</a>
-          <a href="#sec213">2.1.3 Equivalence</a>
-          <a href="#sec214">2.1.4 De Morgan</a>
-          <a href="#sec215">2.1.5 Tautology</a>
-          <a href="#sec221">2.2.1 Contrapositive</a>
-          <a href="#sec222">2.2.2 Biconditional</a>
-          <a href="#sec223">2.2.3 Necessary &amp; sufficient</a>
-          <a href="#sec231">2.3.1 Argument validity</a>
-          <a href="#sec232">2.3.2 Standard forms</a>
-        </div>
+        <nav class="toc" aria-label="Section contents">
+          <div class="toc-col">
+            <h5>§ 2.1 &middot; Logical form &amp; equivalence</h5>
+            <ul>
+              <li><a href="#sec211"><span class="sec">2.1.1</span>Connectives</a></li>
+              <li><a href="#sec212"><span class="sec">2.1.2</span>Truth tables</a></li>
+              <li><a href="#sec213"><span class="sec">2.1.3</span>Equivalence</a></li>
+              <li><a href="#sec214"><span class="sec">2.1.4</span>De Morgan's laws</a></li>
+              <li><a href="#sec215"><span class="sec">2.1.5</span>Tautology &amp; contradiction</a></li>
+            </ul>
+          </div>
+          <div class="toc-col">
+            <h5>§ 2.2 &middot; Conditional statements</h5>
+            <ul>
+              <li><a href="#section-22"><span class="sec">→</span>Conditional sandbox</a></li>
+              <li><a href="#sec221"><span class="sec">2.2.1</span>Contrapositive, converse, inverse</a></li>
+              <li><a href="#sec222"><span class="sec">2.2.2</span>Biconditional</a></li>
+              <li><a href="#sec223"><span class="sec">2.2.3</span>Necessary &amp; sufficient</a></li>
+            </ul>
+          </div>
+          <div class="toc-col">
+            <h5>§ 2.3 &middot; Valid arguments</h5>
+            <ul>
+              <li><a href="#sec231"><span class="sec">2.3.1</span>Argument validity checker</a></li>
+              <li><a href="#sec232"><span class="sec">2.3.2</span>Standard valid forms</a></li>
+              <li><a href="#recap"><span class="sec">∎</span>Chapter recap &amp; next</a></li>
+            </ul>
+          </div>
+        </nav>
 
         <!-- ===================== SECTION 2.1 ===================== -->
         <div class="chapter-section" id="section-21">
           <h2><span class="ch-num">§ 2.1</span>Logical form and logical equivalence</h2>
 
           <div class="section-intro">
-            <p>A <strong>statement</strong> (or proposition, <em>العبارة / القضية</em>) is a sentence that is either true or false, but not both.</p>
+            <p>A <span class="term" data-tip="العبارة / القضية · a sentence that is unambiguously true or false (not both)"><strong>statement</strong> (or proposition)</span> is a sentence that is either true or false, but not both. Statements built from simple statements joined by connectives (<span class="mono-inline">∼ ∧ ∨ → ↔</span>) are <span class="term" data-tip="A statement built from one or more simpler statements joined by connectives"><strong>compound statements</strong></span> &mdash; the focus of this chapter.</p>
             <p><strong>Statements:</strong></p>
             <ul>
               <li>"2 + 2 = 4" &rarr; true</li>
@@ -871,7 +1042,7 @@
           <!-- 2.1.2 Truth tables -->
           <div class="widget-card" id="sec212">
             <h3>2.1.2 Truth tables</h3>
-            <div class="widget-desc">A <strong>truth table</strong> lists every possible combination of truth values for the inputs and shows the result for each row. With <em>n</em> variables there are 2<sup>n</sup> rows. Enter any formula below.</div>
+            <div class="widget-desc">A <span class="term" data-tip="A complete enumeration: every combination of T/F for the inputs · with n variables, 2^n rows · the slides call this the 'numeration method'"><strong>truth table</strong></span> lists every possible combination of truth values for the inputs and shows the result for each row. With <em>n</em> variables there are 2<sup>n</sup> rows. Enter any formula below &mdash; the table builds each sub-expression as its own column, so you can read the construction step by step.</div>
 
             <div class="formula-row">
               <div class="formula-input-wrap">
@@ -912,7 +1083,7 @@
           <!-- 2.1.3 Logical equivalence -->
           <div class="widget-card" id="sec213">
             <h3>2.1.3 Logical equivalence <span class="ar">(التكافؤ المنطقي)</span></h3>
-            <div class="widget-desc">Two statement forms are <strong>logically equivalent</strong> if they have the same truth value in every row of the truth table. We write <span class="mono-inline">P ≡ Q</span>. Enter two formulas. The companion builds both truth tables side by side, marks any differing row, and reports the verdict.</div>
+            <div class="widget-desc">Two statement forms are <span class="term" data-tip="التكافؤ المنطقي · same truth value in every row of the truth table · written P ≡ Q"><strong>logically equivalent</strong></span> if they have the same truth value in every row of the truth table. We write <span class="mono-inline">P ≡ Q</span>. Enter two formulas. The companion builds both truth tables side by side, marks any differing row, and reports the verdict.</div>
 
             <div class="formula-row">
               <div class="formula-label">Left:</div>
@@ -998,9 +1169,9 @@
             <h3>2.1.5 Tautology and contradiction</h3>
             <div class="widget-desc">
               <ul style="padding-left:20px; margin:0 0 6px;">
-                <li>A <strong>tautology</strong> (<em>التطابق</em>) is a statement form that is true in <em>every</em> row of its truth table. Example: <span class="mono-inline">p ∨ ∼p</span>.</li>
-                <li>A <strong>contradiction</strong> (<em>التناقض</em>) is false in <em>every</em> row. Example: <span class="mono-inline">p ∧ ∼p</span>.</li>
-                <li>Anything else is a <strong>contingency</strong> &mdash; sometimes true, sometimes false.</li>
+                <li>A <span class="term" data-tip="التطابق · always true · the slides denote any tautology by the letter t"><strong>tautology</strong></span> is a statement form that is true in <em>every</em> row of its truth table. Example: <span class="mono-inline">p ∨ ∼p</span>.</li>
+                <li>A <span class="term" data-tip="التناقض · always false · the slides denote any contradiction by the letter c"><strong>contradiction</strong></span> is false in <em>every</em> row. Example: <span class="mono-inline">p ∧ ∼p</span>.</li>
+                <li>Anything else is a <span class="term" data-tip="Sometimes true, sometimes false · neither tautology nor contradiction · the typical case"><strong>contingency</strong></span> &mdash; sometimes true, sometimes false.</li>
               </ul>
             </div>
             <div class="formula-row">
@@ -1182,8 +1353,8 @@
             <ul style="font-size:0.92rem; line-height:1.7; padding-left:22px;">
               <li><em>"p is <span class="term" data-tip="p → q · having p is enough to guarantee q"><strong>sufficient</strong></span> for q"</em> means <span class="mono-inline">p → q</span>. (Having <span class="mono-inline">p</span> is enough to guarantee <span class="mono-inline">q</span>.)</li>
               <li><em>"p is <span class="term" data-tip="q → p · without p, q cannot happen"><strong>necessary</strong></span> for q"</em> means <span class="mono-inline">q → p</span>. (Without <span class="mono-inline">p</span>, <span class="mono-inline">q</span> cannot happen.)</li>
-              <li><em>"p <strong>only if</strong> q"</em> means <span class="mono-inline">p → q</span>. <span class="optional-tag" title="Slide p. 45 marked 'not included: ignore if you want'">slide p. 45 &middot; optional</span></li>
-              <li><em>"p <strong>if</strong> q"</em> means <span class="mono-inline">q → p</span>. <span class="optional-tag" title="Slide p. 45 marked 'not included: ignore if you want'">slide p. 45 &middot; optional</span></li>
+              <li><em>"p <strong>only if</strong> q"</em> means <span class="mono-inline">p → q</span>. <span class="optional-tag" title="Ch 2.2 slide 15 of 20 carries the annotation 'Not included: ignore if you want'">slide 15 of Ch 2.2 &middot; optional</span></li>
+              <li><em>"p <strong>if</strong> q"</em> means <span class="mono-inline">q → p</span>. <span class="optional-tag" title="Ch 2.2 slide 15 of 20 carries the annotation 'Not included: ignore if you want'">slide 15 of Ch 2.2 &middot; optional</span></li>
             </ul>
 
             <p style="margin: 16px 0 8px; font-size:0.88rem; color:var(--c-muted);">Pick a statement to see its symbolic translation:</p>
@@ -1306,7 +1477,7 @@
           <!-- 2.3.2 Standard forms -->
           <div class="widget-card" id="sec232">
             <h3>2.3.2 Standard valid forms (rules of inference)</h3>
-            <div class="widget-desc">The nine rules from the lecture slides. Each has been proven valid once and is then used as a building block in larger arguments. <em>c</em> denotes any contradiction. Two classic fallacies follow.</div>
+            <div class="widget-desc">The nine <span class="term" data-tip="A pre-verified valid argument form · once proved by truth table, it can be applied directly without rebuilding the table · the slides cover 9 of these"><strong>rules of inference</strong></span> from the lecture slides. Each has been proven valid once and is then used as a building block in larger arguments (a chain of rules replaces a truth table that doubles in size with every variable). <em>c</em> denotes any contradiction. Two classic <span class="term" data-tip="An invalid argument form that resembles a valid one · easy to mistake for the real thing"><strong>fallacies</strong></span> follow.</div>
 
             <div class="forms-grid">
               <div class="form-card">
@@ -1478,7 +1649,7 @@
         </div>
 
         <!-- Recap -->
-        <div class="recap-card">
+        <div class="recap-card" id="recap">
           <h3>Recap &mdash; Chapter 2</h3>
           <ul>
             <li>Build a truth table for any compound statement.</li>
@@ -1491,6 +1662,33 @@
             <li>Recognise the nine rules of inference (<strong>Modus Ponens</strong>, <strong>Modus Tollens</strong>, <strong>Generalization</strong>, <strong>Specialization</strong>, <strong>Conjunction</strong>, <strong>Elimination</strong>, <strong>Transitivity</strong>, <strong>Division into cases</strong>, <strong>Contradiction rule</strong>) and the two classic fallacies (<strong>converse error</strong>, <strong>inverse error</strong>).</li>
           </ul>
           <div class="preview"><strong>What's next.</strong> Chapter 3 &mdash; The Logic of Quantified Statements. Predicates, the universal and existential quantifiers, and a Tarski-style playground for evaluating quantified statements like $\forall x\, (\mathrm{Triangle}(x) \to \mathrm{Blue}(x))$ and $\forall x\, \exists y\, (\mathrm{Square}(x) \wedge \mathrm{Circle}(y) \wedge \mathrm{SameColor}(x, y))$.</div>
+        </div>
+
+        <!-- Tarski preview (bridge to Ch 3) -->
+        <div class="tarski-card">
+          <h3><i class="fas fa-shapes" style="color: var(--c-primary);"></i> Tarski preview <span class="ch3-tag">Chapter 3</span></h3>
+          <p>Tarski-style exercises live in Ch 3 because they need predicates and quantifiers (<span class="mono-inline">∀x</span>, <span class="mono-inline">∃y</span>). But the Ch 2 connectives already handle one piece of the picture &mdash; statements about <em>specific</em> labelled objects in a scene. Hover the underlined terms for the new vocabulary.</p>
+
+          <div class="tarski-layout">
+            <div class="tarski-grid" aria-label="Tarski-style scene with four labelled shapes">
+              <div class="tarski-cell"><span class="tarski-name">a</span><span class="tarski-shape blue">▲</span></div>
+              <div class="tarski-cell"><span class="tarski-name">b</span><span class="tarski-shape red">●</span></div>
+              <div class="tarski-cell"><span class="tarski-name">c</span><span class="tarski-shape green">■</span></div>
+              <div class="tarski-cell"><span class="tarski-name">d</span><span class="tarski-shape blue">▲</span></div>
+            </div>
+
+            <table class="tarski-props">
+              <tbody>
+                <tr><td class="prop">Triangle(a) ∧ Blue(a)</td><td class="val t">T</td></tr>
+                <tr><td class="prop">Square(c) ∨ Square(b)</td><td class="val t">T</td></tr>
+                <tr><td class="prop">Red(b) ∧ ∼Red(d)</td><td class="val t">T</td></tr>
+                <tr><td class="prop">Triangle(a) ↔ Triangle(d)</td><td class="val t">T</td></tr>
+                <tr><td class="prop">Circle(a) ∨ Square(d)</td><td class="val f">F</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="caption">In Ch 2, <span class="term" data-tip="A statement about a specific named object, like Triangle(a) · in Ch 2 it is just a proposition with a fixed T/F value"><strong>predicates</strong></span> like <span class="mono-inline">Triangle(a)</span> are propositions with a fixed truth value &mdash; you combine them with the connectives you already know. In Ch 3 we'll add a <span class="term" data-tip="Variables stand for any object in the scene · combined with quantifiers ∀ (for all) and ∃ (there exists)"><strong>variable</strong></span> like <span class="mono-inline">x</span> and <span class="term" data-tip="∀ universal · ∃ existential · let us claim something about all objects, or about at least one object"><strong>quantifiers</strong></span> <span class="mono-inline">∀x</span>, <span class="mono-inline">∃y</span>, so we can speak about the whole scene at once. For instance, <em>"every triangle is blue"</em> ($\forall x (\mathrm{Triangle}(x) \to \mathrm{Blue}(x))$) is <strong style="color:var(--c-true)">true</strong> here (both triangles, <span class="mono-inline">a</span> and <span class="mono-inline">d</span>, are blue), while <em>"some shape is yellow"</em> ($\exists x\, \mathrm{Yellow}(x)$) is <strong style="color:var(--c-false)">false</strong> (no yellow shapes in this scene).</p>
         </div>
 
       </div>
