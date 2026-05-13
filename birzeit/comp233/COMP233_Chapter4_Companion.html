@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true}, {left:'$',right:'$',display:false}], throwOnError: false });"></script>
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Chapter 4 Interactive Companion: number theory, direct proof, counterexample, rationals, divisibility, the quotient-remainder theorem." />
+
+  <title>COMP233 Ch.4 Companion: Number Theory and Methods of Proof</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-critical: #fff9c4;
+      --c-broken-bg: #ffcdd2;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-critical: #4e4322;
+      --c-broken-bg: #5a2727;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .companion-hero { text-align: center; padding: 30px 0 12px; }
+    .companion-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 700; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .companion-hero h1 { font-size: 1.8rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .companion-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .companion-hero .back-link { font-size: 0.88rem; color: var(--c-primary); text-decoration: none; font-weight: 600; }
+    .companion-hero .back-link:hover { text-decoration: underline; }
+
+    .intro-card {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-primary); border-radius: 8px;
+      padding: 16px 22px; margin: 24px 0 0;
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
+    }
+    .intro-card h4 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .intro-card p { margin: 0 0 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    .toc {
+      background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-primary); border-radius: 12px;
+      padding: 18px 24px 14px; margin: 22px 0 18px;
+      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
+    }
+    body.dark .toc { background: linear-gradient(180deg, rgba(100,181,246,0.10) 0%, var(--c-card-bg) 100%); }
+    .toc-title {
+      margin: 0 0 12px; font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-primary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toc-section { margin-bottom: 10px; }
+    .toc-section:last-child { margin-bottom: 0; }
+    .toc-section h5 {
+      margin: 0 0 6px; font-size: 0.9rem; font-weight: 700;
+      color: var(--c-text); line-height: 1.4;
+    }
+    .toc-section h5 .toc-num {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      color: var(--c-primary); margin-right: 8px;
+    }
+    .toc-links {
+      display: flex; flex-wrap: wrap; gap: 6px 8px;
+      padding-left: 14px; border-left: 2px solid var(--c-border);
+    }
+    body.dark .toc-links { border-left-color: #2a3a4a; }
+    .toc-links a {
+      display: inline-block; font-size: 0.84rem;
+      color: var(--c-primary); background: var(--c-card-bg);
+      text-decoration: none; padding: 4px 12px;
+      border: 1px solid var(--c-border); border-radius: 16px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .toc-links a:hover { background: var(--c-primary); color: #fff; border-color: var(--c-primary); text-decoration: none; }
+    @media (max-width: 640px) { .toc { padding: 16px 18px 12px; } .toc-links { padding-left: 10px; } }
+
+    .chapter-section { margin-top: 44px; }
+    .chapter-section > h2 {
+      font-size: 1.45rem; font-weight: 700; color: var(--c-primary);
+      border-bottom: 2px solid var(--c-border); padding-bottom: 10px; margin: 0 0 22px;
+    }
+    .chapter-section > h2 .ch-num {
+      font-family: 'Roboto Mono', monospace; font-size: 1.15rem;
+      margin-right: 10px; color: var(--c-muted);
+    }
+
+    .section-intro {
+      font-size: 0.96rem; line-height: 1.65; color: var(--c-text); margin-bottom: 22px;
+    }
+    .section-intro ul { padding-left: 22px; }
+    .section-intro li { margin-bottom: 4px; }
+    .section-intro code, .section-intro .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86em;
+    }
+
+    .widget-card {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 22px 26px; margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .widget-card h3 {
+      font-size: 1.05rem; font-weight: 700; color: var(--c-primary); margin: 0 0 6px;
+    }
+    .widget-card .widget-desc {
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.55; margin-bottom: 16px;
+    }
+    .widget-card .widget-desc code,
+    .widget-card .widget-desc .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.88em;
+    }
+
+    /* Hover terms */
+    .term {
+      position: relative; cursor: help;
+      border-bottom: 1px dotted var(--c-primary);
+      color: inherit; font-weight: 700;
+    }
+    .term::after {
+      content: attr(data-tip); position: absolute;
+      bottom: calc(100% + 8px); left: 0;
+      background: #263238; color: #fff;
+      padding: 9px 13px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 400; line-height: 1.55;
+      white-space: normal; word-wrap: break-word; width: max-content;
+      max-width: min(360px, calc(100vw - 32px));
+      text-align: left; opacity: 0; pointer-events: none;
+      transition: opacity 0.15s; z-index: 50;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .term::before {
+      content: ''; position: absolute;
+      bottom: calc(100% + 3px); left: 14px;
+      border: 5px solid transparent; border-top-color: #263238;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50;
+    }
+    .term:hover::after, .term:focus::after,
+    .term:hover::before, .term:focus::before { opacity: 1; }
+
+    .mono-inline {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg);
+      padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+
+    /* Floating "How to use" widget */
+    .howto-fab {
+      position: fixed; top: 100px; right: 18px; z-index: 30;
+      max-width: 300px; display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .howto-fab-toggle {
+      background: var(--c-primary); color: #fff; border: none;
+      border-radius: 8px; padding: 10px 16px; cursor: pointer;
+      font-size: 0.84rem; font-weight: 700;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    .howto-fab-toggle:hover, .howto-fab-toggle:focus { background: var(--c-primary-dark); outline: none; }
+    .howto-fab-toggle .chev { font-size: 0.72rem; transition: transform 0.2s; }
+    .howto-fab[data-open="true"] .howto-fab-toggle .chev { transform: rotate(180deg); }
+    .howto-fab-body {
+      width: 300px; margin-top: 8px;
+      background: var(--c-card-bg); border: 1px solid var(--c-primary);
+      border-radius: 10px; padding: 14px 18px;
+      font-size: 0.86rem; line-height: 1.55;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+    .howto-fab-body[hidden] { display: none; }
+    .howto-fab-body h5 {
+      margin: 0 0 8px; font-size: 0.72rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+    }
+    .howto-fab-body ul { margin: 0; padding-left: 20px; }
+    .howto-fab-body li { margin-bottom: 8px; }
+    .howto-fab-body li:last-child { margin-bottom: 0; }
+    @media (max-width: 980px) {
+      .howto-fab { position: static; max-width: 100%; align-items: stretch; margin: 18px 0 0; }
+      .howto-fab-toggle { align-self: flex-start; }
+      .howto-fab-body { width: auto; }
+    }
+
+    /* Numeric input row */
+    .num-row {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .num-row label {
+      font-size: 0.88rem; color: var(--c-text);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .num-row input[type="number"], .num-row select {
+      padding: 7px 12px; border: 1px solid var(--c-border); border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.95rem;
+      background: var(--c-card-bg); color: var(--c-text);
+      width: 130px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .num-row input[type="number"]:focus, .num-row select:focus {
+      border-color: var(--c-primary); box-shadow: 0 0 0 2px rgba(21,101,192,0.13);
+    }
+
+    /* Result panels */
+    .result-panel {
+      background: var(--c-page-bg); border-radius: 8px;
+      padding: 12px 16px; margin-top: 8px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem; line-height: 1.7;
+    }
+    .result-panel .res-row {
+      display: flex; gap: 14px; align-items: baseline; padding: 4px 0;
+    }
+    .result-panel .res-row + .res-row {
+      border-top: 1px dotted var(--c-border);
+    }
+    .result-panel .res-label {
+      min-width: 130px; color: var(--c-muted); font-weight: 600;
+    }
+    .result-panel .res-val { color: var(--c-text); font-weight: 700; }
+    .result-panel .res-val.t { color: var(--c-true); }
+    .result-panel .res-val.f { color: var(--c-false); }
+    .result-panel .res-note {
+      font-family: 'Roboto', sans-serif; font-style: italic;
+      color: var(--c-muted); font-size: 0.86rem;
+    }
+
+    /* Verdict pill */
+    .verdict {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 16px;
+      font-size: 0.88rem; font-weight: 700; margin-top: 12px;
+    }
+    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
+    .verdict.warn { background: #fff3e0; color: #e65100; }
+    body.dark .verdict.warn { background: #3a2410; color: #ffb74d; }
+
+    /* Conjecture lab */
+    .conj-card {
+      background: var(--c-page-bg); border-radius: 8px;
+      padding: 14px 18px; margin-top: 8px;
+      font-size: 0.9rem; line-height: 1.65;
+    }
+    .conj-card .conj-stmt {
+      font-style: italic; color: var(--c-text); margin-bottom: 8px;
+    }
+    .conj-card .conj-result {
+      font-family: 'Roboto Mono', monospace; font-size: 0.86rem; line-height: 1.7;
+    }
+    .conj-card .conj-cex {
+      color: var(--c-false); font-weight: 700;
+    }
+    .conj-card .conj-note {
+      font-style: italic; color: var(--c-muted); font-size: 0.82rem;
+      margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--c-border);
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    .data-table th, .data-table td {
+      padding: 7px 12px; border-bottom: 1px solid var(--c-border);
+      text-align: left;
+    }
+    .data-table th {
+      background: var(--c-page-bg); color: var(--c-primary);
+      font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .data-table tr:hover { background: var(--c-page-bg); }
+    .data-table td.formal, .data-table td.mono {
+      font-family: 'Roboto Mono', monospace;
+    }
+    .data-table td.t { color: var(--c-true); font-weight: 700; }
+    .data-table td.f { color: var(--c-false); font-weight: 700; }
+    .data-table td.center { text-align: center; }
+
+    /* Theorem / definition box */
+    .thm-box {
+      border-left: 3px solid var(--c-primary);
+      background: var(--c-primary-light);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: 0.93rem; line-height: 1.65;
+    }
+    .thm-box .thm-title {
+      font-weight: 800; color: var(--c-primary); margin-bottom: 4px;
+      font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .thm-box .thm-body { color: var(--c-text); }
+    .thm-box.def { border-left-color: #2e7d32; background: var(--c-true-bg); }
+    .thm-box.def .thm-title { color: var(--c-true); }
+    body.dark .thm-box.def { background: rgba(46,125,50,0.18); }
+
+    /* Proof callout */
+    .proof-callout {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 14px 18px; margin: 12px 0;
+      font-family: 'Roboto', sans-serif; font-size: 0.9rem; line-height: 1.7;
+    }
+    .proof-callout .proof-label {
+      font-size: 0.74rem; font-weight: 800; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+    .proof-callout .proof-step { padding: 3px 0; }
+    .proof-callout .proof-step.mono {
+      font-family: 'Roboto Mono', monospace; padding-left: 18px;
+    }
+    .proof-callout .end-of-proof {
+      font-weight: 800; color: var(--c-primary); float: right;
+    }
+
+    /* Properties grid (the 7 even/odd properties) */
+    .props-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .prop-cell {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-radius: 6px; padding: 10px 14px;
+      font-size: 0.86rem; line-height: 1.5;
+    }
+    .prop-cell .prop-num {
+      font-size: 0.7rem; font-weight: 800; color: var(--c-primary);
+      letter-spacing: 0.5px;
+    }
+
+    /* Parity-class visualisation */
+    .class-row {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      align-items: baseline; padding: 6px 0;
+    }
+    .class-row + .class-row {
+      border-top: 1px dotted var(--c-border);
+    }
+    .class-row .class-label {
+      min-width: 130px; font-family: 'Roboto Mono', monospace;
+      font-weight: 700; color: var(--c-primary); font-size: 0.86rem;
+    }
+    .class-row .class-chip {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 12px;
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      font-family: 'Roboto Mono', monospace; font-size: 0.82rem;
+    }
+
+    /* Exercises */
+    .exercises-block { margin-top: 18px; }
+    .exercises-block > h3 { font-size: 1.05rem; color: var(--c-primary); margin: 0 0 6px; }
+    .exercises-block .ex-source { font-size: 0.82rem; color: var(--c-muted); font-style: italic; margin-bottom: 16px; }
+    .exercise {
+      background: var(--c-card-bg); border-left: 4px solid var(--c-primary);
+      border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px;
+    }
+    .exercise.exam {
+      border-left-color: #e65100;
+    }
+    body.dark .exercise.exam { border-left-color: #ffb74d; }
+    .exercise .ex-label {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+    .exercise.exam .ex-label { color: #e65100; }
+    body.dark .exercise.exam .ex-label { color: #ffb74d; }
+    .exam-tag {
+      display: inline-block; margin-left: 8px;
+      padding: 1px 8px; font-size: 0.66rem; font-weight: 800;
+      letter-spacing: 0.4px; text-transform: uppercase;
+      background: #fff3e0; color: #e65100; border-radius: 9px;
+    }
+    body.dark .exam-tag { background: #3a2410; color: #ffb74d; }
+    .exercise .ex-body {
+      font-size: 0.94rem; color: var(--c-text); line-height: 1.6; margin-bottom: 10px;
+    }
+    .solution-btn {
+      background: var(--c-primary-light); color: var(--c-primary);
+      border: 1px solid var(--c-primary); padding: 5px 14px; border-radius: 6px;
+      font-size: 0.84rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-primary); color: #fff; }
+    .solution-btn.open { background: var(--c-primary); color: #fff; }
+    .solution {
+      margin-top: 12px; padding: 14px 18px;
+      background: var(--c-page-bg); border-radius: 6px;
+      font-size: 0.9rem; line-height: 1.65; color: var(--c-text); display: none;
+    }
+    .solution.open { display: block; }
+    .solution code, .solution .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px;
+    }
+    .solution strong { color: var(--c-primary); }
+
+    /* Multiple-choice quiz */
+    .mcq {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 14px;
+    }
+    .mcq .mcq-num {
+      font-size: 0.72rem; font-weight: 800; color: var(--c-primary);
+      letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .mcq .mcq-stmt {
+      font-size: 0.94rem; color: var(--c-text); line-height: 1.55; margin-bottom: 10px;
+    }
+    .mcq .mcq-options { display: flex; flex-direction: column; gap: 6px; }
+    .mcq-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border: 1px solid var(--c-border); border-radius: 6px;
+      cursor: pointer; transition: background 0.12s, border-color 0.12s;
+      font-size: 0.9rem; user-select: none;
+    }
+    .mcq-option:hover { background: var(--c-primary-light); border-color: var(--c-primary); }
+    .mcq-option .letter {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      width: 22px; text-align: center; color: var(--c-muted);
+    }
+    .mcq-option.correct { background: var(--c-true-bg); border-color: var(--c-true); color: var(--c-true); }
+    .mcq-option.correct .letter { color: var(--c-true); }
+    .mcq-option.wrong { background: var(--c-false-bg); border-color: var(--c-false); color: var(--c-false); }
+    .mcq-option.wrong .letter { color: var(--c-false); }
+    .mcq-explain {
+      margin-top: 10px; padding: 10px 14px;
+      background: var(--c-page-bg); border-radius: 6px;
+      font-size: 0.88rem; line-height: 1.6; display: none;
+    }
+    .mcq-explain.open { display: block; }
+
+    .recap-card {
+      background: var(--c-primary-light); border-radius: 10px;
+      padding: 22px 28px; margin-top: 36px;
+    }
+    .recap-card h3 { color: var(--c-primary); margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; }
+    .recap-card ul { margin: 0 0 12px; padding-left: 22px; line-height: 1.75; font-size: 0.92rem; }
+    .recap-card .preview {
+      font-size: 0.88rem; color: var(--c-text);
+      padding-top: 12px; border-top: 1px solid rgba(21,101,192,0.2); line-height: 1.6;
+    }
+    body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
+
+    @media (max-width: 640px) {
+      .companion-hero h1 { font-size: 1.4rem; }
+      .widget-card { padding: 16px 18px; }
+    }
+  </style>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <aside class="howto-fab" id="howto-fab" data-open="false">
+    <button type="button" class="howto-fab-toggle" aria-expanded="false" aria-controls="howto-fab-body">
+      <i class="fas fa-question-circle"></i>
+      <span>How to use</span>
+      <i class="fas fa-chevron-down chev"></i>
+    </button>
+    <div class="howto-fab-body" id="howto-fab-body" hidden>
+      <h5>Using this companion</h5>
+      <ul>
+        <li><strong>Number-theory widgets</strong>: type or pick an integer, the panel reports definitions, witnesses, and counterexamples in real time.</li>
+        <li><strong>Conjecture lab in Section 4.1</strong>: search small ranges for counterexamples. <em>Finding none is not a proof</em>; the lab makes that distinction explicit.</li>
+        <li><strong>Hover any underlined term</strong> for its symbol, Arabic name, and definition.</li>
+        <li><strong>Section 5 (Exam-style practice)</strong> mirrors the first exam: MCQ questions and proof-writing prompts with full worked solutions.</li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="companion-hero">
+          <div class="eyebrow">COMP233 &middot; Chapter 4 Interactive Companion</div>
+          <h1>Number Theory and Methods of Proof</h1>
+          <div class="subtitle">Direct proof, counterexample, rationals, divisibility, and the quotient-remainder theorem.</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="intro-card">
+          <h4><i class="fas fa-compass"></i> About this chapter</h4>
+          <p>Chapter 4 is where the logic of Chapters 2 and 3 starts paying back: we use it to prove and disprove real <strong>claims about integers</strong>. The objects are familiar (even, odd, prime, rational, divisible), but the discipline is new. Every claim is either proved by the <span class="term" data-tip="البرهان · suppose an arbitrary element of the domain, apply definitions and known results, derive the conclusion"><strong>generic-particular method</strong></span> or disproved by a single <span class="term" data-tip="المثال المضاد · one specific x in the domain that makes the hypothesis true and the conclusion false"><strong>counterexample</strong></span>.</p>
+          <p><strong>Where it is used.</strong> Number theory is the foundation of cryptography (RSA, Diffie-Hellman), hashing, error-correcting codes, and modular arithmetic in every CPU. More immediately, the proof techniques here are the toolkit you will use in every later chapter: induction (Chapter 5), set theory (Chapter 6), functions and relations (Chapters 7-8). The first exam tests these techniques directly.</p>
+        </div>
+
+        <nav class="toc" aria-label="Companion contents">
+          <div class="toc-title"><i class="fas fa-list"></i> Contents</div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 4.1</span>Direct proof and counterexample, introduction</h5>
+            <div class="toc-links">
+              <a href="#sec411">Definitions tester</a>
+              <a href="#sec412">Conjecture lab</a>
+              <a href="#sec413">Direct proof template</a>
+              <a href="#ex41">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 4.2</span>Rational numbers</h5>
+            <div class="toc-links">
+              <a href="#sec421">Rational or irrational?</a>
+              <a href="#sec422">Repeating decimals</a>
+              <a href="#sec423">Famous irrationals</a>
+              <a href="#sec424">Closure theorems</a>
+              <a href="#sec425">Seven even/odd properties</a>
+              <a href="#ex42">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 4.3</span>Divisibility</h5>
+            <div class="toc-links">
+              <a href="#sec431">Divisibility checker</a>
+              <a href="#sec432">Properties of divisibility</a>
+              <a href="#sec433">Prime factorisation</a>
+              <a href="#sec434">Unique factorisation theorem</a>
+              <a href="#ex43">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 4.4</span>Quotient-remainder theorem and division into cases</h5>
+            <div class="toc-links">
+              <a href="#sec441">q and r calculator</a>
+              <a href="#sec442">div, mod, applications</a>
+              <a href="#sec443">Parity and division into cases</a>
+              <a href="#sec444">Integers mod d explorer</a>
+              <a href="#sec445">Congruence modulo</a>
+              <a href="#sec446">Absolute value and triangle inequality</a>
+              <a href="#ex44">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 5</span>Exam-style practice</h5>
+            <div class="toc-links">
+              <a href="#exam-mcq">Multiple choice (Q1)</a>
+              <a href="#exam-proofs">Proof problems (Q2, Q3)</a>
+              <a href="#recap">Recap</a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- ===================== SECTION 4.1 ===================== -->
+        <div class="chapter-section" id="section-41">
+          <h2><span class="ch-num">Section 4.1</span>Direct proof and counterexample: introduction</h2>
+
+          <div class="section-intro">
+            <p>Two definitions to memorise word for word. Both directions of "if and only if" are used: the rightward direction tells you what to do when you <em>see</em> an even (or odd) integer; the leftward direction is what you <em>conclude</em> when you have produced the right form.</p>
+            <div class="thm-box def">
+              <div class="thm-title">Definitions (Epp p. 147)</div>
+              <div class="thm-body">
+                An integer <span class="mono-inline">n</span> is <span class="term" data-tip="العدد الزوجي · n = 2k for some integer k"><strong>even</strong></span> if and only if there exists an integer <span class="mono-inline">k</span> such that <span class="mono-inline">n = 2k</span>.<br>
+                An integer <span class="mono-inline">n</span> is <span class="term" data-tip="العدد الفردي · n = 2k + 1 for some integer k"><strong>odd</strong></span> if and only if there exists an integer <span class="mono-inline">k</span> such that <span class="mono-inline">n = 2k + 1</span>.
+              </div>
+            </div>
+            <div class="thm-box def">
+              <div class="thm-title">Definitions (Epp p. 148)</div>
+              <div class="thm-body">
+                An integer <span class="mono-inline">n &gt; 1</span> is <span class="term" data-tip="العدد الأولي · n > 1 and the only positive factorisations of n are 1 · n and n · 1"><strong>prime</strong></span> iff for all positive integers <span class="mono-inline">r, s</span>, if <span class="mono-inline">n = rs</span> then <span class="mono-inline">r = 1 ∧ s = n</span>, or <span class="mono-inline">r = n ∧ s = 1</span>.<br>
+                An integer <span class="mono-inline">n &gt; 1</span> is <span class="term" data-tip="العدد المركّب · n > 1 and there exist integers r, s with 1 < r < n and 1 < s < n such that n = rs"><strong>composite</strong></span> iff there exist positive integers <span class="mono-inline">r, s</span> with <span class="mono-inline">1 &lt; r &lt; n</span> and <span class="mono-inline">1 &lt; s &lt; n</span> such that <span class="mono-inline">n = rs</span>.
+              </div>
+            </div>
+            <p style="margin-top:10px;"><strong>Watch.</strong> To show <span class="mono-inline">n</span> is prime, you must rule out <em>every</em> non-trivial factorisation (a universal claim). To show <span class="mono-inline">n</span> is composite, you need to exhibit <em>one</em> non-trivial factorisation (an existential claim). By convention <span class="mono-inline">1</span> is neither prime nor composite.</p>
+          </div>
+
+          <!-- 4.1.1 Definitions tester -->
+          <div class="widget-card" id="sec411">
+            <h3>4.1.1 Even, odd, prime, composite tester</h3>
+            <div class="widget-desc">Type any integer. The panel reports its classification and gives the witness <span class="mono-inline">k</span> from the definition (e.g. <span class="mono-inline">n = 2k</span> for even, <span class="mono-inline">n = 2k + 1</span> for odd).</div>
+
+            <div class="num-row">
+              <label>n =&nbsp;<input type="number" id="defs-n" value="42"></label>
+            </div>
+            <div class="result-panel" id="defs-out"></div>
+          </div>
+
+          <!-- 4.1.2 Conjecture lab -->
+          <div class="widget-card" id="sec412">
+            <h3>4.1.2 Conjecture lab: disproof by counterexample</h3>
+            <div class="widget-desc">To disprove a universal statement, exhibit one <span class="term" data-tip="One specific x in the domain that makes the hypothesis true and the conclusion false. One is enough to break a universal claim."><strong>counterexample</strong></span>. Pick a conjecture, choose a search range, and the lab reports whether one was found.</div>
+
+            <div style="background:#fff3e0; color:#e65100; padding:10px 14px; border-radius:6px; font-size:0.86rem; margin-bottom:14px;">
+              <strong>Caution.</strong> Finding <em>no</em> counterexample in <span class="mono-inline">|n| ≤ N</span> is not a proof. A larger N could still reveal one, and even searching all integers is impossible. A proof is required.
+            </div>
+
+            <div class="num-row">
+              <label>Conjecture:
+                <select id="conj-stmt" style="width:auto; min-width:340px;">
+                  <option value="0">For all integers n, if n is odd then (n − 1)/2 is odd.</option>
+                  <option value="1">For all integers n, if n is odd then n² is odd.</option>
+                  <option value="2">For all integers m ≥ 3, m² − 1 is prime.</option>
+                  <option value="3">For all integers n, n² − n + 11 is prime.</option>
+                  <option value="4">For all positive integers m, n, m · n ≥ m + n.</option>
+                  <option value="5">For all integers a, b, if a² = b² then a = b.</option>
+                </select>
+              </label>
+              <label>|n| ≤&nbsp;<input type="number" id="conj-range" value="20" min="5" max="200"></label>
+            </div>
+            <div class="conj-card" id="conj-out"></div>
+          </div>
+
+          <!-- 4.1.3 Direct proof template -->
+          <div class="widget-card" id="sec413">
+            <h3>4.1.3 Direct proof and the generic-particular method</h3>
+            <div class="widget-desc">To prove <span class="mono-inline">∀x ∈ D, P(x) → Q(x)</span> by direct proof:</div>
+
+            <ol style="font-size:0.92rem; line-height:1.7; padding-left:22px; margin-bottom:14px;">
+              <li>Suppose <span class="mono-inline">x</span> is a <em>particular but arbitrarily chosen</em> element of <span class="mono-inline">D</span> for which <span class="mono-inline">P(x)</span> holds.</li>
+              <li>Show, using definitions and known facts, that <span class="mono-inline">Q(x)</span> follows.</li>
+            </ol>
+
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.1.1 (Epp p. 154)</div>
+              <div class="thm-body">The sum of any two even integers is even.</div>
+            </div>
+
+            <div class="proof-callout">
+              <div class="proof-label">Proof</div>
+              <div class="proof-step">Suppose <span class="mono">m</span> and <span class="mono">n</span> are particular but arbitrarily chosen even integers. <em>[We must show that <span class="mono">m + n</span> is even.]</em></div>
+              <div class="proof-step">By definition of even, <span class="mono">m = 2r</span> and <span class="mono">n = 2s</span> for some integers <span class="mono">r</span> and <span class="mono">s</span>.</div>
+              <div class="proof-step mono">m + n  =  2r + 2s  =  2(r + s)        by the distributive law.</div>
+              <div class="proof-step">Let <span class="mono">t = r + s</span>. Then <span class="mono">t</span> is an integer (sum of integers is an integer), and <span class="mono">m + n = 2t</span>.</div>
+              <div class="proof-step">Therefore <span class="mono">m + n</span> equals 2 times an integer, so by definition of even, <span class="mono">m + n</span> is even. <span class="end-of-proof">∎</span></div>
+            </div>
+
+            <div class="widget-desc" style="margin-top:18px;">Try it numerically. Pick any two even integers; the panel walks the algebraic step from the proof (it <em>illustrates</em> the result, but the proof above is what makes it certain).</div>
+
+            <div class="num-row">
+              <label>m =&nbsp;<input type="number" id="sum-m" value="6"></label>
+              <label>n =&nbsp;<input type="number" id="sum-n" value="10"></label>
+            </div>
+            <div class="result-panel" id="sum-out"></div>
+          </div>
+
+          <!-- Exercises 4.1 -->
+          <div class="exercises-block" id="ex41">
+            <h3>Practice exercises &middot; Section 4.1</h3>
+            <div class="ex-source">Adapted from Epp Section 4.1, suggested questions: 12, 28, 36.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.1.A</div>
+              <div class="ex-body">Disprove by counterexample: <em>For all integers <span class="mono-inline">n</span>, if <span class="mono-inline">n</span> is odd then <span class="mono-inline">(n − 1)/2</span> is odd.</em> Use the conjecture lab to find a witness, then write a one-line justification.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-1-A">Show solution</button>
+              <div class="solution" id="sol-4-1-A">
+                <p><strong>Counterexample: <span class="mono">n = 5</span>.</strong></p>
+                <ul>
+                  <li>Hypothesis: 5 is odd, since <span class="mono">5 = 2·2 + 1</span>. ✓</li>
+                  <li>Conclusion: <span class="mono">(5 − 1)/2 = 2</span>, and <span class="mono">2 = 2·1</span> is even. The conclusion is false. ✗</li>
+                </ul>
+                <p>So <span class="mono">n = 5</span> makes the hypothesis true and the conclusion false: one such case is enough to disprove the universal claim.</p>
+                <p>Other counterexamples in a small range: <span class="mono">n = 1</span> (<span class="mono">(1−1)/2 = 0</span>, even), <span class="mono">n = 9</span> (<span class="mono">(9−1)/2 = 4</span>, even).</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.1.B</div>
+              <div class="ex-body">Prove directly: <em>For all integers <span class="mono-inline">n</span>, if <span class="mono-inline">n</span> is odd then <span class="mono-inline">n²</span> is odd.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-1-B">Show solution</button>
+              <div class="solution" id="sol-4-1-B">
+                <p>Suppose <span class="mono">n</span> is a particular but arbitrarily chosen odd integer. <em>[We must show <span class="mono">n²</span> is odd.]</em></p>
+                <p>By definition of odd, <span class="mono">n = 2k + 1</span> for some integer <span class="mono">k</span>. Then</p>
+                <p class="mono">n² = (2k + 1)² = 4k² + 4k + 1 = 2(2k² + 2k) + 1.</p>
+                <p>Let <span class="mono">t = 2k² + 2k</span>. Then <span class="mono">t</span> is an integer (products and sums of integers are integers). So <span class="mono">n² = 2t + 1</span>, hence odd by definition. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.1.C</div>
+              <div class="ex-body">Decide: <em>There exists an integer <span class="mono-inline">n</span> such that <span class="mono-inline">6n² + 27</span> is prime.</em> Prove or disprove.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-1-C">Show solution</button>
+              <div class="solution" id="sol-4-1-C">
+                <p><strong>False.</strong> The conjecture lab cannot settle this by failing to find a witness; we need an argument that <em>no</em> integer works.</p>
+                <p><strong>Proof.</strong> Suppose, for contradiction, that <span class="mono">6n² + 27</span> is prime for some integer <span class="mono">n</span>. Notice <span class="mono">6n² + 27 = 3(2n² + 9)</span>. Since <span class="mono">2n² + 9 ≥ 9 &gt; 1</span> is an integer, <span class="mono">6n² + 27</span> has <span class="mono">3</span> as a divisor different from itself, so it is composite. Contradiction. Hence no such <span class="mono">n</span> exists. ∎</p>
+                <p>Sample values: <span class="mono">n = 0</span> gives <span class="mono">27 = 3·9</span>; <span class="mono">n = 1</span> gives <span class="mono">33 = 3·11</span>; <span class="mono">n = 2</span> gives <span class="mono">51 = 3·17</span>. All composite.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 4.2 ===================== -->
+        <div class="chapter-section" id="section-42">
+          <h2><span class="ch-num">Section 4.2</span>Rational numbers</h2>
+
+          <div class="section-intro">
+            <div class="thm-box def">
+              <div class="thm-title">Definition (Epp p. 163)</div>
+              <div class="thm-body">A real number <span class="mono-inline">r</span> is <span class="term" data-tip="العدد النسبي · r = a/b for some integers a, b with b ≠ 0"><strong>rational</strong></span> if and only if it can be written as a quotient of two integers with nonzero denominator: <span class="mono-inline">∃ integers a, b such that r = a/b and b ≠ 0</span>. A real number that is not rational is <span class="term" data-tip="العدد غير النسبي · a real number that is not rational"><strong>irrational</strong></span>.</div>
+            </div>
+            <p>The word <em>"rational"</em> contains <em>"ratio"</em>. A rational number is, literally, a ratio of integers.</p>
+          </div>
+
+          <!-- 4.2.1 Rational or irrational? -->
+          <div class="widget-card" id="sec421">
+            <h3>4.2.1 Rational or irrational?</h3>
+            <div class="widget-desc">Click a value to see the classification and the witnessing fraction <span class="mono-inline">a/b</span> when possible.</div>
+
+            <table class="data-table">
+              <thead><tr><th>Value</th><th>Classification</th><th>Witness</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">10 / 3</td><td class="t">Rational</td><td class="mono">a = 10, b = 3</td></tr>
+                <tr><td class="mono">−5 / 39</td><td class="t">Rational</td><td class="mono">a = −5, b = 39</td></tr>
+                <tr><td class="mono">0.281</td><td class="t">Rational</td><td class="mono">281 / 1000 (any finite decimal is rational)</td></tr>
+                <tr><td class="mono">7</td><td class="t">Rational</td><td class="mono">7 / 1 (every integer is rational, Theorem 4.2.1)</td></tr>
+                <tr><td class="mono">0</td><td class="t">Rational</td><td class="mono">0 / 1</td></tr>
+                <tr><td class="mono">2 / 0</td><td class="f">Not a number</td><td>Division by zero is undefined; not rational, not irrational, just undefined.</td></tr>
+                <tr><td class="mono">0.12121212&hellip;</td><td class="t">Rational</td><td class="mono">12 / 99 (proved below)</td></tr>
+                <tr><td class="mono">π</td><td class="f">Irrational</td><td>Cannot be written as <span class="mono">a/b</span>.</td></tr>
+                <tr><td class="mono">√2</td><td class="f">Irrational</td><td>Proved by contradiction in Section 4.7.</td></tr>
+              </tbody>
+            </table>
+
+            <p style="margin-top:12px; font-size:0.88rem; color:var(--c-muted);"><strong style="color:var(--c-text)">Watch.</strong> <span class="mono-inline">2/0</span> is <em>not</em> irrational. Irrational numbers are real numbers that are not rational; <span class="mono-inline">2/0</span> is not a number at all.</p>
+          </div>
+
+          <!-- 4.2.2 Repeating decimals -->
+          <div class="widget-card" id="sec422">
+            <h3>4.2.2 Why repeating decimals are rational</h3>
+            <div class="widget-desc">Type a repeating block (up to 6 digits). The companion runs the classic <em>multiply-and-subtract</em> trick and produces the witness fraction.</div>
+
+            <div class="num-row">
+              <label>0.<input type="text" id="rep-digits" value="121" maxlength="6" style="font-family:'Roboto Mono', monospace; width:120px;">…  (repeating)</label>
+            </div>
+            <div class="result-panel" id="rep-out"></div>
+
+            <p style="font-size:0.88rem; color:var(--c-muted); margin-top:10px;">The same trick works for any repeating decimal. In Section 9.4 we show that every rational number has a repeating or terminating decimal expansion.</p>
+          </div>
+
+          <!-- 4.2.3 Famous irrationals -->
+          <div class="widget-card" id="sec423">
+            <h3>4.2.3 Famous irrationals</h3>
+            <div class="widget-desc">None of these can be written as a ratio of two integers.</div>
+
+            <table class="data-table">
+              <thead><tr><th>Symbol</th><th>Approximation</th><th>Identity</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">π</td><td class="mono">3.14159 26535 89793…</td><td>Ratio of a circle's circumference to its diameter</td></tr>
+                <tr><td class="mono">√2</td><td class="mono">1.41421 35623 73095…</td><td>Diagonal of a unit square; proved irrational in Section 4.7</td></tr>
+                <tr><td class="mono">√3</td><td class="mono">1.73205 08075 68877…</td><td></td></tr>
+                <tr><td class="mono">√5</td><td class="mono">2.23606 79774 99790…</td><td></td></tr>
+                <tr><td class="mono">φ = (1 + √5) / 2</td><td class="mono">1.61803 39887 49895…</td><td>The golden ratio (النسبة الذهبية)</td></tr>
+                <tr><td class="mono">e</td><td class="mono">2.71828 18284 59045…</td><td>Euler's number (العدد النيبيري)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 4.2.4 Closure theorems -->
+          <div class="widget-card" id="sec424">
+            <h3>4.2.4 Closure theorems for rationals</h3>
+            <div class="widget-desc">The rationals are closed under the four basic operations (with division requiring a nonzero divisor). Pick any pair of rationals; the panel performs the operation and exposes the integers <span class="mono-inline">p</span> and <span class="mono-inline">q</span> from the proof.</div>
+
+            <div class="num-row">
+              <label>a =&nbsp;<input type="number" id="cl-a" value="3"></label>
+              <label>b (≠ 0) =&nbsp;<input type="number" id="cl-b" value="4"></label>
+              <label>c =&nbsp;<input type="number" id="cl-c" value="1"></label>
+              <label>d (≠ 0) =&nbsp;<input type="number" id="cl-d" value="6"></label>
+              <label>Operation:
+                <select id="cl-op" style="width:auto;">
+                  <option value="sum">r + s (Theorem 4.2.2)</option>
+                  <option value="diff">r − s</option>
+                  <option value="prod">r · s</option>
+                  <option value="quot">r / s  (s ≠ 0)</option>
+                </select>
+              </label>
+            </div>
+            <div class="result-panel" id="cl-out"></div>
+
+            <div class="thm-box" style="margin-top:16px;">
+              <div class="thm-title">Theorem 4.2.2 (Epp p. 165)</div>
+              <div class="thm-body">The sum of any two rational numbers is rational.</div>
+            </div>
+
+            <div class="proof-callout">
+              <div class="proof-label">Proof of Theorem 4.2.2</div>
+              <div class="proof-step">Suppose <span class="mono">r</span> and <span class="mono">s</span> are rational. <em>[We must show <span class="mono">r + s</span> is rational.]</em></div>
+              <div class="proof-step">By definition of rational, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for some integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>.</div>
+              <div class="proof-step mono">r + s  =  a/b + c/d  =  (ad + bc) / bd        by basic algebra.</div>
+              <div class="proof-step">Let <span class="mono">p = ad + bc</span> and <span class="mono">q = bd</span>. Then <span class="mono">p, q</span> are integers, and <span class="mono">q = bd ≠ 0</span> by the zero-product property (since <span class="mono">b, d ≠ 0</span>).</div>
+              <div class="proof-step">So <span class="mono">r + s = p/q</span> with <span class="mono">p, q</span> integers and <span class="mono">q ≠ 0</span>. Therefore <span class="mono">r + s</span> is rational. <span class="end-of-proof">∎</span></div>
+            </div>
+
+            <div class="thm-box" style="margin-top:8px;">
+              <div class="thm-title">Corollary 4.2.3 (Epp p. 168)</div>
+              <div class="thm-body">The double of a rational number is rational. <em>(Cite Theorem 4.2.2 directly: <span class="mono-inline">2r = r + r</span>.)</em></div>
+            </div>
+          </div>
+
+          <!-- 4.2.5 Seven even/odd properties -->
+          <div class="widget-card" id="sec425">
+            <h3>4.2.5 Deriving new results from old: the seven even/odd properties</h3>
+            <div class="widget-desc">Once these are proved (Exercises 4.1), you may cite them by number in later proofs instead of re-proving from the definitions.</div>
+
+            <div class="props-grid">
+              <div class="prop-cell"><div class="prop-num">1</div>Sum, product, and difference of any two <strong>even</strong> integers are even.</div>
+              <div class="prop-cell"><div class="prop-num">2</div>Sum and difference of any two <strong>odd</strong> integers are even.</div>
+              <div class="prop-cell"><div class="prop-num">3</div>Product of any two <strong>odd</strong> integers is odd.</div>
+              <div class="prop-cell"><div class="prop-num">4</div>Product of any even integer and any odd integer is even.</div>
+              <div class="prop-cell"><div class="prop-num">5</div>Sum of any odd integer and any even integer is odd.</div>
+              <div class="prop-cell"><div class="prop-num">6</div>Difference of any odd integer minus any even integer is odd.</div>
+              <div class="prop-cell"><div class="prop-num">7</div>Difference of any even integer minus any odd integer is odd.</div>
+            </div>
+
+            <p style="margin-top:14px; font-size:0.92rem;"><strong>Worked sketch (Epp Example 4.2.3).</strong> If <span class="mono-inline">a</span> is even and <span class="mono-inline">b</span> is odd, then <span class="mono-inline">(a² + b² + 1)/2</span> is an integer.</p>
+            <p style="font-size:0.88rem; color:var(--c-muted); line-height:1.6;"><span class="mono-inline">a</span> even ⇒ <span class="mono-inline">a²</span> even (property 1). <span class="mono-inline">b</span> odd ⇒ <span class="mono-inline">b²</span> odd (property 3). <span class="mono-inline">a² + b²</span> even + odd ⇒ odd (property 5). <span class="mono-inline">(a² + b²) + 1</span> odd + odd ⇒ even (property 2). So <span class="mono-inline">a² + b² + 1 = 2k</span> for some integer <span class="mono-inline">k</span>, hence <span class="mono-inline">(a² + b² + 1)/2 = k</span>, an integer.</p>
+          </div>
+
+          <!-- Exercises 4.2 -->
+          <div class="exercises-block" id="ex42">
+            <h3>Practice exercises &middot; Section 4.2</h3>
+            <div class="ex-source">Adapted from Epp Section 4.2, suggested questions: 16, 17, 22.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.2.A</div>
+              <div class="ex-body">True or false: <em>The difference of any two rational numbers is a rational number.</em> Prove or disprove.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-2-A">Show solution</button>
+              <div class="solution" id="sol-4-2-A">
+                <p><strong>True.</strong></p>
+                <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are rational. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>. Then</p>
+                <p class="mono">r − s = a/b − c/d = (ad − bc) / bd.</p>
+                <p>Let <span class="mono">p = ad − bc</span> and <span class="mono">q = bd</span>. Both are integers (differences and products of integers are integers), and <span class="mono">q ≠ 0</span> by the zero-product property. Hence <span class="mono">r − s = p/q</span> is rational. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.2.B</div>
+              <div class="ex-body">Prove: <em>The quotient of any two rational numbers, where the divisor is nonzero, is a rational number.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-2-B">Show solution</button>
+              <div class="solution" id="sol-4-2-B">
+                <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are rational and <span class="mono">s ≠ 0</span>. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>. Since <span class="mono">s ≠ 0</span>, also <span class="mono">c ≠ 0</span> (otherwise <span class="mono">s = 0/d = 0</span>). Then</p>
+                <p class="mono">r / s = (a/b) / (c/d) = (a · d) / (b · c) = ad / bc.</p>
+                <p>Let <span class="mono">p = ad</span> and <span class="mono">q = bc</span>. Both are integers; <span class="mono">q = bc ≠ 0</span> by the zero-product property. Hence <span class="mono">r/s = p/q</span> with <span class="mono">q ≠ 0</span>, so <span class="mono">r/s</span> is rational. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.2.C</div>
+              <div class="ex-body">True or false: <em>If <span class="mono-inline">a</span> is any odd integer, then <span class="mono-inline">a² + a</span> is even.</em> Prove or disprove.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-2-C">Show solution</button>
+              <div class="solution" id="sol-4-2-C">
+                <p><strong>True.</strong> Suppose <span class="mono">a</span> is any odd integer. Then <span class="mono">a = 2k + 1</span> for some integer <span class="mono">k</span>. So</p>
+                <p class="mono">a² + a = (2k + 1)² + (2k + 1) = 4k² + 4k + 1 + 2k + 1 = 4k² + 6k + 2 = 2(2k² + 3k + 1).</p>
+                <p>Let <span class="mono">t = 2k² + 3k + 1</span> (an integer). Then <span class="mono">a² + a = 2t</span>, hence even by definition. ∎</p>
+                <p><em>Sharper insight.</em> <span class="mono">a² + a = a(a + 1)</span> is the product of two consecutive integers, one of which is always even. The proof above only handles <span class="mono">a</span> odd; the general fact follows from Theorem 4.4.2 (Section 4.4).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 4.3 ===================== -->
+        <div class="chapter-section" id="section-43">
+          <h2><span class="ch-num">Section 4.3</span>Divisibility</h2>
+
+          <div class="section-intro">
+            <div class="thm-box def">
+              <div class="thm-title">Definition (Epp p. 170)</div>
+              <div class="thm-body">If <span class="mono-inline">n</span> and <span class="mono-inline">d</span> are integers with <span class="mono-inline">d ≠ 0</span>, then <span class="term" data-tip="القابلية للقسمة · d divides n means n = dk for some integer k"><strong><span class="mono-inline">n</span> is divisible by <span class="mono-inline">d</span></strong></span> iff <span class="mono-inline">n = dk</span> for some integer <span class="mono-inline">k</span>. Notation: <span class="mono-inline">d | n</span> (read <em>"d divides n"</em>). Equivalent phrases: <em>n is a multiple of d</em>, <em>d is a factor of n</em>, <em>d is a divisor of n</em>.</div>
+            </div>
+            <p><strong>Watch the distinction.</strong> <span class="mono-inline">a | b</span> is a <em>sentence</em> (true or false). <span class="mono-inline">a / b</span> is a <em>number</em> (may or may not be an integer). Example: <span class="mono-inline">3 | 12</span> is true; <span class="mono-inline">3 | 7</span> is false; <span class="mono-inline">12 / 3 = 4</span>; <span class="mono-inline">7 / 3 ≈ 2.333</span>.</p>
+          </div>
+
+          <!-- 4.3.1 Divisibility checker -->
+          <div class="widget-card" id="sec431">
+            <h3>4.3.1 Divisibility checker</h3>
+            <div class="widget-desc">Test whether <span class="mono-inline">d | n</span>. If yes, the panel exhibits the integer <span class="mono-inline">k</span> with <span class="mono-inline">n = dk</span>. If not, it shows the closest <span class="mono-inline">d · q + r</span> with nonzero remainder.</div>
+
+            <div class="num-row">
+              <label>d (≠ 0) =&nbsp;<input type="number" id="div-d" value="3"></label>
+              <label>n =&nbsp;<input type="number" id="div-n" value="24"></label>
+            </div>
+            <div class="result-panel" id="div-out"></div>
+          </div>
+
+          <!-- 4.3.2 Properties of divisibility -->
+          <div class="widget-card" id="sec432">
+            <h3>4.3.2 Properties of divisibility</h3>
+            <div class="widget-desc">Four theorems from Section 4.3, all proved by direct application of the definition.</div>
+
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.3.1: a positive divisor is at most as large</div>
+              <div class="thm-body">For all integers <span class="mono-inline">a, b</span>: if <span class="mono-inline">a, b &gt; 0</span> and <span class="mono-inline">a | b</span>, then <span class="mono-inline">a ≤ b</span>.</div>
+            </div>
+
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.3.2: divisors of 1</div>
+              <div class="thm-body">The only integer divisors of <span class="mono-inline">1</span> are <span class="mono-inline">1</span> and <span class="mono-inline">−1</span>.</div>
+            </div>
+
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.3.3: transitivity of divisibility</div>
+              <div class="thm-body">For all integers <span class="mono-inline">a, b, c</span>: if <span class="mono-inline">a | b</span> and <span class="mono-inline">b | c</span>, then <span class="mono-inline">a | c</span>.</div>
+            </div>
+
+            <div class="proof-callout">
+              <div class="proof-label">Proof of Theorem 4.3.3 (transitivity)</div>
+              <div class="proof-step">Suppose <span class="mono">a, b, c</span> are integers with <span class="mono">a | b</span> and <span class="mono">b | c</span>. <em>[We must show <span class="mono">a | c</span>.]</em></div>
+              <div class="proof-step">By definition, <span class="mono">b = ar</span> for some integer <span class="mono">r</span>, and <span class="mono">c = bs</span> for some integer <span class="mono">s</span>.</div>
+              <div class="proof-step mono">c = bs = (ar)s = a(rs).</div>
+              <div class="proof-step">Let <span class="mono">k = rs</span>. Then <span class="mono">k</span> is an integer, and <span class="mono">c = ak</span>, so <span class="mono">a | c</span> by definition. <span class="end-of-proof">∎</span></div>
+            </div>
+
+            <p style="font-size:0.92rem; margin-top:14px;"><strong>Live demo.</strong> Pick three integers and watch the transitivity check.</p>
+            <div class="num-row">
+              <label>a =&nbsp;<input type="number" id="tr-a" value="3"></label>
+              <label>b =&nbsp;<input type="number" id="tr-b" value="12"></label>
+              <label>c =&nbsp;<input type="number" id="tr-c" value="60"></label>
+            </div>
+            <div class="result-panel" id="tr-out"></div>
+
+            <div class="thm-box" style="margin-top:18px;">
+              <div class="thm-title">Theorem 4.3.4: every n &gt; 1 has a prime divisor</div>
+              <div class="thm-body">Any integer <span class="mono-inline">n &gt; 1</span> is divisible by some prime number.</div>
+            </div>
+          </div>
+
+          <!-- 4.3.3 Prime factorisation -->
+          <div class="widget-card" id="sec433">
+            <h3>4.3.3 Prime factorisation explorer</h3>
+            <div class="widget-desc">Type any integer <span class="mono-inline">n ≥ 2</span> and the companion produces its prime factorisation. The order of primes is canonical (ascending), giving the <strong>standard factored form</strong>.</div>
+
+            <div class="num-row">
+              <label>n (≥ 2) =&nbsp;<input type="number" id="fact-n" value="360" min="2"></label>
+            </div>
+            <div class="result-panel" id="fact-out"></div>
+          </div>
+
+          <!-- 4.3.4 Unique factorisation -->
+          <div class="widget-card" id="sec434">
+            <h3>4.3.4 The unique factorisation theorem</h3>
+            <div class="widget-desc">Every integer <span class="mono-inline">n &gt; 1</span> can be written as a product of primes, uniquely up to the order of factors. This is the Fundamental Theorem of Arithmetic.</div>
+
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.3.5 (Gauss, 1801)</div>
+              <div class="thm-body">For any <span class="mono-inline">n &gt; 1</span> there exist a positive integer <span class="mono-inline">k</span>, distinct primes <span class="mono-inline">p₁ &lt; p₂ &lt; … &lt; pₖ</span>, and positive integers <span class="mono-inline">e₁, …, eₖ</span> such that<br>
+                <span class="mono-inline">n = p₁<sup>e₁</sup> · p₂<sup>e₂</sup> · … · pₖ<sup>eₖ</sup></span>.</div>
+            </div>
+
+            <div class="proof-callout" style="margin-top:12px;">
+              <div class="proof-label">Worked example (Epp Example 4.3.9, p. 175)</div>
+              <div class="proof-step">Suppose <span class="mono">m</span> is an integer with <span class="mono">8·7·6·5·4·3·2·m = 17·16·15·14·13·12·11·10</span>. Does <span class="mono">17 | m</span>?</div>
+              <div class="proof-step"><strong>Yes.</strong> The prime <span class="mono">17</span> appears on the right (as <span class="mono">17</span> itself). By unique factorisation, it must also appear on the left. Each of <span class="mono">2, 3, 4, 5, 6, 7, 8</span> is less than <span class="mono">17</span>, so none of their prime factors is <span class="mono">17</span>. Hence <span class="mono">17</span> must appear in <span class="mono">m</span>: <span class="mono">17 | m</span>. <span class="end-of-proof">∎</span></div>
+            </div>
+          </div>
+
+          <!-- Exercises 4.3 -->
+          <div class="exercises-block" id="ex43">
+            <h3>Practice exercises &middot; Section 4.3</h3>
+            <div class="ex-source">Adapted from Epp Section 4.3, suggested questions: 13, 21, 29.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.3.A</div>
+              <div class="ex-body">Prove: <em>For all integers <span class="mono-inline">a, b, c</span>, if <span class="mono-inline">a | b</span> and <span class="mono-inline">a | c</span>, then <span class="mono-inline">a | (b − c)</span>.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-3-A">Show solution</button>
+              <div class="solution" id="sol-4-3-A">
+                <p>Suppose <span class="mono">a, b, c</span> are integers with <span class="mono">a | b</span> and <span class="mono">a | c</span>. By definition, <span class="mono">b = ar</span> and <span class="mono">c = as</span> for some integers <span class="mono">r, s</span>. Then</p>
+                <p class="mono">b − c = ar − as = a(r − s).</p>
+                <p>Let <span class="mono">t = r − s</span> (an integer). Then <span class="mono">b − c = at</span>, so <span class="mono">a | (b − c)</span> by definition. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.3.B</div>
+              <div class="ex-body">Prove or disprove: <em>For all integers <span class="mono-inline">a, b</span>, if <span class="mono-inline">a | b</span> then <span class="mono-inline">a | b²</span>.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-3-B">Show solution</button>
+              <div class="solution" id="sol-4-3-B">
+                <p><strong>True.</strong> Suppose <span class="mono">a, b</span> are integers with <span class="mono">a | b</span>. Then <span class="mono">b = ak</span> for some integer <span class="mono">k</span>. So</p>
+                <p class="mono">b² = (ak)² = a² k² = a · (ak²).</p>
+                <p>Let <span class="mono">t = ak²</span> (an integer). Then <span class="mono">b² = at</span>, hence <span class="mono">a | b²</span>. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.3.C</div>
+              <div class="ex-body">Disprove by counterexample: <em>For all integers <span class="mono-inline">a, b, c</span>, if <span class="mono-inline">a | (b · c)</span> then <span class="mono-inline">a | b</span> or <span class="mono-inline">a | c</span>.</em></div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-3-C">Show solution</button>
+              <div class="solution" id="sol-4-3-C">
+                <p><strong>False.</strong> Counterexample: <span class="mono">a = 6, b = 4, c = 9</span>.</p>
+                <ul>
+                  <li><span class="mono">b · c = 4 · 9 = 36</span> and <span class="mono">6 | 36</span> since <span class="mono">36 = 6·6</span>. ✓ hypothesis</li>
+                  <li><span class="mono">6 ∤ 4</span> (since <span class="mono">4 = 6·0 + 4</span>) and <span class="mono">6 ∤ 9</span> (since <span class="mono">9 = 6·1 + 3</span>). ✗ conclusion</li>
+                </ul>
+                <p>The hypothesis is true and the conclusion is false, so the universal claim is disproved.</p>
+                <p><em>Why this happens.</em> <span class="mono">6 = 2·3</span> splits its prime factors between <span class="mono">b</span> (which has a factor of 2) and <span class="mono">c</span> (which has a factor of 3). The product gathers both, but neither side alone has both. The statement <em>does</em> hold when <span class="mono">a</span> is prime (Euclid's lemma); composite <span class="mono">a</span> can fail.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 4.4 ===================== -->
+        <div class="chapter-section" id="section-44">
+          <h2><span class="ch-num">Section 4.4</span>Quotient-remainder theorem and division into cases</h2>
+
+          <div class="section-intro">
+            <p>Long division from grade school, formalised. The theorem fixes <em>unique</em> integers <span class="mono-inline">q</span> and <span class="mono-inline">r</span> for any pair <span class="mono-inline">(n, d)</span> with <span class="mono-inline">d &gt; 0</span>.</p>
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.4.1: the quotient-remainder theorem (<span class="term" data-tip="نظرية القسمة · for any integer n and positive integer d, there exist unique q, r with n = dq + r and 0 ≤ r < d"><em>نظرية القسمة</em></span>)</div>
+              <div class="thm-body">Given any integer <span class="mono-inline">n</span> and positive integer <span class="mono-inline">d</span>, there exist unique integers <span class="mono-inline">q</span> and <span class="mono-inline">r</span> such that<br><span class="mono-inline">n = dq + r</span> and <span class="mono-inline">0 ≤ r &lt; d</span>.</div>
+            </div>
+          </div>
+
+          <!-- 4.4.1 q, r calculator -->
+          <div class="widget-card" id="sec441">
+            <h3>4.4.1 q and r calculator</h3>
+            <div class="widget-desc">Type any integer <span class="mono-inline">n</span> and positive divisor <span class="mono-inline">d</span>. The panel returns the unique <span class="mono-inline">q</span> and <span class="mono-inline">r</span>, verifies <span class="mono-inline">n = dq + r</span>, and checks <span class="mono-inline">0 ≤ r &lt; d</span>.</div>
+
+            <div class="num-row">
+              <label>n =&nbsp;<input type="number" id="qr-n" value="54"></label>
+              <label>d (&gt; 0) =&nbsp;<input type="number" id="qr-d" value="4" min="1"></label>
+            </div>
+            <div class="result-panel" id="qr-out"></div>
+
+            <p style="font-size:0.86rem; color:var(--c-muted); margin-top:10px;"><strong style="color:var(--c-text)">Negative n.</strong> When <span class="mono-inline">n</span> is negative, <span class="mono-inline">q</span> is negative enough to keep <span class="mono-inline">r ∈ [0, d)</span>. For example, <span class="mono-inline">−54 = 4 · (−14) + 2</span>, not <span class="mono-inline">4 · (−13) − 2</span>.</p>
+          </div>
+
+          <!-- 4.4.2 div, mod, applications -->
+          <div class="widget-card" id="sec442">
+            <h3>4.4.2 div and mod, with applications</h3>
+            <div class="widget-desc">Three classic applications from the slides.</div>
+
+            <p style="font-size:0.92rem;"><strong>(1) Day of the week, one year from today.</strong> Today is Tuesday; neither year is a leap year. What day is it 365 days from now?</p>
+            <div class="result-panel"><div class="res-row"><span class="res-label">365 div 7</span><span class="res-val">52</span><span class="res-note">52 full weeks</span></div><div class="res-row"><span class="res-label">365 mod 7</span><span class="res-val">1</span><span class="res-note">1 extra day</span></div><div class="res-row"><span class="res-label">Answer</span><span class="res-val t">Wednesday</span></div></div>
+
+            <p style="font-size:0.92rem; margin-top:14px;"><strong>(2) Solving with mod.</strong> Suppose <span class="mono-inline">m mod 11 = 6</span>. What is <span class="mono-inline">4m mod 11</span>?</p>
+            <div class="proof-callout">
+              <div class="proof-label">Solution (Epp Example 4.4.4)</div>
+              <div class="proof-step">Translate: <span class="mono">m mod 11 = 6  ⇔  m = 11q + 6</span> for some integer <span class="mono">q</span>.</div>
+              <div class="proof-step mono">4m = 4(11q + 6) = 44q + 24 = 44q + 22 + 2 = 11(4q + 2) + 2.</div>
+              <div class="proof-step"><span class="mono">4q + 2</span> is an integer, and <span class="mono">0 ≤ 2 &lt; 11</span>. Therefore <span class="mono">4m mod 11 = 2</span>. <span class="end-of-proof">∎</span></div>
+            </div>
+
+            <p style="font-size:0.86rem; color:var(--c-muted); margin-top:14px;"><strong style="color:var(--c-text)">Watch (language note).</strong> In Python, <span class="mono-inline">%</span> returns a non-negative remainder when the divisor is positive (matches Epp). In C, C++, and Java, <span class="mono-inline">%</span> can return a negative result when <span class="mono-inline">n &lt; 0</span>. The companion uses Python-style mod throughout.</p>
+          </div>
+
+          <!-- 4.4.3 Parity and division into cases -->
+          <div class="widget-card" id="sec443">
+            <h3>4.4.3 Parity property and proof by division into cases</h3>
+            <div class="widget-desc">Apply the quotient-remainder theorem with <span class="mono-inline">d = 2</span>. The only non-negative remainders less than 2 are <span class="mono-inline">0</span> and <span class="mono-inline">1</span>, so every integer is either <span class="mono-inline">2q</span> (even) or <span class="mono-inline">2q + 1</span> (odd), and no integer is both.</div>
+
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.4.2: parity of consecutive integers (Epp p. 184)</div>
+              <div class="thm-body">Any two consecutive integers have opposite parity: one is even, the other is odd.</div>
+            </div>
+
+            <div class="proof-callout">
+              <div class="proof-label">Proof (by division into cases, <span class="term" data-tip="البرهان بالحالات · split the domain into mutually exclusive classes by remainder, prove the claim in each class"><em>البرهان بالحالات</em></span>)</div>
+              <div class="proof-step">Suppose <span class="mono">m, m + 1</span> are two consecutive integers. By the parity property, either <span class="mono">m</span> is even or <span class="mono">m</span> is odd.</div>
+              <div class="proof-step"><strong>Case 1.</strong> <span class="mono">m</span> is even. Then <span class="mono">m = 2k</span> for some integer <span class="mono">k</span>. So <span class="mono">m + 1 = 2k + 1</span>, which is odd by definition.</div>
+              <div class="proof-step"><strong>Case 2.</strong> <span class="mono">m</span> is odd. Then <span class="mono">m = 2k + 1</span> for some integer <span class="mono">k</span>. So <span class="mono">m + 1 = (2k + 1) + 1 = 2(k + 1)</span>, which is even.</div>
+              <div class="proof-step">In both cases, exactly one of <span class="mono">m, m + 1</span> is even and the other is odd. <span class="end-of-proof">∎</span></div>
+            </div>
+
+            <div class="thm-box" style="margin-top:14px;">
+              <div class="thm-title">Theorem 4.4.3: the square of any odd integer has the form 8m + 1 (Epp p. 186)</div>
+              <div class="thm-body">For every odd integer <span class="mono-inline">n</span>, there exists an integer <span class="mono-inline">m</span> such that <span class="mono-inline">n² = 8m + 1</span>.</div>
+            </div>
+
+            <div class="proof-callout">
+              <div class="proof-label">Proof (cases mod 4)</div>
+              <div class="proof-step">Every odd integer <span class="mono">n</span> has the form <span class="mono">n = 4q + 1</span> or <span class="mono">n = 4q + 3</span> for some integer <span class="mono">q</span>.</div>
+              <div class="proof-step"><strong>Case 1.</strong> <span class="mono">n = 4q + 1</span>:<br><span class="mono">n² = 16q² + 8q + 1 = 8(2q² + q) + 1</span>. Let <span class="mono">m = 2q² + q</span>.</div>
+              <div class="proof-step"><strong>Case 2.</strong> <span class="mono">n = 4q + 3</span>:<br><span class="mono">n² = 16q² + 24q + 9 = 8(2q² + 3q + 1) + 1</span>. Let <span class="mono">m = 2q² + 3q + 1</span>.</div>
+              <div class="proof-step">In both cases <span class="mono">n² = 8m + 1</span>. <span class="end-of-proof">∎</span></div>
+            </div>
+          </div>
+
+          <!-- 4.4.4 Integers mod d explorer -->
+          <div class="widget-card" id="sec444">
+            <h3>4.4.4 Integers mod d explorer</h3>
+            <div class="widget-desc">Pick a divisor <span class="mono-inline">d</span> and see how the integers fall into <span class="mono-inline">d</span> mutually exclusive classes by remainder. Every integer falls into exactly one class. With <span class="mono-inline">d = 2</span> this is parity; with <span class="mono-inline">d = 3</span> we get <span class="mono-inline">3q</span>, <span class="mono-inline">3q + 1</span>, <span class="mono-inline">3q + 2</span>; and so on.</div>
+
+            <div class="num-row">
+              <label>d (modulus) =&nbsp;<input type="number" id="cls-d" value="3" min="2" max="8"></label>
+              <label>show |n| ≤&nbsp;<input type="number" id="cls-N" value="10" min="3" max="30"></label>
+            </div>
+            <div id="cls-out"></div>
+          </div>
+
+          <!-- 4.4.5 Congruence -->
+          <div class="widget-card" id="sec445">
+            <h3>4.4.5 Congruence modulo</h3>
+            <div class="widget-desc">For integers <span class="mono-inline">A, B</span> and positive integer <span class="mono-inline">C</span>: <span class="term" data-tip="توافق بمقياس · A ≡ B (mod C) means C | (A − B)"><strong><span class="mono-inline">A ≡ B (mod C)</span></strong></span> iff <span class="mono-inline">C | (A − B)</span>. Example: <span class="mono-inline">26 ≡ 11 (mod 5)</span> because <span class="mono-inline">5 | (26 − 11) = 5 | 15</span>.</div>
+
+            <div class="num-row">
+              <label>A =&nbsp;<input type="number" id="cg-a" value="26"></label>
+              <label>B =&nbsp;<input type="number" id="cg-b" value="11"></label>
+              <label>C (&gt; 0) =&nbsp;<input type="number" id="cg-c" value="5" min="1"></label>
+            </div>
+            <div class="result-panel" id="cg-out"></div>
+          </div>
+
+          <!-- 4.4.6 Absolute value and triangle inequality -->
+          <div class="widget-card" id="sec446">
+            <h3>4.4.6 Absolute value and the triangle inequality</h3>
+            <div class="widget-desc">For any real <span class="mono-inline">x</span>: <span class="mono-inline">|x| = x</span> when <span class="mono-inline">x ≥ 0</span>, and <span class="mono-inline">|x| = −x</span> when <span class="mono-inline">x &lt; 0</span>.</div>
+
+            <div class="thm-box">
+              <div class="thm-title">Lemma 4.4.4 (Epp p. 190)</div>
+              <div class="thm-body">For all real numbers <span class="mono-inline">r</span>: <span class="mono-inline">−|r| ≤ r ≤ |r|</span>.</div>
+            </div>
+
+            <div class="thm-box">
+              <div class="thm-title">Theorem 4.4.6: the triangle inequality (Epp p. 191)</div>
+              <div class="thm-body">For all real numbers <span class="mono-inline">x, y</span>: <span class="mono-inline">|x + y| ≤ |x| + |y|</span>.</div>
+            </div>
+
+            <p style="font-size:0.92rem; margin-top:14px;"><strong>Live verification.</strong> Pick <span class="mono-inline">x</span> and <span class="mono-inline">y</span>; the panel computes both sides.</p>
+            <div class="num-row">
+              <label>x =&nbsp;<input type="number" id="tri-x" value="3"></label>
+              <label>y =&nbsp;<input type="number" id="tri-y" value="-5"></label>
+            </div>
+            <div class="result-panel" id="tri-out"></div>
+          </div>
+
+          <!-- Exercises 4.4 -->
+          <div class="exercises-block" id="ex44">
+            <h3>Practice exercises &middot; Section 4.4</h3>
+            <div class="ex-source">Adapted from Epp Section 4.4, suggested questions: 4, 8, 22.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.4.A</div>
+              <div class="ex-body">Find <span class="mono-inline">q</span> and <span class="mono-inline">r</span> with <span class="mono-inline">0 ≤ r &lt; d</span> such that <span class="mono-inline">n = dq + r</span>:
+                <ol style="margin-top:6px;">
+                  <li><span class="mono-inline">n = 3, d = 11</span></li>
+                  <li><span class="mono-inline">n = −45, d = 11</span></li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-4-A">Show solution</button>
+              <div class="solution" id="sol-4-4-A">
+                <p><strong>(1)</strong> <span class="mono">3 = 11·0 + 3</span>. So <span class="mono">q = 0, r = 3</span>. (Verify: <span class="mono">0 ≤ 3 &lt; 11</span> ✓.)</p>
+                <p><strong>(2)</strong> <span class="mono">−45 = 11·(−5) + 10</span>. So <span class="mono">q = −5, r = 10</span>. (Verify: <span class="mono">11·(−5) = −55</span>, and <span class="mono">−55 + 10 = −45</span> ✓. <span class="mono">0 ≤ 10 &lt; 11</span> ✓.)</p>
+                <p>The quotient is <span class="mono">−5</span>, not <span class="mono">−4</span>. We "overshoot" below <span class="mono">n</span> so the remainder stays non-negative.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.4.B</div>
+              <div class="ex-body">Evaluate <span class="mono-inline">50 div 7</span> and <span class="mono-inline">50 mod 7</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-4-B">Show solution</button>
+              <div class="solution" id="sol-4-4-B">
+                <p><span class="mono">50 div 7 = 7</span>; <span class="mono">50 mod 7 = 1</span>. Verify: <span class="mono">7·7 + 1 = 50</span> ✓; <span class="mono">0 ≤ 1 &lt; 7</span> ✓.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 4.4.C</div>
+              <div class="ex-body">Prove: <em>For every integer <span class="mono-inline">n</span>, <span class="mono-inline">n² + n</span> is even.</em> (Use division into cases mod 2.)</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-4-4-C">Show solution</button>
+              <div class="solution" id="sol-4-4-C">
+                <p>Suppose <span class="mono">n</span> is any integer. By the quotient-remainder theorem with <span class="mono">d = 2</span>, either <span class="mono">n = 2q</span> or <span class="mono">n = 2q + 1</span> for some integer <span class="mono">q</span>.</p>
+                <p><strong>Case 1: <span class="mono">n = 2q</span>.</strong> <span class="mono">n² + n = 4q² + 2q = 2(2q² + q)</span>. Let <span class="mono">t = 2q² + q</span> (an integer). Then <span class="mono">n² + n = 2t</span>, hence even.</p>
+                <p><strong>Case 2: <span class="mono">n = 2q + 1</span>.</strong> <span class="mono">n² + n = (2q+1)² + (2q+1) = 4q² + 4q + 1 + 2q + 1 = 4q² + 6q + 2 = 2(2q² + 3q + 1)</span>. Let <span class="mono">t = 2q² + 3q + 1</span> (an integer). Then <span class="mono">n² + n = 2t</span>, hence even.</p>
+                <p>In both cases <span class="mono">n² + n</span> is even. ∎</p>
+                <p><em>Quicker insight.</em> <span class="mono">n² + n = n(n + 1)</span> is the product of two consecutive integers, one of which is even by Theorem 4.4.2.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 5: EXAM PRACTICE ===================== -->
+        <div class="chapter-section" id="section-exam">
+          <h2><span class="ch-num">Section 5</span>Exam-style practice (First Exam, Section 9)</h2>
+
+          <div class="section-intro">
+            <p>Mirrors the first exam in the course: five multiple-choice items (Q1), proof-writing in Q2 and Q3, and a logic question combining Chapters 2 and 3 in Q4. Click any answer to see whether it is correct, with the reasoning.</p>
+          </div>
+
+          <!-- MCQ -->
+          <div class="widget-card" id="exam-mcq">
+            <h3>Question 1 &middot; Multiple choice (10 marks)</h3>
+            <div class="widget-desc">Click an option to check it. The reasoning unlocks below.</div>
+            <div id="mcq-host"></div>
+          </div>
+
+          <!-- Proof problems -->
+          <div class="widget-card" id="exam-proofs">
+            <h3>Questions 2 and 3 &middot; Proof problems</h3>
+            <div class="widget-desc">Write each proof on paper first; click <em>Show solution</em> only after attempting.</div>
+
+            <div class="exercise exam">
+              <div class="ex-label">Q2.A <span class="exam-tag">first exam · 4 marks</span></div>
+              <div class="ex-body">Prove that for every odd integer <span class="mono-inline">n</span>, <span class="mono-inline">n² + 3</span> is divisible by 4.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-q2a">Show solution</button>
+              <div class="solution" id="sol-q2a">
+                <p>Suppose <span class="mono">n</span> is a particular but arbitrarily chosen odd integer. By definition of odd, <span class="mono">n = 2k + 1</span> for some integer <span class="mono">k</span>. Then</p>
+                <p class="mono">n² + 3 = (2k + 1)² + 3 = 4k² + 4k + 1 + 3 = 4k² + 4k + 4 = 4(k² + k + 1).</p>
+                <p>Let <span class="mono">t = k² + k + 1</span>. Then <span class="mono">t</span> is an integer (sums and products of integers are integers), and <span class="mono">n² + 3 = 4t</span>. So <span class="mono">4 | (n² + 3)</span>. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise exam">
+              <div class="ex-label">Q2.B <span class="exam-tag">first exam · 3 marks</span></div>
+              <div class="ex-body">Prove that for all integers <span class="mono-inline">a, b, c</span>, if <span class="mono-inline">a | b</span> and <span class="mono-inline">b | c</span>, then <span class="mono-inline">a | c</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-q2b">Show solution</button>
+              <div class="solution" id="sol-q2b">
+                <p>This is Theorem 4.3.3. Suppose <span class="mono">a | b</span> and <span class="mono">b | c</span>. By definition, <span class="mono">b = ar</span> and <span class="mono">c = bs</span> for some integers <span class="mono">r, s</span>. Substituting,</p>
+                <p class="mono">c = bs = (ar)s = a(rs).</p>
+                <p>Let <span class="mono">k = rs</span> (an integer, product of integers). Then <span class="mono">c = ak</span>, so <span class="mono">a | c</span> by definition. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise exam">
+              <div class="ex-label">Q2.C <span class="exam-tag">first exam · 3 marks</span></div>
+              <div class="ex-body">Use the quotient-remainder theorem with <span class="mono-inline">d = 3</span> to prove that for every integer <span class="mono-inline">n</span>, the integer <span class="mono-inline">n² + 2n</span> has the form <span class="mono-inline">3k</span> or <span class="mono-inline">3k + 2</span> for some integer <span class="mono-inline">k</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-q2c">Show solution</button>
+              <div class="solution" id="sol-q2c">
+                <p>By the quotient-remainder theorem with <span class="mono">d = 3</span>, every integer <span class="mono">n</span> has exactly one of the three forms <span class="mono">3q</span>, <span class="mono">3q + 1</span>, or <span class="mono">3q + 2</span> for some integer <span class="mono">q</span>.</p>
+                <p><strong>Case 1: <span class="mono">n = 3q</span>.</strong></p>
+                <p class="mono">n² + 2n = 9q² + 6q = 3(3q² + 2q).</p>
+                <p>Let <span class="mono">k = 3q² + 2q</span> (an integer). Then <span class="mono">n² + 2n = 3k</span>. ✓</p>
+                <p><strong>Case 2: <span class="mono">n = 3q + 1</span>.</strong></p>
+                <p class="mono">n² + 2n = (3q+1)² + 2(3q+1) = 9q² + 6q + 1 + 6q + 2 = 9q² + 12q + 3 = 3(3q² + 4q + 1).</p>
+                <p>Let <span class="mono">k = 3q² + 4q + 1</span>. Then <span class="mono">n² + 2n = 3k</span>. ✓</p>
+                <p><strong>Case 3: <span class="mono">n = 3q + 2</span>.</strong></p>
+                <p class="mono">n² + 2n = (3q+2)² + 2(3q+2) = 9q² + 12q + 4 + 6q + 4 = 9q² + 18q + 8 = 3(3q² + 6q + 2) + 2.</p>
+                <p>Let <span class="mono">k = 3q² + 6q + 2</span>. Then <span class="mono">n² + 2n = 3k + 2</span>. ✓</p>
+                <p>In every case, <span class="mono">n² + 2n</span> has the form <span class="mono">3k</span> or <span class="mono">3k + 2</span>. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise exam">
+              <div class="ex-label">Q3.A <span class="exam-tag">first exam · 4 marks</span></div>
+              <div class="ex-body">Consider: <em>"For all integers <span class="mono-inline">m, n</span>, if <span class="mono-inline">m</span> and <span class="mono-inline">n</span> are both odd, then <span class="mono-inline">m + n</span> is odd."</em>
+                <ol style="margin-top:6px;">
+                  <li>Disprove the statement with a counterexample.</li>
+                  <li>State the correct conclusion about <span class="mono-inline">m + n</span> when both are odd, and prove it.</li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-q3a">Show solution</button>
+              <div class="solution" id="sol-q3a">
+                <p><strong>(1) Counterexample.</strong> Take <span class="mono">m = 3, n = 5</span>. Both odd. Their sum: <span class="mono">m + n = 8 = 2·4</span>, even, not odd. The hypothesis is true and the conclusion fails, so the statement is disproved.</p>
+                <p><strong>(2) Correct conclusion.</strong> <em>"For all integers <span class="mono">m, n</span>, if <span class="mono">m</span> and <span class="mono">n</span> are both odd, then <span class="mono">m + n</span> is <strong>even</strong>."</em></p>
+                <p><strong>Proof.</strong> Suppose <span class="mono">m</span> and <span class="mono">n</span> are particular but arbitrarily chosen odd integers. By definition, <span class="mono">m = 2r + 1</span> and <span class="mono">n = 2s + 1</span> for some integers <span class="mono">r, s</span>. Then</p>
+                <p class="mono">m + n = (2r + 1) + (2s + 1) = 2r + 2s + 2 = 2(r + s + 1).</p>
+                <p>Let <span class="mono">t = r + s + 1</span> (an integer). Then <span class="mono">m + n = 2t</span>, hence even. ∎</p>
+              </div>
+            </div>
+
+            <div class="exercise exam">
+              <div class="ex-label">Q3.B <span class="exam-tag">first exam · 6 marks</span></div>
+              <div class="ex-body">Prove that for all rational numbers <span class="mono-inline">r</span> and <span class="mono-inline">s</span>, the number <span class="mono-inline">r² + s²</span> is a rational number.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-q3b">Show solution</button>
+              <div class="solution" id="sol-q3b">
+                <p>Suppose <span class="mono">r</span> and <span class="mono">s</span> are particular but arbitrarily chosen rational numbers. By definition, <span class="mono">r = a/b</span> and <span class="mono">s = c/d</span> for some integers <span class="mono">a, b, c, d</span> with <span class="mono">b ≠ 0</span> and <span class="mono">d ≠ 0</span>.</p>
+                <p><strong>Step 1: <span class="mono">r²</span> is rational.</strong></p>
+                <p class="mono">r² = (a/b)² = a²/b².</p>
+                <p>Let <span class="mono">p₁ = a²</span> and <span class="mono">q₁ = b²</span>. Both are integers (products of integers), and <span class="mono">q₁ = b² ≠ 0</span> since <span class="mono">b ≠ 0</span>. So <span class="mono">r² = p₁/q₁</span> is rational. Similarly <span class="mono">s² = c²/d²</span> is rational.</p>
+                <p><strong>Step 2: <span class="mono">r² + s²</span> is rational.</strong></p>
+                <p>By Theorem 4.2.2 (sum of two rationals is rational), <span class="mono">r² + s²</span> is rational. ∎</p>
+                <p><em>Alternative (compute directly):</em> <span class="mono">r² + s² = a²/b² + c²/d² = (a²d² + b²c²) / (bd)²</span>, where the numerator and denominator are integers and the denominator is nonzero, giving the same conclusion without citing Theorem 4.2.2.</p>
+              </div>
+            </div>
+
+            <div class="exercise exam">
+              <div class="ex-label">Q4.A <span class="exam-tag">first exam · 6 marks · Chapter 3</span></div>
+              <div class="ex-body">Let <span class="mono-inline">S</span> be the set of students at a university, <span class="mono-inline">C</span> the set of courses, and <span class="mono-inline">E(s, c)</span> mean "student <span class="mono-inline">s</span> is enrolled in course <span class="mono-inline">c</span>".
+                <ol style="margin-top:6px;">
+                  <li>Symbolically: <em>"There is a course that every student is enrolled in."</em></li>
+                  <li>Negate (with no negation symbol before any quantifier): <span class="mono-inline">∀s ∈ S, ∃c ∈ C such that E(s, c)</span>.</li>
+                </ol>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-q4a">Show solution</button>
+              <div class="solution" id="sol-q4a">
+                <p><strong>(1)</strong> <span class="mono">∃c ∈ C such that ∀s ∈ S, E(s, c)</span>. The course is fixed first; every student is enrolled in that one course.</p>
+                <p><strong>(2)</strong> Walk left to right, flipping each quantifier:</p>
+                <p class="mono">∼(∀s ∈ S, ∃c ∈ C, E(s, c))<br>
+                  ≡ ∃s ∈ S such that ∼(∃c ∈ C, E(s, c))<br>
+                  ≡ ∃s ∈ S such that ∀c ∈ C, ∼E(s, c).</p>
+                <p>In English: <em>"there is a student who is enrolled in no course at all."</em></p>
+              </div>
+            </div>
+
+            <div class="exercise exam">
+              <div class="ex-label">Q4.B <span class="exam-tag">first exam · 4 marks · Chapter 2</span></div>
+              <div class="ex-body">Use a truth table to test the validity of: <span class="mono-inline">p ∨ q, &nbsp;p → r, &nbsp;q → r ∴ r</span>. Indicate the premise columns, the conclusion column, the verdict, and a short explanation.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-q4b">Show solution</button>
+              <div class="solution" id="sol-q4b">
+                <p>This is the <strong>division into cases</strong> rule (Chapter 2.3, Rule 8). Eight rows for three variables <span class="mono">p, q, r</span>:</p>
+                <pre style="font-family:'Roboto Mono',monospace; font-size:0.84rem; line-height:1.6; padding:10px 14px; background:var(--c-card-bg); border-radius:6px; margin:8px 0; overflow-x:auto;">
+ p | q | r | p∨q | p→r | q→r | ∴ r
+─────────────────────────────────────
+ T | T | T |  T  |  T  |  T  |  T   ← critical row, conclusion T ✓
+ T | T | F |  T  |  F  |  F  |  F   not critical
+ T | F | T |  T  |  T  |  T  |  T   ← critical row, conclusion T ✓
+ T | F | F |  T  |  F  |  T  |  F   not critical
+ F | T | T |  T  |  T  |  T  |  T   ← critical row, conclusion T ✓
+ F | T | F |  T  |  T  |  F  |  F   not critical
+ F | F | T |  F  |  T  |  T  |  T   not critical (premise p∨q is F)
+ F | F | F |  F  |  T  |  T  |  F   not critical (premise p∨q is F)</pre>
+                <p>Premise columns: <span class="mono">p ∨ q</span>, <span class="mono">p → r</span>, <span class="mono">q → r</span>. Conclusion: <span class="mono">r</span>. Critical rows (all three premises T): rows 1, 3, 5. In every critical row the conclusion is also T.</p>
+                <p><strong>Verdict: VALID</strong>, by the division-into-cases inference rule.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recap -->
+        <div class="recap-card" id="recap">
+          <h3>Recap: Chapter 4</h3>
+          <ul>
+            <li>Memorise the definitions of <strong>even</strong>, <strong>odd</strong>, <strong>prime</strong>, <strong>composite</strong>, <strong>rational</strong>, <strong>irrational</strong>, and <strong>divisibility</strong>. Both directions of "if and only if" are used in proofs.</li>
+            <li>Identify the shape of each claim first: universal (∀) or existential (∃). The strategy depends on the shape.</li>
+            <li>To disprove a universal, exhibit one <strong>counterexample</strong>. The counterexample must satisfy the hypothesis and fail the conclusion.</li>
+            <li>To prove a universal, use the <strong>direct-proof template</strong>: suppose an arbitrary element, apply definitions and known results, conclude.</li>
+            <li>Cite Theorems 4.1.1 (sum of evens), 4.2.2 (sum of rationals), 4.3.3 (transitivity of divisibility), 4.3.5 (unique factorisation), and 4.4.1 (quotient-remainder) by number once they are proved. The seven even/odd properties are a reusable toolbox.</li>
+            <li>The <strong>quotient-remainder theorem</strong> partitions integers into classes by remainder. Pick the right modulus and use <strong>division into cases</strong>: prove the claim in each class, conclude for all integers.</li>
+            <li>Watch the language gap: <span class="mono-inline">a | b</span> is a sentence; <span class="mono-inline">a / b</span> is a number. Python's <span class="mono-inline">%</span> matches Epp's <span class="mono-inline">mod</span> for positive divisors; C and Java do not, when the dividend is negative.</li>
+          </ul>
+          <div class="preview"><strong>What's next.</strong> Chapter 5: Sequences and Mathematical Induction. The same proof discipline scales to claims about every term of an infinite sequence, using a clean two-step template (base case + inductive step).</div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+
+    /* =====================================================
+       Number-theory helpers.
+       ===================================================== */
+    function isEven(n) { return n % 2 === 0; }
+    function isOdd(n)  { return n % 2 !== 0; }
+    function isPrime(n) {
+      if (n < 2) return false;
+      if (n < 4) return true;
+      if (n % 2 === 0) return false;
+      for (let d = 3; d * d <= n; d += 2) if (n % d === 0) return false;
+      return true;
+    }
+    function primeFactors(n) {
+      if (n < 2) return null;
+      const f = {};
+      let d = 2;
+      while (d * d <= n) {
+        while (n % d === 0) { f[d] = (f[d] || 0) + 1; n = Math.floor(n / d); }
+        d++;
+      }
+      if (n > 1) f[n] = (f[n] || 0) + 1;
+      return f;
+    }
+    function factorString(f) {
+      const parts = [];
+      for (const p of Object.keys(f).map(Number).sort(function (a, b) { return a - b; })) {
+        const e = f[p];
+        parts.push(e === 1 ? '' + p : p + '<sup>' + e + '</sup>');
+      }
+      return parts.join(' · ');
+    }
+    function divides(d, n) { return d !== 0 && n % d === 0; }
+    function eppDiv(n, d) {
+      // Floor division, matches Epp's div for positive d, including negative n
+      return Math.floor(n / d);
+    }
+    function eppMod(n, d) {
+      // Non-negative remainder for positive d
+      const r = ((n % d) + d) % d;
+      return r;
+    }
+
+    /* =====================================================
+       4.1.1 even/odd/prime/composite tester
+       ===================================================== */
+    (function defsTester() {
+      const inp = document.getElementById('defs-n');
+      const out = document.getElementById('defs-out');
+      if (!inp || !out) return;
+      function render() {
+        const n = parseInt(inp.value || '0', 10);
+        if (isNaN(n)) { out.innerHTML = '<div class="res-row"><span class="res-note">Enter an integer.</span></div>'; return; }
+        const parity = isEven(n) ? 'Even' : 'Odd';
+        const k = isEven(n) ? n / 2 : (n - 1) / 2;
+        const witness = isEven(n) ? n + ' = 2 · ' + k : n + ' = 2 · ' + k + ' + 1';
+        let primeLine = '';
+        if (n > 1 && n <= 1e7) {
+          const p = isPrime(n);
+          primeLine = '<div class="res-row"><span class="res-label">Prime?</span><span class="res-val ' + (p ? 't' : 'f') + '">' + (p ? 'Prime' : 'Composite') + '</span>' +
+                      (p ? '' : '<span class="res-note">factorisation: ' + factorString(primeFactors(n)) + '</span>') + '</div>';
+        } else if (n === 1) {
+          primeLine = '<div class="res-row"><span class="res-label">Prime?</span><span class="res-val">Neither prime nor composite (by convention)</span></div>';
+        } else if (n <= 0) {
+          primeLine = '<div class="res-row"><span class="res-label">Prime?</span><span class="res-val">Definition applies only to n &gt; 1</span></div>';
+        }
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">n</span><span class="res-val">' + n + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Parity</span><span class="res-val ' + (isEven(n) ? 't' : 't') + '">' + parity + '</span><span class="res-note">' + witness + '</span></div>' +
+          primeLine;
+      }
+      inp.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.1.2 Conjecture lab
+       ===================================================== */
+    (function conjLab() {
+      const stmtSel = document.getElementById('conj-stmt');
+      const rangeIn = document.getElementById('conj-range');
+      const out     = document.getElementById('conj-out');
+      if (!stmtSel || !rangeIn || !out) return;
+
+      const conjectures = [
+        {
+          text: 'For all integers n, if n is odd then (n − 1)/2 is odd.',
+          P: function (n) { return isOdd(n); },
+          Q: function (n) { return isOdd(Math.floor((n - 1) / 2)); },
+          truth: 'FALSE',
+          note: 'False. Counterexample n = 5: (5−1)/2 = 2 is even. Epp Section 4.1, exercise 12.'
+        },
+        {
+          text: 'For all integers n, if n is odd then n² is odd.',
+          P: function (n) { return isOdd(n); },
+          Q: function (n) { return isOdd(n * n); },
+          truth: 'TRUE',
+          note: 'True. Provable by direct proof (Exercise 4.1.B). Search alone cannot establish it.'
+        },
+        {
+          text: 'For all integers m ≥ 3, m² − 1 is prime.',
+          P: function (n) { return n >= 3; },
+          Q: function (n) { return isPrime(n * n - 1); },
+          truth: 'FALSE',
+          note: 'False. Counterexample m = 3: 9 − 1 = 8 is composite. Epp Section 4.1, exercise 35.'
+        },
+        {
+          text: 'For all integers n, n² − n + 11 is prime.',
+          P: function (n) { return true; },
+          Q: function (n) { return isPrime(n * n - n + 11); },
+          truth: 'FALSE',
+          note: 'A famous trap: prime for n = 1..10 (Epp 4.1.18), but at n = 11 we get 121 = 11². Search beyond small n catches it.'
+        },
+        {
+          text: 'For all positive integers m, n, m · n ≥ m + n.',
+          P: function (n) { return n >= 1; },
+          Q: function (n) { return n * 1 >= n + 1; },
+          truth: 'FALSE',
+          note: 'False. Take m = 1: m·n = n but m + n = n + 1, so m·n < m + n.'
+        },
+        {
+          text: 'For all integers a, b, if a² = b² then a = b.',
+          P: function (n) { return true; },
+          Q: function (n) {
+            // For each n, check pairs (a, b) with a² = b². The lab represents the conjecture as "∀a, ∃b such that..."?
+            // We instead simulate: for n, take a = n, b = -n. If a² = b² but a ≠ b → counterexample.
+            return n === 0 || n === -n;
+          },
+          truth: 'FALSE',
+          note: 'False. Counterexample a = 1, b = −1: 1² = (−1)² but 1 ≠ −1. Epp Section 4.1, example 4.1.4.'
+        }
+      ];
+
+      function render() {
+        const c = conjectures[+stmtSel.value];
+        const N = Math.max(1, Math.min(500, parseInt(rangeIn.value || '20', 10) || 20));
+        let checked = 0;
+        const cex = [];
+        for (let n = -N; n <= N; n++) {
+          if (c.P(n)) {
+            checked++;
+            if (!c.Q(n)) {
+              cex.push(n);
+              if (cex.length >= 5) break;
+            }
+          }
+        }
+        let html = '<div class="conj-stmt">' + c.text + '</div>';
+        html += '<div class="conj-result">Searched n in [' + (-N) + ', ' + N + ']; ' + checked + ' satisfied the hypothesis.</div>';
+        if (cex.length) {
+          const n0 = cex[0];
+          html += '<div class="conj-result conj-cex">✗ Counterexample(s) found: ' + cex.join(', ') + '</div>';
+          html += '<div class="conj-result">For n = ' + n0 + ': hypothesis true, conclusion false. <strong>The statement is disproved.</strong></div>';
+        } else {
+          html += '<div class="conj-result">No counterexample found in this range. ⚠ This does <strong>not</strong> prove the statement, a larger range may reveal one.</div>';
+        }
+        html += '<div class="conj-note">' + c.note + '</div>';
+        out.innerHTML = html;
+      }
+      stmtSel.addEventListener('change', render);
+      rangeIn.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.1.3 Sum-of-evens demo
+       ===================================================== */
+    (function sumEvens() {
+      const m = document.getElementById('sum-m');
+      const n = document.getElementById('sum-n');
+      const out = document.getElementById('sum-out');
+      if (!m || !n || !out) return;
+      function render() {
+        const mv = parseInt(m.value || '0', 10);
+        const nv = parseInt(n.value || '0', 10);
+        if (isNaN(mv) || isNaN(nv)) { out.innerHTML = ''; return; }
+        if (!isEven(mv) || !isEven(nv)) {
+          out.innerHTML = '<div class="res-row"><span class="res-note">Both inputs must be even for this demonstration.</span></div>';
+          return;
+        }
+        const r = mv / 2, s = nv / 2;
+        const total = mv + nv;
+        const t = r + s;
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">m</span><span class="res-val">' + mv + ' = 2 · ' + r + '</span><span class="res-note">witness r = ' + r + '</span></div>' +
+          '<div class="res-row"><span class="res-label">n</span><span class="res-val">' + nv + ' = 2 · ' + s + '</span><span class="res-note">witness s = ' + s + '</span></div>' +
+          '<div class="res-row"><span class="res-label">m + n</span><span class="res-val">2·' + r + ' + 2·' + s + ' = 2(' + r + ' + ' + s + ') = 2·' + t + ' = ' + total + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Result</span><span class="res-val t">Even</span><span class="res-note">witness t = r + s = ' + t + '</span></div>' +
+          '<div class="res-row"><span class="res-note">This illustrates one case. The proof above covers every case by leaving r, s symbolic.</span></div>';
+      }
+      m.addEventListener('input', render);
+      n.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.2.2 Repeating decimal demonstrator
+       ===================================================== */
+    (function repDecimal() {
+      const inp = document.getElementById('rep-digits');
+      const out = document.getElementById('rep-out');
+      if (!inp || !out) return;
+      function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { const t = b; b = a % b; a = t; } return a || 1; }
+      function render() {
+        const s = (inp.value || '').replace(/[^0-9]/g, '');
+        if (!s.length) { out.innerHTML = '<div class="res-row"><span class="res-note">Type one or more digits.</span></div>'; return; }
+        const k = s.length;
+        const block = parseInt(s, 10);
+        const denom = Math.pow(10, k) - 1;
+        const g = gcd(block, denom);
+        const num = Math.floor(block / g);
+        const den = Math.floor(denom / g);
+        const decimalApprox = (block / denom).toFixed(Math.min(10, k * 3));
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">Let x</span><span class="res-val">0.' + s + s + s + '… (block length ' + k + ')</span></div>' +
+          '<div class="res-row"><span class="res-label">10<sup>' + k + '</sup>·x</span><span class="res-val">' + s + '.' + s + s + '…</span></div>' +
+          '<div class="res-row"><span class="res-label">(10<sup>' + k + '</sup> − 1)·x</span><span class="res-val">' + denom + '·x = ' + block + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Solve</span><span class="res-val">x = ' + block + ' / ' + denom + '</span>' + (g > 1 ? '<span class="res-note">reduces to ' + num + ' / ' + den + '</span>' : '') + '</div>' +
+          '<div class="res-row"><span class="res-label">Decimal</span><span class="res-val">≈ ' + decimalApprox + '…</span></div>' +
+          '<div class="res-row"><span class="res-label">Conclusion</span><span class="res-val t">Rational</span><span class="res-note">a quotient of two integers with nonzero denominator</span></div>';
+      }
+      inp.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.2.4 Rational closure widget
+       ===================================================== */
+    (function rationalClosure() {
+      const a = document.getElementById('cl-a');
+      const b = document.getElementById('cl-b');
+      const c = document.getElementById('cl-c');
+      const d = document.getElementById('cl-d');
+      const op = document.getElementById('cl-op');
+      const out = document.getElementById('cl-out');
+      if (!a) return;
+      function gcd(x, y) { x = Math.abs(x); y = Math.abs(y); while (y) { const t = y; y = x % y; x = t; } return x || 1; }
+      function reduce(p, q) {
+        if (q < 0) { p = -p; q = -q; }
+        const g = gcd(p, q) || 1;
+        return [p / g, q / g];
+      }
+      function render() {
+        const av = parseInt(a.value || '0', 10);
+        const bv = parseInt(b.value || '0', 10);
+        const cv = parseInt(c.value || '0', 10);
+        const dv = parseInt(d.value || '0', 10);
+        if (bv === 0 || dv === 0) { out.innerHTML = '<div class="res-row"><span class="res-note">b and d must be nonzero.</span></div>'; return; }
+        let p, q, label, formula;
+        if (op.value === 'sum') {
+          p = av * dv + bv * cv; q = bv * dv;
+          label = 'r + s';
+          formula = '(a·d + b·c) / (b·d) = (' + av + '·' + dv + ' + ' + bv + '·' + cv + ') / (' + bv + '·' + dv + ') = ' + p + '/' + q;
+        } else if (op.value === 'diff') {
+          p = av * dv - bv * cv; q = bv * dv;
+          label = 'r − s';
+          formula = '(a·d − b·c) / (b·d) = (' + av + '·' + dv + ' − ' + bv + '·' + cv + ') / (' + bv + '·' + dv + ') = ' + p + '/' + q;
+        } else if (op.value === 'prod') {
+          p = av * cv; q = bv * dv;
+          label = 'r · s';
+          formula = '(a·c) / (b·d) = (' + av + '·' + cv + ') / (' + bv + '·' + dv + ') = ' + p + '/' + q;
+        } else {
+          if (cv === 0) { out.innerHTML = '<div class="res-row"><span class="res-note">For division, c must also be nonzero (so s ≠ 0).</span></div>'; return; }
+          p = av * dv; q = bv * cv;
+          label = 'r / s';
+          formula = '(a·d) / (b·c) = (' + av + '·' + dv + ') / (' + bv + '·' + cv + ') = ' + p + '/' + q;
+        }
+        const r = reduce(p, q);
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">r = a/b</span><span class="res-val">' + av + '/' + bv + '</span></div>' +
+          '<div class="res-row"><span class="res-label">s = c/d</span><span class="res-val">' + cv + '/' + dv + '</span></div>' +
+          '<div class="res-row"><span class="res-label">' + label + '</span><span class="res-val">' + formula + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Reduced</span><span class="res-val">' + r[0] + '/' + r[1] + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Result</span><span class="res-val t">Rational</span><span class="res-note">numerator and denominator are integers, denominator ≠ 0</span></div>';
+      }
+      [a, b, c, d, op].forEach(function (el) { el.addEventListener('input', render); el.addEventListener('change', render); });
+      render();
+    })();
+
+    /* =====================================================
+       4.3.1 Divisibility checker
+       ===================================================== */
+    (function divChecker() {
+      const d = document.getElementById('div-d');
+      const n = document.getElementById('div-n');
+      const out = document.getElementById('div-out');
+      if (!d || !n || !out) return;
+      function render() {
+        const dv = parseInt(d.value || '0', 10);
+        const nv = parseInt(n.value || '0', 10);
+        if (dv === 0) { out.innerHTML = '<div class="res-row"><span class="res-note">d must be nonzero.</span></div>'; return; }
+        if (divides(dv, nv)) {
+          const k = nv / dv;
+          out.innerHTML =
+            '<div class="res-row"><span class="res-label">' + dv + ' | ' + nv + '?</span><span class="res-val t">True</span></div>' +
+            '<div class="res-row"><span class="res-label">Witness</span><span class="res-val">k = ' + k + '</span><span class="res-note">n = d · k = ' + dv + ' · ' + k + ' = ' + nv + '</span></div>';
+        } else {
+          const q = Math.floor(nv / dv);
+          const r = ((nv % dv) + Math.abs(dv)) % Math.abs(dv);
+          out.innerHTML =
+            '<div class="res-row"><span class="res-label">' + dv + ' | ' + nv + '?</span><span class="res-val f">False</span></div>' +
+            '<div class="res-row"><span class="res-label">Closest</span><span class="res-val">' + nv + ' = ' + dv + '·' + q + ' + ' + r + '</span><span class="res-note">non-zero remainder, so not divisible</span></div>';
+        }
+      }
+      d.addEventListener('input', render);
+      n.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.3.2 Transitivity demo
+       ===================================================== */
+    (function trans() {
+      const a = document.getElementById('tr-a');
+      const b = document.getElementById('tr-b');
+      const c = document.getElementById('tr-c');
+      const out = document.getElementById('tr-out');
+      if (!a) return;
+      function render() {
+        const av = parseInt(a.value || '0', 10);
+        const bv = parseInt(b.value || '0', 10);
+        const cv = parseInt(c.value || '0', 10);
+        if (av === 0 || bv === 0) { out.innerHTML = '<div class="res-row"><span class="res-note">a and b must be nonzero.</span></div>'; return; }
+        const ab = divides(av, bv);
+        const bc = divides(bv, cv);
+        const ac = divides(av, cv);
+        let html =
+          '<div class="res-row"><span class="res-label">a | b?</span><span class="res-val ' + (ab ? 't' : 'f') + '">' + (ab ? 'True' : 'False') + '</span>' + (ab ? '<span class="res-note">b = a · ' + (bv / av) + '</span>' : '') + '</div>' +
+          '<div class="res-row"><span class="res-label">b | c?</span><span class="res-val ' + (bc ? 't' : 'f') + '">' + (bc ? 'True' : 'False') + '</span>' + (bc ? '<span class="res-note">c = b · ' + (cv / bv) + '</span>' : '') + '</div>' +
+          '<div class="res-row"><span class="res-label">a | c?</span><span class="res-val ' + (ac ? 't' : 'f') + '">' + (ac ? 'True' : 'False') + '</span>' + (ac ? '<span class="res-note">c = a · ' + (cv / av) + '</span>' : '') + '</div>';
+        if (ab && bc) {
+          const r = bv / av, s = cv / bv;
+          html += '<div class="res-row"><span class="res-label">Transitivity</span><span class="res-val t">Confirmed</span><span class="res-note">r = ' + r + ', s = ' + s + ', t = r·s = ' + (r * s) + '; c = a·t</span></div>';
+        }
+        out.innerHTML = html;
+      }
+      [a, b, c].forEach(function (el) { el.addEventListener('input', render); });
+      render();
+    })();
+
+    /* =====================================================
+       4.3.3 Prime factorisation
+       ===================================================== */
+    (function factWidget() {
+      const inp = document.getElementById('fact-n');
+      const out = document.getElementById('fact-out');
+      if (!inp) return;
+      function render() {
+        const n = parseInt(inp.value || '0', 10);
+        if (n < 2 || n > 1e9) { out.innerHTML = '<div class="res-row"><span class="res-note">Enter an integer between 2 and 1,000,000,000.</span></div>'; return; }
+        const f = primeFactors(n);
+        const fstr = factorString(f);
+        const primes = Object.keys(f).map(Number).sort(function (a, b) { return a - b; });
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">n</span><span class="res-val">' + n + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Factorisation</span><span class="res-val">' + fstr + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Distinct primes</span><span class="res-val">{' + primes.join(', ') + '}</span></div>';
+      }
+      inp.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.4.1 q, r calculator
+       ===================================================== */
+    (function qrCalc() {
+      const n = document.getElementById('qr-n');
+      const d = document.getElementById('qr-d');
+      const out = document.getElementById('qr-out');
+      if (!n) return;
+      function render() {
+        const nv = parseInt(n.value || '0', 10);
+        const dv = parseInt(d.value || '0', 10);
+        if (dv <= 0) { out.innerHTML = '<div class="res-row"><span class="res-note">d must be positive.</span></div>'; return; }
+        const q = eppDiv(nv, dv);
+        const r = eppMod(nv, dv);
+        const check = (dv * q + r === nv);
+        const rangeOk = (0 <= r && r < dv);
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">n div d</span><span class="res-val">' + q + '</span></div>' +
+          '<div class="res-row"><span class="res-label">n mod d</span><span class="res-val">' + r + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Identity</span><span class="res-val ' + (check ? 't' : 'f') + '">n = d·q + r &nbsp;⇔&nbsp; ' + nv + ' = ' + dv + '·' + q + ' + ' + r + ' = ' + (dv * q + r) + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Range</span><span class="res-val ' + (rangeOk ? 't' : 'f') + '">0 ≤ ' + r + ' &lt; ' + dv + '</span></div>';
+      }
+      n.addEventListener('input', render);
+      d.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.4.4 Integers mod d explorer
+       ===================================================== */
+    (function classExplorer() {
+      const d = document.getElementById('cls-d');
+      const N = document.getElementById('cls-N');
+      const out = document.getElementById('cls-out');
+      if (!d) return;
+      function render() {
+        const dv = parseInt(d.value || '2', 10);
+        const nv = parseInt(N.value || '10', 10);
+        if (dv < 2 || dv > 12) { out.innerHTML = '<div class="result-panel"><span class="res-note">Choose d between 2 and 12.</span></div>'; return; }
+        const classes = {};
+        for (let r = 0; r < dv; r++) classes[r] = [];
+        for (let n = -nv; n <= nv; n++) classes[eppMod(n, dv)].push(n);
+        let html = '<div class="result-panel">';
+        for (let r = 0; r < dv; r++) {
+          const label = r === 0 ? 'class ' + dv + 'q' : 'class ' + dv + 'q + ' + r;
+          html += '<div class="class-row"><span class="class-label">' + label + '</span>';
+          for (const n of classes[r]) html += '<span class="class-chip">' + n + '</span>';
+          html += '</div>';
+        }
+        html += '<div class="res-row"><span class="res-note">Every integer falls into exactly one class. Total classes: ' + dv + '.</span></div>';
+        html += '</div>';
+        out.innerHTML = html;
+      }
+      d.addEventListener('input', render);
+      N.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       4.4.5 Congruence
+       ===================================================== */
+    (function congr() {
+      const A = document.getElementById('cg-a');
+      const B = document.getElementById('cg-b');
+      const C = document.getElementById('cg-c');
+      const out = document.getElementById('cg-out');
+      if (!A) return;
+      function render() {
+        const av = parseInt(A.value || '0', 10);
+        const bv = parseInt(B.value || '0', 10);
+        const cv = parseInt(C.value || '0', 10);
+        if (cv <= 0) { out.innerHTML = '<div class="res-row"><span class="res-note">C must be positive.</span></div>'; return; }
+        const diff = av - bv;
+        const ok = divides(cv, diff);
+        const k = ok ? diff / cv : null;
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">A − B</span><span class="res-val">' + av + ' − ' + bv + ' = ' + diff + '</span></div>' +
+          '<div class="res-row"><span class="res-label">C | (A − B)?</span><span class="res-val ' + (ok ? 't' : 'f') + '">' + (ok ? 'True' : 'False') + '</span>' + (ok ? '<span class="res-note">' + diff + ' = ' + cv + ' · ' + k + '</span>' : '') + '</div>' +
+          '<div class="res-row"><span class="res-label">A ≡ B (mod C)?</span><span class="res-val ' + (ok ? 't' : 'f') + '">' + (ok ? 'Yes' : 'No') + '</span></div>';
+      }
+      [A, B, C].forEach(function (el) { el.addEventListener('input', render); });
+      render();
+    })();
+
+    /* =====================================================
+       4.4.6 Triangle inequality
+       ===================================================== */
+    (function triangle() {
+      const x = document.getElementById('tri-x');
+      const y = document.getElementById('tri-y');
+      const out = document.getElementById('tri-out');
+      if (!x) return;
+      function render() {
+        const xv = parseFloat(x.value || '0');
+        const yv = parseFloat(y.value || '0');
+        const lhs = Math.abs(xv + yv);
+        const rhs = Math.abs(xv) + Math.abs(yv);
+        out.innerHTML =
+          '<div class="res-row"><span class="res-label">|x + y|</span><span class="res-val">|' + xv + ' + ' + yv + '| = |' + (xv + yv) + '| = ' + lhs + '</span></div>' +
+          '<div class="res-row"><span class="res-label">|x| + |y|</span><span class="res-val">' + Math.abs(xv) + ' + ' + Math.abs(yv) + ' = ' + rhs + '</span></div>' +
+          '<div class="res-row"><span class="res-label">Inequality</span><span class="res-val ' + (lhs <= rhs ? 't' : 'f') + '">' + lhs + ' ≤ ' + rhs + '  ' + (lhs === rhs ? '(equality)' : '(strict)') + '</span></div>';
+      }
+      x.addEventListener('input', render);
+      y.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================
+       Exam MCQ widget
+       ===================================================== */
+    (function mcq() {
+      const host = document.getElementById('mcq-host');
+      if (!host) return;
+      const questions = [
+        {
+          stmt: 'If n = 5k + 2 for some integer k, what is the value of n² mod 5?',
+          options: ['0', '1', '4', '2'],
+          correct: 2,
+          why: 'n² = (5k + 2)² = 25k² + 20k + 4 = 5(5k² + 4k) + 4. The remainder when divided by 5 is 4. (Answer: c.)'
+        },
+        {
+          stmt: 'What is the largest power of 6 that divides 30⁵ · 40³?',
+          options: ['6³', '6⁵', '6⁷', '6⁹'],
+          correct: 1,
+          why: '6 = 2·3, so each factor of 6 needs one 2 and one 3. Factorise: 30⁵ = (2·3·5)⁵ = 2⁵·3⁵·5⁵; 40³ = (2³·5)³ = 2⁹·5³. Product: 2¹⁴·3⁵·5⁸. Powers of 2: 14. Powers of 3: 5. The bottleneck is 3. So largest power of 6 dividing the product is 6⁵. (Answer: b.)'
+        },
+        {
+          stmt: 'Suppose m and n are integers with m mod 6 = 3 and n mod 6 = 4. What is (m + n) mod 6?',
+          options: ['7', '1', '0', '5'],
+          correct: 1,
+          why: 'Write m = 6a + 3 and n = 6b + 4. Then m + n = 6(a + b) + 7 = 6(a + b + 1) + 1. So (m + n) mod 6 = 1. (Answer: b.)'
+        },
+        {
+          stmt: 'Which is NOT equivalent to: "∀ integers n, if n is divisible by 4, then n is divisible by 2"?',
+          options: [
+            'Every integer divisible by 4 is also divisible by 2.',
+            'There is no integer divisible by 4 that is not divisible by 2.',
+            'Being divisible by 4 is a sufficient condition for an integer to be divisible by 2.',
+            'Some integer divisible by 4 is divisible by 2.'
+          ],
+          correct: 3,
+          why: 'The original is a universal statement. Option (d) is an existential, much weaker, so it is not equivalent. Options (a), (b), and (c) are standard rewordings of the same universal claim. (Answer: d.)'
+        },
+        {
+          stmt: 'Consider: "∃ a real number x such that x² + 1 = 0". Which best describes this statement?',
+          options: [
+            'The statement is true; x = 0 satisfies it.',
+            'The statement is false; for every real x, x² ≥ 0, so x² + 1 ≥ 1 > 0.',
+            'The statement is true; x = −1 satisfies it.',
+            'The statement is undefined since x² + 1 has no real solution.'
+          ],
+          correct: 1,
+          why: 'For every real x, x² ≥ 0, so x² + 1 ≥ 1 > 0. No real x can make x² + 1 = 0. The statement is false. (Answer: b.) The complex roots ±i are not real numbers.'
+        }
+      ];
+
+      const letters = ['a', 'b', 'c', 'd'];
+      let html = '';
+      questions.forEach(function (q, i) {
+        html += '<div class="mcq" data-q="' + i + '">';
+        html += '<div class="mcq-num">Question 1.' + (i + 1) + '</div>';
+        html += '<div class="mcq-stmt">' + q.stmt + '</div>';
+        html += '<div class="mcq-options">';
+        q.options.forEach(function (opt, j) {
+          html += '<div class="mcq-option" data-i="' + j + '"><span class="letter">' + letters[j] + '.</span><span>' + opt + '</span></div>';
+        });
+        html += '</div>';
+        html += '<div class="mcq-explain"></div>';
+        html += '</div>';
+      });
+      host.innerHTML = html;
+
+      host.querySelectorAll('.mcq').forEach(function (card) {
+        const qIdx = +card.dataset.q;
+        const q = questions[qIdx];
+        const explain = card.querySelector('.mcq-explain');
+        card.querySelectorAll('.mcq-option').forEach(function (opt) {
+          opt.addEventListener('click', function () {
+            const choice = +opt.dataset.i;
+            card.querySelectorAll('.mcq-option').forEach(function (o) { o.classList.remove('correct'); o.classList.remove('wrong'); });
+            if (choice === q.correct) opt.classList.add('correct');
+            else {
+              opt.classList.add('wrong');
+              const right = card.querySelectorAll('.mcq-option')[q.correct];
+              right.classList.add('correct');
+            }
+            explain.innerHTML = '<strong>' + (choice === q.correct ? 'Correct.' : 'Not quite.') + '</strong> ' + q.why;
+            explain.classList.add('open');
+          });
+        });
+      });
+    })();
+
+    /* =====================================================
+       Solution reveal buttons
+       ===================================================== */
+    document.querySelectorAll('[data-toggle-sol]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const sol = document.getElementById(btn.dataset.toggleSol);
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+
+    /* Floating "How to use" toggle */
+    (function () {
+      const root = document.getElementById('howto-fab');
+      if (!root) return;
+      const toggle = root.querySelector('.howto-fab-toggle');
+      const body   = root.querySelector('.howto-fab-body');
+      toggle.addEventListener('click', function () {
+        const willOpen = body.hasAttribute('hidden');
+        if (willOpen) {
+          body.removeAttribute('hidden');
+          root.setAttribute('data-open', 'true');
+          toggle.setAttribute('aria-expanded', 'true');
+        } else {
+          body.setAttribute('hidden', '');
+          root.setAttribute('data-open', 'false');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+
+  </script>
+</body>
+</html>
