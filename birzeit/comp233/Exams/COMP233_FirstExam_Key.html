@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8" />
+  <title>COMP 233 First Exam: Answers &amp; Marking Scheme</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+    body {
+      font-family: 'Cambria', 'Georgia', 'Times New Roman', serif;
+      font-size: 11pt;
+      line-height: 1.45;
+      color: #000;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .doc-title { text-align: center; margin-bottom: 16pt; }
+    .doc-title .u { font-size: 14pt; font-weight: bold; }
+    .doc-title .t { font-size: 13pt; margin-top: 2pt; }
+    .doc-title .s { font-size: 11pt; font-weight: bold; margin-top: 6pt; }
+    .doc-title .y { font-size: 11pt; margin-top: 2pt; color: #333; }
+
+    h2 {
+      font-size: 12.5pt;
+      margin: 16pt 0 8pt;
+      padding-bottom: 3pt;
+      border-bottom: 1.5pt solid #000;
+      page-break-after: avoid;
+    }
+    .part-block { page-break-inside: avoid; margin-bottom: 12pt; }
+    .part-head {
+      font-size: 11.5pt;
+      font-weight: bold;
+      margin: 12pt 0 6pt;
+      page-break-after: avoid;
+    }
+    .label {
+      display: inline-block;
+      font-size: 9.5pt;
+      font-weight: bold;
+      letter-spacing: 0.4pt;
+      text-transform: uppercase;
+      color: #444;
+      background: #ececec;
+      padding: 1pt 7pt;
+      margin-right: 6pt;
+      vertical-align: 1pt;
+    }
+    .stmt {
+      margin: 4pt 0 8pt;
+      padding: 5pt 10pt 5pt 10pt;
+      border-left: 2pt solid #888;
+      background: #fafafa;
+    }
+    .stmt p { margin: 2pt 0; }
+
+    .soln { margin: 4pt 0 8pt; }
+    .soln p { margin: 3pt 0; text-align: justify; }
+    .soln p.center { text-align: center; }
+    .qed { font-weight: bold; }
+
+    code, .mono {
+      font-family: 'Cambria Math', 'STIX Two Math', 'Cambria', 'Times New Roman', serif;
+      font-style: italic;
+    }
+
+    table.mcq-key {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 4pt 0 12pt;
+      font-size: 10.5pt;
+      page-break-inside: avoid;
+    }
+    table.mcq-key caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      padding-bottom: 3pt;
+      font-size: 11pt;
+    }
+    table.mcq-key th, table.mcq-key td {
+      border: 0.5pt solid #000;
+      padding: 4pt 9pt;
+      text-align: left;
+    }
+    table.mcq-key th { background: #ececec; font-weight: bold; text-align: center; }
+    table.mcq-key td.c { text-align: center; }
+    table.mcq-key td.ans { font-weight: bold; }
+    table.mcq-key tr.total td {
+      background: #f5f5f5;
+      font-weight: bold;
+      border-top: 1pt solid #000;
+    }
+
+    table.marking {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 4pt 0 12pt;
+      font-size: 10.5pt;
+      page-break-inside: avoid;
+    }
+    table.marking caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      padding-bottom: 3pt;
+      font-size: 10.5pt;
+    }
+    table.marking th, table.marking td {
+      border: 0.5pt solid #000;
+      padding: 4pt 8pt;
+      vertical-align: top;
+      text-align: left;
+    }
+    table.marking th { background: #ececec; font-weight: bold; }
+    table.marking td.m {
+      width: 46pt;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    table.tt {
+      border-collapse: collapse;
+      margin: 6pt auto 10pt;
+      font-family: 'Cambria Math', 'Cambria', 'Times New Roman', serif;
+      font-size: 10.5pt;
+    }
+    table.tt th, table.tt td {
+      border: 0.5pt solid #000;
+      padding: 2.5pt 9pt;
+      text-align: center;
+    }
+    table.tt th { background: #ececec; font-weight: bold; }
+    table.tt tr.crit td { background: #e8f3e8; font-weight: bold; }
+
+    ul.principles {
+      font-size: 10.5pt;
+      margin: 4pt 0 0;
+      padding-left: 18pt;
+    }
+    ul.principles li { margin-bottom: 4pt; text-align: justify; }
+
+    .summary {
+      margin-top: 10pt;
+      padding: 8pt 10pt;
+      border-top: 1pt solid #000;
+      border-bottom: 1pt solid #000;
+      font-size: 11pt;
+    }
+    .summary table { border: 0; width: 100%; }
+    .summary td { padding: 2pt 6pt; border: 0; }
+    .summary td.q { width: 28%; }
+    .summary td.calc { font-family: 'Cambria Math', 'Cambria', serif; }
+    .summary td.total { width: 18%; text-align: right; font-weight: bold; }
+    .summary tr.grand td {
+      border-top: 0.5pt solid #000;
+      padding-top: 5pt;
+      font-weight: bold;
+      font-size: 11.5pt;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="doc-title">
+    <div class="u">Birzeit University</div>
+    <div class="t">Discrete Mathematics (COMP 233): First Exam</div>
+    <div class="s">Section 9: Answers &amp; Marking Scheme</div>
+    <div class="y">Second Semester 2025/2026</div>
+  </div>
+
+  <h2>Question One [10 Marks]: Multiple-choice (2 marks each, no partial credit)</h2>
+
+  <table class="mcq-key">
+    <caption>Marking key, Question One (quick reference)</caption>
+    <thead>
+      <tr><th style="width: 50pt;">Q</th><th style="width: 90pt;">Answer</th><th style="width: 60pt;">Marks</th><th>Topic / what to check</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="c">1.1</td><td class="ans c">(c) 4</td><td class="c">2</td><td>Quotient&ndash;remainder: square of <code>n = 5k + 2</code> mod 5.</td></tr>
+      <tr><td class="c">1.2</td><td class="ans c">(b) 6<sup>5</sup></td><td class="c">2</td><td>Prime factorisation: highest power of 6 dividing <code>30<sup>5</sup>&middot;40<sup>3</sup></code>.</td></tr>
+      <tr><td class="c">1.3</td><td class="ans c">(b) 1</td><td class="c">2</td><td>Modular arithmetic: reducing <code>6(a+b) + 7</code> mod 6.</td></tr>
+      <tr><td class="c">1.4</td><td class="ans c">(d)</td><td class="c">2</td><td>Universal vs existential: distinguishing &forall; from &exist; restatements.</td></tr>
+      <tr><td class="c">1.5</td><td class="ans c">(b)</td><td class="c">2</td><td>Existential over reals: <code>x<sup>2</sup> + 1 = 0</code> has no real solution.</td></tr>
+      <tr class="total"><td class="c">Total</td><td></td><td class="c">10</td><td>Mark the selected option only; do not award partial credit.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="part-block">
+    <div class="part-head">Q1.1 [2 marks]</div>
+    <div class="stmt"><p>If <code>n = 5k + 2</code> for some integer <code>k</code>, what is <code>n<sup>2</sup> mod 5</code>?</p></div>
+    <div class="soln">
+      <p><span class="label">Answer</span> (c) 4.</p>
+      <p><span class="label">Solution</span> <code>n<sup>2</sup> = (5k + 2)<sup>2</sup> = 25k<sup>2</sup> + 20k + 4 = 5(5k<sup>2</sup> + 4k) + 4</code>. The first term is a multiple of 5; the leftover is 4. Hence <code>n<sup>2</sup> mod 5 = 4</code>.</p>
+    </div>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q1.2 [2 marks]</div>
+    <div class="stmt"><p>What is the largest power of 6 that divides <code>30<sup>5</sup> &middot; 40<sup>3</sup></code>?</p></div>
+    <div class="soln">
+      <p><span class="label">Answer</span> (b) <code>6<sup>5</sup></code>.</p>
+      <p><span class="label">Solution</span> Factorise each base: <code>30 = 2 &middot; 3 &middot; 5</code> gives <code>30<sup>5</sup> = 2<sup>5</sup> &middot; 3<sup>5</sup> &middot; 5<sup>5</sup></code>; <code>40 = 2<sup>3</sup> &middot; 5</code> gives <code>40<sup>3</sup> = 2<sup>9</sup> &middot; 5<sup>3</sup></code>. The product is <code>2<sup>14</sup> &middot; 3<sup>5</sup> &middot; 5<sup>8</sup></code>. Each factor of <code>6 = 2 &middot; 3</code> consumes one 2 and one 3; the limiting count is <code>min(14, 5) = 5</code>. Largest power of 6: <code>6<sup>5</sup></code>.</p>
+    </div>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q1.3 [2 marks]</div>
+    <div class="stmt"><p>If <code>m</code> and <code>n</code> are integers with <code>m mod 6 = 3</code> and <code>n mod 6 = 4</code>, what is <code>(m + n) mod 6</code>?</p></div>
+    <div class="soln">
+      <p><span class="label">Answer</span> (b) 1.</p>
+      <p><span class="label">Solution</span> Write <code>m = 6a + 3</code> and <code>n = 6b + 4</code>. Then <code>m + n = 6(a + b) + 7 = 6(a + b + 1) + 1</code>. Because a remainder must lie in <code>[0, 6)</code>, <code>(m + n) mod 6 = 1</code>. <em>Common trap:</em> option (a) "7" results from stopping at <code>6(a+b) + 7</code> without reducing.</p>
+    </div>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q1.4 [2 marks]</div>
+    <div class="stmt"><p>Which of (a)&ndash;(d) is NOT equivalent to "<em>&forall; integers <code>n</code>, if <code>4 | n</code> then <code>2 | n</code></em>"?</p></div>
+    <div class="soln">
+      <p><span class="label">Answer</span> (d).</p>
+      <p><span class="label">Solution</span> Options (a), (b), and (c) are standard universal restatements of the same conditional. Option (d) is existential ("some integer&hellip;"), which is logically weaker than a universal claim and is therefore not equivalent.</p>
+    </div>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q1.5 [2 marks]</div>
+    <div class="stmt"><p>Consider "<em>&exist; a real number <code>x</code> such that <code>x<sup>2</sup> + 1 = 0</code></em>". Which best describes it?</p></div>
+    <div class="soln">
+      <p><span class="label">Answer</span> (b).</p>
+      <p><span class="label">Solution</span> For every real <code>x</code>, <code>x<sup>2</sup> &ge; 0</code>, hence <code>x<sup>2</sup> + 1 &ge; 1 &gt; 0</code>. No real solution exists, so the existential claim is false. Options (a) and (c) test simple substitutions (<code>0<sup>2</sup> + 1 = 1</code>; <code>(&minus;1)<sup>2</sup> + 1 = 2</code>). The complex roots <code>&plusmn;i</code> are not real numbers, so (d) misreads the domain.</p>
+    </div>
+  </div>
+
+  <h2>Question Two [10 Marks]: Direct Proofs</h2>
+
+  <div class="part-block">
+    <div class="part-head">Q2.A [4 marks]</div>
+    <div class="stmt"><p>Prove that for every odd integer <code>n</code>, <code>n<sup>2</sup> + 3</code> is divisible by 4.</p></div>
+    <div class="soln">
+      <p><span class="label">Solution</span> Let <code>n</code> be any odd integer. We must show that <code>4 | (n<sup>2</sup> + 3)</code>.</p>
+      <p>By the definition of odd, <code>n = 2k + 1</code> for some integer <code>k</code>.</p>
+      <p>Then <code>n<sup>2</sup> + 3 = (2k + 1)<sup>2</sup> + 3 = 4k<sup>2</sup> + 4k + 1 + 3 = 4k<sup>2</sup> + 4k + 4 = 4(k<sup>2</sup> + k + 1)</code>.</p>
+      <p>Let <code>m = k<sup>2</sup> + k + 1</code>. Then <code>m</code> is an integer (integers are closed under products and sums). So <code>n<sup>2</sup> + 3 = 4m</code>, and by the definition of divisibility, <code>4 | (n<sup>2</sup> + 3)</code>.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q2.A [4 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Correct setup using the definition of odd: <code>n = 2k + 1</code> for some integer <code>k</code>.</td></tr>
+        <tr><td class="m">1</td><td>Correct algebraic expansion: <code>(2k + 1)<sup>2</sup> + 3 = 4k<sup>2</sup> + 4k + 4</code>.</td></tr>
+        <tr><td class="m">1</td><td>Factoring out 4 to obtain <code>4(k<sup>2</sup> + k + 1)</code>.</td></tr>
+        <tr><td class="m">1</td><td>Clean conclusion: name the integer factor and cite the definition of divisibility.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q2.B [3 marks]</div>
+    <div class="stmt"><p>Prove that for all integers <code>a</code>, <code>b</code>, <code>c</code>: if <code>a | b</code> and <code>b | c</code> then <code>a | c</code>.</p></div>
+    <div class="soln">
+      <p><span class="label">Solution</span> Let <code>a</code>, <code>b</code>, <code>c</code> be integers with <code>a | b</code> and <code>b | c</code>. We must show <code>a | c</code>.</p>
+      <p>By the definition of divisibility, there exist integers <code>r</code> and <code>s</code> with <code>b = ar</code> and <code>c = bs</code>.</p>
+      <p>Substituting: <code>c = bs = (ar)s = a(rs)</code>. Let <code>k = rs</code>; <code>k</code> is an integer (closure under product). Hence <code>c = ak</code>, and by the definition of divisibility, <code>a | c</code>.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q2.B [3 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Correct application of the definition of divisibility to both hypotheses: <code>b = ar</code> and <code>c = bs</code>.</td></tr>
+        <tr><td class="m">1</td><td>Correct substitution to express <code>c = a(rs)</code>.</td></tr>
+        <tr><td class="m">1</td><td>Clean conclusion: <code>rs</code> is an integer, hence <code>a | c</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q2.C [3 marks]</div>
+    <div class="stmt"><p>Use the quotient&ndash;remainder theorem with <code>d = 3</code> to show that for every integer <code>n</code>, <code>n<sup>2</sup> + 2n</code> has the form <code>3k</code> or <code>3k + 2</code> for some integer <code>k</code>.</p></div>
+    <div class="soln">
+      <p><span class="label">Solution</span> Let <code>n</code> be any integer. By the quotient&ndash;remainder theorem with <code>d = 3</code>, exactly one of the following holds for some integer <code>q</code>:</p>
+      <p class="center"><code>n = 3q</code>, &nbsp;<code>n = 3q + 1</code>, &nbsp;or&nbsp; <code>n = 3q + 2</code>.</p>
+      <p><em>Case 1</em> (<code>n = 3q</code>): <code>n<sup>2</sup> + 2n = 9q<sup>2</sup> + 6q = 3(3q<sup>2</sup> + 2q)</code>. Form <code>3k</code>, with <code>k = 3q<sup>2</sup> + 2q</code>.</p>
+      <p><em>Case 2</em> (<code>n = 3q + 1</code>): <code>n<sup>2</sup> + 2n = (3q + 1)<sup>2</sup> + 2(3q + 1) = 9q<sup>2</sup> + 12q + 3 = 3(3q<sup>2</sup> + 4q + 1)</code>. Form <code>3k</code>.</p>
+      <p><em>Case 3</em> (<code>n = 3q + 2</code>): <code>n<sup>2</sup> + 2n = (3q + 2)<sup>2</sup> + 2(3q + 2) = 9q<sup>2</sup> + 18q + 8 = 3(3q<sup>2</sup> + 6q + 2) + 2</code>. Form <code>3k + 2</code>.</p>
+      <p>In all three cases, <code>n<sup>2</sup> + 2n</code> has the form <code>3k</code> or <code>3k + 2</code>.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q2.C [3 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Correct setup applying the quotient&ndash;remainder theorem to split <code>n</code> into three cases.</td></tr>
+        <tr><td class="m">1</td><td>Correct algebra for <code>n<sup>2</sup> + 2n</code> in all three cases.</td></tr>
+        <tr><td class="m">1</td><td>Correct identification of the target form (<code>3k</code> or <code>3k + 2</code>) for each case and clean overall conclusion.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Question Three [10 Marks]: Counterexample &amp; Closure</h2>
+
+  <div class="part-block">
+    <div class="part-head">Q3.A [4 marks]</div>
+    <div class="stmt"><p>Disprove "for all integers <code>m</code> and <code>n</code>, if both are odd then <code>m + n</code> is odd"; state the correct conclusion and prove it.</p></div>
+    <div class="soln">
+      <p><span class="label">Counterexample</span> Take <code>m = 1</code> and <code>n = 3</code>. Both are odd, but <code>m + n = 4</code>, which is even. The statement is false.</p>
+      <p><em>Acceptable variants:</em> any specific pair of odd integers whose sum is even, e.g. <code>(1, 1)</code>, <code>(3, 5)</code>, <code>(&minus;1, 7)</code>.</p>
+      <p><span class="label">Corrected statement</span> For all integers <code>m</code> and <code>n</code>, if <code>m</code> and <code>n</code> are both odd, then <code>m + n</code> is even.</p>
+      <p><span class="label">Proof</span> Let <code>m</code> and <code>n</code> be integers, both odd. By the definition of odd, <code>m = 2j + 1</code> and <code>n = 2k + 1</code> for some integers <code>j</code> and <code>k</code>.</p>
+      <p>Then <code>m + n = (2j + 1) + (2k + 1) = 2j + 2k + 2 = 2(j + k + 1)</code>. Let <code>q = j + k + 1</code>; <code>q</code> is an integer. So <code>m + n = 2q</code>, and by the definition of even, <code>m + n</code> is even.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q3.A [4 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Valid counterexample: any specific pair of odd integers whose sum is even (no partial credit for a generic claim without a witness).</td></tr>
+        <tr><td class="m">1</td><td>Correct statement of the revised conclusion (<code>m + n</code> is even when both are odd).</td></tr>
+        <tr><td class="m">1</td><td>Correct setup using the definition of odd: <code>m = 2j + 1</code>, <code>n = 2k + 1</code>.</td></tr>
+        <tr><td class="m">1</td><td>Completing the proof: show <code>m + n = 2 &middot; (integer)</code> and conclude even.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q3.B [6 marks]</div>
+    <div class="stmt"><p>Prove that for all rational numbers <code>r</code> and <code>s</code>, the number <code>r<sup>2</sup> + s<sup>2</sup></code> is rational.</p></div>
+    <div class="soln">
+      <p><span class="label">Solution</span> Let <code>r</code> and <code>s</code> be rational. We must show <code>r<sup>2</sup> + s<sup>2</sup></code> is rational.</p>
+      <p>By the definition of rational, there exist integers <code>a, b, c, d</code> with <code>b &ne; 0</code> and <code>d &ne; 0</code> such that <code>r = a/b</code> and <code>s = c/d</code>.</p>
+      <p>Then <code>r<sup>2</sup> = a<sup>2</sup>/b<sup>2</sup></code> and <code>s<sup>2</sup> = c<sup>2</sup>/d<sup>2</sup></code>. Combining over the common denominator <code>b<sup>2</sup>d<sup>2</sup></code>:</p>
+      <p class="center"><code>r<sup>2</sup> + s<sup>2</sup> = a<sup>2</sup>/b<sup>2</sup> + c<sup>2</sup>/d<sup>2</sup> = (a<sup>2</sup>d<sup>2</sup> + b<sup>2</sup>c<sup>2</sup>) / (b<sup>2</sup>d<sup>2</sup>)</code>.</p>
+      <p>The numerator <code>a<sup>2</sup>d<sup>2</sup> + b<sup>2</sup>c<sup>2</sup></code> is an integer (closure of integers under product and sum).</p>
+      <p>The denominator <code>b<sup>2</sup>d<sup>2</sup></code> is an integer, and it is nonzero: since <code>b &ne; 0</code> and <code>d &ne; 0</code>, neither <code>b<sup>2</sup></code> nor <code>d<sup>2</sup></code> is zero, so their product is nonzero.</p>
+      <p>Hence <code>r<sup>2</sup> + s<sup>2</sup></code> is the quotient of an integer by a nonzero integer; by the definition of rational, it is rational.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q3.B [6 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Correct setup using the definition of rational: <code>r = a/b</code>, <code>s = c/d</code>, with <code>b, d &ne; 0</code>.</td></tr>
+        <tr><td class="m">1</td><td>Correct squaring: <code>r<sup>2</sup> = a<sup>2</sup>/b<sup>2</sup></code> and <code>s<sup>2</sup> = c<sup>2</sup>/d<sup>2</sup></code>.</td></tr>
+        <tr><td class="m">1</td><td>Correct combination into a single fraction with common denominator <code>b<sup>2</sup>d<sup>2</sup></code>.</td></tr>
+        <tr><td class="m">1</td><td>Justifying that the numerator <code>a<sup>2</sup>d<sup>2</sup> + b<sup>2</sup>c<sup>2</sup></code> is an integer.</td></tr>
+        <tr><td class="m">1</td><td>Justifying that the denominator <code>b<sup>2</sup>d<sup>2</sup></code> is a nonzero integer (frequently missed).</td></tr>
+        <tr><td class="m">1</td><td>Clean conclusion citing the definition of rational.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Question Four [10 Marks]: Predicate Logic &amp; Validity</h2>
+
+  <div class="part-block">
+    <div class="part-head">Q4.A.a [3 marks]</div>
+    <div class="stmt"><p>Let <code>S</code> be the set of students, <code>C</code> the set of courses, and <code>E(s, c)</code> the predicate "student <code>s</code> is enrolled in course <code>c</code>". Write a symbolic form of: <em>"there is a course in which every student is enrolled."</em></p></div>
+    <div class="soln">
+      <p><span class="label">Answer</span> <code>&exist; c &isin; C</code> such that <code>&forall; s &isin; S</code>, <code>E(s, c)</code>.</p>
+      <p><span class="label">Note</span> Structure is <code>&exist;&forall;</code>: the same course <code>c</code> must enrol every student <code>s</code>. <em>Common error:</em> writing <code>&forall; s, &exist; c, E(s, c)</code> says every student is enrolled in some course (possibly different for each student), which is strictly weaker and not equivalent.</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q4.A.a [3 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Correct outer quantifier <code>&exist; c &isin; C</code>.</td></tr>
+        <tr><td class="m">1</td><td>Correct inner quantifier <code>&forall; s &isin; S</code>, with proper scope.</td></tr>
+        <tr><td class="m">1</td><td>Correct predicate <code>E(s, c)</code> with the arguments in the right order.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q4.A.b [3 marks]</div>
+    <div class="stmt"><p>Write the negation of <code>&forall; s &isin; S, &exist; c &isin; C</code> such that <code>E(s, c)</code>.</p></div>
+    <div class="soln">
+      <p><span class="label">Answer</span> <code>&exist; s &isin; S</code> such that <code>&forall; c &isin; C</code>, <code>&sim;E(s, c)</code>.</p>
+      <p><span class="label">Working</span> <code>&sim;(&forall; s, &exist; c, E(s, c)) &equiv; &exist; s, &sim;(&exist; c, E(s, c)) &equiv; &exist; s</code> such that <code>&forall; c, &sim;E(s, c)</code>.</p>
+      <p><span class="label">English</span> "There is a student who is not enrolled in any course."</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q4.A.b [3 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Correct conversion of the outer <code>&forall;</code> to <code>&exist;</code>.</td></tr>
+        <tr><td class="m">1</td><td>Correct conversion of the inner <code>&exist;</code> to <code>&forall;</code>.</td></tr>
+        <tr><td class="m">1</td><td>Correct negation of the predicate: <code>E(s, c)</code> becomes <code>&sim;E(s, c)</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="part-block">
+    <div class="part-head">Q4.B [4 marks]</div>
+    <div class="stmt"><p>Determine the validity of the argument with premises <code>p &or; q</code>, <code>p &rarr; r</code>, <code>q &rarr; r</code> and conclusion <code>&there4; r</code>.</p></div>
+    <div class="soln">
+      <p><span class="label">Solution</span> Build the truth table (T = true, F = false). Premise columns are <code>p &or; q</code>, <code>p &rarr; r</code>, <code>q &rarr; r</code>; the conclusion column is <code>r</code>.</p>
+      <table class="tt">
+        <thead>
+          <tr><th>p</th><th>q</th><th>r</th><th>p &or; q</th><th>p &rarr; r</th><th>q &rarr; r</th><th>r</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr class="crit"><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>critical</td></tr>
+          <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td>F</td><td>F</td><td></td></tr>
+          <tr class="crit"><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>critical</td></tr>
+          <tr><td>T</td><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td></td></tr>
+          <tr class="crit"><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>critical</td></tr>
+          <tr><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td>F</td><td>F</td><td></td></tr>
+          <tr><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td></td></tr>
+          <tr><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td><td>F</td><td></td></tr>
+        </tbody>
+      </table>
+      <p><span class="label">Verdict</span> The argument is <strong>valid</strong>. There are three critical rows where all three premises are true: <code>(p, q, r) = (T, T, T)</code>, <code>(T, F, T)</code>, <code>(F, T, T)</code>. In every critical row the conclusion <code>r</code> is also true, so there is no row where all premises are true but the conclusion is false. (This is the standard proof-by-cases inference rule.)</p>
+    </div>
+    <table class="marking">
+      <caption>Marking, Q4.B [4 marks]</caption>
+      <thead><tr><th class="m">Marks</th><th>Criterion</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>Complete and correct 8-row truth table with all premise and conclusion columns computed correctly.</td></tr>
+        <tr><td class="m">1</td><td>Correct identification of the premise columns (<code>p &or; q</code>, <code>p &rarr; r</code>, <code>q &rarr; r</code>) and the conclusion column (<code>r</code>).</td></tr>
+        <tr><td class="m">1</td><td>Correct identification of the three critical rows where all premises are true.</td></tr>
+        <tr><td class="m">1</td><td>Correct validity verdict with reasoning that references the critical rows.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <strong>Marks summary</strong>
+    <table>
+      <tr><td class="q">Question One</td><td class="calc">5 MCQs &times; 2 marks</td><td class="total">10</td></tr>
+      <tr><td class="q">Question Two</td><td class="calc">4 + 3 + 3</td><td class="total">10</td></tr>
+      <tr><td class="q">Question Three</td><td class="calc">4 + 6</td><td class="total">10</td></tr>
+      <tr><td class="q">Question Four</td><td class="calc">(3 + 3) + 4</td><td class="total">10</td></tr>
+      <tr class="grand"><td class="q">Total</td><td></td><td class="total">40</td></tr>
+    </table>
+  </div>
+
+  <h2>General Marking Principles</h2>
+  <ul class="principles">
+    <li>For MCQs (Q1), award 2 marks for the correct selected option and 0 otherwise. No partial credit.</li>
+    <li>For proof questions, the marking breakdown is sequential: students lose individual marks for missing or incorrect steps, not the whole question.</li>
+    <li>Award full credit when the student uses different variable names (e.g. <code>j</code>, <code>k</code>, <code>p</code>, <code>q</code>) provided the logic is correct.</li>
+    <li>Accept any logically equivalent reformulation of the symbolic answers in Q4.A.</li>
+    <li>In Q3.A, any specific pair of odd integers with even sum is acceptable. No partial credit for a generic claim without a specific witness.</li>
+    <li>In Q4.B, accept alternative correct column orderings provided premise and conclusion columns are clearly identified.</li>
+  </ul>
+
+</body>
+</html>
