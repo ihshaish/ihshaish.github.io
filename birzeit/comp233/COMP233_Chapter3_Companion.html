@@ -626,7 +626,8 @@
               <a href="#sec332">The loves table</a>
               <a href="#sec333">Cafeteria example</a>
               <a href="#sec334">Tarski with multiple quantifiers</a>
-              <a href="#sec335">Negating multiple quantifiers</a>
+              <a href="#sec335">Formal notation</a>
+              <a href="#sec336">Negating multiple quantifiers</a>
               <a href="#recap">Recap</a>
             </div>
           </div>
@@ -1200,7 +1201,7 @@
           </div>
 
           <!-- 3.3.5 Formal logical notation -->
-          <div class="widget-card">
+          <div class="widget-card" id="sec335">
             <h3>3.3.5 Formal logical notation</h3>
             <div class="widget-desc">Domain restrictions like <em>"for all circles x"</em> are sugar. The fully formal first-order shape uses the connectives differently for ∀ and ∃:</div>
 
@@ -1227,7 +1228,7 @@
           </div>
 
           <!-- 3.3.6 Negating multiple quantifiers -->
-          <div class="widget-card" id="sec335">
+          <div class="widget-card" id="sec336">
             <h3>3.3.6 Negating multiply-quantified statements</h3>
             <div class="widget-desc">The mechanical rule: <strong>flip every outer quantifier</strong> (∀ ↔ ∃) and negate the innermost predicate. Type any quantified statement; the companion applies the negation step by step.</div>
 
@@ -1636,6 +1637,65 @@ x =  2  →  y = −2, x + y = 0</pre>
       throw new Error('pushNeg: unknown node ' + node.kind);
     }
 
+    /* Single-step push: returns {result, reason} if a ∼ can be pushed one level, else null.
+       Used to display the negation derivation one rule at a time. */
+    function pushNegOneStep(node) {
+      // Look for a ∼ at this level
+      if (node.kind === 'not') {
+        const inner = node.expr;
+        if (inner.kind === 'forall') {
+          return { result: { kind: 'exists', var: inner.var, domain: inner.domain, body: { kind: 'not', expr: inner.body } },
+                   reason: 'flip ∀ to ∃ and move ∼ inside (Theorem 3.2.1)' };
+        }
+        if (inner.kind === 'exists') {
+          return { result: { kind: 'forall', var: inner.var, domain: inner.domain, body: { kind: 'not', expr: inner.body } },
+                   reason: 'flip ∃ to ∀ and move ∼ inside (Theorem 3.2.2)' };
+        }
+        if (inner.kind === 'and') {
+          return { result: { kind: 'or',  left: { kind: 'not', expr: inner.left }, right: { kind: 'not', expr: inner.right } },
+                   reason: 'De Morgan: ∼(A ∧ B) ≡ ∼A ∨ ∼B' };
+        }
+        if (inner.kind === 'or') {
+          return { result: { kind: 'and', left: { kind: 'not', expr: inner.left }, right: { kind: 'not', expr: inner.right } },
+                   reason: 'De Morgan: ∼(A ∨ B) ≡ ∼A ∧ ∼B' };
+        }
+        if (inner.kind === 'imp') {
+          return { result: { kind: 'and', left: inner.left, right: { kind: 'not', expr: inner.right } },
+                   reason: 'negate conditional: ∼(P → Q) ≡ P ∧ ∼Q' };
+        }
+        if (inner.kind === 'not') {
+          return { result: inner.expr, reason: 'double negation: ∼∼P ≡ P' };
+        }
+        return null; // ∼ on atom, no further push
+      }
+      // ∼ not at top: descend into children to find a ∼ to push
+      if (node.kind === 'forall' || node.kind === 'exists') {
+        const sub = pushNegOneStep(node.body);
+        if (!sub) return null;
+        return { result: { kind: node.kind, var: node.var, domain: node.domain, body: sub.result }, reason: sub.reason };
+      }
+      if (['and', 'or', 'imp', 'iff', 'xor'].includes(node.kind)) {
+        const l = pushNegOneStep(node.left);
+        if (l) return { result: { kind: node.kind, left: l.result, right: node.right }, reason: l.reason };
+        const r = pushNegOneStep(node.right);
+        if (r) return { result: { kind: node.kind, left: node.left, right: r.result }, reason: r.reason };
+      }
+      return null;
+    }
+
+    function explainNegationSteps(ast) {
+      // Returns an ordered list of {form, reason} pairs walking from ∼(original) to the simplified push form.
+      const steps = [{ form: '∼(' + prettyPrint(ast) + ')', reason: 'negate the whole statement' }];
+      let cur = { kind: 'not', expr: ast };
+      for (let i = 0; i < 30; i++) {
+        const next = pushNegOneStep(cur);
+        if (!next) break;
+        cur = next.result;
+        steps.push({ form: prettyPrint(cur), reason: next.reason });
+      }
+      return steps;
+    }
+
     /* =====================================================
        TARSKI SCENE ENGINE
        ===================================================== */
@@ -1884,15 +1944,21 @@ x =  2  →  y = −2, x + y = 0</pre>
         const steps = [];
         if (node.kind === 'forall' || node.kind === 'exists') {
           const q = node.kind === 'forall' ? '∀' : '∃';
-          steps.push(indent + q + node.var + ' ' + prettyPrint(node.body) + '   →   ' + valHtml);
+          const note = node.kind === 'forall' ? 'big AND across the domain' : 'big OR across the domain';
+          steps.push(indent + q + node.var + ' ' + prettyPrint(node.body) + '   →   ' + valHtml + ' &nbsp;<span style="color:var(--c-muted); font-style:italic;">(' + note + ')</span>');
+          let decisiveMarked = false;
           for (const o of scene.objects.map(x => x.name)) {
             const env2 = Object.assign({}, env); env2[node.var] = o;
             let inner;
             try { inner = evalAST(node.body, env2, scene); }
             catch (e) { continue; }
             const innerVal = '<span class="e-val ' + (inner ? 't' : 'f') + '">' + (inner ? 'T' : 'F') + '</span>';
-            steps.push(indent + '&nbsp;&nbsp;' + node.var + ' = ' + o + ':  ' + prettyPrint(substituteVarForDisplay(node.body, node.var, o)) + ' = ' + innerVal);
-            if ((node.kind === 'forall' && !inner) || (node.kind === 'exists' && inner)) break;
+            const isDecisive = !decisiveMarked && ((node.kind === 'forall' && !inner) || (node.kind === 'exists' && inner));
+            const marker = isDecisive
+              ? ' &nbsp;<span style="font-size:0.72rem; font-weight:800; color:' + (node.kind === 'forall' ? 'var(--c-false)' : 'var(--c-true)') + '; text-transform:uppercase; letter-spacing:0.4px;">' + (node.kind === 'forall' ? '← counterexample' : '← witness') + '</span>'
+              : '';
+            if (isDecisive) decisiveMarked = true;
+            steps.push(indent + '&nbsp;&nbsp;' + node.var + ' = ' + o + ':  ' + prettyPrint(substituteVarForDisplay(node.body, node.var, o)) + ' = ' + innerVal + marker);
           }
         } else {
           steps.push(indent + prettyPrint(node) + '   =   ' + valHtml);
@@ -1987,7 +2053,7 @@ x =  2  →  y = −2, x + y = 0</pre>
     })();
 
     /* =====================================================
-       3.3.5 NEGATION FLIPPER
+       3.3.6 NEGATION FLIPPER  ·  Step-by-step derivation
        ===================================================== */
     (function negationFlipper() {
       const input = document.getElementById('neg-input');
@@ -2000,15 +2066,27 @@ x =  2  →  y = −2, x + y = 0</pre>
         const ast = parseInputSafely(input, err);
         if (!ast) { out.innerHTML = ''; return; }
         const original = prettyPrint(ast);
-        const negPushed = pushNeg(ast);
-        const negPushedStr = prettyPrint(negPushed);
-        const negRaw = '∼(' + original + ')';
-        out.innerHTML =
-          '<div class="neg-card">' +
-          '<div class="row"><div class="lbl">Original</div><div class="val">' + original + '</div></div>' +
-          '<div class="row"><div class="lbl">Negation</div><div class="val">' + negRaw + '</div></div>' +
-          '<div class="row"><div class="lbl">Simplified</div><div class="val">' + negPushedStr + '</div></div>' +
-          '</div>';
+        const steps = explainNegationSteps(ast);
+        const final = steps[steps.length - 1].form;
+        let html = '<div class="neg-card">';
+        html += '<div class="row"><div class="lbl">Original</div><div class="val">' + original + '</div></div>';
+        html += '<div class="row"><div class="lbl">Derivation</div><div class="val" style="flex:1;">';
+        html += '<div style="display:flex; flex-direction:column; gap:6px;">';
+        steps.forEach(function (s, i) {
+          const tag = (i === 0) ? 'start' : 'step ' + i;
+          const isFinal = (i === steps.length - 1);
+          html += '<div style="display:flex; gap:10px; align-items:baseline;">';
+          html += '<span style="font-size:0.72rem; font-weight:700; color:var(--c-muted); min-width:48px; text-transform:uppercase; letter-spacing:0.4px;">' + tag + '</span>';
+          html += '<span style="font-family:\'Roboto Mono\', monospace; color:' + (isFinal ? 'var(--c-primary)' : 'var(--c-text)') + '; font-weight:' + (isFinal ? '700' : '500') + ';">' + s.form + '</span>';
+          if (i > 0) {
+            html += '<span style="font-size:0.78rem; color:var(--c-muted); font-style:italic; margin-left:auto;">' + s.reason + '</span>';
+          }
+          html += '</div>';
+        });
+        html += '</div></div></div>';
+        html += '<div class="row"><div class="lbl">Final form</div><div class="val" style="font-weight:800; color:var(--c-primary);">' + final + '</div></div>';
+        html += '</div>';
+        out.innerHTML = html;
       }
       input.addEventListener('input', render);
       document.querySelectorAll('[data-neg-preset]').forEach(function (btn) {
