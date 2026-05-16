@@ -1,0 +1,2632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From interviews to personas - an interactive walkthrough · COMP322</title>
+<style>
+:root {
+  --ink: #1A1A1A;
+  --ink-soft: #2A2A2A;
+  --muted: #5A6B78;
+  --faint: #9AA5B1;
+  --paper: #FBFAF7;
+  --card: #FFFFFF;
+  --rule: #E4E2DC;
+  --rule-strong: #D0CEC6;
+  --accent: #2C5F7C;
+  --accent-dark: #1F4860;
+  --accent-soft: #E8F0F5;
+  --accent-cream: #F5EFE3;
+  --warn: #B8862F;
+  --warn-soft: #FAF1E0;
+  --success: #2D7A4F;
+  --success-soft: #E6F1EB;
+  --danger: #B23B3B;
+  --danger-soft: #FBEAE9;
+  --layla: #3A6FA0;
+  --maryam: #B8862F;
+  --type-act: #3A6FA0;
+  --type-att: #B23B3B;
+  --type-apt: #B8862F;
+  --type-mot: #2D7A4F;
+  --type-skl: #6B4FA0;
+  --serif: 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4em 0;
+}
+h1 { font-size: 38px; line-height: 1.15; letter-spacing: -0.02em; }
+h2 { font-size: 28px; line-height: 1.2; }
+h3 { font-size: 21px; line-height: 1.3; }
+h4 { font-size: 16px; line-height: 1.4; }
+p { margin: 0 0 1em 0; }
+em { font-style: italic; }
+strong { font-weight: 600; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { color: var(--accent-dark); }
+
+/* Top ribbon */
+.ribbon {
+  background: var(--accent);
+  color: white;
+  padding: 0;
+  border-bottom: 3px solid var(--accent-dark);
+}
+.ribbon-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-family: var(--sans);
+}
+.ribbon a { color: rgba(255,255,255,0.95); border-bottom-color: rgba(255,255,255,0.4); }
+.ribbon a:hover { color: white; border-bottom-color: white; }
+.ribbon-left { display: flex; gap: 22px; align-items: center; }
+.ribbon-left strong { color: white; font-weight: 600; }
+
+/* Page container */
+.page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 48px 32px 100px 32px;
+}
+.page.wide { max-width: 1100px; }
+
+/* Masthead */
+.masthead { margin-bottom: 48px; }
+.masthead .kicker {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.masthead h1 {
+  font-size: 46px;
+  margin-bottom: 18px;
+}
+.masthead h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.masthead .standfirst {
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-weight: 400;
+  max-width: 740px;
+}
+.masthead .meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--muted);
+}
+.masthead .meta .meta-block strong {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--faint);
+  margin-bottom: 3px;
+  font-weight: 700;
+}
+
+/* Section header */
+.sect-head {
+  margin: 0 0 28px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.sect-head .num {
+  display: inline-block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--accent);
+  margin-right: 12px;
+}
+.sect-head .kicker {
+  display: inline-block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.sect-head h2 {
+  margin-top: 6px;
+  font-size: 32px;
+}
+.sect-head h2 em { font-style: italic; color: var(--accent); }
+.sect-head .lede {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Progress strip */
+.progress {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(251,250,247,0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 0;
+  margin: 0 -32px 32px -32px;
+  border-bottom: 1px solid var(--rule);
+}
+.progress-inner {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 11px;
+  border-radius: 14px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+  font-weight: 500;
+}
+.dot:hover { background: var(--accent-soft); color: var(--accent); }
+.dot.active {
+  background: var(--accent);
+  color: white;
+}
+.dot.done { color: var(--accent); }
+.dot .roman {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  opacity: 0.85;
+}
+.dot.active .roman { color: rgba(255,255,255,0.85); }
+
+/* Body prose */
+.prose { font-size: 16px; }
+.prose p { margin: 0 0 1.1em 0; }
+.prose p.lede {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-bottom: 1.2em;
+}
+.prose ul, .prose ol { margin: 0 0 1.2em 0; padding-left: 22px; }
+.prose li { margin-bottom: 0.4em; }
+
+/* Tooltip term (dotted underline) */
+.term {
+  border-bottom: 1.5px dotted var(--accent);
+  cursor: help;
+  position: relative;
+}
+.term:hover .tip { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.tip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 4px);
+  width: 280px;
+  background: var(--ink);
+  color: white;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.15s;
+  z-index: 100;
+  font-family: var(--sans);
+  font-style: normal;
+  margin-bottom: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+.tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+}
+.tip .ar {
+  display: block;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  font-size: 14px;
+  color: #FFD691;
+  direction: rtl;
+  text-align: right;
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif;
+}
+
+/* Callout boxes */
+.callout {
+  margin: 24px 0;
+  padding: 18px 22px;
+  border-radius: 6px;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+.callout.note {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+}
+.callout.warn {
+  background: var(--warn-soft);
+  border-left: 3px solid var(--warn);
+}
+.callout.pitfall {
+  background: var(--danger-soft);
+  border-left: 3px solid var(--danger);
+}
+.callout.aside {
+  background: var(--accent-cream);
+  border-left: 3px solid var(--warn);
+  font-family: var(--serif);
+  font-style: italic;
+}
+.callout .lbl {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-style: normal;
+  font-family: var(--sans);
+}
+.callout.note .lbl { color: var(--accent); }
+.callout.warn .lbl { color: var(--warn); }
+.callout.pitfall .lbl { color: var(--danger); }
+.callout.aside .lbl { color: var(--warn); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Drop cap (only on intro) */
+.dropcap::first-letter {
+  font-family: var(--serif);
+  float: left;
+  font-size: 64px;
+  line-height: 0.85;
+  padding: 5px 8px 0 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Buttons */
+button, .btn {
+  font-family: var(--sans);
+  font-weight: 500;
+  cursor: pointer;
+  background: white;
+  color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.12s;
+}
+button:hover { border-color: var(--accent); color: var(--accent); }
+button.primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+button.primary:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: white;
+}
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+}
+button.ghost:hover { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button:disabled:hover { border-color: var(--rule-strong); color: var(--ink); }
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+.nav-row .next-hint {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Project picker cards */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin: 32px 0 8px 0;
+}
+.proj-card {
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  border-radius: 8px;
+  padding: 22px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+}
+.proj-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44,95,124,0.08);
+}
+.proj-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.proj-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 12px; right: 14px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+.proj-card .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.proj-card h3 {
+  font-size: 19px;
+  margin-bottom: 6px;
+}
+.proj-card .blurb {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.proj-card .stat {
+  font-size: 11px;
+  color: var(--faint);
+  border-top: 1px dashed var(--rule);
+  padding-top: 10px;
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+/* Transcript display */
+.transcripts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin: 28px 0;
+}
+.transcript {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.transcript .who {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.transcript .who .pid {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 13px;
+}
+.transcript .who .name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+}
+.transcript .who .age {
+  color: var(--muted);
+  font-size: 14px;
+}
+.transcript .meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  font-style: italic;
+  font-family: var(--serif);
+}
+.transcript .quote {
+  font-size: 13.5px;
+  line-height: 1.55;
+  margin-bottom: 8px;
+  padding: 8px 10px 8px 28px;
+  background: var(--paper);
+  border-radius: 4px;
+  position: relative;
+}
+.transcript .quote::before {
+  content: 'Q' attr(data-q);
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Mode tabs */
+.mode-bar {
+  display: flex;
+  gap: 0;
+  margin: 20px 0 6px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.mode-bar button {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 16px;
+  border-radius: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+.mode-bar button:hover { color: var(--accent); border-color: transparent; background: transparent; }
+.mode-bar button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.mode-bar button .desc {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--faint);
+  margin-top: 2px;
+  font-weight: 400;
+}
+.mode-bar button.active .desc { color: var(--accent); opacity: 0.7; }
+
+/* Coding rows */
+.code-bank {
+  background: var(--accent-cream);
+  border: 1px dashed var(--rule-strong);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 18px 0;
+}
+.code-bank .lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.code-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.code-chip {
+  padding: 5px 11px;
+  background: white;
+  border: 1px solid var(--rule-strong);
+  border-radius: 14px;
+  font-size: 12.5px;
+  cursor: grab;
+  user-select: none;
+  transition: all 0.12s;
+}
+.code-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.code-chip:active { cursor: grabbing; }
+.code-chip.dragging { opacity: 0.4; }
+.code-chip.t-Activities { border-left: 3px solid var(--type-act); }
+.code-chip.t-Attitudes { border-left: 3px solid var(--type-att); }
+.code-chip.t-Aptitudes { border-left: 3px solid var(--type-apt); }
+.code-chip.t-Motivations { border-left: 3px solid var(--type-mot); }
+.code-chip.t-Skills { border-left: 3px solid var(--type-skl); }
+
+.code-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 12px 0 18px 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.code-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.code-legend i {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.cd-row {
+  display: grid;
+  grid-template-columns: 78px 1fr 300px;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  margin-bottom: 7px;
+}
+.cd-row .pid {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 13px;
+}
+.cd-row .text { font-size: 13.5px; line-height: 1.5; }
+.cd-row .text .fb {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.cd-row .text .fb.correct { background: var(--success-soft); color: var(--success); }
+.cd-row .text .fb.partial { background: var(--warn-soft); color: var(--warn); }
+.cd-row .text .fb.wrong { background: var(--danger-soft); color: var(--danger); }
+.cd-row select, .cd-row input[type="text"] {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  background: white;
+}
+.dz {
+  min-height: 32px;
+  border: 1px dashed var(--rule-strong);
+  border-radius: 4px;
+  padding: 4px 9px;
+  font-size: 12px;
+  color: var(--faint);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.dz.over { border-color: var(--accent); background: var(--accent-soft); }
+.dz .assigned {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 3px 8px;
+  border-radius: 11px;
+  font-size: 12px;
+}
+.dz .x {
+  margin-left: 5px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.cd-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 22px 0 8px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.cd-section-head .pid {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 13px;
+}
+.cd-section-head .name {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+}
+.cd-section-head .meta {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+.expert-disclose {
+  margin: -2px 0 8px 92px;
+  font-size: 13px;
+}
+.expert-disclose summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 12px;
+  padding: 3px 0;
+}
+.expert-disclose .body {
+  padding: 9px 12px;
+  background: var(--accent-soft);
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+/* Worked example panel */
+.worked {
+  background: var(--accent-cream);
+  border-left: 4px solid var(--warn);
+  padding: 18px 22px;
+  border-radius: 0 6px 6px 0;
+  margin: 22px 0;
+  font-size: 14px;
+}
+.worked .lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: var(--warn);
+  margin-bottom: 8px;
+}
+.worked .quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  margin: 10px 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--rule-strong);
+}
+
+/* Bridge - the wrong vs right diagram */
+.bridge-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 28px 0;
+}
+.bridge-card {
+  border-radius: 8px;
+  padding: 22px;
+  border: 2px solid var(--rule);
+}
+.bridge-card.wrong {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+.bridge-card.right {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+.bridge-card .stamp {
+  display: inline-block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 11px;
+  margin-bottom: 10px;
+}
+.bridge-card.wrong .stamp { background: var(--danger); color: white; }
+.bridge-card.right .stamp { background: var(--success); color: white; }
+.bridge-card h4 { font-size: 17px; margin-bottom: 12px; }
+.bridge-card ol {
+  margin: 0 0 14px 0;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.bridge-card ol li { margin-bottom: 2px; }
+.bridge-card .moral {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+/* Diagnostic SVG framing */
+.diagnostic-sketch {
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 22px 0;
+}
+.diagnostic-sketch .cap {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* Variables table */
+.vars-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  font-size: 14px;
+}
+.vars-table th, .vars-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.vars-table th {
+  background: transparent;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 2px solid var(--rule-strong);
+}
+.vars-table tbody tr:hover { background: var(--paper); }
+
+.tpill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.tpill.Activities { background: rgba(58,111,160,0.12); color: var(--type-act); }
+.tpill.Attitudes { background: rgba(178,59,59,0.12); color: var(--type-att); }
+.tpill.Aptitudes { background: rgba(184,134,47,0.15); color: var(--type-apt); }
+.tpill.Motivations { background: rgba(45,122,79,0.12); color: var(--type-mot); }
+.tpill.Skills { background: rgba(107,79,160,0.12); color: var(--type-skl); }
+
+/* Scoring matrix */
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  font-size: 13.5px;
+}
+.score-table th, .score-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.score-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  font-weight: 700;
+  text-align: center;
+  vertical-align: bottom;
+  padding-top: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--rule-strong);
+}
+.score-table th .vname {
+  display: block;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--ink);
+  margin-top: 6px;
+  max-width: 90px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.score-table th:first-child { text-align: left; }
+.score-table td { vertical-align: middle; }
+.score-table td.cl { text-align: center; }
+
+.score-cell {
+  display: inline-block;
+  min-width: 26px;
+  padding: 4px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 0 1px;
+  border: 1px solid transparent;
+  background: #EEF0F2;
+  color: var(--faint);
+  transition: all 0.12s;
+}
+.score-cell:hover { border-color: var(--accent); }
+.score-cell.on-1 { background: #C5CDD3; color: white; }
+.score-cell.on-3 { background: #6B8AAA; color: white; }
+.score-cell.on-5 { background: var(--accent); color: white; }
+
+.evi-toggle {
+  font-size: 11px;
+  color: var(--accent);
+  cursor: pointer;
+  margin-top: 3px;
+  display: inline-block;
+}
+.evi {
+  padding: 6px 10px;
+  background: var(--paper);
+  border-left: 2px solid var(--accent);
+  font-size: 12px;
+  color: var(--muted);
+  margin: 4px 0;
+  border-radius: 0 3px 3px 0;
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+/* Cluster step */
+.k-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: var(--paper);
+  padding: 14px 18px;
+  border-radius: 6px;
+  margin: 18px 0;
+  border: 1px solid var(--rule);
+}
+.k-btn {
+  padding: 7px 18px;
+  border-radius: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  background: white;
+  border: 1px solid var(--rule-strong);
+}
+.k-btn.on { background: var(--accent); color: white; border-color: var(--accent); }
+.sil-readout {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: auto;
+  font-style: italic;
+}
+.sil-readout strong {
+  font-style: normal;
+  color: var(--ink);
+  font-size: 17px;
+  font-family: var(--sans);
+}
+
+.viz-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 18px 0;
+}
+.viz-pane h4 { font-size: 14px; margin-bottom: 4px; }
+.viz-pane .cap {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.viz-svg-wrap {
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 6px;
+}
+
+.cluster-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 13.5px;
+}
+.cluster-legend .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cluster-legend .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  padding: 0;
+  border: none;
+  cursor: default;
+  background: transparent;
+}
+.cluster-legend .row:hover { background: transparent; }
+
+/* Persona cards */
+.persona-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 28px 0;
+}
+.pcard {
+  background: white;
+  border-radius: 10px;
+  border-top: 6px solid var(--accent);
+  padding: 22px 22px 18px 22px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.pcard.layla { border-top-color: var(--layla); }
+.pcard.maryam { border-top-color: var(--maryam); }
+.pcard .lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.pcard h3 { font-size: 20px; margin-bottom: 2px; }
+.pcard .role {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.pcard .anchored {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 6px 10px;
+  background: var(--paper);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.pcard .anchored strong { color: var(--accent); }
+.pcard label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  color: var(--muted);
+  margin: 12px 0 4px 0;
+  font-weight: 700;
+}
+.pcard input[type="text"], .pcard textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #FCFAF7;
+}
+.pcard textarea { resize: vertical; min-height: 64px; line-height: 1.4; }
+.pcard input:focus, .pcard textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: white;
+}
+.pcard .quote-input {
+  font-family: var(--serif);
+  font-style: italic;
+}
+.pcard .centroid-list {
+  background: var(--paper);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 6px;
+}
+.pcard .centroid-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-size: 13px;
+}
+.pcard .centroid-row:last-child { border-bottom: none; }
+.pcard .centroid-row .vname { color: var(--ink-soft); }
+.pcard .centroid-row .vval {
+  font-family: 'Source Code Pro', 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 13px;
+}
+.pcard.layla .centroid-row .vval { color: var(--layla); }
+.pcard.maryam .centroid-row .vval { color: var(--maryam); }
+.pcard .members {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+.pcard .members strong { color: var(--accent); font-weight: 600; }
+
+/* Citation pill */
+.cit {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 1px 5px;
+  border-radius: 8px;
+  margin-left: 4px;
+  font-family: var(--sans);
+  vertical-align: super;
+  line-height: 1.4;
+  border: 1px solid rgba(44,95,124,0.15);
+}
+
+/* Glossary */
+.glossary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.gentry {
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.gentry .term-name {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 3px;
+}
+.gentry .term-def {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.gentry .term-ar {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--rule);
+  font-family: 'Amiri', 'Noto Naskh Arabic', serif;
+  font-size: 17px;
+  color: var(--accent);
+  direction: rtl;
+  text-align: right;
+}
+
+/* Pitfalls list */
+.pitfalls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.pitfall-item {
+  background: white;
+  border-left: 3px solid var(--danger);
+  padding: 12px 16px;
+  border-radius: 0 4px 4px 0;
+}
+.pitfall-item h4 {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.pitfall-item p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* References */
+.refs { margin: 24px 0; font-size: 13.5px; }
+.refs p {
+  margin: 0 0 10px 0;
+  padding-left: 22px;
+  text-indent: -22px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.refs p strong { color: var(--ink); }
+
+/* Footer */
+.colophon {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  color: var(--faint);
+  font-family: var(--serif);
+  font-style: italic;
+  text-align: center;
+}
+.colophon a { color: var(--muted); border-bottom-color: var(--rule-strong); }
+
+/* SVG axis common styling */
+svg .axis { stroke: var(--muted); stroke-width: 1; }
+svg .grid { stroke: var(--rule); stroke-width: 0.5; stroke-dasharray: 2,2; }
+svg .axis-label { font-size: 11px; fill: var(--muted); font-family: var(--sans); }
+svg .tick-label { font-size: 9.5px; fill: var(--faint); font-family: var(--sans); }
+svg text { user-select: none; }
+
+@media (max-width: 800px) {
+  .transcripts, .bridge-two, .persona-two, .viz-two { grid-template-columns: 1fr; }
+  .cd-row { grid-template-columns: 1fr; gap: 8px; }
+  .page { padding: 28px 18px 80px 18px; }
+  .masthead h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .ribbon-left { font-size: 12px; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ribbon">
+  <div class="ribbon-inner">
+    <div class="ribbon-left">
+      <strong>COMP322 · Personas walkthrough</strong>
+      <span style="opacity:0.75;">An interactive companion to the handbook</span>
+    </div>
+    <div>Birzeit University · Dr Hisham Ihshaish</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="masthead" id="masthead">
+    <div class="kicker">COMP322 · Interactive walkthrough</div>
+    <h1>From <em>interviews</em> to <em>personas:</em><br>the move that turns six conversations into two people.</h1>
+    <p class="standfirst">A persona is not a character you invent. It is the centroid of a cluster of real users, told as a story. This walkthrough is the methodology made operational - read six interviews, code what you hear, lift behavioural variables, score the participants, cluster them, and read each centroid as a person. Roughly one hour, end to end. Pick a project and start.</p>
+    <div class="meta">
+      <div class="meta-block"><strong>Method</strong>Cooper, Reimann, Cronin, Noessel (2014)</div>
+      <div class="meta-block"><strong>Companion to</strong>Lecture on personas, project Phase 1</div>
+      <div class="meta-block"><strong>Format</strong>Self-paced, no marks, replayable</div>
+      <div class="meta-block"><strong>Time</strong>~60 minutes per pass</div>
+    </div>
+  </div>
+
+  <div id="progress" class="progress"></div>
+
+  <div id="step-content"></div>
+
+  <div class="colophon">
+    Method following Cooper, Reimann, Cronin & Noessel (2014), <em>About Face</em>, 4th ed., Wiley, Chapter 3. Variable types: Activities, Attitudes, Aptitudes, Motivations, Skills.<br>
+    Hover any dotted term for definition and Arabic translation. Walkthrough only - no marks, no submissions.
+  </div>
+
+</div>
+
+<script>
+const DATASETS = {
+  banking: {
+    id: "banking",
+    title: "Palestinian banking app",
+    blurb: "Bank of Palestine's mobile app. Mixed user base: young professionals, older customers, students. Recurring complaints about login, transfer flows, and Arabic interface gaps.",
+    icon: "bank",
+    participants: [
+      { id: "P1", name: "Yousef", age: 34, city: "Bethlehem", role: "Engineer at a software firm" },
+      { id: "P2", name: "Layla", age: 27, city: "Hebron", role: "Mathematics teacher" },
+      { id: "P3", name: "Maryam", age: 52, city: "Nablus", role: "Pharmacist, owns a pharmacy" },
+      { id: "P4", name: "Omar", age: 31, city: "Ramallah", role: "Freelance designer" },
+      { id: "P5", name: "Hala", age: 48, city: "Jenin", role: "Schoolteacher, three children" },
+      { id: "P6", name: "Tareq", age: 29, city: "Ramallah", role: "Logistics coordinator" }
+    ],
+    transcripts: {
+      P1: [
+        { idx: 0, text: "I open the app maybe once every two weeks, mostly to check my salary landed. I prefer the branch for anything serious." },
+        { idx: 1, text: "If the login fails I just try again. It's not the end of the world. I have other things to worry about." },
+        { idx: 2, text: "English or Arabic, both fine for me. I work in English all day so I default to that." },
+        { idx: 3, text: "When my colleague had trouble transferring money I figured it out for him. The flow is not great but it's not impossible if you know what you're looking for." }
+      ],
+      P2: [
+        { idx: 0, text: "I use it every single day. Salary day, bills, splitting expenses with my sister. It's my main bank." },
+        { idx: 1, text: "When the app freezes during a transfer I lose my mind. I just typed all those numbers, why would you reset me to the start?" },
+        { idx: 2, text: "I'll use English because half the buttons in Arabic are translated badly. 'Confirm' becomes something that doesn't quite mean confirm." },
+        { idx: 3, text: "I never ask anyone for help. If the app is broken, the app is broken. I'll figure it out or complain on Twitter." }
+      ],
+      P3: [
+        { idx: 0, text: "I avoid the app honestly. I go to the branch. The young woman at the desk knows me, she handles everything." },
+        { idx: 1, text: "When I do open it, my son is usually next to me. He taps the buttons. I just want to see the balance." },
+        { idx: 2, text: "Arabic only. The English makes me nervous, I might press the wrong thing and send my money somewhere." },
+        { idx: 3, text: "Last month I tried to transfer money to my supplier. I gave up and called my son. He did it in two minutes on his phone." }
+      ],
+      P4: [
+        { idx: 0, text: "I'm in the app constantly. I invoice clients abroad, I need to see incoming wires the moment they hit." },
+        { idx: 1, text: "The transfer screen has this delay before the confirm button responds. It drives me insane. I want speed." },
+        { idx: 2, text: "I switch the language to English the first time I install any app. Arabic UI is hit or miss." },
+        { idx: 3, text: "I don't ask anyone. If something is wrong I will read every menu until I find it. Or I switch banks." }
+      ],
+      P5: [
+        { idx: 0, text: "I check it maybe twice a month. Rent day and salary day. The rest of the time I don't think about money on the app." },
+        { idx: 1, text: "It's slow but I'm patient. I'll wait. My phone is old anyway, everything is slow." },
+        { idx: 2, text: "Arabic, definitely. I read English but the financial words confuse me. 'Beneficiary'? What is that?" },
+        { idx: 3, text: "My daughter set it up for me. When something breaks she fixes it. Otherwise I'd never figure it out." }
+      ],
+      P6: [
+        { idx: 0, text: "Daily. Multiple times a day actually. I track every transaction the moment it happens." },
+        { idx: 1, text: "If the app shows a spinner for more than three seconds I'm already swearing at my phone." },
+        { idx: 2, text: "English is faster for me. Arabic translations are clunky and sometimes wrong." },
+        { idx: 3, text: "I solve my own problems. I read the help articles, I email support if I have to, but I do not ask family for tech help." }
+      ]
+    },
+    codes: [
+      { id: "FREQ_HIGH", label: "Uses app very frequently", type: "Activities", variable: "Login frequency", score: 5 },
+      { id: "FREQ_MED",  label: "Uses app occasionally",   type: "Activities", variable: "Login frequency", score: 3 },
+      { id: "FREQ_LOW",  label: "Uses app rarely",         type: "Activities", variable: "Login frequency", score: 1 },
+      { id: "FRIC_LOW",  label: "Low tolerance for friction", type: "Attitudes", variable: "Tolerance for friction", score: 1 },
+      { id: "FRIC_MED",  label: "Some tolerance for friction", type: "Attitudes", variable: "Tolerance for friction", score: 3 },
+      { id: "FRIC_HIGH", label: "Accepts delays patiently", type: "Attitudes", variable: "Tolerance for friction", score: 5 },
+      { id: "SELF_HIGH", label: "Solves problems alone", type: "Aptitudes", variable: "Self-reliance", score: 5 },
+      { id: "SELF_MED",  label: "Sometimes asks for help", type: "Aptitudes", variable: "Self-reliance", score: 3 },
+      { id: "SELF_LOW",  label: "Relies on family member", type: "Aptitudes", variable: "Self-reliance", score: 1 },
+      { id: "CTRL_HIGH", label: "Wants direct control of finances", type: "Motivations", variable: "Need for direct control", score: 5 },
+      { id: "CTRL_MED",  label: "Mixed: app and branch", type: "Motivations", variable: "Need for direct control", score: 3 },
+      { id: "CTRL_LOW",  label: "Prefers branch or delegate", type: "Motivations", variable: "Need for direct control", score: 1 },
+      { id: "EN_HIGH",   label: "Comfortable with English UI", type: "Skills", variable: "English UI comfort", score: 5 },
+      { id: "EN_MED",    label: "Bilingual, uses either", type: "Skills", variable: "English UI comfort", score: 3 },
+      { id: "EN_LOW",    label: "Needs Arabic UI", type: "Skills", variable: "English UI comfort", score: 1 }
+    ],
+    groundTruth: {
+      P1: { 0: "FREQ_MED", 1: "FRIC_HIGH", 2: "EN_MED",  3: "SELF_MED" },
+      P2: { 0: "FREQ_HIGH", 1: "FRIC_LOW", 2: "EN_HIGH", 3: "SELF_HIGH" },
+      P3: { 0: "FREQ_LOW", 1: "SELF_LOW",  2: "EN_LOW",  3: "CTRL_LOW" },
+      P4: { 0: "FREQ_HIGH", 1: "FRIC_LOW", 2: "EN_HIGH", 3: "SELF_HIGH" },
+      P5: { 0: "FREQ_LOW", 1: "FRIC_HIGH", 2: "EN_LOW",  3: "SELF_LOW" },
+      P6: { 0: "FREQ_HIGH", 1: "FRIC_LOW", 2: "EN_HIGH", 3: "SELF_HIGH" }
+    },
+    variables: [
+      { name: "Login frequency",          type: "Activities" },
+      { name: "Tolerance for friction",   type: "Attitudes" },
+      { name: "Self-reliance",            type: "Aptitudes" },
+      { name: "Need for direct control",  type: "Motivations" },
+      { name: "English UI comfort",       type: "Skills" }
+    ],
+    expectedScores: {
+      P1: { "Login frequency": 3, "Tolerance for friction": 5, "Self-reliance": 3, "Need for direct control": 3, "English UI comfort": 3 },
+      P2: { "Login frequency": 5, "Tolerance for friction": 1, "Self-reliance": 5, "Need for direct control": 5, "English UI comfort": 5 },
+      P3: { "Login frequency": 1, "Tolerance for friction": 3, "Self-reliance": 1, "Need for direct control": 1, "English UI comfort": 1 },
+      P4: { "Login frequency": 5, "Tolerance for friction": 1, "Self-reliance": 5, "Need for direct control": 5, "English UI comfort": 5 },
+      P5: { "Login frequency": 1, "Tolerance for friction": 5, "Self-reliance": 1, "Need for direct control": 1, "English UI comfort": 1 },
+      P6: { "Login frequency": 5, "Tolerance for friction": 1, "Self-reliance": 5, "Need for direct control": 5, "English UI comfort": 5 }
+    },
+    personaDrafts: {
+      A: {
+        name: "Layla",
+        age: 28,
+        role: "Engaged power user",
+        quote: "If the app freezes during a transfer I lose my mind.",
+        anchorParticipant: "P2",
+        description: "Daily user who treats the app as her primary bank. Impatient with friction, self-sufficient, comfortable in English. Wants speed and control."
+      },
+      B: {
+        name: "Maryam",
+        age: 50,
+        role: "Cautious delegator",
+        quote: "I gave up and called my son. He did it in two minutes.",
+        anchorParticipant: "P3",
+        description: "Rare app user who prefers the branch. Asks family for help, depends on Arabic UI, more comfortable with cash than digital transfers."
+      }
+    }
+  },
+
+  ritaj: {
+    id: "ritaj",
+    title: "Ritaj course registration",
+    blurb: "Birzeit University's Ritaj portal during the busy registration window. Students struggle with overloaded servers, schedule conflicts, prerequisite checking, and section availability.",
+    icon: "book",
+    participants: [
+      { id: "P1", name: "Nour", age: 19, city: "Birzeit campus", role: "Second-year, biology" },
+      { id: "P2", name: "Saeed", age: 22, city: "Ramallah", role: "Fourth-year, computer science" },
+      { id: "P3", name: "Raghad", age: 18, city: "Salfit", role: "First-year, business" },
+      { id: "P4", name: "Karim", age: 21, city: "Ramallah", role: "Third-year, electrical engineering" },
+      { id: "P5", name: "Dina", age: 20, city: "Jericho", role: "Second-year, English literature" },
+      { id: "P6", name: "Bashar", age: 23, city: "Birzeit", role: "Fifth-year, civil engineering" }
+    ],
+    transcripts: {
+      P1: [
+        { idx: 0, text: "I check Ritaj a couple of times during registration week. I know my schedule already so I just click and confirm." },
+        { idx: 1, text: "When the page is slow I just wait. Everyone is registering at the same time, what do you expect." },
+        { idx: 2, text: "My older sister helped me last semester. This time I did it on my own but I called her to double-check." },
+        { idx: 3, text: "I prefer Arabic. The English version has weird translations for course statuses." }
+      ],
+      P2: [
+        { idx: 0, text: "I'm on Ritaj every day during registration week. Refreshing, watching for sections to open." },
+        { idx: 1, text: "If a page takes more than five seconds I open another tab. I will not sit there waiting." },
+        { idx: 2, text: "I help my classmates with Ritaj problems. I know every quirk of that system by now." },
+        { idx: 3, text: "English. Always. The Arabic interface mixes up course codes sometimes, I don't trust it." }
+      ],
+      P3: [
+        { idx: 0, text: "I logged in maybe three times total during registration. My academic advisor told me what to pick." },
+        { idx: 1, text: "The error messages are scary. I read them, I don't understand, I close the page and ask someone." },
+        { idx: 2, text: "I always call my advisor or my cousin who's a senior. I'm not going to break something by clicking the wrong thing." },
+        { idx: 3, text: "Arabic, please. English makes me anxious for something this important." }
+      ],
+      P4: [
+        { idx: 0, text: "I'm constantly on Ritaj. Five times a day during registration. I want every section locked the moment it opens." },
+        { idx: 1, text: "The lag is unbearable. I built scripts to refresh the page faster, I shouldn't have to do that." },
+        { idx: 2, text: "I figure everything out myself. I've read every Ritaj announcement, every FAQ." },
+        { idx: 3, text: "English UI. The Arabic translation of engineering courses is sometimes ambiguous." }
+      ],
+      P5: [
+        { idx: 0, text: "I log in once or twice. I know what I'm taking, I register, I leave." },
+        { idx: 1, text: "If it's slow I close it and try again later. I don't have time to sit there." },
+        { idx: 2, text: "My roommate helped me my first year. Now I do it alone but I'm not really an expert." },
+        { idx: 3, text: "Arabic. My English is fine for literature but registration jargon is a different thing." }
+      ],
+      P6: [
+        { idx: 0, text: "Many times a day during registration. I've done this for five years, I know exactly when sections open." },
+        { idx: 1, text: "Slow loads are the worst. I miss sections because of latency. I lose minutes that decide my schedule." },
+        { idx: 2, text: "I do everything myself. Younger students ask me for help, not the other way around." },
+        { idx: 3, text: "English. Faster and more reliable for me." }
+      ]
+    },
+    codes: [
+      { id: "FREQ_HIGH", label: "Checks Ritaj many times daily", type: "Activities", variable: "Ritaj usage frequency", score: 5 },
+      { id: "FREQ_MED",  label: "Checks a few times per week",  type: "Activities", variable: "Ritaj usage frequency", score: 3 },
+      { id: "FREQ_LOW",  label: "Logs in only when necessary",  type: "Activities", variable: "Ritaj usage frequency", score: 1 },
+      { id: "PAT_LOW",   label: "Impatient with slow pages",    type: "Attitudes", variable: "Patience with slowness", score: 1 },
+      { id: "PAT_MED",   label: "Mild tolerance for delays",    type: "Attitudes", variable: "Patience with slowness", score: 3 },
+      { id: "PAT_HIGH",  label: "Accepts slowness without stress", type: "Attitudes", variable: "Patience with slowness", score: 5 },
+      { id: "SELF_HIGH", label: "Figures it out alone",          type: "Aptitudes", variable: "Self-reliance on Ritaj", score: 5 },
+      { id: "SELF_MED",  label: "Occasionally asks a peer",      type: "Aptitudes", variable: "Self-reliance on Ritaj", score: 3 },
+      { id: "SELF_LOW",  label: "Defers to advisor or family",   type: "Aptitudes", variable: "Self-reliance on Ritaj", score: 1 },
+      { id: "CTRL_HIGH", label: "Wants to lock schedule first",  type: "Motivations", variable: "Drive to optimise schedule", score: 5 },
+      { id: "CTRL_MED",  label: "Plans normally, follows guidance", type: "Motivations", variable: "Drive to optimise schedule", score: 3 },
+      { id: "CTRL_LOW",  label: "Picks what advisor suggests",   type: "Motivations", variable: "Drive to optimise schedule", score: 1 },
+      { id: "EN_HIGH",   label: "Prefers English Ritaj UI",      type: "Skills", variable: "English UI comfort", score: 5 },
+      { id: "EN_MED",    label: "Uses either Arabic or English", type: "Skills", variable: "English UI comfort", score: 3 },
+      { id: "EN_LOW",    label: "Needs Arabic for clarity",      type: "Skills", variable: "English UI comfort", score: 1 }
+    ],
+    groundTruth: {
+      P1: { 0: "FREQ_MED", 1: "PAT_HIGH", 2: "SELF_MED", 3: "EN_LOW" },
+      P2: { 0: "FREQ_HIGH", 1: "PAT_LOW", 2: "SELF_HIGH", 3: "EN_HIGH" },
+      P3: { 0: "FREQ_LOW", 1: "SELF_LOW", 2: "SELF_LOW", 3: "EN_LOW" },
+      P4: { 0: "FREQ_HIGH", 1: "PAT_LOW", 2: "SELF_HIGH", 3: "EN_HIGH" },
+      P5: { 0: "FREQ_LOW", 1: "PAT_HIGH", 2: "SELF_MED", 3: "EN_LOW" },
+      P6: { 0: "FREQ_HIGH", 1: "PAT_LOW", 2: "SELF_HIGH", 3: "EN_HIGH" }
+    },
+    variables: [
+      { name: "Ritaj usage frequency",       type: "Activities" },
+      { name: "Patience with slowness",      type: "Attitudes" },
+      { name: "Self-reliance on Ritaj",      type: "Aptitudes" },
+      { name: "Drive to optimise schedule",  type: "Motivations" },
+      { name: "English UI comfort",          type: "Skills" }
+    ],
+    expectedScores: {
+      P1: { "Ritaj usage frequency": 3, "Patience with slowness": 5, "Self-reliance on Ritaj": 3, "Drive to optimise schedule": 3, "English UI comfort": 1 },
+      P2: { "Ritaj usage frequency": 5, "Patience with slowness": 1, "Self-reliance on Ritaj": 5, "Drive to optimise schedule": 5, "English UI comfort": 5 },
+      P3: { "Ritaj usage frequency": 1, "Patience with slowness": 3, "Self-reliance on Ritaj": 1, "Drive to optimise schedule": 1, "English UI comfort": 1 },
+      P4: { "Ritaj usage frequency": 5, "Patience with slowness": 1, "Self-reliance on Ritaj": 5, "Drive to optimise schedule": 5, "English UI comfort": 5 },
+      P5: { "Ritaj usage frequency": 1, "Patience with slowness": 5, "Self-reliance on Ritaj": 3, "Drive to optimise schedule": 3, "English UI comfort": 1 },
+      P6: { "Ritaj usage frequency": 5, "Patience with slowness": 1, "Self-reliance on Ritaj": 5, "Drive to optimise schedule": 5, "English UI comfort": 5 }
+    },
+    personaDrafts: {
+      A: {
+        name: "Saeed the Optimiser",
+        age: 22,
+        role: "Engaged power user",
+        quote: "If a page takes more than five seconds I open another tab.",
+        anchorParticipant: "P2",
+        description: "Lives on Ritaj during registration week. Knows every quirk of the system, helps others, refuses to wait. Prefers English UI for speed and precision."
+      },
+      B: {
+        name: "Raghad the Cautious",
+        age: 18,
+        role: "Guided novice",
+        quote: "I always call my advisor. I'm not going to break something.",
+        anchorParticipant: "P3",
+        description: "Registers a handful of times each semester, relies on advisor or family, anxious about errors, depends on the Arabic interface."
+      }
+    }
+  },
+
+  delivery: {
+    id: "delivery",
+    title: "Food delivery app",
+    blurb: "A regional food-delivery app (Talabat-style) used across Palestinian cities. Mixed user base of busy professionals, families ordering for groups, and occasional users. Pain points around payment, delivery tracking, and missing items.",
+    icon: "delivery",
+    participants: [
+      { id: "P1", name: "Rami", age: 30, city: "Ramallah", role: "Office worker, lives alone" },
+      { id: "P2", name: "Sara", age: 26, city: "Bethlehem", role: "Marketing specialist" },
+      { id: "P3", name: "Abu Khalid", age: 58, city: "Hebron", role: "Retired teacher" },
+      { id: "P4", name: "Lina", age: 28, city: "Ramallah", role: "Hospital nurse, shift worker" },
+      { id: "P5", name: "Um Ahmad", age: 45, city: "Nablus", role: "Mother of four" },
+      { id: "P6", name: "Walid", age: 32, city: "Ramallah", role: "Software developer" }
+    ],
+    transcripts: {
+      P1: [
+        { idx: 0, text: "I order maybe once a week, usually on the weekend. Not a regular thing." },
+        { idx: 1, text: "If the order is late I shrug. It comes when it comes. I'm not in a rush." },
+        { idx: 2, text: "I figure out the app fine. If something is weird I just close it and try again." },
+        { idx: 3, text: "I use the Arabic version. English works too but Arabic is fine." }
+      ],
+      P2: [
+        { idx: 0, text: "I order three or four times a week. Lunch every workday, sometimes dinner with friends." },
+        { idx: 1, text: "If the tracker stops updating I will be on the phone with support immediately. I want to know where my food is." },
+        { idx: 2, text: "I troubleshoot everything myself. I read the receipts carefully, I flag missing items, I do not ask anyone." },
+        { idx: 3, text: "English, definitely. The English version has cleaner restaurant names and clearer menus." }
+      ],
+      P3: [
+        { idx: 0, text: "I've used it twice. My nephew set it up for me. I prefer to call the restaurant directly." },
+        { idx: 1, text: "When the app asks me to confirm my card details I get nervous. I close it." },
+        { idx: 2, text: "My nephew handles it. I just tell him what I want and he places the order." },
+        { idx: 3, text: "Arabic only. I do not read English well enough for this." }
+      ],
+      P4: [
+        { idx: 0, text: "I order daily. Night shifts, I need food at strange hours, the app saves me." },
+        { idx: 1, text: "If the driver is late and the tracker is wrong I am furious. I need food in a specific window or I miss it." },
+        { idx: 2, text: "I solve my own problems with the app. I am quick and I do not have time to ask anyone." },
+        { idx: 3, text: "English UI. Faster and the search works better." }
+      ],
+      P5: [
+        { idx: 0, text: "Maybe twice a month, on a busy day. Mostly I cook for the family." },
+        { idx: 1, text: "Late food is fine, the kids will wait. I'm patient about these things." },
+        { idx: 2, text: "My oldest daughter orders for the family. She's better with the app than I am." },
+        { idx: 3, text: "Arabic. I need to read the menu carefully and English food names confuse me." }
+      ],
+      P6: [
+        { idx: 0, text: "I order four or five times a week. Cooking is not my thing." },
+        { idx: 1, text: "If anything in the app is slow or broken I notice within seconds and complain." },
+        { idx: 2, text: "I solve my own issues. I am a developer, I know how apps work." },
+        { idx: 3, text: "English UI. Always. Arabic translations of menus are sometimes funny." }
+      ]
+    },
+    codes: [
+      { id: "FREQ_HIGH", label: "Orders almost daily", type: "Activities", variable: "Ordering frequency", score: 5 },
+      { id: "FREQ_MED",  label: "Orders once a week",  type: "Activities", variable: "Ordering frequency", score: 3 },
+      { id: "FREQ_LOW",  label: "Rarely orders",       type: "Activities", variable: "Ordering frequency", score: 1 },
+      { id: "PAT_LOW",   label: "Cannot tolerate late or wrong orders", type: "Attitudes", variable: "Tolerance for delays", score: 1 },
+      { id: "PAT_MED",   label: "Mild tolerance for delays",            type: "Attitudes", variable: "Tolerance for delays", score: 3 },
+      { id: "PAT_HIGH",  label: "Patient with the process",             type: "Attitudes", variable: "Tolerance for delays", score: 5 },
+      { id: "SELF_HIGH", label: "Solves problems alone",   type: "Aptitudes", variable: "Self-reliance", score: 5 },
+      { id: "SELF_MED",  label: "Sometimes asks a peer",   type: "Aptitudes", variable: "Self-reliance", score: 3 },
+      { id: "SELF_LOW",  label: "Lets family handle it",   type: "Aptitudes", variable: "Self-reliance", score: 1 },
+      { id: "CTRL_HIGH", label: "Wants speed and full control", type: "Motivations", variable: "Need for control", score: 5 },
+      { id: "CTRL_MED",  label: "Mixed, app and phone",          type: "Motivations", variable: "Need for control", score: 3 },
+      { id: "CTRL_LOW",  label: "Prefers phone calls or family", type: "Motivations", variable: "Need for control", score: 1 },
+      { id: "EN_HIGH",   label: "Prefers English UI",            type: "Skills", variable: "English UI comfort", score: 5 },
+      { id: "EN_MED",    label: "Bilingual, uses either",        type: "Skills", variable: "English UI comfort", score: 3 },
+      { id: "EN_LOW",    label: "Needs Arabic UI",               type: "Skills", variable: "English UI comfort", score: 1 }
+    ],
+    groundTruth: {
+      P1: { 0: "FREQ_MED", 1: "PAT_HIGH", 2: "SELF_MED", 3: "EN_MED" },
+      P2: { 0: "FREQ_HIGH", 1: "PAT_LOW", 2: "SELF_HIGH", 3: "EN_HIGH" },
+      P3: { 0: "FREQ_LOW", 1: "SELF_LOW", 2: "SELF_LOW", 3: "EN_LOW" },
+      P4: { 0: "FREQ_HIGH", 1: "PAT_LOW", 2: "SELF_HIGH", 3: "EN_HIGH" },
+      P5: { 0: "FREQ_LOW", 1: "PAT_HIGH", 2: "SELF_LOW", 3: "EN_LOW" },
+      P6: { 0: "FREQ_HIGH", 1: "PAT_LOW", 2: "SELF_HIGH", 3: "EN_HIGH" }
+    },
+    variables: [
+      { name: "Ordering frequency",   type: "Activities" },
+      { name: "Tolerance for delays", type: "Attitudes" },
+      { name: "Self-reliance",        type: "Aptitudes" },
+      { name: "Need for control",     type: "Motivations" },
+      { name: "English UI comfort",   type: "Skills" }
+    ],
+    expectedScores: {
+      P1: { "Ordering frequency": 3, "Tolerance for delays": 5, "Self-reliance": 3, "Need for control": 3, "English UI comfort": 3 },
+      P2: { "Ordering frequency": 5, "Tolerance for delays": 1, "Self-reliance": 5, "Need for control": 5, "English UI comfort": 5 },
+      P3: { "Ordering frequency": 1, "Tolerance for delays": 3, "Self-reliance": 1, "Need for control": 1, "English UI comfort": 1 },
+      P4: { "Ordering frequency": 5, "Tolerance for delays": 1, "Self-reliance": 5, "Need for control": 5, "English UI comfort": 5 },
+      P5: { "Ordering frequency": 1, "Tolerance for delays": 5, "Self-reliance": 1, "Need for control": 1, "English UI comfort": 1 },
+      P6: { "Ordering frequency": 5, "Tolerance for delays": 1, "Self-reliance": 5, "Need for control": 5, "English UI comfort": 5 }
+    },
+    personaDrafts: {
+      A: {
+        name: "Sara the Power Orderer",
+        age: 27,
+        role: "Engaged power user",
+        quote: "If the tracker stops updating I will be on the phone with support immediately.",
+        anchorParticipant: "P2",
+        description: "Orders multiple times a week, intolerant of friction, troubleshoots alone, prefers English UI. Wants tight tracking and fast resolution of any issue."
+      },
+      B: {
+        name: "Abu Khalid the Reluctant",
+        age: 58,
+        role: "Reluctant occasional user",
+        quote: "My nephew handles it. I just tell him what I want.",
+        anchorParticipant: "P3",
+        description: "Rarely uses the app, prefers calling the restaurant directly, asks family for help, needs Arabic UI, nervous about card details."
+      }
+    }
+  }
+};
+
+function standardise(matrix) {
+  const n = matrix.length, d = matrix[0].length;
+  const means = new Array(d).fill(0), sds = new Array(d).fill(0);
+  for (let j = 0; j < d; j++) {
+    for (let i = 0; i < n; i++) means[j] += matrix[i][j];
+    means[j] /= n;
+    for (let i = 0; i < n; i++) sds[j] += (matrix[i][j] - means[j]) ** 2;
+    sds[j] = Math.sqrt(sds[j] / n) || 1;
+  }
+  return matrix.map(row => row.map((v, j) => (v - means[j]) / sds[j]));
+}
+function euclidean(a, b) { let s = 0; for (let i = 0; i < a.length; i++) s += (a[i] - b[i]) ** 2; return Math.sqrt(s); }
+function kmeans(points, K, maxIter = 100, seed = 7) {
+  const n = points.length, d = points[0].length;
+  let rng = seed;
+  const rand = () => { rng = (rng * 9301 + 49297) % 233280; return rng / 233280; };
+  const centroids = [];
+  centroids.push([...points[Math.floor(rand() * n)]]);
+  while (centroids.length < K) {
+    const distSq = points.map(p => {
+      let best = Infinity;
+      for (const c of centroids) { const ds = euclidean(p, c) ** 2; if (ds < best) best = ds; }
+      return best;
+    });
+    const total = distSq.reduce((s, v) => s + v, 0);
+    if (total === 0) { centroids.push([...points[Math.floor(rand() * n)]]); continue; }
+    let r = rand() * total, chosen = 0;
+    for (let i = 0; i < n; i++) { r -= distSq[i]; if (r <= 0) { chosen = i; break; } }
+    centroids.push([...points[chosen]]);
+  }
+  let assignments = new Array(n).fill(0);
+  for (let iter = 0; iter < maxIter; iter++) {
+    let changed = false;
+    for (let i = 0; i < n; i++) {
+      let best = 0, bestD = Infinity;
+      for (let k = 0; k < K; k++) {
+        const dist = euclidean(points[i], centroids[k]);
+        if (dist < bestD) { bestD = dist; best = k; }
+      }
+      if (assignments[i] !== best) { assignments[i] = best; changed = true; }
+    }
+    for (let k = 0; k < K; k++) {
+      const members = points.filter((_, i) => assignments[i] === k);
+      if (members.length === 0) continue;
+      for (let j = 0; j < d; j++) {
+        centroids[k][j] = members.reduce((sum, p) => sum + p[j], 0) / members.length;
+      }
+    }
+    if (!changed) break;
+  }
+  return { assignments, centroids };
+}
+function silhouette(points, assignments, K) {
+  const n = points.length;
+  if (K < 2) return 0;
+  let total = 0, counted = 0;
+  for (let i = 0; i < n; i++) {
+    const own = assignments[i];
+    const ownMembers = points.filter((_, j) => assignments[j] === own && j !== i);
+    if (ownMembers.length === 0) continue;
+    const a = ownMembers.reduce((s, p) => s + euclidean(points[i], p), 0) / ownMembers.length;
+    let b = Infinity;
+    for (let k = 0; k < K; k++) {
+      if (k === own) continue;
+      const otherMembers = points.filter((_, j) => assignments[j] === k);
+      if (otherMembers.length === 0) continue;
+      const meanDist = otherMembers.reduce((s, p) => s + euclidean(points[i], p), 0) / otherMembers.length;
+      if (meanDist < b) b = meanDist;
+    }
+    if (b === Infinity) continue;
+    total += (b - a) / Math.max(a, b);
+    counted++;
+  }
+  return counted > 0 ? total / counted : 0;
+}
+function matVec(M, v) { const n = M.length; const out = new Array(n).fill(0); for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) out[i] += M[i][j] * v[j]; return out; }
+function vecNorm(v) { return Math.sqrt(v.reduce((s, x) => s + x * x, 0)); }
+function vecScale(v, c) { return v.map(x => x * c); }
+function dot(a, b) { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }
+function powerIteration(M) {
+  const n = M.length;
+  let v = new Array(n).fill(0).map((_, i) => Math.sin(i + 1));
+  v = vecScale(v, 1 / vecNorm(v));
+  let lambda = 0;
+  for (let iter = 0; iter < 500; iter++) {
+    const Mv = matVec(M, v);
+    const norm = vecNorm(Mv);
+    if (norm < 1e-12) return { value: 0, vector: v };
+    const vNew = vecScale(Mv, 1 / norm);
+    const lambdaNew = dot(vNew, matVec(M, vNew));
+    if (Math.abs(lambdaNew - lambda) < 1e-9) return { value: lambdaNew, vector: vNew };
+    v = vNew; lambda = lambdaNew;
+  }
+  return { value: lambda, vector: v };
+}
+function deflate(M, lambda, v) { return M.map((row, i) => row.map((m, j) => m - lambda * v[i] * v[j])); }
+function pca2D(matrix) {
+  const n = matrix.length, d = matrix[0].length;
+  const means = new Array(d).fill(0);
+  for (let j = 0; j < d; j++) { for (let i = 0; i < n; i++) means[j] += matrix[i][j]; means[j] /= n; }
+  const centred = matrix.map(row => row.map((v, j) => v - means[j]));
+  const cov = [];
+  for (let i = 0; i < d; i++) {
+    cov[i] = [];
+    for (let j = 0; j < d; j++) {
+      let s = 0;
+      for (let k = 0; k < n; k++) s += centred[k][i] * centred[k][j];
+      cov[i][j] = s / Math.max(n - 1, 1);
+    }
+  }
+  const trace = cov.reduce((s, r, i) => s + r[i], 0);
+  const pc1 = powerIteration(cov);
+  const cov2 = deflate(cov, pc1.value, pc1.vector);
+  const pc2 = powerIteration(cov2);
+  const projected = centred.map(row => [dot(row, pc1.vector), dot(row, pc2.vector)]);
+  const varExplained = [pc1.value / (trace || 1), pc2.value / (trace || 1)];
+  return { projected, varExplained };
+}
+
+const STATE = {
+  step: 0,
+  projectId: null,
+  codeMode: "drag",
+  assignments: {},
+  freeText: {},
+  bankPicks: {},
+  scoresOverride: {},
+  K: 2,
+  personaEdits: {},
+  expandedEvidence: {}
+};
+
+const STEPS = [
+  { id: "intro", num: "i", label: "Start" },
+  { id: "interviews", num: "ii", label: "Listen" },
+  { id: "coding", num: "iii", label: "Code" },
+  { id: "bridge", num: "iv", label: "Where clustering lives" },
+  { id: "variables", num: "v", label: "Variables" },
+  { id: "scoring", num: "vi", label: "Score" },
+  { id: "cluster", num: "vii", label: "Cluster" },
+  { id: "personas", num: "viii", label: "Personas" },
+  { id: "reflect", num: "ix", label: "Reference" }
+];
+
+function P() { return STATE.projectId ? DATASETS[STATE.projectId] : null; }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+function term(text, def, arabic) {
+  return `<span class="term">${esc(text)}<span class="tip">${esc(def)}<span class="ar">${esc(arabic)}</span></span></span>`;
+}
+
+function renderProgress() {
+  const el = document.getElementById("progress");
+  el.innerHTML = '<div class="progress-inner">' + STEPS.map((s, i) => {
+    const cls = i === STATE.step ? "active" : (i < STATE.step ? "done" : "");
+    return `<span class="dot ${cls}" onclick="setStep(${i})"><span class="roman">${s.num}</span>${esc(s.label)}</span>`;
+  }).join("") + '</div>';
+}
+
+function setStep(n) {
+  STATE.step = Math.max(0, Math.min(STEPS.length - 1, n));
+  renderProgress();
+  renderStep();
+  const mh = document.getElementById("masthead");
+  if (mh) mh.style.display = STATE.step === 0 ? "block" : "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function nav(canForward = true, label = "Next", hint = "") {
+  const back = STATE.step > 0 ? `<button onclick="setStep(STATE.step - 1)">&larr; Back</button>` : `<span></span>`;
+  const fwd = STATE.step < STEPS.length - 1
+    ? `<button class="primary" onclick="setStep(STATE.step + 1)" ${canForward ? "" : "disabled"}>${esc(label)} &rarr;</button>`
+    : `<button class="primary" onclick="setStep(0)">Start again</button>`;
+  const hintHtml = hint ? `<span class="next-hint">${esc(hint)}</span>` : '';
+  return `<div class="nav-row">${back}${hintHtml}${fwd}</div>`;
+}
+
+function effectiveAssignment(pid, idx) {
+  const p = P();
+  if (STATE.codeMode === "drag" && STATE.assignments[p.id]?.[`${pid}_${idx}`]) return STATE.assignments[p.id][`${pid}_${idx}`];
+  if (STATE.codeMode === "bank" && STATE.bankPicks[p.id]?.[`${pid}_${idx}`]) return STATE.bankPicks[p.id][`${pid}_${idx}`];
+  return null;
+}
+
+function effectiveScores() {
+  const p = P();
+  const result = {};
+  p.participants.forEach(pp => {
+    result[pp.id] = {};
+    p.variables.forEach(v => {
+      const override = STATE.scoresOverride[pp.id]?.[v.name];
+      result[pp.id][v.name] = override !== undefined ? override : p.expectedScores[pp.id][v.name];
+    });
+  });
+  return result;
+}
+
+function renderStep() {
+  const id = STEPS[STATE.step].id;
+  const el = document.getElementById("step-content");
+  if (id === "intro") renderIntro(el);
+  else if (id === "interviews") renderInterviews(el);
+  else if (id === "coding") renderCoding(el);
+  else if (id === "bridge") renderBridge(el);
+  else if (id === "variables") renderVariables(el);
+  else if (id === "scoring") renderScoring(el);
+  else if (id === "cluster") renderCluster(el);
+  else if (id === "personas") renderPersonas(el);
+  else if (id === "reflect") renderReflect(el);
+}
+
+function renderIntro(el) {
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">i.</span><span class="kicker">Begin here</span></div>
+      <h2>Six people. Five variables. <em>Two personas.</em></h2>
+      <p class="lede">Pick a real local service. Walk the method end to end.</p>
+    </div>
+
+    <div class="prose">
+      <p class="dropcap">A ${term("persona", "An evidence-grounded portrait of a user pattern, distilled from cluster centroids and anchored in real interview data.", "شخصية نموذجية")} is not a character your team invents over coffee. It is the average of a group of real users on a set of meaningful behavioural axes - a ${term("centroid", "The mean position of a cluster in the variable space. Each cluster has one centroid; the persona narrative is read off it.", "مركز العنقود")} told as a story. When a team writes a persona without doing the upstream work - the interviews, the coding, the variable identification, the clustering - they are not designing for users. They are designing for a stereotype that happens to have a name.</p>
+
+      <p>This walkthrough is the method made operational. You pick a project, listen to six interviews, code what you hear, lift the codes into behavioural variables, score every participant on every variable, cluster the participants, and read each cluster's centroid as a persona card. The full journey takes about an hour. You can run it again with a different project.</p>
+
+      <div class="callout aside">
+        <span class="lbl">Companion piece</span>
+        This walkthrough complements the handbook section on personas, scenarios and requirements (chapter xx). The handbook gives you the conceptual frame; this tool lets you do the work.
+      </div>
+
+      <h3 style="margin-top:32px;">Choose a project</h3>
+      <p>Three pre-built cases. Each has six participants and four interview excerpts each. The methodology is identical across all three; the variables, the language, and the cluster shape differ. The banking app keeps you consistent with the lecture deck. Ritaj is the closest to your own student experience. Food delivery is the most different in tone and likely to challenge any assumptions you brought.</p>
+
+      <div class="proj-grid">
+        ${Object.values(DATASETS).map(d => `
+          <div class="proj-card ${STATE.projectId === d.id ? "selected" : ""}" onclick="STATE.projectId='${d.id}'; renderStep();">
+            <div class="label">${d.icon === "bank" ? "Domain · Finance" : d.icon === "book" ? "Domain · University" : "Domain · Commerce"}</div>
+            <h3>${esc(d.title)}</h3>
+            <p class="blurb">${esc(d.blurb)}</p>
+            <p class="stat">${d.participants.length} participants &middot; ${d.codes.length} codes &middot; ${d.variables.length} behavioural variables</p>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    ${nav(!!STATE.projectId, "Begin", STATE.projectId ? "" : "Pick a project to begin")}
+  `;
+}
+
+function renderInterviews(el) {
+  const p = P();
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">ii.</span><span class="kicker">Listen first</span></div>
+      <h2>The interviews on which everything else rests.</h2>
+      <p class="lede">Bad interview, bad data, bad personas. Read these carefully.</p>
+    </div>
+
+    <div class="prose">
+      <p>You are studying the <strong>${esc(p.title)}</strong>. Six participants were interviewed for 20 to 45 minutes each on their experience of this service. Below are short excerpts from each interview, organised by participant. They are deliberately written in the participants' own voice - colloquial, particular, sometimes contradictory - because that is the texture of real qualitative data. Polished, decontextualised quotes are a sign someone has already done the interpretive work for you, which means you cannot do it yourself.</p>
+
+      <div class="callout note">
+        <span class="lbl">Stories, not opinions</span>
+        Notice that every excerpt is about something the participant <em>did</em>, not what they <em>think</em>. Hisham Ihshaish's handbook calls this the most important interviewing principle: ask about specific past experiences, not generic preferences. The reason is the 1986 Sony Walkman study - focus groups picked yellow Walkmans; almost all picked black when offered a free one on the way out. People are bad at predicting their own behaviour but excellent at remembering specific events.
+      </div>
+
+      <p>Read all six. In the next step you will tag each excerpt with a short code. The handbook recommends two pairs of eyes per interview: one to lead the questioning, one to take notes. You are getting the second pair of eyes' notes here.</p>
+
+      <div class="transcripts">
+        ${p.participants.map(pp => `
+          <div class="transcript">
+            <div class="who"><span class="pid">${pp.id}</span><span class="name">${esc(pp.name)}</span><span class="age">${pp.age}</span></div>
+            <div class="meta">${esc(pp.role)} &middot; ${esc(pp.city)}</div>
+            ${p.transcripts[pp.id].map(t => `<p class="quote" data-q="${t.idx + 1}">${esc(t.text)}</p>`).join("")}
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="callout aside">
+        <span class="lbl">Why six participants?</span>
+        Phase 1 of your team project requires at least 2 interviews (3-4 strongly recommended). Six is the smallest sample that produces a clearly visible cluster structure - the threshold below which "patterns" are guesses and above which they are evidence. Production studies typically run 8-20 interviews; the methodology is identical.
+      </div>
+    </div>
+
+    ${nav(true, "Start coding", "Next: open coding")}
+  `;
+}
+
+function renderCoding(el) {
+  const p = P();
+  if (!STATE.assignments[p.id]) STATE.assignments[p.id] = {};
+  if (!STATE.bankPicks[p.id]) STATE.bankPicks[p.id] = {};
+  if (!STATE.freeText[p.id]) STATE.freeText[p.id] = {};
+  const mode = STATE.codeMode;
+
+  const exampleEx = p.transcripts[p.participants[1].id][1];
+  const exampleCode = p.codes.find(c => c.id === p.groundTruth[p.participants[1].id][1]);
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">iii.</span><span class="kicker">First interpretive pass</span></div>
+      <h2><em>Open coding:</em> tag every excerpt with what it actually says.</h2>
+      <p class="lede">Stay close to the words. Resist the urge to theorise.</p>
+    </div>
+
+    <div class="prose">
+      <p>${term("Open coding", "The first interpretive pass over qualitative data, where each segment is labelled with a short code that captures what it reveals about behaviour, attitude, or skill. Codes stay close to participants' own words.", "الترميز المفتوح")} is the first interpretive pass over qualitative data. You read an excerpt; you give it a short label that captures the behaviour, attitude, or skill it reveals. The label is a code. Across all participants, codes that recur point to behavioural dimensions that distinguish users. That is the bridge to the next step.</p>
+
+      <div class="worked">
+        <span class="lbl">Worked example</span>
+        Consider this excerpt from <strong>${p.participants[1].id}: ${esc(p.participants[1].name)}</strong>:
+        <p class="quote">"${esc(exampleEx.text)}"</p>
+        The participant is describing a moment of frustration with friction in the system. The appropriate code is <strong>"${esc(exampleCode.label)}"</strong>. It is short, descriptive, and stays close to the participant's actual experience. It is not <em>"this app is bad"</em> (an opinion, not behaviour) and not <em>"low patience personality"</em> (a leap to traits the participant did not claim). Good codes are tight and grounded.
+      </div>
+
+      <p>Three modes are available below. Drag is fastest and produces the input the rest of the walkthrough needs. Code-bank gives you the same task with immediate correct/partial/wrong feedback per excerpt. Free-text is the hardest: you write your own codes, then compare with the expert codes the dataset ships with. Free-text mode is for practice; it does not feed into clustering.</p>
+
+      <div class="mode-bar">
+        <button class="${mode === "drag" ? "active" : ""}" onclick="STATE.codeMode='drag'; renderStep();">Drag mode<span class="desc">fast, drives the rest</span></button>
+        <button class="${mode === "bank" ? "active" : ""}" onclick="STATE.codeMode='bank'; renderStep();">Code-bank<span class="desc">with feedback</span></button>
+        <button class="${mode === "free" ? "active" : ""}" onclick="STATE.codeMode='free'; renderStep();">Free-text<span class="desc">hardest, no feedforward</span></button>
+      </div>
+
+      ${renderCodingBody(p, mode)}
+    </div>
+
+    ${nav(true, "On to clustering", "Next: where does clustering actually live?")}
+  `;
+  if (mode === "drag") attachDrag(p);
+}
+
+function renderCodingBody(p, mode) {
+  if (mode === "drag") return renderDrag(p);
+  if (mode === "bank") return renderBank(p);
+  return renderFree(p);
+}
+
+function renderDrag(p) {
+  return `
+    <div class="code-bank">
+      <div class="lbl">Drag a chip onto an excerpt &middot; the coloured stripe marks the Cooper type</div>
+      <div class="code-chips">
+        ${p.codes.map(c => `<div class="code-chip t-${c.type}" draggable="true" data-code="${c.id}" title="${esc(c.type)}">${esc(c.label)}</div>`).join("")}
+      </div>
+    </div>
+    <div class="code-legend">
+      <span><i style="background:var(--type-act);"></i>Activities</span>
+      <span><i style="background:var(--type-att);"></i>Attitudes</span>
+      <span><i style="background:var(--type-apt);"></i>Aptitudes</span>
+      <span><i style="background:var(--type-mot);"></i>Motivations</span>
+      <span><i style="background:var(--type-skl);"></i>Skills</span>
+    </div>
+    ${p.participants.map(pp => `
+      <div class="cd-section-head">
+        <span class="pid">${pp.id}</span><span class="name">${esc(pp.name)}</span>
+        <span class="meta">${esc(pp.role)}</span>
+      </div>
+      ${p.transcripts[pp.id].map(t => {
+        const assigned = STATE.assignments[p.id][`${pp.id}_${t.idx}`];
+        const code = assigned ? p.codes.find(c => c.id === assigned) : null;
+        return `
+          <div class="cd-row">
+            <span class="pid">${pp.id}.Q${t.idx + 1}</span>
+            <span class="text">"${esc(t.text)}"</span>
+            <div class="dz" data-target="${pp.id}_${t.idx}">
+              ${code ? `<span class="assigned">${esc(code.label)}<span class="x" onclick="removeAssign('${pp.id}_${t.idx}')">&times;</span></span>` : "Drop a code"}
+            </div>
+          </div>
+        `;
+      }).join("")}
+    `).join("")}
+  `;
+}
+
+function renderBank(p) {
+  const byType = {};
+  p.codes.forEach(c => { if (!byType[c.type]) byType[c.type] = []; byType[c.type].push(c); });
+  return `
+    <p>For each excerpt, pick the best-fitting code from the dropdown. Feedback appears immediately - correct (exact match), partial (right Cooper type, different specific code), or off (wrong type).</p>
+    ${p.participants.map(pp => `
+      <div class="cd-section-head"><span class="pid">${pp.id}</span><span class="name">${esc(pp.name)}</span><span class="meta">${esc(pp.role)}</span></div>
+      ${p.transcripts[pp.id].map(t => {
+        const key = `${pp.id}_${t.idx}`;
+        const picked = STATE.bankPicks[p.id][key];
+        const correct = p.groundTruth[pp.id][t.idx];
+        let fb = "";
+        if (picked) {
+          const pCode = p.codes.find(c => c.id === picked);
+          const cCode = p.codes.find(c => c.id === correct);
+          if (picked === correct) fb = `<span class="fb correct">correct</span>`;
+          else if (pCode && cCode && pCode.type === cCode.type) fb = `<span class="fb partial">right type (${pCode.type}); the closer code is "${esc(cCode.label)}"</span>`;
+          else fb = `<span class="fb wrong">off &middot; expected "${esc(cCode ? cCode.label : '')}"</span>`;
+        }
+        return `
+          <div class="cd-row">
+            <span class="pid">${pp.id}.Q${t.idx + 1}</span>
+            <span class="text">"${esc(t.text)}"${fb}</span>
+            <select onchange="STATE.bankPicks['${p.id}']['${key}']=this.value; renderStep();">
+              <option value="">- pick a code -</option>
+              ${Object.entries(byType).map(([type, list]) => `
+                <optgroup label="${esc(type)}">
+                  ${list.map(c => `<option value="${c.id}" ${picked === c.id ? "selected" : ""}>${esc(c.label)}</option>`).join("")}
+                </optgroup>
+              `).join("")}
+            </select>
+          </div>
+        `;
+      }).join("")}
+    `).join("")}
+  `;
+}
+
+function renderFree(p) {
+  return `
+    <div class="callout warn">
+      <span class="lbl">Practice only</span>
+      Free-text codes do not feed into the rest of the walkthrough. Use this mode to practise interpretation - write your code, compare with the expert code, learn the gap. Then switch back to drag or code-bank to drive the analysis forward.
+    </div>
+    ${p.participants.map(pp => `
+      <div class="cd-section-head"><span class="pid">${pp.id}</span><span class="name">${esc(pp.name)}</span><span class="meta">${esc(pp.role)}</span></div>
+      ${p.transcripts[pp.id].map(t => {
+        const key = `${pp.id}_${t.idx}`;
+        const my = STATE.freeText[p.id][key] || "";
+        const correctId = p.groundTruth[pp.id][t.idx];
+        const cCode = p.codes.find(c => c.id === correctId);
+        return `
+          <div class="cd-row">
+            <span class="pid">${pp.id}.Q${t.idx + 1}</span>
+            <span class="text">"${esc(t.text)}"</span>
+            <input type="text" value="${esc(my)}" placeholder="Your code (3-6 words)..." oninput="STATE.freeText['${p.id}']['${key}']=this.value;">
+          </div>
+          <details class="expert-disclose">
+            <summary>Show expert code</summary>
+            <div class="body">
+              Expert: <strong>${esc(cCode.label)}</strong> &nbsp;<span class="tpill ${cCode.type}">${cCode.type}</span><br>
+              <span style="color:var(--muted);font-size:12px;">Maps to behavioural variable: <em>${esc(cCode.variable)}</em></span>
+            </div>
+          </details>
+        `;
+      }).join("")}
+    `).join("")}
+  `;
+}
+
+function attachDrag(p) {
+  document.querySelectorAll(".code-chip").forEach(chip => {
+    chip.addEventListener("dragstart", e => { chip.classList.add("dragging"); e.dataTransfer.setData("text/plain", chip.dataset.code); });
+    chip.addEventListener("dragend", () => chip.classList.remove("dragging"));
+  });
+  document.querySelectorAll(".dz").forEach(zone => {
+    zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("over"); });
+    zone.addEventListener("dragleave", () => zone.classList.remove("over"));
+    zone.addEventListener("drop", e => {
+      e.preventDefault(); zone.classList.remove("over");
+      const codeId = e.dataTransfer.getData("text/plain");
+      STATE.assignments[p.id][zone.dataset.target] = codeId;
+      renderStep();
+    });
+  });
+}
+
+function removeAssign(target) {
+  const p = P();
+  delete STATE.assignments[p.id][target];
+  renderStep();
+}
+
+function renderBridge(el) {
+  const p = P();
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">iv.</span><span class="kicker">A critical clarification</span></div>
+      <h2>The single most common mistake: <em>clustering the codes</em>.</h2>
+      <p class="lede">Personas are people. The unit of clustering must also be people.</p>
+    </div>
+
+    <div class="prose">
+      <p>Stop before continuing. This step exists because at this point in every cohort, half the students start to ask the wrong question: "so now we cluster the codes, right?" If you wire the method up that way, you will end with themes ("frustration with logins", "language difficulties") which are findings about the system, not user types. Themes are useful for other research questions; they are not personas.</p>
+
+      <div class="bridge-two">
+        <div class="bridge-card wrong">
+          <span class="stamp">wrong path</span>
+          <h4>What students often imagine</h4>
+          <ol>
+            <li>Read interviews</li>
+            <li>Extract codes from excerpts</li>
+            <li><strong>Cluster the codes</strong> into themes</li>
+            <li>Each theme becomes a persona</li>
+          </ol>
+          <p class="moral">This produces <em>themes of discourse</em> - what users talk about. A theme is "users worry about logins." That is a research finding, not a person. You cannot design for a theme any more than you can design for a verb.</p>
+        </div>
+        <div class="bridge-card right">
+          <span class="stamp">cooper's method</span>
+          <h4>What actually clusters into personas</h4>
+          <ol>
+            <li>Read interviews</li>
+            <li>Extract codes from excerpts</li>
+            <li>Use codes to identify ${term("behavioural variables", "Continuous axes along which users meaningfully differ - e.g. login frequency, self-reliance. Variables are lifted from codes, then scored per participant.", "متغيرات سلوكية")} that differentiate users</li>
+            <li>Score each <strong>participant</strong> on every variable</li>
+            <li><strong>Cluster the participants</strong> on those scores</li>
+            <li>Each cluster's centroid becomes a persona</li>
+          </ol>
+          <p class="moral">Personas are <em>people</em>. The unit of clustering is therefore <em>people</em>. Codes are an intermediate step - they exist so that the right variables surface for scoring.</p>
+        </div>
+      </div>
+
+      <div class="diagnostic-sketch">
+        <svg width="100%" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg">
+          <text x="20" y="22" class="axis-label" font-weight="700" style="fill:var(--ink);">The two routes, side by side</text>
+
+          <g transform="translate(20,50)">
+            <rect x="0" y="0" width="320" height="200" rx="8" fill="#FBEAE9" stroke="#B23B3B" stroke-width="1.5" stroke-dasharray="6,4"/>
+            <text x="160" y="22" text-anchor="middle" class="axis-label" font-weight="700" fill="#B23B3B" font-size="12">clustering codes (wrong)</text>
+
+            <g transform="translate(20,40)">
+              <rect x="0" y="0" width="90" height="22" rx="11" fill="white" stroke="#B23B3B"/>
+              <text x="45" y="15" text-anchor="middle" font-size="10" fill="#B23B3B">login codes</text>
+            </g>
+            <g transform="translate(120,40)">
+              <rect x="0" y="0" width="90" height="22" rx="11" fill="white" stroke="#B23B3B"/>
+              <text x="45" y="15" text-anchor="middle" font-size="10" fill="#B23B3B">language codes</text>
+            </g>
+            <g transform="translate(220,40)">
+              <rect x="0" y="0" width="90" height="22" rx="11" fill="white" stroke="#B23B3B"/>
+              <text x="45" y="15" text-anchor="middle" font-size="10" fill="#B23B3B">help codes</text>
+            </g>
+
+            <line x1="65" y1="78" x2="65" y2="105" stroke="#B23B3B" stroke-width="1"/>
+            <line x1="165" y1="78" x2="165" y2="105" stroke="#B23B3B" stroke-width="1"/>
+            <line x1="265" y1="78" x2="265" y2="105" stroke="#B23B3B" stroke-width="1"/>
+
+            <text x="160" y="120" text-anchor="middle" font-size="11" fill="#B23B3B" font-style="italic">themes about the system</text>
+
+            <text x="160" y="155" text-anchor="middle" font-size="22" fill="#B23B3B">&ne;</text>
+            <text x="160" y="180" text-anchor="middle" font-size="12" fill="#B23B3B" font-weight="600">people you can design for</text>
+          </g>
+
+          <g transform="translate(380,50)">
+            <rect x="0" y="0" width="320" height="200" rx="8" fill="#E6F1EB" stroke="#2D7A4F" stroke-width="1.5"/>
+            <text x="160" y="22" text-anchor="middle" class="axis-label" font-weight="700" fill="#2D7A4F" font-size="12">clustering participants (right)</text>
+
+            <g transform="translate(15,40)">
+              <circle cx="14" cy="14" r="14" fill="#3A6FA0"/>
+              <text x="14" y="18" text-anchor="middle" font-size="10" fill="white" font-weight="700">P2</text>
+            </g>
+            <g transform="translate(55,46)">
+              <circle cx="14" cy="14" r="14" fill="#3A6FA0"/>
+              <text x="14" y="18" text-anchor="middle" font-size="10" fill="white" font-weight="700">P4</text>
+            </g>
+            <g transform="translate(35,80)">
+              <circle cx="14" cy="14" r="14" fill="#3A6FA0"/>
+              <text x="14" y="18" text-anchor="middle" font-size="10" fill="white" font-weight="700">P6</text>
+            </g>
+
+            <g transform="translate(200,40)">
+              <circle cx="14" cy="14" r="14" fill="#B8862F"/>
+              <text x="14" y="18" text-anchor="middle" font-size="10" fill="white" font-weight="700">P1</text>
+            </g>
+            <g transform="translate(240,46)">
+              <circle cx="14" cy="14" r="14" fill="#B8862F"/>
+              <text x="14" y="18" text-anchor="middle" font-size="10" fill="white" font-weight="700">P3</text>
+            </g>
+            <g transform="translate(220,80)">
+              <circle cx="14" cy="14" r="14" fill="#B8862F"/>
+              <text x="14" y="18" text-anchor="middle" font-size="10" fill="white" font-weight="700">P5</text>
+            </g>
+
+            <ellipse cx="50" cy="65" rx="55" ry="35" fill="none" stroke="#3A6FA0" stroke-dasharray="4,3" stroke-width="1.5"/>
+            <ellipse cx="235" cy="65" rx="55" ry="35" fill="none" stroke="#B8862F" stroke-dasharray="4,3" stroke-width="1.5"/>
+
+            <text x="50" y="125" text-anchor="middle" font-size="10" fill="#3A6FA0" font-weight="600">Cluster A</text>
+            <text x="235" y="125" text-anchor="middle" font-size="10" fill="#B8862F" font-weight="600">Cluster B</text>
+
+            <text x="160" y="155" text-anchor="middle" font-size="22" fill="#2D7A4F">=</text>
+            <text x="160" y="180" text-anchor="middle" font-size="12" fill="#2D7A4F" font-weight="600">two personas you can design for</text>
+          </g>
+        </svg>
+        <p class="cap">The same data, two different unit-of-clustering choices. The choice on the right is the only one that gives you personas.</p>
+      </div>
+
+      <div class="callout aside">
+        <span class="lbl">A useful sister method</span>
+        ${term("Affinity diagramming", "A complementary qualitative method where codes are grouped into themes on a wall of sticky notes. Useful for identifying topics, not for identifying user types.", "التخطيط التقاربي")} is the other thing students often imagine they are doing. It is also a legitimate method - it surfaces themes like "trust gaps" or "language friction" - but it answers a different question. Affinity diagramming answers <em>"what do users talk about?"</em>; persona analysis answers <em>"who are the distinct users?"</em>. Both methods can be applied to the same coded data, sequentially, for different deliverables.
+      </div>
+
+      <p>From here on, your codes are not the things being clustered. They are <em>evidence</em>. They tell you which behavioural variables actually distinguish people in this study. Then those variables are scored per participant. Then the participants are clustered. Clustering happens on a participant-by-variable matrix - <strong>${p.participants.length} rows by ${p.variables.length} columns</strong> - in the upcoming steps.</p>
+    </div>
+
+    ${nav(true, "Lift the variables", "Next: from codes to behavioural variables")}
+  `;
+}
+
+function renderVariables(el) {
+  const p = P();
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">v.</span><span class="kicker">Codes become axes</span></div>
+      <h2>The five types, and what your variables look like.</h2>
+      <p class="lede">A well-rounded persona spans Cooper's five behavioural types.</p>
+    </div>
+
+    <div class="prose">
+      <p>Codes told you what each excerpt was about. Behavioural variables are the next abstraction: continuous axes on which any participant can be placed. Where codes are categorical and tied to specific excerpts, variables are dimensions that apply to every participant whether they spoke about them or not.</p>
+
+      <p>Alan Cooper and colleagues, in <em>About Face</em> (4th edition, 2014, p. 75), argue that a sound persona analysis spans five types of behavioural variable. If all your variables fall under one type, you have measured only one slice of behaviour, and your personas will be flat - more competence ranking than character.</p>
+
+      <div class="callout note">
+        <span class="lbl">Cooper's five types &middot; Cooper et al. 2014, p. 75</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-top:6px;font-size:14px;">
+          <div><strong>Activities</strong> &middot; what people do, how often, in what volume</div>
+          <div><strong>Attitudes</strong> &middot; how people feel about it - impatient, trusting, anxious</div>
+          <div><strong>Aptitudes</strong> &middot; how capable they are - self-reliance, problem-solving</div>
+          <div><strong>Motivations</strong> &middot; why they engage at all - control, convenience, social</div>
+          <div><strong>Skills</strong> &middot; what technical abilities they bring - language, tools</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:32px;">Your variable set for this study</h3>
+      <p>Here are the ${p.variables.length} variables that emerge from the codes you have just been working with. Each variable spans one Cooper type. The right column shows the codes that feed it.</p>
+
+      <table class="vars-table">
+        <thead><tr><th style="width:130px;">Type</th><th style="width:200px;">Variable</th><th>Codes that feed this variable</th></tr></thead>
+        <tbody>
+          ${p.variables.map(v => {
+            const feed = p.codes.filter(c => c.variable === v.name);
+            return `<tr><td><span class="tpill ${v.type}">${v.type}</span></td><td><strong>${esc(v.name)}</strong></td><td style="color:var(--muted);font-size:13px;">${feed.map(c => esc(c.label)).join(" &middot; ")}</td></tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <span class="lbl">Pitfall &middot; variables that don't differentiate</span>
+        A variable on which every participant scores the same is useless for personas. It tells you about the population but cannot split it. When picking variables, the test is: <em>do participants visibly disagree on this?</em> If not, drop it. In a real Phase 1 with 2-4 interviews, you may discover that some candidate variables collapse to single values; that is signal, not noise - those are no longer differentiators in your sample.
+      </div>
+
+      <p>For Phase 1, you will typically end up with 5 to 8 variables in total. Five is the minimum to span the types; fewer and your personas will be one-dimensional. Eight and above starts to over-fit small samples.</p>
+    </div>
+
+    ${nav(true, "Score the participants", "Next: turn interviews into a matrix")}
+  `;
+}
+
+function renderScoring(el) {
+  const p = P();
+  const scores = effectiveScores();
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">vi.</span><span class="kicker">From narrative to numbers</span></div>
+      <h2>Six participants. Five variables. <em>One matrix.</em></h2>
+      <p class="lede">This is where qualitative becomes quantitative, with the evidence right there.</p>
+    </div>
+
+    <div class="prose">
+      <p>Now lift the coded interviews into a matrix. Each row is a participant; each column is a variable; each cell is a score on a 1-3-5 scale. The scale matters: 1 = low, 3 = medium, 5 = high. Three categories, no fence-sitting. The decision <em>"is this person closer to a 1 or a 5 on this variable?"</em> forces you to commit to a reading of the evidence.</p>
+
+      <div class="callout note">
+        <span class="lbl">Why 1-3-5 and not 1-5</span>
+        Reviewers and students given a 1-5 scale tend to crowd toward 3 - the safe middle. Stripping out 2 and 4 forces a directional judgement. It also makes the cluster boundaries cleaner. Cooper's original method uses continuous variables; in classroom practice, three-level scales work better and produce more discussable matrices.
+      </div>
+
+      <p>Default scores below come from the coded evidence per participant. Click any cell to override - if you read the evidence differently, your score wins. The matrix you finalise here is the one that gets clustered in the next step.</p>
+
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th style="text-align:left;">Participant</th>
+            ${p.variables.map(v => {
+              const abbr = v.type === "Activities" ? "Ac" : v.type === "Attitudes" ? "At" : v.type === "Aptitudes" ? "Ap" : v.type === "Motivations" ? "Mo" : "Sk";
+              return `<th><span class="tpill ${v.type}">${abbr}</span><span class="vname">${esc(v.name)}</span></th>`;
+            }).join("")}
+          </tr>
+        </thead>
+        <tbody>
+          ${p.participants.map(pp => {
+            const evid = STATE.expandedEvidence[pp.id];
+            return `
+              <tr>
+                <td>
+                  <strong style="font-family:var(--serif);">${pp.id}: ${esc(pp.name)}</strong><br>
+                  <span style="font-size:11px;color:var(--muted);">${esc(pp.role)}</span><br>
+                  <span class="evi-toggle" onclick="STATE.expandedEvidence['${pp.id}']=!STATE.expandedEvidence['${pp.id}']; renderStep();">${evid ? "&minus; hide" : "+ show"} evidence</span>
+                  ${evid ? p.transcripts[pp.id].map(t => `<div class="evi">"${esc(t.text.substring(0, 110))}${t.text.length > 110 ? '...' : ''}"</div>`).join("") : ""}
+                </td>
+                ${p.variables.map(v => {
+                  const s = scores[pp.id][v.name];
+                  return `<td class="cl">${[1,3,5].map(opt => `<span class="score-cell ${s === opt ? `on-${opt}` : ''}" onclick="setScore('${pp.id}','${v.name.replace(/'/g,"\\'")}',${opt})">${opt}</span>`).join("")}</td>`;
+                }).join("")}
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+
+      <div class="callout aside">
+        <span class="lbl">A point of intellectual honesty</span>
+        The 1-3-5 scores you are looking at were assigned by reading the coded excerpts carefully. They are not from a survey, not from a Likert questionnaire, not from psychometric validation. They are the result of one researcher reading one set of interviews and committing to a judgement. That is also exactly what Cooper's method asks for: it is qualitative analysis that produces quantifiable outputs, not measurement in a scientific sense. Be honest about this in your Phase 1 write-up.
+      </div>
+    </div>
+
+    ${nav(true, "Cluster the participants", "Next: the matrix becomes clusters")}
+  `;
+}
+
+function setScore(pid, vname, val) {
+  if (!STATE.scoresOverride[pid]) STATE.scoresOverride[pid] = {};
+  STATE.scoresOverride[pid][vname] = val;
+  renderStep();
+}
+
+function renderCluster(el) {
+  const p = P();
+  const scores = effectiveScores();
+  const matrix = p.participants.map(pp => p.variables.map(v => scores[pp.id][v.name]));
+  const std = standardise(matrix);
+  const K = STATE.K;
+  const result = kmeans(std, K, 100, 7);
+  const sil2 = silhouette(std, kmeans(std, 2, 100, 7).assignments, 2);
+  const sil3 = silhouette(std, kmeans(std, 3, 100, 7).assignments, 3);
+  const silCurrent = K === 2 ? sil2 : sil3;
+  const pca = pca2D(std);
+
+  STATE.lastClustering = { assignments: result.assignments, centroids: result.centroids, std };
+
+  const clusterColors = ["#3A6FA0", "#B8862F", "#2D7A4F"];
+
+  const xs = pca.projected.map(p => p[0]);
+  const ys = pca.projected.map(p => p[1]);
+  const xMin = Math.min(...xs), xMax = Math.max(...xs);
+  const yMin = Math.min(...ys), yMax = Math.max(...ys);
+  const padX = (xMax - xMin) * 0.18 || 0.5;
+  const padY = (yMax - yMin) * 0.18 || 0.5;
+  const svgW = 480, svgH = 320, margin = 42;
+  const xS = v => margin + ((v - (xMin - padX)) / ((xMax + padX) - (xMin - padX))) * (svgW - 2 * margin);
+  const yS = v => svgH - margin - ((v - (yMin - padY)) / ((yMax + padY) - (yMin - padY))) * (svgH - 2 * margin);
+
+  const groups = {};
+  p.participants.forEach((pp, i) => {
+    const key = `${pca.projected[i][0].toFixed(2)}_${pca.projected[i][1].toFixed(2)}`;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(i);
+  });
+  const jitter = new Array(p.participants.length).fill(null).map(() => ({ dx: 0, dy: 0 }));
+  Object.values(groups).forEach(grp => {
+    if (grp.length > 1) {
+      const r = 14;
+      grp.forEach((idx, j) => {
+        const angle = (j / grp.length) * Math.PI * 2 - Math.PI / 2;
+        jitter[idx] = { dx: Math.cos(angle) * r, dy: Math.sin(angle) * r };
+      });
+    }
+  });
+
+  const pcaSvg = `
+    <svg width="100%" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+      <line class="axis" x1="${margin}" y1="${svgH - margin}" x2="${svgW - margin}" y2="${svgH - margin}"/>
+      <line class="axis" x1="${margin}" y1="${margin}" x2="${margin}" y2="${svgH - margin}"/>
+      <text class="axis-label" x="${svgW / 2}" y="${svgH - 10}" text-anchor="middle">PC1 &middot; ${(pca.varExplained[0] * 100).toFixed(0)}% of variance</text>
+      <text class="axis-label" x="14" y="${svgH / 2}" text-anchor="middle" transform="rotate(-90 14 ${svgH / 2})">PC2 &middot; ${(pca.varExplained[1] * 100).toFixed(0)}%</text>
+      ${p.participants.map((pp, i) => `
+        <circle cx="${xS(pca.projected[i][0]) + jitter[i].dx}" cy="${yS(pca.projected[i][1]) + jitter[i].dy}" r="13" fill="${clusterColors[result.assignments[i]]}" stroke="white" stroke-width="2.5"/>
+        <text x="${xS(pca.projected[i][0]) + jitter[i].dx}" y="${yS(pca.projected[i][1]) + jitter[i].dy + 4}" text-anchor="middle" fill="white" font-size="10" font-weight="700">${pp.id}</text>
+      `).join("")}
+    </svg>
+  `;
+
+  const centroidVals = [...new Set(result.assignments)].sort().map(k => {
+    const realC = p.variables.map(v => {
+      const members = p.participants.filter((_, i) => result.assignments[i] === k);
+      return members.length ? members.reduce((s, pp) => s + scores[pp.id][v.name], 0) / members.length : 0;
+    });
+    return { idx: k, values: realC };
+  });
+
+  const pcW = 480, pcH = 300, pcMargin = 64, pcPad = 40;
+  const pcLeft = pcPad, pcRight = pcW - 20;
+  const pcStep = (pcRight - pcLeft) / (p.variables.length - 1);
+  const pcYTop = 30, pcYBot = pcH - pcMargin;
+  const pcY = v => pcYBot - ((v - 1) / 4) * (pcYBot - pcYTop);
+
+  const parallelSvg = `
+    <svg width="100%" viewBox="0 0 ${pcW} ${pcH}" xmlns="http://www.w3.org/2000/svg">
+      ${p.variables.map((v, j) => {
+        const cx = pcLeft + j * pcStep;
+        const words = v.name.split(" ");
+        const half = Math.ceil(words.length / 2);
+        const l1 = words.slice(0, half).join(" ");
+        const l2 = words.slice(half).join(" ");
+        return `
+          <line class="axis" x1="${cx}" y1="${pcYTop}" x2="${cx}" y2="${pcYBot}"/>
+          <text class="axis-label" x="${cx}" y="${pcYBot + 16}" text-anchor="middle" font-size="10">${esc(l1)}</text>
+          ${l2 ? `<text class="axis-label" x="${cx}" y="${pcYBot + 28}" text-anchor="middle" font-size="10">${esc(l2)}</text>` : ""}
+          ${[1,3,5].map(t => `<text class="tick-label" x="${cx - 6}" y="${pcY(t) + 3}" text-anchor="end">${t}</text>`).join("")}
+        `;
+      }).join("")}
+      ${p.participants.map((pp, i) => {
+        const pts = p.variables.map((v, j) => `${pcLeft + j * pcStep},${pcY(scores[pp.id][v.name])}`).join(" ");
+        return `<polyline points="${pts}" fill="none" stroke="${clusterColors[result.assignments[i]]}" stroke-width="1" opacity="0.35"/>`;
+      }).join("")}
+      ${centroidVals.map(cp => {
+        const pts = cp.values.map((v, j) => `${pcLeft + j * pcStep},${pcY(v)}`).join(" ");
+        return `<polyline points="${pts}" fill="none" stroke="${clusterColors[cp.idx]}" stroke-width="3"/>`;
+      }).join("")}
+    </svg>
+  `;
+
+  let silMsg;
+  if (Math.abs(sil2 - sil3) < 0.02) {
+    silMsg = `K=2 gives <strong>${sil2.toFixed(3)}</strong> and K=3 gives <strong>${sil3.toFixed(3)}</strong> - very close. When silhouettes are this similar, prefer the smaller K. Occam's razor: fewer personas, each more distinct.`;
+  } else if (sil2 > sil3) {
+    silMsg = `K=2 gives <strong>${sil2.toFixed(3)}</strong>; K=3 gives <strong>${sil3.toFixed(3)}</strong>. <strong>K=2 wins.</strong> The data does not support a third group. If you force K=3 here, you are inventing a split that does not exist.`;
+  } else {
+    silMsg = `K=2 gives <strong>${sil2.toFixed(3)}</strong>; K=3 gives <strong>${sil3.toFixed(3)}</strong>. <strong>K=3 has a higher silhouette</strong>, so a third cluster is genuinely emerging from the data. Phase 1 asks for two personas, so you will either (a) report the two most distinct of the three or (b) report all three. State your choice and the reasoning - either is defensible.`;
+  }
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">vii.</span><span class="kicker">The clustering itself</span></div>
+      <h2>Six points, two clusters - <em>visible</em>.</h2>
+      <p class="lede">k-means on the standardised matrix. The data picks the structure.</p>
+    </div>
+
+    <div class="prose">
+      <p>You now have a ${p.participants.length} by ${p.variables.length} matrix - six participants, five variables. ${term("k-means clustering", "An unsupervised algorithm that groups data points into K clusters by minimising within-cluster distance. Each cluster has a centroid - the mean of its members.", "تجميع المتوسطات K")} groups them so that participants similar across all five variables sit in the same cluster.</p>
+
+      <div class="k-controls">
+        <span style="font-size:13px;font-weight:600;">Choice of K:</span>
+        <button class="k-btn ${K === 2 ? "on" : ""}" onclick="STATE.K=2; renderStep();">K = 2</button>
+        <button class="k-btn ${K === 3 ? "on" : ""}" onclick="STATE.K=3; renderStep();">K = 3</button>
+        <span class="sil-readout">silhouette: <strong>${silCurrent.toFixed(3)}</strong></span>
+      </div>
+
+      <div class="callout note">
+        <span class="lbl">Reading the ${term("silhouette score", "A goodness-of-clustering measure between -1 and 1. Near 1: tight, well-separated clusters. Near 0: overlapping clusters. Negative: misassigned points.", "نتيجة الصورة الظلية")}</span>
+        ${silMsg}
+      </div>
+
+      <div class="viz-two">
+        <div class="viz-pane">
+          <h4>Two-dimensional projection</h4>
+          <p class="cap">All ${p.variables.length} variables reduced to two axes that capture the most variance. Overlapping points are nudged slightly so each participant is visible.</p>
+          <div class="viz-svg-wrap">${pcaSvg}</div>
+        </div>
+        <div class="viz-pane">
+          <h4>Centroid profile, all variables</h4>
+          <p class="cap">Faint lines are individual participants. Thick lines are the cluster centroids. The persona narrative comes from the thick lines.</p>
+          <div class="viz-svg-wrap">${parallelSvg}</div>
+        </div>
+      </div>
+
+      <div class="cluster-legend">
+        ${[...new Set(result.assignments)].sort().map(k => {
+          const members = p.participants.filter((_, i) => result.assignments[i] === k);
+          return `<div class="row"><span class="dot" style="background:${clusterColors[k]};"></span><strong style="font-family:var(--serif);">Cluster ${String.fromCharCode(65 + k)}</strong> &middot; ${members.map(m => m.id + " " + esc(m.name)).join(", ")}</div>`;
+        }).join("")}
+      </div>
+
+      <div class="callout pitfall">
+        <span class="lbl">Pitfall &middot; let the data pick K</span>
+        Teams sometimes decide in advance that they will produce two personas, then force K=2 regardless of what the data shows. That is letting prior beliefs pick K. The silhouette score above is for the configuration of <em>your</em> matrix - run it, read it, then justify your K with the number. In a Phase 1 with 3-4 interviews, you may not even be able to compute silhouette reliably; in that case, visually inspect the parallel-coordinates plot. Are the centroid lines clearly different across most variables? Then you have your clusters.
+      </div>
+    </div>
+
+    ${nav(true, "Draft the personas", "Next: read the centroid as a story")}
+  `;
+}
+
+function renderPersonas(el) {
+  const p = P();
+  const c = STATE.lastClustering;
+  if (!c) { setStep(6); return; }
+  const scores = effectiveScores();
+  const K = STATE.K;
+  const result = kmeans(c.std, K, 100, 7);
+
+  const clusterMeta = [];
+  const sortedClusters = [...new Set(result.assignments)].sort();
+  sortedClusters.forEach(k => {
+    const members = p.participants.filter((_, i) => result.assignments[i] === k);
+    const centroid = {};
+    p.variables.forEach(v => {
+      const sum = members.reduce((s, pp) => s + scores[pp.id][v.name], 0);
+      centroid[v.name] = members.length ? sum / members.length : 0;
+    });
+    let bestParticipant = members[0];
+    let bestDist = Infinity;
+    members.forEach(pp => {
+      let dist = 0;
+      p.variables.forEach(v => { dist += (scores[pp.id][v.name] - centroid[v.name]) ** 2; });
+      if (dist < bestDist) { bestDist = dist; bestParticipant = pp; }
+    });
+    clusterMeta.push({ k, members, centroid, anchor: bestParticipant });
+  });
+
+  if (!STATE.personaEdits[p.id]) STATE.personaEdits[p.id] = {};
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">viii.</span><span class="kicker">From centroid to character</span></div>
+      <h2>The persona card is the centroid, <em>told as a story</em>.</h2>
+      <p class="lede">Every editable line is narrative; every locked line is evidence.</p>
+    </div>
+
+    <div class="prose">
+      <p>You are now ready to draft the persona cards. Two clusters, two personas. Each card has a top half you can edit (the narrative the team will pin to the wall) and a bottom half that is locked (the evidence the narrative must remain faithful to). When the locked half and the editable half drift apart, you have invented; when they stay tied, you have synthesised.</p>
+
+      <div class="callout note">
+        <span class="lbl">Anchor &middot; the participant closest to the centroid</span>
+        For each cluster, one participant sits closest to the centroid in five-dimensional space. That participant is your <strong>anchor</strong>: the one whose quote you should use, whose lifestyle details ground the narrative, whose interview transcript you return to whenever the persona description starts to drift. The anchors are computed below and shown on each card. Note that the anchor's name may not match the persona's name - that is fine; the name is a narrative label, the anchor is data.
+      </div>
+
+      <div class="persona-two">
+        ${clusterMeta.slice(0, 2).map(cm => {
+          let draftKey = "A";
+          for (const dk of ["A", "B"]) {
+            const cd = p.personaDrafts[dk];
+            if (cd && cm.members.some(m => m.id === cd.anchorParticipant)) { draftKey = dk; break; }
+          }
+          const cardClass = draftKey === "A" ? "layla" : "maryam";
+          const draft = p.personaDrafts[draftKey] || p.personaDrafts.A;
+          const editKey = `cluster_${cm.k}`;
+          const edits = STATE.personaEdits[p.id][editKey] || {};
+          const name = edits.name !== undefined ? edits.name : draft.name;
+          const quote = edits.quote !== undefined ? edits.quote : draft.quote;
+          const description = edits.description !== undefined ? edits.description : draft.description;
+          const memberIds = cm.members.map(m => m.id).join("");
+
+          return `
+            <div class="pcard ${cardClass}">
+              <div class="lbl">Cluster ${String.fromCharCode(65 + cm.k)} &middot; ${cm.members.length} participants${memberIds ? ' <span class="cit">' + memberIds + '</span>' : ''}</div>
+              <h3>${esc(name)}</h3>
+              <p class="role">${esc(draft.role)}</p>
+              <div class="anchored">Anchored by <strong>${cm.anchor.id}: ${esc(cm.anchor.name)}</strong> &middot; ${cm.anchor.age} &middot; ${esc(cm.anchor.role)}</div>
+
+              <label>Name</label>
+              <input type="text" value="${esc(name)}" oninput="editP('${editKey}','name',this.value)">
+
+              <label>Representative quote &middot; from the anchor's interview</label>
+              <input type="text" class="quote-input" value="${esc(quote)}" oninput="editP('${editKey}','quote',this.value)">
+
+              <label>Description</label>
+              <textarea oninput="editP('${editKey}','description',this.value)">${esc(description)}</textarea>
+
+              <label>Evidence &middot; centroid profile (locked)</label>
+              <div class="centroid-list">
+                ${p.variables.map(v => {
+                  const abbr = v.type === "Activities" ? "Ac" : v.type === "Attitudes" ? "At" : v.type === "Aptitudes" ? "Ap" : v.type === "Motivations" ? "Mo" : "Sk";
+                  return `
+                  <div class="centroid-row">
+                    <span class="vname"><span class="tpill ${v.type}" style="margin-right:6px;font-size:10px;">${abbr}</span>${esc(v.name)}</span>
+                    <span class="vval">${cm.centroid[v.name].toFixed(1)} <span style="color:var(--faint);font-weight:400;font-size:11px;">/ 5</span></span>
+                  </div>
+                `;}).join("")}
+              </div>
+
+              <p class="members">Members of this cluster: ${cm.members.map(m => `<strong>${m.id}</strong> ${esc(m.name)}`).join(" &middot; ")}</p>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      ${clusterMeta.length > 2 ? `<div class="callout warn"><span class="lbl">More than two clusters present</span>Your K choice produced ${clusterMeta.length} clusters. Two are shown above. Phase 1 of the team project asks for two personas; if you genuinely have a third, decide whether to (a) merge two and report the most distinct pair, or (b) report all three and explain why. Document the decision in your write-up.</div>` : ""}
+
+      <div class="callout aside">
+        <span class="lbl">What the editable fields are for</span>
+        The name is a label your team will use in conversation - <em>"would this persona click that?"</em> The quote should come from the anchor's interview, verbatim. The description should be readable in 30 seconds and contain nothing that is not visible in either the centroid or the anchor's transcript. Anything beyond that - a fabricated backstory, a guess about family circumstances - is the moment the persona stops being evidence-grounded.
+      </div>
+    </div>
+
+    ${nav(true, "Reference & glossary", "Next: pitfalls, glossary, references")}
+  `;
+}
+
+function editP(key, field, value) {
+  const p = P();
+  if (!STATE.personaEdits[p.id][key]) STATE.personaEdits[p.id][key] = {};
+  STATE.personaEdits[p.id][key][field] = value;
+}
+
+function renderReflect(el) {
+  const p = P();
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">ix.</span><span class="kicker">Reference</span></div>
+      <h2>The journey, common mistakes, and how to <em>cite</em>.</h2>
+      <p class="lede">A short reference companion to take back into your Phase 1 work.</p>
+    </div>
+
+    <div class="prose">
+
+      <h3>The journey, laid flat</h3>
+      <p>Here is what you just did, in six lines:</p>
+      <ol style="font-size:15px;line-height:1.8;">
+        <li>Six interviews produced raw evidence about ${p.participants.length} real users.</li>
+        <li>Open coding labelled each excerpt with a short code revealing behaviour, attitude or skill.</li>
+        <li>The codes lifted into ${p.variables.length} behavioural variables spanning Cooper's five types.</li>
+        <li>Every participant was scored 1-3-5 on every variable, producing a ${p.participants.length} &times; ${p.variables.length} matrix.</li>
+        <li>The participants - not the codes - were clustered on those scores using k-means.</li>
+        <li>Each cluster's centroid became a persona card, anchored by the participant closest to it.</li>
+      </ol>
+
+      <h3 style="margin-top:32px;">Common pitfalls</h3>
+      <p>These are the mistakes that cost teams marks in past iterations of Phase 1. Pre-empt them.</p>
+
+      <div class="pitfalls">
+        <div class="pitfall-item"><h4>Clustering codes, not participants</h4><p>The mistake the bridge step exists to prevent. Codes cluster into themes (useful for other research questions); only participants cluster into personas.</p></div>
+        <div class="pitfall-item"><h4>Two variables instead of five</h4><p>Two participants can sit on top of each other on two variables and split apart on the next three. Cluster in the multi-variable space, not on the easiest-to-plot pair.</p></div>
+        <div class="pitfall-item"><h4>Letting prior beliefs pick K</h4><p>If your matrix produces K=3 with higher silhouette than K=2, accept that. Force-fitting to a pre-decided K is the persona equivalent of confirmation bias.</p></div>
+        <div class="pitfall-item"><h4>Making the persona's narrative up</h4><p>Quote, lifestyle details, frustrations should come from the anchor's transcript. If you cannot point at evidence, do not put it on the card.</p></div>
+        <div class="pitfall-item"><h4>One Cooper type, repeatedly</h4><p>Five variables all about "skill level" measure competence, not behaviour. A flat persona. Span the five types deliberately.</p></div>
+        <div class="pitfall-item"><h4>Invented personas</h4><p>"Let's say she's Sara, she's 20" is the wrong starting point. Personas come <em>from</em> data, not before it. Anchors are computed; names are chosen with care, not at random.</p></div>
+        <div class="pitfall-item"><h4>Personas as character sketches, not design tools</h4><p>The persona's purpose is to constrain design decisions. "Would this persona click this?" must be answerable from the evidence. If it is not, the persona has not earned its place on the wall.</p></div>
+        <div class="pitfall-item"><h4>Asking convenience-sample friends</h4><p>Roommates and classmates are not the user diversity Phase 1 needs. Mix year, department, device, commuting status. Different lives, different clusters.</p></div>
+      </div>
+
+      <h3 style="margin-top:32px;">Bilingual glossary</h3>
+      <p>Use these terms consistently in your write-up.</p>
+
+      <div class="glossary">
+        <div class="gentry"><div class="term-name">Persona</div><div class="term-def">An evidence-grounded portrait of a user pattern, anchored in interview data and centred on a cluster centroid.</div><div class="term-ar">شخصية نموذجية</div></div>
+        <div class="gentry"><div class="term-name">Open coding</div><div class="term-def">First-pass labelling of qualitative data with short codes that stay close to participants' own words.</div><div class="term-ar">الترميز المفتوح</div></div>
+        <div class="gentry"><div class="term-name">Behavioural variable</div><div class="term-def">A continuous axis along which users meaningfully differ. Lifted from codes; scored per participant.</div><div class="term-ar">متغير سلوكي</div></div>
+        <div class="gentry"><div class="term-name">Centroid</div><div class="term-def">The mean position of a cluster across all variables. One centroid per cluster; one persona per centroid.</div><div class="term-ar">مركز العنقود</div></div>
+        <div class="gentry"><div class="term-name">k-means</div><div class="term-def">An unsupervised algorithm that partitions data into K clusters by minimising within-cluster distance.</div><div class="term-ar">تجميع المتوسطات K</div></div>
+        <div class="gentry"><div class="term-name">Silhouette score</div><div class="term-def">A goodness-of-clustering measure between -1 and 1. Higher is tighter and better separated.</div><div class="term-ar">نتيجة الصورة الظلية</div></div>
+        <div class="gentry"><div class="term-name">Affinity diagramming</div><div class="term-def">Grouping codes into themes on a wall of stickies. Surfaces topics, not user types - a sister method to persona analysis.</div><div class="term-ar">التخطيط التقاربي</div></div>
+        <div class="gentry"><div class="term-name">Anchor participant</div><div class="term-def">The participant closest to a cluster centroid. The source of the persona's quote and lifestyle detail.</div><div class="term-ar">المشارك المرجعي</div></div>
+      </div>
+
+      <h3 style="margin-top:32px;">References</h3>
+      <div class="refs">
+        <p><strong>Cooper, A., Reimann, R., Cronin, D. and Noessel, C.</strong> (2014). <em>About Face: The Essentials of Interaction Design</em>, 4th edition. Wiley. Chapter 3 - personas, behavioural variables, and the five types.</p>
+        <p><strong>Pruitt, J. and Adlin, T.</strong> (2006). <em>The Persona Lifecycle: Keeping People in Mind Throughout Product Design</em>. Morgan Kaufmann. The classical operational guide to evidence-based personas.</p>
+        <p><strong>Rogers, Y., Sharp, H. and Preece, J.</strong> (2024). <em>Interaction Design: Beyond Human-Computer Interaction</em>, 6th edition. Wiley. The course textbook; chapter on data gathering and analysis.</p>
+        <p><strong>Goodwin, K.</strong> (2009). <em>Designing for the Digital Age: How to Create Human-Centered Products and Services</em>. Wiley. Operational follow-up to Cooper with worked examples of the clustering step.</p>
+        <p><strong>Rousseeuw, P. J.</strong> (1987). Silhouettes: a graphical aid to the interpretation and validation of cluster analysis. <em>Journal of Computational and Applied Mathematics</em>, 20, 53-65.</p>
+        <p><strong>Portigal, S.</strong> (2013). <em>Interviewing Users: How to Uncover Compelling Insights</em>. Rosenfeld Media. Stories-not-opinions interviewing technique.</p>
+      </div>
+
+    </div>
+
+    ${nav(true)}
+  `;
+}
+
+renderProgress();
+renderStep();
+</script>
+</body>
+</html>
