@@ -2352,25 +2352,40 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
 
     <p>The clearest way to see what the heuristic is doing for A* is to put A* next to an uninformed algorithm on the same problem and watch what each one expands. A grid maze makes this visible at a glance.</p>
 
-    <h4>Manhattan distance</h4>
-    <p>Before running anything, fix the heuristic. <span class="term">Manhattan distance<span class="term-tooltip">For grid cells (r, c) and (r', c'), |r &minus; r'| + |c &minus; c'|. The minimum number of horizontal-plus-vertical steps needed if there were no walls.<span class="ar">مسافة مانهاتن</span></span></span> from cell (r, c) to cell (r', c') is</p>
-    <div class="eq centered">h(r, c) = |r &minus; r'| + |c &minus; c'|</div>
-    <p>That is the number of moves you would take if you could only go horizontally and vertically and there were no obstacles. On a grid where every step costs 1, Manhattan is admissible: walls can only make a real path longer than the unobstructed count of vertical-plus-horizontal moves, never shorter. So h(n) &le; h*(n) always holds.</p>
-    <p>In the maze below, G sits at row 4, column 4. The small number written in each empty cell is its h-value, which is (4 &minus; r) + (4 &minus; c).</p>
+    <h4>Rules of the maze</h4>
+    <ul class="tight">
+      <li><strong>5 &times; 5 grid.</strong> S sits in the top-left cell (row 0, column 0); G sits in the bottom-right cell (row 4, column 4).</li>
+      <li><strong>Walls (dark navy squares) are blocked.</strong> The agent cannot enter, leave through, or pass over them. They are not just unexplored, they are <em>unavailable</em> as states. The walls in rows 1 and 3 split the maze into three vertical lanes joined only through column 2.</li>
+      <li><strong>Movement is four-directional</strong>, up / down / left / right, between adjacent open cells. No diagonals.</li>
+      <li><strong>Every move costs 1.</strong> Step cost is uniform. The cost of a path is its number of moves.</li>
+      <li><strong>The number printed inside each open cell is h(cell)</strong>, the heuristic estimate (defined next). S and G are labelled by name instead of by their h-values; h(S) = 8 and h(G) = 0 by definition.</li>
+    </ul>
 
-    <h4>The maze</h4>
-    <p>5 &times; 5 grid. S in the top-left, G in the bottom-right. Dark squares are walls. You may move horizontally or vertically between adjacent open cells; each move costs 1. The walls in rows 1 and 3 split the maze into three vertical lanes joined at rows 0, 2, and 4.</p>
+    <h4>Manhattan distance, the heuristic</h4>
+    <p><span class="term">Manhattan distance<span class="term-tooltip">For grid cells (r, c) and (r', c'), |r &minus; r'| + |c &minus; c'|. The minimum number of horizontal-plus-vertical steps needed if there were no walls.<span class="ar">مسافة مانهاتن</span></span></span> from cell (r, c) to cell (r', c') is</p>
+    <div class="eq centered">|r &minus; r'| + |c &minus; c'|</div>
+    <p>that is, the total number of vertical-plus-horizontal moves you would need on an obstacle-free grid. In this maze G is at row 4, column 4, so the heuristic at cell (r, c) is</p>
+    <div class="eq centered">h(r, c) = (4 &minus; r) + (4 &minus; c)</div>
+    <p>Worked examples from the grid below:</p>
+    <ul class="tight">
+      <li>h(S) = h(0, 0) = 4 + 4 = <strong>8</strong>. (And h*(S) = 8 as well, the true optimal cost; on this maze the heuristic is tight at S.)</li>
+      <li>h(2, 1) = (4 &minus; 2) + (4 &minus; 1) = 2 + 3 = <strong>5</strong>. But the real shortest cost from (2, 1) to G is 7 (forced detour through column 2). h underestimates by 2.</li>
+      <li>h(G) = 0. The goal is always 0 distance from itself.</li>
+    </ul>
+    <p>On a grid where every step costs 1, Manhattan is admissible: walls can only make the real path longer than the obstacle-free count, never shorter, so h(n) &le; h*(n) always holds.</p>
 
     <div class="callout"><span class="marker">Colour key on the cells</span>
       <ul class="tight" style="margin: 8px 0 0 0;">
-        <li><strong>Dark navy:</strong> start S or wall.</li>
-        <li><strong>Maroon (filled):</strong> goal G or the node currently being expanded.</li>
-        <li><strong>Light maroon:</strong> cells that have been expanded (closed list).</li>
-        <li><strong>Yellow dashed:</strong> cells on the fringe (generated, not yet expanded).</li>
-        <li><strong>Gold:</strong> cells on the returned path.</li>
-        <li><strong>Plain:</strong> cells never reached. This is the pruned set.</li>
+        <li><strong>Dark navy filled:</strong> the start S, or a wall (blocked, unavailable).</li>
+        <li><strong>Maroon filled with white letter:</strong> the goal G, or the cell the algorithm is currently popping.</li>
+        <li><strong>Light maroon:</strong> cells already expanded (the closed list).</li>
+        <li><strong>Yellow with dashed border:</strong> cells on the fringe, generated but not yet popped.</li>
+        <li><strong>Gold:</strong> cells on the path the algorithm finally returns.</li>
+        <li><strong>Plain cream background:</strong> cells the algorithm never reached. This is the pruned set, the cells A* refused to expand because the heuristic ruled them out.</li>
       </ul>
     </div>
+
+    <div class="callout"><span class="marker">Tie-breaking</span>Many cells in this maze have the same f-value (the heuristic is tight on the optimal trajectory, so f = 8 along the whole way). When the priority queue has multiple cells with equal f, A* breaks ties by insertion order (first in, first out). That is why A* can pop one f = 8 cell, then a non-adjacent f = 8 cell next: the second cell was already on the fringe, queued behind the first. The algorithm is not "jumping"; it is draining its tied-priority bucket.</div>
 
     <p>Press Step on each side to advance one expansion at a time. Watch which cells each algorithm leaves untouched.</p>
 
@@ -5296,11 +5311,21 @@ function shufflePuzzle(numMoves = 25) {
 
 const algoState = {};
 
+function fringeEntryToStateName(entry) {
+  if (typeof entry !== 'string') return String(entry);
+  const idx = entry.indexOf('(');
+  if (idx === -1) {
+    const skip = entry.indexOf(' ');
+    return skip === -1 ? entry.trim() : entry.slice(0, skip).trim();
+  }
+  return entry.slice(0, idx).trim();
+}
+
 function applyHighlights(svg, expanded, fringe, current, path) {
   if (!svg) return;
-  const expSet = new Set(expanded || []);
-  const fringeSet = new Set(fringe || []);
-  const pathSet = new Set(path || []);
+  const expSet = new Set((expanded || []).map(fringeEntryToStateName));
+  const fringeSet = new Set((fringe || []).map(fringeEntryToStateName));
+  const pathSet = new Set((path || []).map(fringeEntryToStateName));
   const groups = svg.querySelectorAll('g[data-node]');
   groups.forEach(g => {
     const name = g.getAttribute('data-node');
