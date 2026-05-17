@@ -1570,7 +1570,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; step | popped | fringe (front to back)</h6>
-          <table class="trace-table" data-algo-trace="bfs"><thead><tr><th>Step</th><th>Popped</th><th>Fringe (front &rarr; back)</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="bfs"><thead><tr><th>Step</th><th>Popped</th><th>Visited (closed list)</th><th>Fringe (front &rarr; back)</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -1620,6 +1620,8 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div class="fringe-info">Fringe data structure: priority queue ordered by g(n). When step costs are all equal, UCS degenerates into BFS.</div>
     </div>
 
+    <div class="callout"><span class="marker">Notation</span><strong>g(n)</strong> is the cost of the path from the start state to <em>n</em>, accumulated by summing step costs along the way. UCS is the first algorithm in this companion that orders the fringe by a numeric quantity, so this is where the notation appears. Later, in Part Eight, we will add <strong>h(n)</strong>, an estimate of the remaining cost from <em>n</em> to a goal, and <strong>f(n) = g(n) + h(n)</strong>. In the traces below, fringe entries are written <code>X(g=5)</code> to mean state X with g-value 5; informed algorithms use the analogous <code>X(h=...)</code> and <code>X(g=..., h=..., f=...)</code> forms.</div>
+
     <div class="callout warn"><span class="marker">Critical</span>The goal test fires <em>on pop, not on generation</em>. A node is checked for goal-hood when it is removed from the fringe, not when it is first generated. Why? Because a cheaper path to the same goal might still be sitting on the fringe. Testing on generation would commit too early and break optimality.</div>
 
     <div class="algo-stage">
@@ -1642,7 +1644,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; step | popped | fringe sorted by g(n)</h6>
-          <table class="trace-table" data-algo-trace="ucs"><thead><tr><th>Step</th><th>Popped</th><th>Fringe (lowest g first)</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="ucs"><thead><tr><th>Step</th><th>Popped</th><th>Visited (closed list)</th><th>Fringe (lowest g first)</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -1718,7 +1720,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; step | popped | fringe (top of stack on the right)</h6>
-          <table class="trace-table" data-algo-trace="dfs"><thead><tr><th>Step</th><th>Popped</th><th>Fringe (bottom &rarr; top)</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="dfs"><thead><tr><th>Step</th><th>Popped</th><th>Visited (closed list)</th><th>Fringe (bottom &rarr; top)</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -1797,7 +1799,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; step | popped at depth | fringe</h6>
-          <table class="trace-table" data-algo-trace="dls"><thead><tr><th>Step</th><th>Popped</th><th>Fringe</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="dls"><thead><tr><th>Step</th><th>Popped</th><th>Visited (closed list)</th><th>Fringe</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -1879,7 +1881,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; iteration | popped | fringe</h6>
-          <table class="trace-table" data-algo-trace="ids"><thead><tr><th>Iter</th><th>Popped</th><th>Fringe</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="ids"><thead><tr><th>Iter</th><th>Popped</th><th>Visited (this iter)</th><th>Fringe</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -1949,7 +1951,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; step | direction | both fringes</h6>
-          <table class="trace-table" data-algo-trace="bidir"><thead><tr><th>Step</th><th>Direction</th><th>Popped &middot; Fringes</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="bidir"><thead><tr><th>Step</th><th>Direction</th><th>Visited (F &amp; B)</th><th>Popped &middot; Fringes</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -2062,7 +2064,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; step | popped | fringe with h(n)</h6>
-          <table class="trace-table" data-algo-trace="greedy"><thead><tr><th>Step</th><th>Popped</th><th>Fringe (lowest h first)</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="greedy"><thead><tr><th>Step</th><th>Popped</th><th>Visited (closed list)</th><th>Fringe (lowest h first)</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -2131,7 +2133,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div>
         <div class="trace-wrapper">
           <h6>Trace &middot; step | popped | fringe with f = g + h</h6>
-          <table class="trace-table" data-algo-trace="astar"><thead><tr><th>Step</th><th>Popped</th><th>Fringe (lowest f first)</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" data-algo-trace="astar"><thead><tr><th>Step</th><th>Popped</th><th>Visited (closed list)</th><th>Fringe (lowest f first)</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -2820,7 +2822,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div style="margin-top: 16px;">
         <div class="trace-wrapper">
           <h6 id="exercise-trace-title">Click a row above to see that algorithm's trace</h6>
-          <table class="trace-table" id="exercise-trace-table"><thead><tr><th>Step</th><th>Popped</th><th>Fringe</th></tr></thead><tbody></tbody></table>
+          <table class="trace-table" id="exercise-trace-table"><thead><tr><th>Step</th><th>Popped</th><th>Visited</th><th>Fringe</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -4107,7 +4109,7 @@ function runDLS(graph, limit, useGraphSearch = true) {
     if (node.state === goal) {
       steps.push({
         kind: 'goal', node: node.state,
-        fringe: fringe.map(n => `${n.state}@${n.depth}`),
+        fringe: fringe.map(n => `${n.state}(d=${n.depth})`),
         expanded: Array.from(closed),
         path: tracePath(node), cost: node.g,
         message: `Popped ${node.state} at depth ${node.depth}. It is the goal.`
@@ -4118,8 +4120,8 @@ function runDLS(graph, limit, useGraphSearch = true) {
       cutoffOccurred = true;
       steps.push({
         kind: 'cutoff', node: node.state,
-        fringe: fringe.map(n => `${n.state}@${n.depth}`),
-        expanded: Array.from(closed), stepN,
+        fringe: fringe.map(n => `${n.state}(d=${n.depth})`),
+        expanded: Array.from(closed), stepN, depth: node.depth,
         message: `Popped ${node.state} at depth ${node.depth} = limit. Treat as no successors.`
       });
       stepN++;
@@ -4134,11 +4136,11 @@ function runDLS(graph, limit, useGraphSearch = true) {
         depth: node.depth + 1, g: node.g + w
       };
       fringe.push(childNode);
-      newChildren.push(`${child}@${childNode.depth}`);
+      newChildren.push(`${child}(d=${childNode.depth})`);
     }
     steps.push({
       kind: 'expand', node: node.state, newChildren,
-      fringe: fringe.map(n => `${n.state}@${n.depth}`),
+      fringe: fringe.map(n => `${n.state}(d=${n.depth})`),
       expanded: Array.from(closed), stepN, depth: node.depth,
       message: `Pop ${node.state} at depth ${node.depth}. Push ${newChildren.length ? newChildren.join(', ') : '(no successors)'}.`
     });
@@ -4993,61 +4995,69 @@ function bindAlgoControls(key) {
   }
 }
 
+function visitedCell(arr) {
+  if (!arr || arr.length === 0) return '-';
+  return arr.join(', ');
+}
+
 function traceBFS(s, i) {
-  if (s.kind === 'init') return { Step: 0, Popped: '-', 'Fringe (front \u2192 back)': s.fringe.join(', ') };
-  if (s.kind === 'expand') return { Step: s.stepN, Popped: s.node, 'Fringe (front \u2192 back)': s.fringe.join(', ') };
-  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, 'Fringe (front \u2192 back)': 'path: ' + s.path.join(' \u2192 ') };
-  if (s.kind === 'skip') return { Step: '-', Popped: s.node + ' (skip)', 'Fringe (front \u2192 back)': s.fringe.join(', ') };
+  if (s.kind === 'init') return { Step: 0, Popped: '-', Visited: '-', Fringe: s.fringe.join(', ') };
+  if (s.kind === 'expand') return { Step: s.stepN, Popped: s.node, Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
+  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'path: ' + s.path.join(' \u2192 ') };
+  if (s.kind === 'skip') return { Step: '-', Popped: s.node + ' (skip)', Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
   return null;
 }
 function traceUCS(s, i) {
-  if (s.kind === 'init') return { Step: 0, Popped: '-', 'Fringe (lowest g first)': s.fringe.join(', ') };
-  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node} g=${s.g}`, 'Fringe (lowest g first)': s.fringe.join(', ') };
-  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, 'Fringe (lowest g first)': 'path cost = ' + s.cost };
+  if (s.kind === 'init') return { Step: 0, Popped: '-', Visited: '-', Fringe: s.fringe.join(', ') };
+  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node}(g=${s.g})`, Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
+  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'path cost = ' + s.cost };
   return null;
 }
 function traceDFS(s, i) {
-  if (s.kind === 'init') return { Step: 0, Popped: '-', 'Fringe (bottom \u2192 top)': s.fringe.join(', ') };
-  if (s.kind === 'expand') return { Step: s.stepN, Popped: s.node, 'Fringe (bottom \u2192 top)': s.fringe.join(', ') };
-  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, 'Fringe (bottom \u2192 top)': 'path: ' + s.path.join(' \u2192 ') };
+  if (s.kind === 'init') return { Step: 0, Popped: '-', Visited: '-', Fringe: s.fringe.join(', ') };
+  if (s.kind === 'expand') return { Step: s.stepN, Popped: s.node, Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
+  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'path: ' + s.path.join(' \u2192 ') };
   return null;
 }
 function traceDLS(s, i) {
-  if (s.kind === 'init') return { Step: 0, Popped: '-', Fringe: s.fringe.join(', ') };
-  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node}@${s.depth}`, Fringe: s.fringe.join(', ') };
-  if (s.kind === 'cutoff' && s.node) return { Step: s.stepN, Popped: `${s.node} (cutoff)`, Fringe: s.fringe ? s.fringe.join(', ') : '-' };
-  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Fringe: 'path: ' + s.path.join(' \u2192 ') };
+  if (s.kind === 'init') return { Step: 0, Popped: '-', Visited: '-', Fringe: s.fringe.join(', ') };
+  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node}(d=${s.depth})`, Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
+  if (s.kind === 'cutoff' && s.node) return { Step: s.stepN, Popped: `${s.node}(d=${s.depth}) cutoff`, Visited: visitedCell(s.expanded), Fringe: s.fringe ? s.fringe.join(', ') : '-' };
+  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'path: ' + s.path.join(' \u2192 ') };
   return null;
 }
 function traceIDS(s, i) {
-  if (s.kind === 'iteration-start') return { Iter: 'l=' + s.limit, Popped: '---', Fringe: '(restart)' };
+  if (s.kind === 'iteration-start') return { Iter: 'l=' + s.limit, Popped: '-', Visited: '-', Fringe: '(restart)' };
   if (s.kind === 'init') return null;
-  if (s.kind === 'expand') return { Iter: s.iteration !== undefined ? 'l=' + s.iteration : '-', Popped: `${s.node}@${s.depth || 0}`, Fringe: (s.fringe || []).join(', ') };
-  if (s.kind === 'cutoff' && s.node) return { Iter: 'l=' + (s.iteration || '?'), Popped: `${s.node} (cutoff)`, Fringe: (s.fringe || []).join(', ') };
-  if (s.kind === 'goal') return { Iter: 'l=' + s.iteration, Popped: s.node, Fringe: 'path: ' + s.path.join(' \u2192 ') };
+  if (s.kind === 'expand') return { Iter: s.iteration !== undefined ? 'l=' + s.iteration : '-', Popped: `${s.node}(d=${s.depth || 0})`, Visited: visitedCell(s.expanded), Fringe: (s.fringe || []).join(', ') };
+  if (s.kind === 'cutoff' && s.node) return { Iter: 'l=' + (s.iteration || '?'), Popped: `${s.node}(d=${s.depth || 0}) cutoff`, Visited: visitedCell(s.expanded), Fringe: (s.fringe || []).join(', ') };
+  if (s.kind === 'goal') return { Iter: 'l=' + s.iteration, Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'path: ' + s.path.join(' \u2192 ') };
   return null;
 }
 function traceBidir(s, i) {
-  if (s.kind === 'init') return { Step: 0, Direction: '-', 'Popped \u00b7 Fringes': `F=[${s.forward.join(',')}] B=[${s.backward.join(',')}]` };
+  const fv = (s.fVisited && s.fVisited.length) ? s.fVisited.join(',') : '';
+  const bv = (s.bVisited && s.bVisited.length) ? s.bVisited.join(',') : '';
+  const visited = (!fv && !bv) ? '-' : `F:{${fv}} B:{${bv}}`;
+  if (s.kind === 'init') return { Step: 0, Direction: '-', Visited: '-', Fringe: `F=[${s.forward.join(',')}] B=[${s.backward.join(',')}]` };
   if (s.kind === 'expand' || s.kind === 'meet') {
     return {
-      Step: s.stepN, Direction: s.direction,
-      'Popped \u00b7 Fringes': `${s.node} \u2192 F=[${s.forward.join(',')}] B=[${s.backward.join(',')}]`
+      Step: s.stepN, Direction: s.direction, Visited: visited,
+      Fringe: `${s.node} \u2192 F=[${s.forward.join(',')}] B=[${s.backward.join(',')}]`
     };
   }
-  if (s.kind === 'goal') return { Step: 'goal', Direction: '-', 'Popped \u00b7 Fringes': 'path: ' + s.path.join(' \u2192 ') };
+  if (s.kind === 'goal') return { Step: 'goal', Direction: '-', Visited: visited, Fringe: 'path: ' + s.path.join(' \u2192 ') };
   return null;
 }
 function traceGreedy(s, i) {
-  if (s.kind === 'init') return { Step: 0, Popped: '-', 'Fringe (lowest h first)': s.fringe.join(', ') };
-  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node} h=${s.h}`, 'Fringe (lowest h first)': s.fringe.join(', ') };
-  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, 'Fringe (lowest h first)': 'cost ' + s.cost };
+  if (s.kind === 'init') return { Step: 0, Popped: '-', Visited: '-', Fringe: s.fringe.join(', ') };
+  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node}(h=${s.h})`, Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
+  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'cost ' + s.cost };
   return null;
 }
 function traceAStar(s, i) {
-  if (s.kind === 'init') return { Step: 0, Popped: '-', 'Fringe (lowest f first)': s.fringe.join(', ') };
-  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node} f=${s.f}`, 'Fringe (lowest f first)': s.fringe.join(', ') };
-  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, 'Fringe (lowest f first)': 'cost ' + s.cost };
+  if (s.kind === 'init') return { Step: 0, Popped: '-', Visited: '-', Fringe: s.fringe.join(', ') };
+  if (s.kind === 'expand') return { Step: s.stepN, Popped: `${s.node}(g=${s.g}, h=${s.h}, f=${s.f})`, Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
+  if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'cost ' + s.cost };
   return null;
 }
 </script>
@@ -5456,12 +5466,12 @@ function setupExerciseGraph() {
   renderExerciseGraph('exercise-graph');
 
   const algos = [
-    { key: 'BFS', run: () => runBFS(EXERCISE_GRAPH, true), trace: traceBFS, columns: ['Step', 'Popped', 'Fringe'] },
-    { key: 'UCS', run: () => runUCS(EXERCISE_GRAPH, true), trace: traceUCS, columns: ['Step', 'Popped', 'Fringe (lowest g first)'] },
-    { key: 'DFS', run: () => runDFS(EXERCISE_GRAPH, true), trace: traceDFS, columns: ['Step', 'Popped', 'Fringe'] },
-    { key: 'IDS', run: () => runIDS(EXERCISE_GRAPH, true, 6), trace: traceIDS, columns: ['Iter', 'Popped', 'Fringe'] },
-    { key: 'Greedy', run: () => runGreedy(EXERCISE_GRAPH), trace: traceGreedy, columns: ['Step', 'Popped', 'Fringe (lowest h first)'] },
-    { key: 'A*', run: () => runAStar(EXERCISE_GRAPH), trace: traceAStar, columns: ['Step', 'Popped', 'Fringe (lowest f first)'] }
+    { key: 'BFS', run: () => runBFS(EXERCISE_GRAPH, true), trace: traceBFS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'UCS', run: () => runUCS(EXERCISE_GRAPH, true), trace: traceUCS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'DFS', run: () => runDFS(EXERCISE_GRAPH, true), trace: traceDFS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'IDS', run: () => runIDS(EXERCISE_GRAPH, true, 6), trace: traceIDS, columns: ['Iter', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'Greedy', run: () => runGreedy(EXERCISE_GRAPH), trace: traceGreedy, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'A*', run: () => runAStar(EXERCISE_GRAPH), trace: traceAStar, columns: ['Step', 'Popped', 'Visited', 'Fringe'] }
   ];
 
   const tbody = document.querySelector('#exercise-results tbody');
@@ -5662,13 +5672,16 @@ function setupCoordExercise() {
     const runner = mode === 'greedy' ? () => runGreedy(COORD_GRAPH) : () => runAStar(COORD_GRAPH);
     const traceMaker = mode === 'greedy' ? traceGreedy : traceAStar;
     const columns = mode === 'greedy'
-      ? ['Step', 'Popped', 'Fringe (lowest h first)']
-      : ['Step', 'Popped', 'Fringe (lowest f first)'];
+      ? ['Step', 'Popped', 'Visited', 'Fringe']
+      : ['Step', 'Popped', 'Visited', 'Fringe'];
+    const visibleHeaders = mode === 'greedy'
+      ? ['Step', 'Popped', 'Visited (closed list)', 'Fringe (lowest h first)']
+      : ['Step', 'Popped', 'Visited (closed list)', 'Fringe (lowest f first)'];
 
     const traceTable = document.querySelector('[data-algo-trace="coord"]');
     if (traceTable) {
       const headTr = traceTable.querySelector('thead tr');
-      if (headTr) headTr.innerHTML = columns.map(c => `<th>${c}</th>`).join('');
+      if (headTr) headTr.innerHTML = visibleHeaders.map(c => `<th>${c}</th>`).join('');
     }
 
     initialiseAlgo('coord', runner, COORD_GRAPH, columns, traceMaker);
@@ -5770,14 +5783,14 @@ function setupRomaniaSuccessors() {
 
 function setupSystematicAlgorithms() {
   const configs = [
-    { key: 'bfs', runner: () => runBFS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="bfs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceBFS, columns: ['Step', 'Popped', 'Fringe (FIFO)'] },
-    { key: 'ucs', runner: () => runUCS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="ucs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceUCS, columns: ['Step', 'Popped', 'Fringe (lowest g first)'] },
-    { key: 'dfs', runner: () => runDFS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="dfs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceDFS, columns: ['Step', 'Popped', 'Fringe (LIFO)'] },
-    { key: 'dls', runner: () => runDLS(ABSTRACT_GRAPH, 3, !!document.querySelector('[data-algo-toggle="dls"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceDLS, columns: ['Step', 'Popped@depth', 'Fringe'] },
-    { key: 'ids', runner: () => runIDS(ABSTRACT_GRAPH, true, 6), graph: ABSTRACT_GRAPH, traceMaker: traceIDS, columns: ['Iter', 'Popped', 'Fringe'] },
-    { key: 'bidir', runner: () => runBidirectional(ABSTRACT_GRAPH), graph: ABSTRACT_GRAPH, traceMaker: traceBidir, columns: ['Step', 'Direction', 'Popped &middot; Fringes'] },
-    { key: 'greedy', runner: () => runGreedy(ROMANIA), graph: ROMANIA, traceMaker: traceGreedy, columns: ['Step', 'Popped', 'Fringe (lowest h first)'] },
-    { key: 'astar', runner: () => runAStar(ROMANIA), graph: ROMANIA, traceMaker: traceAStar, columns: ['Step', 'Popped', 'Fringe (lowest f first)'] }
+    { key: 'bfs', runner: () => runBFS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="bfs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceBFS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'ucs', runner: () => runUCS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="ucs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceUCS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'dfs', runner: () => runDFS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="dfs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceDFS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'dls', runner: () => runDLS(ABSTRACT_GRAPH, 3, !!document.querySelector('[data-algo-toggle="dls"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceDLS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'ids', runner: () => runIDS(ABSTRACT_GRAPH, true, 6), graph: ABSTRACT_GRAPH, traceMaker: traceIDS, columns: ['Iter', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'bidir', runner: () => runBidirectional(ABSTRACT_GRAPH), graph: ABSTRACT_GRAPH, traceMaker: traceBidir, columns: ['Step', 'Direction', 'Visited', 'Fringe'] },
+    { key: 'greedy', runner: () => runGreedy(ROMANIA), graph: ROMANIA, traceMaker: traceGreedy, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'astar', runner: () => runAStar(ROMANIA), graph: ROMANIA, traceMaker: traceAStar, columns: ['Step', 'Popped', 'Visited', 'Fringe'] }
   ];
 
   for (const c of configs) {
