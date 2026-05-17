@@ -160,6 +160,33 @@
     }
     .companion-btn i { color: #00897b; }
     .companion-btn:hover i { color: #004d40; }
+
+    .lecture-extras {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+    }
+    .lecture-extras li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      margin: 4px 0;
+      line-height: 1.35;
+    }
+    .lecture-extras li::before {
+      content: "\2022";
+      color: #00897b;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .lecture-extras a {
+      color: #00695c;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .lecture-extras a:hover { text-decoration: underline; color: #004d40; }
+    .lecture-extras a i { margin-right: 4px; color: #00897b; }
     .handbook-btn:hover {
       background: #0d47a1;
       color: #fff;
@@ -491,20 +518,19 @@
             </tr>
             <tr>
               <td>4</td>
-              <td>Personas</td>
+              <td>
+                Personas
+                <ul class="lecture-extras">
+                  <li><a href="/birzeit/comp322/personas_interactive_tool.html" target="_blank" rel="noopener"><i class="fas fa-atlas"></i>From interviews to personas, an interactive walkthrough</a></li>
+                  <li><a href="/birzeit/comp322/quiz/personas.html" target="_blank" rel="noopener"><i class="fas fa-tasks"></i>Personas quiz (self-paced, 15 questions)</a></li>
+                </ul>
+              </td>
               <td><a class="pdf-link" href="/birzeit/courses/L4_Personas.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a></td>
             </tr>
           </tbody>
         </table>
 
-        <div class="companion-row">
-          <span class="companion-label">Lecture 4 companion:</span>
-          <a class="companion-btn" href="/birzeit/comp322/personas_interactive_tool.html" target="_blank" rel="noopener">
-            <i class="fas fa-atlas"></i> From interviews to personas, an interactive walkthrough
-          </a>
-        </div>
-
-        <div style="text-align: center; margin-top: 8px; margin-bottom: 40px;">
+        <div style="text-align: center; margin-top: 20px; margin-bottom: 40px;">
           <a class="handbook-btn" href="/birzeit/courses/COMP322_Interactive_Handbook.html" target="_blank" rel="noopener">
             <i class="fas fa-atlas"></i>Interactive Handbook
           </a>

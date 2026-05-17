@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP322 · Personas quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1A1A;
+  --ink-soft: #2A2A2A;
+  --muted: #5A6B78;
+  --faint: #9AA5B1;
+  --paper: #FBFAF7;
+  --card: #FFFFFF;
+  --rule: #E4E2DC;
+  --rule-strong: #D0CEC6;
+  --accent: #2C5F7C;
+  --accent-dark: #1F4860;
+  --accent-soft: #E8F0F5;
+  --accent-cream: #F5EFE3;
+  --warn: #B8862F;
+  --warn-soft: #FAF1E0;
+  --success: #2D7A4F;
+  --success-soft: #E6F1EB;
+  --danger: #B23B3B;
+  --danger-soft: #FBEAE9;
+  --serif: 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+
+/* ============== Top ribbon ============== */
+.ribbon {
+  background: var(--accent);
+  color: white;
+  padding: 14px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.ribbon strong { font-weight: 600; }
+.ribbon .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* ============== Layout ============== */
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 22px 80px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--rule);
+  border-radius: 3px;
+  margin: 8px 0 24px;
+  overflow: hidden;
+}
+.progress-bar > div {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.35s ease;
+}
+
+.qmeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.qmeta .qtype {
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.6px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 28px 30px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 3px rgba(28, 32, 40, 0.04);
+}
+
+.question {
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 8px 0 22px;
+}
+.question .small {
+  display: block;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* ============== Options (MC + multi) ============== */
+.options { display: grid; gap: 10px; }
+.opt {
+  background: var(--paper);
+  border: 1.5px solid var(--rule);
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+.opt:hover { border-color: var(--accent); background: var(--accent-soft); }
+.opt.picked {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.opt.locked { pointer-events: none; }
+.opt.locked:hover { background: var(--paper); border-color: var(--rule); }
+
+.opt-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--rule-strong);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  transition: all 0.15s;
+}
+.opt[data-type="multi"] .opt-mark { border-radius: 4px; }
+.opt.picked .opt-mark {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.opt.picked .opt-mark::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+.opt[data-type="multi"].picked .opt-mark::after {
+  content: "";
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  background: transparent;
+  border-radius: 0;
+  margin-bottom: 2px;
+}
+
+.opt-label {
+  font-size: 15.5px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  flex: 1;
+}
+
+/* After submission feedback */
+.opt.correct {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+.opt.correct .opt-mark {
+  border-color: var(--success);
+  background: var(--success);
+}
+.opt.wrong {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+.opt.wrong .opt-mark {
+  border-color: var(--danger);
+  background: var(--danger);
+}
+.opt-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 9px;
+  border-radius: 11px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.opt-tag.correct-tag { background: var(--success); color: white; }
+.opt-tag.wrong-tag { background: var(--danger); color: white; }
+.opt-tag.missed-tag { background: var(--warn); color: white; }
+
+/* ============== Matching ============== */
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  align-items: start;
+}
+.match-col-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.match-item {
+  background: var(--paper);
+  border: 1.5px solid var(--rule);
+  border-radius: 7px;
+  padding: 11px 14px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+.match-left { background: var(--accent-soft); border-color: var(--accent); }
+.match-select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  background: white;
+  color: var(--ink);
+}
+.match-select:focus { outline: none; border-color: var(--accent); }
+.match-select:disabled { background: var(--paper); color: var(--muted); }
+.match-feedback {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 9px;
+  margin-top: 6px;
+}
+.match-feedback.correct { background: var(--success); color: white; }
+.match-feedback.wrong { background: var(--danger); color: white; }
+
+/* ============== Ranking ============== */
+.rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--paper);
+  border: 1.5px solid var(--rule);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14.5px;
+}
+.rank-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rank-text { flex: 1; line-height: 1.4; }
+.rank-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.rank-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--rule-strong);
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans);
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 700;
+}
+.rank-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.rank-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.rank-feedback {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-left: 8px;
+}
+.rank-feedback.ok { color: var(--success); }
+.rank-feedback.bad { color: var(--danger); }
+.rank-correct-list {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--rule);
+}
+.rank-correct-list h5 {
+  font-family: var(--sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+/* ============== Action button ============== */
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+.btn {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 14.5px;
+  padding: 12px 22px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-primary:disabled {
+  background: var(--rule-strong);
+  cursor: not-allowed;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--rule);
+}
+.btn-ghost:hover { border-color: var(--accent); }
+
+/* ============== Explanation ============== */
+.explanation {
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: var(--accent-cream);
+  border-left: 3px solid var(--warn);
+  border-radius: 0 6px 6px 0;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.explanation .label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--warn);
+  margin-bottom: 6px;
+  font-style: normal;
+}
+
+/* ============== Welcome / Results ============== */
+.welcome-card {
+  text-align: center;
+  padding: 48px 36px 40px;
+}
+.welcome-card h1 {
+  font-size: 34px;
+  margin-bottom: 14px;
+}
+.welcome-card .lead {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  font-size: 16.5px;
+  line-height: 1.55;
+  max-width: 520px;
+  margin: 0 auto 22px;
+}
+.welcome-card .stats {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin: 18px 0 26px;
+}
+.welcome-card .stat {
+  text-align: center;
+}
+.welcome-card .stat-num {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.welcome-card .stat-label {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.welcome-card .actions { justify-content: center; margin-top: 8px; }
+
+.results-card { padding: 38px 32px; }
+.results-card h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.results-card .score-big {
+  font-family: var(--serif);
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.05;
+  margin: 18px 0 4px;
+}
+.results-card .score-out {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 600;
+}
+.results-bar {
+  margin: 30px auto 8px;
+  max-width: 480px;
+}
+.results-bar-track {
+  height: 14px;
+  background: var(--rule);
+  border-radius: 7px;
+  overflow: hidden;
+}
+.results-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--warn) 70%, var(--success) 100%);
+  transition: width 1.2s ease;
+}
+.results-summary {
+  margin: 28px auto 0;
+  max-width: 560px;
+  display: grid;
+  gap: 10px;
+}
+.results-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  gap: 12px;
+  font-size: 14px;
+}
+.results-row .rnum {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--muted);
+  width: 28px;
+  text-align: center;
+}
+.results-row .rqt { flex: 1; line-height: 1.4; color: var(--ink-soft); }
+.results-row .rmark {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 11px;
+  white-space: nowrap;
+}
+.results-row .rmark.ok { background: var(--success); color: white; }
+.results-row .rmark.partial { background: var(--warn); color: white; }
+.results-row .rmark.no { background: var(--danger); color: white; }
+
+.footer {
+  text-align: center;
+  color: var(--faint);
+  font-size: 12px;
+  margin-top: 36px;
+  font-family: var(--serif);
+  font-style: italic;
+}
+.footer a { color: var(--muted); text-decoration: none; border-bottom: 1px dotted; }
+
+@media (max-width: 600px) {
+  .wrap { padding: 18px 14px 60px; }
+  .card { padding: 22px 18px; }
+  .welcome-card { padding: 36px 22px 30px; }
+  .question { font-size: 19px; }
+  .match-grid { grid-template-columns: 1fr; }
+  .results-card .score-big { font-size: 52px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ribbon">
+  <div><strong>COMP322</strong> &middot; Personas quiz</div>
+  <div class="meta">Self-paced &middot; ~10 minutes</div>
+</div>
+
+<div class="wrap" id="root"></div>
+
+<div class="footer">
+  Quiz content drawn from Lecture 4 &middot; <a href="/birzeit/comp322/">Back to course</a>
+</div>
+
+<script>
+"use strict";
+
+// =====================================================================
+// QUESTION DATA
+// =====================================================================
+const QUESTIONS = [
+  {
+    type: 'mc',
+    text: 'A persona, as used in HCI design, is best described as:',
+    options: [
+      'A real user invited to test the product in usability sessions',
+      'A fictitious archetype representing a segment of real users, derived from research',
+      'The team’s preferred customer profile',
+      'A demographic chart showing user age, gender, and income'
+    ],
+    correct: 1,
+    explanation: 'A persona is a research-derived fictional user who stands in for a real user segment. It is neither a real person nor a demographic average; it is a memorable archetype the team can refer to when making design decisions.'
+  },
+  {
+    type: 'mc',
+    text: 'Why do designers create personas?',
+    options: [
+      'To replace the need for user research',
+      'To give the team a shared, concrete mental model of users that guides design decisions',
+      'To impress stakeholders with detailed user profiles',
+      'To target advertising and marketing campaigns'
+    ],
+    correct: 1,
+    explanation: 'Personas crystallise findings from research into a memorable archetype the whole team can refer back to. They do not replace research, they communicate and apply it.'
+  },
+  {
+    type: 'multi',
+    text: 'Which of these should appear on a well-formed persona?',
+    options: [
+      'Photo and a name',
+      'Goals and motivations',
+      'Frustrations or pain points',
+      'The user’s bank account number',
+      'Behaviour patterns and context of use',
+      'A representative quote in their own voice',
+      'Internal product roadmap and pricing strategy'
+    ],
+    correct: [0, 1, 2, 4, 5],
+    explanation: 'A good persona makes the user concrete with personal identifiers (name, photo, quote) and captures what matters for design (goals, frustrations, behaviour patterns). It does not include sensitive personal data or internal company information.'
+  },
+  {
+    type: 'mc',
+    text: 'The primary persona for a product is:',
+    options: [
+      'The most photogenic or relatable one',
+      'The persona representing the largest demographic',
+      'The persona whose needs cannot be satisfied by designing for any other persona',
+      'The persona the design team finds most likeable'
+    ],
+    correct: 2,
+    explanation: 'Cooper’s definition: the primary persona is one whose needs must be specifically targeted, because designing for someone else would fail them. Photogenic looks and demographic size are not the criteria.'
+  },
+  {
+    type: 'multi',
+    text: 'Common pitfalls when creating personas include:',
+    options: [
+      'Inventing demographic detail without research to back it',
+      'Stereotyping based on age, gender, or nationality',
+      'Creating more than five primary personas for a single product',
+      'Including a memorable name and photograph',
+      'Creating the personas after the product has shipped',
+      'Sourcing data from interviews with real users'
+    ],
+    correct: [0, 1, 2, 4],
+    explanation: 'Personas are powerful when they are research-backed, focused (typically three to five), and built before design decisions. The usual failure modes are gut-feel personas, demographic stereotypes, too many of them, and creating them retrospectively to justify decisions already made.'
+  },
+  {
+    type: 'mc',
+    text: 'Where should the data for a good persona come from?',
+    options: [
+      'The designer’s intuition about likely users',
+      'Stakeholder gut feel about who buys the product',
+      'Direct user research: interviews, observation, contextual inquiry',
+      'Marketing demographics from third-party data providers'
+    ],
+    correct: 2,
+    explanation: 'Personas distil findings from primary user research. Marketing demographics describe who buys, not how users think, decide, or struggle, which is what design needs to address.'
+  },
+  {
+    type: 'match',
+    text: 'Match each persona element to its primary purpose in design.',
+    leftLabel: 'Persona element',
+    rightLabel: 'Why it is on the persona',
+    pairs: [
+      { left: 'Goals',              right: 'Drive which features matter most for this user' },
+      { left: 'Frustrations',       right: 'Reveal what the product must avoid or actively solve' },
+      { left: 'Representative quote', right: 'Capture the user’s voice in their own words' },
+      { left: 'Photo and name',     right: 'Make the persona feel like a real, memorable person' },
+      { left: 'Behaviour patterns', right: 'Predict how this user will actually interact with the product' }
+    ],
+    explanation: 'Each persona field exists for a reason. The personal identifiers (photo, name, quote) make the persona memorable; the goals, frustrations, and behaviour drive concrete design decisions.'
+  },
+  {
+    type: 'rank',
+    text: 'Put the steps of creating personas in the correct order, from first to last.',
+    items: [
+      'Use the personas to guide ongoing design decisions',
+      'Validate the drafts with stakeholders and additional users',
+      'Identify recurring patterns and user segments across participants',
+      'Draft preliminary persona archetypes',
+      'Conduct user research (interviews, observation, contextual inquiry)'
+    ],
+    correctOrder: [4, 2, 3, 1, 0],
+    explanation: 'Personas are research-first artefacts: data comes before drafting. The typical pipeline is research → pattern identification → drafting → validation → ongoing use throughout design.'
+  },
+  {
+    type: 'mc',
+    text: 'A secondary persona’s needs should be:',
+    options: [
+      'Ignored entirely so the team can focus',
+      'Accommodated as long as they do not compromise the primary persona’s needs',
+      'Weighted equally with the primary persona’s needs',
+      'Deferred to a later version of the product'
+    ],
+    correct: 1,
+    explanation: 'Secondary personas are supplemental: their needs are addressed wherever possible, but never at the cost of the primary persona. Equal weighting would dilute the design focus; deferring would lose the data the persona captures.'
+  },
+  {
+    type: 'mc',
+    text: 'Microsoft’s Persona Spectrum framework emphasises that limitations or disabilities are:',
+    options: [
+      'Always permanent and unchanging',
+      'Permanent, temporary, or situational, all relevant to design',
+      'Rare and best handled by specialised accessibility teams',
+      'Best addressed by separate products for each group'
+    ],
+    correct: 1,
+    explanation: 'The Persona Spectrum reframes accessibility as the union of permanent (e.g. one arm), temporary (e.g. broken arm), and situational (e.g. holding a baby) conditions. A design that works for the permanent case usually also helps the temporary and situational cases.'
+  },
+  {
+    type: 'match',
+    text: 'Match each user situation to its category on the Persona Spectrum.',
+    leftLabel: 'User situation',
+    rightLabel: 'Spectrum category',
+    pairs: [
+      { left: 'A user with congenital low vision',           right: 'Permanent limitation' },
+      { left: 'A user with a cast on their dominant wrist',  right: 'Temporary limitation' },
+      { left: 'A user holding a baby in one arm',            right: 'Situational limitation' },
+      { left: 'A user in bright sunlight with screen glare', right: 'Situational limitation (environment)' }
+    ],
+    explanation: 'Permanent, temporary, and situational are not just disability categories; they are conditions of use. Each one yields design constraints the team can target.'
+  },
+  {
+    type: 'multi',
+    text: 'Which of these are genuine advantages of personas for a design team?',
+    options: [
+      'Shared vocabulary across the team when discussing users',
+      'Anchor design decisions to specific, named users',
+      'Replaces the need for user testing later',
+      'Helps prioritise features by user value',
+      'Makes user needs concrete and memorable',
+      'Guarantees the product will succeed in the market'
+    ],
+    correct: [0, 1, 3, 4],
+    explanation: 'Personas align teams and inform priorities, but they complement rather than replace ongoing user research and testing. They are not a guarantee of success; they are a guard against designing for nobody in particular.'
+  },
+  {
+    type: 'mc',
+    text: 'Personas and user stories: which statement is correct?',
+    options: [
+      'They are the same thing under different names',
+      'Personas describe WHO the user is; user stories describe what that user wants to DO and WHY',
+      'Personas come from marketing; user stories from engineering',
+      'User stories make personas unnecessary once written'
+    ],
+    correct: 1,
+    explanation: 'A persona is the actor; a user story is one action that actor wants and the reason: "As <persona>, I want to <action> so that <benefit>." Personas without stories are static descriptions; stories without personas drift toward abstract, generic users.'
+  },
+  {
+    type: 'rank',
+    text: 'Rank these sources of data for persona creation, from most reliable to least reliable.',
+    items: [
+      'Designer’s assumptions and personal experience',
+      'Marketing demographics and purchase records',
+      'Stakeholder interviews about who their users are',
+      'User surveys with open-ended response questions',
+      'Direct user interviews and field observation'
+    ],
+    correctOrder: [4, 3, 2, 1, 0],
+    explanation: 'The closer the data is to actual users speaking and acting, the more reliable it is for design. Designer assumptions and pure demographics tend to produce "paper personas" that lead the design astray.'
+  },
+  {
+    type: 'mc',
+    text: 'When in the design process should personas be created?',
+    options: [
+      'After product launch, to retroactively validate decisions already made',
+      'After initial user research is gathered and before significant design decisions are taken',
+      'Only when the product is failing and the team needs to course-correct',
+      'Once development is complete, as documentation for handover'
+    ],
+    correct: 1,
+    explanation: 'Personas are at their most useful between user research and design decisions: they translate research insights into a form designers can reason with, before commitments are made.'
+  }
+];
+
+// =====================================================================
+// STATE
+// =====================================================================
+const state = {
+  screen: 'welcome',          // 'welcome' | 'question' | 'results'
+  idx: 0,
+  responses: new Array(QUESTIONS.length).fill(null),
+  submitted: new Array(QUESTIONS.length).fill(false),
+  scores: new Array(QUESTIONS.length).fill(null)
+};
+
+const root = document.getElementById('root');
+
+function startQuiz() {
+  state.screen = 'question';
+  state.idx = 0;
+  state.responses = new Array(QUESTIONS.length).fill(null);
+  state.submitted = new Array(QUESTIONS.length).fill(false);
+  state.scores = new Array(QUESTIONS.length).fill(null);
+  render();
+}
+
+function nextQuestion() {
+  if (state.idx < QUESTIONS.length - 1) {
+    state.idx++;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    state.screen = 'results';
+    render();
+  }
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
+function typeLabel(t) {
+  return ({ mc: 'Choose one', multi: 'Choose all that apply', match: 'Match the pairs', rank: 'Put in order' })[t] || t;
+}
+
+// =====================================================================
+// RENDER ROOT
+// =====================================================================
+function render() {
+  if (state.screen === 'welcome') return renderWelcome();
+  if (state.screen === 'results') return renderResults();
+  return renderQuestion();
+}
+
+function renderWelcome() {
+  const mcCount = QUESTIONS.filter(q => q.type === 'mc').length;
+  const multiCount = QUESTIONS.filter(q => q.type === 'multi').length;
+  const matchCount = QUESTIONS.filter(q => q.type === 'match').length;
+  const rankCount = QUESTIONS.filter(q => q.type === 'rank').length;
+
+  root.innerHTML = `
+    <div class="card welcome-card">
+      <h1>Personas in HCI</h1>
+      <p class="lead">A self-paced check on the core ideas from Lecture 4. Each question gives you immediate feedback and a short explanation, so the quiz is also a revision tool.</p>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">${QUESTIONS.length}</div><div class="stat-label">questions</div></div>
+        <div class="stat"><div class="stat-num">${mcCount}+${multiCount}</div><div class="stat-label">MC + multi-select</div></div>
+        <div class="stat"><div class="stat-num">${matchCount}</div><div class="stat-label">matching</div></div>
+        <div class="stat"><div class="stat-num">${rankCount}</div><div class="stat-label">ranking</div></div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="start-btn">Start the quiz</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('start-btn').addEventListener('click', startQuiz);
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.idx];
+  const pct = Math.round(((state.idx) / QUESTIONS.length) * 100);
+  const submitted = state.submitted[state.idx];
+
+  root.innerHTML = `
+    <div class="qmeta">
+      <div>Question ${state.idx + 1} of ${QUESTIONS.length}</div>
+      <div class="qtype">${typeLabel(q.type)}</div>
+    </div>
+    <div class="progress-bar"><div style="width: ${pct}%"></div></div>
+    <div class="card">
+      <div class="question">${escapeHtml(q.text)}</div>
+      <div id="qbody"></div>
+      <div class="actions" id="qactions"></div>
+      <div id="qexplanation"></div>
+    </div>
+  `;
+
+  const body = document.getElementById('qbody');
+  if (q.type === 'mc') renderMC(body, q, submitted);
+  else if (q.type === 'multi') renderMulti(body, q, submitted);
+  else if (q.type === 'match') renderMatch(body, q, submitted);
+  else if (q.type === 'rank') renderRank(body, q, submitted);
+
+  renderActions();
+  if (submitted) renderExplanation();
+}
+
+// =====================================================================
+// RENDER PER TYPE
+// =====================================================================
+function renderMC(body, q, submitted) {
+  const picked = state.responses[state.idx];
+  body.innerHTML = '<div class="options">' + q.options.map((opt, i) => {
+    let cls = 'opt';
+    if (submitted) cls += ' locked';
+    if (i === picked) cls += ' picked';
+    if (submitted) {
+      if (i === q.correct) cls += ' correct';
+      else if (i === picked) cls += ' wrong';
+    }
+    const tag = submitted ? (
+      i === q.correct ? '<span class="opt-tag correct-tag">Correct</span>' :
+      (i === picked ? '<span class="opt-tag wrong-tag">Your pick</span>' : '')
+    ) : '';
+    return `<div class="${cls}" data-i="${i}" data-type="mc">
+      <span class="opt-mark"></span>
+      <span class="opt-label">${escapeHtml(opt)}</span>
+      ${tag}
+    </div>`;
+  }).join('') + '</div>';
+
+  if (!submitted) {
+    body.querySelectorAll('.opt').forEach(el => {
+      el.addEventListener('click', () => {
+        state.responses[state.idx] = +el.dataset.i;
+        renderQuestion();
+      });
+    });
+  }
+}
+
+function renderMulti(body, q, submitted) {
+  const picked = Array.isArray(state.responses[state.idx]) ? state.responses[state.idx] : [];
+  body.innerHTML = '<div class="options">' + q.options.map((opt, i) => {
+    let cls = 'opt';
+    if (submitted) cls += ' locked';
+    if (picked.includes(i)) cls += ' picked';
+    if (submitted) {
+      const isCorrect = q.correct.includes(i);
+      const wasPicked = picked.includes(i);
+      if (isCorrect && wasPicked) cls += ' correct';
+      else if (isCorrect && !wasPicked) cls += ' correct';
+      else if (!isCorrect && wasPicked) cls += ' wrong';
+    }
+    let tag = '';
+    if (submitted) {
+      const isCorrect = q.correct.includes(i);
+      const wasPicked = picked.includes(i);
+      if (isCorrect && wasPicked) tag = '<span class="opt-tag correct-tag">Right</span>';
+      else if (isCorrect && !wasPicked) tag = '<span class="opt-tag missed-tag">Missed</span>';
+      else if (!isCorrect && wasPicked) tag = '<span class="opt-tag wrong-tag">Wrong pick</span>';
+    }
+    return `<div class="${cls}" data-i="${i}" data-type="multi">
+      <span class="opt-mark"></span>
+      <span class="opt-label">${escapeHtml(opt)}</span>
+      ${tag}
+    </div>`;
+  }).join('') + '</div>';
+
+  if (!submitted) {
+    body.querySelectorAll('.opt').forEach(el => {
+      el.addEventListener('click', () => {
+        const i = +el.dataset.i;
+        const current = Array.isArray(state.responses[state.idx]) ? state.responses[state.idx] : [];
+        const idx = current.indexOf(i);
+        if (idx === -1) current.push(i);
+        else current.splice(idx, 1);
+        current.sort((a, b) => a - b);
+        state.responses[state.idx] = current;
+        renderQuestion();
+      });
+    });
+  }
+}
+
+function renderMatch(body, q, submitted) {
+  const assignments = state.responses[state.idx] || {};
+  const rightChoices = q.pairs.map(p => p.right);
+  // Shuffled right options remain a stable list, but the select shows them.
+  body.innerHTML = `
+    <div class="match-grid">
+      <div>
+        <div class="match-col-label">${escapeHtml(q.leftLabel || 'Item')}</div>
+        ${q.pairs.map((p, i) => {
+          const chosen = assignments[i];
+          const correctRight = p.right;
+          let feedback = '';
+          if (submitted) {
+            const isCorrect = chosen === correctRight;
+            feedback = isCorrect
+              ? '<div class="match-feedback correct">Correct</div>'
+              : `<div class="match-feedback wrong">Should be: ${escapeHtml(correctRight)}</div>`;
+          }
+          return `<div class="match-item match-left" style="margin-bottom: 14px;">
+            <div>${escapeHtml(p.left)}</div>
+            <select class="match-select" data-i="${i}" ${submitted ? 'disabled' : ''}>
+              <option value="">Select a match…</option>
+              ${rightChoices.map(r => `<option value="${escapeHtml(r)}" ${chosen === r ? 'selected' : ''}>${escapeHtml(r)}</option>`).join('')}
+            </select>
+            ${feedback}
+          </div>`;
+        }).join('')}
+      </div>
+      <div>
+        <div class="match-col-label">${escapeHtml(q.rightLabel || 'Match')}</div>
+        ${rightChoices.map(r => `<div class="match-item">${escapeHtml(r)}</div>`).join('')}
+      </div>
+    </div>
+  `;
+
+  if (!submitted) {
+    body.querySelectorAll('.match-select').forEach(sel => {
+      sel.addEventListener('change', () => {
+        const i = +sel.dataset.i;
+        const val = sel.value;
+        const current = state.responses[state.idx] || {};
+        if (val === '') delete current[i]; else current[i] = val;
+        state.responses[state.idx] = current;
+        renderActions();
+      });
+    });
+  }
+}
+
+function renderRank(body, q, submitted) {
+  // The user's order is stored as an array of original-index references.
+  // On first render with no response: start with the shuffled order.
+  if (!state.responses[state.idx]) {
+    state.responses[state.idx] = shuffledStableOrder(q.items.length, state.idx);
+  }
+  const order = state.responses[state.idx];
+
+  body.innerHTML = `
+    <ol class="rank-list">
+      ${order.map((origIdx, pos) => {
+        let feedback = '';
+        if (submitted) {
+          const correctPos = q.correctOrder.indexOf(origIdx);
+          if (correctPos === pos) feedback = '<span class="rank-feedback ok">in place</span>';
+          else feedback = `<span class="rank-feedback bad">should be #${correctPos + 1}</span>`;
+        }
+        return `<li class="rank-item">
+          <span class="rank-num">${pos + 1}</span>
+          <span class="rank-text">${escapeHtml(q.items[origIdx])}</span>
+          ${feedback}
+          ${submitted ? '' : `<span class="rank-btns">
+            <button class="rank-btn" data-pos="${pos}" data-dir="up" ${pos === 0 ? 'disabled' : ''}>&uarr;</button>
+            <button class="rank-btn" data-pos="${pos}" data-dir="down" ${pos === order.length - 1 ? 'disabled' : ''}>&darr;</button>
+          </span>`}
+        </li>`;
+      }).join('')}
+    </ol>
+    ${submitted ? `<div class="rank-correct-list">
+      <h5>Correct order</h5>
+      <ol style="padding-left: 22px; margin: 0; font-size: 14.5px; line-height: 1.65; color: var(--ink-soft);">
+        ${q.correctOrder.map(origIdx => `<li>${escapeHtml(q.items[origIdx])}</li>`).join('')}
+      </ol>
+    </div>` : ''}
+  `;
+
+  if (!submitted) {
+    body.querySelectorAll('.rank-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pos = +btn.dataset.pos;
+        const dir = btn.dataset.dir;
+        const order = state.responses[state.idx];
+        const swap = dir === 'up' ? pos - 1 : pos + 1;
+        [order[pos], order[swap]] = [order[swap], order[pos]];
+        renderQuestion();
+      });
+    });
+  }
+}
+
+// Deterministic shuffle per question so refresh does not re-randomise within a session.
+function shuffledStableOrder(n, seed) {
+  const arr = Array.from({ length: n }, (_, i) => i);
+  let s = seed * 7919 + 31;
+  for (let i = arr.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// =====================================================================
+// ACTIONS + SCORING
+// =====================================================================
+function renderActions() {
+  const q = QUESTIONS[state.idx];
+  const submitted = state.submitted[state.idx];
+  const actions = document.getElementById('qactions');
+  if (submitted) {
+    const lastQ = state.idx === QUESTIONS.length - 1;
+    actions.innerHTML = `<button class="btn btn-primary" id="next-btn">${lastQ ? 'See results' : 'Next question'} →</button>`;
+    document.getElementById('next-btn').addEventListener('click', nextQuestion);
+  } else {
+    const ready = isAnswered(q, state.responses[state.idx]);
+    actions.innerHTML = `<button class="btn btn-primary" id="submit-btn" ${ready ? '' : 'disabled'}>Submit answer</button>`;
+    if (ready) {
+      document.getElementById('submit-btn').addEventListener('click', () => {
+        state.submitted[state.idx] = true;
+        state.scores[state.idx] = scoreQuestion(q, state.responses[state.idx]);
+        renderQuestion();
+      });
+    }
+  }
+}
+
+function isAnswered(q, response) {
+  if (q.type === 'mc') return Number.isInteger(response);
+  if (q.type === 'multi') return Array.isArray(response) && response.length > 0;
+  if (q.type === 'match') return response && Object.keys(response).length === q.pairs.length;
+  if (q.type === 'rank') return Array.isArray(response) && response.length === q.items.length;
+  return false;
+}
+
+function scoreQuestion(q, response) {
+  if (q.type === 'mc') {
+    return response === q.correct ? { score: 1, total: 1 } : { score: 0, total: 1 };
+  }
+  if (q.type === 'multi') {
+    // Score: 1 point per correct pick - 1 per wrong pick - 1 per missed, capped at [0, total].
+    const correctSet = new Set(q.correct);
+    let hits = 0, misses = 0, wrongs = 0;
+    for (const i of response) {
+      if (correctSet.has(i)) hits++; else wrongs++;
+    }
+    for (const i of q.correct) {
+      if (!response.includes(i)) misses++;
+    }
+    const total = q.correct.length;
+    const raw = hits - wrongs - misses;
+    const score = Math.max(0, Math.min(total, raw));
+    return { score, total };
+  }
+  if (q.type === 'match') {
+    let hits = 0;
+    for (let i = 0; i < q.pairs.length; i++) {
+      if (response[i] === q.pairs[i].right) hits++;
+    }
+    return { score: hits, total: q.pairs.length };
+  }
+  if (q.type === 'rank') {
+    let hits = 0;
+    for (let pos = 0; pos < q.correctOrder.length; pos++) {
+      if (response[pos] === q.correctOrder[pos]) hits++;
+    }
+    return { score: hits, total: q.correctOrder.length };
+  }
+  return { score: 0, total: 1 };
+}
+
+function renderExplanation() {
+  const q = QUESTIONS[state.idx];
+  const exp = document.getElementById('qexplanation');
+  const sc = state.scores[state.idx];
+  let verdict = '';
+  if (sc.score === sc.total) verdict = 'Right';
+  else if (sc.score > 0) verdict = 'Part credit (' + sc.score + ' / ' + sc.total + ')';
+  else verdict = 'Not quite';
+  exp.innerHTML = `<div class="explanation">
+    <span class="label">${verdict} · why</span>
+    ${escapeHtml(q.explanation)}
+  </div>`;
+}
+
+// =====================================================================
+// RESULTS SCREEN
+// =====================================================================
+function renderResults() {
+  const totalEarned = state.scores.reduce((a, b) => a + (b ? b.score : 0), 0);
+  const totalAvailable = state.scores.reduce((a, b) => a + (b ? b.total : 0), 0);
+  const pct = totalAvailable === 0 ? 0 : Math.round((totalEarned / totalAvailable) * 100);
+
+  let verdict = '';
+  if (pct >= 90) verdict = 'You’ve got personas down. Move on with confidence.';
+  else if (pct >= 70) verdict = 'Solid grasp of the core ideas. Review the few you missed.';
+  else if (pct >= 50) verdict = 'You’ve got the basics. The explanations on missed questions are worth a slow re-read.';
+  else verdict = 'Worth revisiting Lecture 4 before sitting the exam. The explanations below are a good starting point.';
+
+  root.innerHTML = `
+    <div class="card results-card">
+      <h1>Results</h1>
+      <div class="score-big">${pct}%</div>
+      <div class="score-out">${totalEarned} of ${totalAvailable} points</div>
+      <div class="results-bar"><div class="results-bar-track"><div class="results-bar-fill" style="width: 0%"></div></div></div>
+      <p class="lead" style="margin-top: 24px; font-family: var(--serif); font-style: italic; color: var(--muted); text-align: center;">${escapeHtml(verdict)}</p>
+      <div class="results-summary">
+        ${QUESTIONS.map((q, i) => {
+          const sc = state.scores[i] || { score: 0, total: 1 };
+          let mark = 'no';
+          if (sc.score === sc.total) mark = 'ok';
+          else if (sc.score > 0) mark = 'partial';
+          const tag = mark === 'ok' ? 'All correct' : (mark === 'partial' ? `${sc.score} / ${sc.total}` : 'Missed');
+          return `<div class="results-row">
+            <span class="rnum">${i + 1}</span>
+            <span class="rqt">${escapeHtml(q.text)}</span>
+            <span class="rmark ${mark}">${tag}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="actions" style="justify-content: center; margin-top: 28px;">
+        <button class="btn btn-ghost" id="retake-btn">Retake the quiz</button>
+        <button class="btn btn-primary" id="back-btn">Back to course</button>
+      </div>
+    </div>
+  `;
+  // Animate the bar fill.
+  setTimeout(() => {
+    const fill = document.querySelector('.results-bar-fill');
+    if (fill) fill.style.width = pct + '%';
+  }, 80);
+  document.getElementById('retake-btn').addEventListener('click', () => {
+    state.screen = 'welcome';
+    render();
+  });
+  document.getElementById('back-btn').addEventListener('click', () => {
+    window.location.href = '/birzeit/comp322/';
+  });
+}
+
+// =====================================================================
+// BOOT
+// =====================================================================
+render();
+</script>
+
+</body>
+</html>
