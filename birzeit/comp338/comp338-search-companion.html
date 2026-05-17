@@ -1791,7 +1791,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
         </div>
         <div class="feedback info" data-algo-feedback="dls">
           <span class="what-happened">Try a small limit first.</span>
-          With l = 1 DLS will report cutoff because the goal G is at depth 2. Increase the limit to see DLS find the goal, but note that it may not be the cheapest path.
+          The shallowest goal in the reference graph is at depth 4. With l = 1, 2, or 3 DLS will report cutoff. Set the limit to 4 or higher to see DLS find the goal, but note that it may not be the cheapest path.
         </div>
       </div>
       <div>
@@ -3141,24 +3141,29 @@ const RULE = '#c9bfa8';
 
 const ABSTRACT_GRAPH = {
   nodes: {
-    'S': { x: 450, y: 60 },
-    'A': { x: 180, y: 200 },
-    'B': { x: 450, y: 200 },
-    'C': { x: 720, y: 200 },
-    'D': { x: 90,  y: 370 },
-    'E': { x: 310, y: 370 },
-    'G': { x: 560, y: 370 },
-    'F': { x: 810, y: 370 },
-    'H': { x: 90,  y: 490 }
+    'S': { x: 80,  y: 270 },
+    'A': { x: 220, y: 120 },
+    'B': { x: 220, y: 270 },
+    'C': { x: 220, y: 420 },
+    'D': { x: 380, y: 60  },
+    'E': { x: 380, y: 270 },
+    'F': { x: 380, y: 480 },
+    'H': { x: 540, y: 40  },
+    'I': { x: 540, y: 200 },
+    'J': { x: 540, y: 400 },
+    'K': { x: 720, y: 40  },
+    'G': { x: 780, y: 270 }
   },
   edges: [
-    ['S','A',5],['S','B',2],['S','C',4],
-    ['A','D',9],['A','E',4],
-    ['B','G',6],
-    ['C','F',2],['C','G',8],
-    ['E','G',6],
-    ['F','G',1],
-    ['D','H',7]
+    ['S','A',3], ['S','B',1], ['S','C',4],
+    ['A','D',2], ['A','E',5],
+    ['B','E',2], ['B','F',4],
+    ['C','F',3],
+    ['D','H',1], ['D','I',6],
+    ['E','I',1], ['E','J',4],
+    ['F','J',2],
+    ['H','K',3],
+    ['I','G',3], ['J','G',2]
   ],
   start: 'S',
   goal: 'G'
