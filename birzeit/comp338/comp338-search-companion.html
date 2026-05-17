@@ -825,6 +825,65 @@ table.compare-table td .complexity { font-family: var(--mono); font-size: 12px; 
   margin: 8px 0 14px;
 }
 
+/* ============== Maze pruning demo ============== */
+.maze-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 18px;
+}
+@media (max-width: 760px) {
+  .maze-comparison { grid-template-columns: 1fr; }
+}
+.maze-panel { display: flex; flex-direction: column; }
+.maze-panel h6 {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+.maze-stats {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  padding: 10px 12px;
+  background: var(--paper-warm);
+  border: 1px solid var(--rule);
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+}
+.maze-stats strong { color: var(--ink); font-weight: 700; }
+.maze-wall {
+  fill: var(--ink);
+  stroke: var(--ink-soft);
+  stroke-width: 1;
+}
+.maze-h-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  fill: var(--ink-soft);
+  stroke: var(--paper);
+  stroke-width: 2.5;
+  paint-order: stroke fill;
+  text-anchor: middle;
+  pointer-events: none;
+  user-select: none;
+}
+.maze-sg-label {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  fill: var(--paper);
+  text-anchor: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* ============== 8-puzzle ============== */
 .puzzle-board {
   display: inline-grid;
@@ -2285,6 +2344,121 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <li>Relax it so a tile may move to any <em>adjacent</em> square ignoring whether it is occupied: optimal cost is h<sub>2</sub> (Manhattan distance).</li>
     </ul>
     <p>Both are admissible because removing constraints can only make a problem <em>easier</em>; an optimal solution to the relaxed problem cannot cost more than an optimal solution to the original.</p>
+  </div>
+
+  <!-- ===================== Pruning maze ===================== -->
+  <div class="subsection" id="astar-pruning">
+    <h3>Pruning in action &middot; a 5&times;5 maze <span class="ar">التهذيب في العمل</span></h3>
+
+    <p>The clearest way to see what the heuristic is doing for A* is to put A* next to an uninformed algorithm on the same problem and watch what each one expands. A grid maze makes this visible at a glance.</p>
+
+    <h4>Manhattan distance</h4>
+    <p>Before running anything, fix the heuristic. <span class="term">Manhattan distance<span class="term-tooltip">For grid cells (r, c) and (r', c'), |r &minus; r'| + |c &minus; c'|. The minimum number of horizontal-plus-vertical steps needed if there were no walls.<span class="ar">مسافة مانهاتن</span></span></span> from cell (r, c) to cell (r', c') is</p>
+    <div class="eq centered">h(r, c) = |r &minus; r'| + |c &minus; c'|</div>
+    <p>That is the number of moves you would take if you could only go horizontally and vertically and there were no obstacles. On a grid where every step costs 1, Manhattan is admissible: walls can only make a real path longer than the unobstructed count of vertical-plus-horizontal moves, never shorter. So h(n) &le; h*(n) always holds.</p>
+    <p>In the maze below, G sits at row 4, column 4. The small number written in each empty cell is its h-value, which is (4 &minus; r) + (4 &minus; c).</p>
+
+    <h4>The maze</h4>
+    <p>5 &times; 5 grid. S in the top-left, G in the bottom-right. Dark squares are walls. You may move horizontally or vertically between adjacent open cells; each move costs 1. The walls in rows 1 and 3 split the maze into three vertical lanes joined at rows 0, 2, and 4.</p>
+
+    <div class="callout"><span class="marker">Colour key on the cells</span>
+      <ul class="tight" style="margin: 8px 0 0 0;">
+        <li><strong>Dark navy:</strong> start S or wall.</li>
+        <li><strong>Maroon (filled):</strong> goal G or the node currently being expanded.</li>
+        <li><strong>Light maroon:</strong> cells that have been expanded (closed list).</li>
+        <li><strong>Yellow dashed:</strong> cells on the fringe (generated, not yet expanded).</li>
+        <li><strong>Gold:</strong> cells on the returned path.</li>
+        <li><strong>Plain:</strong> cells never reached. This is the pruned set.</li>
+      </ul>
+    </div>
+
+    <p>Press Step on each side to advance one expansion at a time. Watch which cells each algorithm leaves untouched.</p>
+
+    <div class="maze-comparison">
+      <div class="maze-panel">
+        <h6>A* with h = Manhattan</h6>
+        <div class="graph-stage">
+          <svg viewBox="0 0 290 290" id="graph-maze-astar" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="controls">
+          <button class="step-btn" data-algo="maze-astar" data-action="reset">Reset</button>
+          <button class="step-btn primary" data-algo="maze-astar" data-action="step">Step &#9656;</button>
+          <button class="step-btn" data-algo="maze-astar" data-action="play">Play All</button>
+        </div>
+        <div class="maze-stats" data-maze-stats="maze-astar"></div>
+      </div>
+      <div class="maze-panel">
+        <h6>BFS, uninformed</h6>
+        <div class="graph-stage">
+          <svg viewBox="0 0 290 290" id="graph-maze-bfs" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="controls">
+          <button class="step-btn" data-algo="maze-bfs" data-action="reset">Reset</button>
+          <button class="step-btn primary" data-algo="maze-bfs" data-action="step">Step &#9656;</button>
+          <button class="step-btn" data-algo="maze-bfs" data-action="play">Play All</button>
+        </div>
+        <div class="maze-stats" data-maze-stats="maze-bfs"></div>
+      </div>
+    </div>
+
+    <div class="callout tip"><span class="marker">What to see</span>
+      <ol class="tight" style="font-style: normal; margin-top: 10px;">
+        <li><strong>Both find the same optimal cost.</strong> The path length is identical because the heuristic is admissible.</li>
+        <li><strong>A* never touches the bottom-left pocket.</strong> Cells (2, 0), (2, 1), (4, 0), (4, 1) sit at row-column positions whose g + h exceeds C*. A* refuses to expand them because it has a cheaper goal-cost upper bound from its right-lane progress.</li>
+        <li><strong>BFS expands them anyway.</strong> BFS knows nothing about the goal's location; from its point of view a cell at depth 6 is just as worthy of expansion as any other cell at depth 6, even if Manhattan says that cell is on the wrong side of the maze.</li>
+        <li><strong>The difference is the pruning.</strong> The cells A* never colours are the cells the heuristic ruled out. Make the heuristic worse and that pruned set shrinks; make it perfect and A* would touch only the path itself.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===================== Complexity in depth ===================== -->
+  <div class="subsection" id="astar-complexity">
+    <h3>The complexity of A*, in depth <span class="ar">التعقيد بالتفصيل</span></h3>
+
+    <p class="lede">Time and space costs for A* are not single numbers. They range across a spectrum decided almost entirely by the heuristic. The same A* algorithm can be near-linear on one problem and ruinously exponential on the next.</p>
+
+    <h4>Time complexity: three cases</h4>
+
+    <p>A* expands nodes in order of f(n) = g(n) + h(n). What we want to count is how many nodes it expands before the goal is popped. Space tracks the same number because A* stores every generated node. The question is: how does this count grow as problems get harder (deeper solutions, larger branching factor)? The answer depends entirely on how good the heuristic is. Three cases.</p>
+
+    <div class="card">
+      <div class="card-label">Case 1 &middot; perfect heuristic &rarr; linear time</div>
+      <p>Suppose h(n) = h*(n) for every node n. The heuristic returns the exact true remaining cost, with zero error.</p>
+      <p>Then for every node on an optimal path, f(n) = g(n) + h*(n) = C*; for every node off an optimal path, f(n) &gt; C*. Since A* expands nodes in order of f, and every optimal-path node has f = C* while every off-path node has f &gt; C*, <strong>A* expands only the nodes on the optimal path</strong>. Exactly d + 1 expansions where d is the solution depth. Linear in d, with no wasted work.</p>
+      <p>Intuitively: a perfect h is a perfect oracle. At each node it whispers "go this way, not that way" and never lies; A* just follows the breadcrumb trail.</p>
+      <p>This case is unattainable in practice (if you had a perfect h you would not need to search at all, you would just compute the answer), but it is the theoretical floor.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Case 2 &middot; zero heuristic &rarr; exponential time</div>
+      <p>Suppose h(n) = 0 everywhere. Then f(n) = g(n), and A* degenerates into Uniform-Cost Search. UCS explores in every direction equally, like ripples on a pond, because no fringe node looks more promising than any other.</p>
+      <p>UCS expands roughly every node with g &le; C*. In a tree with branching factor b and solution depth d that is about <strong>b<sup>d</sup></strong> nodes. This is the worst case: A* with the worst possible admissible heuristic.</p>
+      <p>Concretely on Romania: with h = 0, A* would expand outward from Arad equally in every direction, toward Zerind, Timisoara, Sibiu, with no preference, and would explore the entire road network cheaper than 418 km before settling on the answer.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Case 3 &middot; real heuristic &rarr; somewhere between</div>
+      <p>Real heuristics sit between perfect and useless. The question is how much do they prune? There is a precise bound. The number of nodes A* expands is bounded by the size of the set</p>
+      <div class="eq centered">{ n : f(n) &le; C* }</div>
+      <p>These are the nodes A* <em>cannot</em> rule out. It must expand each of them before it can be certain that the goal at cost C* is optimal.</p>
+      <p>The size of this set depends on the <em>heuristic error</em>, the gap between h(n) and h*(n). AIMA introduces the <span class="term">effective branching factor b*<span class="term-tooltip">If A* expands N nodes on a problem with solution depth d, the effective branching factor b* is the value that makes a uniform tree of depth d and branching factor b* have N+1 nodes. Closer to 1 means the heuristic prunes very well; closer to b means it barely helps.<span class="ar">عامل التفرع الفعّال</span></span></span> such that A* expands roughly (b*)<sup>d</sup> nodes.</p>
+      <ul class="tight">
+        <li>Perfect h: b* &rarr; 1, near-linear.</li>
+        <li>Zero h: b* = b, full exponential.</li>
+        <li>Real h: somewhere between.</li>
+      </ul>
+      <p>For the 8-puzzle with h<sub>2</sub> (Manhattan), the empirical b* is around 1.4, dramatically smaller than the underlying branching factor b = 3 of unrestricted moves. That is why A* solves 8-puzzles that uninformed search cannot.</p>
+    </div>
+
+    <h4>Space complexity, and why it bites first</h4>
+
+    <p>A* keeps every generated node in memory: the priority-queue fringe, the closed list, and the search-tree pointers needed to reconstruct the returned path. With b<sup>d</sup> generated nodes in the worst case, memory grows exponentially too. The space and time bounds are the same expression.</p>
+
+    <p>Here is the practical truth that makes A* hard on large problems: <strong>memory runs out before time does</strong>. A modern CPU does several million A* expansions per second, but every expanded node carries roughly 50 to 100 bytes of bookkeeping (state representation, parent pointer, g, h, and the priority-queue link). With 8 GB of RAM you can hold around 10<sup>8</sup> nodes. On a problem with b = 10, d = 12, A* can generate 10<sup>13</sup> nodes in the worst case, a hundred thousand times more than fits. The algorithm crashes out of memory long before it would have finished computing.</p>
+
+    <p>This is why R&amp;N call A* "memory-bound" rather than "time-bound" for hard problems, and why the memory-bounded variants RBFS and SMA* exist: they trade re-computation for a memory budget you can actually afford. They are introduced in Part Nine.</p>
+
+    <div class="callout warn"><span class="marker">A quiet caveat</span>The bounds above assume tree-search. In graph-search A* benefits from skipping repeated states, but the worst-case complexity in terms of generated nodes is unchanged: the state space could still have b<sup>d</sup> distinct states. Graph-search saves you from re-exploring loops, not from the underlying combinatorial explosion.</div>
   </div>
 
   <!-- ===================== Coordinate exercise ===================== -->
@@ -3824,6 +3998,154 @@ function populateSldTable() {
     row.className = 'sld-row';
     row.innerHTML = `<span class="city">${city}</span><span class="dist">${ROMANIA.h[city]}</span>`;
     sld.appendChild(row);
+  }
+}
+
+/* =====================================================================
+   5x5 maze for the A* pruning demo. Walls in rows 1 and 3 force the
+   path through three vertical "lanes" so BFS visibly explores extra
+   cells in the bottom-left pocket that A* refuses to expand.
+   ===================================================================== */
+const MAZE_5X5_GRID = [
+  [0, 0, 0, 0, 0],
+  [1, 1, 0, 1, 1],
+  [0, 0, 0, 0, 0],
+  [1, 1, 0, 1, 1],
+  [0, 0, 0, 0, 0]
+];
+
+function buildMazeGraph(grid) {
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const goalR = rows - 1, goalC = cols - 1;
+  const nodes = {};
+  const edges = [];
+  const h = {};
+  const cellPx = 50, marginPx = 20;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === 1) continue;
+      const name = `R${r}C${c}`;
+      nodes[name] = {
+        x: c * cellPx + cellPx / 2 + marginPx,
+        y: r * cellPx + cellPx / 2 + marginPx,
+        row: r, col: c
+      };
+      h[name] = Math.abs(r - goalR) + Math.abs(c - goalC);
+    }
+  }
+  const dirs = [[0, 1], [1, 0]];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === 1) continue;
+      for (const [dr, dc] of dirs) {
+        const nr = r + dr, nc = c + dc;
+        if (nr >= rows || nc >= cols) continue;
+        if (grid[nr][nc] === 1) continue;
+        edges.push([`R${r}C${c}`, `R${nr}C${nc}`, 1]);
+      }
+    }
+  }
+  return {
+    nodes, edges, h,
+    start: 'R0C0', goal: `R${rows-1}C${cols-1}`,
+    _grid: grid, _rows: rows, _cols: cols
+  };
+}
+
+const MAZE_GRAPH = buildMazeGraph(MAZE_5X5_GRID);
+
+function renderMaze(svgId, graph) {
+  const svg = document.getElementById(svgId);
+  if (!svg) return null;
+  svg.innerHTML = '';
+  const grid = graph._grid;
+  const rows = graph._rows;
+  const cols = graph._cols;
+  const cellPx = 50, marginPx = 20;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] !== 1) continue;
+      const rect = svgNS('rect', {
+        x: c * cellPx + marginPx, y: r * cellPx + marginPx,
+        width: cellPx - 2, height: cellPx - 2,
+        rx: 3, 'class': 'maze-wall'
+      });
+      svg.appendChild(rect);
+    }
+  }
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === 1) continue;
+      const name = `R${r}C${c}`;
+      const g = svgNS('g', { 'data-node': name });
+      let cls = 'node-circle';
+      if (name === graph.start) cls += ' start';
+      else if (name === graph.goal) cls += ' goal';
+      const rect = svgNS('rect', {
+        x: c * cellPx + marginPx, y: r * cellPx + marginPx,
+        width: cellPx - 2, height: cellPx - 2,
+        rx: 3, 'class': cls
+      });
+      g.appendChild(rect);
+      const cx = c * cellPx + cellPx / 2 + marginPx;
+      const cy = r * cellPx + cellPx / 2 + marginPx;
+      const labelEl = svgNS('text', {
+        x: cx, y: cy + 5,
+        'class': (name === graph.start || name === graph.goal) ? 'maze-sg-label' : 'maze-h-label'
+      });
+      labelEl.textContent = (name === graph.start) ? 'S'
+                          : (name === graph.goal) ? 'G'
+                          : String(graph.h[name]);
+      g.appendChild(labelEl);
+      svg.appendChild(g);
+    }
+  }
+
+  svg.dataset.startName = graph.start;
+  svg.dataset.goalName = graph.goal;
+  return svg;
+}
+
+function summariseRun(steps) {
+  const expansions = steps.filter(s => s.kind === 'expand').length;
+  const goalStep = steps.find(s => s.kind === 'goal');
+  return {
+    expansions,
+    cost: goalStep ? goalStep.cost : null,
+    pathLength: goalStep && goalStep.path ? goalStep.path.length - 1 : null,
+    goalReachedAt: goalStep ? steps.indexOf(goalStep) : null
+  };
+}
+
+function writeMazeStats(key, summary, labelExtra) {
+  const panel = document.querySelector(`[data-maze-stats="${key}"]`);
+  if (!panel) return;
+  panel.innerHTML = `
+    <div><strong>Algorithm:</strong> ${labelExtra}</div>
+    <div><strong>Nodes expanded:</strong> ${summary.expansions}</div>
+    <div><strong>Path length:</strong> ${summary.pathLength}</div>
+    <div><strong>Path cost:</strong> ${summary.cost}</div>
+  `;
+}
+
+function setupMazeDemo() {
+  if (!document.getElementById('graph-maze-astar')) return;
+  const configs = [
+    { key: 'maze-astar', runner: () => runAStar(MAZE_GRAPH), traceMaker: traceAStar,
+      columns: ['Step', 'Popped', 'Visited', 'Fringe'], label: 'A* with h = Manhattan' },
+    { key: 'maze-bfs', runner: () => runBFS(MAZE_GRAPH, true), traceMaker: traceBFS,
+      columns: ['Step', 'Popped', 'Visited', 'Fringe'], label: 'BFS (uninformed)' }
+  ];
+  for (const c of configs) {
+    const svgId = `graph-${c.key}`;
+    renderMaze(svgId, MAZE_GRAPH);
+    initialiseAlgo(c.key, c.runner, MAZE_GRAPH, c.columns, c.traceMaker);
+    bindAlgoControls(c.key);
+    const summary = summariseRun(c.runner());
+    writeMazeStats(c.key, summary, c.label);
   }
 }
 
@@ -6063,6 +6385,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTreeVsGraph();
   populateSldTable();
   setupSystematicAlgorithms();
+  setupMazeDemo();
   setupCoordExercise();
   setupInteractivePuzzle();
   setupLandscape();
