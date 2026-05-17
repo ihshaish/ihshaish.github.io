@@ -2566,11 +2566,63 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <div class="sublabel">when A* runs out of RAM</div>
   </div>
 
-  <p class="lede">A*'s real-world bottleneck is space, not time. For hard problems the fringe grows exponentially; modern hardware fills its memory long before the algorithm fills its clock. Two refinements buy a memory bound, each at a different price.</p>
+  <p class="lede">A*'s real-world bottleneck is space, not time. The fringe grows exponentially; modern hardware fills its memory long before the algorithm finishes computing. Before we meet the refinements that fix this, it is worth being precise about <em>what</em> A* is storing and <em>why</em> none of it can be discarded.</p>
 
   <div class="subsection">
     <h3>The problem with A* <span class="ar">المشكلة في الذاكرة</span></h3>
-    <p>A* keeps every generated node on the fringe. For deep problems the fringe is exponentially large. The trick used by all memory-bounded variants is the same idea that IDS used for uninformed search: <em>iterative deepening, but cut off on f-cost instead of depth</em>. The two algorithms below differ in how aggressively they use whatever memory is actually available.</p>
+
+    <h4>What A* keeps, per node</h4>
+    <p>For every state it has ever generated, A* stores a small record. Roughly:</p>
+    <ul class="tight">
+      <li><strong>State</strong>: the configuration itself (the 3 &times; 3 grid for the 8-puzzle, the city name for Romania, the (row, column) cell for a grid maze).</li>
+      <li><strong>Parent pointer</strong>: which node it was reached from. The returned path is recovered by walking this chain back to the start.</li>
+      <li><strong>g(n)</strong>: the actual path cost from the start to this node.</li>
+      <li><strong>h(n)</strong>: the heuristic estimate from this node to a goal.</li>
+      <li><strong>f(n) = g(n) + h(n)</strong>: the key used to order the priority queue.</li>
+    </ul>
+    <p>Concretely on the 8-puzzle: the state takes about 9 bytes (one nibble per tile), the parent pointer about 8 bytes, three integers about 12 bytes, plus 16 to 32 bytes of priority-queue and hash-table overhead. <strong>Roughly 40 to 100 bytes per node</strong>, depending on the implementation.</p>
+
+    <h4>Where the nodes live: two structures</h4>
+    <p>A* keeps these records in two collections that both grow monotonically until the goal is popped. Nothing is freed in between:</p>
+    <ul class="tight">
+      <li><strong>Frontier</strong> (the priority queue): every generated-but-not-yet-expanded node, ordered by f(n).</li>
+      <li><strong>Reached</strong> (the closed list): every state that has already been expanded, kept so repeats can be recognised and skipped.</li>
+    </ul>
+
+    <h4>Why none of this can be thrown away</h4>
+    <p>Students usually ask: cannot A* just discard the bad-looking nodes? For unmodified A* the answer is no, and there are three independent reasons.</p>
+    <ol class="tight">
+      <li><strong>The reached set is needed to avoid re-expansion.</strong> Without the closed list, the same state can be reached via a longer path, expanded a second time, its children regenerated, expanded again, and so on. State spaces with loops or many paths to the same configuration explode exponentially when the closed list is absent.</li>
+      <li><strong>The frontier is needed for optimality.</strong> A* always expands the lowest-f node next. That might currently be node D with f = 14. But after expanding D, every child of D might have f = 20, and the next-best candidate becomes node E with f = 17. If A* had thrown E away to save space, it would never reach E and would miss the path through it. The whole frontier is on the critical path; there is no "obviously useless" subset to drop.</li>
+      <li><strong>Parent pointers are needed to return the answer.</strong> When A* finally pops the goal, the only way to recover the sequence of actions is to walk the parent chain back to the start. Drop the pointers and A* knows the optimal cost but cannot report the optimal path.</li>
+    </ol>
+
+    <h4>How fast does the memory bill grow?</h4>
+    <p>Each expansion pops one node and pushes up to b children. Memory grows by roughly (b &minus; 1) nodes per expansion. The number of expansions itself grows roughly as (b*)<sup>d</sup>, where b* is the effective branching factor introduced in Part Eight. For a hard instance of the 15-puzzle with b &asymp; 3 and depth around 50, the table looks like:</p>
+
+    <div class="compare-wrapper">
+      <table class="compare-table" style="background: var(--paper); min-width: 0;">
+        <thead>
+          <tr><th>Expansions done</th><th>Nodes in memory</th><th>RAM at ~50 bytes/node</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>10<sup>2</sup></td><td>~300</td><td>15 KB</td></tr>
+          <tr><td>10<sup>4</sup></td><td>~30,000</td><td>1.5 MB</td></tr>
+          <tr><td>10<sup>6</sup></td><td>~3,000,000</td><td>150 MB</td></tr>
+          <tr><td>10<sup>8</sup></td><td>~300,000,000</td><td><strong>~14 GB</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>A hard 15-puzzle instance typically requires 10<sup>7</sup> to 10<sup>8</sup> A* expansions. The last row exceeds the RAM of a typical laptop. A* swaps to disk, thrashes, and eventually crashes long before it would have finished computing the answer. This is the practical face of the worst-case bound from Part Eight, with concrete numbers attached.</p>
+
+    <h4>What the variants buy</h4>
+    <p>The two algorithms in this section take different routes to a memory-bounded A*.</p>
+    <ul class="tight">
+      <li><strong>RBFS</strong>, next, keeps only the current depth-first path plus the second-best f-value at each ancestor. On the same 15-puzzle instance that is roughly 50 &times; (3 &times; 50 bytes) &asymp; <strong>7 KB</strong> instead of 14 GB. About two million times less memory for the same optimal answer, at the cost of regenerating nodes when the search backtracks.</li>
+      <li><strong>SMA*</strong>, after that, takes a different route: keep as much of A*'s memory profile as fits in a chosen budget of N nodes, evict the worst when full, regenerate later if needed. The budget is the dial; the answer quality degrades gracefully as it shrinks.</li>
+    </ul>
+    <p>Both rest on the same trick that IDS used for uninformed search: <em>iterate, with the cutoff defined by f-cost instead of depth</em>. They differ in how aggressively they use whatever memory is actually available.</p>
   </div>
 
   <div class="subsection" id="rbfs">
