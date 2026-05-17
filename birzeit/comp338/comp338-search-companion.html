@@ -764,6 +764,67 @@ table.compare-table td .complexity { font-family: var(--mono); font-size: 12px; 
 .sld-table .sld-row .city { color: var(--ink); }
 .sld-table .sld-row .dist { color: var(--accent); font-weight: 700; }
 
+/* ============== Heuristic explorer overlay ============== */
+.h-explorer-overlay { pointer-events: none; }
+.h-explorer-overlay .h-path-edge {
+  stroke: var(--gold);
+  stroke-width: 5;
+  fill: none;
+  opacity: 0.9;
+  stroke-linecap: round;
+}
+.h-explorer-overlay .h-dashed {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-dasharray: 7 5;
+  fill: none;
+  opacity: 0.85;
+}
+.h-explorer-overlay .h-label-bg {
+  fill: var(--paper);
+  stroke: var(--accent);
+  stroke-width: 1.2;
+}
+.h-explorer-overlay .h-label-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--accent);
+}
+.h-explorer-overlay .h-badge-bg {
+  fill: var(--paper);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+.h-explorer-overlay .h-badge-name {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.h-explorer-overlay .h-badge-gh {
+  font-family: var(--mono);
+  font-size: 11px;
+  fill: var(--ink-soft);
+}
+.h-explorer-overlay .h-badge-f {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  fill: var(--accent);
+}
+
+.h-explorer-hint {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--grey);
+  font-style: italic;
+  padding: 6px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--paper-warm);
+  margin: 8px 0 14px;
+}
+
 /* ============== 8-puzzle ============== */
 .puzzle-board {
   display: inline-grid;
@@ -2046,6 +2107,8 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <div class="fringe-info">Fringe data structure: priority queue ordered by h(n).</div>
     </div>
 
+    <div class="h-explorer-hint">Click any city to see its h. The dashed line is the straight-line heuristic to Bucharest; greedy picks whichever fringe city has the smallest such dashed line. Click again to clear.</div>
+
     <div class="algo-stage">
       <div>
         <div class="graph-stage romania-stage">
@@ -2114,6 +2177,8 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
 
     <div class="eq centered">f(n) = g(n) + h(n)<br>
     <span style="color: var(--grey); font-size: 12px;">cost so far  +  estimated cost remaining  =  estimated total cost</span></div>
+
+    <div class="h-explorer-hint">Click any city on the map to inspect that city's g, h, and f. The solid gold lines trace the cheapest road route from Arad; the dashed line is the straight-line heuristic to Bucharest. Click the same city again to clear.</div>
 
     <div class="algo-stage">
       <div>
@@ -2226,6 +2291,8 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
   <div class="subsection" id="exercise-coord">
     <h3>Exercise &middot; the coordinate graph <span class="ar">تمرين تطبيقيّ</span></h3>
     <p>An abstract graph with nodes A through K placed on a 2D grid. The straight-line distance from each node to goal K serves as h(n). Step through Greedy and A* in turn and compare the paths and the number of nodes expanded.</p>
+
+    <div class="h-explorer-hint">Click any node to inspect its g, h, and f. The solid gold lines are the cheapest route from A; the dashed line is the straight-line heuristic to K.</div>
 
     <div class="tabs" style="margin-top: 12px;">
       <button class="tab active" data-coord-algo="greedy">Greedy Best-First</button>
@@ -3577,6 +3644,187 @@ function renderCoordGraph(svgId) {
   svg.appendChild(weightLayer);
   svg.appendChild(nodeLayer);
   return svg;
+}
+
+/* =====================================================================
+   Heuristic explorer: click any node to see g(n), h(n), f(n) with the
+   actual path from the start drawn in solid gold and the straight-line
+   heuristic drawn as a dashed segment to the goal.
+   ===================================================================== */
+function dijkstraFrom(graph, start) {
+  const adj = adjacency(graph);
+  const dist = {};
+  const prev = {};
+  for (const n in graph.nodes) dist[n] = Infinity;
+  dist[start] = 0;
+  const visited = new Set();
+  while (true) {
+    let u = null, best = Infinity;
+    for (const n in dist) {
+      if (!visited.has(n) && dist[n] < best) { best = dist[n]; u = n; }
+    }
+    if (u === null) break;
+    visited.add(u);
+    for (const [v, w] of adj[u]) {
+      if (dist[u] + w < dist[v]) {
+        dist[v] = dist[u] + w;
+        prev[v] = u;
+      }
+    }
+  }
+  const paths = {};
+  for (const n in dist) {
+    const path = [];
+    let cur = n;
+    while (cur !== undefined) {
+      path.unshift(cur);
+      cur = prev[cur];
+    }
+    paths[n] = path;
+  }
+  return { dist, paths };
+}
+
+function getNodePixelXY(svg, n) {
+  const g = svg.querySelector(`[data-node="${n}"]`);
+  if (!g) return null;
+  const circle = g.querySelector('circle');
+  if (!circle) return null;
+  return { x: +circle.getAttribute('cx'), y: +circle.getAttribute('cy') };
+}
+
+function clearHeuristicOverlay(svg) {
+  svg.querySelectorAll('.h-explorer-overlay').forEach(o => o.remove());
+}
+
+function drawHeuristicOverlay(svg, graph, n, optG, paths) {
+  clearHeuristicOverlay(svg);
+  const np = getNodePixelXY(svg, n);
+  const goalP = getNodePixelXY(svg, graph.goal);
+  if (!np || !goalP) return;
+  const h = graph.h && graph.h[n] !== undefined ? graph.h[n] : 0;
+  const gCost = optG[n] === Infinity ? null : optG[n];
+  const f = (gCost !== null && n !== graph.goal) ? gCost + h : (gCost !== null ? gCost : null);
+
+  const overlay = svgNS('g', { 'class': 'h-explorer-overlay' });
+
+  const path = paths[n] || [];
+  for (let i = 0; i < path.length - 1; i++) {
+    const a = getNodePixelXY(svg, path[i]);
+    const b = getNodePixelXY(svg, path[i + 1]);
+    if (!a || !b) continue;
+    const line = svgNS('line', {
+      x1: a.x, y1: a.y, x2: b.x, y2: b.y,
+      'class': 'h-path-edge'
+    });
+    overlay.appendChild(line);
+  }
+
+  if (n !== graph.goal) {
+    const dashed = svgNS('line', {
+      x1: np.x, y1: np.y, x2: goalP.x, y2: goalP.y,
+      'class': 'h-dashed'
+    });
+    overlay.appendChild(dashed);
+    const mx = (np.x + goalP.x) / 2;
+    const my = (np.y + goalP.y) / 2;
+    const hStr = `h = ${h}`;
+    const lbW = 14 + hStr.length * 6.5;
+    const labelBg = svgNS('rect', {
+      x: mx - lbW / 2, y: my - 9, width: lbW, height: 16, rx: 8,
+      'class': 'h-label-bg'
+    });
+    const labelText = svgNS('text', {
+      x: mx, y: my + 4, 'text-anchor': 'middle',
+      'class': 'h-label-text'
+    });
+    labelText.textContent = hStr;
+    overlay.appendChild(labelBg);
+    overlay.appendChild(labelText);
+  }
+
+  const badgeW = 158, badgeH = (n === graph.goal) ? 36 : 56;
+  const vb = svg.viewBox.baseVal;
+  let bx = np.x + 18;
+  let by = np.y - badgeH - 8;
+  if (vb) {
+    if (bx + badgeW > vb.width - 4) bx = np.x - badgeW - 18;
+    if (by < 4) by = np.y + 14;
+    if (by + badgeH > vb.height - 4) by = vb.height - badgeH - 4;
+  }
+
+  const bg = svgNS('rect', {
+    x: bx, y: by, width: badgeW, height: badgeH, rx: 6,
+    'class': 'h-badge-bg'
+  });
+  overlay.appendChild(bg);
+
+  const nameText = svgNS('text', {
+    x: bx + 10, y: by + 17, 'class': 'h-badge-name'
+  });
+  nameText.textContent = n;
+  overlay.appendChild(nameText);
+
+  if (n === graph.goal) {
+    const gt = svgNS('text', {
+      x: bx + 10, y: by + 30, 'class': 'h-badge-gh'
+    });
+    gt.textContent = `goal: h = 0`;
+    overlay.appendChild(gt);
+  } else {
+    const ghText = svgNS('text', {
+      x: bx + 10, y: by + 32, 'class': 'h-badge-gh'
+    });
+    ghText.textContent = gCost !== null ? `g = ${gCost}    h = ${h}` : `h = ${h}`;
+    overlay.appendChild(ghText);
+    if (f !== null) {
+      const fText = svgNS('text', {
+        x: bx + 10, y: by + 48, 'class': 'h-badge-f'
+      });
+      fText.textContent = `f = g + h = ${f}`;
+      overlay.appendChild(fText);
+    }
+  }
+
+  svg.appendChild(overlay);
+}
+
+const _hExplorerWiredSvgs = new WeakSet();
+function attachHeuristicExplorer(svgId, graph) {
+  const svg = document.getElementById(svgId);
+  if (!svg || _hExplorerWiredSvgs.has(svg)) return;
+  if (!graph.h) return;
+  _hExplorerWiredSvgs.add(svg);
+  const { dist: optG, paths } = dijkstraFrom(graph, graph.start);
+  const state = { selected: null };
+
+  svg.querySelectorAll('[data-node]').forEach(nodeG => {
+    if (!nodeG.classList.contains('node-clickable')) nodeG.classList.add('node-clickable');
+    nodeG.style.cursor = 'pointer';
+    nodeG.addEventListener('click', () => {
+      const n = nodeG.getAttribute('data-node');
+      if (state.selected === n) {
+        clearHeuristicOverlay(svg);
+        state.selected = null;
+        return;
+      }
+      drawHeuristicOverlay(svg, graph, n, optG, paths);
+      state.selected = n;
+    });
+  });
+}
+
+function populateSldTable() {
+  const sld = document.getElementById('sld-table');
+  if (!sld || !ROMANIA.h) return;
+  sld.innerHTML = '';
+  const cities = Object.keys(ROMANIA.h).sort();
+  for (const city of cities) {
+    const row = document.createElement('div');
+    row.className = 'sld-row';
+    row.innerHTML = `<span class="city">${city}</span><span class="dist">${ROMANIA.h[city]}</span>`;
+    sld.appendChild(row);
+  }
 }
 
 function renderExerciseGraph(svgId) {
@@ -5649,6 +5897,7 @@ function setupCoordExercise() {
   const svg = document.getElementById('graph-coord');
   if (!svg) return;
   renderCoordGraph('graph-coord');
+  attachHeuristicExplorer('graph-coord', COORD_GRAPH);
 
   const coordTable = document.getElementById('coord-table');
   if (coordTable) {
@@ -5802,6 +6051,7 @@ function setupSystematicAlgorithms() {
     }
     initialiseAlgo(c.key, c.runner, c.graph, c.columns, c.traceMaker);
     bindAlgoControls(c.key);
+    if (c.graph === ROMANIA) attachHeuristicExplorer(svgId, ROMANIA);
   }
 
   const refGraph = document.getElementById('reference-graph');
@@ -5811,6 +6061,7 @@ function setupSystematicAlgorithms() {
 document.addEventListener('DOMContentLoaded', () => {
   setupRomaniaSuccessors();
   setupTreeVsGraph();
+  populateSldTable();
   setupSystematicAlgorithms();
   setupCoordExercise();
   setupInteractivePuzzle();
