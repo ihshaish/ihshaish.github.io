@@ -2754,6 +2754,44 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
 
   <div class="callout tip"><span class="marker">Key idea</span>Local search algorithms operate using only a single current node (rather than multiple paths) and generally move only to neighbours of that node. They use very little memory, usually a constant amount, and they can find reasonable solutions in large or infinite state spaces where systematic algorithms are unsuitable.</div>
 
+  <!-- =====================  WHAT KIND OF PROBLEMS  ===================== -->
+  <div class="subsection" id="local-problem-shape">
+    <h3>Problems suited to local search <span class="ar">المسائل المناسبة للبحث المحلّيّ</span></h3>
+
+    <p>Local search shines on a particular shape of problem. Before we look at the algorithms, three ingredients have to be on the table.</p>
+
+    <h4>1. A candidate-solution state</h4>
+    <p>A <em>state</em> in local search is a complete candidate answer to the problem, not a partial path being grown. The size of the state is the size of the answer.</p>
+    <ul class="tight">
+      <li>n-queens: an array of n integers, one per column, giving the row of that column's queen. A state is an entire board configuration with all n queens placed.</li>
+      <li>Travelling salesperson (TSP): a permutation of the cities. A state is a complete tour.</li>
+      <li>Scheduling: an assignment of every task to a time slot and a machine. A state is a full schedule.</li>
+      <li>VLSI placement: an x/y position for every component on the chip. A state is a complete layout.</li>
+    </ul>
+    <p>This contrasts sharply with systematic search, where a state is a node on a path from start to goal. In local search the "path" is meaningless; only the candidate at the current step matters.</p>
+
+    <h4>2. A neighbour function</h4>
+    <p>Given the current state, the <em>neighbour function</em> (or <em>successor function</em>) returns all states reachable by a single small change.</p>
+    <ul class="tight">
+      <li>n-queens: move one queen to a different row in its column. n queens &times; (n &minus; 1) other rows = n(n&minus;1) neighbours. For n = 8 that is 56.</li>
+      <li>TSP: swap two cities in the tour, or reverse a contiguous segment. Each gives O(n<sup>2</sup>) neighbours.</li>
+      <li>Scheduling: move one task to a different slot, or swap two tasks. Many neighbours per state.</li>
+    </ul>
+    <p>The neighbour function defines the <em>topology</em> of the search landscape. A larger neighbourhood gives the algorithm more options at each step, but also makes each step more expensive.</p>
+
+    <h4>3. An objective function</h4>
+    <p>The <em>objective function</em> (also called the <em>fitness function</em> in evolutionary algorithms, or the <em>cost function</em> when minimising) assigns a numeric quality to every state. Local search uses this number to compare candidates and decide what to do next.</p>
+    <ul class="tight">
+      <li>n-queens (cost view): h(state) = number of pairs of queens attacking each other. Minimise to 0.</li>
+      <li>n-queens (fitness view): f(state) = number of non-attacking pairs out of <sup>n</sup>C<sub>2</sub>. Maximise to <sup>n</sup>C<sub>2</sub> (28 for n = 8).</li>
+      <li>TSP: minimise total tour length.</li>
+      <li>Scheduling: minimise makespan, or weighted lateness.</li>
+    </ul>
+    <p>The maximise and minimise views are interchangeable; the algorithms below are written for maximisation (higher VALUE = better), and the 8-queens example minimises h. Mentally flip the sign and the algorithms behave identically.</p>
+
+    <div class="callout"><span class="marker">When local search wins</span>Local search is the right tool when (a) the path to the answer is irrelevant, only the answer matters; (b) the state space is too large to enumerate systematically; (c) you have a cheap-to-evaluate objective function; (d) memory is constrained. It is the wrong tool when you need a sequence of actions (driving directions, planning a sequence of moves), when the objective is deceptive (no signal toward the global optimum), or when you need a provable optimum.</div>
+  </div>
+
   <div class="subsection">
     <h3>The state-space landscape <span class="ar">منظر فضاء الحالات</span></h3>
     <p>Picture the state space as a one-dimensional landscape: the x-axis is the state, the y-axis is an <em>objective function</em> we want to maximise (or, equivalently, a cost we want to minimise; the two views are interchangeable by flipping the sign). Each point is a state; the height is its quality. The shape of the landscape decides how easy or hard the problem is.</p>
@@ -2852,6 +2890,8 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <li><strong>Random-restart hill climbing</strong>, if hill climbing fails, start again from a random state. If each attempt succeeds with probability p, expected number of restarts is 1/p. For 8-queens, p &asymp; 0.14, so an average of seven restarts solves it.</li>
     </ul>
 
+    <div class="callout"><span class="marker">Stopping criterion</span>Basic hill climbing terminates as soon as <strong>no neighbour is strictly better</strong> than the current state. That state may be the global maximum (success), a local maximum (stuck), a plateau (stuck), or a shoulder (stuck unless sideways moves are allowed). Implementations sometimes add safety caps: a maximum number of steps, or a maximum number of consecutive sideways moves on a plateau before giving up.</div>
+
     <div class="props-detailed">
       <h4>Why hill climbing has these properties</h4>
       <div class="prop-row">
@@ -2911,6 +2951,20 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
         <span class="kw">else</span> current &larr; next <span class="kw">with probability</span> e<sup>&Delta;E/T</sup>   <span class="cm">// worse move, accept sometimes</span></div>
 
     <div class="callout"><span class="marker">The acceptance rule</span>If the move is uphill (&Delta;E &gt; 0), always take it. If the move is downhill (&Delta;E &lt; 0), take it with probability e<sup>&Delta;E/T</sup>. When T is high, this probability is near 1, almost anything is accepted. When T is low, even small downhill moves are almost never accepted, the algorithm becomes hill climbing.</div>
+
+    <h4>Theoretical steps</h4>
+    <ol class="tight">
+      <li><strong>Initialise.</strong> Pick a random starting state. Choose a starting temperature T<sub>0</sub> (large enough that most worse moves are accepted at first) and a cooling schedule, typically geometric: T(t + 1) = &alpha; T(t) with &alpha; close to 1, say 0.95.</li>
+      <li><strong>Pick a random neighbour.</strong> Unlike hill climbing, SA does not look at all neighbours. It samples one at random.</li>
+      <li><strong>Compute &Delta;E</strong> = VALUE(neighbour) &minus; VALUE(current).</li>
+      <li><strong>Decide.</strong> If &Delta;E &gt; 0 accept the move (current &larr; neighbour). If &Delta;E &le; 0 accept with probability e<sup>&Delta;E/T</sup>; otherwise stay.</li>
+      <li><strong>Cool.</strong> Lower T according to the schedule.</li>
+      <li><strong>Repeat</strong> until the stopping criterion fires.</li>
+    </ol>
+
+    <div class="callout"><span class="marker">Worked example</span>Suppose h(current) = 5, T = 2.0, and the random neighbour has h = 7 (worse, &Delta;E = &minus;2 in maximisation language). Acceptance probability = e<sup>&minus;2/2</sup> = e<sup>&minus;1</sup> &asymp; 0.37. Roll a uniform-random number r in [0, 1]; if r &lt; 0.37, accept the worse move. Later, with T cooled to 0.2, the same &Delta;E = &minus;2 gives e<sup>&minus;2/0.2</sup> = e<sup>&minus;10</sup> &asymp; 0.00005, almost never accepted. As temperature falls, SA grows pickier; the late-stage trajectory looks like hill climbing.</div>
+
+    <div class="callout"><span class="marker">Stopping criterion</span>Three common rules, often combined. <strong>(a) Temperature floor:</strong> T drops below a tiny threshold or reaches zero on the schedule. <strong>(b) Step budget:</strong> a fixed maximum number of iterations. <strong>(c) Solution found:</strong> the objective reaches the target (e.g., 8-queens h = 0). Some implementations also stop early if the best-seen state has not improved for some number of steps.</div>
 
     <div class="algo-stage">
       <div>
@@ -2975,6 +3029,8 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
   <!-- =====================  LOCAL BEAM  ===================== -->
   <div class="subsection" id="algo-beam">
     <h3>3. Local Beam Search <span class="ar">البحث الشعاعي المحليّ</span></h3>
+
+    <div class="callout warn"><span class="marker">Not examined in COMP338</span>Local Beam Search is <em>not</em> part of Jarrar's Ch4 syllabus and is not required for the COMP338 exam. It is included here for completeness because it bridges naturally between hill climbing and genetic algorithms. Read it for context, skip it if pressed for time.</div>
 
     <div class="algo-desc">
       <div class="name">Idea</div>
@@ -3050,6 +3106,79 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
 
     <div class="callout"><span class="marker">Representation matters</span>For 8-queens, a state is naturally an 8-digit string (each digit is a row from 0-7). Crossover at position k means: child = first k digits of parent A, then last 8-k digits of parent B. The hope: good column-row pairings from each parent are preserved if the crossover point falls between them.</div>
 
+    <h4>The five operations of a GA</h4>
+    <p>Every generation runs five operations. Understanding each in isolation is the key to understanding how GAs differ from other local-search methods.</p>
+
+    <ol class="tight">
+      <li><strong>Representation (encoding).</strong> Each candidate solution is encoded as a fixed-length string of symbols, the <em>chromosome</em>. Each position is a <em>gene</em>; each symbol value is an <em>allele</em>. For 8-queens the chromosome is eight digits, each in [1, 8] (or [0, 7]), giving the row of that column's queen. For a problem to suit a GA, an encoding has to exist whose <em>substrings</em> capture meaningful sub-solutions that crossover can preserve.</li>
+      <li><strong>Fitness function.</strong> Numeric measure of how good a chromosome is. For 8-queens, a natural fitness is the number of non-attacking pairs of queens, in [0, <sup>8</sup>C<sub>2</sub>] = [0, 28]. Fitness 28 means a solution; lower values are worse.</li>
+      <li><strong>Selection.</strong> Pick pairs of parents from the current population, with selection probability proportional to fitness. The standard formula for individual <em>i</em> with fitness f<sub>i</sub> in a population of N is</li>
+    </ol>
+
+    <div class="eq centered">p<sub>i</sub> = f<sub>i</sub> / &Sigma;<sub>j=1..N</sub> f<sub>j</sub></div>
+
+    <p>Higher-fitness individuals are more likely to be selected, but lower-fitness ones still have a chance (which preserves population diversity). This scheme is called <em>roulette-wheel selection</em>: imagine a wheel divided into N slices, with each slice's width proportional to that individual's fitness. Spin twice to get two parents.</p>
+
+    <ol class="tight" start="4">
+      <li><strong>Crossover (recombination).</strong> Combine two parents into two children. Pick a random crossover point k in [1, L &minus; 1] where L is chromosome length. Child A inherits positions 1..k from parent A and positions k+1..L from parent B; child B is the reverse. The hope: if good "building blocks" of the answer sit in different parents, crossover assembles them.</li>
+      <li><strong>Mutation.</strong> With small probability (typically 0.01 to 0.05 per gene), randomly change one symbol in a child to keep the population from collapsing to a single area of the search space. Without mutation, lost alleles cannot return.</li>
+    </ol>
+
+    <h4>Worked example: 8-queens with GA</h4>
+
+    <p>Start with a population of four chromosomes (small for illustration; production GAs typically use 20-500). Each chromosome is a candidate 8-queens board, written as an 8-digit string in which digit <em>i</em> gives the row of the queen in column <em>i</em>.</p>
+
+    <div class="card" style="margin-top: 12px;">
+      <div class="card-label">Step 1: population &amp; fitness (non-attacking pairs, max 28)</div>
+      <table class="compare-table" style="background: var(--paper); min-width: 0;">
+        <thead><tr><th>Label</th><th>Chromosome</th><th>Fitness f<sub>i</sub></th><th>p<sub>i</sub> = f<sub>i</sub> / &Sigma;f</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td><code>2 4 4 1 5 1 2 4</code></td><td>24</td><td>24 / 78 = 0.31 (31%)</td></tr>
+          <tr><td>B</td><td><code>3 2 5 4 3 2 1 3</code></td><td>23</td><td>23 / 78 = 0.29 (29%)</td></tr>
+          <tr><td>C</td><td><code>2 4 7 4 8 5 5 2</code></td><td>20</td><td>20 / 78 = 0.26 (26%)</td></tr>
+          <tr><td>D</td><td><code>3 2 7 5 2 4 1 1</code></td><td>11</td><td>11 / 78 = 0.14 (14%)</td></tr>
+          <tr style="background: var(--paper-warm);"><td colspan="2"><strong>Sum &Sigma;f</strong></td><td><strong>78</strong></td><td>1.00</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 13px; color: var(--grey); margin-top: 8px;">Selection probabilities form a proper distribution: they sum to 1. A and B are roughly twice as likely to be picked as D, which encodes the GA's "selection pressure" toward better candidates.</p>
+    </div>
+
+    <div class="card" style="margin-top: 14px;">
+      <div class="card-label">Step 2: selection (roulette wheel, two pairs picked at random by p<sub>i</sub>)</div>
+      <p style="margin-bottom: 8px;">Suppose two spins yield the parent pairs <strong>(A, C)</strong> and <strong>(A, B)</strong>. (A is fittest so most likely to be chosen; that it appears twice is consistent with its 31% slice.)</p>
+    </div>
+
+    <div class="card" style="margin-top: 14px;">
+      <div class="card-label">Step 3: crossover at a random point</div>
+      <p style="margin-bottom: 10px;">Pick crossover position k = 3 for pair (A, C). Take the first three digits from one parent and the last five from the other.</p>
+      <table class="compare-table" style="background: var(--paper); min-width: 0;">
+        <thead><tr><th>Parent / child</th><th>Digits 1..3</th><th>Digits 4..8</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Parent A</td><td><code>2 4 4</code></td><td><code>1 5 1 2 4</code></td><td><code>2 4 4 1 5 1 2 4</code></td></tr>
+          <tr><td>Parent C</td><td><code>2 4 7</code></td><td><code>4 8 5 5 2</code></td><td><code>2 4 7 4 8 5 5 2</code></td></tr>
+          <tr style="background: var(--success-bg, #E8F1EB);"><td><strong>Child 1</strong> (A then C)</td><td><code>2 4 4</code></td><td><code>4 8 5 5 2</code></td><td><code>2 4 4 4 8 5 5 2</code></td></tr>
+          <tr style="background: var(--success-bg, #E8F1EB);"><td><strong>Child 2</strong> (C then A)</td><td><code>2 4 7</code></td><td><code>1 5 1 2 4</code></td><td><code>2 4 7 1 5 1 2 4</code></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 13px; color: var(--grey); margin-top: 8px;">The same operation is run on pair (A, B) with its own random crossover point, producing two more children. The four children replace the current population.</p>
+    </div>
+
+    <div class="card" style="margin-top: 14px;">
+      <div class="card-label">Step 4: mutation (small probability per gene)</div>
+      <p style="margin-bottom: 6px;">Walk through each gene of each child. With mutation probability around 1% per gene, occasionally swap one digit for a random replacement.</p>
+      <p style="margin: 6px 0;">Suppose gene 7 of Child 1 mutates from <code>5</code> to <code>7</code>:</p>
+      <p style="font-family: var(--mono); font-size: 14px; margin: 4px 0 0;">Before: <code>2 4 4 4 8 5 5 2</code></p>
+      <p style="font-family: var(--mono); font-size: 14px; margin: 4px 0 0;">After:&nbsp;&nbsp;<code>2 4 4 4 8 5 <strong style="color: var(--accent);">7</strong> 2</code></p>
+      <p style="font-size: 13px; color: var(--grey); margin-top: 10px;">Mutation is the only operator that can introduce <em>new</em> alleles. If every member of the population has row 5 in column 2, crossover alone will never produce row 6 in column 2. Mutation can.</p>
+    </div>
+
+    <div class="card" style="margin-top: 14px;">
+      <div class="card-label">Step 5: replace the population, repeat</div>
+      <p>The four (mutated) children become the new population. Compute fitness for each, then go back to Step 2. The average fitness typically rises generation after generation; the best individual eventually reaches the target.</p>
+    </div>
+
+    <div class="callout"><span class="marker">Stopping criterion</span>A GA terminates on one of: <strong>(a) a satisfactory individual</strong>, one whose fitness meets the target (for 8-queens, fitness = 28 = 0 attacking pairs); <strong>(b) a generation cap</strong>, a fixed maximum number of generations; <strong>(c) convergence</strong>, the population's diversity has collapsed or the best fitness has not improved for some number of generations. R&amp;N and Jarrar both phrase this as "until some individual is fit enough, or enough time has elapsed".</div>
+
     <div class="algo-stage">
       <div>
         <div class="graph-stage" style="padding: 18px 22px;">
@@ -3078,6 +3207,42 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <p>GAs have been applied to circuit design (a famous early result: Adrian Thompson's evolved sound discriminator), antenna design (NASA used a GA-designed antenna on the ST5 spacecraft), schedule optimisation, and many problems where the search space is huge and the structure is poorly understood.</p>
 
     <div class="callout warn"><span class="marker">Honest assessment</span>The theoretical case for genetic algorithms over other local search methods is weak. The schema theorem, the original justification for why crossover should help, turns out to apply only under restrictive assumptions. In practice GAs are useful when the state representation has natural sub-structures that crossover can exploit, but they are not magic, and a well-tuned simulated annealing often beats them.</div>
+  </div>
+
+  <!-- =====================  STOPPING CRITERIA SUMMARY  ===================== -->
+  <div class="subsection">
+    <h3>Stopping criteria, side by side <span class="ar">شروط التوقّف</span></h3>
+    <p>One question every local-search algorithm has to answer: when do we stop? Each algorithm uses a different mix of natural and engineered stop conditions, and an exam answer should name them explicitly.</p>
+
+    <div class="compare-wrapper">
+      <table class="compare-table" style="min-width: 0;">
+        <thead><tr><th>Algorithm</th><th>Natural stop</th><th>Engineered safety stops</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="algo">Hill Climbing</td>
+            <td>No neighbour strictly better than the current state.</td>
+            <td>Max steps; max consecutive sideways moves (for the plateau-tolerant variant).</td>
+          </tr>
+          <tr>
+            <td class="algo">Hill Climbing with random restarts</td>
+            <td>One of the restarts reaches the target objective value.</td>
+            <td>Max number of restarts; total step budget across all restarts.</td>
+          </tr>
+          <tr>
+            <td class="algo">Simulated Annealing</td>
+            <td>Temperature reaches zero (or some &epsilon; floor).</td>
+            <td>Step budget; target objective reached; no improvement for k iterations.</td>
+          </tr>
+          <tr>
+            <td class="algo">Genetic Algorithms</td>
+            <td>An individual reaches the target fitness.</td>
+            <td>Max generations; population diversity collapses; best fitness flat for k generations.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size: 13px; color: var(--grey);">In practice every implementation combines its natural stop with at least one engineered safety stop so the algorithm always terminates in bounded time even when the natural condition is never met.</p>
   </div>
 
   <!-- =====================  WHEN TO USE LOCAL SEARCH  ===================== -->
