@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>COMP322 · Personas live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1A1A; --ink-soft: #2A2A2A; --muted: #5A6B78; --faint: #9AA5B1;
+  --paper: #FBFAF7; --card: #FFFFFF; --rule: #E4E2DC; --rule-strong: #D0CEC6;
+  --accent: #2C5F7C; --accent-dark: #1F4860; --accent-soft: #E8F0F5; --accent-cream: #F5EFE3;
+  --warn: #B8862F; --warn-soft: #FAF1E0;
+  --success: #2D7A4F; --success-soft: #E6F1EB;
+  --danger: #B23B3B; --danger-soft: #FBEAE9;
+  --serif: 'Source Serif Pro', Georgia, serif;
+  --sans: 'Inter', 'Segoe UI', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: var(--sans); background: var(--paper); color: var(--ink);
+  line-height: 1.55; -webkit-font-smoothing: antialiased;
+  overscroll-behavior: contain;
+}
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0 0 0.4em; letter-spacing: -0.01em; }
+
+.ribbon {
+  background: var(--accent); color: white;
+  padding: 12px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px;
+}
+.ribbon strong { font-weight: 600; }
+.ribbon .sess {
+  font-family: var(--mono); font-size: 11px; opacity: 0.8;
+}
+
+.wrap { max-width: 560px; margin: 0 auto; padding: 20px 18px 80px; }
+
+.card {
+  background: var(--card); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 22px; margin-bottom: 16px;
+}
+.card.warn { background: var(--warn-soft); border-color: var(--warn); }
+.card.success { background: var(--success-soft); border-color: var(--success); }
+.card.accent { background: var(--accent-soft); border-color: var(--accent); }
+
+.kicker {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1.3px;
+  color: var(--accent); font-weight: 700; margin-bottom: 8px;
+}
+.lede {
+  font-family: var(--serif); font-style: italic; color: var(--muted);
+  margin: 0 0 14px; font-size: 15px;
+}
+
+label {
+  display: block; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--muted); font-weight: 700;
+  margin: 10px 0 5px;
+}
+input[type="text"], select {
+  width: 100%; padding: 11px 12px; border: 1px solid var(--rule);
+  border-radius: 6px; font-family: inherit; font-size: 16px;
+  background: white; color: var(--ink);
+}
+input[type="text"]:focus, select:focus { outline: none; border-color: var(--accent); }
+
+button {
+  font-family: inherit; cursor: pointer; background: var(--accent);
+  color: white; border: none; padding: 12px 18px; border-radius: 6px;
+  font-size: 15px; font-weight: 600; width: 100%;
+}
+button:hover { background: var(--accent-dark); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--rule); }
+
+.qmeta {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--muted); font-weight: 600; margin-bottom: 6px;
+}
+.qmeta .qtype {
+  background: var(--accent-soft); color: var(--accent);
+  padding: 3px 10px; border-radius: 12px; letter-spacing: 0.6px;
+}
+.question {
+  font-family: var(--serif); font-size: 21px; line-height: 1.45;
+  font-weight: 600; margin: 6px 0 18px;
+}
+
+/* MC + multi options */
+.options { display: grid; gap: 10px; }
+.opt {
+  background: var(--paper); border: 1.5px solid var(--rule); border-radius: 8px;
+  padding: 13px 16px; display: flex; align-items: center; gap: 12px;
+  cursor: pointer; user-select: none;
+}
+.opt:hover:not(.locked) { border-color: var(--accent); background: var(--accent-soft); }
+.opt.picked { border-color: var(--accent); background: var(--accent-soft); }
+.opt.locked { pointer-events: none; }
+.opt-mark {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--rule-strong); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; background: white;
+}
+.opt[data-type="multi"] .opt-mark { border-radius: 4px; }
+.opt.picked .opt-mark { border-color: var(--accent); background: var(--accent); }
+.opt.picked .opt-mark::after {
+  content: ""; display: block; width: 7px; height: 7px;
+  border-radius: 50%; background: white;
+}
+.opt[data-type="multi"].picked .opt-mark::after {
+  width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0;
+  transform: rotate(45deg); background: transparent; border-radius: 0; margin-bottom: 2px;
+}
+.opt-label { font-size: 15px; line-height: 1.4; color: var(--ink-soft); flex: 1; }
+.opt.correct { border-color: var(--success); background: var(--success-soft); }
+.opt.correct .opt-mark { border-color: var(--success); background: var(--success); }
+.opt.wrong { border-color: var(--danger); background: var(--danger-soft); }
+.opt.wrong .opt-mark { border-color: var(--danger); background: var(--danger); }
+.opt-tag {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  padding: 3px 9px; border-radius: 11px; margin-left: auto; flex-shrink: 0;
+}
+.opt-tag.ok { background: var(--success); color: white; }
+.opt-tag.bad { background: var(--danger); color: white; }
+.opt-tag.miss { background: var(--warn); color: white; }
+
+/* Match */
+.match-row {
+  background: var(--paper); border: 1.5px solid var(--rule); border-radius: 7px;
+  padding: 11px 14px; margin-bottom: 10px;
+}
+.match-row .left { background: var(--accent-soft); margin: -11px -14px 8px; padding: 8px 14px; font-size: 14.5px; border-radius: 7px 7px 0 0; border-bottom: 1px solid var(--accent); }
+.match-row select.match-sel {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--rule-strong);
+  border-radius: 5px; font-family: inherit; font-size: 13.5px; background: white; color: var(--ink);
+}
+.match-feedback { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  padding: 2px 8px; border-radius: 9px; margin-top: 6px; display: inline-block; }
+.match-feedback.ok { background: var(--success); color: white; }
+.match-feedback.bad { background: var(--danger); color: white; }
+
+/* Rank */
+.rank-list { display: flex; flex-direction: column; gap: 8px; padding: 0; margin: 0; list-style: none; }
+.rank-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--paper); border: 1.5px solid var(--rule);
+  border-radius: 7px; padding: 11px 12px; font-size: 14px;
+}
+.rank-num {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: white;
+  font-family: var(--mono); font-weight: 700; font-size: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.rank-text { flex: 1; line-height: 1.35; }
+.rank-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.rank-btn {
+  width: 28px; height: 28px; border: 1px solid var(--rule-strong); background: white;
+  border-radius: 5px; cursor: pointer; font-family: inherit; font-size: 14px;
+  font-weight: 700; color: var(--ink-soft); padding: 0;
+}
+.rank-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.rank-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.rank-feedback { font-size: 11px; color: var(--muted); font-weight: 600; }
+.rank-feedback.ok { color: var(--success); }
+.rank-feedback.bad { color: var(--danger); }
+
+.explanation {
+  margin-top: 14px; padding: 14px 16px; background: var(--accent-cream);
+  border-left: 3px solid var(--warn); border-radius: 0 6px 6px 0;
+  font-family: var(--serif); font-size: 15px; line-height: 1.55;
+}
+.explanation .label {
+  display: block; font-family: var(--sans); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.2px; color: var(--warn);
+  margin-bottom: 6px;
+}
+
+.spinner {
+  border: 3px solid var(--rule); border-top-color: var(--accent);
+  border-radius: 50%; width: 24px; height: 24px;
+  animation: spin 0.8s linear infinite; margin: 16px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.banner {
+  background: var(--success-soft); border: 1px solid var(--success);
+  color: var(--success); padding: 12px 14px; border-radius: 6px;
+  font-size: 14px; font-weight: 600; text-align: center; margin: 14px 0;
+}
+.banner .alias { font-family: var(--mono); font-weight: 700; background: white; padding: 2px 6px; border-radius: 3px; }
+
+.score-big {
+  font-family: var(--serif); font-size: 56px; font-weight: 700;
+  color: var(--accent); text-align: center; line-height: 1.05; margin: 12px 0 4px;
+}
+.score-out {
+  font-family: var(--sans); font-size: 13px; color: var(--muted);
+  text-align: center; text-transform: uppercase; letter-spacing: 1.3px; font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div class="ribbon">
+  <div><strong>COMP322</strong> · Personas live</div>
+  <div class="sess" id="session-display"></div>
+</div>
+
+<div class="wrap" id="root">
+  <div class="card"><div class="spinner"></div><p style="text-align:center;color:var(--muted);font-size:13px;">Connecting…</p></div>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="personas-questions.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const QUESTIONS = window.PERSONAS_QUESTIONS || [];
+const root = document.getElementById('root');
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])); }
+
+// Session ID from URL ?s=...
+const SESSION_ID = new URLSearchParams(location.search).get('s') || 'default';
+document.getElementById('session-display').textContent = 'Session ' + SESSION_ID;
+
+// Firebase init
+let app, db, auth, userId;
+let sessionData = null, alias = null, participantId = null;
+
+try {
+  app = initializeApp(window.COMP322_FIREBASE_CONFIG);
+  db = getDatabase(app);
+  auth = getAuth(app);
+  if (!window.COMP322_FIREBASE_CONFIG || window.COMP322_FIREBASE_CONFIG.apiKey === 'PASTE_YOUR_API_KEY_HERE') {
+    throw new Error('Firebase has not been configured. Ask the instructor to set firebase-config.js.');
+  }
+} catch (e) {
+  root.innerHTML = `<div class="card warn"><h3>Setup incomplete</h3><p style="font-size:14px;color:var(--muted);">${esc(e.message)}</p></div>`;
+  throw e;
+}
+
+try {
+  participantId = localStorage.getItem('comp322_pid_' + SESSION_ID);
+  alias = localStorage.getItem('comp322_alias_' + SESSION_ID);
+} catch (e) {}
+
+signInAnonymously(auth).catch(e => {
+  root.innerHTML = `<div class="card warn"><h3>Sign-in failed</h3><p style="font-size:14px;color:var(--muted);">${esc(e.message)}</p></div>`;
+});
+
+onAuthStateChanged(auth, user => {
+  if (!user) return;
+  userId = user.uid;
+  const sessionRef = ref(db, 'sessions/' + SESSION_ID);
+  onValue(sessionRef, snap => {
+    sessionData = snap.val() || {};
+    render();
+  });
+});
+
+function setLocal(key, value) {
+  try { localStorage.setItem('comp322_' + key + '_' + SESSION_ID, value); } catch (e) {}
+}
+
+function joinSession(newAlias) {
+  participantId = userId;
+  alias = newAlias;
+  setLocal('pid', participantId);
+  setLocal('alias', alias);
+  return set(ref(db, `sessions/${SESSION_ID}/participants/${participantId}`), {
+    alias: alias, joinedAt: serverTimestamp()
+  });
+}
+
+function submitAnswer(qIdx, answer) {
+  return set(ref(db, `sessions/${SESSION_ID}/answers/q${qIdx}/${participantId}`), answer);
+}
+
+// =====================================================================
+// RENDER
+// =====================================================================
+function render() {
+  if (!alias || !sessionData?.participants?.[participantId]) return renderJoin();
+  const state = sessionData?.meta?.state || 'lobby';
+  const qIdx = sessionData?.meta?.questionIdx ?? 0;
+
+  if (state === 'lobby') return renderLobby();
+  if (state === 'done') return renderDone();
+  if (state === 'reveal') return renderReveal(qIdx);
+  return renderQuestion(qIdx);
+}
+
+function renderJoin() {
+  root.innerHTML = `
+    <div class="card">
+      <div class="kicker">Personas live · join</div>
+      <h2>Pick an alias</h2>
+      <p class="lede">Any name you are happy to see on the projector when you submit answers. It does not have to be your real name.</p>
+      <label for="alias-in">Your alias</label>
+      <input type="text" id="alias-in" maxlength="22" placeholder="e.g. orange-fox">
+      <button id="join-btn" style="margin-top:14px;">Join the session</button>
+    </div>
+  `;
+  document.getElementById('alias-in').focus();
+  document.getElementById('join-btn').addEventListener('click', async () => {
+    const v = document.getElementById('alias-in').value.trim();
+    if (!v) return;
+    await joinSession(v);
+  });
+}
+
+function renderLobby() {
+  const count = Object.keys(sessionData?.participants || {}).length;
+  root.innerHTML = `
+    <div class="card">
+      <div class="kicker">Joined</div>
+      <h2>Waiting for the instructor</h2>
+      <div class="banner">You're in as <span class="alias">${esc(alias)}</span></div>
+      <p style="text-align:center; color:var(--muted); font-size:14px;">
+        ${count} student${count === 1 ? '' : 's'} ${count === 1 ? 'is' : 'are'} in the room. Hold tight; the first question will appear here when the instructor starts.
+      </p>
+    </div>
+  `;
+}
+
+function renderQuestion(qIdx) {
+  const q = QUESTIONS[qIdx];
+  if (!q) return renderDone();
+  const submitted = sessionData?.answers?.['q' + qIdx]?.[participantId] !== undefined;
+  root.innerHTML = `
+    <div class="qmeta">
+      <div>Question ${qIdx + 1} of ${QUESTIONS.length}</div>
+      <div class="qtype">${typeLabel(q.type)}</div>
+    </div>
+    <div class="card">
+      <div class="question">${esc(q.text)}</div>
+      <div id="qbody"></div>
+      <div id="qsubmit" style="margin-top:14px;"></div>
+    </div>
+  `;
+  const body = document.getElementById('qbody');
+  if (q.type === 'mc') renderMC(body, q, qIdx, submitted);
+  else if (q.type === 'multi') renderMulti(body, q, qIdx, submitted);
+  else if (q.type === 'match') renderMatch(body, q, qIdx, submitted);
+  else if (q.type === 'rank') renderRank(body, q, qIdx, submitted);
+  if (submitted) {
+    document.getElementById('qsubmit').innerHTML = `<div class="banner">Submitted. Waiting for the rest of the class…</div>`;
+  }
+}
+
+const pendingResponses = {};
+
+function renderMC(body, q, qIdx, submitted) {
+  const stored = sessionData?.answers?.['q' + qIdx]?.[participantId];
+  const picked = stored !== undefined ? stored : pendingResponses[qIdx];
+  body.innerHTML = '<div class="options">' + q.options.map((opt, i) => {
+    let cls = 'opt';
+    if (submitted) cls += ' locked';
+    if (i === picked) cls += ' picked';
+    return `<div class="${cls}" data-i="${i}" data-type="mc">
+      <span class="opt-mark"></span><span class="opt-label">${esc(opt)}</span>
+    </div>`;
+  }).join('') + '</div>';
+  if (!submitted) {
+    body.querySelectorAll('.opt').forEach(el => {
+      el.addEventListener('click', () => {
+        pendingResponses[qIdx] = +el.dataset.i;
+        renderQuestion(qIdx);
+      });
+    });
+    const sub = document.getElementById('qsubmit');
+    sub.innerHTML = `<button id="sub-btn" ${picked == null ? 'disabled' : ''}>Submit answer</button>`;
+    if (picked != null) {
+      document.getElementById('sub-btn').addEventListener('click', async () => {
+        await submitAnswer(qIdx, picked);
+      });
+    }
+  }
+}
+
+function renderMulti(body, q, qIdx, submitted) {
+  const stored = sessionData?.answers?.['q' + qIdx]?.[participantId];
+  const picked = stored !== undefined ? (Array.isArray(stored) ? stored : []) : (pendingResponses[qIdx] || []);
+  body.innerHTML = '<div class="options">' + q.options.map((opt, i) => {
+    let cls = 'opt';
+    if (submitted) cls += ' locked';
+    if (picked.includes(i)) cls += ' picked';
+    return `<div class="${cls}" data-i="${i}" data-type="multi">
+      <span class="opt-mark"></span><span class="opt-label">${esc(opt)}</span>
+    </div>`;
+  }).join('') + '</div>';
+  if (!submitted) {
+    body.querySelectorAll('.opt').forEach(el => {
+      el.addEventListener('click', () => {
+        const i = +el.dataset.i;
+        const current = pendingResponses[qIdx] || [];
+        const idx = current.indexOf(i);
+        if (idx === -1) current.push(i); else current.splice(idx, 1);
+        current.sort((a, b) => a - b);
+        pendingResponses[qIdx] = current;
+        renderQuestion(qIdx);
+      });
+    });
+    const sub = document.getElementById('qsubmit');
+    sub.innerHTML = `<button id="sub-btn" ${picked.length === 0 ? 'disabled' : ''}>Submit answer</button>`;
+    if (picked.length > 0) {
+      document.getElementById('sub-btn').addEventListener('click', async () => {
+        await submitAnswer(qIdx, picked);
+      });
+    }
+  }
+}
+
+function renderMatch(body, q, qIdx, submitted) {
+  const stored = sessionData?.answers?.['q' + qIdx]?.[participantId];
+  const picked = stored !== undefined ? stored : (pendingResponses[qIdx] || {});
+  const rightChoices = q.pairs.map(p => p.right);
+  body.innerHTML = q.pairs.map((p, i) => {
+    const chosen = picked[i] || '';
+    return `<div class="match-row">
+      <div class="left">${esc(p.left)}</div>
+      <select class="match-sel" data-i="${i}" ${submitted ? 'disabled' : ''}>
+        <option value="">Select a match…</option>
+        ${rightChoices.map(r => `<option value="${esc(r)}" ${chosen === r ? 'selected' : ''}>${esc(r)}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+  if (!submitted) {
+    body.querySelectorAll('.match-sel').forEach(sel => {
+      sel.addEventListener('change', () => {
+        const i = +sel.dataset.i;
+        const val = sel.value;
+        const current = pendingResponses[qIdx] || {};
+        if (val === '') delete current[i]; else current[i] = val;
+        pendingResponses[qIdx] = current;
+        renderQuestion(qIdx);
+      });
+    });
+    const allFilled = Object.keys(picked).length === q.pairs.length;
+    const sub = document.getElementById('qsubmit');
+    sub.innerHTML = `<button id="sub-btn" ${allFilled ? '' : 'disabled'}>Submit answer</button>`;
+    if (allFilled) {
+      document.getElementById('sub-btn').addEventListener('click', async () => {
+        await submitAnswer(qIdx, picked);
+      });
+    }
+  }
+}
+
+function renderRank(body, q, qIdx, submitted) {
+  const stored = sessionData?.answers?.['q' + qIdx]?.[participantId];
+  if (!pendingResponses[qIdx] && stored === undefined) {
+    pendingResponses[qIdx] = shuffledOrder(q.items.length, qIdx);
+  }
+  const order = stored !== undefined ? stored : pendingResponses[qIdx];
+  body.innerHTML = `<ol class="rank-list">${order.map((origIdx, pos) => `
+    <li class="rank-item">
+      <span class="rank-num">${pos + 1}</span>
+      <span class="rank-text">${esc(q.items[origIdx])}</span>
+      ${submitted ? '' : `<span class="rank-btns">
+        <button class="rank-btn" data-pos="${pos}" data-dir="up" ${pos === 0 ? 'disabled' : ''}>↑</button>
+        <button class="rank-btn" data-pos="${pos}" data-dir="down" ${pos === order.length - 1 ? 'disabled' : ''}>↓</button>
+      </span>`}
+    </li>
+  `).join('')}</ol>`;
+  if (!submitted) {
+    body.querySelectorAll('.rank-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pos = +btn.dataset.pos;
+        const dir = btn.dataset.dir;
+        const arr = pendingResponses[qIdx];
+        const swap = dir === 'up' ? pos - 1 : pos + 1;
+        [arr[pos], arr[swap]] = [arr[swap], arr[pos]];
+        renderQuestion(qIdx);
+      });
+    });
+    const sub = document.getElementById('qsubmit');
+    sub.innerHTML = `<button id="sub-btn">Submit answer</button>`;
+    document.getElementById('sub-btn').addEventListener('click', async () => {
+      await submitAnswer(qIdx, order);
+    });
+  }
+}
+
+function renderReveal(qIdx) {
+  const q = QUESTIONS[qIdx];
+  if (!q) return renderDone();
+  const stored = sessionData?.answers?.['q' + qIdx]?.[participantId];
+  const sc = scoreOne(q, stored);
+  let verdict = sc.score === sc.total ? 'Right' : (sc.score > 0 ? `Part credit (${sc.score} / ${sc.total})` : 'Not quite');
+
+  root.innerHTML = `
+    <div class="qmeta">
+      <div>Question ${qIdx + 1} of ${QUESTIONS.length}</div>
+      <div class="qtype">Reveal</div>
+    </div>
+    <div class="card">
+      <div class="question">${esc(q.text)}</div>
+      <div id="qbody"></div>
+      <div class="explanation">
+        <span class="label">${verdict} · why</span>
+        ${esc(q.explanation)}
+      </div>
+      <p style="margin-top:14px; text-align:center; color:var(--muted); font-size:13px; font-style:italic;">Waiting for the next question…</p>
+    </div>
+  `;
+  const body = document.getElementById('qbody');
+  if (q.type === 'mc') renderMCFeedback(body, q, stored);
+  else if (q.type === 'multi') renderMultiFeedback(body, q, stored);
+  else if (q.type === 'match') renderMatchFeedback(body, q, stored);
+  else if (q.type === 'rank') renderRankFeedback(body, q, stored);
+}
+
+function renderMCFeedback(body, q, picked) {
+  body.innerHTML = '<div class="options">' + q.options.map((opt, i) => {
+    let cls = 'opt locked';
+    let tag = '';
+    if (i === q.correct) { cls += ' correct'; tag = '<span class="opt-tag ok">Correct</span>'; }
+    else if (i === picked) { cls += ' wrong'; tag = '<span class="opt-tag bad">Your pick</span>'; }
+    return `<div class="${cls}" data-type="mc">
+      <span class="opt-mark"></span><span class="opt-label">${esc(opt)}</span>${tag}
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function renderMultiFeedback(body, q, picked) {
+  const pset = Array.isArray(picked) ? picked : [];
+  body.innerHTML = '<div class="options">' + q.options.map((opt, i) => {
+    const isCorrect = q.correct.includes(i);
+    const wasPicked = pset.includes(i);
+    let cls = 'opt locked';
+    let tag = '';
+    if (isCorrect && wasPicked) { cls += ' correct'; tag = '<span class="opt-tag ok">Right</span>'; }
+    else if (isCorrect && !wasPicked) { cls += ' correct'; tag = '<span class="opt-tag miss">Missed</span>'; }
+    else if (!isCorrect && wasPicked) { cls += ' wrong'; tag = '<span class="opt-tag bad">Wrong pick</span>'; }
+    return `<div class="${cls}" data-type="multi">
+      <span class="opt-mark"></span><span class="opt-label">${esc(opt)}</span>${tag}
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function renderMatchFeedback(body, q, picked) {
+  const p = picked || {};
+  body.innerHTML = q.pairs.map((pair, i) => {
+    const chosen = p[i];
+    const isCorrect = chosen === pair.right;
+    return `<div class="match-row">
+      <div class="left">${esc(pair.left)}</div>
+      <div style="font-size:13.5px; padding:4px 0;">Your match: <strong>${esc(chosen || '(none)')}</strong></div>
+      ${isCorrect ? '<div class="match-feedback ok">Correct</div>'
+                  : `<div class="match-feedback bad">Should be: ${esc(pair.right)}</div>`}
+    </div>`;
+  }).join('');
+}
+
+function renderRankFeedback(body, q, picked) {
+  const order = Array.isArray(picked) ? picked : [];
+  body.innerHTML = `<ol class="rank-list">${q.correctOrder.map((origIdx, pos) => {
+    const yourPick = order[pos];
+    const yourPickText = yourPick !== undefined ? q.items[yourPick] : '(none)';
+    const isCorrect = yourPick === origIdx;
+    return `<li class="rank-item">
+      <span class="rank-num">${pos + 1}</span>
+      <span class="rank-text">${esc(q.items[origIdx])}<br><small style="color:var(--muted)">You put: ${esc(yourPickText)}</small></span>
+      <span class="rank-feedback ${isCorrect ? 'ok' : 'bad'}">${isCorrect ? 'right' : 'wrong'}</span>
+    </li>`;
+  }).join('')}</ol>`;
+}
+
+function renderDone() {
+  let earned = 0, total = 0;
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const stored = sessionData?.answers?.['q' + i]?.[participantId];
+    const sc = scoreOne(QUESTIONS[i], stored);
+    earned += sc.score; total += sc.total;
+  }
+  const pct = total === 0 ? 0 : Math.round((earned / total) * 100);
+  root.innerHTML = `
+    <div class="card" style="text-align:center;">
+      <div class="kicker">Session ended</div>
+      <h2>Your result</h2>
+      <div class="score-big">${pct}%</div>
+      <div class="score-out">${earned} of ${total} points</div>
+      <p class="lede" style="margin-top:18px;">Thanks for playing. The instructor will share the aggregate results.</p>
+    </div>
+  `;
+}
+
+function scoreOne(q, response) {
+  if (response === undefined || response === null) return { score: 0, total: 1 };
+  if (q.type === 'mc') return { score: response === q.correct ? 1 : 0, total: 1 };
+  if (q.type === 'multi') {
+    const correctSet = new Set(q.correct);
+    let hits = 0, wrongs = 0, misses = 0;
+    for (const i of response) { if (correctSet.has(i)) hits++; else wrongs++; }
+    for (const i of q.correct) { if (!response.includes(i)) misses++; }
+    const total = q.correct.length;
+    return { score: Math.max(0, Math.min(total, hits - wrongs - misses)), total };
+  }
+  if (q.type === 'match') {
+    let hits = 0;
+    for (let i = 0; i < q.pairs.length; i++) if (response[i] === q.pairs[i].right) hits++;
+    return { score: hits, total: q.pairs.length };
+  }
+  if (q.type === 'rank') {
+    let hits = 0;
+    for (let pos = 0; pos < q.correctOrder.length; pos++) if (response[pos] === q.correctOrder[pos]) hits++;
+    return { score: hits, total: q.correctOrder.length };
+  }
+  return { score: 0, total: 1 };
+}
+
+function shuffledOrder(n, seed) {
+  const arr = Array.from({ length: n }, (_, i) => i);
+  let s = seed * 7919 + 31;
+  for (let i = arr.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function typeLabel(t) {
+  return ({ mc: 'Choose one', multi: 'Choose all that apply', match: 'Match the pairs', rank: 'Put in order' })[t] || t;
+}
+</script>
+
+</body>
+</html>

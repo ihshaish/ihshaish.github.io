@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP322 · Personas live · host</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1A1A; --ink-soft: #2A2A2A; --muted: #5A6B78; --faint: #9AA5B1;
+  --paper: #FBFAF7; --card: #FFFFFF; --rule: #E4E2DC; --rule-strong: #D0CEC6;
+  --accent: #2C5F7C; --accent-dark: #1F4860; --accent-soft: #E8F0F5; --accent-cream: #F5EFE3;
+  --warn: #B8862F; --warn-soft: #FAF1E0;
+  --success: #2D7A4F; --success-soft: #E6F1EB;
+  --danger: #B23B3B; --danger-soft: #FBEAE9;
+  --serif: 'Source Serif Pro', Georgia, serif;
+  --sans: 'Inter', 'Segoe UI', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; min-height: 100%; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); line-height: 1.5; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0 0 0.3em; letter-spacing: -0.01em; }
+
+.ribbon {
+  background: var(--accent); color: white; padding: 12px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 3px solid var(--accent-dark);
+}
+.ribbon strong { font-weight: 600; }
+.ribbon .right { display: flex; gap: 18px; align-items: center; font-size: 13px; }
+.ribbon .pill {
+  background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 14px;
+  font-family: var(--mono); font-size: 12px;
+}
+
+.wrap { max-width: 1400px; margin: 0 auto; padding: 22px 28px 60px; }
+
+.grid { display: grid; grid-template-columns: 340px 1fr; gap: 22px; }
+@media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 20px; margin-bottom: 14px;
+}
+.card.tight { padding: 14px 18px; }
+.card.accent { background: var(--accent-soft); border-color: var(--accent); }
+.card.cream  { background: var(--accent-cream); border-color: var(--warn); }
+.card.warn   { background: var(--warn-soft); border-color: var(--warn); }
+
+.kicker {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1.4px;
+  color: var(--accent); font-weight: 700; margin-bottom: 6px;
+}
+
+button {
+  font-family: inherit; cursor: pointer; background: var(--accent); color: white;
+  border: none; padding: 10px 16px; border-radius: 6px; font-size: 14px;
+  font-weight: 600; margin: 4px 0;
+}
+button:hover { background: var(--accent-dark); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button.ghost { background: white; color: var(--accent); border: 1px solid var(--accent); }
+button.ghost:hover { background: var(--accent-soft); }
+button.warn-btn { background: var(--warn); }
+button.warn-btn:hover { background: #9C7426; }
+button.danger-btn { background: var(--danger); }
+button.danger-btn:hover { background: #8E2F2F; }
+button.wide { width: 100%; padding: 12px 16px; font-size: 15px; }
+
+/* Left side */
+.qr-box {
+  text-align: center;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.qr-box .url {
+  font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+  word-break: break-all; margin-top: 10px;
+}
+#qr-canvas { margin: 6px auto 0; display: inline-block; }
+#qr-canvas img, #qr-canvas svg { width: 220px; height: 220px; display: block; }
+
+.participants {
+  font-family: var(--mono); font-size: 12px; color: var(--ink-soft);
+  background: var(--paper); border: 1px dashed var(--rule); border-radius: 6px;
+  padding: 12px; max-height: 220px; overflow-y: auto;
+}
+.participants .name { display: inline-block; background: var(--accent-soft); color: var(--accent); padding: 2px 9px; border-radius: 10px; margin: 2px 4px 2px 0; }
+
+/* Main side */
+.qbig {
+  font-family: var(--serif); font-size: 32px; line-height: 1.35;
+  font-weight: 600; margin: 0 0 22px;
+}
+.qmeta {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--muted); font-weight: 600; margin-bottom: 6px;
+}
+.qmeta .qtype {
+  background: var(--accent-soft); color: var(--accent);
+  padding: 3px 10px; border-radius: 12px; letter-spacing: 0.6px;
+}
+
+/* Bar chart for MC + multi aggregation */
+.bar-list { display: grid; gap: 10px; margin-top: 4px; }
+.bar-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+  padding: 14px 18px; border-radius: 8px;
+  background: var(--paper); border: 1.5px solid var(--rule);
+  position: relative; overflow: hidden;
+}
+.bar-row .fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--accent-soft);
+  transition: width 0.45s ease;
+  z-index: 0;
+}
+.bar-row .text { position: relative; z-index: 1; font-size: 15.5px; line-height: 1.35; color: var(--ink-soft); }
+.bar-row .text strong { font-weight: 600; }
+.bar-row .count { position: relative; z-index: 1; font-family: var(--mono); font-weight: 700; font-size: 14px; color: var(--accent); white-space: nowrap; }
+.bar-row.correct .fill { background: var(--success-soft); }
+.bar-row.correct { border-color: var(--success); }
+.bar-row.correct .count { color: var(--success); }
+.bar-row.wrong .fill { background: var(--danger-soft); }
+.bar-row.wrong { border-color: var(--danger); }
+.bar-row.wrong .count { color: var(--danger); }
+
+.match-aggregate, .rank-aggregate { display: grid; gap: 10px; }
+.match-aggregate .row, .rank-aggregate .row {
+  display: grid; grid-template-columns: 1fr auto; gap: 14px;
+  padding: 12px 16px; border: 1px solid var(--rule); border-radius: 7px;
+  background: var(--paper); align-items: center;
+}
+.match-aggregate .label, .rank-aggregate .label { font-size: 14px; line-height: 1.35; color: var(--ink-soft); }
+.match-aggregate .label small, .rank-aggregate .label small { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+.match-aggregate .pct, .rank-aggregate .pct {
+  font-family: var(--mono); font-weight: 700; font-size: 14px; color: var(--accent);
+  text-align: right; min-width: 92px;
+}
+
+.controls {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.controls button { margin: 0; }
+
+.stat-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.stat {
+  background: white; border: 1px solid var(--rule); border-radius: 6px;
+  padding: 10px 14px; flex: 1 1 110px; min-width: 110px;
+}
+.stat-num { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1.05; }
+.stat-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+
+.lobby-card { text-align: center; padding: 36px 28px; }
+.lobby-card .big { font-family: var(--serif); font-size: 28px; font-weight: 600; margin: 6px 0 12px; }
+.lobby-card .sub { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 16px; max-width: 540px; margin: 0 auto 22px; }
+
+.done-card { text-align: center; padding: 36px 28px; }
+.done-card .big { font-family: var(--serif); font-size: 38px; font-weight: 700; margin: 6px 0 8px; color: var(--accent); }
+
+.leaderboard { max-width: 640px; margin: 0 auto; text-align: left; }
+.leaderboard .row {
+  display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: center;
+  padding: 10px 14px; border: 1px solid var(--rule); border-radius: 7px;
+  background: var(--paper); margin-bottom: 6px;
+}
+.leaderboard .pos { font-family: var(--mono); font-weight: 700; color: var(--accent); text-align: center; }
+.leaderboard .alias { font-weight: 600; color: var(--ink); }
+.leaderboard .score { font-family: var(--mono); color: var(--accent); font-weight: 700; }
+.leaderboard .row.top { background: var(--accent-soft); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="ribbon">
+  <div><strong>COMP322</strong> · Personas live · host</div>
+  <div class="right">
+    <span class="pill" id="session-display"></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="grid">
+    <aside>
+      <div class="qr-box">
+        <div class="kicker">Join URL</div>
+        <div id="qr-canvas"></div>
+        <div class="url" id="join-url">...</div>
+      </div>
+      <div class="card tight">
+        <div class="kicker">Participants <span id="pcount" style="float:right; font-family: var(--mono); color: var(--ink-soft);">0</span></div>
+        <div class="participants" id="participants-list">No-one yet. Project the QR.</div>
+      </div>
+      <div class="card tight">
+        <div class="kicker">Session</div>
+        <button class="ghost wide" id="export-btn">Export results CSV</button>
+        <button class="warn-btn wide" id="reset-btn">Reset session</button>
+      </div>
+    </aside>
+
+    <main id="main">
+      <div class="card"><p style="color:var(--muted);font-size:13px;text-align:center;">Connecting…</p></div>
+    </main>
+  </div>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="personas-questions.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, update, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const QUESTIONS = window.PERSONAS_QUESTIONS || [];
+const main = document.getElementById('main');
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])); }
+
+// =====================================================================
+// SESSION ID
+// =====================================================================
+function newSessionId() {
+  const chars = 'abcdefghijkmnpqrstuvwxyz23456789';
+  let s = 'pers-';
+  for (let i = 0; i < 6; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
+let SESSION_ID = new URLSearchParams(location.search).get('s');
+if (!SESSION_ID) {
+  SESSION_ID = newSessionId();
+  const u = new URL(location.href);
+  u.searchParams.set('s', SESSION_ID);
+  history.replaceState({}, '', u);
+}
+document.getElementById('session-display').textContent = 'Session ' + SESSION_ID;
+
+const joinUrl = new URL(location.href);
+joinUrl.pathname = joinUrl.pathname.replace(/personas-host\.html$/, 'personas-live.html');
+document.getElementById('join-url').textContent = joinUrl.toString();
+
+// QR
+try {
+  if (typeof qrcode === 'function') {
+    const qr = qrcode(0, 'M');
+    qr.addData(joinUrl.toString());
+    qr.make();
+    document.getElementById('qr-canvas').innerHTML = qr.createImgTag(6, 6);
+  }
+} catch (e) { /* CDN may be blocked; URL printed below as fallback */ }
+
+// =====================================================================
+// FIREBASE
+// =====================================================================
+let app, db, auth;
+try {
+  if (!window.COMP322_FIREBASE_CONFIG || window.COMP322_FIREBASE_CONFIG.apiKey === 'PASTE_YOUR_API_KEY_HERE') {
+    throw new Error('Firebase config not set. Edit quiz/firebase-config.js with the project credentials.');
+  }
+  app = initializeApp(window.COMP322_FIREBASE_CONFIG);
+  db = getDatabase(app);
+  auth = getAuth(app);
+} catch (e) {
+  main.innerHTML = `<div class="card warn"><h2>Setup incomplete</h2><p style="font-size:14px;color:var(--muted);">${esc(e.message)}</p></div>`;
+  throw e;
+}
+
+let sessionData = null;
+signInAnonymously(auth).catch(e => {
+  main.innerHTML = `<div class="card warn"><h2>Sign-in failed</h2><p style="font-size:14px;">${esc(e.message)}</p></div>`;
+});
+onAuthStateChanged(auth, user => {
+  if (!user) return;
+  onValue(ref(db, 'sessions/' + SESSION_ID), snap => {
+    sessionData = snap.val() || {};
+    render();
+  });
+});
+
+function setMeta(patch) {
+  return update(ref(db, `sessions/${SESSION_ID}/meta`), patch);
+}
+
+document.getElementById('reset-btn').addEventListener('click', async () => {
+  if (!confirm('Reset the session? All current submissions will be cleared.')) return;
+  await remove(ref(db, 'sessions/' + SESSION_ID));
+});
+
+document.getElementById('export-btn').addEventListener('click', () => exportCsv());
+
+// =====================================================================
+// RENDER
+// =====================================================================
+function render() {
+  renderSidePanel();
+  const state = sessionData?.meta?.state || 'lobby';
+  const qIdx = sessionData?.meta?.questionIdx ?? 0;
+  if (state === 'lobby') return renderLobby();
+  if (state === 'done') return renderDone();
+  return renderQuestion(qIdx, state);
+}
+
+function renderSidePanel() {
+  const ps = sessionData?.participants || {};
+  const list = Object.values(ps);
+  document.getElementById('pcount').textContent = String(list.length);
+  const el = document.getElementById('participants-list');
+  if (list.length === 0) { el.textContent = 'No-one yet. Project the QR.'; return; }
+  el.innerHTML = list.map(p => `<span class="name">${esc(p.alias)}</span>`).join('');
+}
+
+function renderLobby() {
+  const count = Object.keys(sessionData?.participants || {}).length;
+  main.innerHTML = `
+    <div class="card lobby-card">
+      <div class="kicker">Lobby</div>
+      <div class="big">Personas live</div>
+      <p class="sub">${QUESTIONS.length} questions, mixed format. Students scan the QR on the left to join. When you are ready, start question 1.</p>
+      <div class="stat-row" style="max-width:520px; margin:0 auto 20px;">
+        <div class="stat"><div class="stat-num">${count}</div><div class="stat-label">in the room</div></div>
+        <div class="stat"><div class="stat-num">${QUESTIONS.length}</div><div class="stat-label">questions</div></div>
+      </div>
+      <button class="wide" id="start-btn" style="max-width:320px;" ${count === 0 ? 'disabled' : ''}>Start question 1 →</button>
+    </div>
+  `;
+  if (count > 0) {
+    document.getElementById('start-btn').addEventListener('click', () =>
+      setMeta({ state: 'question', questionIdx: 0, startedAt: serverTimestamp() })
+    );
+  }
+}
+
+function renderQuestion(qIdx, state) {
+  const q = QUESTIONS[qIdx];
+  if (!q) return renderDone();
+  const answers = sessionData?.answers?.['q' + qIdx] || {};
+  const submittedCount = Object.keys(answers).length;
+  const totalParticipants = Object.keys(sessionData?.participants || {}).length;
+
+  main.innerHTML = `
+    <div class="qmeta">
+      <div>Question ${qIdx + 1} of ${QUESTIONS.length}</div>
+      <div class="qtype">${typeLabel(q.type)} · ${state === 'reveal' ? 'reveal' : 'live'}</div>
+    </div>
+    <div class="card">
+      <h2 class="qbig">${esc(q.text)}</h2>
+      <div class="stat-row" style="margin-bottom:18px;">
+        <div class="stat"><div class="stat-num">${submittedCount}</div><div class="stat-label">submitted</div></div>
+        <div class="stat"><div class="stat-num">${totalParticipants}</div><div class="stat-label">in the room</div></div>
+        <div class="stat"><div class="stat-num">${totalParticipants > 0 ? Math.round((submittedCount/totalParticipants)*100) : 0}%</div><div class="stat-label">response</div></div>
+      </div>
+      <div id="aggregate"></div>
+      ${state === 'reveal' ? `<div class="card cream" style="margin-top:18px;"><div class="kicker">Why</div><p style="font-family:var(--serif); font-size:15.5px; line-height:1.55; margin:4px 0 0;">${esc(q.explanation)}</p></div>` : ''}
+      <div class="controls">
+        ${state === 'question' ? `<button id="reveal-btn" class="warn-btn">Reveal answer</button>` : ''}
+        ${state === 'reveal' ? (
+          qIdx < QUESTIONS.length - 1
+            ? `<button id="next-btn">Next question →</button>`
+            : `<button id="end-btn" class="danger-btn">End session</button>`
+        ) : ''}
+        <button id="back-btn" class="ghost" style="margin-left:auto;">Back to lobby</button>
+      </div>
+    </div>
+  `;
+
+  const agg = document.getElementById('aggregate');
+  if (q.type === 'mc')        renderAggregateMC(agg, q, answers, state === 'reveal');
+  else if (q.type === 'multi') renderAggregateMulti(agg, q, answers, state === 'reveal');
+  else if (q.type === 'match') renderAggregateMatch(agg, q, answers, state === 'reveal');
+  else if (q.type === 'rank')  renderAggregateRank(agg, q, answers, state === 'reveal');
+
+  const reveal = document.getElementById('reveal-btn');
+  if (reveal) reveal.addEventListener('click', () => setMeta({ state: 'reveal' }));
+  const next = document.getElementById('next-btn');
+  if (next) next.addEventListener('click', () => setMeta({ state: 'question', questionIdx: qIdx + 1 }));
+  const end = document.getElementById('end-btn');
+  if (end) end.addEventListener('click', () => setMeta({ state: 'done' }));
+  document.getElementById('back-btn').addEventListener('click', () => setMeta({ state: 'lobby' }));
+}
+
+function renderAggregateMC(el, q, answers, revealed) {
+  const counts = q.options.map(() => 0);
+  for (const uid in answers) {
+    const a = answers[uid];
+    if (Number.isInteger(a) && a >= 0 && a < counts.length) counts[a]++;
+  }
+  const total = Object.keys(answers).length || 1;
+  el.innerHTML = '<div class="bar-list">' + q.options.map((opt, i) => {
+    const pct = Math.round((counts[i] / total) * 100);
+    let cls = 'bar-row';
+    if (revealed) {
+      if (i === q.correct) cls += ' correct';
+      else if (counts[i] > 0) cls += '';
+    }
+    const tag = revealed && i === q.correct ? '  <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color: var(--success); margin-left:8px;">Correct</span>' : '';
+    return `<div class="${cls}">
+      <div class="fill" style="width: ${counts[i] > 0 ? pct : 0}%"></div>
+      <span class="text"><strong>${String.fromCharCode(65 + i)}.</strong> ${esc(opt)}${tag}</span>
+      <span class="count">${counts[i]} · ${pct}%</span>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function renderAggregateMulti(el, q, answers, revealed) {
+  const counts = q.options.map(() => 0);
+  for (const uid in answers) {
+    const arr = answers[uid];
+    if (Array.isArray(arr)) for (const i of arr) {
+      if (Number.isInteger(i) && i >= 0 && i < counts.length) counts[i]++;
+    }
+  }
+  const total = Object.keys(answers).length || 1;
+  el.innerHTML = '<div class="bar-list">' + q.options.map((opt, i) => {
+    const pct = Math.round((counts[i] / total) * 100);
+    const isCorrect = q.correct.includes(i);
+    let cls = 'bar-row';
+    let tag = '';
+    if (revealed) {
+      if (isCorrect) { cls += ' correct'; tag = '  <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color: var(--success); margin-left:8px;">Correct</span>'; }
+      else if (counts[i] > 0) { cls += ' wrong'; tag = '  <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color: var(--danger); margin-left:8px;">Not in answer</span>'; }
+    }
+    return `<div class="${cls}">
+      <div class="fill" style="width: ${counts[i] > 0 ? pct : 0}%"></div>
+      <span class="text">${esc(opt)}${tag}</span>
+      <span class="count">${counts[i]} · ${pct}%</span>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function renderAggregateMatch(el, q, answers, revealed) {
+  const total = Object.keys(answers).length || 1;
+  el.innerHTML = '<div class="match-aggregate">' + q.pairs.map((pair, i) => {
+    let correctCount = 0;
+    for (const uid in answers) {
+      const obj = answers[uid];
+      if (obj && obj[i] === pair.right) correctCount++;
+    }
+    const pct = Math.round((correctCount / total) * 100);
+    return `<div class="row">
+      <div class="label"><strong>${esc(pair.left)}</strong>${revealed ? `<small>Correct: ${esc(pair.right)}</small>` : ''}</div>
+      <div class="pct">${correctCount} / ${total} (${pct}%)</div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function renderAggregateRank(el, q, answers, revealed) {
+  const total = Object.keys(answers).length || 1;
+  let fullCorrect = 0;
+  const correctPosCounts = q.correctOrder.map(() => 0);
+  for (const uid in answers) {
+    const arr = answers[uid];
+    if (!Array.isArray(arr)) continue;
+    let allRight = true;
+    for (let pos = 0; pos < q.correctOrder.length; pos++) {
+      if (arr[pos] === q.correctOrder[pos]) correctPosCounts[pos]++;
+      else allRight = false;
+    }
+    if (allRight) fullCorrect++;
+  }
+  el.innerHTML = `
+    <div class="match-aggregate" style="margin-bottom:14px;">
+      <div class="row">
+        <div class="label"><strong>Fully correct order</strong><small>everyone who got every position right</small></div>
+        <div class="pct">${fullCorrect} / ${total} (${Math.round((fullCorrect/total)*100)}%)</div>
+      </div>
+    </div>
+    <div class="rank-aggregate">
+      ${q.correctOrder.map((origIdx, pos) => {
+        const pct = Math.round((correctPosCounts[pos] / total) * 100);
+        return `<div class="row">
+          <div class="label"><strong>#${pos + 1}: ${esc(q.items[origIdx])}</strong></div>
+          <div class="pct">${correctPosCounts[pos]} / ${total} (${pct}%)</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function renderDone() {
+  // Build leaderboard.
+  const participants = sessionData?.participants || {};
+  const answers = sessionData?.answers || {};
+  const scores = [];
+  for (const pid in participants) {
+    let earned = 0, total = 0;
+    for (let qi = 0; qi < QUESTIONS.length; qi++) {
+      const ans = answers['q' + qi]?.[pid];
+      const sc = scoreOne(QUESTIONS[qi], ans);
+      earned += sc.score; total += sc.total;
+    }
+    scores.push({ alias: participants[pid].alias, earned, total });
+  }
+  scores.sort((a, b) => b.earned - a.earned);
+
+  const avgPct = scores.length === 0 ? 0 : Math.round(scores.reduce((a, s) => a + (s.total > 0 ? s.earned / s.total : 0), 0) / scores.length * 100);
+
+  main.innerHTML = `
+    <div class="card done-card">
+      <div class="kicker">Session complete</div>
+      <div class="big">${avgPct}%</div>
+      <div style="text-transform:uppercase; letter-spacing:1.3px; font-size:12px; color:var(--muted); font-weight:600; margin-bottom:24px;">Class average</div>
+      ${scores.length === 0 ? '<p>No submissions to score.</p>' : `
+        <div class="leaderboard">
+          ${scores.map((s, i) => `<div class="row${i === 0 ? ' top' : ''}">
+            <div class="pos">${i + 1}</div>
+            <div class="alias">${esc(s.alias)}</div>
+            <div class="score">${s.earned} / ${s.total}</div>
+          </div>`).join('')}
+        </div>
+      `}
+      <div class="controls" style="justify-content:center;">
+        <button class="ghost" id="lobby-btn">Back to lobby</button>
+        <button id="export-btn-bot">Export results CSV</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('lobby-btn').addEventListener('click', () => setMeta({ state: 'lobby' }));
+  document.getElementById('export-btn-bot').addEventListener('click', () => exportCsv());
+}
+
+// =====================================================================
+// SCORING + EXPORT
+// =====================================================================
+function scoreOne(q, response) {
+  if (response === undefined || response === null) return { score: 0, total: scoreTotal(q) };
+  if (q.type === 'mc') return { score: response === q.correct ? 1 : 0, total: 1 };
+  if (q.type === 'multi') {
+    if (!Array.isArray(response)) return { score: 0, total: q.correct.length };
+    const correctSet = new Set(q.correct);
+    let hits = 0, wrongs = 0, misses = 0;
+    for (const i of response) { if (correctSet.has(i)) hits++; else wrongs++; }
+    for (const i of q.correct) { if (!response.includes(i)) misses++; }
+    const total = q.correct.length;
+    return { score: Math.max(0, Math.min(total, hits - wrongs - misses)), total };
+  }
+  if (q.type === 'match') {
+    if (!response || typeof response !== 'object') return { score: 0, total: q.pairs.length };
+    let hits = 0;
+    for (let i = 0; i < q.pairs.length; i++) if (response[i] === q.pairs[i].right) hits++;
+    return { score: hits, total: q.pairs.length };
+  }
+  if (q.type === 'rank') {
+    if (!Array.isArray(response)) return { score: 0, total: q.correctOrder.length };
+    let hits = 0;
+    for (let pos = 0; pos < q.correctOrder.length; pos++) if (response[pos] === q.correctOrder[pos]) hits++;
+    return { score: hits, total: q.correctOrder.length };
+  }
+  return { score: 0, total: 1 };
+}
+
+function scoreTotal(q) {
+  if (q.type === 'mc') return 1;
+  if (q.type === 'multi') return q.correct.length;
+  if (q.type === 'match') return q.pairs.length;
+  if (q.type === 'rank')  return q.correctOrder.length;
+  return 1;
+}
+
+function exportCsv() {
+  const participants = sessionData?.participants || {};
+  const answers = sessionData?.answers || {};
+  const headers = ['alias'];
+  for (let qi = 0; qi < QUESTIONS.length; qi++) headers.push(`q${qi + 1}_score`, `q${qi + 1}_total`);
+  headers.push('total_score', 'total_available');
+  const rows = [headers.join(',')];
+  for (const pid in participants) {
+    const cells = [JSON.stringify(participants[pid].alias)];
+    let sum = 0, max = 0;
+    for (let qi = 0; qi < QUESTIONS.length; qi++) {
+      const sc = scoreOne(QUESTIONS[qi], answers['q' + qi]?.[pid]);
+      cells.push(sc.score, sc.total);
+      sum += sc.score; max += sc.total;
+    }
+    cells.push(sum, max);
+    rows.push(cells.join(','));
+  }
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `${SESSION_ID}-results.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function typeLabel(t) {
+  return ({ mc: 'Choose one', multi: 'Choose all that apply', match: 'Match the pairs', rank: 'Put in order' })[t] || t;
+}
+</script>
+
+</body>
+</html>
