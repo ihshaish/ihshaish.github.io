@@ -2762,18 +2762,22 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <svg viewBox="0 0 800 280" id="landscape-illustration"></svg>
     </div>
 
-    <p>The four features above are the ones every local-search lecture returns to. They are <em>not</em> small bumps in the curve; the flat regions in the diagram are exactly that, flat segments where every neighbour has the same objective value.</p>
+    <p>Notice that the maxima (the peaks) are <em>curves</em>, smooth high points where the gradient briefly hits zero before reversing. They are not flat. Only the shoulder and the plateau are flat in the diagram. The wording below follows Russell &amp; Norvig and Jarrar's Ch4 notes; the bracket markers under the diagram show the exact extent of each flat region.</p>
 
     <ul class="tight">
-      <li><strong>Global maximum.</strong> The highest state anywhere in the space. The destination we want. There is exactly one global optimum value, though several states can share it.</li>
-      <li><strong>Local maximum.</strong> A peak that is higher than every neighbour but lower than the global maximum. Hill climbing terminates here because no neighbour is strictly better; the algorithm cannot tell it is not at the global maximum.</li>
-      <li><strong>Plateau.</strong> A flat region where every neighbour has the <em>same</em> objective value. There is no preferred direction. Hill climbing's strict-improvement rule terminates immediately on a plateau. The plateau in the diagram (states 540 to 640) is genuinely flat, the curve does not dip or bump inside it.</li>
-      <li><strong>Shoulder.</strong> A flat region with an exit, one edge of the plateau leads to higher terrain. Sideways moves across the shoulder eventually reach the rising edge. Without a small allowance for equal-valued moves (a sideways move limit), basic hill climbing stops on the shoulder as well, even though escape is possible.</li>
+      <li><strong>Global maximum</strong> <span class="ar">القيمة العظمى الشاملة</span>: the highest objective value anywhere in the state space. The destination. Several different states can share this value, but the value itself is unique.</li>
+      <li><strong>Local maximum</strong> <span class="ar">القيمة العظمى المحلّيّة</span>: a state whose objective value is higher than that of every immediate neighbour but lower than the global maximum. Hill climbing stops here because no neighbour is strictly better, even though the algorithm has not reached the true peak.</li>
+      <li><strong>Plateau</strong> <span class="ar">هضبة</span>: a flat region of the landscape where every neighbour has the <em>same</em> objective value. No gradient, no preferred direction. The strict-improvement rule of basic hill climbing terminates immediately. The plateau in the diagram (states 540 to 640) is genuinely flat; the curve does not dip or bump inside it.</li>
+      <li><strong>Shoulder</strong> <span class="ar">كتف</span>: a flat region that <em>does</em> have an exit, one edge of the flat leads to higher terrain. A hill climbing variant that allows sideways moves can cross the shoulder and continue up; the basic strict-improvement variant cannot.</li>
     </ul>
 
-    <p>A fifth feature, the <strong>ridge</strong>, is intrinsically two-dimensional and hard to render in 1D. Think of it as a long, narrow crest where moving along the crest is uphill, but every individual one-step move is sideways or downhill, so single-step hill climbing oscillates without progressing along the ridge. Ridges are why some implementations choose moves by combining the current direction with the steepest neighbour, not just the steepest neighbour alone.</p>
+    <p>A few notes on what the 1D diagram does <em>not</em> show.</p>
+    <ul class="tight">
+      <li>The <strong>valleys</strong> between peaks are <em>local minima</em> <span class="ar">القيمة الصغرى المحلّيّة</span>. When the problem is phrased as minimising a cost (the 8-queens case below, with h = attacking pairs), maxima and minima swap roles: we are descending the landscape, and the local minimum is what the algorithm gets stuck on.</li>
+      <li>A <strong>ridge</strong> <span class="ar">تلّ ضيّق</span> is intrinsically two-dimensional, a long, narrow crest where moving along the crest is uphill, but every single-step neighbour move is sideways or downhill. Single-step hill climbing oscillates and makes no progress along the ridge. 1D illustrations cannot show this; it requires at least two state-space dimensions.</li>
+    </ul>
 
-    <div class="callout"><span class="marker">Maximise or minimise, pick one</span>The algorithms below are written for <em>maximisation</em> (higher value is better). The 8-queens example, our worked example throughout this section, is written for <em>minimisation</em> (h = number of attacking pairs, we want zero). Mentally negate, the two views are identical. Sommerville and Russell &amp; Norvig both use "VALUE" for the maximised version and "h" or "cost" for the minimised one.</div>
+    <div class="callout"><span class="marker">Maximise or minimise, pick one</span>The algorithms below are written for <em>maximisation</em> (higher VALUE is better). The 8-queens example throughout this section is written for <em>minimisation</em> (h = number of attacking pairs, we want zero). The two views are identical up to a sign flip. Russell &amp; Norvig use "VALUE" for the maximised version and "h" or "cost" for the minimised one; Jarrar's Ch4 slides do the same.</div>
   </div>
 
   <div class="subsection">
@@ -4453,53 +4457,41 @@ function renderLandscape(svgId) {
 
   const W = 800, H = 280, baseY = 250, axisY = baseY + 6;
 
-  // Piecewise landscape so flat features (shoulder, plateau) are
-  // genuinely flat segments, not small bumps. Lower y is "higher"
-  // in the chart because SVG y grows downward.
-  // Anchor (x, y) pairs joined by linear segments; flat regions
-  // share the same y between consecutive anchors.
-  const anchors = [
-    { x:  40, y: 240 },
-    { x: 100, y: 215 },   // rise into a step
-    { x: 160, y: 215 },   // SHOULDER (flat 100..160)
-    { x: 220, y: 145 },   // rise to local max
-    { x: 245, y: 145 },   // local max top (small flat tip)
-    { x: 320, y: 230 },   // fall into valley
-    { x: 360, y: 230 },   // valley bottom
-    { x: 440, y:  85 },   // climb to global max
-    { x: 470, y:  85 },   // global max top (small flat tip)
-    { x: 540, y: 200 },   // descent
-    { x: 640, y: 200 },   // PLATEAU (flat 540..640)
-    { x: 720, y: 242 },   // descent
-    { x: 770, y: 248 }
-  ];
-  function yAt(x) {
-    for (let i = 0; i < anchors.length - 1; i++) {
-      const a = anchors[i], b = anchors[i + 1];
-      if (x >= a.x && x <= b.x) {
-        const t = (x - a.x) / (b.x - a.x);
-        return a.y + t * (b.y - a.y);
-      }
-    }
-    return anchors[anchors.length - 1].y;
-  }
+  // Hybrid path. Smooth cubic Beziers for the rounded peaks and
+  // valleys (a maximum is a curve, not a flat tip); straight lines
+  // only where the landscape is genuinely flat (shoulder and
+  // plateau). Lower y in SVG = higher on the chart.
+  //
+  // Key anchors used in the path below:
+  //   shoulder peak:  flat at y=215 between x=100 and x=160
+  //   local max:      rounded peak around (220, 145)
+  //   valley:         rounded dip around (340, 230)
+  //   global max:     rounded peak around (455, 80)
+  //   plateau:        flat at y=200 between x=540 and x=640
+  const pathD = [
+    'M 40 245',
+    'L 100 215',                                      // rise to shoulder
+    'L 160 215',                                      // FLAT SHOULDER (100..160)
+    'C 180 215, 200 145, 220 145',                    // smooth rise over local-max peak
+    'C 240 145, 260 215, 290 230',                    // smooth fall to valley
+    'C 320 235, 360 235, 380 225',                    // valley floor
+    'C 410 215, 430 80, 455 80',                      // smooth climb over global-max peak
+    'C 480 80, 510 195, 540 200',                     // smooth fall to plateau
+    'L 640 200',                                      // FLAT PLATEAU (540..640)
+    'C 670 205, 720 242, 770 248'                     // smooth descent to right edge
+  ].join(' ');
 
-  // Filled area under the curve for visual weight.
-  let pathFill = `M ${anchors[0].x} ${axisY}`;
-  for (const a of anchors) pathFill += ` L ${a.x} ${a.y}`;
-  pathFill += ` L ${anchors[anchors.length - 1].x} ${axisY} Z`;
+  // Filled area beneath the curve.
   const fillEl = svgNS('path', {
-    d: pathFill,
+    d: pathD + ` L 770 ${axisY} L 40 ${axisY} Z`,
     fill: 'var(--accent-soft)',
     opacity: 0.6
   });
   svg.appendChild(fillEl);
 
-  // Main curve on top of the fill.
-  let pathLine = `M ${anchors[0].x} ${anchors[0].y}`;
-  for (let i = 1; i < anchors.length; i++) pathLine += ` L ${anchors[i].x} ${anchors[i].y}`;
+  // The curve itself.
   const lineEl = svgNS('path', {
-    d: pathLine,
+    d: pathD,
     fill: 'none',
     stroke: 'var(--ink)',
     'stroke-width': 2.4,
@@ -4508,12 +4500,13 @@ function renderLandscape(svgId) {
   });
   svg.appendChild(lineEl);
 
-  // Labelled markers.
+  // Labelled markers. Each dot sits on the curve at the labelled
+  // feature; flat features are dotted at the centre of their range.
   const markers = [
-    { x: 130, label: 'shoulder',         dotY: 215, labelDx:   0, labelDy: -22, cls: 'mark' },
-    { x: 230, label: 'local maximum',    dotY: 145, labelDx:   0, labelDy: -16, cls: 'mark' },
-    { x: 455, label: 'global maximum',   dotY:  85, labelDx:   0, labelDy: -16, cls: 'best' },
-    { x: 590, label: 'plateau',          dotY: 200, labelDx:   0, labelDy: -16, cls: 'mark' }
+    { x: 130, label: 'shoulder',       dotY: 215, labelDx:   0, labelDy: -22, cls: 'mark' },
+    { x: 220, label: 'local maximum',  dotY: 145, labelDx:   0, labelDy: -16, cls: 'mark' },
+    { x: 455, label: 'global maximum', dotY:  80, labelDx:   0, labelDy: -16, cls: 'best' },
+    { x: 590, label: 'plateau',        dotY: 200, labelDx:   0, labelDy: -16, cls: 'mark' }
   ];
 
   for (const m of markers) {
