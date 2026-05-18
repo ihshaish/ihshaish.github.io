@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP433 Requirements engineering quiz</title>
+<style>
+  :root {
+    --steel:       #2C5F7C;
+    --accent:      #3A7CA5;
+    --ink:         #1A1A1A;
+    --body:        #333333;
+    --mute:        #777777;
+    --paper:       #FFFFFF;
+    --soft:        #F0F4F8;
+    --border:      #DEE2E6;
+    --callout:     #FFF4D6;
+    --callout-bd:  #E8D9A2;
+    --good-bg:     #E8F5E9;
+    --good-tx:     #2E7D32;
+    --bad-bg:      #FDEDED;
+    --bad-tx:      #C62828;
+    --warn-bg:     #FFF4E0;
+    --warn-tx:     #8C6E25;
+    --shadow:      0 1px 2px rgba(26,26,26,0.04), 0 8px 24px rgba(26,26,26,0.04);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Calibri, Arial, sans-serif;
+    background: var(--soft);
+    color: var(--body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .topbar { height: 4px; background: var(--steel); width: 100%; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 36px 24px 80px; }
+
+  h1, h2, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--ink);
+    font-weight: 700;
+    margin: 0 0 12px;
+    line-height: 1.2;
+  }
+  h1 { font-size: 30px; }
+  h2 { font-size: 22px; color: var(--steel); }
+  h3 { font-size: 16px; }
+
+  .course-tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .header { margin-bottom: 24px; }
+  .header .subtitle {
+    color: var(--mute);
+    font-style: italic;
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 26px 28px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .intro-card .meta {
+    font-size: 12px;
+    color: var(--mute);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--mute);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 12px 0 4px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 15px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  input[type="text"]:focus { outline: none; border-color: var(--accent); }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 11px 22px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  button.primary {
+    background: var(--steel);
+    color: white;
+  }
+  button.primary:hover { background: var(--ink); }
+  button.ghost {
+    background: var(--paper);
+    color: var(--steel);
+    border: 1px solid var(--steel);
+  }
+  button.ghost:hover { background: var(--soft); }
+
+  .progress {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--mute);
+  }
+  .progress-name { font-weight: 600; color: var(--steel); }
+  .progress-bar { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+
+  .question-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .question-num {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 700;
+  }
+  .question-tag {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--soft);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 11px;
+    font-weight: 700;
+  }
+  .question-text {
+    font-family: Georgia, serif;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 6px 0 18px;
+    font-weight: 600;
+  }
+  .question-text .example {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--mute);
+    font-size: 15.5px;
+    margin-top: 6px;
+  }
+  .multi-hint {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--warn-tx);
+    background: var(--warn-bg);
+    padding: 3px 10px;
+    border-radius: 11px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  ul.options { list-style: none; padding: 0; margin: 0; }
+  li.option {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  li.option:hover:not(.locked) { border-color: var(--accent); background: var(--soft); }
+  li.option input { margin: 0; cursor: pointer; flex-shrink: 0; transform: scale(1.15); accent-color: var(--steel); }
+  li.option .option-text { flex: 1; font-size: 15px; line-height: 1.4; color: var(--body); }
+  li.option.locked { cursor: default; }
+  li.option.locked:hover { border-color: var(--border); background: var(--paper); }
+  li.option.dim { opacity: 0.55; }
+  li.option.correct { background: var(--good-bg); border-color: var(--good-tx); }
+  li.option.correct .option-text { color: var(--good-tx); font-weight: 600; }
+  li.option.wrong { background: var(--bad-bg); border-color: var(--bad-tx); }
+  li.option.wrong .option-text { color: var(--bad-tx); font-weight: 600; }
+  li.option .verdict {
+    margin-left: auto;
+    font-size: 10.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  li.option.correct .verdict { background: var(--good-tx); color: white; }
+  li.option.wrong .verdict { background: var(--bad-tx); color: white; }
+  li.option.missed .verdict { background: var(--warn-tx); color: white; }
+  li.option.missed { background: var(--warn-bg); border-color: var(--warn-tx); }
+  li.option.missed .option-text { color: var(--warn-tx); font-weight: 600; }
+
+  .explanation {
+    background: var(--callout);
+    border: 1px solid var(--callout-bd);
+    border-radius: 5px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    display: none;
+  }
+  .explanation.shown { display: block; }
+  .explanation strong { color: var(--ink); }
+
+  .q-actions {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .result-hero {
+    text-align: center;
+    padding: 18px 0 22px;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 20px;
+  }
+  .score-big {
+    font-family: Georgia, serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--steel);
+    line-height: 1.05;
+  }
+  .score-of { color: var(--mute); font-size: 26px; }
+  .verdict-band {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 14px;
+    font-weight: 600;
+  }
+  .verdict-band.good { background: var(--good-bg); color: var(--good-tx); }
+  .verdict-band.mid  { background: var(--callout); color: var(--ink); }
+  .verdict-band.low  { background: var(--bad-bg); color: var(--bad-tx); }
+
+  .breakdown { display: grid; gap: 8px; margin-bottom: 20px; }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--soft);
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  .breakdown-label { color: var(--body); }
+  .breakdown-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--steel);
+  }
+
+  .submit-summary {
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+  }
+  .submit-summary p { font-size: 14px; color: var(--mute); }
+
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--mute);
+    margin-top: 30px;
+    font-style: italic;
+  }
+
+  .error-msg {
+    color: var(--bad-tx);
+    font-size: 12px;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="wrap">
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="header">
+      <div class="course-tag">COMP 4 3 3 &middot; Software Engineering</div>
+      <h1>Requirements engineering quiz</h1>
+      <div class="subtitle">Thirteen short questions on classification, validation, abstraction level, and goal-versus-verifiable refinement. Mix of single-choice and multi-select. Approximately 12 minutes.</div>
+    </div>
+
+    <div class="card intro-card">
+      <h2>Before you begin</h2>
+      <p>This quiz follows from the Requirements Engineering lectures. Each question is locked once you submit it, and you cannot revisit it. Read the question and every option carefully before clicking submit.</p>
+      <p>Watch the small badge on the right of each question, it tells you whether to pick <strong>one</strong> answer or <strong>all that apply</strong>. Partial credit applies on multi-select questions: each correct option adds a point, each wrong pick and each missed correct option costs one.</p>
+      <p>At the end you will see your score, a category breakdown, and a button to email or copy a summary for the instructor.</p>
+
+      <label for="name1">Your full name</label>
+      <input type="text" id="name1" placeholder="e.g., Aysha Hasan" autocomplete="off">
+      <label for="name2">Partner's full name</label>
+      <input type="text" id="name2" placeholder="e.g., Saleh Salameen" autocomplete="off">
+      <div class="error-msg hidden" id="name-error">Please enter both names before starting.</div>
+
+      <div class="meta">
+        Instructor: Hisham Ihshaish &middot; Birzeit University &middot; Spring 2025/2026
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="start-btn">Begin quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen" class="hidden">
+    <div class="progress">
+      <div class="progress-meta">
+        <span class="progress-name" id="progress-name"></span>
+        <span id="progress-text">Question 1 of 13</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div id="question-container"></div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="result-screen" class="hidden">
+    <div class="header">
+      <div class="course-tag">QUIZ COMPLETE</div>
+      <h1>Your result</h1>
+    </div>
+
+    <div class="card">
+      <div class="result-hero">
+        <div class="score-big"><span id="score-num">0</span><span class="score-of"> / <span id="score-max">0</span></span></div>
+        <div class="verdict-band" id="verdict-band"></div>
+      </div>
+
+      <div class="breakdown">
+        <div class="breakdown-row">
+          <span class="breakdown-label">Functional, non-functional, and domain</span>
+          <span class="breakdown-val" id="cat-class">0 / 0</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Validation characteristics</span>
+          <span class="breakdown-val" id="cat-validation">0 / 0</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">User vs system level</span>
+          <span class="breakdown-val" id="cat-level">0 / 0</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Goal vs verifiable NFR</span>
+          <span class="breakdown-val" id="cat-goal">0 / 0</span>
+        </div>
+      </div>
+
+      <div class="submit-summary">
+        <h3>Submit your result to the instructor</h3>
+        <p>Click below to open your email client with a pre-filled message containing your names, score, and answer summary. Review and send.</p>
+        <div class="actions" style="justify-content: flex-start;">
+          <button class="primary" id="email-btn">Email my result</button>
+          <button class="ghost" id="copy-btn">Copy summary</button>
+        </div>
+        <div id="copy-confirm" class="hidden" style="margin-top: 10px; font-size: 12px; color: var(--good-tx); font-weight: 600;">Summary copied to clipboard.</div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      COMP433 Software Engineering &middot; Hisham Ihshaish &middot; Birzeit University
+    </div>
+  </div>
+
+</div>
+
+<script>
+const INSTRUCTOR_EMAIL = "hihshaish@birzeit.edu";
+
+const QUESTIONS = [
+  {
+    cat: "class", tag: "Classification", type: "mc",
+    q: "A requirement reads:",
+    example: "“The system shall let a registered patient book an appointment with a doctor.”",
+    follow: "How is this best classified?",
+    options: [
+      "Functional requirement",
+      "Non-functional requirement",
+      "Domain requirement",
+      "Process requirement"
+    ],
+    correct: 0,
+    why: "It describes a specific service the system must provide to a user. Functional requirements specify what the system does, and verbs like “book”, “search”, “notify” usually mark them."
+  },
+  {
+    cat: "class", tag: "Classification", type: "multi",
+    q: "Which of the following are non-functional requirements?",
+    follow: "Select all that apply.",
+    options: [
+      "“The system shall encrypt all stored patient records using AES-256.”",
+      "“Nurses shall be able to search for a patient by national ID number.”",
+      "“The system shall be available at least 99.9% of the time during clinic working hours.”",
+      "“Search results shall be returned in under two seconds for 95% of queries.”",
+      "“A doctor shall be able to view the list of their own appointments for the day.”"
+    ],
+    correct: [0, 2, 3],
+    why: "Options A, C, and D constrain quality attributes (security, availability, performance), not services. B and E describe services the system provides, so they are functional requirements. Naming the quality attribute (security, availability, performance) is a useful sanity check when classifying."
+  },
+  {
+    cat: "class", tag: "Classification", type: "mc",
+    q: "A requirement reads:",
+    example: "“The system shall comply with the privacy provisions of the Palestinian Personal Data Protection Law.”",
+    follow: "How is this best classified?",
+    options: [
+      "Functional requirement",
+      "Non-functional (external) requirement",
+      "Non-functional (product) requirement",
+      "Domain requirement"
+    ],
+    correct: 1,
+    why: "Legal and regulatory constraints imposed from outside the development organisation are external non-functional requirements in Sommerville's classification. They differ from product NFRs (which describe how the product itself behaves) and process NFRs (which constrain how the team works)."
+  },
+  {
+    cat: "class", tag: "Classification", type: "mc",
+    q: "For a hospital appointment system, consider the rule:",
+    example: "“A patient cannot be assigned to two doctors in overlapping time slots.”",
+    follow: "How is this best classified?",
+    options: [
+      "Functional requirement",
+      "Domain requirement",
+      "Organisational requirement",
+      "User goal"
+    ],
+    correct: 1,
+    why: "This is a constraint that comes from the application domain (medical scheduling practice and clinical safety), rather than a service the system explicitly offers its users. Domain requirements often originate outside the customer organisation and are easy to miss."
+  },
+  {
+    cat: "validation", tag: "Validation", type: "multi",
+    q: "A requirement reads:",
+    example: "“The system should be user-friendly and reasonably fast.”",
+    follow: "Which validation characteristics does it fail? Select all that apply.",
+    options: [
+      "Verifiability (no objective measure for either phrase)",
+      "Unambiguity (two distinct concerns packed into one requirement)",
+      "Traceability",
+      "Realism / feasibility",
+      "Completeness"
+    ],
+    correct: [0, 1],
+    why: "“User-friendly” and “reasonably fast” have no measurable threshold, so the requirement fails verifiability. It also mixes two separate concerns (usability and performance), so it fails unambiguity and ought to be split into two requirements. Traceability is about assigning an identifier; realism is about feasibility; neither is the primary issue here."
+  },
+  {
+    cat: "validation", tag: "Validation", type: "mc",
+    q: "Two requirements are written:",
+    example: "R4: “All user transactions shall be logged for audit purposes.”\nR17: “Anonymous browsing shall produce no log entries.”",
+    follow: "Which validation characteristic do these requirements jointly fail?",
+    options: [
+      "Verifiability",
+      "Consistency",
+      "Traceability",
+      "Realism"
+    ],
+    correct: 1,
+    why: "If anonymous browsing counts as a “user transaction”, R4 and R17 contradict each other. Consistency means the requirement set has no internal contradictions. The team must resolve the conflict explicitly (define which scope wins, or refine both)."
+  },
+  {
+    cat: "validation", tag: "Validation", type: "mc",
+    q: "A team writes 30 system requirements as free-flowing paragraphs in a Word document, with no identifiers at all. Which validation characteristic is violated?",
+    options: [
+      "Verifiability",
+      "Traceability",
+      "Completeness",
+      "Realism"
+    ],
+    correct: 1,
+    why: "Without unique identifiers, requirements cannot be cross-referenced to design elements, code, test cases, or change requests. Traceability is the property that lets you ask “which requirements does this module implement, and which tests cover them?” and get a defensible answer."
+  },
+  {
+    cat: "validation", tag: "Validation", type: "mc",
+    q: "A requirement reads:",
+    example: "“The system shall identify patients by face recognition with 99.99% accuracy under all lighting conditions, including total darkness.”",
+    follow: "Which validation characteristic is most at risk?",
+    options: [
+      "Unambiguity",
+      "Realism / feasibility",
+      "Traceability",
+      "Consistency"
+    ],
+    correct: 1,
+    why: "99.99% accuracy under all lighting conditions exceeds the state of the art for face recognition; “total darkness” makes it physically impossible without infrared imaging. A requirement that cannot be implemented within the available time, budget, hardware, and skills is unrealistic. Realism is the often-overlooked validation characteristic."
+  },
+  {
+    cat: "goal", tag: "Goal vs verifiable", type: "multi",
+    q: "Which of the following are testable as written (i.e., a tester could decide pass or fail without further clarification)?",
+    follow: "Select all that apply.",
+    options: [
+      "“Search shall return results in under 1.5 seconds for 95% of queries.”",
+      "“The system shall be intuitive.”",
+      "“The system shall be available 99.5% of the time during business hours (Sunday to Thursday, 08:30 to 17:30).”",
+      "“The system shall be secure.”",
+      "“The login form shall accept passwords of 8 to 64 characters, containing at least one digit and one special character.”"
+    ],
+    correct: [0, 2, 4],
+    why: "A, C, and E specify a measurable threshold and a scope a tester can apply. B and D are goals: useful as design direction but not yet contractable. They must be refined into measurable NFRs before they can be validated."
+  },
+  {
+    cat: "level", tag: "Abstraction level", type: "mc",
+    q: "A customer writes:",
+    example: "“The system shall be easy for new users to learn.”",
+    follow: "At what abstraction level is this statement appropriate?",
+    options: [
+      "User requirement, acceptable as written, must be refined later",
+      "System requirement, acceptable as written",
+      "Software specification",
+      "Invalid at any level"
+    ],
+    correct: 0,
+    why: "User requirements may be qualitative and aspirational; they speak the customer's language. The same statement is not acceptable as a system requirement, because a tester cannot decide pass or fail from it. During analysis it must be refined, e.g. “90% of first-time users complete the booking task within three minutes without help”."
+  },
+  {
+    cat: "level", tag: "Abstraction level", type: "mc",
+    q: "Which of these reads as a system requirement (not a user-level statement)?",
+    options: [
+      "“The system shall make it easy to book appointments.”",
+      "“When the user clicks ‘Book’, the system shall display available slots in under 1.5 seconds.”",
+      "“Users want a fast booking experience.”",
+      "“The system shall be reliable.”"
+    ],
+    correct: 1,
+    why: "System requirements specify precise behaviours, conditions, and measurable thresholds. The other three are user-level statements or unrefined goals. Notice the trigger (“when the user clicks Book”), the actor (“the system”), the behaviour (“shall display available slots”), and the constraint (“in under 1.5 seconds”), the four ingredients of a well-formed system requirement."
+  },
+  {
+    cat: "goal", tag: "Goal vs verifiable", type: "multi",
+    q: "A customer writes “The system shall be secure.” Which of the following are valid measurable refinements?",
+    follow: "Select all that apply.",
+    options: [
+      "“All passwords shall be hashed using bcrypt with a cost factor of at least 12 before storage.”",
+      "“All data in transit shall be encrypted with TLS 1.3 or higher.”",
+      "“Security shall be maintained at all times.”",
+      "“Failed login attempts shall be rate-limited to no more than five per minute per account.”",
+      "“The system shall be very hard to attack.”"
+    ],
+    correct: [0, 1, 3],
+    why: "A, B, and D specify a security mechanism with a verifiable parameter (algorithm and strength, protocol version, numeric rate). C and E are restatements of the goal in different wording and add no measurability. Refining “secure” well usually means picking specific threats (credential theft, eavesdropping, brute force) and writing one measurable requirement per threat."
+  },
+  {
+    cat: "goal", tag: "Goal vs verifiable", type: "mc",
+    q: "Which of the following is the strongest refinement of the goal:",
+    example: "“The system shall be highly available.”",
+    follow: "Pick the option a tester could verify directly.",
+    options: [
+      "“The system shall almost never crash.”",
+      "“The system shall have very low downtime.”",
+      "“The system shall be available 99.5% of the time during business hours (08:30 to 17:30, Sunday to Thursday).”",
+      "“The system shall recover quickly from failures.”"
+    ],
+    correct: 2,
+    why: "C names the metric (availability percentage), the threshold (99.5%), and the scope (defined business hours and working week). A, B, and D contain only qualitative language and cannot be validated without further definition. A good availability requirement also names what happens when the threshold is breached (penalty? maintenance window?)."
+  }
+];
+
+let state = {
+  name1: "",
+  name2: "",
+  current: 0,
+  answers: [],
+  startedAt: null
+};
+
+const $ = (id) => document.getElementById(id);
+
+function showScreen(id) {
+  ["start-screen", "quiz-screen", "result-screen"].forEach(s => {
+    $(s).classList.toggle("hidden", s !== id);
+  });
+}
+
+$("start-btn").addEventListener("click", () => {
+  const n1 = $("name1").value.trim();
+  const n2 = $("name2").value.trim();
+  if (!n1 || !n2) {
+    $("name-error").classList.remove("hidden");
+    return;
+  }
+  state.name1 = n1;
+  state.name2 = n2;
+  state.startedAt = new Date();
+  $("progress-name").textContent = `${n1}  &  ${n2}`;
+  showScreen("quiz-screen");
+  renderQuestion(0);
+});
+
+function renderQuestion(idx) {
+  state.current = idx;
+  const q = QUESTIONS[idx];
+  const total = QUESTIONS.length;
+  $("progress-text").textContent = `Question ${idx + 1} of ${total}`;
+  $("progress-fill").style.width = `${(idx / total) * 100}%`;
+
+  const container = $("question-container");
+  container.innerHTML = "";
+
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const meta = document.createElement("div");
+  meta.className = "question-meta";
+  meta.innerHTML = `<span class="question-num">Question ${idx + 1}</span><span class="question-tag">${q.tag}</span>`;
+  card.appendChild(meta);
+
+  if (q.type === "multi") {
+    const hint = document.createElement("div");
+    hint.className = "multi-hint";
+    hint.textContent = "Multi-select · pick all that apply";
+    card.appendChild(hint);
+  }
+
+  const qtext = document.createElement("div");
+  qtext.className = "question-text";
+  let html = escapeHtml(q.q);
+  if (q.example) {
+    html += `<span class="example">${escapeHtml(q.example).replace(/\n/g, "<br>")}</span>`;
+  }
+  if (q.follow) {
+    html += `<span class="example" style="margin-top:10px; font-style:normal; color:var(--body); font-weight:600;">${escapeHtml(q.follow)}</span>`;
+  }
+  qtext.innerHTML = html;
+  card.appendChild(qtext);
+
+  const ul = document.createElement("ul");
+  ul.className = "options";
+  q.options.forEach((opt, i) => {
+    const li = document.createElement("li");
+    li.className = "option";
+    const inputType = q.type === "multi" ? "checkbox" : "radio";
+    li.innerHTML = `<input type="${inputType}" name="q${idx}" value="${i}" id="q${idx}o${i}"><label for="q${idx}o${i}" class="option-text">${escapeHtml(opt)}</label>`;
+    li.addEventListener("click", (e) => {
+      if (li.classList.contains("locked")) return;
+      const input = li.querySelector("input");
+      if (e.target !== input) {
+        if (inputType === "checkbox") input.checked = !input.checked;
+        else input.checked = true;
+      }
+    });
+    ul.appendChild(li);
+  });
+  card.appendChild(ul);
+
+  const explanation = document.createElement("div");
+  explanation.className = "explanation";
+  explanation.id = `expl-${idx}`;
+  card.appendChild(explanation);
+
+  const actions = document.createElement("div");
+  actions.className = "q-actions";
+  const submitBtn = document.createElement("button");
+  submitBtn.className = "primary";
+  submitBtn.textContent = "Submit answer";
+  submitBtn.id = `submit-${idx}`;
+  submitBtn.addEventListener("click", () => submitAnswer(idx));
+  actions.appendChild(submitBtn);
+  card.appendChild(actions);
+
+  container.appendChild(card);
+}
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
+function submitAnswer(idx) {
+  const q = QUESTIONS[idx];
+  const inputs = document.querySelectorAll(`input[name="q${idx}"]`);
+  const chosen = [];
+  inputs.forEach((inp, i) => { if (inp.checked) chosen.push(i); });
+
+  if (chosen.length === 0) {
+    alert("Please select an answer before submitting.");
+    return;
+  }
+
+  const correctArr = Array.isArray(q.correct) ? q.correct : [q.correct];
+  const correctSet = new Set(correctArr);
+
+  let hits = 0, wrongs = 0, missed = 0;
+  for (const i of chosen) { if (correctSet.has(i)) hits++; else wrongs++; }
+  for (const i of correctArr) { if (!chosen.includes(i)) missed++; }
+
+  let score, total;
+  if (q.type === "multi") {
+    total = correctArr.length;
+    score = Math.max(0, Math.min(total, hits - wrongs - missed));
+  } else {
+    total = 1;
+    score = (hits === 1 && wrongs === 0) ? 1 : 0;
+  }
+
+  state.answers.push({ q: idx, chosen, score, total });
+
+  inputs.forEach((input, i) => {
+    input.disabled = true;
+    const li = input.closest(".option");
+    li.classList.add("locked");
+    const isCorrect = correctSet.has(i);
+    const wasPicked = chosen.includes(i);
+    const verdict = document.createElement("span");
+    verdict.className = "verdict";
+    if (isCorrect && wasPicked) { li.classList.add("correct"); verdict.textContent = "CORRECT"; li.appendChild(verdict); }
+    else if (isCorrect && !wasPicked) { li.classList.add("missed"); verdict.textContent = "MISSED"; li.appendChild(verdict); }
+    else if (!isCorrect && wasPicked) { li.classList.add("wrong"); verdict.textContent = "WRONG"; li.appendChild(verdict); }
+    else { li.classList.add("dim"); }
+  });
+
+  const expl = $(`expl-${idx}`);
+  let verdictLine = "";
+  if (score === total) verdictLine = "<strong style='color: var(--good-tx);'>Full marks.</strong> ";
+  else if (score > 0)  verdictLine = `<strong style='color: var(--warn-tx);'>Partial credit (${score} / ${total}).</strong> `;
+  else                 verdictLine = "<strong style='color: var(--bad-tx);'>Not quite.</strong> ";
+  expl.innerHTML = verdictLine + `<strong>Why:</strong> ${escapeHtml(q.why)}`;
+  expl.classList.add("shown");
+
+  const submitBtn = $(`submit-${idx}`);
+  const actions = submitBtn.parentNode;
+  actions.removeChild(submitBtn);
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "primary";
+  nextBtn.textContent = (idx + 1 === QUESTIONS.length) ? "See result" : "Next question";
+  nextBtn.addEventListener("click", () => {
+    if (idx + 1 === QUESTIONS.length) showResult();
+    else renderQuestion(idx + 1);
+  });
+  actions.appendChild(nextBtn);
+
+  $("progress-fill").style.width = `${((idx + 1) / QUESTIONS.length) * 100}%`;
+}
+
+function showResult() {
+  const totalEarned = state.answers.reduce((a, x) => a + x.score, 0);
+  const totalAvailable = state.answers.reduce((a, x) => a + x.total, 0);
+
+  const catTotals = { class: [0, 0], validation: [0, 0], level: [0, 0], goal: [0, 0] };
+  state.answers.forEach((a) => {
+    const cat = QUESTIONS[a.q].cat;
+    catTotals[cat][0] += a.score;
+    catTotals[cat][1] += a.total;
+  });
+
+  $("score-num").textContent = totalEarned;
+  $("score-max").textContent = totalAvailable;
+  $("cat-class").textContent      = `${catTotals.class[0]} / ${catTotals.class[1]}`;
+  $("cat-validation").textContent = `${catTotals.validation[0]} / ${catTotals.validation[1]}`;
+  $("cat-level").textContent      = `${catTotals.level[0]} / ${catTotals.level[1]}`;
+  $("cat-goal").textContent       = `${catTotals.goal[0]} / ${catTotals.goal[1]}`;
+
+  const pct = totalAvailable === 0 ? 0 : (totalEarned / totalAvailable);
+  const band = $("verdict-band");
+  if (pct >= 0.8)      { band.className = "verdict-band good"; band.textContent = "Strong understanding of the material. Well done."; }
+  else if (pct >= 0.6) { band.className = "verdict-band mid";  band.textContent = "Reasonable grasp. Review the explanations for questions you missed."; }
+  else                 { band.className = "verdict-band low";  band.textContent = "Several gaps. Revisit the RE lecture notes before the next session."; }
+
+  showScreen("result-screen");
+}
+
+function buildSummary() {
+  const submittedAt = new Date();
+  const totalEarned = state.answers.reduce((a, x) => a + x.score, 0);
+  const totalAvailable = state.answers.reduce((a, x) => a + x.total, 0);
+
+  const lines = [];
+  lines.push(`COMP433 Requirements Engineering Quiz: Submission`);
+  lines.push(`==================================================`);
+  lines.push(``);
+  lines.push(`Student 1: ${state.name1}`);
+  lines.push(`Student 2: ${state.name2}`);
+  lines.push(`Submitted: ${submittedAt.toLocaleString()}`);
+  lines.push(`Score: ${totalEarned} / ${totalAvailable}`);
+  lines.push(``);
+  lines.push(`Per-question detail:`);
+  state.answers.forEach((a) => {
+    const q = QUESTIONS[a.q];
+    const mark = a.score === a.total ? "FULL" : (a.score > 0 ? `PART(${a.score}/${a.total})` : "MISS");
+    const chosenStr = a.chosen.map(c => c + 1).join(",");
+    const correctArr = Array.isArray(q.correct) ? q.correct : [q.correct];
+    const correctStr = correctArr.map(c => c + 1).join(",");
+    lines.push(`  Q${a.q + 1} [${q.tag}, ${q.type}] ${mark}  chose: [${chosenStr}]  correct: [${correctStr}]`);
+  });
+  lines.push(``);
+  lines.push(`Submitted via the COMP433 RE quiz at /birzeit/comp433/COMP433_RE_Quiz.html`);
+  return lines.join("\n");
+}
+
+$("email-btn").addEventListener("click", () => {
+  const summary = buildSummary();
+  const earned = state.answers.reduce((a, x) => a + x.score, 0);
+  const available = state.answers.reduce((a, x) => a + x.total, 0);
+  const subject = encodeURIComponent(`COMP433 RE Quiz, ${state.name1} & ${state.name2}, ${earned}/${available}`);
+  const body = encodeURIComponent(summary);
+  window.location.href = `mailto:${INSTRUCTOR_EMAIL}?subject=${subject}&body=${body}`;
+});
+
+$("copy-btn").addEventListener("click", async () => {
+  const summary = buildSummary();
+  try {
+    await navigator.clipboard.writeText(summary);
+    $("copy-confirm").classList.remove("hidden");
+    setTimeout(() => $("copy-confirm").classList.add("hidden"), 3000);
+  } catch (err) {
+    const ta = document.createElement("textarea");
+    ta.value = summary;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    $("copy-confirm").classList.remove("hidden");
+    setTimeout(() => $("copy-confirm").classList.add("hidden"), 3000);
+  }
+});
+
+$("name1").addEventListener("input", () => $("name-error").classList.add("hidden"));
+$("name2").addEventListener("input", () => $("name-error").classList.add("hidden"));
+</script>
+</body>
+</html>
