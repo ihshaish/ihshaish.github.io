@@ -390,6 +390,28 @@
           </div>
         </div>
 
+        <!-- Block 3: Requirements Engineering -->
+        <div style="border-left:4px solid #1565c0; background:#fafbfc; border-radius:0 8px 8px 0; padding:18px 22px; margin-bottom:20px;">
+          <h3 style="margin:0 0 8px; font-size:1.05rem; color:#1565c0;">Block 3: Requirements Engineering</h3>
+
+          <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start;">
+            <div style="flex:1 1 320px; min-width:260px;">
+              <div class="auxiliary-label" style="margin-top:4px;">Self-check quiz</div>
+              <p style="margin:6px 0 10px; font-size:0.9rem; color:#555;">Thirteen questions on classification (functional, non-functional, domain), validation characteristics, user vs system-level requirements, and turning goals into verifiable NFRs. Mix of single-choice and multi-select; partial credit on multi-select.</p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <a class="auxiliary-btn" href="/birzeit/comp433/COMP433_RE_Quiz.html" target="_blank" rel="noopener" style="background:#1565c0; color:#fff; border-color:#1565c0;"><i class="fas fa-clipboard-list"></i> Open the RE quiz</a>
+                <span style="font-family:'Courier New', monospace; font-size:11px; color:#777;">approx. 12 min</span>
+              </div>
+            </div>
+            <div style="flex-shrink:0; text-align:center; min-width:130px;">
+              <div id="re-quiz-qr" style="width:130px; height:130px; background:white; padding:6px; border:1px solid #e0e0e0; border-radius:6px; display:flex; align-items:center; justify-content:center;">
+                <span style="font-size:10px; color:#aaa;">QR loading...</span>
+              </div>
+              <div style="font-size:10.5px; color:#777; margin-top:4px; letter-spacing:0.4px;">Scan to take on phone</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Sections -->
         <h2 class="section-heading"><i class="fas fa-users" style="margin-right: 8px;"></i>Project Resources</h2>
         <p class="sections-intro">Select your section to access project allocations, timeline, and deliverables.</p>
@@ -566,6 +588,26 @@
       if (s5) { document.getElementById('s5-pwd-input').value = s5; try { await unlockS5(); } catch(e) {} }
       var s6 = sessionStorage.getItem('comp433_s6_pwd');
       if (s6) { document.getElementById('s6-pwd-input').value = s6; try { await unlockS6(); } catch(e) {} }
+    })();
+  </script>
+
+  <!-- QR code generator for the RE quiz link in Block 3 -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script>
+    (function() {
+      var target = document.getElementById('re-quiz-qr');
+      if (!target || typeof qrcode !== 'function') return;
+      var url = 'https://ihshaish.github.io/birzeit/comp433/COMP433_RE_Quiz.html';
+      try {
+        var qr = qrcode(0, 'M');
+        qr.addData(url);
+        qr.make();
+        target.innerHTML = qr.createImgTag(4, 0);
+        var img = target.querySelector('img');
+        if (img) { img.style.width = '100%'; img.style.height = '100%'; img.style.display = 'block'; img.alt = 'QR code linking to the COMP433 RE quiz'; }
+      } catch (e) {
+        target.innerHTML = '<span style="font-size:10px;color:#aaa;">QR unavailable</span>';
+      }
     })();
   </script>
 
