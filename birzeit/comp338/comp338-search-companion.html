@@ -2756,19 +2756,24 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
 
   <div class="subsection">
     <h3>The state-space landscape <span class="ar">منظر فضاء الحالات</span></h3>
-    <p>Imagine the state space as a one-dimensional landscape: the x-axis is the state, the y-axis is an <em>objective function</em> we want to maximise (or, equivalently, a cost we want to minimise). Each point is a state; the height is its quality. The shape of this landscape determines how easy or hard the problem is.</p>
+    <p>Picture the state space as a one-dimensional landscape: the x-axis is the state, the y-axis is an <em>objective function</em> we want to maximise (or, equivalently, a cost we want to minimise; the two views are interchangeable by flipping the sign). Each point is a state; the height is its quality. The shape of the landscape decides how easy or hard the problem is.</p>
 
     <div class="landscape-stage">
       <svg viewBox="0 0 800 280" id="landscape-illustration"></svg>
     </div>
 
-    <p>Key features of the landscape:</p>
+    <p>The four features above are the ones every local-search lecture returns to. They are <em>not</em> small bumps in the curve; the flat regions in the diagram are exactly that, flat segments where every neighbour has the same objective value.</p>
+
     <ul class="tight">
-      <li><strong>Global maximum</strong>, the best state in the whole space. The destination we want.</li>
-      <li><strong>Local maximum</strong>, a peak that is higher than every neighbour but lower than the global maximum. The trap.</li>
-      <li><strong>Plateau</strong>, a flat region where every neighbour has the same value. No signal for which way to move.</li>
-      <li><strong>Ridge</strong>, a sequence of local maxima along a line. The algorithm can be stuck oscillating.</li>
+      <li><strong>Global maximum.</strong> The highest state anywhere in the space. The destination we want. There is exactly one global optimum value, though several states can share it.</li>
+      <li><strong>Local maximum.</strong> A peak that is higher than every neighbour but lower than the global maximum. Hill climbing terminates here because no neighbour is strictly better; the algorithm cannot tell it is not at the global maximum.</li>
+      <li><strong>Plateau.</strong> A flat region where every neighbour has the <em>same</em> objective value. There is no preferred direction. Hill climbing's strict-improvement rule terminates immediately on a plateau. The plateau in the diagram (states 540 to 640) is genuinely flat, the curve does not dip or bump inside it.</li>
+      <li><strong>Shoulder.</strong> A flat region with an exit, one edge of the plateau leads to higher terrain. Sideways moves across the shoulder eventually reach the rising edge. Without a small allowance for equal-valued moves (a sideways move limit), basic hill climbing stops on the shoulder as well, even though escape is possible.</li>
     </ul>
+
+    <p>A fifth feature, the <strong>ridge</strong>, is intrinsically two-dimensional and hard to render in 1D. Think of it as a long, narrow crest where moving along the crest is uphill, but every individual one-step move is sideways or downhill, so single-step hill climbing oscillates without progressing along the ridge. Ridges are why some implementations choose moves by combining the current direction with the steepest neighbour, not just the steepest neighbour alone.</p>
+
+    <div class="callout"><span class="marker">Maximise or minimise, pick one</span>The algorithms below are written for <em>maximisation</em> (higher value is better). The 8-queens example, our worked example throughout this section, is written for <em>minimisation</em> (h = number of attacking pairs, we want zero). Mentally negate, the two views are identical. Sommerville and Russell &amp; Norvig both use "VALUE" for the maximised version and "h" or "cost" for the minimised one.</div>
   </div>
 
   <div class="subsection">
@@ -2781,6 +2786,15 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <li><strong>Objective (to minimise):</strong> h = number of pairs of queens attacking each other (directly or diagonally). h = 0 is a solution.</li>
     </ul>
     <p>The state space has 8<sup>8</sup> &asymp; 17 million states. Systematic search is feasible but slow; local search is much faster.</p>
+
+    <h4>Reading h on the board</h4>
+    <p>The board below shows one specific 8-queens state. The queens (Q in the dark circles) sit at the columns' current rows. The number printed in every other square is the h-value the state would have <em>if the queen in that column moved to that square</em>. So the 56 numbers represent the 56 possible single-queen moves. Hill climbing simply picks one (or all) of the cells with the smallest number, here highlighted in gold.</p>
+
+    <div class="graph-stage" style="text-align: center;">
+      <svg viewBox="0 0 448 478" id="annotated-queens" preserveAspectRatio="xMidYMid meet" style="max-width: 460px;"></svg>
+    </div>
+
+    <p class="muted" style="font-size: 13px;">Notice that several different moves can yield the same minimum h. The algorithm needs a tie-breaking rule (Russell &amp; Norvig: pick uniformly at random among the best). Notice also that no single move drops h to zero on this board, every smallest-h cell still leaves attacking pairs. Hill climbing must take several moves in sequence, and may not converge to a solution at all.</p>
   </div>
 
   <!-- =====================  HILL CLIMBING  ===================== -->
@@ -4437,58 +4451,240 @@ function renderLandscape(svgId) {
   if (!svg) return null;
   svg.innerHTML = '';
 
-  const W = 800, H = 280, baseY = 240;
+  const W = 800, H = 280, baseY = 250, axisY = baseY + 6;
 
-  function f(x) {
-    return baseY - 80 * Math.exp(-Math.pow((x-180)/60, 2))
-      - 50 * Math.exp(-Math.pow((x-340)/40, 2))
-      - 110 * Math.exp(-Math.pow((x-540)/55, 2))
-      - 40 * Math.exp(-Math.pow((x-680)/45, 2))
-      + 5 * Math.sin(x / 30);
+  // Piecewise landscape so flat features (shoulder, plateau) are
+  // genuinely flat segments, not small bumps. Lower y is "higher"
+  // in the chart because SVG y grows downward.
+  // Anchor (x, y) pairs joined by linear segments; flat regions
+  // share the same y between consecutive anchors.
+  const anchors = [
+    { x:  40, y: 240 },
+    { x: 100, y: 215 },   // rise into a step
+    { x: 160, y: 215 },   // SHOULDER (flat 100..160)
+    { x: 220, y: 145 },   // rise to local max
+    { x: 245, y: 145 },   // local max top (small flat tip)
+    { x: 320, y: 230 },   // fall into valley
+    { x: 360, y: 230 },   // valley bottom
+    { x: 440, y:  85 },   // climb to global max
+    { x: 470, y:  85 },   // global max top (small flat tip)
+    { x: 540, y: 200 },   // descent
+    { x: 640, y: 200 },   // PLATEAU (flat 540..640)
+    { x: 720, y: 242 },   // descent
+    { x: 770, y: 248 }
+  ];
+  function yAt(x) {
+    for (let i = 0; i < anchors.length - 1; i++) {
+      const a = anchors[i], b = anchors[i + 1];
+      if (x >= a.x && x <= b.x) {
+        const t = (x - a.x) / (b.x - a.x);
+        return a.y + t * (b.y - a.y);
+      }
+    }
+    return anchors[anchors.length - 1].y;
   }
 
-  let path = `M 30 ${baseY}`;
-  for (let x = 30; x <= 770; x += 4) path += ` L ${x} ${f(x)}`;
-  const pathEl = svgNS('path', { d: path, 'class': 'landscape-curve' });
-  svg.appendChild(pathEl);
+  // Filled area under the curve for visual weight.
+  let pathFill = `M ${anchors[0].x} ${axisY}`;
+  for (const a of anchors) pathFill += ` L ${a.x} ${a.y}`;
+  pathFill += ` L ${anchors[anchors.length - 1].x} ${axisY} Z`;
+  const fillEl = svgNS('path', {
+    d: pathFill,
+    fill: 'var(--accent-soft)',
+    opacity: 0.6
+  });
+  svg.appendChild(fillEl);
 
-  const labels = [
-    { x: 180, label: 'local max', cls: 'landscape-marker' },
-    { x: 340, label: 'plateau / shoulder', cls: 'landscape-marker' },
-    { x: 540, label: 'global max', cls: 'landscape-best' },
-    { x: 680, label: 'local max', cls: 'landscape-marker' }
+  // Main curve on top of the fill.
+  let pathLine = `M ${anchors[0].x} ${anchors[0].y}`;
+  for (let i = 1; i < anchors.length; i++) pathLine += ` L ${anchors[i].x} ${anchors[i].y}`;
+  const lineEl = svgNS('path', {
+    d: pathLine,
+    fill: 'none',
+    stroke: 'var(--ink)',
+    'stroke-width': 2.4,
+    'stroke-linejoin': 'round',
+    'stroke-linecap': 'round'
+  });
+  svg.appendChild(lineEl);
+
+  // Labelled markers.
+  const markers = [
+    { x: 130, label: 'shoulder',         dotY: 215, labelDx:   0, labelDy: -22, cls: 'mark' },
+    { x: 230, label: 'local maximum',    dotY: 145, labelDx:   0, labelDy: -16, cls: 'mark' },
+    { x: 455, label: 'global maximum',   dotY:  85, labelDx:   0, labelDy: -16, cls: 'best' },
+    { x: 590, label: 'plateau',          dotY: 200, labelDx:   0, labelDy: -16, cls: 'mark' }
   ];
-  for (const lab of labels) {
-    const y = f(lab.x);
-    const dot = svgNS('circle', { cx: lab.x, cy: y, r: 6, 'class': lab.cls });
-    svg.appendChild(dot);
-    const text = svgNS('text', {
-      x: lab.x, y: y - 14,
-      'text-anchor': 'middle',
-      style: 'font-family: var(--sans); font-size: 11px; font-weight: 600; fill: var(--ink);'
+
+  for (const m of markers) {
+    if (m.cls === 'best') {
+      const ringPulse = svgNS('circle', {
+        cx: m.x, cy: m.dotY, r: 11,
+        fill: 'none', stroke: 'var(--gold)', 'stroke-width': 2, opacity: 0.55
+      });
+      svg.appendChild(ringPulse);
+    }
+    const dot = svgNS('circle', {
+      cx: m.x, cy: m.dotY, r: m.cls === 'state' ? 5 : 5.5,
+      fill: m.cls === 'best' ? 'var(--gold)'
+          : m.cls === 'state' ? 'var(--accent-dark)'
+          : 'var(--accent)',
+      stroke: 'var(--ink)', 'stroke-width': 1.2
     });
-    text.textContent = lab.label;
+    svg.appendChild(dot);
+
+    const text = svgNS('text', {
+      x: m.x + m.labelDx, y: m.dotY + m.labelDy,
+      'text-anchor': 'middle',
+      style: 'font-family: var(--sans); font-size: 11.5px; font-weight: 600; fill: var(--ink);'
+    });
+    text.textContent = m.label;
     svg.appendChild(text);
   }
 
-  const axisX = svgNS('line', {
-    x1: 30, y1: baseY + 6, x2: 770, y2: baseY + 6,
+  // Light vertical guides under the plateau and shoulder so readers
+  // see how wide the truly-flat regions are.
+  const guides = [
+    { x1: 100, x2: 160, y: 215, label: 'flat 100..160' },
+    { x1: 540, x2: 640, y: 200, label: 'flat 540..640' }
+  ];
+  for (const g of guides) {
+    const bracket = svgNS('path', {
+      d: `M ${g.x1} ${g.y + 5} L ${g.x1} ${g.y + 12} L ${g.x2} ${g.y + 12} L ${g.x2} ${g.y + 5}`,
+      fill: 'none', stroke: 'var(--accent)', 'stroke-width': 1
+    });
+    svg.appendChild(bracket);
+  }
+
+  // Axes.
+  const axisLine = svgNS('line', {
+    x1: 30, y1: axisY, x2: 770, y2: axisY,
     stroke: 'var(--ink)', 'stroke-width': 1.5
   });
-  svg.appendChild(axisX);
+  svg.appendChild(axisLine);
+  const yAxis = svgNS('line', {
+    x1: 30, y1: 30, x2: 30, y2: axisY,
+    stroke: 'var(--ink)', 'stroke-width': 1.5
+  });
+  svg.appendChild(yAxis);
+
   const xLabel = svgNS('text', {
-    x: 400, y: 270, 'text-anchor': 'middle',
+    x: 400, y: 275, 'text-anchor': 'middle',
     style: 'font-family: var(--serif); font-style: italic; font-size: 13px; fill: var(--grey);'
   });
   xLabel.textContent = 'state space';
   svg.appendChild(xLabel);
 
   const yLabel = svgNS('text', {
-    x: 15, y: 30, 'text-anchor': 'start',
+    x: 40, y: 26, 'text-anchor': 'start',
     style: 'font-family: var(--serif); font-style: italic; font-size: 13px; fill: var(--grey);'
   });
-  yLabel.textContent = 'objective';
+  yLabel.textContent = 'objective (higher is better)';
   svg.appendChild(yLabel);
+
+  return svg;
+}
+
+function hQueens(state) {
+  let n = 0;
+  const N = state.length;
+  for (let i = 0; i < N; i++) {
+    for (let j = i + 1; j < N; j++) {
+      if (state[i] === state[j]) n++;
+      else if (Math.abs(state[i] - state[j]) === Math.abs(i - j)) n++;
+    }
+  }
+  return n;
+}
+
+function renderAnnotatedQueens(svgId, state) {
+  const svg = document.getElementById(svgId);
+  if (!svg) return null;
+  svg.innerHTML = '';
+  const cell = 56;
+  const N = state.length;
+
+  const currentH = hQueens(state);
+
+  // Compute h for every possible single-queen move.
+  // grid[r][c] = h after moving column c's queen to row r (null when r === state[c]).
+  const moves = [];
+  let bestH = Infinity;
+  for (let c = 0; c < N; c++) {
+    moves.push([]);
+    for (let r = 0; r < N; r++) {
+      if (r === state[c]) { moves[c].push(null); continue; }
+      const next = state.slice();
+      next[c] = r;
+      const h = hQueens(next);
+      moves[c].push(h);
+      if (h < bestH) bestH = h;
+    }
+  }
+
+  // Squares.
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      const isLight = (r + c) % 2 === 0;
+      const rect = svgNS('rect', {
+        x: c * cell, y: r * cell, width: cell, height: cell,
+        fill: isLight ? '#f4ecd8' : '#c9bfa8'
+      });
+      svg.appendChild(rect);
+
+      // h-if-moved annotation on empty cells.
+      const m = moves[c][r];
+      if (m !== null) {
+        const isBest = m === bestH;
+        if (isBest) {
+          const halo = svgNS('rect', {
+            x: c * cell + 4, y: r * cell + 4,
+            width: cell - 8, height: cell - 8,
+            fill: 'var(--gold)', opacity: 0.32, rx: 4
+          });
+          svg.appendChild(halo);
+        }
+        const t = svgNS('text', {
+          x: c * cell + cell / 2,
+          y: r * cell + cell / 2 + 5,
+          'text-anchor': 'middle',
+          style: 'font-family: var(--mono); font-size: 13.5px; font-weight: '
+                 + (isBest ? '700' : '500') + '; fill: '
+                 + (isBest ? 'var(--accent-dark)' : (isLight ? '#5a513b' : '#3a3522')) + ';'
+        });
+        t.textContent = String(m);
+        svg.appendChild(t);
+      }
+    }
+  }
+
+  // Queens.
+  for (let c = 0; c < N; c++) {
+    const r = state[c];
+    const cx = c * cell + cell / 2;
+    const cy = r * cell + cell / 2;
+    const circle = svgNS('circle', {
+      cx, cy, r: cell * 0.32,
+      fill: 'var(--accent)', stroke: 'var(--ink)', 'stroke-width': 2
+    });
+    svg.appendChild(circle);
+    const crown = svgNS('text', {
+      x: cx, y: cy + 2,
+      'text-anchor': 'middle', 'dominant-baseline': 'central',
+      style: 'font-family: var(--serif); font-size: 24px; font-weight: 700; fill: var(--paper);'
+    });
+    crown.textContent = 'Q';
+    svg.appendChild(crown);
+  }
+
+  // Bottom caption with current h and best-move h.
+  const cap = svgNS('text', {
+    x: (cell * N) / 2, y: cell * N + 24,
+    'text-anchor': 'middle',
+    style: 'font-family: var(--sans); font-size: 12.5px; font-weight: 600; fill: var(--ink);'
+  });
+  cap.textContent = 'Current state h = ' + currentH + '   ·   Best single-move h = ' + bestH + ' (gold cells)';
+  svg.appendChild(cap);
 
   return svg;
 }
@@ -5999,6 +6195,10 @@ function setupTreeVsGraph() {
 
 function setupLandscape() {
   renderLandscape('landscape-illustration');
+  // Static h-annotated 8-queens board for the worked example.
+  // The state was chosen so that several distinct single-queen moves
+  // achieve the same minimum h, illustrating tie-breaking.
+  renderAnnotatedQueens('annotated-queens', [3, 4, 5, 2, 1, 0, 7, 6]);
 }
 
 let HILL_INITIAL = null;
