@@ -1382,6 +1382,69 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     </div>
   </div>
 
+  <div class="subsection">
+    <h3>Real-world problem formulations <span class="ar">أمثلة عمليّة من الواقع</span></h3>
+    <p>Romania and the 8-puzzle are textbook examples chosen to fit on a page. The same six-component schema scales to genuinely industrial problems. Four short formulations follow, drawn from Jarrar's Ch3 pages 10-15.</p>
+
+    <div class="formulation-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+
+      <div class="formulation-item">
+        <h5>Travelling Salesperson <span style="font-family: var(--sans); font-weight: 500; font-size: 12px; color: var(--grey);">(TSP)</span></h5>
+        <div class="ar-label">مسألة البائع المتجوّل</div>
+        <p style="margin: 4px 0 8px; font-size: 14px;">Given a set of cities and pairwise distances, find the shortest tour that visits every city exactly once and returns to the start.</p>
+        <ul class="tight" style="font-size: 13.5px;">
+          <li><strong>State:</strong> current city, plus the set of cities already visited.</li>
+          <li><strong>Initial state:</strong> the starting city, no other city visited.</li>
+          <li><strong>Successors:</strong> move to any city not yet visited.</li>
+          <li><strong>Goal test:</strong> all cities visited AND the agent is back at the starting city.</li>
+          <li><strong>Path cost:</strong> total tour length (sum of inter-city distances).</li>
+        </ul>
+      </div>
+
+      <div class="formulation-item">
+        <h5>VLSI layout</h5>
+        <div class="ar-label">تصميم الدوائر المتكاملة</div>
+        <p style="margin: 4px 0 8px; font-size: 14px;">Place electronic components on a chip and route wires between them. Each chip has billions of transistors; the layout has dramatic effects on speed, power, and yield.</p>
+        <ul class="tight" style="font-size: 13.5px;">
+          <li><strong>State:</strong> positions of components and wires on the chip.</li>
+          <li><strong>Initial state:</strong> either no components placed (incremental) or all components placed at random (complete-state).</li>
+          <li><strong>Successors:</strong> place a component, route a wire (incremental); or move/swap components and re-route (complete-state).</li>
+          <li><strong>Goal test:</strong> all components placed and connections routed without overlap, meeting timing and area constraints.</li>
+          <li><strong>Path cost:</strong> some combination of total wire length, congestion, and number of layer changes.</li>
+        </ul>
+      </div>
+
+      <div class="formulation-item">
+        <h5>Robot navigation</h5>
+        <div class="ar-label">ملاحة الإنسان الآليّ</div>
+        <p style="margin: 4px 0 8px; font-size: 14px;">A mobile robot must move from a start configuration to a target configuration in an environment that may include obstacles and other moving agents.</p>
+        <ul class="tight" style="font-size: 13.5px;">
+          <li><strong>State:</strong> robot's position (and orientation), plus the positions of its actuators.</li>
+          <li><strong>Initial state:</strong> the robot's starting configuration (task-dependent).</li>
+          <li><strong>Successors:</strong> apply a movement or an actuator action.</li>
+          <li><strong>Goal test:</strong> the robot has reached the target configuration (task-dependent).</li>
+          <li><strong>Path cost:</strong> often a weighted sum of distance travelled, energy consumed, and time taken.</li>
+        </ul>
+      </div>
+
+      <div class="formulation-item">
+        <h5>Automatic assembly</h5>
+        <div class="ar-label">التجميع الآليّ</div>
+        <p style="margin: 4px 0 8px; font-size: 14px;">A robot assembles a product from parts, one component at a time, respecting physical constraints (a part can only be attached when its mating surfaces are accessible).</p>
+        <ul class="tight" style="font-size: 13.5px;">
+          <li><strong>State:</strong> which components have been placed and where.</li>
+          <li><strong>Initial state:</strong> no components placed.</li>
+          <li><strong>Successors:</strong> place the next compatible component in a feasible position.</li>
+          <li><strong>Goal test:</strong> the product is fully assembled.</li>
+          <li><strong>Path cost:</strong> number of moves, or weighted assembly time.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <p class="muted" style="font-size: 13px; margin-top: 14px;">The same problems can be tackled by very different algorithms depending on their formulation. TSP and VLSI are typically attacked by <em>local search</em> (Part Ten) because the state space is gigantic and the path of intermediate states is irrelevant: we just want a good final assignment. Route finding and assembly sequencing, where the sequence of actions matters, lean on systematic search.</p>
+  </div>
+
   <div class="callout"><span class="marker">Aside</span>A good formulation removes detail that does not affect the search and keeps only what is needed to make decisions. The art of problem solving begins here, before any algorithm runs.</div>
 </section>
 
@@ -1419,6 +1482,46 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <p>The algorithm grows the tree by <span class="term">expanding<span class="term-tooltip">Applying the successor function to a node to generate its children, which are then added to the frontier.<span class="ar">توسيع</span></span></span> a node: it applies the successor function to that node's state, generates one new node per resulting &lt;action, state&gt; pair, and adds those new nodes to the collection of unexplored options. This collection is called the <em>frontier</em> or <em>fringe</em>.</p>
 
     <div class="callout tip"><span class="marker">Key</span>Expansion is the only way the search tree ever grows. Every algorithm we will see expands one node per step. They differ only in <em>which</em> node they choose to expand next.</div>
+  </div>
+
+  <div class="subsection">
+    <h3>Search terminology, in one place <span class="ar">مفردات البحث</span></h3>
+    <p>These terms recur in every algorithm below; pinning them down once avoids confusion later. The same node passes through three sets in its lifetime: it is first <em>generated</em>, then <em>reached</em>, then <em>expanded</em>.</p>
+
+    <div class="formulation-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+      <div class="formulation-item">
+        <h5>Generated</h5>
+        <div class="ar-label">مُولَّد</div>
+        <p>A node has been <em>generated</em> the moment the successor function produces it. The total count of generated nodes is what the time-complexity formulas count.</p>
+      </div>
+      <div class="formulation-item">
+        <h5>Reached</h5>
+        <div class="ar-label">مُكتشف</div>
+        <p>A state is <em>reached</em> if a node for that state has been generated and placed somewhere we can find it (fringe or closed list). In graph-search, we generate a state at most once because we check against the reached set.</p>
+      </div>
+      <div class="formulation-item">
+        <h5>Expanded (visited)</h5>
+        <div class="ar-label">مُوسَّع / مُزار</div>
+        <p>A node is <em>expanded</em> when its successor function is applied. Synonymously called <em>visited</em>. The number of expansions is the main metric algorithms compare on. After expansion, the node moves from the fringe to the closed list.</p>
+      </div>
+      <div class="formulation-item">
+        <h5>Fringe (frontier, open list)</h5>
+        <div class="ar-label">الحافة / المُقدِّمة</div>
+        <p>The collection of nodes that have been generated but not yet expanded. The algorithm's choice of which fringe node to expand next is what makes each algorithm distinct (FIFO for BFS, LIFO for DFS, priority queue for UCS, A*, etc).</p>
+      </div>
+      <div class="formulation-item">
+        <h5>Closed list (reached set)</h5>
+        <div class="ar-label">قائمة المُغلَقة</div>
+        <p>The set of nodes that have already been expanded. Used by graph-search to recognise when we are about to re-process a state and skip it. Tree-search has no closed list and may revisit states.</p>
+      </div>
+      <div class="formulation-item">
+        <h5>Search strategy</h5>
+        <div class="ar-label">استراتيجيّة البحث</div>
+        <p>The rule by which an algorithm picks the next node to expand from the fringe. Different rules give different algorithms; all of them use the same expansion machinery.</p>
+      </div>
+    </div>
+
+    <p class="muted" style="font-size: 13px; margin-top: 12px;">In the interactive demos below, the trace tables show <strong>Step</strong>, <strong>Popped</strong> (the node just expanded), <strong>Visited</strong> (the closed list at that point), and <strong>Fringe</strong> (what is still queued). Track these columns and the abstract terminology becomes concrete.</p>
   </div>
 </section>
 <!-- ============================================================
