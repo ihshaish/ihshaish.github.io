@@ -3670,6 +3670,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
   </div>
 
   <div class="formulation-grid">
+
     <div class="formulation-item">
       <h5>State</h5>
       <div class="ar-label">حالة</div>
@@ -3678,58 +3679,158 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <div class="formulation-item">
       <h5>Node</h5>
       <div class="ar-label">عقدة</div>
-      <p>Bookkeeping record in the search tree containing a state, parent, action, path-cost, and depth.</p>
+      <p>Bookkeeping record in the search tree containing a state, parent pointer, action, path-cost, and depth.</p>
     </div>
     <div class="formulation-item">
-      <h5>Fringe / Frontier</h5>
+      <h5>Successor function</h5>
+      <div class="ar-label">دالّة الخلَف</div>
+      <p>Given a state, returns the set of &lt;action, resulting state&gt; pairs reachable in one step. Implicitly defines the state space and the search tree.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Goal test</h5>
+      <div class="ar-label">اختبار الهدف</div>
+      <p>A function that, given a state, returns true if it is a goal. Can be explicit (specific state) or a property (e.g. checkmate).</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Path cost &middot; g(n)</h5>
+      <div class="ar-label">تكلفة المسار</div>
+      <p>The cost of the path from the start to node n. Usually a sum of non-negative step costs. UCS and A* order the fringe by g (and g + h).</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Optimal solution</h5>
+      <div class="ar-label">الحلّ الأمثل</div>
+      <p>A solution whose path cost is the lowest among all solutions to the problem. Distinct from "a solution" of which there may be many.</p>
+    </div>
+
+    <div class="formulation-item">
+      <h5>Generated</h5>
+      <div class="ar-label">مُولَّد</div>
+      <p>A node is generated the moment the successor function produces it. The total count of generated nodes is what time-complexity formulas count.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Reached</h5>
+      <div class="ar-label">مُكتشف</div>
+      <p>A state is reached if a node for that state has been generated. In graph-search the reached set blocks duplicate generation; in tree-search there is no such check.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Expanded (visited)</h5>
+      <div class="ar-label">مُوسَّع / مُزار</div>
+      <p>A node is expanded when its successor function is applied. The number of expansions is the main efficiency metric.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Fringe / frontier / open list</h5>
       <div class="ar-label">الحافة / المُقدِّمة</div>
       <p>The collection of generated but unexpanded nodes. Different orderings give different algorithms.</p>
     </div>
     <div class="formulation-item">
-      <h5>Branching factor (b)</h5>
+      <h5>Closed list / reached set</h5>
+      <div class="ar-label">قائمة المغلَقة</div>
+      <p>The set of already-expanded nodes. Used by graph-search to recognise repeats and avoid re-expansion.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Search strategy</h5>
+      <div class="ar-label">استراتيجيّة البحث</div>
+      <p>The rule by which an algorithm picks which fringe node to expand next. Every algorithm in this companion is defined by its strategy.</p>
+    </div>
+
+    <div class="formulation-item">
+      <h5>Branching factor &middot; b</h5>
       <div class="ar-label">عامل التفرّع</div>
-      <p>Maximum number of successors of any node.</p>
+      <p>Maximum number of successors any single node has. Formulas like b<sup>d</sup> assume a uniform tree as the worst-case upper bound.</p>
     </div>
     <div class="formulation-item">
-      <h5>Depth (d, m)</h5>
+      <h5>Effective branching factor &middot; b*</h5>
+      <div class="ar-label">عامل التفرع الفعّال</div>
+      <p>The b that a uniform tree of depth d would need to contain the same number of nodes the algorithm actually expanded. Closer to 1 means the algorithm prunes well.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Depth &middot; d, m</h5>
       <div class="ar-label">العمق</div>
-      <p>d = depth of shallowest goal; m = maximum depth of any path in the search tree.</p>
+      <p>d = depth of the shallowest goal; m = maximum depth of any path in the state space (may be infinite).</p>
     </div>
+
     <div class="formulation-item">
-      <h5>Heuristic h(n)</h5>
+      <h5>Heuristic &middot; h(n)</h5>
       <div class="ar-label">دالّة استدلاليّة</div>
       <p>Estimate of cost from n to the nearest goal. Problem-specific; chosen by the designer.</p>
     </div>
     <div class="formulation-item">
+      <h5>Evaluation function &middot; f(n)</h5>
+      <div class="ar-label">دالّة التقييم</div>
+      <p>The key used to order the fringe in best-first search. Greedy uses f = h; A* uses f = g + h.</p>
+    </div>
+    <div class="formulation-item">
       <h5>Admissible</h5>
       <div class="ar-label">مقبولة</div>
-      <p>h(n) &le; h*(n) for every node. Admissible heuristics never overestimate. Required for A* optimality.</p>
+      <p>h(n) &le; h*(n) for every node. Admissible heuristics never overestimate the true remaining cost. Required for A*'s tree-search optimality.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Consistent (monotonic)</h5>
+      <div class="ar-label">متّسقة</div>
+      <p>h satisfies the triangle inequality: h(n) &le; c(n, a, n') + h(n'). Consistency implies admissibility. With a consistent h, A*'s graph-search is optimal too.</p>
     </div>
     <div class="formulation-item">
       <h5>Dominance</h5>
       <div class="ar-label">الهيمنة</div>
-      <p>h<sub>2</sub> dominates h<sub>1</sub> if h<sub>2</sub>(n) &ge; h<sub>1</sub>(n) everywhere. Bigger admissible heuristics expand fewer nodes.</p>
+      <p>h<sub>2</sub> dominates h<sub>1</sub> if h<sub>2</sub>(n) &ge; h<sub>1</sub>(n) everywhere, both admissible. A* with h<sub>2</sub> expands no more nodes than A* with h<sub>1</sub>.</p>
     </div>
     <div class="formulation-item">
       <h5>Relaxed problem</h5>
       <div class="ar-label">مسألة مُخفّفة</div>
-      <p>Problem with fewer restrictions on the actions. Optimal cost of the relaxed problem is an admissible h for the original.</p>
+      <p>A problem with fewer restrictions on the actions. The optimal cost of a relaxed problem is an admissible heuristic for the original.</p>
     </div>
     <div class="formulation-item">
+      <h5>Pathmax</h5>
+      <div class="ar-label">أعظم على المسار</div>
+      <p>Adjustment used by RBFS to ensure f-values are non-decreasing along any path: f(child) &larr; max(f(parent), g(child) + h(child)).</p>
+    </div>
+
+    <div class="formulation-item">
       <h5>Local maximum</h5>
-      <div class="ar-label">أقصى محلّي</div>
-      <p>State whose value is higher than every neighbour but not the global maximum. Trap for hill climbing.</p>
+      <div class="ar-label">القيمة العظمى المحلّيّة</div>
+      <p>A state whose value is higher than every immediate neighbour but lower than the global maximum. Hill climbing terminates here.</p>
     </div>
     <div class="formulation-item">
       <h5>Plateau</h5>
-      <div class="ar-label">سهل / هضبة</div>
-      <p>Flat region in the state-space landscape where neighbours have equal value. No gradient signal.</p>
+      <div class="ar-label">هضبة</div>
+      <p>Flat region of the state-space landscape where every neighbour has the same objective value. No gradient signal.</p>
     </div>
     <div class="formulation-item">
-      <h5>Annealing schedule</h5>
-      <div class="ar-label">جدول التبريد</div>
-      <p>Function T(t) controlling how the temperature decreases over time in simulated annealing.</p>
+      <h5>Shoulder</h5>
+      <div class="ar-label">كتف</div>
+      <p>Flat region with an exit, one edge of the flat leads to higher terrain. Escapable by sideways moves.</p>
     </div>
+    <div class="formulation-item">
+      <h5>Ridge</h5>
+      <div class="ar-label">تلّ ضيّق</div>
+      <p>A long narrow crest in &ge; 2D: moving along the crest is uphill, but every single-step move is sideways or downhill. Single-step hill climbing oscillates.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Sideways move</h5>
+      <div class="ar-label">حركة جانبيّة</div>
+      <p>A neighbour move with the same objective value as the current state. Allowing a bounded number of sideways moves lets hill climbing cross shoulders.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Cooling schedule</h5>
+      <div class="ar-label">جدول التبريد</div>
+      <p>Function T(t) controlling how the temperature decreases over time in simulated annealing. Slow logarithmic schedules guarantee convergence; fast geometric schedules are typical.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Fitness function</h5>
+      <div class="ar-label">دالّة اللياقة</div>
+      <p>Objective in evolutionary algorithms. For 8-queens, the number of non-attacking pairs of queens. Genetic Algorithms maximise this.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Crossover</h5>
+      <div class="ar-label">التهجين</div>
+      <p>GA operation: pick a random split point in two parent chromosomes; child A inherits the first half of one parent and the second half of the other. Two children per crossover.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Mutation</h5>
+      <div class="ar-label">الطفرة</div>
+      <p>GA operation: with small probability per gene, randomly change a symbol in a child. The only operator that can introduce alleles not present in any parent.</p>
+    </div>
+
   </div>
 </section>
 
