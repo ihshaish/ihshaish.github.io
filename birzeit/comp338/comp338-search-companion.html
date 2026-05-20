@@ -2327,6 +2327,19 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
         </div>
       </div>
     </div>
+
+    <div class="callout warn"><span class="marker">Worked failure: Iasi to Fagaras</span>
+      <p style="margin: 6px 0 8px;">The canonical demonstration that Greedy is incomplete. Set start = Iasi, goal = Fagaras. The straight-line distance from Neamt to Fagaras happens to be smaller than from Iasi to Fagaras (Neamt sits roughly between Iasi and Fagaras as the crow flies, even though by road it is a dead-end).</p>
+      <p style="margin: 6px 0;">Greedy's behaviour:</p>
+      <ol class="tight" style="font-style: normal; margin: 6px 0 8px 0;">
+        <li>Start at Iasi. Generate neighbours: Vaslui, Neamt.</li>
+        <li>Compare heuristics. h(Neamt &rarr; Fagaras) &lt; h(Vaslui &rarr; Fagaras). Greedy picks Neamt.</li>
+        <li>Expand Neamt. Its only neighbour is Iasi (a dead-end town).</li>
+        <li><strong>Tree-search:</strong> Iasi is regenerated and looks attractive again. Greedy picks Iasi, generates Neamt, picks Neamt, generates Iasi&hellip; an infinite loop. Tree-search Greedy is <em>not</em> complete.</li>
+        <li><strong>Graph-search:</strong> Iasi and Neamt are both closed after one pass. The fringe ran out of unexpanded options for that side of the map; Greedy returns failure or backs up to Vaslui (which is on the fringe), then continues. Graph-search prevents the loop but the algorithm still committed to a wrong side of the map first.</li>
+      </ol>
+      <p style="margin: 6px 0 0;">Lesson: a heuristic that points toward a dead-end is enough to derail Greedy. The closed list rescues termination but not optimality, and not the wasted exploration.</p>
+    </div>
   </div>
 
   <!-- =====================  A*  ===================== -->
