@@ -1605,12 +1605,14 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <p>The number of nodes generated during the search. We express this in terms of three quantities:</p>
     <div class="card">
       <ul class="tight" style="margin: 0;">
-        <li><strong>b</strong>, the <span class="term">branching factor<span class="term-tooltip">The maximum number of successors of any node.<span class="ar">عامل التفرّع</span></span></span>: the maximum number of successors of any node.</li>
+        <li><strong>b</strong>, the <span class="term">branching factor<span class="term-tooltip">The maximum number of successors any single node has. Worst-case complexity formulas like b^d assume a uniform tree in which every node has b children; the bound is an upper bound on a tree where some nodes branch less.<span class="ar">عامل التفرّع</span></span></span>, the <em>maximum</em> number of successors any single node has. Some nodes may have fewer; b is the worst case across the tree.</li>
         <li><strong>d</strong>, the depth of the <em>shallowest</em> goal node.</li>
         <li><strong>m</strong>, the maximum length of any path in the state space (may be infinite).</li>
       </ul>
     </div>
-    <p>A tree with branching factor <em>b</em> has roughly <em>b<sup>k</sup></em> nodes at depth <em>k</em>. This is why search complexity is so often exponential: a million nodes at depth 6 with b = 10. This is also why <em>any</em> improvement to the algorithm matters in practice.</p>
+    <p>A uniform tree with branching factor <em>b</em> has exactly <em>b<sup>k</sup></em> nodes at depth <em>k</em>. Real trees rarely are uniform, some nodes branch fully, others not at all, so the formula is an upper bound: at most b<sup>k</sup> nodes at depth k. Either way the count is exponential in d: a million nodes at depth 6 with b = 10. This is why every algorithmic improvement matters.</p>
+
+    <p class="muted" style="font-size: 13px;">A related quantity, the <span class="term">effective branching factor b*<span class="term-tooltip">If an algorithm expands N nodes on a problem of depth d, b* is the branching factor of the uniform tree of depth d that would contain N+1 nodes. b* between 1 and b summarises in a single number how aggressively the algorithm prunes. Closer to 1 means it expands almost only the optimal path.<span class="ar">عامل التفرع الفعّال</span></span></span>, appears in A*'s complexity analysis (Part Eight). It is the imagined branching factor of a uniform tree that would contain the same number of nodes the algorithm actually expanded, useful for comparing the pruning quality of different heuristics.</p>
   </div>
 
   <div class="subsection">
@@ -4900,7 +4902,11 @@ function runBFS(graph, useGraphSearch = true) {
   const startNode = { state: start, parent: null, action: null, depth: 0, g: 0 };
   const fringe = [startNode];
   const closed = new Set();
-  const generated = { [start]: startNode };
+  // `reached` tracks every state ever placed on the fringe (in graph-search
+  // mode). Checking reached at generation time, instead of closed at pop
+  // time, prevents the same state from being queued by two different parents
+  // before either is expanded. Trace stays clean: no "skip" rows.
+  const reached = useGraphSearch ? new Set([start]) : null;
 
   steps.push({
     kind: 'init',
@@ -4912,16 +4918,6 @@ function runBFS(graph, useGraphSearch = true) {
   let stepN = 1;
   while (fringe.length > 0) {
     const node = fringe.shift();
-    if (useGraphSearch && closed.has(node.state)) {
-      steps.push({
-        kind: 'skip',
-        node: node.state,
-        fringe: fringe.map(n => n.state),
-        expanded: Array.from(closed),
-        message: `Popped ${node.state}, but it is already in the closed list. Skip and continue.`
-      });
-      continue;
-    }
     if (node.state === goal) {
       steps.push({
         kind: 'goal',
@@ -4937,7 +4933,8 @@ function runBFS(graph, useGraphSearch = true) {
     closed.add(node.state);
     const newChildren = [];
     for (const [child, w] of adj[node.state]) {
-      if (useGraphSearch && closed.has(child)) continue;
+      if (useGraphSearch && reached.has(child)) continue;
+      if (useGraphSearch) reached.add(child);
       const childNode = {
         state: child, parent: node, action: child,
         depth: node.depth + 1, g: node.g + w
@@ -5032,6 +5029,8 @@ function runDFS(graph, useGraphSearch = true, maxSteps = 200) {
   const startNode = { state: start, parent: null, action: null, depth: 0, g: 0 };
   const fringe = [startNode];
   const closed = new Set();
+  // See runBFS: `reached` blocks duplicate fringe insertions in graph-search.
+  const reached = useGraphSearch ? new Set([start]) : null;
 
   steps.push({
     kind: 'init', fringe: [start], expanded: [],
@@ -5041,7 +5040,6 @@ function runDFS(graph, useGraphSearch = true, maxSteps = 200) {
   let stepN = 1, iter = 0;
   while (fringe.length > 0 && iter++ < maxSteps) {
     const node = fringe.pop();
-    if (useGraphSearch && closed.has(node.state)) continue;
     if (node.state === goal) {
       steps.push({
         kind: 'goal', node: node.state,
@@ -5055,7 +5053,8 @@ function runDFS(graph, useGraphSearch = true, maxSteps = 200) {
     closed.add(node.state);
     const newChildren = [];
     for (const [child, w] of adj[node.state]) {
-      if (useGraphSearch && closed.has(child)) continue;
+      if (useGraphSearch && reached.has(child)) continue;
+      if (useGraphSearch) reached.add(child);
       const childNode = {
         state: child, parent: node, action: child,
         depth: node.depth + 1, g: node.g + w
@@ -5086,6 +5085,8 @@ function runDLS(graph, limit, useGraphSearch = true) {
   const startNode = { state: start, parent: null, action: null, depth: 0, g: 0 };
   const fringe = [startNode];
   const closed = new Set();
+  // See runBFS: `reached` keeps the fringe free of duplicate states.
+  const reached = useGraphSearch ? new Set([start]) : null;
   let cutoffOccurred = false;
 
   steps.push({
@@ -5096,7 +5097,6 @@ function runDLS(graph, limit, useGraphSearch = true) {
   let stepN = 1;
   while (fringe.length > 0) {
     const node = fringe.pop();
-    if (useGraphSearch && closed.has(node.state)) continue;
     if (node.state === goal) {
       steps.push({
         kind: 'goal', node: node.state,
@@ -5121,7 +5121,8 @@ function runDLS(graph, limit, useGraphSearch = true) {
     closed.add(node.state);
     const newChildren = [];
     for (const [child, w] of adj[node.state]) {
-      if (useGraphSearch && closed.has(child)) continue;
+      if (useGraphSearch && reached.has(child)) continue;
+      if (useGraphSearch) reached.add(child);
       const childNode = {
         state: child, parent: node, action: child,
         depth: node.depth + 1, g: node.g + w
@@ -6005,7 +6006,6 @@ function traceBFS(s, i) {
   if (s.kind === 'init') return { Step: 0, Popped: '-', Visited: '-', Fringe: s.fringe.join(', ') };
   if (s.kind === 'expand') return { Step: s.stepN, Popped: s.node, Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
   if (s.kind === 'goal') return { Step: 'goal', Popped: s.node, Visited: visitedCell(s.expanded), Fringe: 'path: ' + s.path.join(' \u2192 ') };
-  if (s.kind === 'skip') return { Step: '-', Popped: s.node + ' (skip)', Visited: visitedCell(s.expanded), Fringe: s.fringe.join(', ') };
   return null;
 }
 function traceUCS(s, i) {
@@ -6792,7 +6792,11 @@ function setupSystematicAlgorithms() {
     { key: 'bfs', runner: () => runBFS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="bfs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceBFS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
     { key: 'ucs', runner: () => runUCS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="ucs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceUCS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
     { key: 'dfs', runner: () => runDFS(ABSTRACT_GRAPH, !!document.querySelector('[data-algo-toggle="dfs"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceDFS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
-    { key: 'dls', runner: () => runDLS(ABSTRACT_GRAPH, 3, !!document.querySelector('[data-algo-toggle="dls"]')?.checked), graph: ABSTRACT_GRAPH, traceMaker: traceDLS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
+    { key: 'dls', runner: () => {
+        const limSel = document.getElementById('dls-limit-select');
+        const lim = limSel ? +limSel.value : 3;
+        return runDLS(ABSTRACT_GRAPH, lim, !!document.querySelector('[data-algo-toggle="dls"]')?.checked);
+      }, graph: ABSTRACT_GRAPH, traceMaker: traceDLS, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
     { key: 'ids', runner: () => runIDS(ABSTRACT_GRAPH, true, 6), graph: ABSTRACT_GRAPH, traceMaker: traceIDS, columns: ['Iter', 'Popped', 'Visited', 'Fringe'] },
     { key: 'bidir', runner: () => runBidirectional(ABSTRACT_GRAPH), graph: ABSTRACT_GRAPH, traceMaker: traceBidir, columns: ['Step', 'Direction', 'Visited', 'Fringe'] },
     { key: 'greedy', runner: () => runGreedy(ROMANIA), graph: ROMANIA, traceMaker: traceGreedy, columns: ['Step', 'Popped', 'Visited', 'Fringe'] },
@@ -6810,6 +6814,20 @@ function setupSystematicAlgorithms() {
     bindAlgoControls(c.key);
     if (c.graph === ROMANIA) attachHeuristicExplorer(svgId, ROMANIA);
   }
+
+  // Reset DLS whenever the depth-limit dropdown changes, so the chosen
+  // limit actually takes effect instead of the trace being stuck on the
+  // previous limit's run.
+  const dlsLimSel = document.getElementById('dls-limit-select');
+  if (dlsLimSel) {
+    dlsLimSel.addEventListener('change', () => reset('dls'));
+  }
+  // Reset the per-algorithm graph-search toggle handlers similarly: any
+  // toggle change should re-run the algorithm with the new mode.
+  document.querySelectorAll('[data-algo-toggle]').forEach(t => {
+    const key = t.getAttribute('data-algo-toggle');
+    t.addEventListener('change', () => reset(key));
+  });
 
   const refGraph = document.getElementById('reference-graph');
   if (refGraph) renderAbstractGraph('reference-graph');
