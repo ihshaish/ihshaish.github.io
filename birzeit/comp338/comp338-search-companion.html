@@ -2411,6 +2411,16 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
         </div>
       </div>
     </div>
+
+    <div class="callout"><span class="marker">Contrast: A* on the same Iasi-to-Fagaras problem</span>
+      <p style="margin: 6px 0 8px;">In the Greedy section we saw that ordering the fringe by h alone derails on Iasi&nbsp;&rarr;&nbsp;Fagaras because Neamt's h is misleading. A* on the same problem uses f = g + h instead:</p>
+      <ul class="tight" style="margin: 4px 0;">
+        <li>From Iasi, A* generates Neamt and Vaslui. Neamt has a small h but g(Neamt) accumulates 87 km from Iasi. Once g is added the f-value of any path through Neamt is dominated by the round-trip back through Iasi.</li>
+        <li>Any path passing through Neamt twice (which is the only way out, since Neamt is a dead-end) has cumulative g &ge; 2 &times; 87 + cost(Iasi to anywhere else). After Neamt is expanded once and provides no progress, A*'s priority queue prefers Vaslui's branch.</li>
+        <li>A* commits to the correct side of the map after only the misleading detour through Neamt is shown not to improve the f-value, and returns the optimal route Iasi&nbsp;&rarr;&nbsp;Vaslui&nbsp;&rarr;&nbsp;Urziceni&nbsp;&rarr;&nbsp;Bucharest&nbsp;&rarr;&nbsp;Fagaras.</li>
+      </ul>
+      <p style="margin: 6px 0 0;">The g term is what saves A* here. Greedy throws this information away; A* keeps it.</p>
+    </div>
   </div>
 
   <!-- =====================  ADMISSIBILITY  ===================== -->
@@ -2800,6 +2810,16 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <h3>2. Simplified Memory-Bounded A* &middot; SMA* <span class="ar">A* بذاكرة محدودة</span></h3>
 
     <p>SMA* uses <em>all</em> available memory, not just linear. It runs A* until memory is full; then it drops the worst leaf (highest f-value) and remembers that subtree's best f-value in the parent. When that subtree later becomes attractive again, SMA* regenerates it.</p>
+
+    <div class="callout"><span class="marker">SMA* in three rules</span>The pseudocode below packs a lot in; the mental model is simpler.
+      <ol class="tight" style="font-style: normal; margin-top: 10px;">
+        <li><strong>Run A* until memory is full.</strong> With the memory budget N, store at most N nodes at any time.</li>
+        <li><strong>When the budget is exceeded, drop the worst leaf.</strong> The "worst" leaf is the one with the highest f-value among the leaves of the current search tree. Before dropping it, record its f-value in its parent so the parent knows "I had a forgotten descendant with f = this".</li>
+        <li><strong>Regenerate when the forgotten subtree becomes attractive again.</strong> If, later, every node currently in memory has an f-value worse than some ancestor's "forgotten f", SMA* regenerates that ancestor's dropped subtree, expanding it again from scratch. The price of a small memory budget is paid in re-computation.</li>
+      </ol>
+    </div>
+
+    <p>The "deepest least-f-cost node" rule (line 4 of the pseudocode) breaks ties by preferring nodes that are <em>deeper</em> in the tree. This favours finishing a promising branch over scattering effort across the frontier, which helps when memory is tight.</p>
 
 <div class="pseudo"><span class="kw">function</span> SMA*(problem) <span class="kw">returns</span> a solution
     Queue &larr; MAKE-QUEUE({MAKE-NODE(INITIAL-STATE[problem])})
