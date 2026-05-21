@@ -3,36 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>From interviews to personas - an interactive walkthrough · COMP322</title>
+<title>From interviews to personas, an interactive walkthrough · COMP322</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink: #1A1A1A;
-  --ink-soft: #2A2A2A;
-  --muted: #5A6B78;
-  --faint: #9AA5B1;
-  --paper: #FBFAF7;
-  --card: #FFFFFF;
-  --rule: #E4E2DC;
-  --rule-strong: #D0CEC6;
-  --accent: #2C5F7C;
-  --accent-dark: #1F4860;
-  --accent-soft: #E8F0F5;
-  --accent-cream: #F5EFE3;
-  --warn: #B8862F;
-  --warn-soft: #FAF1E0;
-  --success: #2D7A4F;
-  --success-soft: #E6F1EB;
-  --danger: #B23B3B;
-  --danger-soft: #FBEAE9;
-  --layla: #3A6FA0;
-  --maryam: #B8862F;
-  --type-act: #3A6FA0;
-  --type-att: #B23B3B;
-  --type-apt: #B8862F;
-  --type-mot: #2D7A4F;
-  --type-skl: #6B4FA0;
-  --serif: 'Source Serif Pro', Georgia, 'Times New Roman', serif;
-  --sans: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ink: #0f1419;
+  --ink-soft: #2c3540;
+  --muted: #5a6473;
+  --faint: #8b95a4;
+  --paper: #faf7f2;
+  --paper-warm: #f3ede2;
+  --paper-deep: #ebe2d1;
+  --card: #ffffff;
+  --rule: #d8cfc0;
+  --rule-strong: #c4b8a4;
+  --accent: #b85c38;
+  --accent-dark: #7a3a23;
+  --accent-soft: #f4dccf;
+  --accent-cream: #f3ede2;
+  --steel: #2c5f7c;
+  --steel-deep: #1a3d52;
+  --warn: #c9a961;
+  --warn-soft: #f6eed6;
+  --success: #4a6b3a;
+  --success-soft: #e0e8d8;
+  --danger: #b03a3a;
+  --danger-soft: #f3d8d8;
+  --layla: #2c5f7c;
+  --maryam: #b85c38;
+  --type-act: #2c5f7c;
+  --type-att: #b85c38;
+  --type-apt: #c9a961;
+  --type-mot: #4a6b3a;
+  --type-skl: #6b4fa0;
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter Tight', 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
 }
 
 * { box-sizing: border-box; }
@@ -41,9 +49,13 @@ body {
   font-family: var(--sans);
   background: var(--paper);
   color: var(--ink);
-  line-height: 1.65;
+  line-height: 1.6;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
+    radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
+  min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5 {
@@ -53,88 +65,113 @@ h1, h2, h3, h4, h5 {
   letter-spacing: -0.01em;
   margin: 0 0 0.4em 0;
 }
-h1 { font-size: 38px; line-height: 1.15; letter-spacing: -0.02em; }
-h2 { font-size: 28px; line-height: 1.2; }
-h3 { font-size: 21px; line-height: 1.3; }
+h1 { font-size: 38px; line-height: 1.15; letter-spacing: -0.02em; font-variation-settings: "opsz" 144; }
+h2 { font-size: 30px; line-height: 1.2; font-variation-settings: "opsz" 96; }
+h3 { font-size: 22px; line-height: 1.3; }
 h4 { font-size: 16px; line-height: 1.4; }
 p { margin: 0 0 1em 0; }
 em { font-style: italic; }
 strong { font-weight: 600; color: var(--ink); }
-a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
-a:hover { color: var(--accent-dark); }
+a { color: var(--accent-dark); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { color: var(--accent); }
 
-/* Top ribbon */
+/* Top ribbon, handbook-style topbar */
 .ribbon {
-  background: var(--accent);
-  color: white;
-  padding: 0;
-  border-bottom: 3px solid var(--accent-dark);
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,247,242,0.93);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--rule);
+  padding: 14px 0;
 }
 .ribbon-inner {
-  max-width: 1100px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 12px 32px;
+  padding: 0 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
   font-family: var(--sans);
+  gap: 24px;
 }
-.ribbon a { color: rgba(255,255,255,0.95); border-bottom-color: rgba(255,255,255,0.4); }
-.ribbon a:hover { color: white; border-bottom-color: white; }
-.ribbon-left { display: flex; gap: 22px; align-items: center; }
-.ribbon-left strong { color: white; font-weight: 600; }
+.ribbon a { color: var(--ink-soft); border-bottom: 1px dotted var(--rule-strong); }
+.ribbon a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.ribbon-left { display: flex; gap: 14px; align-items: center; font-family: var(--serif); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
+.ribbon-left strong { color: var(--ink); font-weight: 600; }
+.ribbon-left::before {
+  content: ''; width: 28px; height: 28px; border-radius: 5px;
+  background: linear-gradient(135deg, var(--steel) 0%, var(--accent) 100%);
+  display: inline-block; box-shadow: 0 2px 6px rgba(184,92,56,0.25);
+}
 
 /* Page container */
 .page {
-  max-width: 920px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 48px 32px 100px 32px;
+  padding: 60px 32px 100px 32px;
 }
-.page.wide { max-width: 1100px; }
+.page.wide { max-width: 1240px; }
 
-/* Masthead */
-.masthead { margin-bottom: 48px; }
+/* Masthead, handbook-style hero */
+.masthead { margin-bottom: 56px; }
 .masthead .kicker {
-  font-size: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 1.8px;
+  letter-spacing: 0.2em;
   color: var(--accent);
   font-weight: 600;
-  margin-bottom: 14px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.masthead .kicker::before {
+  content: ''; flex-shrink: 0; width: 32px; height: 1px; background: var(--accent);
+}
+.masthead .kicker::after {
+  content: ''; flex: 1; max-width: 120px; height: 1px; background: var(--accent);
 }
 .masthead h1 {
-  font-size: 46px;
-  margin-bottom: 18px;
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(42px, 6.5vw, 78px);
+  line-height: 1.02; letter-spacing: -0.03em;
+  margin-bottom: 28px;
+  font-variation-settings: "opsz" 144;
+  max-width: 1000px;
 }
 .masthead h1 em {
   font-style: italic;
   color: var(--accent);
+  font-variation-settings: "opsz" 144, "wght" 400;
 }
 .masthead .standfirst {
-  font-size: 19px;
+  font-size: 20px;
   line-height: 1.55;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-family: var(--serif);
   font-weight: 400;
-  max-width: 740px;
+  max-width: 760px;
 }
 .masthead .meta {
-  display: flex;
-  gap: 32px;
-  margin-top: 28px;
-  padding-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+  padding-top: 36px;
   border-top: 1px solid var(--rule);
   font-size: 13px;
-  color: var(--muted);
+  color: var(--ink-soft);
 }
 .masthead .meta .meta-block strong {
   display: block;
+  font-family: var(--mono);
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 1.4px;
-  color: var(--faint);
-  margin-bottom: 3px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin-bottom: 6px;
   font-weight: 700;
 }
 
@@ -1214,24 +1251,23 @@ svg text { user-select: none; }
 <div class="ribbon">
   <div class="ribbon-inner">
     <div class="ribbon-left">
-      <strong>COMP322 · Personas walkthrough</strong>
-      <span style="opacity:0.75;">An interactive companion to the handbook</span>
+      <strong>COMP322 &middot; Personas walkthrough</strong>
     </div>
-    <div>Birzeit University · Dr Hisham Ihshaish</div>
+    <div><a href="/birzeit/comp322/personas_companion.html">theory companion</a> &middot; <a href="/birzeit/comp322/">course</a></div>
   </div>
 </div>
 
 <div class="page">
 
   <div class="masthead" id="masthead">
-    <div class="kicker">COMP322 · Interactive walkthrough</div>
-    <h1>From <em>interviews</em> to <em>personas:</em><br>the move that turns six conversations into two people.</h1>
-    <p class="standfirst">A persona is not a character you invent. It is the centroid of a cluster of real users, told as a story. This walkthrough is the methodology made operational - read six interviews, code what you hear, lift behavioural variables, score the participants, cluster them, and read each centroid as a person. Roughly one hour, end to end. Pick a project and start.</p>
+    <div class="kicker">COMP322 &middot; Human-Computer Interaction</div>
+    <h1>From <em>interviews</em> to <em>personas</em>:<br>the move that turns six conversations into two people.</h1>
+    <p class="standfirst">A persona is not a character you invent. It is the centroid of a cluster of real users, told as a story. This walkthrough is the methodology made operational. Read six interviews, code what you hear, lift behavioural variables, score the participants, cluster them, and read each centroid as a person. Roughly one hour, end to end. Pick a project and begin.</p>
     <div class="meta">
       <div class="meta-block"><strong>Method</strong>Cooper, Reimann, Cronin, Noessel (2014)</div>
-      <div class="meta-block"><strong>Companion to</strong>Lecture on personas, project Phase 1</div>
       <div class="meta-block"><strong>Format</strong>Self-paced, no marks, replayable</div>
-      <div class="meta-block"><strong>Time</strong>~60 minutes per pass</div>
+      <div class="meta-block"><strong>Time</strong>About 60 minutes per pass</div>
+      <div class="meta-block"><strong>Reading</strong><a href="/birzeit/comp322/personas_companion.html" style="color:inherit;border-bottom:1px dotted;">Theory companion</a></div>
     </div>
   </div>
 
@@ -1240,8 +1276,7 @@ svg text { user-select: none; }
   <div id="step-content"></div>
 
   <div class="colophon">
-    Method following Cooper, Reimann, Cronin & Noessel (2014), <em>About Face</em>, 4th ed., Wiley, Chapter 3. Variable types: Activities, Attitudes, Aptitudes, Motivations, Skills.<br>
-    Hover any dotted term for definition and Arabic translation. Walkthrough only - no marks, no submissions.
+    Method following Cooper, Reimann, Cronin and Noessel (2014), <em>About Face</em>, 4th ed., Wiley, Chapter 3. Variable types: Activities, Attitudes, Aptitudes, Motivations, Skills. Hover any dotted term for definition and Arabic translation. For the full theoretical treatment with cited literature, see the <a href="/birzeit/comp322/personas_companion.html">theory companion</a>.
   </div>
 
 </div>
@@ -2609,14 +2644,17 @@ function renderReflect(el) {
         <div class="gentry"><div class="term-name">Anchor participant</div><div class="term-def">The participant closest to a cluster centroid. The source of the persona's quote and lifestyle detail.</div><div class="term-ar">المشارك المرجعي</div></div>
       </div>
 
+      <h3 style="margin-top:32px;">For deeper theory</h3>
+      <p>This walkthrough is operational; for the research literature, industry case studies, and methodological critique, read the <a href="/birzeit/comp322/personas_companion.html"><strong>Personas: theory and practice</strong></a> companion. It pairs Cooper, Goodwin, and Pruitt and Adlin with the empirical evidence on persona use in industry (Pruitt and Grudin at Microsoft; Chapman and Milham's critique; Matthews, Judge and Whittaker's CHI 2012 study) and the Persona Spectrum framework for inclusive design (Holmes, 2018).</p>
+
       <h3 style="margin-top:32px;">References</h3>
       <div class="refs">
-        <p><strong>Cooper, A., Reimann, R., Cronin, D. and Noessel, C.</strong> (2014). <em>About Face: The Essentials of Interaction Design</em>, 4th edition. Wiley. Chapter 3 - personas, behavioural variables, and the five types.</p>
+        <p><strong>Preece, J., Sharp, H. and Rogers, Y.</strong> (2019). <em>Interaction Design: Beyond Human-Computer Interaction</em>, 5th edition. John Wiley &amp; Sons. The course textbook; chapter on data gathering and analysis is the entry point for this material.</p>
+        <p><strong>Cooper, A., Reimann, R., Cronin, D. and Noessel, C.</strong> (2014). <em>About Face: The Essentials of Interaction Design</em>, 4th edition. Wiley. Chapter 3 covers personas, behavioural variables, and the five types used here.</p>
         <p><strong>Pruitt, J. and Adlin, T.</strong> (2006). <em>The Persona Lifecycle: Keeping People in Mind Throughout Product Design</em>. Morgan Kaufmann. The classical operational guide to evidence-based personas.</p>
-        <p><strong>Rogers, Y., Sharp, H. and Preece, J.</strong> (2024). <em>Interaction Design: Beyond Human-Computer Interaction</em>, 6th edition. Wiley. The course textbook; chapter on data gathering and analysis.</p>
         <p><strong>Goodwin, K.</strong> (2009). <em>Designing for the Digital Age: How to Create Human-Centered Products and Services</em>. Wiley. Operational follow-up to Cooper with worked examples of the clustering step.</p>
         <p><strong>Rousseeuw, P. J.</strong> (1987). Silhouettes: a graphical aid to the interpretation and validation of cluster analysis. <em>Journal of Computational and Applied Mathematics</em>, 20, 53-65.</p>
-        <p><strong>Portigal, S.</strong> (2013). <em>Interviewing Users: How to Uncover Compelling Insights</em>. Rosenfeld Media. Stories-not-opinions interviewing technique.</p>
+        <p><strong>Portigal, S.</strong> (2013). <em>Interviewing Users: How to Uncover Compelling Insights</em>. Rosenfeld Media. Practical guidance on the interview technique that produces persona-grade data.</p>
       </div>
 
     </div>
