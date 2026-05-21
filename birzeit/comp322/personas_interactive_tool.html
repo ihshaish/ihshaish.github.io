@@ -1229,6 +1229,36 @@ button:disabled:hover { border-color: var(--rule-strong); color: var(--ink); }
 }
 .colophon a { color: var(--muted); border-bottom-color: var(--rule-strong); }
 
+/* Final polished persona card (renderReflect) */
+.fp-card { background: white; border: 1px solid var(--rule); border-radius: 14px; box-shadow: 0 4px 12px rgba(15,20,25,0.08), 0 24px 48px rgba(15,20,25,0.10); margin: 22px 0; overflow: hidden; display: grid; grid-template-columns: 240px 1fr; }
+.fp-portrait { background: linear-gradient(135deg, #f3ede2 0%, #d6e0e8 100%); padding: 28px 22px; display: flex; flex-direction: column; align-items: center; text-align: center; border-right: 1px solid var(--rule); }
+.fp-portrait svg { width: 160px; height: 160px; margin-bottom: 18px; filter: drop-shadow(0 6px 18px rgba(44,95,124,0.18)); }
+.fp-name { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 4px; }
+.fp-role { font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; font-weight: 600; }
+.fp-quote { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink-soft); line-height: 1.45; max-width: 200px; }
+.fp-quote::before { content: '\201C'; display: block; font-size: 30px; line-height: 0.5; color: var(--accent); margin-bottom: 4px; }
+.fp-body { padding: 26px 30px; }
+.fp-body h4 { font-family: var(--sans); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 14px 0 6px; font-weight: 600; }
+.fp-body h4:first-child { margin-top: 0; }
+.fp-body p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+.fp-body ul { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 0 18px; padding: 0; }
+.fp-body ul li { margin-bottom: 3px; }
+.fp-demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px 16px; margin-top: 2px; }
+.fp-demo { font-size: 12px; }
+.fp-demo span:first-child { display: block; font-family: var(--sans); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 2px; }
+.fp-demo span:last-child { color: var(--ink); font-weight: 600; font-size: 12.5px; }
+.fp-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 1000px) { .fp-pair { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .fp-card { grid-template-columns: 1fr; } .fp-portrait { border-right: none; border-bottom: 1px solid var(--rule); } }
+
+.real-case { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 22px 26px; margin: 16px 0; box-shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px rgba(15,20,25,0.06); }
+.real-case .lbl { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-weight: 600; }
+.real-case h4 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+.real-case p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 8px; }
+.real-case .source { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rule); font-size: 12px; font-style: italic; color: var(--faint); }
+.real-case.good { border-left: 4px solid #4a6b3a; }
+.real-case.bad { border-left: 4px solid var(--accent); }
+
 /* SVG axis common styling */
 svg .axis { stroke: var(--muted); stroke-width: 1; }
 svg .grid { stroke: var(--rule); stroke-width: 0.5; stroke-dasharray: 2,2; }
@@ -2605,7 +2635,130 @@ function renderReflect(el) {
 
     <div class="prose">
 
-      <h3>The journey, laid flat</h3>
+      <h3>What the finished persona looks like</h3>
+      <p>The interactive cards in the previous step are the working draft. Below is the same persona presented as a polished, publication-ready card of the kind a design team pins to the wall or includes in a Phase 1 deliverable. Every field on the card comes either from the centroid or from the anchor's transcript; nothing is invented.</p>
+
+      <div class="fp-pair">
+
+        <div class="fp-card">
+          <div class="fp-portrait">
+            <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-label="Stylised persona portrait">
+              <defs>
+                <linearGradient id="layla-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d6e0e8"/><stop offset="100%" stop-color="#f3ede2"/></linearGradient>
+                <linearGradient id="layla-hair" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2c3540"/><stop offset="100%" stop-color="#1a3d52"/></linearGradient>
+                <linearGradient id="layla-scarf" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b85c38"/><stop offset="100%" stop-color="#7a3a23"/></linearGradient>
+              </defs>
+              <circle cx="90" cy="90" r="88" fill="url(#layla-bg)"/>
+              <path d="M 50 160 Q 50 120 90 115 Q 130 120 130 160 Z" fill="url(#layla-scarf)"/>
+              <ellipse cx="90" cy="78" rx="32" ry="38" fill="#e8d4be"/>
+              <path d="M 58 75 Q 56 38 90 36 Q 124 38 122 75 Q 122 60 110 55 Q 105 70 90 70 Q 75 70 70 55 Q 58 60 58 75 Z" fill="url(#layla-hair)"/>
+              <ellipse cx="79" cy="82" rx="2.5" ry="3" fill="#2c3540"/>
+              <ellipse cx="101" cy="82" rx="2.5" ry="3" fill="#2c3540"/>
+              <path d="M 84 96 Q 90 100 96 96" stroke="#7a3a23" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <circle cx="90" cy="90" r="88" fill="none" stroke="#c9a961" stroke-width="2" stroke-opacity="0.4"/>
+            </svg>
+            <div class="fp-name">Layla Yousef</div>
+            <div class="fp-role">Engaged power user</div>
+            <p class="fp-quote">If the app freezes during a transfer I lose my mind.</p>
+          </div>
+          <div class="fp-body">
+            <h4>Demographics that matter for the design</h4>
+            <div class="fp-demos">
+              <div class="fp-demo"><span>Age</span><span>28</span></div>
+              <div class="fp-demo"><span>Location</span><span>Hebron</span></div>
+              <div class="fp-demo"><span>Role</span><span>Maths teacher</span></div>
+              <div class="fp-demo"><span>Devices</span><span>Phone first</span></div>
+              <div class="fp-demo"><span>UI language</span><span>English</span></div>
+              <div class="fp-demo"><span>Anchor</span><span>P2</span></div>
+            </div>
+            <h4>Behavioural patterns</h4>
+            <p>Daily app user; treats it as her primary bank. Performs short, frequent sessions; uses transfers and bill payments routinely; rarely visits the branch.</p>
+            <h4>End goals</h4>
+            <ul><li>Move money fast and reliably, with proof of success.</li><li>Stay in direct control without intermediaries.</li><li>Resolve routine tasks in under a minute.</li></ul>
+            <h4>Frustrations</h4>
+            <ul><li>App freezes during a transfer and loses the entered values.</li><li>Friction prompts ("are you sure?", re-authentication) interrupt flow.</li></ul>
+          </div>
+        </div>
+
+        <div class="fp-card">
+          <div class="fp-portrait">
+            <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-label="Stylised persona portrait">
+              <defs>
+                <linearGradient id="maryam-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e0e8d8"/><stop offset="100%" stop-color="#f3ede2"/></linearGradient>
+                <linearGradient id="maryam-hair" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#4a3a2a"/><stop offset="100%" stop-color="#2c2520"/></linearGradient>
+                <linearGradient id="maryam-scarf" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2c5f7c"/><stop offset="100%" stop-color="#1a3d52"/></linearGradient>
+              </defs>
+              <circle cx="90" cy="90" r="88" fill="url(#maryam-bg)"/>
+              <path d="M 48 160 Q 48 118 90 113 Q 132 118 132 160 Z" fill="url(#maryam-scarf)"/>
+              <ellipse cx="90" cy="80" rx="33" ry="39" fill="#e8d4be"/>
+              <path d="M 57 78 Q 55 42 90 40 Q 125 42 123 78 Q 121 64 110 58 Q 100 56 90 58 Q 80 56 70 58 Q 59 64 57 78 Z" fill="url(#maryam-hair)"/>
+              <path d="M 64 70 Q 66 64 72 66" stroke="#c9a961" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <ellipse cx="79" cy="84" rx="2.5" ry="3" fill="#2c3540"/>
+              <ellipse cx="101" cy="84" rx="2.5" ry="3" fill="#2c3540"/>
+              <path d="M 84 100 Q 90 98 96 100" stroke="#7a3a23" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <circle cx="90" cy="90" r="88" fill="none" stroke="#c9a961" stroke-width="2" stroke-opacity="0.4"/>
+            </svg>
+            <div class="fp-name">Maryam Saleh</div>
+            <div class="fp-role">Cautious delegator</div>
+            <p class="fp-quote">I gave up and called my son. He did it in two minutes.</p>
+          </div>
+          <div class="fp-body">
+            <h4>Demographics that matter for the design</h4>
+            <div class="fp-demos">
+              <div class="fp-demo"><span>Age</span><span>52</span></div>
+              <div class="fp-demo"><span>Location</span><span>Nablus</span></div>
+              <div class="fp-demo"><span>Role</span><span>Pharmacist</span></div>
+              <div class="fp-demo"><span>Devices</span><span>Phone, hesitantly</span></div>
+              <div class="fp-demo"><span>UI language</span><span>Arabic</span></div>
+              <div class="fp-demo"><span>Anchor</span><span>P3</span></div>
+            </div>
+            <h4>Behavioural patterns</h4>
+            <p>Rare app user; prefers the branch for anything beyond balance checks. Asks her son for help on the app; relies on cash for day-to-day spending.</p>
+            <h4>End goals</h4>
+            <ul><li>Get the task done without making a costly mistake.</li><li>Have a person or family member to fall back on.</li></ul>
+            <h4>Frustrations</h4>
+            <ul><li>Interface in English, jargon she does not recognise, error messages that do not explain what to do next.</li><li>Forced re-authentication that interrupts an already-effortful task.</li></ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="callout note">
+        <span class="lbl">What the polished card adds, and what it does not</span>
+        The polished card is the same evidence as the editable cards above, presented for the audience that will not have seen the cluster diagram. Demographics on the card are restricted to those that change a design decision (Cooper's criterion). Goals and frustrations are paraphrased from the anchor's transcript; if a future reviewer asks "where did this come from?", the answer is the participant and the interview segment. For deeper theoretical background, including Cooper's three goal types, the seven-component anatomy in detail, and the persona lifecycle, read the <a href="/birzeit/comp322/personas_companion.html"><strong>Personas: theory and practice</strong></a> companion.
+      </div>
+
+      <h3 style="margin-top:32px;">Real personas in published practice</h3>
+      <p>Personas of the form shown above are not a classroom exercise. They have been used at scale by major product teams, sometimes with documented success and sometimes with documented failure. Three cases are worth knowing.</p>
+
+      <div class="real-case good">
+        <span class="lbl">The good &middot; cross-functional alignment</span>
+        <h4>Microsoft, persona work across product groups (Pruitt and Grudin, 2003)</h4>
+        <p>Pruitt and Grudin's DUX 2003 paper is the most widely cited industry account of persona use. They describe persona programmes across multiple Microsoft product groups, including MSN Explorer and Windows. The teams that benefited used personas as cross-functional communication aids: engineering, marketing, support, and design referenced the same named characters in roadmap meetings, which reduced talking past one another. The visible payoff was not so much in any single design decision as in how the team scoped, prioritised, and reviewed work.</p>
+        <span class="source">Pruitt, J. and Grudin, J. (2003). Personas: Practice and Theory. <em>Proceedings of the 2003 Conference on Designing for User Experiences</em> (DUX '03), 1-15.</span>
+      </div>
+
+      <div class="real-case good">
+        <span class="lbl">The good &middot; accessibility at scale</span>
+        <h4>Microsoft Inclusive Design Toolkit (2016)</h4>
+        <p>Microsoft Design's openly published Inclusive Design Toolkit introduced a now-canonical set of personas built around the Persona Spectrum: a person with one arm; a person with a temporary arm injury; a parent holding a baby; a person carrying groceries. Each character is presented with a name, an illustration, and a short behavioural description. The Toolkit was adopted across Microsoft and influenced accessibility-driven design in many other companies because it gave designers concrete characters to reason about, not abstract guidelines.</p>
+        <span class="source">Microsoft Design (2016). <em>Inclusive: Microsoft Design Toolkit</em>. Available openly; widely cited in accessibility and inclusive-design literature.</span>
+      </div>
+
+      <div class="real-case bad">
+        <span class="lbl">The bad &middot; personas as decoration</span>
+        <h4>Matthews, Judge, and Whittaker (CHI 2012): how designers actually use personas</h4>
+        <p>Matthews and colleagues interviewed designers and UX professionals about their real-world use of personas. They found that personas were rarely used in the rigorous, sustained way the textbook recommends. Personas were often produced, pinned to walls, and then ignored. They competed with other artefacts (user stories, journey maps, scenarios) and sometimes lost. Designers reported personas that simplified users misleadingly, with composite characters smoothing over the variation that actually mattered for design. The teams that benefited were those that combined personas with other artefacts and revised them as the project learned.</p>
+        <p>The same Microsoft groups that produced the successful cases also produced personas that nobody used. Pruitt and Grudin are candid about this. The lesson is not that personas are unreliable; the lesson is that the form is necessary but not sufficient. A well-constructed persona that the team does not consult is the same as no persona at all.</p>
+        <span class="source">Matthews, T., Judge, T. and Whittaker, S. (2012). How Do Designers and User Experience Professionals Actually Perceive and Use Personas? <em>CHI '12</em>, 1219-1228.</span>
+      </div>
+
+      <div class="callout aside">
+        <span class="lbl">From a persona to scenarios and requirements</span>
+        A finished persona is the start of the next stage, not the end. Layla and Maryam generate scenarios (what does Layla actually do on a Tuesday morning when the app freezes?), and those scenarios generate requirements (the system shall preserve entered values when the network drops). That pipeline is the subject of the next companion: <a href="/birzeit/comp322/scenarios_requirements_companion.html"><strong>Scenarios and requirements</strong></a>. Read it after this walkthrough and before starting Phase 2.
+      </div>
+
+      <h3 style="margin-top:32px;">The journey, laid flat</h3>
       <p>Here is what you just did, in six lines:</p>
       <ol style="font-size:15px;line-height:1.8;">
         <li>Six interviews produced raw evidence about ${p.participants.length} real users.</li>
