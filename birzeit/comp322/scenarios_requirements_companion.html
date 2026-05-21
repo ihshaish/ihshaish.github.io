@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scenarios and Requirements: theory and practice · COMP322</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1419;
+    --ink-soft: #2c3540;
+    --ink-mute: #5a6473;
+    --paper: #faf7f2;
+    --paper-warm: #f3ede2;
+    --paper-deep: #ebe2d1;
+    --accent: #b85c38;
+    --accent-deep: #7a3a23;
+    --steel: #2c5f7c;
+    --steel-soft: #d6e0e8;
+    --steel-deep: #1a3d52;
+    --moss: #4a6b3a;
+    --moss-soft: #e0e8d8;
+    --gold: #c9a961;
+    --rule: #d8cfc0;
+    --rule-soft: #ebe2d1;
+    --shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px rgba(15,20,25,0.06);
+    --shadow-lg: 0 4px 12px rgba(15,20,25,0.08), 0 24px 48px rgba(15,20,25,0.10);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter Tight', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
+      radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
+    min-height: 100vh;
+  }
+
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,0.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 0; }
+  .topbar-inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { font-family: var(--serif); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 5px; background: linear-gradient(135deg, var(--steel) 0%, var(--accent) 100%); display: inline-block; box-shadow: 0 2px 6px rgba(184,92,56,0.25); }
+  .nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .nav a { color: var(--ink-soft); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 999px; transition: all 0.15s; }
+  .nav a:hover { background: var(--paper-warm); color: var(--ink); }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 80px 32px 60px; position: relative; }
+  .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+  .hero-eyebrow::before { content: ''; flex-shrink: 0; width: 32px; height: 1px; background: var(--accent); }
+  .hero-eyebrow::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: var(--accent); }
+  .hero h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(40px, 6.5vw, 76px); line-height: 1.02; letter-spacing: -0.03em; margin-bottom: 28px; font-variation-settings: "opsz" 144; max-width: 1100px; }
+  .hero h1 em { font-style: italic; color: var(--accent); font-variation-settings: "opsz" 144, "wght" 400; }
+  .hero-lede { font-size: 20px; max-width: 760px; color: var(--ink-soft); line-height: 1.55; font-family: var(--serif); font-weight: 400; }
+  .hero-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--rule); }
+  .hero-meta-item { font-size: 13px; }
+  .hero-meta-item span:first-child { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
+  .hero-meta-item span:last-child { font-weight: 600; color: var(--ink); }
+
+  .toc { max-width: 1240px; margin: 0 auto; padding: 36px 32px 24px; }
+  .toc-card { background: white; border: 1px solid var(--rule); border-radius: 12px; padding: 32px 36px; box-shadow: var(--shadow); }
+  .toc-card h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); font-weight: 600; margin-bottom: 20px; }
+  .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 4px 28px; list-style: none; }
+  .toc-list li { padding: 8px 0; border-bottom: 1px dashed var(--rule); display: flex; align-items: baseline; gap: 14px; }
+  .toc-list a { color: var(--ink); text-decoration: none; font-size: 14px; flex: 1; transition: color 0.15s; }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-list .toc-num { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--accent); min-width: 28px; }
+
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  section.block { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .section-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+  .section-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--steel); }
+  .section-eyebrow .num { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--accent); margin-left: -6px; }
+  h2.section-title { font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 4.6vw, 52px); letter-spacing: -0.025em; line-height: 1.04; margin-bottom: 20px; font-variation-settings: "opsz" 144; max-width: 900px; }
+  h2.section-title em { font-style: italic; color: var(--accent); }
+  .section-intro { font-size: 18px; max-width: 760px; color: var(--ink-soft); margin-bottom: 48px; line-height: 1.6; font-family: var(--serif); font-weight: 400; }
+  h3.subhead { font-family: var(--serif); font-weight: 600; font-size: 24px; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 14px; }
+  h3.subhead-small { font-family: var(--serif); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; margin-top: 32px; margin-bottom: 10px; }
+  p.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 14px; max-width: 760px; }
+  p.body strong { color: var(--ink); }
+  p.note { font-size: 13px; color: var(--ink-mute); font-style: italic; margin-top: 12px; max-width: 760px; }
+  ul.body, ol.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin: 12px 0 18px 24px; max-width: 760px; }
+  ul.body li, ol.body li { margin-bottom: 8px; }
+  ul.body li strong, ol.body li strong { color: var(--ink); }
+  a.inline { color: var(--accent-deep); border-bottom: 1px dotted; text-decoration: none; }
+  a.inline:hover { border-bottom-style: solid; }
+
+  .stakes { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 32px; max-width: 1100px; }
+  @media (max-width: 760px) { .stakes { grid-template-columns: 1fr; } }
+  .stake-card { background: white; border-radius: 10px; padding: 28px 32px; box-shadow: var(--shadow); border: 1px solid var(--rule); }
+  .stake-card.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stake-card .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 16px; color: var(--accent); }
+  .stake-card.dark .tag { color: var(--gold); }
+  .stake-card h4 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin-bottom: 14px; line-height: 1.25; letter-spacing: -0.01em; }
+  .stake-card p { font-size: 14.5px; line-height: 1.6; margin-bottom: 10px; }
+  .stake-card.dark p { color: rgba(250,247,242,0.85); }
+  .stake-card .citation { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; font-style: italic; color: var(--ink-mute); }
+  .stake-card.dark .citation { border-top-color: rgba(255,255,255,0.15); color: rgba(250,247,242,0.7); }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; max-width: 1100px; }
+  .cog-card { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 24px; transition: transform 0.2s, box-shadow 0.2s; }
+  .cog-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cog-card .icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 14px; background: var(--paper-warm); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 18px; color: var(--accent); }
+  .cog-card h4 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .cog-card p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 8px; }
+
+  .quotebox { background: var(--paper-warm); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 22px 28px; margin: 28px 0; max-width: 820px; }
+  .quotebox p { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .quotebox .source { display: block; margin-top: 10px; font-style: normal; font-size: 13px; font-family: var(--sans); color: var(--ink-mute); }
+
+  .table-card { background: white; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin: 24px 0; max-width: 1000px; }
+  table.body-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.body-table thead th { background: var(--paper-warm); padding: 14px 18px; text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  table.body-table tbody td { padding: 14px 18px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  table.body-table tbody tr:last-child td { border-bottom: none; }
+  table.body-table tbody td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+  .practice-callout { background: var(--steel-soft); border: 1px solid var(--steel); border-radius: 10px; padding: 24px 28px; margin: 28px 0; max-width: 900px; }
+  .practice-callout .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 10px; font-weight: 600; }
+  .practice-callout p { color: var(--steel-deep); font-size: 15px; line-height: 1.6; margin: 0 0 10px; }
+  .practice-callout p:last-child { margin-bottom: 0; }
+
+  .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 24px; max-width: 1100px; }
+  .pitfall { background: white; border-left: 4px solid var(--accent); padding: 18px 22px; border-radius: 0 8px 8px 0; box-shadow: var(--shadow); }
+  .pitfall h5 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+  .pitfall p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
+
+  .ref-list { max-width: 880px; margin-top: 32px; }
+  .ref-list .ref { padding: 14px 0; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; }
+  .ref-list .ref:last-child { border-bottom: none; }
+  .ref-list .ref strong { color: var(--ink); }
+  .ref-list .ref em { font-style: italic; }
+
+  .case-card { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 30px 34px; margin: 22px 0; box-shadow: var(--shadow); max-width: 1000px; }
+  .case-card .case-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
+  .case-card h4 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.015em; }
+  .case-card p { font-size: 15px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 10px; }
+  .case-card .source { display: block; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--rule); font-size: 12.5px; font-style: italic; color: var(--ink-mute); }
+
+  .cta-card { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 36px 40px; margin: 32px 0; max-width: 900px; box-shadow: var(--shadow-lg); }
+  .cta-card .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .cta-card h4 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .cta-card p { font-size: 15px; line-height: 1.6; color: rgba(250,247,242,0.85); margin-bottom: 18px; }
+  .cta-card a.button { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: white; padding: 10px 20px; border-radius: 999px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: background 0.15s; }
+  .cta-card a.button:hover { background: var(--accent-deep); }
+
+  .req-example { background: white; border: 1px solid var(--rule); border-radius: 8px; padding: 18px 22px; margin: 14px 0; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); }
+  .req-example .req-id { color: var(--accent); font-weight: 600; }
+  .req-example.good { border-left: 4px solid var(--moss); }
+  .req-example.bad { border-left: 4px solid var(--accent); }
+  .req-example .tag-small { display: inline-block; font-family: var(--sans); font-size: 10px; padding: 2px 8px; border-radius: 8px; margin-right: 8px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+  .req-example.good .tag-small { background: var(--moss-soft); color: var(--moss); }
+  .req-example.bad .tag-small { background: rgba(184,92,56,0.15); color: var(--accent-deep); }
+
+  footer { background: var(--paper-deep); padding: 60px 32px; margin-top: 60px; border-top: 1px solid var(--rule); }
+  footer .inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  footer .inner a { color: var(--steel-deep); text-decoration: none; border-bottom: 1px dotted; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-mark"></span>COMP322 &middot; Scenarios and Requirements</div>
+    <nav class="nav">
+      <a href="/birzeit/comp322/">Course</a>
+      <a href="/birzeit/comp322/personas_companion.html">Personas</a>
+      <a href="#what">i. Overview</a>
+      <a href="#scenarios">ii. Scenarios</a>
+      <a href="#types">iii. Types</a>
+      <a href="#requirements">iv. Requirements</a>
+      <a href="#anatomy">v. Anatomy</a>
+      <a href="#non-functional">vi. NFRs</a>
+      <a href="#use-cases">vii. Use cases</a>
+      <a href="#iso">viii. ISO 9241-11</a>
+      <a href="#cases">ix. Cases</a>
+      <a href="#pitfalls">x. Pitfalls</a>
+      <a href="#refs">xi. References</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">COMP322 &middot; Human-Computer Interaction</div>
+  <h1>Scenarios and requirements: <em>turning users into a design contract</em>.</h1>
+  <p class="hero-lede">Personas tell the team who they are designing for. Scenarios tell the team what those users are trying to do. Requirements turn that understanding into testable obligations on the system. This companion lays out the theory, the practice, and the documented cases where requirements quietly defined entire products.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span>course</span><span>COMP322</span></div>
+    <div class="hero-meta-item"><span>instructor</span><span>Hisham Ihshaish</span></div>
+    <div class="hero-meta-item"><span>institution</span><span>Birzeit University</span></div>
+    <div class="hero-meta-item"><span>textbook</span><span>Preece, Sharp and Rogers</span></div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-card">
+    <h3>Contents</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">i.</span><a href="#what">The pipeline: personas, scenarios, requirements</a></li>
+      <li><span class="toc-num">ii.</span><a href="#scenarios">What a scenario is</a></li>
+      <li><span class="toc-num">iii.</span><a href="#types">Carroll's four kinds of scenario</a></li>
+      <li><span class="toc-num">iv.</span><a href="#requirements">What a requirement is</a></li>
+      <li><span class="toc-num">v.</span><a href="#anatomy">Anatomy of a well-formed requirement</a></li>
+      <li><span class="toc-num">vi.</span><a href="#non-functional">Functional and non-functional requirements</a></li>
+      <li><span class="toc-num">vii.</span><a href="#use-cases">Use cases and user stories</a></li>
+      <li><span class="toc-num">viii.</span><a href="#iso">ISO 9241-11 and usability requirements</a></li>
+      <li><span class="toc-num">ix.</span><a href="#cases">Documented cases where requirements defined the product</a></li>
+      <li><span class="toc-num">x.</span><a href="#pitfalls">Common pitfalls</a></li>
+      <li><span class="toc-num">xi.</span><a href="#refs">References and further reading</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<section class="block" id="what">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">i.</span>Pipeline</div>
+    <h2 class="section-title">Personas, scenarios, requirements: the <em>chain</em> from user to system.</h2>
+    <p class="section-intro">The three artefacts answer three questions that have to be answered in order. Each one constrains what comes next.</p>
+
+    <p class="body"><strong>Personas</strong> answer <em>who the system is for</em>. Their construction was the subject of the previous companion; if you have not read it, the relevant background is on the <a class="inline" href="/birzeit/comp322/personas_companion.html">Personas: theory and practice</a> page. Personas come from research and carry the team's working memory of its users.</p>
+
+    <p class="body"><strong>Scenarios</strong> answer <em>what those users are trying to do</em>. A scenario is a narrative description of an activity that takes place in some context, told from the user's point of view. Scenarios put the persona into motion: now that we know who Aysha is, what does she actually do on a Tuesday morning when her appointment system goes wrong?</p>
+
+    <p class="body"><strong>Requirements</strong> answer <em>what the system must do or be</em>. A requirement is a verifiable specification: a statement that some property of the system is testable, and that the system either has it or does not. Requirements are the design contract between the team and its stakeholders. They define what "done" means.</p>
+
+    <p class="body">The three artefacts have a specific dependency order. Scenarios that do not flow from named personas tend to describe an idealised user who does not exist. Requirements that do not flow from named scenarios tend to describe features in isolation, with no account of when or why anyone would use them. Personas without scenarios are static portraits; scenarios without requirements are stories no one can build to.</p>
+
+    <div class="quotebox">
+      <p>"Scenarios bridge the gap between requirements and design. They sit between the abstract description of what users do and the concrete description of how the interface works."</p>
+      <span class="source">Mary Beth Rosson and John M. Carroll. <em>Usability Engineering: Scenario-Based Development of Human-Computer Interaction</em>. Morgan Kaufmann, 2002.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="scenarios">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ii.</span>Definition</div>
+    <h2 class="section-title">A scenario is a <em>narrative</em>, told from the user's view.</h2>
+    <p class="section-intro">Scenarios are concrete stories of use. They are written in plain language and committed to a specific actor, situation, and goal. Their value lies in the specificity.</p>
+
+    <p class="body">John M. Carroll, who established scenario-based design as a discipline, defines a scenario as a description that contains four ingredients (Carroll, 2000):</p>
+
+    <ul class="body">
+      <li><strong>An actor.</strong> Usually a named persona, with a known set of goals, skills, and constraints.</li>
+      <li><strong>A setting.</strong> Where the activity takes place, on what device, under what time pressure, with what surrounding work going on.</li>
+      <li><strong>A goal.</strong> What the actor is trying to accomplish, in their own terms.</li>
+      <li><strong>A sequence of actions and events.</strong> What the actor does, what the system shows, what goes well, what goes wrong.</li>
+    </ul>
+
+    <p class="body">A scenario is not a use case, although they share a common origin. A use case (Section vii) is a step-by-step description of system-actor interaction, usually written in numbered steps and with explicit success and failure paths. A scenario is the story version of the same situation, written in prose, that gives the use case its motivation and its texture.</p>
+
+    <h3 class="subhead-small">Example scenario, written for a persona</h3>
+    <p class="body">Suppose the persona is Aysha, a third-year nursing student who books shifts on a hospital scheduling app from a corridor between rounds, often using one hand because the other is holding a clipboard. A scenario for her might read:</p>
+
+    <div class="quotebox" style="background: var(--steel-soft); border-left-color: var(--steel);">
+      <p style="font-size: 16px; font-style: normal; color: var(--steel-deep);">It is 7:42 on Tuesday morning, between Aysha's first and second rounds in Paediatrics. She has fifteen minutes. She opens the scheduling app on her phone, one-handed, to swap her Friday night shift with a colleague who has agreed to it. She finds her shift; she taps "Request swap"; she types her colleague's surname; the system shows a long list of partial matches; she sees the correct colleague third from the top, taps the entry, and writes a short note. The system confirms the request. The next round starts on time.</p>
+    </div>
+
+    <p class="body" style="margin-top: 24px;">Notice what this scenario does that an abstract requirement would not. It names the time pressure (fifteen minutes), the input modality (one-handed), the environment (a hospital corridor), and the social context (a colleague has already agreed). These details will turn into very specific requirements: the swap flow has to be completable in fewer than fifteen minutes, the colleague search must work with partial last-name input, and the interface has to be usable one-handed without precise tapping.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="types">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iii.</span>Types</div>
+    <h2 class="section-title">Carroll's four kinds of scenario, each <em>for a different conversation</em>.</h2>
+    <p class="section-intro">Not all scenarios serve the same purpose. Rosson and Carroll's scenario-based design framework distinguishes four types that the team writes at different stages, with different audiences in mind.</p>
+
+    <div class="grid-3">
+      <div class="cog-card">
+        <div class="icon">P</div>
+        <h4>Problem scenarios</h4>
+        <p>Describe how users currently experience the problem the new system is meant to address. They capture the current state of the world, including its frustrations. Problem scenarios make sure the team has a shared understanding of what they are trying to fix.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">A</div>
+        <h4>Activity scenarios</h4>
+        <p>High-level descriptions of what the new system supports. They identify the activities the user will undertake, without yet specifying how the interface looks or what the screens contain. Activity scenarios drive feature scope.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">I</div>
+        <h4>Information scenarios</h4>
+        <p>Add detail about what information is shown to the user and where it comes from. They specify the content the system presents, but not yet the controls or the layout. Information scenarios drive data and content design.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">X</div>
+        <h4>Interaction scenarios</h4>
+        <p>Concrete step-by-step descriptions of how the user interacts with the interface. They specify gestures, screens, error messages, and recovery paths. Interaction scenarios feed the visual and interaction design.</p>
+      </div>
+    </div>
+
+    <p class="body" style="margin-top: 24px;">The four types are written in order. A team that jumps to interaction scenarios without first establishing the problem and activity has decided what the buttons do before deciding whether the buttons are needed at all. Rosson and Carroll are explicit that scenario-based design is a <em>process</em>, not a single artefact; the same situation is described at four different levels of detail, each one informing the next.</p>
+
+    <h3 class="subhead-small">Negative scenarios and stress scenarios</h3>
+    <p class="body">Practitioner extensions of Carroll's framework add two further useful varieties. A <em>negative scenario</em> describes a situation the system explicitly will not support, mirroring the negative-persona idea. A <em>stress scenario</em> describes a situation at the edge of feasible use: the network is slow, the user is interrupted, the task has to complete in seconds. Stress scenarios surface requirements that pleasant-day scenarios miss.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="requirements">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iv.</span>Requirements</div>
+    <h2 class="section-title">A requirement is a <em>verifiable claim</em> the system must satisfy.</h2>
+    <p class="section-intro">A requirement is a precise statement about what the system shall do or be, written so that a tester can decide whether the system actually does or is that thing. Without verifiability, a requirement is a wish.</p>
+
+    <p class="body">Ian Sommerville (<em>Software Engineering</em>, 10th ed., 2015) gives the canonical practitioner definition: a requirement is "a description of a service that the system must provide, or a constraint on the system". The two clauses matter independently. A <em>service</em> is something the system does (let a user book an appointment, send a confirmation, encrypt a file). A <em>constraint</em> is a property the system has (responds within 1.5 seconds, runs on Android 9 or higher, stores data within the European Union).</p>
+
+    <p class="body">The IEEE has codified the same idea as a standard. IEEE Std 830-1998 ("Recommended Practice for Software Requirements Specifications"), now superseded by ISO/IEC/IEEE 29148:2018, lays out the qualities a requirement specification must have: each requirement should be <em>correct</em>, <em>unambiguous</em>, <em>complete</em>, <em>consistent</em>, <em>ranked for importance</em>, <em>verifiable</em>, <em>modifiable</em>, and <em>traceable</em>. We will return to these in Section v.</p>
+
+    <h3 class="subhead-small">User requirements and system requirements</h3>
+    <p class="body">Sommerville distinguishes two abstraction levels at which requirements are written.</p>
+
+    <ul class="body">
+      <li><strong>User requirements</strong> are natural-language statements written for the customer and the user community. They describe what the system shall do or be, in language the customer can confirm. "The system shall be easy for new nurses to learn" is a user requirement: meaningful to the customer, but not yet testable.</li>
+      <li><strong>System requirements</strong> are precise statements written for the developer and the tester, expressed in terms the system can be designed and validated against. The corresponding system requirement might read: "90% of new nursing users shall complete the shift-swap task within three minutes without help, on first attempt." Same intent, different form.</li>
+    </ul>
+
+    <p class="body">Both layers exist on most projects. The user requirement preserves the customer's intent in the customer's language; the system requirement gives the design and verification team something they can build to and test against. Each user requirement typically refines into several system requirements.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="anatomy">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">v.</span>Anatomy</div>
+    <h2 class="section-title">A well-formed requirement passes <em>eight tests</em>.</h2>
+    <p class="section-intro">The IEEE/ISO criteria are not optional polish. Each one corresponds to a way requirements have been observed to fail on real projects.</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Quality</th><th>What it means</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Correct</td><td>The requirement describes a property the system should have. Faithful to the customer's intent.</td><td>An incorrect requirement guarantees a wrong product, however well it is implemented.</td></tr>
+          <tr><td>Unambiguous</td><td>Exactly one interpretation. Each natural-language requirement is a hazard; precision is non-negotiable.</td><td>Ambiguity lets the developer and the tester read the same words and build to different specifications.</td></tr>
+          <tr><td>Complete</td><td>Every situation the system has to handle is covered, with no omissions.</td><td>Missing requirements are discovered after release, at the highest possible cost.</td></tr>
+          <tr><td>Consistent</td><td>No two requirements contradict each other; no two place the developer in an impossible position.</td><td>Conflicting requirements cause one of them to be silently dropped, usually the one whose stakeholder shouts least.</td></tr>
+          <tr><td>Ranked</td><td>Each requirement has an explicit priority. Some are critical; others are negotiable under schedule pressure.</td><td>Without ranking, scope cuts are made by whoever is in the room at the wrong time.</td></tr>
+          <tr><td>Verifiable</td><td>A finite procedure exists that decides whether the system satisfies the requirement.</td><td>An unverifiable requirement is a wish; you can neither demonstrate compliance nor diagnose non-compliance.</td></tr>
+          <tr><td>Modifiable</td><td>The requirement is structured (uniquely identified, cross-referenced, not duplicated) so a change can be made without breaking other requirements.</td><td>Real projects revise requirements continuously; a rigid specification becomes obsolete or wrong.</td></tr>
+          <tr><td>Traceable</td><td>The requirement can be linked backward to its origin (a persona, a scenario, a regulation) and forward to the design and tests that realise it.</td><td>Traceability is what makes change impact analysis possible. Without it, a small change has unknown consequences.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Good versus bad requirements, in five pairs</h3>
+
+    <p class="body">The difference is rarely subtle. The bad version reads naturally but cannot be tested; the good version is testable but, with practice, reads almost as naturally.</p>
+
+    <div class="req-example bad">
+      <span class="tag-small">Bad</span>The system shall be easy to use.
+    </div>
+    <div class="req-example good">
+      <span class="tag-small">Good</span>90% of new users shall complete the appointment-booking task within three minutes on their first attempt, without external help.
+    </div>
+
+    <div class="req-example bad">
+      <span class="tag-small">Bad</span>The system shall be fast.
+    </div>
+    <div class="req-example good">
+      <span class="tag-small">Good</span>Search results shall be returned in under 1.5 seconds for 95% of queries, measured at the application layer under nominal load.
+    </div>
+
+    <div class="req-example bad">
+      <span class="tag-small">Bad</span>The system shall be secure.
+    </div>
+    <div class="req-example good">
+      <span class="tag-small">Good</span>All user passwords shall be hashed with bcrypt (cost factor at least 12) before storage; all data in transit shall be encrypted with TLS 1.3 or higher.
+    </div>
+
+    <div class="req-example bad">
+      <span class="tag-small">Bad</span>The system shall handle errors gracefully.
+    </div>
+    <div class="req-example good">
+      <span class="tag-small">Good</span>On a network or server error during a booking submission, the system shall preserve the user's entered values and offer a single "Try again" action; no entered data shall be lost.
+    </div>
+
+    <div class="req-example bad">
+      <span class="tag-small">Bad</span>The system shall be available.
+    </div>
+    <div class="req-example good">
+      <span class="tag-small">Good</span>The system shall be available 99.5% of the time during business hours (Sunday to Thursday, 08:30 to 17:30 Asia/Jerusalem), measured monthly.
+    </div>
+
+    <p class="note">The bad versions are not always wrong as starting points; they are often perfectly reasonable user requirements (Section iv). They are wrong as system requirements because they do not give the tester anything to test against.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="non-functional">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vi.</span>Classification</div>
+    <h2 class="section-title">Functional and <em>non-functional</em> requirements.</h2>
+    <p class="section-intro">Sommerville's two-axis classification is now standard. The functional axis describes what the system does; the non-functional axis describes how well it does it, and any constraints on how it is built.</p>
+
+    <h3 class="subhead-small">Functional requirements</h3>
+    <p class="body">A functional requirement describes a service the system must provide. The verb is usually "shall", and the subject is usually the system; the system shall accept, the system shall display, the system shall authenticate. Functional requirements are the most concrete and the easiest to write, which is why teams sometimes stop at them and ship a system that works exactly as described and that no one wants to use.</p>
+
+    <p class="body" style="font-family: var(--mono); font-size: 14px;">Example: "The system shall allow a registered patient to request a swap of one of their booked shifts with another nurse on the same shift cycle."</p>
+
+    <h3 class="subhead-small">Non-functional requirements (NFRs)</h3>
+    <p class="body">A non-functional requirement constrains how the system behaves, performs, or is built. Sommerville further classifies NFRs into three families:</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Family</th><th>Subtypes</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td>Product</td><td>Efficiency, reliability, portability, usability, dependability, security</td><td>Response time, mean time between failures, browser compatibility, accessibility level, password strength</td></tr>
+          <tr><td>Organisational</td><td>Operational, development, environmental</td><td>The system shall run on the customer's existing PostgreSQL cluster; code shall be reviewed by two developers before merge.</td></tr>
+          <tr><td>External</td><td>Regulatory, ethical, legislative</td><td>Compliance with the Palestinian Personal Data Protection Law; accessibility per WCAG 2.1 AA; HIPAA-like protections for clinical data.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body">NFRs are where the difficult work tends to be. A functional requirement is usually a question of "what shall the system do"; an NFR is a question of "how well, how fast, under what load, for whom, with what guarantees". The IEEE qualities (Section v) bite hardest on NFRs because the natural English form of an NFR is almost always a wish.</p>
+
+    <div class="practice-callout">
+      <div class="tag">In practice</div>
+      <p>On a typical industrial project, the team will produce many more functional requirements than NFRs, but the NFRs are responsible for most of the user-visible quality. A bug in a functional requirement is usually fixable in one sprint; a missed NFR (the system is too slow, too hard to use, too insecure) usually requires architectural change.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="use-cases">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vii.</span>Use cases and stories</div>
+    <h2 class="section-title">Use cases and user stories: <em>complementary formalisms</em>.</h2>
+    <p class="section-intro">Use cases (from object-oriented software engineering) and user stories (from agile) are two of the most widely used formats for capturing scenario-and-requirement work. They are not competitors; they are tools for different stages.</p>
+
+    <h3 class="subhead">Use cases</h3>
+    <p class="body">Use cases were introduced by Ivar Jacobson in the late 1980s as part of Objectory and its successor, the Unified Modelling Language. Alistair Cockburn's <em>Writing Effective Use Cases</em> (2001) is the standard practitioner reference. A use case has:</p>
+
+    <ul class="body">
+      <li><strong>A primary actor</strong> (usually a persona).</li>
+      <li><strong>A goal</strong> the actor is trying to achieve.</li>
+      <li><strong>A main success scenario</strong>, written as numbered steps that lead to the goal.</li>
+      <li><strong>Extensions</strong>, alternative paths and failure modes, branching off the numbered steps.</li>
+      <li><strong>Preconditions</strong> (what must be true before the use case begins) and <strong>postconditions</strong> (what is true if the use case succeeds).</li>
+    </ul>
+
+    <p class="body">Use cases are heavyweight by design. Cockburn distinguishes "fully dressed" use cases from "casual" ones; the choice depends on project formality. They scale well to large teams and regulated domains where written specifications must survive past the original authors.</p>
+
+    <h3 class="subhead">User stories</h3>
+    <p class="body">User stories were popularised by Kent Beck and the early Extreme Programming community, then developed in depth by Mike Cohn (<em>User Stories Applied</em>, 2004). A user story is a short statement of value:</p>
+
+    <p class="body" style="font-family: var(--mono); font-size: 14px;">As a &lt;persona&gt;, I want to &lt;do something&gt;, so that &lt;benefit&gt;.</p>
+
+    <p class="body">Each story is meant to be small enough to estimate, build, and test within a single iteration. Bill Wake's <em>INVEST</em> criteria (2003) summarise what a good user story looks like:</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Letter</th><th>Criterion</th></tr></thead>
+        <tbody>
+          <tr><td>I</td><td><strong>Independent.</strong> The story can be built without depending on others (or with minimal dependencies).</td></tr>
+          <tr><td>N</td><td><strong>Negotiable.</strong> The story is a placeholder for a conversation, not a fixed contract.</td></tr>
+          <tr><td>V</td><td><strong>Valuable.</strong> The story produces something the customer or user can recognise as worth having.</td></tr>
+          <tr><td>E</td><td><strong>Estimable.</strong> The team can give a rough estimate of how long it will take.</td></tr>
+          <tr><td>S</td><td><strong>Small.</strong> Small enough to complete within one iteration.</td></tr>
+          <tr><td>T</td><td><strong>Testable.</strong> Acceptance tests can be written before the story is built.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body">Use cases and user stories carry the same information at different granularities. A use case typically covers a goal that takes a session to achieve; a user story typically covers a chunk of that goal that takes a sprint to implement. Many teams use both: use cases at the requirements-document level, user stories on the backlog.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="iso">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">viii.</span>Standards</div>
+    <h2 class="section-title">ISO 9241-11: <em>usability has a standard definition</em>.</h2>
+    <p class="section-intro">When a requirement document says "the system shall be usable", what does it mean? Since 1998, there has been an answer.</p>
+
+    <p class="body">ISO 9241-11 (last revised in 2018) defines usability as "the extent to which a system, product or service can be used by specified users to achieve specified goals with effectiveness, efficiency and satisfaction in a specified context of use". The phrasing has three obligations baked in.</p>
+
+    <div class="grid-3">
+      <div class="cog-card">
+        <div class="icon">E</div>
+        <h4>Effectiveness</h4>
+        <p>Can the user actually complete their goal? Measured in completion rate (the proportion of attempts that succeed) and error rate (errors per attempt).</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">F</div>
+        <h4>Efficiency</h4>
+        <p>What does it cost the user to complete the goal? Measured in time, effort, number of steps, or mental load.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">S</div>
+        <h4>Satisfaction</h4>
+        <p>How positively does the user experience the interaction? Measured by post-task questionnaires (SUS, UMUX), Net Promoter Score, qualitative feedback.</p>
+      </div>
+    </div>
+
+    <p class="body" style="margin-top: 24px;">The "specified users" and "specified context of use" clauses connect the standard back to personas and scenarios. A usability claim that does not specify these is a claim that cannot be evaluated, because the answer depends entirely on who is asking and where they are asking it.</p>
+
+    <p class="body">A usability requirement written against ISO 9241-11 names all three dimensions explicitly, for example:</p>
+
+    <p class="body" style="font-family: var(--mono); font-size: 14px;">For the persona Aysha (third-year nursing student, one-handed phone use in a hospital corridor):</p>
+    <ul class="body" style="font-family: var(--mono); font-size: 14px;">
+      <li>Effectiveness: 95% of swap-request attempts complete successfully.</li>
+      <li>Efficiency: median time to submit a swap request shall be under 90 seconds.</li>
+      <li>Satisfaction: post-task SUS score shall be 70 or higher (industry-acceptable threshold).</li>
+    </ul>
+
+    <p class="body">This requirement is verifiable, traceable to a persona, and aligned with a standard. It is also testable in a usability lab in a way "the system shall be easy to use" is not.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="cases">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ix.</span>Cases</div>
+    <h2 class="section-title">Requirements that <em>quietly defined products</em>.</h2>
+    <p class="section-intro">Four well-documented cases where a single requirement (or its absence) shaped the eventual product. The point of citing them is that requirements work is not paperwork; the choices made at the requirements stage are visible in the final shape of the system.</p>
+
+    <div class="case-card">
+      <div class="case-tag">Case 1 &middot; A user requirement that became a brand</div>
+      <h4>Twitter's 140-character limit</h4>
+      <p>When Twitter launched in 2006, posts were limited to 140 characters. The number was not chosen for aesthetic reasons. The original requirement was that a tweet had to fit inside a single SMS message; the SMS standard allows 160 characters, of which Twitter reserved 20 for the username, leaving 140 for the message body.</p>
+      <p>The requirement was technical at origin, but it propagated into every aspect of the product: the conversational style, the prevalence of hashtags and URL shorteners, the editorial discipline of users, the way news organisations broke stories. When Twitter eventually doubled the limit to 280 characters in 2017, the company published the analysis that justified the change, citing user-behaviour research on how often tweets ran out of room. The 140-character constraint had become so central to the product that loosening it was a strategic decision, not a routine engineering one.</p>
+      <span class="source">Documented in Twitter's official engineering blog (Rosen, 2017, "Tweeting Made Easier") and discussed extensively in HCI literature on micro-blogging design.</span>
+    </div>
+
+    <div class="case-card">
+      <div class="case-tag">Case 2 &middot; A requirement framed as a refusal</div>
+      <h4>The iPhone's "no stylus" rule</h4>
+      <p>At the iPhone's introduction in January 2007, Steve Jobs explicitly framed the absence of a stylus as a requirement, not as a missing feature. The competitive landscape at the time (Palm, Windows Mobile, BlackBerry) was dominated by stylus-driven devices. Apple's requirement was that the device be operable with fingers, in all primary tasks, with no accessory.</p>
+      <p>This single requirement cascaded into a long chain of design constraints: minimum interactive element size (44 points, codified later in the iOS Human Interface Guidelines), gesture vocabulary (pinch, swipe, tap), keyboard design (the on-screen keyboard had to compensate for finger imprecision), and even the screen technology (capacitive, not resistive). Two decades on, the entire smartphone market converged on touch as the primary input modality, and stylus-first designs survive only in niches (digital art, fields with gloves, large-screen tablets where the stylus is auxiliary, not primary).</p>
+      <span class="source">Steve Jobs, Macworld Conference keynote, San Francisco, 9 January 2007. The introduction is widely transcribed and the design implications are discussed in iOS Human Interface Guidelines.</span>
+    </div>
+
+    <div class="case-card">
+      <div class="case-tag">Case 3 &middot; A non-functional requirement that became a feature</div>
+      <h4>WhatsApp's end-to-end encryption</h4>
+      <p>WhatsApp introduced end-to-end encryption for all messages in 2016, in partnership with Open Whisper Systems (the team behind the Signal protocol). The decision was framed as a non-functional security requirement: messages between users must be cryptographically protected so that no party other than the conversation participants, including WhatsApp itself, can read them.</p>
+      <p>The requirement reshaped the product in ways far beyond cryptography. Backup and message-history features had to be redesigned (a backed-up message could not be decryptable by the cloud); group dynamics changed (administrators see content but cannot mediate it); a class of moderation interventions became impossible. The same requirement was later adopted by Signal, Apple iMessage (selectively), and Facebook Messenger (in part). E2E encryption moved from a niche concern to a baseline user expectation in messaging in less than five years.</p>
+      <span class="source">WhatsApp Security Whitepaper (2016) and Marlinspike, M. and Perrin, T. <em>The Double Ratchet Algorithm</em>. Open Whisper Systems, 2016. The product implications are surveyed in Schneier, B. <em>Click Here to Kill Everybody</em>, W. W. Norton, 2018.</span>
+    </div>
+
+    <div class="case-card">
+      <div class="case-tag">Case 4 &middot; A persona-driven requirement that saved cards</div>
+      <h4>The ATM card-return sequence</h4>
+      <p>Early automated teller machines dispensed cash before returning the user's card. The functional requirement was satisfied (the user got their money), but a significant fraction of users walked away without their card. The cause was a memory failure: once the goal (cash) had been achieved, the secondary obligation (retrieve card) was forgotten.</p>
+      <p>The solution was a requirement change, not a feature addition: the system shall return the card before the cash is dispensed, and shall not dispense cash until the card is removed. The pattern is now universal across ATMs and is sometimes called "forcing functions" after Don Norman's analysis in <em>The Design of Everyday Things</em>. The case is canonical in HCI teaching because it shows how a usability problem with a clear behavioural signature was solved at the requirements level, not by tweaking the interface.</p>
+      <span class="source">Norman, D. A. (2013). <em>The Design of Everyday Things: Revised and Expanded Edition</em>. Basic Books. Chapter 5 on slips and forcing functions.</span>
+    </div>
+
+    <p class="body" style="margin-top: 16px;">Each of these cases shares a structure: the requirement was non-obvious at the time it was made, it cascaded into many downstream decisions, and the product would have been a different product without it. Spending time on the requirements stage is not procedural; it is where the product's identity is decided.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="pitfalls">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">x.</span>Pitfalls</div>
+    <h2 class="section-title">Eight failure modes the literature has <em>seen too often</em>.</h2>
+    <p class="section-intro">These are recurring patterns in scenarios-and-requirements work, drawn from Sommerville, Robertson and Robertson (<em>Mastering the Requirements Process</em>), and the HCI literature on requirements practice.</p>
+
+    <div class="pitfall-list">
+
+      <div class="pitfall">
+        <h5>Requirements written before personas are settled</h5>
+        <p>If the team does not know who the system is for, every requirement becomes a guess about which user matters more. The result is a specification that contradicts itself when the user community is asked to confirm it.</p>
+      </div>
+
+      <div class="pitfall">
+        <h5>Solution language inside the requirement</h5>
+        <p>"The system shall use a drop-down list to select the doctor" prescribes the design before the design is done. The right form is "The system shall let the user select a doctor from the available list", leaving the control choice to interaction design.</p>
+      </div>
+
+      <div class="pitfall">
+        <h5>Unverifiable adjectives</h5>
+        <p>Easy, fast, friendly, intuitive, modern, robust, reliable. Each one passes natural-language reading, none passes verifiability. Replace with a measurable property and a threshold.</p>
+      </div>
+
+      <div class="pitfall">
+        <h5>Many concerns in one requirement</h5>
+        <p>"The system shall be fast and secure" mixes two unrelated NFRs. They have different acceptance criteria, different stakeholders, and different test procedures. Split them.</p>
+      </div>
+
+      <div class="pitfall">
+        <h5>No ranking</h5>
+        <p>"All requirements are critical" is the equivalent of "there is no plan for scope cuts under pressure". Schedule pressure happens; rank the requirements explicitly so the team knows what survives.</p>
+      </div>
+
+      <div class="pitfall">
+        <h5>Requirements with no traceable origin</h5>
+        <p>A requirement that does not link to a persona, a scenario, a regulation, or a stakeholder request is an orphan. When a reviewer asks "why is this here?", the answer should be in the requirement's traceability link, not in someone's memory.</p>
+      </div>
+
+      <div class="pitfall">
+        <h5>Functional-only specifications</h5>
+        <p>A complete-looking specification that lists only what the system shall do, with no NFRs, has not specified the system. The result is a system that does everything correctly and is unusable, unreliable, or unsafe.</p>
+      </div>
+
+      <div class="pitfall">
+        <h5>Frozen requirements</h5>
+        <p>Real projects discover new requirements after the spec is "frozen". Treating the requirement document as immutable forces the team to either ship the wrong thing or to maintain a shadow spec. The right answer is a versioned spec with a documented change process.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="refs">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xi.</span>References</div>
+    <h2 class="section-title">Sources cited above, <em>and where to go next</em>.</h2>
+    <p class="section-intro">The course textbook is identified at the head of the list; the rest are the works directly referenced in the body.</p>
+
+    <h3 class="subhead-small">Course textbook</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Preece, J., Sharp, H. and Rogers, Y.</strong> (2019). <em>Interaction Design: Beyond Human-Computer Interaction</em> (5th ed.). John Wiley &amp; Sons. <em>The standard reference for COMP322. The data-gathering and requirements chapters cover this material; this companion expands on them with depth and worked examples.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Scenarios and scenario-based design</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Carroll, J. M.</strong> (2000). <em>Making Use: Scenario-Based Design of Human-Computer Interactions</em>. MIT Press. <em>The foundational treatment of scenarios as a design discipline.</em></div>
+      <div class="ref"><strong>Rosson, M. B. and Carroll, J. M.</strong> (2002). <em>Usability Engineering: Scenario-Based Development of Human-Computer Interaction</em>. Morgan Kaufmann. <em>The operational follow-up, with the four-types framework applied step by step.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Requirements engineering</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Sommerville, I.</strong> (2015). <em>Software Engineering</em> (10th ed.). Pearson. <em>The standard textbook treatment of functional and non-functional requirements, with the three-family NFR classification.</em></div>
+      <div class="ref"><strong>Robertson, S. and Robertson, J.</strong> (2012). <em>Mastering the Requirements Process: Getting Requirements Right</em> (3rd ed.). Addison-Wesley. <em>The Volere methodology and template, widely used in industry.</em></div>
+      <div class="ref"><strong>ISO/IEC/IEEE 29148:2018</strong>. <em>Systems and software engineering, Life cycle processes, Requirements engineering</em>. International Organization for Standardization. <em>Current standard, supersedes IEEE 830-1998.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Use cases and user stories</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Cockburn, A.</strong> (2001). <em>Writing Effective Use Cases</em>. Addison-Wesley. <em>The canonical practitioner reference for use-case format and rigour levels.</em></div>
+      <div class="ref"><strong>Jacobson, I.</strong> (1992). <em>Object-Oriented Software Engineering: A Use Case Driven Approach</em>. Addison-Wesley. <em>The original published treatment of use cases.</em></div>
+      <div class="ref"><strong>Cohn, M.</strong> (2004). <em>User Stories Applied: For Agile Software Development</em>. Addison-Wesley. <em>The agile user-story formalism with worked examples.</em></div>
+      <div class="ref"><strong>Wake, B.</strong> (2003). <em>INVEST in Good Stories, and SMART Tasks</em>. <em>The INVEST criteria; widely cited in the agile literature.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Usability standards and HCI</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>ISO 9241-11:2018</strong>. <em>Ergonomics of human-system interaction, Part 11: Usability, Definitions and concepts</em>. International Organization for Standardization. <em>The current standard definition of usability.</em></div>
+      <div class="ref"><strong>Norman, D. A.</strong> (2013). <em>The Design of Everyday Things: Revised and Expanded Edition</em>. Basic Books. <em>The ATM card-return analysis and the concept of forcing functions.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Sources cited in the case studies</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Rosen, A.</strong> (2017). <em>Tweeting Made Easier</em>. Twitter Engineering Blog, 7 November 2017. <em>Twitter's account of the 140 to 280 character change.</em></div>
+      <div class="ref"><strong>WhatsApp</strong> (2016). <em>WhatsApp Encryption Overview Technical White Paper</em>. <em>The product's account of the end-to-end encryption rollout.</em></div>
+      <div class="ref"><strong>Marlinspike, M. and Perrin, T.</strong> (2016). <em>The Double Ratchet Algorithm</em>. Open Whisper Systems. <em>The cryptographic protocol underlying Signal and, since 2016, WhatsApp.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Related companion</h3>
+    <div class="ref-list">
+      <div class="ref"><a class="inline" href="/birzeit/comp322/personas_companion.html"><strong>Personas: theory and practice</strong></a>. <em>The companion for the previous link in the chain. Read it first if you have not, because scenarios are written from named personas and requirements are traced back through them.</em></div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div>COMP322 &middot; Human-Computer Interaction &middot; Birzeit University &middot; Spring 2025/2026</div>
+    <div><a href="/birzeit/comp322/">course page</a> &middot; <a href="/birzeit/comp322/personas_companion.html">personas companion</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

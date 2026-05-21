@@ -146,6 +146,27 @@
   .cta-card a.button { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: white; padding: 10px 20px; border-radius: 999px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: background 0.15s; }
   .cta-card a.button:hover { background: var(--accent-deep); }
 
+  /* Persona card (worked example) */
+  .persona-card { background: white; border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--shadow-lg); margin: 32px 0; max-width: 980px; overflow: hidden; display: grid; grid-template-columns: 280px 1fr; }
+  @media (max-width: 800px) { .persona-card { grid-template-columns: 1fr; } }
+  .persona-portrait { background: linear-gradient(135deg, var(--paper-warm) 0%, var(--steel-soft) 100%); padding: 32px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; border-right: 1px solid var(--rule); }
+  @media (max-width: 800px) { .persona-portrait { border-right: none; border-bottom: 1px solid var(--rule); } }
+  .persona-portrait svg { width: 180px; height: 180px; margin-bottom: 20px; filter: drop-shadow(0 6px 18px rgba(44,95,124,0.18)); }
+  .persona-portrait .p-name { font-family: var(--serif); font-size: 26px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 6px; }
+  .persona-portrait .p-role { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 14px; }
+  .persona-portrait .p-quote { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-soft); line-height: 1.45; max-width: 220px; }
+  .persona-portrait .p-quote::before { content: '\201C'; display: block; font-size: 36px; line-height: 0.6; color: var(--accent); }
+  .persona-body { padding: 32px 36px; }
+  .persona-body h4 { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 18px 0 8px; font-weight: 600; }
+  .persona-body h4:first-child { margin-top: 0; }
+  .persona-body p { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
+  .persona-body ul { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 0 20px; }
+  .persona-body ul li { margin-bottom: 4px; }
+  .persona-body .demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px 18px; margin-top: 4px; }
+  .persona-body .demo { font-size: 12.5px; }
+  .persona-body .demo span:first-child { display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 2px; }
+  .persona-body .demo span:last-child { color: var(--ink); font-weight: 600; font-size: 13.5px; }
+
   footer { background: var(--paper-deep); padding: 60px 32px; margin-top: 60px; border-top: 1px solid var(--rule); }
   footer .inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
   footer .inner a { color: var(--steel-deep); text-decoration: none; border-bottom: 1px dotted; }
@@ -157,6 +178,8 @@
   <div class="topbar-inner">
     <div class="brand"><span class="brand-mark"></span>COMP322 &middot; Personas companion</div>
     <nav class="nav">
+      <a href="/birzeit/comp322/">Course</a>
+      <a href="/birzeit/comp322/scenarios_requirements_companion.html">Scenarios</a>
       <a href="#what">i. What it is</a>
       <a href="#history">ii. History</a>
       <a href="#anatomy">iii. Anatomy</a>
@@ -168,7 +191,8 @@
       <a href="#critique">ix. Critique</a>
       <a href="#pitfalls">x. Pitfalls</a>
       <a href="#lifecycle">xi. Lifecycle</a>
-      <a href="#refs">xii. References</a>
+      <a href="#worked">xii. Worked example</a>
+      <a href="#refs">xiii. References</a>
     </nav>
   </div>
 </div>
@@ -200,7 +224,8 @@
       <li><span class="toc-num">ix.</span><a href="#critique">Critiques and empirical evidence</a></li>
       <li><span class="toc-num">x.</span><a href="#pitfalls">Common pitfalls in practice</a></li>
       <li><span class="toc-num">xi.</span><a href="#lifecycle">The persona lifecycle and validation</a></li>
-      <li><span class="toc-num">xii.</span><a href="#refs">References and further reading</a></li>
+      <li><span class="toc-num">xii.</span><a href="#worked">A worked persona, end to end</a></li>
+      <li><span class="toc-num">xiii.</span><a href="#refs">References and further reading</a></li>
     </ul>
   </div>
 </div>
@@ -610,9 +635,124 @@
 </section>
 
 <!-- ===================================================================== -->
+<section class="block" id="worked">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xii.</span>Worked example</div>
+    <h2 class="section-title">A persona, <em>end to end</em>.</h2>
+    <p class="section-intro">The seven components are easier to recognise on a finished card than to construct from scratch. The example below is a research-grounded synthesis for a hypothetical online-banking redesign; every component is the kind of statement that would, in real work, be traceable to specific interview or observation notes.</p>
+
+    <div class="persona-card">
+      <div class="persona-portrait">
+        <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-label="Stylised persona portrait">
+          <defs>
+            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#d6e0e8"/>
+              <stop offset="100%" stop-color="#f3ede2"/>
+            </linearGradient>
+            <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2c3540"/>
+              <stop offset="100%" stop-color="#1a3d52"/>
+            </linearGradient>
+            <linearGradient id="scarfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#b85c38"/>
+              <stop offset="100%" stop-color="#7a3a23"/>
+            </linearGradient>
+          </defs>
+          <circle cx="90" cy="90" r="88" fill="url(#bgGrad)"/>
+          <path d="M 50 160 Q 50 120 90 115 Q 130 120 130 160 Z" fill="url(#scarfGrad)"/>
+          <ellipse cx="90" cy="78" rx="32" ry="38" fill="#e8d4be"/>
+          <path d="M 58 75 Q 56 38 90 36 Q 124 38 122 75 Q 122 60 110 55 Q 105 70 90 70 Q 75 70 70 55 Q 58 60 58 75 Z" fill="url(#hairGrad)"/>
+          <ellipse cx="79" cy="82" rx="2.5" ry="3" fill="#2c3540"/>
+          <ellipse cx="101" cy="82" rx="2.5" ry="3" fill="#2c3540"/>
+          <path d="M 84 96 Q 90 100 96 96" stroke="#7a3a23" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <circle cx="90" cy="90" r="88" fill="none" stroke="#c9a961" stroke-width="2" stroke-opacity="0.4"/>
+        </svg>
+        <div class="p-name">Layla Yousef</div>
+        <div class="p-role">Primary persona &middot; Mobile-first</div>
+        <p class="p-quote">I do my banking between meetings on my phone. If it takes longer than the lift ride, I will not finish.</p>
+      </div>
+      <div class="persona-body">
+        <h4>Demographics that matter for the design</h4>
+        <div class="demos">
+          <div class="demo"><span>Age</span><span>34</span></div>
+          <div class="demo"><span>Location</span><span>Ramallah</span></div>
+          <div class="demo"><span>Role</span><span>Senior accountant</span></div>
+          <div class="demo"><span>Devices</span><span>iPhone, work laptop</span></div>
+          <div class="demo"><span>Children</span><span>Two, under 6</span></div>
+          <div class="demo"><span>Languages</span><span>Arabic, English</span></div>
+        </div>
+
+        <h4>Behavioural patterns</h4>
+        <p>Checks balances three or four times a week, almost always on her phone in short bursts (under two minutes). Pays utility bills in batches at the start of each month. Transfers money to family members several times a year, always with a note. Reviews monthly statements at her laptop on Sundays, alongside her household ledger spreadsheet.</p>
+
+        <h4>End goals</h4>
+        <ul>
+          <li>Pay scheduled bills before they become late.</li>
+          <li>Move money to family members reliably, with confirmation she can show them.</li>
+          <li>Keep her household ledger reconciled against the bank record.</li>
+        </ul>
+
+        <h4>Experience goals</h4>
+        <ul>
+          <li>Feel that her money is safe and that the bank knows it is her.</li>
+          <li>Not be made to feel rushed or foolish by the interface.</li>
+          <li>Be able to do the routine tasks one-handed, without having to read.</li>
+        </ul>
+
+        <h4>Environment and context</h4>
+        <p>Mostly used on a phone, one-handed, in transitional moments (waiting for a meeting, walking to her car, between bedtime stories). Occasionally on her work laptop in the evening for monthly reconciliation. Network conditions vary; the app sometimes loses connection in the building's lift.</p>
+
+        <h4>Frustrations and pain points</h4>
+        <ul>
+          <li>Loses entered data when the network drops during a transfer.</li>
+          <li>Has to re-authenticate when she switches between checking and paying within the same session.</li>
+          <li>Receipt screens disappear before she can screenshot them for her ledger.</li>
+          <li>Search for a previous transaction requires scrolling rather than filtering.</li>
+        </ul>
+
+        <h4>Skills and knowledge</h4>
+        <p>High financial literacy (accountant); high digital literacy generally; comfortable with web forms, less comfortable with new app patterns she has not seen before. Knows what an IBAN is and can read a statement; does not need the app to explain those.</p>
+      </div>
+    </div>
+
+    <h3 class="subhead">What makes this card a usable persona</h3>
+    <p class="body">Read against the seven-component anatomy from Section iii, the card includes only fields that change a design decision. The age and location are present because the bank's branch network and the regulatory regime depend on them. The number of young children is present because it explains why short-burst use dominates and why one-handed operation matters. The mention of the household ledger is present because it constrains the receipt and statement workflows. The fact that Layla speaks Arabic and English changes localisation and right-to-left layout decisions.</p>
+
+    <p class="body">Equally, the card does <em>not</em> contain her favourite colour, the names of her children, or her preferred coffee. None of those would change a design decision; they would simply make the card feel novelistic. Pruitt and Adlin (2006) call this the "fact-fiction distinction": persona fields should be facts about a class of users (synthesised from research), not fiction about a single character.</p>
+
+    <h3 class="subhead">Where this kind of persona has worked in real product teams</h3>
+    <p class="body">Two publicly documented cases are worth knowing in detail because they show what success looks like with personas of this form.</p>
+
+    <p class="body"><strong>Microsoft, across product groups (Pruitt and Grudin, 2003).</strong> Pruitt and Grudin's DUX 2003 paper is the most widely cited industry account of persona use. They report that the teams that benefited used personas as cross-functional communication aids: engineering, marketing, support, and design referenced the same named characters in roadmap meetings, which reduced talking past one another. The visible payoff was less in any single design decision and more in how the team scoped, prioritised, and reviewed work. The characters themselves were named, with photos, demographics, and behaviour patterns built from large research samples, much like the Layla card above.</p>
+
+    <p class="body"><strong>Microsoft Inclusive Design Toolkit (2016).</strong> The Toolkit, published openly by Microsoft Design, contains a now-canonical set of inclusive personas built around the Persona Spectrum (Section vii): a person with one arm; a person with a temporary arm injury; a parent holding a baby; a person carrying groceries. Each character is presented with a name, an illustration, and a short behavioural description. The Toolkit was adopted across Microsoft and influenced accessibility-driven design in many other companies because it gave designers concrete characters to reason about, not abstract guidelines.</p>
+
+    <p class="body">In both cases the success pattern is the one Section viii identified: personas grounded in research, used continuously, integrated with other artefacts, and revised as the team learned more.</p>
+
+    <h3 class="subhead">Where personas of this kind have failed</h3>
+    <p class="body">The same Microsoft groups produced personas that nobody used. Pruitt and Grudin are candid about this: some teams adopted personas symbolically (printed them, pinned them to walls, then ignored them), and some over-produced (dozens of personas the team could not keep distinct). The Matthews, Judge, and Whittaker CHI 2012 interview study found the same patterns industry-wide: personas frequently competed with other artefacts, were sometimes felt to oversimplify users misleadingly, and were rarely used in the rigorous, sustained way the textbook recommends.</p>
+
+    <p class="body">The lesson is not that personas of Layla's form are unreliable. The lesson is that the form is necessary but not sufficient. A well-constructed persona that the team does not consult is the same as no persona at all, and a well-constructed persona used to decorate a slide deck has the same effect as a wrong persona used in earnest.</p>
+
+    <h3 class="subhead">From this persona to scenarios and requirements</h3>
+    <p class="body">A finished persona is not the end of the design process; it is the beginning of the next stage. The card above generates scenarios (what does Layla actually do on a Tuesday morning?) and from those, requirements (what must the system measurably do or be to support her?). That pipeline is the subject of the next companion: <a class="inline" href="/birzeit/comp322/scenarios_requirements_companion.html">Scenarios and requirements</a>.</p>
+
+    <p class="body">For the step-by-step construction of a persona like Layla from raw interview data, the <a class="inline" href="/birzeit/comp322/personas_interactive_tool.html">From interviews to personas</a> walkthrough takes the same banking research scenario through eight stages of synthesis.</p>
+
+    <div class="cta-card">
+      <div class="tag">Next in the sequence</div>
+      <h4>Scenarios and requirements</h4>
+      <p>Layla's card answers <em>who</em> the design is for. The next companion takes that answer and turns it into <em>what the system must do</em>, by way of scenarios and verifiable requirements.</p>
+      <a class="button" href="/birzeit/comp322/scenarios_requirements_companion.html">Open companion &rarr;</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================================================================== -->
 <section class="block" id="refs">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xii.</span>References</div>
+    <div class="section-eyebrow"><span class="num">xiii.</span>References</div>
     <h2 class="section-title">Sources cited in this companion, and <em>where to go next</em>.</h2>
     <p class="section-intro">The citations below are the works directly referenced in the text above. The course textbook and recommended further reading are marked.</p>
 
@@ -659,7 +799,7 @@
 <footer>
   <div class="inner">
     <div>COMP322 &middot; Human-Computer Interaction &middot; Birzeit University &middot; Spring 2025/2026</div>
-    <div><a href="/birzeit/comp322/">course page</a> &middot; <a href="/birzeit/comp322/personas_interactive_tool.html">interactive walkthrough</a></div>
+    <div><a href="/birzeit/comp322/">course page</a> &middot; <a href="/birzeit/comp322/personas_interactive_tool.html">interactive walkthrough</a> &middot; <a href="/birzeit/comp322/scenarios_requirements_companion.html">scenarios companion</a></div>
   </div>
 </footer>
 
