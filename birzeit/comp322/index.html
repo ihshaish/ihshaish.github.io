@@ -405,6 +405,129 @@
       .dl-banner-icon { display: none; }
       .dl-banner-pulse { top: 14px; left: 14px; }
     }
+
+    /* Announcements widget */
+    .course-alerts {
+      max-width: 380px;
+      margin: 16px 0 6px auto;
+      background: linear-gradient(140deg, #fff7f3 0%, #ffe5d8 100%);
+      border: 1px solid #ffccbc;
+      border-radius: 10px;
+      padding: 14px 18px 16px;
+      box-shadow: 0 4px 14px rgba(191, 54, 12, 0.12);
+      position: relative;
+    }
+    .course-alerts::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #bf360c 0%, #ff8a65 100%);
+      border-radius: 10px 0 0 10px;
+    }
+    .course-alerts .alerts-head { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+    .course-alerts .alerts-icon {
+      flex-shrink: 0; width: 26px; height: 26px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #bf360c; color: #fff; border-radius: 50%;
+      font-size: 0.78rem; box-shadow: 0 0 0 4px rgba(191, 54, 12, 0.15);
+      animation: alertsRing 2.6s ease-in-out infinite;
+    }
+    @keyframes alertsRing {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(191, 54, 12, 0.15); }
+      50%      { box-shadow: 0 0 0 8px rgba(191, 54, 12, 0.05); }
+    }
+    .course-alerts h4 {
+      margin: 0; font-size: 0.82rem; font-weight: 800; color: #bf360c;
+      text-transform: uppercase; letter-spacing: 1px; flex: 1;
+    }
+    .course-alerts .new-pill {
+      display: inline-flex; align-items: center; font-size: 0.62rem;
+      font-weight: 800; letter-spacing: 0.8px; color: #fff;
+      background: #bf360c; padding: 2px 8px; border-radius: 10px;
+      text-transform: uppercase;
+      animation: alertsPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes alertsPulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.08); }
+    }
+    .course-alerts ul {
+      list-style: none; margin: 0; padding: 0;
+      font-size: 0.88rem; color: #333; line-height: 1.5;
+    }
+    .course-alerts li { padding: 2px 0; }
+    .course-alerts li + li {
+      margin-top: 6px; padding-top: 8px; border-top: 1px dashed #ffccbc;
+    }
+    .course-alerts li .alert-date {
+      display: inline-block; font-size: 0.7rem; font-weight: 800;
+      color: #fff; background: #bf360c; padding: 2px 8px;
+      border-radius: 10px; letter-spacing: 0.3px;
+      white-space: nowrap; margin-right: 8px; vertical-align: 1px;
+    }
+    .course-alerts li a {
+      color: #7f1f06; font-weight: 700; text-decoration: none;
+      border-bottom: 1px dotted #ff8a65;
+    }
+    .course-alerts li a:hover { color: #4a1003; border-bottom-color: #bf360c; }
+    .course-alerts li.latest { font-weight: 500; }
+    .course-alerts li.prev { opacity: 0.7; font-style: italic; }
+    .course-alerts li.prev .alert-date { background: #d7c4bc; color: #fff; }
+    .course-alerts li.prev a { color: #888; font-weight: 500; border-bottom-color: #ddcec5; }
+    @media (max-width: 640px) {
+      .course-alerts { max-width: 100%; margin-left: 0; margin-right: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .course-alerts .alerts-icon, .course-alerts .new-pill { animation: none; }
+    }
+
+    /* Where to start: expandable guide */
+    .where-to-start {
+      border: 1px solid #e0e0e0;
+      background: #fafbfc;
+      border-radius: 8px;
+      padding: 0;
+      margin: 20px 0 18px;
+      overflow: hidden;
+    }
+    .where-to-start summary {
+      list-style: none;
+      padding: 14px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      color: #1565c0;
+      font-size: 0.95rem;
+      user-select: none;
+    }
+    .where-to-start summary::-webkit-details-marker { display: none; }
+    .where-to-start summary::before {
+      content: '+';
+      font-size: 1.2rem;
+      font-weight: 700;
+      width: 22px; height: 22px;
+      line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #e3f2fd; color: #1565c0;
+      border-radius: 50%; flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .where-to-start[open] summary::before {
+      content: '\2212';
+    }
+    .where-to-start summary i {
+      color: #1565c0; flex-shrink: 0;
+    }
+    .where-to-start .ws-body {
+      padding: 4px 20px 18px 54px;
+      font-size: 0.92rem;
+      color: #444;
+      line-height: 1.6;
+    }
+    .where-to-start .ws-body ul { margin: 10px 0 0 18px; padding: 0; }
+    .where-to-start .ws-body li { margin: 6px 0; }
+    .where-to-start .ws-body strong { color: #1565c0; }
   </style>
 </head>
 
@@ -463,9 +586,42 @@
           </a>
           <h1>COMP322: Human Computer Interaction</h1>
           <div class="semester">Second Semester 2025/26</div>
-          <div class="instructor">Instructor: Dr Hisham Ihshaish</div>
+          <div class="instructor">Hisham Ihshaish</div>
           <div class="dept">Department of Computer Science, Birzeit University</div>
         </div>
+
+        <!-- What's New -->
+        <aside class="course-alerts" role="status" aria-label="Latest updates">
+          <div class="alerts-head">
+            <span class="alerts-icon" aria-hidden="true"><i class="fas fa-bullhorn"></i></span>
+            <h4>What's New</h4>
+            <span class="new-pill" aria-hidden="true">New</span>
+          </div>
+          <ul>
+            <li class="latest">
+              <span class="alert-date">21 May 2026</span>
+              <a href="#lecture-notes">Scenarios and Requirements</a> slides released.
+            </li>
+            <li class="prev">
+              <span class="alert-date">20 May 2026</span>
+              <a href="/birzeit/comp322/personas_companion.html">Personas: theory and practice</a> companion released.
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Where to start -->
+        <details class="where-to-start">
+          <summary><i class="fas fa-compass"></i>Where to start, what is on this page</summary>
+          <div class="ws-body">
+            <p>The page is organised around three things:</p>
+            <ul>
+              <li><strong>Lecture Notes.</strong> Each entry is a slide deck (PDF) and, where available, an interactive companion that walks through the material with worked examples. Open a slide deck first, then follow its companion when you want to go deeper.</li>
+              <li><strong>Interactive Handbook.</strong> The course's main reading reference. It threads through HCI as a whole, so dip into it alongside the slides rather than reading start to finish.</li>
+              <li><strong>Project Resources.</strong> Section-specific (5 or 6) and password-protected. Pick your section tab below to unlock allocations, templates, and deadlines.</li>
+            </ul>
+            <p>Upcoming deadlines surface in the orange banner immediately below; the announcement card above lists material released most recently.</p>
+          </div>
+        </details>
 
         <!-- Deadline Banner -->
         <div id="deadline-banner" style="display:none; cursor:pointer;" onclick="scrollToProtected()">
@@ -490,7 +646,7 @@
         </div>
 
         <!-- Lecture Notes -->
-        <h2 class="section-heading"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Lecture Notes</h2>
+        <h2 id="lecture-notes" class="section-heading"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Lecture Notes</h2>
 
         <table class="lecture-table">
           <thead>
