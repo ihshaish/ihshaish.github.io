@@ -1194,6 +1194,7 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
   line-height: 1.6;
 }
 </style>
+  <script src="/birzeit/gate.js"></script>
 </head>
 <body>
 <header class="masthead">
@@ -1848,6 +1849,8 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <div class="callout"><span class="marker">Notation</span><strong>g(n)</strong> is the cost of the path from the start state to <em>n</em>, accumulated by summing step costs along the way. UCS is the first algorithm in this companion that orders the fringe by a numeric quantity, so this is where the notation appears. Later, in Part Eight, we will add <strong>h(n)</strong>, an estimate of the remaining cost from <em>n</em> to a goal, and <strong>f(n) = g(n) + h(n)</strong>. In the traces below, fringe entries are written <code>X(g=5)</code> to mean state X with g-value 5; informed algorithms use the analogous <code>X(h=...)</code> and <code>X(g=..., h=..., f=...)</code> forms.</div>
 
     <div class="callout warn"><span class="marker">Critical</span>The goal test fires <em>on pop, not on generation</em>. A node is checked for goal-hood when it is removed from the fringe, not when it is first generated. Why? Because a cheaper path to the same goal might still be sitting on the fringe. Testing on generation would commit too early and break optimality.</div>
+
+    <div class="callout"><span class="marker">UCS and loops</span>Even without a closed list, UCS will not get <em>stuck</em> in a loop when step costs are positive. A cycling path's cumulative g(n) keeps growing, so the priority queue eventually pops a non-cycling path first, the loop is "out-priced" by its own accumulating cost. The closed list (graph-search, &sect;VI) is what prevents <em>wasted</em> re-expansion of states reached by a worse path; it is not what prevents the infinite loop in the first place.</div>
 
     <div class="algo-stage">
       <div>
@@ -3244,6 +3247,14 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
 
     <div class="callout"><span class="marker">Representation matters</span>For 8-queens, a state is naturally an 8-digit string (each digit is a row from 0-7). Crossover at position k means: child = first k digits of parent A, then last 8-k digits of parent B. The hope: good column-row pairings from each parent are preserved if the crossover point falls between them.</div>
 
+    <div class="callout tip"><span class="marker">Vocabulary &middot; chromosome, gene, allele</span>The GA borrows three terms from biology to describe its representation. The metaphor is loose, but the terminology is universal in the literature and on exams.
+      <ul class="tight" style="font-style: normal; margin-top: 10px;">
+        <li>A <strong>chromosome</strong> is a single candidate solution, encoded as a fixed-length string. It is the GA's analogue of a "state" in hill climbing: one complete answer that can be scored by the fitness function. For 8-queens, the 8-digit string <code>2 4 4 1 5 1 2 4</code> is one chromosome.</li>
+        <li>A <strong>gene</strong> is one position within the chromosome. The 8-queens chromosome has eight genes; gene <em>i</em> holds the row of the queen in column <em>i</em>. Genes are the atomic units that crossover splices between parents and that mutation may flip.</li>
+        <li>An <strong>allele</strong> is a particular value a gene can take. For 8-queens, each gene's possible alleles are the digits in [1, 8] (or [0, 7]). If every member of the population has the same allele at some gene, only mutation can reintroduce a different one.</li>
+      </ul>
+    </div>
+
     <h4>The five operations of a GA</h4>
     <p>Every generation runs five operations. Understanding each in isolation is the key to understanding how GAs differ from other local-search methods.</p>
 
@@ -3345,6 +3356,46 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
     <p>GAs have been applied to circuit design (a famous early result: Adrian Thompson's evolved sound discriminator), antenna design (NASA used a GA-designed antenna on the ST5 spacecraft), schedule optimisation, and many problems where the search space is huge and the structure is poorly understood.</p>
 
     <div class="callout warn"><span class="marker">Honest assessment</span>The theoretical case for genetic algorithms over other local search methods is weak. The schema theorem, the original justification for why crossover should help, turns out to apply only under restrictive assumptions. In practice GAs are useful when the state representation has natural sub-structures that crossover can exploit, but they are not magic, and a well-tuned simulated annealing often beats them.</div>
+  </div>
+
+  <!-- =====================  HC vs SA vs GA  ===================== -->
+  <div class="subsection">
+    <h3>HC vs SA vs GA &middot; at a glance <span class="ar">مقارنة سريعة</span></h3>
+    <p>Once all three local-search algorithms are on the table, comparison questions tend to pivot on a handful of axes. None of the rows below introduces new content, the answers are all derivable from each algorithm's pseudocode, but lining them up side by side makes the contrasts easy to recall.</p>
+
+    <div class="compare-wrapper">
+      <table class="compare-table" style="min-width: 0;">
+        <thead><tr><th>Axis</th><th>Hill Climbing</th><th>Simulated Annealing</th><th>Genetic Algorithm</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="algo">Deterministic?</td>
+            <td><span class="yes-mark">Yes</span> in its basic form, every step picks the best neighbour (tie-breaking aside)</td>
+            <td><span class="no-mark">No</span>, the neighbour is sampled at random, and worse moves are accepted with probability e<sup>&Delta;E/T</sup></td>
+            <td><span class="no-mark">No</span>, selection, crossover point, and mutation all draw on randomness</td>
+          </tr>
+          <tr>
+            <td class="algo">Can escape local optima?</td>
+            <td><span class="no-mark">No</span>, terminates at the first one it finds</td>
+            <td><span class="yes-mark">Yes</span>, probabilistically, especially while T is still high</td>
+            <td><span class="yes-mark">Yes</span>, via population diversity, recombination, and mutation</td>
+          </tr>
+          <tr>
+            <td class="algo">Memory at runtime</td>
+            <td>O(1) &mdash; current state only</td>
+            <td>O(1) &mdash; current state plus a temperature</td>
+            <td>O(N) &mdash; the whole population of N individuals</td>
+          </tr>
+          <tr>
+            <td class="algo">Best suited for</td>
+            <td>Smooth landscapes; or with random restarts as a baseline</td>
+            <td>Landscapes with many local optima, when neighbour evaluation is cheap</td>
+            <td>Encodings whose substrings carry meaningful sub-solutions crossover can preserve</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size: 13px; color: var(--grey);">"Determinism" here refers to each algorithm <em>in its basic form</em>. HC has stochastic variants (random restarts, stochastic HC, first-choice HC) that deliberately inject randomness to mitigate the local-maxima problem.</p>
   </div>
 
   <!-- =====================  STOPPING CRITERIA SUMMARY  ===================== -->
@@ -3834,6 +3885,16 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
       <h5>Cooling schedule</h5>
       <div class="ar-label">جدول التبريد</div>
       <p>Function T(t) controlling how the temperature decreases over time in simulated annealing. Slow logarithmic schedules guarantee convergence; fast geometric schedules are typical.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Chromosome</h5>
+      <div class="ar-label">صبغي / كروموسوم</div>
+      <p>A single candidate solution in a GA, encoded as a fixed-length string of symbols. The GA's analogue of a "state" in hill climbing.</p>
+    </div>
+    <div class="formulation-item">
+      <h5>Gene</h5>
+      <div class="ar-label">مُورِّثة / جين</div>
+      <p>One position within a chromosome. Crossover splices genes between parents; mutation flips one at random with small probability.</p>
     </div>
     <div class="formulation-item">
       <h5>Fitness function</h5>

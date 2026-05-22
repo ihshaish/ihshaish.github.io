@@ -1,4 +1,13 @@
 .DS_Store
+
+# Private course material — never publish
+birzeit/participants/
+birzeit/**/*_participants.csv
+birzeit/**/Midterm*.pdf
+birzeit/**/midterm*.pdf
+birzeit/**/answer*key*.pdf
+birzeit/**/Answer*Key*.pdf
+
 birzeit/encrypted-blob.txt
 birzeit/protected-content.html
 birzeit/encrypt.js

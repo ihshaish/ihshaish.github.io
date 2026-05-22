@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP322 Live - Instructor dashboard</title>
+<style>
+  :root {
+    --accent: #2C5F7C;
+    --accent-dark: #1F4860;
+    --accent-soft: #E8F0F5;
+    --accent-cream: #F5EFE3;
+    --warn: #B8862F;
+    --warn-soft: #FAF1E0;
+    --success: #2D7A4F;
+    --success-soft: #E6F1EB;
+    --danger: #B23B3B;
+    --paper: #FBFAF7;
+    --card: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #5A6B78;
+    --faint: #9AA5B1;
+    --rule: #E4E2DC;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  h1, h2, h3 {
+    font-family: Georgia, serif;
+    font-weight: 600;
+    margin: 0 0 0.4em 0;
+    letter-spacing: -0.01em;
+  }
+  h1 { font-size: 28px; }
+  h2 { font-size: 22px; }
+  h3 { font-size: 16px; }
+
+  .ribbon {
+    background: var(--accent);
+    color: white;
+    padding: 12px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--accent-dark);
+  }
+  .ribbon strong { font-weight: 600; }
+  .ribbon .right {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    font-size: 13px;
+  }
+  .ribbon .pill {
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+  }
+
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 28px 80px 28px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card.cream { background: var(--accent-cream); border-color: var(--warn); }
+  .card.accent { background: var(--accent-soft); border-color: var(--accent); }
+  .card.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .card.success { background: var(--success-soft); border-color: var(--success); }
+  .card.tight { padding: 14px 18px; }
+
+  .kicker {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  button, .btn {
+    font-family: inherit;
+    cursor: pointer;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 4px 0;
+  }
+  button:hover { background: var(--accent-dark); }
+  button.ghost {
+    background: white;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  button.ghost:hover { background: var(--accent-soft); }
+  button.warn-btn { background: var(--warn); }
+  button.warn-btn:hover { background: #966c20; }
+  button.danger-btn { background: var(--danger); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; background: var(--faint); }
+  button:disabled:hover { background: var(--faint); }
+
+  .qr-box {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .qr-box canvas, .qr-box img {
+    margin: 0 auto;
+    display: block;
+  }
+  .qr-box .url {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    word-break: break-all;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .num {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--accent);
+  }
+
+  .timer-display {
+    font-family: 'Courier New', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--accent);
+    margin: 12px 0;
+  }
+  .timer-display.urgent { color: var(--danger); }
+
+  .feed {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .feed-item {
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    border-left: 3px solid var(--accent);
+  }
+  .feed-item .who {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .feed-item .text {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .feed-item .tag {
+    display: inline-block;
+    margin-top: 6px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .feed-item.picked {
+    border-left-color: var(--success);
+    background: var(--success-soft);
+  }
+
+  .state-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .state-badge.lobby { background: var(--rule); color: var(--muted); }
+  .state-badge.writing { background: var(--warn); color: white; }
+  .state-badge.voting { background: var(--accent); color: white; }
+  .state-badge.complete { background: var(--success); color: white; }
+
+  .winner-banner {
+    background: var(--success-soft);
+    border-left: 4px solid var(--success);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+  }
+  .winner-banner .who { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--success); font-weight: 700; }
+  .winner-banner .txt { font-family: Georgia, serif; font-style: italic; font-size: 15px; margin-top: 6px; }
+
+  .vote-tally {
+    display: grid;
+    grid-template-columns: 1fr 60px;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 13px;
+  }
+  .vote-tally:last-child { border-bottom: none; }
+  .vote-tally .bar {
+    height: 8px;
+    background: var(--accent);
+    border-radius: 4px;
+  }
+  .vote-tally .pct {
+    text-align: right;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .iso-distribution {
+    display: grid;
+    grid-template-columns: 1fr 60px;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .iso-distribution .bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+
+  .config-warn {
+    background: var(--danger);
+    color: white;
+    padding: 14px 20px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .config-warn code {
+    background: rgba(0,0,0,0.2);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .spinner {
+    border: 3px solid var(--rule);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 0.8s linear infinite;
+    margin: 20px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-feed {
+    text-align: center;
+    color: var(--faint);
+    font-style: italic;
+    padding: 40px 20px;
+    font-family: Georgia, serif;
+  }
+</style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+<body>
+
+<div class="ribbon">
+  <div><strong>COMP322 Live</strong> &middot; Instructor dashboard</div>
+  <div class="right">
+    <span class="pill" id="state-pill">connecting</span>
+    <span id="participant-count">0 participants</span>
+    <span class="pill" id="session-pill">-</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="root">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, push, onValue, get, update, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// =====================================================================
+// CONFIGURATION - same as index.html
+// =====================================================================
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_API_KEY_HERE",
+  authDomain: "comp322-live.firebaseapp.com",
+  databaseURL: "https://comp322-live-default-rtdb.firebaseio.com",
+  projectId: "comp322-live",
+  storageBucket: "comp322-live.appspot.com",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID",
+  appId: "PASTE_YOUR_APP_ID"
+};
+
+const urlParams = new URLSearchParams(window.location.search);
+let SESSION_ID = urlParams.get("s") || ("c322-" + Math.random().toString(36).substring(2, 8));
+// Replace URL so refresh keeps the session
+if (!urlParams.get("s")) {
+  const newUrl = window.location.pathname + "?s=" + SESSION_ID;
+  history.replaceState(null, "", newUrl);
+}
+document.getElementById("session-pill").textContent = SESSION_ID;
+
+let app, db, auth, sessionRef, sessionData = null;
+const isConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "PASTE_YOUR_API_KEY_HERE";
+
+if (!isConfigured) {
+  document.body.insertAdjacentHTML("afterbegin", `<div class="config-warn">Firebase not configured. Edit <code>host.html</code> and <code>index.html</code> with your Firebase project config. See <code>SETUP.md</code>.</div>`);
+}
+
+try {
+  app = initializeApp(firebaseConfig);
+  db = getDatabase(app);
+  auth = getAuth(app);
+} catch (e) {
+  document.getElementById("root").innerHTML = `<div class="card warn"><h2>Firebase init failed</h2><p>${escapeHtml(e.message)}</p></div>`;
+  throw e;
+}
+
+signInAnonymously(auth).catch(e => console.error(e));
+onAuthStateChanged(auth, user => {
+  if (!user) return;
+  sessionRef = ref(db, "sessions/" + SESSION_ID);
+  onValue(sessionRef, snap => {
+    sessionData = snap.val() || {};
+    render();
+  });
+});
+
+// =====================================================================
+// HOST ACTIONS
+// =====================================================================
+async function setState(state, timerMinutes = null) {
+  const updates = { "meta/state": state };
+  if (timerMinutes !== null) {
+    updates["meta/timerEndsAt"] = Date.now() + timerMinutes * 60 * 1000;
+  } else {
+    updates["meta/timerEndsAt"] = null;
+  }
+  await update(ref(db, "sessions/" + SESSION_ID), updates);
+}
+
+async function startRound1() {
+  // Clear any prior round 1 data, set state, start 5-min timer
+  await update(ref(db, "sessions/" + SESSION_ID), {
+    "meta/state": "round1_writing",
+    "meta/timerEndsAt": Date.now() + 5 * 60 * 1000,
+    "meta/round1WinnerKey": null,
+    "round1": {}
+  });
+}
+
+async function endRound1Writing() {
+  await update(ref(db, "sessions/" + SESSION_ID + "/meta"), {
+    state: "round1_writing",
+    timerEndsAt: Date.now() + 1  // makes timeLeft = 0
+  });
+}
+
+async function pickThreeForRound1Vote() {
+  const subs = sessionData?.round1?.submissions || {};
+  const keys = Object.keys(subs);
+  if (keys.length === 0) { alert("No submissions to pick from."); return; }
+  const sample = [...keys].sort(() => Math.random() - 0.5).slice(0, Math.min(3, keys.length));
+  await update(ref(db, "sessions/" + SESSION_ID), {
+    "meta/state": "round1_voting",
+    "meta/timerEndsAt": null,
+    "round1/pickedForVote": sample,
+    "round1/votes": null
+  });
+}
+
+async function declareRound1Winner(submissionKey) {
+  await update(ref(db, "sessions/" + SESSION_ID + "/meta"), {
+    round1WinnerKey: submissionKey
+  });
+}
+
+async function startRound2() {
+  if (!sessionData?.meta?.round1WinnerKey) {
+    alert("Pick a round 1 winner first.");
+    return;
+  }
+  await update(ref(db, "sessions/" + SESSION_ID), {
+    "meta/state": "round2_writing",
+    "meta/timerEndsAt": Date.now() + 5 * 60 * 1000,
+    "round2": {}
+  });
+}
+
+async function pickThreeForRound2Vote() {
+  const subs = sessionData?.round2?.submissions || {};
+  const keys = Object.keys(subs);
+  if (keys.length === 0) { alert("No submissions to pick from."); return; }
+  const sample = [...keys].sort(() => Math.random() - 0.5).slice(0, Math.min(3, keys.length));
+  await update(ref(db, "sessions/" + SESSION_ID), {
+    "meta/state": "round2_voting",
+    "meta/timerEndsAt": null,
+    "round2/pickedForVote": sample,
+    "round2/votes": null
+  });
+}
+
+async function complete() {
+  await update(ref(db, "sessions/" + SESSION_ID + "/meta"), {
+    state: "complete",
+    timerEndsAt: null
+  });
+}
+
+async function resetSession() {
+  if (!confirm("This wipes ALL submissions, votes, and participants for this session. Continue?")) return;
+  await set(sessionRef, null);
+}
+
+function exportCSV() {
+  const rows = [];
+  rows.push(["session", "round", "alias", "iso_goal", "text", "submitted_at"]);
+  const r1 = sessionData?.round1?.submissions || {};
+  Object.entries(r1).forEach(([key, sub]) => {
+    rows.push([SESSION_ID, "1", sub.alias, "", csvEscape(sub.text), new Date(sub.submittedAt || 0).toISOString()]);
+  });
+  const r2 = sessionData?.round2?.submissions || {};
+  Object.entries(r2).forEach(([key, sub]) => {
+    rows.push([SESSION_ID, "2", sub.alias, sub.isoGoal || "", csvEscape(sub.text), new Date(sub.submittedAt || 0).toISOString()]);
+  });
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `comp322_live_${SESSION_ID}_${new Date().toISOString().substring(0, 16).replace(/[:T]/g, "")}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function csvEscape(s) {
+  return String(s == null ? "" : s).replace(/\n/g, " ").replace(/\r/g, "");
+}
+
+function timeLeftSeconds() {
+  const meta = sessionData?.meta;
+  if (!meta?.timerEndsAt) return null;
+  return Math.max(0, Math.floor((meta.timerEndsAt - Date.now()) / 1000));
+}
+
+function formatTime(secs) {
+  if (secs == null) return "";
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+// Expose for inline onclick
+window._startRound1 = startRound1;
+window._endRound1Writing = endRound1Writing;
+window._pickThreeForRound1Vote = pickThreeForRound1Vote;
+window._declareRound1Winner = declareRound1Winner;
+window._startRound2 = startRound2;
+window._pickThreeForRound2Vote = pickThreeForRound2Vote;
+window._complete = complete;
+window._resetSession = resetSession;
+window._exportCSV = exportCSV;
+
+// =====================================================================
+// RENDER
+// =====================================================================
+const root = document.getElementById("root");
+
+function render() {
+  if (!sessionData) {
+    root.innerHTML = `<div class="spinner"></div>`;
+    return;
+  }
+
+  const state = sessionData?.meta?.state || "lobby";
+  const participantCount = sessionData?.participants ? Object.keys(sessionData.participants).length : 0;
+  document.getElementById("state-pill").textContent = state.replace(/_/g, " ");
+  document.getElementById("participant-count").textContent = participantCount + " participant" + (participantCount === 1 ? "" : "s");
+
+  root.innerHTML = `
+    <div class="grid">
+      <div>
+        ${renderSidebar(state, participantCount)}
+      </div>
+      <div>
+        ${renderMain(state)}
+      </div>
+    </div>
+  `;
+
+  // Render QR code if container exists
+  renderQR();
+}
+
+function renderSidebar(state, count) {
+  const studentUrl = window.location.origin + window.location.pathname.replace(/host\.html$/, "index.html").replace(/\/host$/, "") + "?s=" + SESSION_ID;
+  const stateLabel = state === "lobby" ? "Lobby" :
+                     state === "round1_writing" ? "R1 Writing" :
+                     state === "round1_voting" ? "R1 Voting" :
+                     state === "round2_writing" ? "R2 Writing" :
+                     state === "round2_voting" ? "R2 Voting" :
+                     state === "complete" ? "Complete" : state;
+  const stateClass = state.includes("writing") ? "writing" :
+                     state.includes("voting") ? "voting" :
+                     state === "complete" ? "complete" : "lobby";
+
+  return `
+    <div class="card tight">
+      <div class="kicker">Session</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <span class="state-badge ${stateClass}">${escapeHtml(stateLabel)}</span>
+        <strong style="font-family:Georgia,serif;font-size:20px;color:var(--accent);">${count}</strong>
+      </div>
+      <div style="font-size:11px;color:var(--faint);margin-top:4px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">connected students</div>
+    </div>
+
+    <div class="card qr-box">
+      <div class="kicker">Students scan to join</div>
+      <div id="qr-target" style="margin:10px 0;"></div>
+      <div class="url">${escapeHtml(studentUrl)}</div>
+    </div>
+
+    <div class="card tight">
+      <div class="kicker">Round controls</div>
+      ${renderRoundControls(state)}
+    </div>
+
+    <div class="card tight">
+      <div class="kicker">Data</div>
+      <button class="ghost" onclick="_exportCSV()" style="width:100%;">Export CSV</button>
+      <button class="ghost" onclick="_resetSession()" style="width:100%;color:var(--danger);border-color:var(--danger);margin-top:6px;">Reset session</button>
+    </div>
+  `;
+}
+
+function renderRoundControls(state) {
+  if (state === "lobby") {
+    return `<button onclick="_startRound1()" style="width:100%;">Start Round 1 (5 min)</button>`;
+  }
+  if (state === "round1_writing") {
+    const t = timeLeftSeconds();
+    return `
+      <div class="timer-display ${t !== null && t < 60 ? 'urgent' : ''}" id="timer-display">${formatTime(t)}</div>
+      <button onclick="_endRound1Writing()" class="warn-btn" style="width:100%;">End writing now</button>
+      <button onclick="_pickThreeForRound1Vote()" style="width:100%;margin-top:6px;" ${t > 0 ? "disabled" : ""}>Pick 3 for vote</button>
+    `;
+  }
+  if (state === "round1_voting") {
+    const winner = sessionData?.meta?.round1WinnerKey;
+    return `
+      <p style="font-size:13px;color:var(--muted);margin:6px 0 10px 0;">Discuss live. Class votes on their phones. When ready, declare a winner from the main panel.</p>
+      <button onclick="_startRound2()" style="width:100%;" ${!winner ? "disabled" : ""}>Start Round 2 (5 min)</button>
+      ${!winner ? `<p style="font-size:11px;color:var(--warn);margin-top:6px;font-style:italic;text-align:center;">Pick a winner first &rarr;</p>` : ""}
+    `;
+  }
+  if (state === "round2_writing") {
+    const t = timeLeftSeconds();
+    return `
+      <div class="timer-display ${t !== null && t < 60 ? 'urgent' : ''}" id="timer-display">${formatTime(t)}</div>
+      <button onclick="_pickThreeForRound2Vote()" style="width:100%;" ${t > 0 ? "disabled" : ""}>Pick 3 for vote</button>
+    `;
+  }
+  if (state === "round2_voting") {
+    return `<button onclick="_complete()" style="width:100%;">End session</button>`;
+  }
+  if (state === "complete") {
+    return `<p style="font-size:13px;color:var(--muted);margin:6px 0;">Session complete. Export the CSV below for your records.</p>`;
+  }
+  return "";
+}
+
+function renderMain(state) {
+  if (state === "lobby") return renderMainLobby();
+  if (state === "round1_writing") return renderMainRound1Writing();
+  if (state === "round1_voting") return renderMainRound1Voting();
+  if (state === "round2_writing") return renderMainRound2Writing();
+  if (state === "round2_voting") return renderMainRound2Voting();
+  if (state === "complete") return renderMainComplete();
+  return "";
+}
+
+function renderMainLobby() {
+  const participants = sessionData?.participants || {};
+  const aliases = Object.values(participants).map(p => p.alias);
+  return `
+    <div class="card">
+      <h2>Waiting for students to join.</h2>
+      <p style="color:var(--muted);">When the room is ready, click <strong>Start Round 1</strong> in the left panel. Students will see the prompt and a 5-minute timer.</p>
+      ${aliases.length > 0 ? `
+        <div style="margin-top:18px;">
+          <div class="kicker">Joined so far (${aliases.length})</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+            ${aliases.map(a => `<span style="background:var(--accent-soft);color:var(--accent);padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;font-family:'Courier New',monospace;">${escapeHtml(a)}</span>`).join("")}
+          </div>
+        </div>
+      ` : `<p style="color:var(--faint);font-style:italic;font-family:Georgia,serif;margin-top:18px;">No one has joined yet.</p>`}
+    </div>
+  `;
+}
+
+function renderMainRound1Writing() {
+  const submissions = sessionData?.round1?.submissions || {};
+  const subEntries = Object.entries(submissions);
+  const t = timeLeftSeconds();
+  const participants = sessionData?.participants ? Object.keys(sessionData.participants).length : 0;
+
+  return `
+    <div class="card cream">
+      <div class="kicker" style="color:var(--warn);">Round 1 in progress</div>
+      <h2 style="margin-bottom:4px;">Write a scenario</h2>
+      <p style="color:var(--muted);margin:6px 0 0 0;font-size:14px;">Layla, engaged power user of the banking app. Just got paid on the 5th, needs to send 800 NIS to her landlord by tomorrow. Capture temporal context, device, plot point, concrete outcome.</p>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="margin:0;">Live submissions feed</h3>
+        <span style="font-family:Georgia,serif;color:var(--accent);font-weight:700;font-size:20px;">${subEntries.length} / ${participants}</span>
+      </div>
+      <div class="feed">
+        ${subEntries.length === 0 ? `<div class="empty-feed">Submissions will appear here as students press submit.</div>` :
+          subEntries.sort((a, b) => (b[1].submittedAt || 0) - (a[1].submittedAt || 0)).map(([key, sub]) => `
+            <div class="feed-item">
+              <div class="who">
+                <span>${escapeHtml(sub.alias)}</span>
+                <span style="color:var(--faint);font-weight:400;text-transform:none;letter-spacing:0;font-family:Georgia,serif;font-style:italic;font-size:11px;">${sub.text.split(/\s+/).length} words</span>
+              </div>
+              <div class="text">${escapeHtml(sub.text)}</div>
+            </div>
+          `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderMainRound1Voting() {
+  const picked = sessionData?.round1?.pickedForVote || [];
+  const submissions = sessionData?.round1?.submissions || {};
+  const votes = sessionData?.round1?.votes || {};
+  const winner = sessionData?.meta?.round1WinnerKey;
+
+  // Tally votes
+  const tally = {};
+  picked.forEach(k => tally[k] = 0);
+  Object.values(votes).forEach(v => { if (tally[v] !== undefined) tally[v]++; });
+  const totalVotes = Object.values(tally).reduce((s, v) => s + v, 0);
+
+  return `
+    <div class="card accent">
+      <div class="kicker">Round 1 voting</div>
+      <h2>Pick the strongest scenario as the winner</h2>
+      <p style="color:var(--muted);margin:6px 0 0 0;font-size:14px;">Display the three on screen. Discuss what makes one strongest. Use the live vote tally to call the winner, then click "Declare winner" on the strongest. Students need a winner before round 2 can start.</p>
+    </div>
+
+    ${picked.map((key, i) => {
+      const sub = submissions[key];
+      if (!sub) return "";
+      const count = tally[key] || 0;
+      const pct = totalVotes > 0 ? Math.round(100 * count / totalVotes) : 0;
+      const isWinner = winner === key;
+      return `
+        <div class="card ${isWinner ? "success" : ""}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;">
+            <div style="flex:1;">
+              <div class="kicker" style="color:${isWinner ? 'var(--success)' : 'var(--accent)'};">Option ${String.fromCharCode(65 + i)} &middot; ${escapeHtml(sub.alias)} ${isWinner ? '&middot; WINNER' : ''}</div>
+              <p style="font-family:Georgia,serif;font-style:italic;font-size:17px;margin:8px 0 14px 0;line-height:1.5;">${escapeHtml(sub.text)}</p>
+              <div class="vote-tally">
+                <div style="display:flex;align-items:center;gap:10px;"><div class="bar" style="width:${pct * 2.5}px;background:${isWinner ? 'var(--success)' : 'var(--accent)'};"></div><span>${count} vote${count === 1 ? "" : "s"}</span></div>
+                <div class="pct" style="color:${isWinner ? 'var(--success)' : 'var(--accent)'};">${pct}%</div>
+              </div>
+            </div>
+            <button onclick="_declareRound1Winner('${escapeHtml(key)}')" class="${isWinner ? '' : 'ghost'}" style="margin-top:24px;white-space:nowrap;">${isWinner ? "Winner" : "Declare winner"}</button>
+          </div>
+        </div>
+      `;
+    }).join("")}
+
+    <div class="card tight" style="text-align:center;">
+      <span style="color:var(--muted);font-size:13px;">Total votes: <strong style="color:var(--accent);">${totalVotes}</strong></span>
+    </div>
+  `;
+}
+
+function renderMainRound2Writing() {
+  const winnerKey = sessionData?.meta?.round1WinnerKey;
+  const winner = winnerKey ? sessionData?.round1?.submissions?.[winnerKey] : null;
+  const submissions = sessionData?.round2?.submissions || {};
+  const subEntries = Object.entries(submissions);
+  const participants = sessionData?.participants ? Object.keys(sessionData.participants).length : 0;
+
+  // ISO distribution
+  const isoDist = {};
+  Object.values(submissions).forEach(s => {
+    if (s.isoGoal) isoDist[s.isoGoal] = (isoDist[s.isoGoal] || 0) + 1;
+  });
+  const isoTotal = Object.values(isoDist).reduce((s, v) => s + v, 0);
+  const allGoals = ["Effectiveness", "Efficiency", "Satisfaction", "Learnability", "Memorability", "Errors"];
+
+  return `
+    <div class="card cream">
+      <div class="kicker" style="color:var(--warn);">Round 2 in progress</div>
+      <h2 style="margin-bottom:4px;">Write a requirement</h2>
+      <p style="color:var(--muted);margin:6px 0 0 0;font-size:14px;">From the winning scenario, write ONE measurable requirement. Specific metric, ISO 9241-11 goal tagged, under 30 words.</p>
+    </div>
+
+    ${winner ? `
+      <div class="winner-banner">
+        <div class="who">Winning scenario from round 1 (${escapeHtml(winner.alias)})</div>
+        <div class="txt">${escapeHtml(winner.text)}</div>
+      </div>
+    ` : ""}
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="margin:0;">ISO goal distribution</h3>
+        <span style="color:var(--muted);font-size:13px;">${isoTotal} tagged</span>
+      </div>
+      ${allGoals.map(g => {
+        const count = isoDist[g] || 0;
+        const pct = isoTotal > 0 ? Math.round(100 * count / isoTotal) : 0;
+        return `
+          <div class="iso-distribution">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="min-width:120px;font-weight:600;">${escapeHtml(g)}</span>
+              <div class="bar" style="width:${pct * 2}px;"></div>
+              <span style="color:var(--muted);">${count}</span>
+            </div>
+            <div style="text-align:right;color:var(--muted);font-size:12px;">${pct}%</div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="margin:0;">Live submissions</h3>
+        <span style="font-family:Georgia,serif;color:var(--accent);font-weight:700;font-size:20px;">${subEntries.length} / ${participants}</span>
+      </div>
+      <div class="feed">
+        ${subEntries.length === 0 ? `<div class="empty-feed">Submissions appear here as students press submit.</div>` :
+          subEntries.sort((a, b) => (b[1].submittedAt || 0) - (a[1].submittedAt || 0)).map(([key, sub]) => `
+            <div class="feed-item">
+              <div class="who">
+                <span>${escapeHtml(sub.alias)}</span>
+                <span style="color:var(--faint);font-weight:400;text-transform:none;letter-spacing:0;font-family:Georgia,serif;font-style:italic;font-size:11px;">${sub.text.split(/\s+/).length} words</span>
+              </div>
+              <div class="text">${escapeHtml(sub.text)}</div>
+              ${sub.isoGoal ? `<span class="tag">${escapeHtml(sub.isoGoal)}</span>` : ""}
+            </div>
+          `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderMainRound2Voting() {
+  const picked = sessionData?.round2?.pickedForVote || [];
+  const submissions = sessionData?.round2?.submissions || {};
+  const votes = sessionData?.round2?.votes || {};
+
+  // Tally yes/no
+  const tally = { measurable: 0, not_measurable: 0 };
+  Object.values(votes).forEach(v => { if (tally[v] !== undefined) tally[v]++; });
+  const total = tally.measurable + tally.not_measurable;
+  const yesPct = total > 0 ? Math.round(100 * tally.measurable / total) : 0;
+
+  return `
+    <div class="card accent">
+      <div class="kicker">Round 2 voting</div>
+      <h2>Are these genuinely measurable?</h2>
+      <p style="color:var(--muted);margin:6px 0 0 0;font-size:14px;">Real metric, or wish dressed up as one? Use the vote tally to drive the discussion.</p>
+    </div>
+
+    ${picked.map((key, i) => {
+      const sub = submissions[key];
+      if (!sub) return "";
+      return `
+        <div class="card">
+          <div class="kicker" style="color:var(--accent);">Option ${String.fromCharCode(65 + i)} &middot; ${escapeHtml(sub.alias)}</div>
+          <p style="font-family:Georgia,serif;font-style:italic;font-size:17px;margin:8px 0 6px 0;line-height:1.5;">${escapeHtml(sub.text)}</p>
+          <span class="tag" style="background:var(--warn-soft);color:var(--warn);padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;">${escapeHtml(sub.isoGoal || "no goal tagged")}</span>
+        </div>
+      `;
+    }).join("")}
+
+    <div class="card">
+      <h3>Class verdict so far</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+        <div style="text-align:center;padding:16px;background:var(--success-soft);border-radius:6px;border:1px solid var(--success);">
+          <div style="font-family:Georgia,serif;font-size:36px;color:var(--success);font-weight:700;">${tally.measurable}</div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--success);font-weight:700;margin-top:4px;">All measurable</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#FBEAE9;border-radius:6px;border:1px solid var(--danger);">
+          <div style="font-family:Georgia,serif;font-size:36px;color:var(--danger);font-weight:700;">${tally.not_measurable}</div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--danger);font-weight:700;margin-top:4px;">Some are wishes</div>
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:13px;margin-top:14px;text-align:center;">${total} vote${total === 1 ? "" : "s"} cast &middot; ${yesPct}% say measurable</p>
+    </div>
+  `;
+}
+
+function renderMainComplete() {
+  const r1count = sessionData?.round1?.submissions ? Object.keys(sessionData.round1.submissions).length : 0;
+  const r2count = sessionData?.round2?.submissions ? Object.keys(sessionData.round2.submissions).length : 0;
+  const participants = sessionData?.participants ? Object.keys(sessionData.participants).length : 0;
+  return `
+    <div class="card success">
+      <h2>Session complete</h2>
+      <p style="color:var(--muted);">Class wrote ${r1count} scenarios and ${r2count} requirements across ${participants} participants. Export the CSV from the side panel for your records.</p>
+    </div>
+  `;
+}
+
+function renderQR() {
+  const target = document.getElementById("qr-target");
+  if (!target) return;
+  const studentUrl = window.location.origin + window.location.pathname.replace(/host\.html$/, "index.html").replace(/\/host$/, "") + "?s=" + SESSION_ID;
+  try {
+    const qr = qrcode(0, "M");
+    qr.addData(studentUrl);
+    qr.make();
+    target.innerHTML = qr.createImgTag(5, 8);
+    const img = target.querySelector("img");
+    if (img) {
+      img.style.display = "block";
+      img.style.margin = "0 auto";
+    }
+  } catch (e) {
+    target.innerHTML = `<p style="color:var(--danger);font-size:12px;">QR generation failed: ${escapeHtml(e.message)}</p>`;
+  }
+}
+
+// Timer tick
+setInterval(() => {
+  const t = timeLeftSeconds();
+  if (t === null) return;
+  const td = document.getElementById("timer-display");
+  if (td) {
+    td.textContent = formatTime(t);
+    td.classList.toggle("urgent", t < 60 && t > 0);
+    if (t === 0) render(); // re-render to enable "pick 3" button
+  }
+}, 1000);
+
+</script>
+
+</body>
+</html>

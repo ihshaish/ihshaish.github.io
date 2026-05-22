@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>COMP322 - Live exercise</title>
+<style>
+  :root {
+    --accent: #2C5F7C;
+    --accent-dark: #1F4860;
+    --accent-soft: #E8F0F5;
+    --accent-cream: #F5EFE3;
+    --warn: #B8862F;
+    --warn-soft: #FAF1E0;
+    --success: #2D7A4F;
+    --success-soft: #E6F1EB;
+    --danger: #B23B3B;
+    --paper: #FBFAF7;
+    --card: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #5A6B78;
+    --faint: #9AA5B1;
+    --rule: #E4E2DC;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: contain;
+  }
+  h1, h2, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 600;
+    margin: 0 0 0.4em 0;
+    letter-spacing: -0.01em;
+  }
+  h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 17px; }
+
+  .ribbon {
+    background: var(--accent);
+    color: white;
+    padding: 12px 16px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ribbon strong { font-weight: 600; }
+  .ribbon .sess {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 20px 18px 80px 18px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .card.cream { background: var(--accent-cream); border-color: var(--warn); }
+  .card.success { background: var(--success-soft); border-color: var(--success); }
+  .card.accent { background: var(--accent-soft); border-color: var(--accent); }
+
+  .kicker {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .lede {
+    font-family: Georgia, serif;
+    font-style: italic;
+    color: var(--muted);
+    margin: 0 0 14px 0;
+    font-size: 15px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 700;
+    margin: 10px 0 5px 0;
+  }
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 16px;
+    background: white;
+    color: var(--ink);
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 13px 18px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 8px;
+  }
+  button:hover { background: var(--accent-dark); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  button.ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--rule);
+  }
+
+  .timer {
+    font-family: 'Courier New', monospace;
+    font-size: 36px;
+    text-align: center;
+    color: var(--accent);
+    margin: 14px 0 8px 0;
+    font-weight: 700;
+  }
+  .timer.urgent { color: var(--danger); }
+  .timer-label {
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .quote {
+    font-family: Georgia, serif;
+    font-style: italic;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-radius: 0 6px 6px 0;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .vote-card {
+    border: 2px solid var(--rule);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.15s;
+  }
+  .vote-card:hover { border-color: var(--accent); }
+  .vote-card.picked {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .vote-card .who {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .vote-card .text {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .vote-card .tag {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .iso-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .iso-option {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 8px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    background: white;
+    user-select: none;
+  }
+  .iso-option:hover { border-color: var(--accent); }
+  .iso-option.on {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  .iso-option .lbl {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    opacity: 0.75;
+    margin-top: 2px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .submitted-banner {
+    background: var(--success-soft);
+    border: 1px solid var(--success);
+    color: var(--success);
+    padding: 14px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+    margin: 14px 0;
+  }
+  .submitted-banner .alias {
+    font-family: 'Courier New', monospace;
+    background: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+
+  .status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .spinner {
+    border: 3px solid var(--rule);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 0.8s linear infinite;
+    margin: 20px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .footer {
+    text-align: center;
+    color: var(--faint);
+    font-size: 12px;
+    margin-top: 40px;
+    font-family: Georgia, serif;
+    font-style: italic;
+  }
+</style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+<body>
+
+<div class="ribbon">
+  <div><strong>COMP322</strong> &middot; Live exercise</div>
+  <div class="sess" id="session-display"></div>
+</div>
+
+<div class="wrap" id="root">
+  <div class="card"><div class="spinner"></div><p style="text-align:center;color:var(--muted);font-size:13px;">Connecting&hellip;</p></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, push, onValue, get, update, serverTimestamp, off } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// =====================================================================
+// CONFIGURATION - Hisham fills this in after creating Firebase project
+// =====================================================================
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_API_KEY_HERE",
+  authDomain: "comp322-live.firebaseapp.com",
+  databaseURL: "https://comp322-live-default-rtdb.firebaseio.com",
+  projectId: "comp322-live",
+  storageBucket: "comp322-live.appspot.com",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID",
+  appId: "PASTE_YOUR_APP_ID"
+};
+
+// Session ID from URL (?s=...) or default
+const urlParams = new URLSearchParams(window.location.search);
+const SESSION_ID = urlParams.get("s") || "default";
+document.getElementById("session-display").textContent = "Session: " + SESSION_ID;
+
+// Firebase init
+let app, db, auth, userId;
+let sessionRef, sessionData = null;
+let participantId = null;
+let alias = null;
+
+try {
+  app = initializeApp(firebaseConfig);
+  db = getDatabase(app);
+  auth = getAuth(app);
+} catch (e) {
+  document.getElementById("root").innerHTML = `<div class="card warn"><h2>Configuration missing</h2><p style="font-size:14px;color:var(--muted);">The Firebase config has not been set yet. Ask the instructor to complete setup.</p></div>`;
+  console.error(e);
+  throw e;
+}
+
+// Restore from localStorage if returning student
+try {
+  participantId = localStorage.getItem("comp322_pid_" + SESSION_ID);
+  alias = localStorage.getItem("comp322_alias_" + SESSION_ID);
+} catch (e) { /* localStorage may be blocked in private mode */ }
+
+// =====================================================================
+// AUTHENTICATION
+// =====================================================================
+signInAnonymously(auth).catch(e => {
+  document.getElementById("root").innerHTML = `<div class="card warn"><h2>Sign-in failed</h2><p style="font-size:14px;color:var(--muted);">${escapeHtml(e.message)}</p></div>`;
+});
+
+onAuthStateChanged(auth, user => {
+  if (!user) return;
+  userId = user.uid;
+  sessionRef = ref(db, "sessions/" + SESSION_ID);
+  onValue(sessionRef, snap => {
+    sessionData = snap.val() || {};
+    render();
+  });
+});
+
+// =====================================================================
+// HELPERS
+// =====================================================================
+function setLocal(key, value) {
+  try { localStorage.setItem("comp322_" + key + "_" + SESSION_ID, value); } catch (e) {}
+}
+
+function joinSession(newAlias) {
+  participantId = userId;
+  alias = newAlias;
+  setLocal("pid", participantId);
+  setLocal("alias", alias);
+  return set(ref(db, `sessions/${SESSION_ID}/participants/${participantId}`), {
+    alias: alias,
+    joinedAt: serverTimestamp()
+  });
+}
+
+function timeLeftSeconds() {
+  const meta = sessionData?.meta;
+  if (!meta?.timerEndsAt) return null;
+  return Math.max(0, Math.floor((meta.timerEndsAt - Date.now()) / 1000));
+}
+
+function formatTime(secs) {
+  if (secs == null) return "";
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+// =====================================================================
+// ROUND 1: Scenario writing
+// =====================================================================
+function submitRound1(text) {
+  const submission = {
+    participantId,
+    alias,
+    text: text.trim(),
+    submittedAt: serverTimestamp()
+  };
+  return set(ref(db, `sessions/${SESSION_ID}/round1/submissions/${participantId}`), submission);
+}
+
+function submitRound1Vote(submissionKey) {
+  return set(ref(db, `sessions/${SESSION_ID}/round1/votes/${participantId}`), submissionKey);
+}
+
+// =====================================================================
+// ROUND 2: Requirement writing
+// =====================================================================
+function submitRound2(text, isoGoal) {
+  const submission = {
+    participantId,
+    alias,
+    text: text.trim(),
+    isoGoal: isoGoal,
+    submittedAt: serverTimestamp()
+  };
+  return set(ref(db, `sessions/${SESSION_ID}/round2/submissions/${participantId}`), submission);
+}
+
+function submitRound2Vote(verdict) {
+  return set(ref(db, `sessions/${SESSION_ID}/round2/votes/${participantId}`), verdict);
+}
+
+// =====================================================================
+// RENDER ROUTER
+// =====================================================================
+const root = document.getElementById("root");
+
+function render() {
+  // Not joined yet -> show join form
+  if (!alias || !sessionData?.participants?.[participantId]) {
+    renderJoin();
+    return;
+  }
+
+  const state = sessionData?.meta?.state || "lobby";
+  if (state === "lobby") renderLobby();
+  else if (state === "round1_writing") renderRound1Writing();
+  else if (state === "round1_voting") renderRound1Voting();
+  else if (state === "round2_writing") renderRound2Writing();
+  else if (state === "round2_voting") renderRound2Voting();
+  else if (state === "complete") renderComplete();
+  else renderLobby();
+}
+
+function renderJoin() {
+  root.innerHTML = `
+    <div class="card">
+      <div class="kicker">Welcome</div>
+      <h1>Join the live exercise</h1>
+      <p class="lede">Pick a short alias - your initials, a nickname, anything. Just so we can refer to your submission if we want to discuss it.</p>
+      <label for="alias-input">Your alias (2-12 characters)</label>
+      <input type="text" id="alias-input" maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="e.g. HI or layla21" value="${escapeHtml(alias || '')}">
+      <button id="join-btn">Join session</button>
+      <p style="font-size:12px;color:var(--muted);margin-top:14px;text-align:center;">No login, no account. Your alias is the only thing shown to others.</p>
+    </div>
+  `;
+  const input = document.getElementById("alias-input");
+  const btn = document.getElementById("join-btn");
+  input.focus();
+  input.addEventListener("input", () => { btn.disabled = input.value.trim().length < 2; });
+  btn.disabled = input.value.trim().length < 2;
+  btn.addEventListener("click", async () => {
+    const a = input.value.trim();
+    if (a.length < 2) return;
+    btn.disabled = true;
+    btn.textContent = "Joining...";
+    try {
+      await joinSession(a);
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = "Try again";
+      alert("Could not join: " + e.message);
+    }
+  });
+}
+
+function renderLobby() {
+  const count = sessionData?.participants ? Object.keys(sessionData.participants).length : 0;
+  root.innerHTML = `
+    <div class="card">
+      <span class="status-pill">Waiting</span>
+      <h1 style="margin-top:8px;">You're in!</h1>
+      <p style="font-size:15px;color:var(--muted);">You're <span style="font-family:'Courier New',monospace;background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:3px;font-weight:700;">${escapeHtml(alias)}</span>. Wait for the instructor to start round 1.</p>
+      <div style="text-align:center;margin:20px 0;font-size:13px;color:var(--muted);">
+        <strong style="font-size:24px;font-family:Georgia,serif;color:var(--accent);">${count}</strong>
+        <div style="text-transform:uppercase;letter-spacing:1.2px;font-size:10px;font-weight:700;color:var(--faint);margin-top:4px;">participants joined</div>
+      </div>
+    </div>
+    <p class="footer">Keep this page open. It will advance automatically when the round starts.</p>
+  `;
+}
+
+function renderRound1Writing() {
+  const existing = sessionData?.round1?.submissions?.[participantId];
+  const t = timeLeftSeconds();
+  const isOver = t === 0;
+  const urgent = t !== null && t > 0 && t < 60;
+
+  root.innerHTML = `
+    <div class="card cream">
+      <div class="kicker" style="color:var(--warn);">Round 1 &middot; 5 minutes</div>
+      <h2>Write a scenario.</h2>
+      ${t !== null ? `<div class="timer ${urgent ? 'urgent' : ''}" id="timer-display">${formatTime(t)}</div><div class="timer-label">time remaining</div>` : ""}
+    </div>
+
+    <div class="card">
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;margin-bottom:4px;">Persona</div>
+        <p style="margin:0;font-size:15px;"><strong>Layla</strong>, engaged power user of the banking app.</p>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;margin-bottom:4px;">Situation</div>
+        <p style="margin:0;font-size:15px;">Layla just got paid on the 5th and needs to send 800 NIS to her landlord by tomorrow.</p>
+      </div>
+
+      <div style="font-size:13px;color:var(--muted);margin:14px 0;padding:10px 12px;background:var(--paper);border-radius:6px;border-left:3px solid var(--accent);">
+        <strong>Capture in 2-3 sentences:</strong> the temporal context, the device, a plot point (something that could go wrong, or a decision), and a concrete outcome.
+      </div>
+
+      <label for="r1-input">Your scenario</label>
+      <textarea id="r1-input" placeholder="It is the morning of the 6th. Layla opens..." ${isOver ? "disabled" : ""}>${escapeHtml(existing?.text || "")}</textarea>
+      <div style="font-size:11px;color:var(--faint);text-align:right;margin-top:4px;" id="r1-counter">0 / 400</div>
+
+      ${existing ? `<div class="submitted-banner">Submitted as <span class="alias">${escapeHtml(alias)}</span>. You can still edit until time runs out.</div>` : ""}
+
+      <button id="r1-submit" ${isOver ? "disabled" : ""}>${existing ? "Update submission" : "Submit"}</button>
+      ${isOver ? `<p style="text-align:center;color:var(--muted);font-size:13px;margin-top:10px;font-style:italic;">Time is up. Waiting for the voting round to start.</p>` : ""}
+    </div>
+  `;
+
+  const ta = document.getElementById("r1-input");
+  const counter = document.getElementById("r1-counter");
+  const submitBtn = document.getElementById("r1-submit");
+
+  function updateCounter() {
+    const len = ta.value.length;
+    counter.textContent = `${len} / 400`;
+    counter.style.color = len > 400 ? "var(--danger)" : "var(--faint)";
+  }
+  updateCounter();
+  ta.addEventListener("input", updateCounter);
+
+  submitBtn.addEventListener("click", async () => {
+    const text = ta.value.trim();
+    if (text.length < 20) { alert("Scenario is too short - aim for 2-3 sentences."); return; }
+    if (text.length > 400) { alert("Scenario is too long - keep it to 2-3 sentences."); return; }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+    try {
+      await submitRound1(text);
+      submitBtn.textContent = "Submitted";
+      setTimeout(() => render(), 300);
+    } catch (e) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Try again";
+      alert("Failed: " + e.message);
+    }
+  });
+}
+
+function renderRound1Voting() {
+  const picked = sessionData?.round1?.pickedForVote || [];
+  const submissions = sessionData?.round1?.submissions || {};
+  const myVote = sessionData?.round1?.votes?.[participantId];
+
+  const cards = picked.map((key, i) => {
+    const sub = submissions[key];
+    if (!sub) return "";
+    return `
+      <div class="vote-card ${myVote === key ? "picked" : ""}" data-key="${escapeHtml(key)}">
+        <div class="who">Option ${String.fromCharCode(65 + i)}</div>
+        <div class="text">${escapeHtml(sub.text)}</div>
+      </div>
+    `;
+  }).join("");
+
+  root.innerHTML = `
+    <div class="card accent">
+      <div class="kicker">Round 1 &middot; Voting</div>
+      <h2>Which is the strongest scenario?</h2>
+      <p class="lede" style="margin-bottom:0;">Particular, contextual, with a plot point, disputable. Tap the option you think is strongest.</p>
+    </div>
+    ${cards}
+    ${myVote ? `<div class="submitted-banner">Vote submitted. Discussing live - look at the screen.</div>` : ""}
+  `;
+
+  document.querySelectorAll(".vote-card").forEach(c => {
+    c.addEventListener("click", async () => {
+      const key = c.dataset.key;
+      try {
+        await submitRound1Vote(key);
+      } catch (e) {
+        alert("Vote failed: " + e.message);
+      }
+    });
+  });
+}
+
+function renderRound2Writing() {
+  const winnerKey = sessionData?.meta?.round1WinnerKey;
+  const winnerSubmission = winnerKey ? sessionData?.round1?.submissions?.[winnerKey] : null;
+  const existing = sessionData?.round2?.submissions?.[participantId];
+  const t = timeLeftSeconds();
+  const isOver = t === 0;
+  const urgent = t !== null && t > 0 && t < 60;
+
+  const isoGoals = [
+    { id: "Effectiveness", label: "Effectiveness", sub: "complete task" },
+    { id: "Efficiency", label: "Efficiency", sub: "time/effort" },
+    { id: "Satisfaction", label: "Satisfaction", sub: "feel" },
+    { id: "Learnability", label: "Learnability", sub: "first use" },
+    { id: "Memorability", label: "Memorability", sub: "return" },
+    { id: "Errors", label: "Errors", sub: "safety" }
+  ];
+
+  const selectedGoal = existing?.isoGoal || "";
+
+  root.innerHTML = `
+    <div class="card cream">
+      <div class="kicker" style="color:var(--warn);">Round 2 &middot; 5 minutes</div>
+      <h2>Write a requirement.</h2>
+      ${t !== null ? `<div class="timer ${urgent ? 'urgent' : ''}" id="timer-display">${formatTime(t)}</div><div class="timer-label">time remaining</div>` : ""}
+    </div>
+
+    ${winnerSubmission ? `
+      <div class="card">
+        <div class="kicker" style="color:var(--warn);">Winning scenario from round 1</div>
+        <div class="quote">${escapeHtml(winnerSubmission.text)}</div>
+        <div style="font-size:11px;color:var(--faint);margin-top:8px;font-style:italic;">by ${escapeHtml(winnerSubmission.alias)}</div>
+      </div>
+    ` : ""}
+
+    <div class="card">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px;padding:10px 12px;background:var(--paper);border-radius:6px;border-left:3px solid var(--accent);">
+        <strong>Write ONE measurable requirement</strong> from the scenario above. Specific metric, under 30 words.
+        <br><br>
+        Example shape: <em>"Layla shall complete the transfer in under 90 seconds with at most 1 confirmation tap."</em>
+      </div>
+
+      <label for="r2-input">Your requirement</label>
+      <textarea id="r2-input" placeholder="Layla shall..." style="min-height:80px;" ${isOver ? "disabled" : ""}>${escapeHtml(existing?.text || "")}</textarea>
+      <div style="font-size:11px;color:var(--faint);text-align:right;margin-top:4px;" id="r2-counter">0 words</div>
+
+      <label>Which ISO 9241-11 goal does this serve?</label>
+      <div class="iso-grid" id="iso-grid">
+        ${isoGoals.map(g => `
+          <div class="iso-option ${selectedGoal === g.id ? "on" : ""}" data-goal="${g.id}">
+            ${g.label}<span class="lbl">${g.sub}</span>
+          </div>
+        `).join("")}
+      </div>
+
+      ${existing ? `<div class="submitted-banner">Submitted as <span class="alias">${escapeHtml(alias)}</span>. You can still edit until time runs out.</div>` : ""}
+
+      <button id="r2-submit" ${isOver ? "disabled" : ""}>${existing ? "Update submission" : "Submit"}</button>
+      ${isOver ? `<p style="text-align:center;color:var(--muted);font-size:13px;margin-top:10px;font-style:italic;">Time is up.</p>` : ""}
+    </div>
+  `;
+
+  const ta = document.getElementById("r2-input");
+  const counter = document.getElementById("r2-counter");
+  const submitBtn = document.getElementById("r2-submit");
+  let currentGoal = selectedGoal;
+
+  function updateCounter() {
+    const words = ta.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+    counter.textContent = `${words} word${words === 1 ? "" : "s"} / 30 max`;
+    counter.style.color = words > 30 ? "var(--danger)" : "var(--faint)";
+  }
+  updateCounter();
+  ta.addEventListener("input", updateCounter);
+
+  document.querySelectorAll(".iso-option").forEach(o => {
+    o.addEventListener("click", () => {
+      currentGoal = o.dataset.goal;
+      document.querySelectorAll(".iso-option").forEach(x => x.classList.toggle("on", x.dataset.goal === currentGoal));
+    });
+  });
+
+  submitBtn.addEventListener("click", async () => {
+    const text = ta.value.trim();
+    const words = text.split(/\s+/).filter(w => w.length > 0).length;
+    if (text.length < 10) { alert("Requirement is too short."); return; }
+    if (words > 30) { alert("Requirement exceeds 30 words - tighten it."); return; }
+    if (!currentGoal) { alert("Tap the ISO goal this requirement serves."); return; }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+    try {
+      await submitRound2(text, currentGoal);
+      submitBtn.textContent = "Submitted";
+      setTimeout(() => render(), 300);
+    } catch (e) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Try again";
+      alert("Failed: " + e.message);
+    }
+  });
+}
+
+function renderRound2Voting() {
+  const picked = sessionData?.round2?.pickedForVote || [];
+  const submissions = sessionData?.round2?.submissions || {};
+  const myVote = sessionData?.round2?.votes?.[participantId];
+
+  const cards = picked.map((key, i) => {
+    const sub = submissions[key];
+    if (!sub) return "";
+    return `
+      <div class="vote-card" data-key="${escapeHtml(key)}" style="cursor:default;">
+        <div class="who">Option ${String.fromCharCode(65 + i)}</div>
+        <div class="text">${escapeHtml(sub.text)}</div>
+        <span class="tag">${escapeHtml(sub.isoGoal)}</span>
+      </div>
+    `;
+  }).join("");
+
+  root.innerHTML = `
+    <div class="card accent">
+      <div class="kicker">Round 2 &middot; Voting</div>
+      <h2>For each, is it genuinely measurable?</h2>
+      <p class="lede" style="margin-bottom:0;">A real metric (number, time, threshold) - or a wish dressed up?</p>
+    </div>
+    ${cards}
+    <div class="card">
+      <label>Across all three, vote:</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="ghost ${myVote === 'measurable' ? 'on' : ''}" id="vote-yes" style="background:${myVote === 'measurable' ? 'var(--success)' : 'transparent'};color:${myVote === 'measurable' ? 'white' : 'var(--success)'};border-color:var(--success);">All measurable</button>
+        <button class="ghost" id="vote-no" style="background:${myVote === 'not_measurable' ? 'var(--danger)' : 'transparent'};color:${myVote === 'not_measurable' ? 'white' : 'var(--danger)'};border-color:var(--danger);">Some are wishes</button>
+      </div>
+      ${myVote ? `<div class="submitted-banner" style="margin-top:14px;">Vote submitted.</div>` : ""}
+    </div>
+  `;
+
+  document.getElementById("vote-yes")?.addEventListener("click", () => submitRound2Vote("measurable"));
+  document.getElementById("vote-no")?.addEventListener("click", () => submitRound2Vote("not_measurable"));
+}
+
+function renderComplete() {
+  root.innerHTML = `
+    <div class="card success">
+      <div class="kicker" style="color:var(--success);">Session complete</div>
+      <h2>Thank you.</h2>
+      <p style="font-size:15px;color:var(--muted);">You wrote a scenario from a persona, then a measurable requirement from that scenario. That is the chain. Take it into your Phase 1 submission.</p>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;color:var(--muted);margin:0;">Refer back to the lecture deck and the handbook section on personas, scenarios, requirements before you write up your team's work. Phase 1 is due <strong style="color:var(--danger);">Wednesday 20 May</strong>.</p>
+    </div>
+    <p class="footer">You can close this page.</p>
+  `;
+}
+
+// Ticker for timer display - re-renders the timer text every second
+setInterval(() => {
+  const t = timeLeftSeconds();
+  if (t === null) return;
+  const td = document.getElementById("timer-display");
+  if (td) {
+    td.textContent = formatTime(t);
+    if (t < 60 && t > 0) td.classList.add("urgent");
+    if (t === 0) render(); // re-render to disable inputs
+  }
+}, 1000);
+
+</script>
+
+</body>
+</html>
