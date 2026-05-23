@@ -254,7 +254,7 @@
 
     <p class="body">A second, less obvious finding is that the requirements stage is also where the project's <em>identity</em> is decided. The Twitter 140-character limit was a requirement. The iPhone's no-stylus rule was a requirement. WhatsApp's end-to-end encryption was a requirement. None of these features were decided by writing code; they were decided by writing a sentence about what the system would or would not do. The same logic applies in every system that COMP433 students will work on: the requirements document sets the shape that the rest of the project will execute against.</p>
 
-    <p class="body">This companion treats requirements engineering with that weight. The first half covers what requirements <em>are</em> and how they are written; the second half covers how the work is <em>validated</em>, <em>documented</em>, and <em>estimated for effort</em>. The running example follows the course textbook: the Mental Health Care Patient Management System (MHC-PMS) used in Sommerville's tenth edition.</p>
+    <p class="body">This companion treats requirements engineering with that weight. The first half covers what requirements <em>are</em> and how they are written; the second half covers how the work is <em>validated</em>, <em>documented</em>, and <em>estimated for effort</em>. The running example follows the course lecture deck: the <strong>Mentcare</strong> patient information system for mental health care (called MHC-PMS in older editions of Sommerville; the same system).</p>
   </div>
 </section>
 
@@ -308,7 +308,7 @@
 
     <div class="req-example user">
       <span class="tag-small">User requirement</span><br>
-      <span class="req-id">UR4.0:</span> The system administrator shall be able to register and create user accounts, for new users, as members of staff, of the PMS system.
+      <span class="req-id">UR4.0:</span> The system administrator shall be able to register and create user accounts, for new users, as members of staff, of the Mentcare system.
     </div>
 
     <div class="req-example system">
@@ -336,21 +336,21 @@
     <p class="section-intro">Sommerville's classification, which Adel follows, separates requirements into three mutually exclusive categories. The third one (domain) is often skipped in lighter treatments and is exactly where most subtle errors come from.</p>
 
     <h3 class="subhead-small">Functional requirements</h3>
-    <p class="body">Statements of the services the system should provide, how the system should react to particular inputs, and how the system should behave in particular situations. They are usually written with the system as subject and "shall" as the modal verb. Example, from the MHC-PMS:</p>
+    <p class="body">Statements of the services the system should provide, how the system should react to particular inputs, and how the system should behave in particular situations. They are usually written with the system as subject and "shall" as the modal verb. Example, from the Mentcare system:</p>
 
     <div class="req-example">
       <span class="req-id">2.3:</span> A user shall be able to search the appointments lists for all clinics.<br>
-      <span class="req-id">5.2:</span> The PMS system shall generate each day, for each clinic, a list of patients who are expected to attend appointments that day.<br>
+      <span class="req-id">5.2:</span> The Mentcare system shall generate each day, for each clinic, a list of patients who are expected to attend appointments that day.<br>
       <span class="req-id">6.1:</span> Each staff member using the system shall be uniquely identified by an 8-digit employee number.
     </div>
 
     <h3 class="subhead-small">Non-functional requirements</h3>
     <p class="body">Constraints on the services or functions offered by the system. They describe how well, how fast, under what load, for whom, with what guarantees. They are not optional polish: if NFRs are not met, the system can be useless even when every functional requirement passes.</p>
 
-    <p class="body">A worked NFR example for the MHC-PMS:</p>
+    <p class="body">A worked NFR example for the Mentcare system:</p>
 
     <div class="req-example">
-      <span class="req-id">3.C.8:</span> The MHC-PMS shall be available to all clinics during normal working hours (Mon to Fri, 08:30 to 17:30). Downtime within normal working hours shall not exceed five seconds in any one day.
+      <span class="req-id">3.C.8:</span> The Mentcare system shall be available to all clinics during normal working hours (Mon to Fri, 08:30 to 17:30). Downtime within normal working hours shall not exceed five seconds in any one day.
     </div>
 
     <p class="body">Notice the verifiability: "available" is not abstract here, it has a measurable threshold (downtime under five seconds per day during stated hours). Section v returns to NFR families and metrics.</p>
@@ -360,7 +360,7 @@
 
     <ul class="body">
       <li>A train control system has to take into account the braking characteristics in different weather conditions.</li>
-      <li>A PMS has to enforce all confidentiality rules in accordance with national medical domain practices.</li>
+      <li>The Mentcare system has to enforce all confidentiality rules in accordance with national medical domain practices.</li>
     </ul>
 
     <p class="body">Domain requirements have two characteristic problems, both consequences of the fact that the domain is not the developer's home discipline:</p>
@@ -398,12 +398,12 @@
 
     <div class="req-example user">
       <span class="tag-small">Goal (not yet verifiable)</span><br>
-      <span class="req-id">G.8.1:</span> The PMS system should be easy to use by medical staff and should be organised in such a way that user errors are minimised.
+      <span class="req-id">G.8.1:</span> The Mentcare system should be easy to use by medical staff and should be organised in such a way that user errors are minimised.
     </div>
 
     <div class="req-example system">
       <span class="tag-small">Verifiable NFR</span><br>
-      <span class="req-id">8.4.3:</span> Medical staff shall be able to use all the PMS system functions after four hours of training. After this training, the average number of errors made by experienced users shall not exceed two per hour of system use.
+      <span class="req-id">8.4.3:</span> Medical staff shall be able to use all the Mentcare system functions after four hours of training. After this training, the average number of errors made by experienced users shall not exceed two per hour of system use.
     </div>
 
     <p class="body">The goal is still useful: it tells the developers what the team is trying to achieve. The verifiable requirement tells the tester what to measure. Both belong in the document; they do not replace each other.</p>

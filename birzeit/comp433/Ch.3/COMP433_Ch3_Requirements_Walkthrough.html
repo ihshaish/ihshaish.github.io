@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Requirements engineering: interactive walkthrough · COMP433 · Chapter 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1419;
+    --ink-soft: #2c3540;
+    --ink-mute: #5a6473;
+    --paper: #faf7f2;
+    --paper-warm: #f3ede2;
+    --paper-deep: #ebe2d1;
+    --accent: #b85c38;
+    --accent-deep: #7a3a23;
+    --accent-soft: rgba(184,92,56,0.08);
+    --steel: #2c5f7c;
+    --steel-soft: #d6e0e8;
+    --steel-deep: #1a3d52;
+    --moss: #4a6b3a;
+    --moss-soft: #e0e8d8;
+    --gold: #c9a961;
+    --rule: #d8cfc0;
+    --rule-strong: #c5b9a3;
+    --rule-soft: #ebe2d1;
+    --danger: #b85c38;
+    --muted: #6b7280;
+    --faint: #94a3b8;
+    --shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px rgba(15,20,25,0.06);
+    --shadow-lg: 0 4px 12px rgba(15,20,25,0.08), 0 24px 48px rgba(15,20,25,0.10);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter Tight', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
+      radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
+    min-height: 100vh;
+  }
+
+  .ribbon { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,0.95); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 0; }
+  .ribbon-inner { max-width: 1200px; margin: 0 auto; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+  .brand { font-family: var(--serif); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+  .brand-mark { width: 28px; height: 28px; border-radius: 5px; background: linear-gradient(135deg, var(--steel) 0%, var(--accent) 100%); box-shadow: 0 2px 6px rgba(184,92,56,0.25); }
+  .ribbon-links { display: flex; gap: 4px; }
+  .ribbon-links a { color: var(--ink-soft); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 999px; transition: all 0.15s; }
+  .ribbon-links a:hover { background: var(--paper-warm); color: var(--ink); }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 36px 28px 80px; }
+
+  /* Progress indicator */
+  .progress { margin: 0 0 36px; }
+  .progress-inner { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 18px; background: white; border: 1px solid var(--rule); border-radius: 999px; box-shadow: var(--shadow); }
+  .progress .dot { flex: 1; min-width: 110px; padding: 8px 10px; border-radius: 999px; font-size: 12px; color: var(--muted); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 8px; }
+  .progress .dot:hover { background: var(--paper-warm); }
+  .progress .dot.active { background: var(--ink); color: var(--paper); }
+  .progress .dot.done { color: var(--steel-deep); }
+  .progress .dot.done::before { content: '✓'; color: var(--moss); font-weight: 700; }
+  .progress .roman { font-family: var(--serif); font-style: italic; font-size: 13px; opacity: 0.7; margin-right: 2px; }
+
+  /* Hero masthead (intro only) */
+  .masthead { padding: 40px 0 0; }
+  .masthead .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+  .masthead .kicker::before { content: ''; flex-shrink: 0; width: 32px; height: 1px; background: var(--accent); }
+  .masthead .kicker::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: var(--accent); }
+  .masthead h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(40px, 6.4vw, 74px); line-height: 1.02; letter-spacing: -0.03em; margin-bottom: 22px; font-variation-settings: "opsz" 144; max-width: 1100px; }
+  .masthead h1 em { font-style: italic; color: var(--accent); font-variation-settings: "opsz" 144, "wght" 400; }
+  .masthead .lede { font-size: 19px; max-width: 780px; color: var(--ink-soft); font-family: var(--serif); }
+  .masthead .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 22px; margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--rule); }
+  .masthead .meta-item { font-size: 13px; }
+  .masthead .meta-item span:first-child { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 4px; }
+  .masthead .meta-item span:last-child { font-weight: 600; color: var(--ink); }
+
+  /* Step content */
+  .sect-head { margin: 36px 0 26px; }
+  .sect-head .num { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--accent); }
+  .sect-head .kicker { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); margin-left: 12px; }
+  .sect-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(28px, 4.4vw, 48px); letter-spacing: -0.025em; line-height: 1.04; margin-top: 14px; margin-bottom: 14px; font-variation-settings: "opsz" 144; }
+  .sect-head h2 em { font-style: italic; color: var(--accent); }
+  .sect-head .lede { font-size: 17px; color: var(--ink-soft); max-width: 800px; font-family: var(--serif); }
+
+  .prose { max-width: 980px; }
+  .prose h3 { font-family: var(--serif); font-weight: 600; font-size: 22px; margin: 32px 0 12px; letter-spacing: -0.015em; }
+  .prose h4 { font-family: var(--serif); font-weight: 600; font-size: 17px; margin: 22px 0 8px; letter-spacing: -0.01em; }
+  .prose p { font-size: 15.5px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.65; }
+  .prose p strong { color: var(--ink); }
+  .prose ul, .prose ol { font-size: 15.5px; color: var(--ink-soft); margin: 10px 0 16px 22px; line-height: 1.6; }
+  .prose ul li, .prose ol li { margin-bottom: 6px; }
+  .prose ul li strong, .prose ol li strong { color: var(--ink); }
+  .prose a { color: var(--accent-deep); border-bottom: 1px dotted; text-decoration: none; }
+  .prose a:hover { border-bottom-style: solid; }
+
+  /* Term tooltip */
+  .term { position: relative; border-bottom: 1px dotted var(--accent); cursor: help; color: var(--ink); }
+  .term .tip { position: absolute; top: -8px; left: 50%; transform: translateX(-50%) translateY(-100%); background: var(--ink); color: var(--paper); padding: 8px 12px; border-radius: 6px; font-size: 12px; line-height: 1.4; min-width: 200px; max-width: 320px; opacity: 0; pointer-events: none; transition: opacity 0.15s; font-family: var(--sans); font-weight: 400; z-index: 50; }
+  .term .tip .ar { display: block; margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.2); font-family: 'Amiri', serif; font-size: 13px; color: var(--gold); direction: rtl; text-align: right; }
+  .term:hover .tip { opacity: 1; }
+
+  /* Callouts */
+  .callout { padding: 18px 22px; border-radius: 8px; margin: 18px 0; max-width: 980px; }
+  .callout .lbl { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+  .callout p { font-size: 14.5px; line-height: 1.6; margin: 0 0 8px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout.note { background: var(--steel-soft); border-left: 4px solid var(--steel); color: var(--steel-deep); }
+  .callout.note .lbl { color: var(--steel-deep); }
+  .callout.warn { background: rgba(184,92,56,0.08); border-left: 4px solid var(--accent); color: var(--accent-deep); }
+  .callout.warn .lbl { color: var(--accent-deep); }
+  .callout.aside { background: var(--paper-warm); border-left: 4px solid var(--gold); color: var(--ink-soft); }
+  .callout.aside .lbl { color: #b8860b; }
+
+  /* Quote box */
+  .quotebox { background: var(--paper-warm); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 20px 26px; margin: 20px 0; max-width: 880px; }
+  .quotebox p { font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .quotebox .source { display: block; margin-top: 8px; font-style: normal; font-size: 12.5px; font-family: var(--sans); color: var(--ink-mute); }
+
+  /* Tables */
+  .body-table-card { background: white; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin: 18px 0; max-width: 1080px; }
+  .body-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .body-table th { background: var(--paper-warm); padding: 12px 16px; text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  .body-table td { padding: 12px 16px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  .body-table tr:last-child td { border-bottom: none; }
+  .body-table td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+  /* Two-column callout pair */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 1080px; margin: 18px 0; }
+  @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+  .two-col > div { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 18px 22px; }
+  .two-col h4 { font-family: var(--serif); font-size: 16px; margin: 0 0 8px; color: var(--ink); }
+  .two-col p { font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .two-col ul { font-size: 14px; color: var(--ink-soft); margin: 6px 0 0 18px; line-height: 1.55; }
+
+  /* Three-col cards */
+  .three-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; max-width: 1080px; margin: 18px 0; }
+  .three-col > div { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 18px 22px; }
+  .three-col h4 { font-family: var(--serif); font-size: 16px; margin: 0 0 8px; color: var(--ink); }
+  .three-col h4 .iconbox { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: var(--paper-warm); margin-right: 8px; font-family: var(--serif); font-style: italic; color: var(--accent); font-size: 14px; }
+  .three-col p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .three-col ul { font-size: 13.5px; color: var(--ink-soft); margin: 6px 0 0 18px; }
+
+  /* Worked-example requirement display */
+  .req-card { background: white; border: 1px solid var(--rule); border-left: 4px solid var(--steel); border-radius: 6px; padding: 14px 18px; margin: 10px 0; max-width: 1080px; font-family: var(--mono); font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; }
+  .req-card.system { border-left-color: var(--moss); }
+  .req-card .id { color: var(--accent); font-weight: 600; }
+
+  /* Pitfalls/checklist style */
+  .checklist { margin: 14px 0; max-width: 1080px; }
+  .checklist-item { display: flex; gap: 14px; padding: 12px 16px; background: white; border: 1px solid var(--rule); border-radius: 6px; margin-bottom: 8px; }
+  .checklist-item .check-num { font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 13px; flex-shrink: 0; }
+  .checklist-item .check-body { font-size: 14px; color: var(--ink-soft); }
+  .checklist-item .check-body strong { color: var(--ink); }
+
+  /* === Interactive elements === */
+
+  /* Drag-classify zone */
+  .classify-zone { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 18px 0; max-width: 1080px; }
+  @media (max-width: 800px) { .classify-zone { grid-template-columns: 1fr; } }
+  .classify-bucket { background: white; border: 2px dashed var(--rule); border-radius: 10px; padding: 16px; min-height: 200px; transition: all 0.15s; }
+  .classify-bucket.drop-hover { background: var(--paper-warm); border-color: var(--accent); }
+  .classify-bucket .bucket-head { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+  .classify-bucket .bucket-head .hint { display: block; font-weight: 400; font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 0.06em; text-transform: none; }
+
+  .classify-pool { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: var(--paper-warm); border-radius: 10px; margin: 14px 0; max-width: 1080px; min-height: 80px; }
+  .classify-item { background: white; padding: 8px 14px; border-radius: 999px; font-size: 13.5px; color: var(--ink); border: 1px solid var(--rule); cursor: grab; transition: all 0.15s; user-select: none; }
+  .classify-item:hover { box-shadow: var(--shadow); border-color: var(--accent); }
+  .classify-item.dragging { opacity: 0.5; }
+  .classify-item.placed-correct { background: var(--moss-soft); border-color: var(--moss); }
+  .classify-item.placed-wrong { background: rgba(184,92,56,0.12); border-color: var(--accent); }
+
+  .classify-feedback { margin-top: 12px; font-family: var(--mono); font-size: 12px; color: var(--ink-mute); }
+  .classify-feedback .score { color: var(--accent); font-weight: 700; }
+
+  /* Pick-one selection cards */
+  .pickone { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; max-width: 1080px; margin: 16px 0; }
+  .pickone-card { background: white; border: 2px solid var(--rule); border-radius: 10px; padding: 18px 20px; cursor: pointer; transition: all 0.15s; }
+  .pickone-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .pickone-card.selected { background: var(--steel-soft); border-color: var(--steel); }
+  .pickone-card.correct { background: var(--moss-soft); border-color: var(--moss); }
+  .pickone-card.wrong { background: rgba(184,92,56,0.12); border-color: var(--accent); opacity: 0.7; }
+  .pickone-card h5 { font-family: var(--serif); font-size: 16px; margin-bottom: 6px; color: var(--ink); }
+  .pickone-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+
+  /* Multi-check (validation) */
+  .multicheck-card { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 16px 20px; margin: 12px 0; max-width: 1080px; }
+  .multicheck-card .req { font-family: var(--mono); font-size: 13.5px; color: var(--ink); padding: 10px 14px; background: var(--paper-warm); border-radius: 6px; margin-bottom: 12px; line-height: 1.55; }
+  .multicheck-card .req .id { color: var(--accent); font-weight: 600; }
+  .multicheck-options { display: flex; flex-wrap: wrap; gap: 8px; }
+  .multicheck-options label { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: white; border: 1px solid var(--rule); border-radius: 999px; font-size: 12.5px; color: var(--ink-soft); cursor: pointer; transition: all 0.12s; }
+  .multicheck-options label:hover { border-color: var(--accent); }
+  .multicheck-options input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
+  .multicheck-options label.checked { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-deep); }
+  .multicheck-actions { display: flex; gap: 12px; margin-top: 12px; align-items: center; }
+  .multicheck-feedback { font-size: 13px; color: var(--ink-mute); }
+  .multicheck-feedback.right { color: var(--moss); }
+  .multicheck-feedback.wrong { color: var(--accent); }
+
+  /* Buttons */
+  button { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; padding: 9px 16px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; transition: all 0.15s; }
+  button.primary { background: var(--steel); color: white; border-color: var(--steel); }
+  button.primary:hover { background: var(--steel-deep); border-color: var(--steel-deep); }
+  button.secondary { background: white; color: var(--ink); border-color: var(--rule); }
+  button.secondary:hover { background: var(--paper-warm); }
+  button.ghost { background: transparent; color: var(--ink-soft); border-color: transparent; padding: 9px 12px; }
+  button.ghost:hover { background: var(--paper-warm); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .nav-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin: 40px 0 18px; padding: 18px 0; border-top: 1px solid var(--rule); }
+  .nav-row .next-hint { font-size: 13px; color: var(--ink-mute); font-style: italic; }
+
+  /* Stakeholder selector */
+  .stakeholder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: 1080px; margin: 16px 0; }
+  .stakeholder-card { background: white; border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; }
+  .stakeholder-card:hover { box-shadow: var(--shadow); border-color: var(--accent); }
+  .stakeholder-card.active { background: var(--steel-soft); border-color: var(--steel); border-width: 2px; padding: 13px 15px; }
+  .stakeholder-card .role { font-family: var(--serif); font-weight: 600; font-size: 16px; color: var(--ink); margin-bottom: 4px; }
+  .stakeholder-card .stake { font-size: 12px; color: var(--ink-mute); }
+
+  /* Process steps visualisation */
+  .process-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin: 18px 0; max-width: 1080px; }
+  .process-step { background: white; border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; font-size: 13px; color: var(--ink); cursor: grab; user-select: none; }
+  .process-step .step-num { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-right: 6px; }
+  .process-arrow { color: var(--muted); font-size: 18px; }
+
+  /* Effort estimation calculator (reused from earlier) */
+  .calc-card { background: white; border: 2px solid var(--steel); border-radius: 12px; padding: 22px 26px; margin: 18px 0; max-width: 1080px; box-shadow: var(--shadow-lg); }
+  .calc-card h4 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.015em; color: var(--steel-deep); }
+  .calc-card .sub { font-size: 13.5px; color: var(--ink-mute); margin-bottom: 16px; }
+  .calc-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-bottom: 14px; }
+  .calc-table thead th { background: var(--paper-warm); padding: 9px 11px; text-align: left; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  .calc-table tbody td { padding: 7px 11px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); }
+  .calc-table input[type="text"], .calc-table input[type="number"] { width: 100%; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 5px; font-family: var(--sans); font-size: 13.5px; color: var(--ink); background: var(--paper); }
+  .calc-table input:focus { outline: none; border-color: var(--accent); background: white; }
+  .calc-table input[readonly] { background: var(--paper-warm); color: var(--ink); font-weight: 600; cursor: default; }
+  .calc-table input.totalcol { background: var(--steel-soft); color: var(--steel-deep); font-weight: 700; }
+  .calc-table .x-btn { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 16px; padding: 0 4px; }
+  .calc-actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .calc-params { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px 18px; padding: 14px; background: var(--paper-warm); border-radius: 8px; margin-bottom: 16px; }
+  .calc-params label { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 3px; font-weight: 600; }
+  .calc-params input { width: 100%; padding: 6px 9px; border: 1px solid var(--rule); border-radius: 5px; font-family: var(--sans); font-size: 13.5px; color: var(--ink); background: white; }
+  .calc-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; padding: 18px; background: var(--ink); border-radius: 10px; }
+  .calc-summary .metric { font-size: 13px; }
+  .calc-summary .metric .lbl { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; font-weight: 600; }
+  .calc-summary .metric .val { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--paper); letter-spacing: -0.01em; }
+  .calc-summary .metric .unit { font-family: var(--sans); font-size: 12px; font-weight: 400; color: rgba(250,247,242,0.7); margin-left: 4px; }
+
+  /* SRS visual map */
+  .srs-map { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 18px 22px; margin: 16px 0; max-width: 1080px; box-shadow: var(--shadow); }
+  .srs-map .row { display: grid; grid-template-columns: 32px 1fr 2fr; gap: 12px; padding: 8px 0; border-bottom: 1px dashed var(--rule); align-items: baseline; }
+  .srs-map .row:last-child { border-bottom: none; }
+  .srs-map .nr { font-family: var(--mono); color: var(--muted); font-size: 12px; text-align: right; }
+  .srs-map .title { font-family: var(--serif); font-weight: 600; font-size: 15px; color: var(--ink); }
+  .srs-map .what { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+  /* Final reference */
+  .refs { margin: 18px 0; font-size: 13.5px; max-width: 980px; }
+  .refs p { padding-left: 22px; text-indent: -22px; line-height: 1.55; color: var(--ink-soft); margin-bottom: 10px; }
+  .refs p strong { color: var(--ink); }
+
+  footer { padding-top: 48px; margin-top: 36px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--ink-mute); font-family: var(--serif); font-style: italic; text-align: center; }
+  footer a { color: var(--steel-deep); text-decoration: none; border-bottom: 1px dotted; }
+</style>
+</head>
+<body>
+
+<div class="ribbon">
+  <div class="ribbon-inner">
+    <div class="brand"><span class="brand-mark"></span>COMP433 · Ch.3 walkthrough</div>
+    <div class="ribbon-links">
+      <a href="/birzeit/comp433/">Course</a>
+      <a href="/birzeit/comp433/Ch.3/COMP433_Ch3_Requirements_Engineering_Companion.html">Reference handbook</a>
+      <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html">Ch.4 UML</a>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<div id="progress" class="progress"></div>
+
+<div id="step-content"></div>
+
+<footer>
+  COMP433 · Requirements engineering walkthrough · <a href="/birzeit/comp433/">course page</a> · <a href="/birzeit/comp433/Ch.3/COMP433_Ch3_Requirements_Engineering_Companion.html">handbook</a>
+</footer>
+
+</div>
+
+<script>
+/* ========================================================================
+   STATE
+======================================================================== */
+
+const STEPS = [
+  { id: "intro",        num: "i",    label: "Start" },
+  { id: "layers",       num: "ii",   label: "Three layers" },
+  { id: "categories",   num: "iii",  label: "Categories" },
+  { id: "goals",        num: "iv",   label: "Goals → NFRs" },
+  { id: "process",      num: "v",    label: "The RE process" },
+  { id: "elicit",       num: "vi",   label: "Elicitation" },
+  { id: "write",        num: "vii",  label: "Write" },
+  { id: "validate",     num: "viii", label: "Validate" },
+  { id: "document",     num: "ix",   label: "Document" },
+  { id: "estimate",     num: "x",    label: "Estimate" },
+  { id: "reference",    num: "xi",   label: "Reference" }
+];
+
+const STATE = {
+  step: 0,
+  stakeholder: null,
+  classified: {},   // step ii / iii
+  goalAnswers: {},  // step iv
+  processOrder: null,
+  elicitChoice: {},
+  ucCheck: {}
+};
+
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+function term(text, def, ar) { return `<span class="term">${esc(text)}<span class="tip">${esc(def)}<span class="ar">${esc(ar||"")}</span></span></span>`; }
+
+function renderProgress() {
+  const el = document.getElementById("progress");
+  el.innerHTML = '<div class="progress-inner">' + STEPS.map((s, i) => {
+    const cls = i === STATE.step ? "active" : (i < STATE.step ? "done" : "");
+    return `<span class="dot ${cls}" onclick="setStep(${i})"><span class="roman">${s.num}.</span>${esc(s.label)}</span>`;
+  }).join("") + '</div>';
+}
+
+function setStep(n) {
+  STATE.step = Math.max(0, Math.min(STEPS.length - 1, n));
+  renderProgress();
+  renderStep();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function nav(label = "Continue", hint = "") {
+  const back = STATE.step > 0 ? `<button class="ghost" onclick="setStep(STATE.step - 1)">&larr; Back</button>` : `<span></span>`;
+  const fwd = STATE.step < STEPS.length - 1
+    ? `<button class="primary" onclick="setStep(STATE.step + 1)">${esc(label)} &rarr;</button>`
+    : `<button class="primary" onclick="setStep(0)">Start again</button>`;
+  const hintHtml = hint ? `<span class="next-hint">${esc(hint)}</span>` : '<span></span>';
+  return `<div class="nav-row">${back}${hintHtml}${fwd}</div>`;
+}
+
+function renderStep() {
+  const id = STEPS[STATE.step].id;
+  const el = document.getElementById("step-content");
+  ({
+    intro:     renderIntro,
+    layers:    renderLayers,
+    categories: renderCategories,
+    goals:     renderGoals,
+    process:   renderProcess,
+    elicit:    renderElicit,
+    write:     renderWrite,
+    validate:  renderValidate,
+    document:  renderDocument,
+    estimate:  renderEstimate,
+    reference: renderReference
+  }[id])(el);
+}
+
+/* ========================================================================
+   STEP i: INTRO
+======================================================================== */
+
+function renderIntro(el) {
+  el.innerHTML = `
+    <div class="masthead">
+      <div class="kicker">COMP433 · Chapter 3 · Interactive walkthrough</div>
+      <h1>Requirements engineering, <em>from need to contract</em>.</h1>
+      <p class="lede">A step-by-step walkthrough that mirrors the lecture flow. We will move a single stakeholder need from elicitation, through user and system requirements, validation, traceability, documentation, and effort estimation. Each step has a small interactive exercise; by the end you will have built one full requirement and seen how the rest of the RE process supports it.</p>
+      <div class="meta">
+        <div class="meta-item"><span>course</span><span>COMP433</span></div>
+        <div class="meta-item"><span>chapter</span><span>3 , Requirements</span></div>
+        <div class="meta-item"><span>running example</span><span>Mentcare</span></div>
+        <div class="meta-item"><span>format</span><span>11 steps · interactive</span></div>
+      </div>
+    </div>
+
+    <div class="prose">
+
+      <h3>How to use this walkthrough</h3>
+      <p>The eleven steps progress in the same order the lecture covers them: requirement layers, categories, goals versus verifiable NFRs, the RE process, elicitation techniques, writing user and system requirements, validation, documentation, and effort estimation. At any point you can click a step in the progress bar above to revisit it.</p>
+      <p>Some terms have small dotted underlines, like ${term("user requirement", "A natural-language statement of what the system must provide, written for the customer to read and confirm.", "متطلب مستخدم")}; hover over them to see a short definition. Interactive exercises track your answers; correct ones are highlighted, mistakes are kept visible so you can compare.</p>
+
+      <h3>The running example: Mentcare</h3>
+      <p>Mentcare is the patient information system used in mental-health clinics that Sommerville's 10th edition uses as its running case study (older editions called it MHC-PMS , the same system). It records patient details, consultations, and treatments; generates reports; talks to a national insurance database; and is operated by receptionists, nurses, doctors, and managers.</p>
+      <p>It is a good teaching system because every category of requirement (functional, non-functional, domain) and every audience for the requirements document (customer, manager, developer, tester, regulator) shows up clearly in it.</p>
+
+      <div class="callout note">
+        <span class="lbl">If you have not read it yet</span>
+        <p>The static <a href="/birzeit/comp433/Ch.3/COMP433_Ch3_Requirements_Engineering_Companion.html">Requirements engineering reference handbook</a> covers the same material in a flat reading layout, with deeper citations. The walkthrough below is the same content in exercise form.</p>
+      </div>
+
+      <h3>What you will produce by the end</h3>
+      <ul>
+        <li>One <strong>user requirement</strong> for a Mentcare service, in the lecturer's style.</li>
+        <li>Several refined <strong>system requirements</strong> derived from it, each traceable back to the user requirement.</li>
+        <li>A <strong>validation</strong> pass over those requirements against the six characteristics.</li>
+        <li>A placement of those requirements in the <strong>SRS document structure</strong>.</li>
+        <li>An <strong>effort estimate</strong> for the requirement, using the course's simplified per-UR method.</li>
+      </ul>
+    </div>
+
+    ${nav("Begin", "Next: the three abstraction layers")}
+  `;
+}
+
+/* ========================================================================
+   STEP ii: THREE LAYERS , classify by audience level
+======================================================================== */
+
+const LAYERS_ITEMS = [
+  { id: "L1", text: "Staff members shall be able to log in to the Mentcare system using a registered username and password.", layer: "user" },
+  { id: "L2", text: "Usernames shall be a minimum of 8 alphanumeric characters and uniquely identify the user.", layer: "system" },
+  { id: "L3", text: "Passwords shall be stored using bcrypt with cost factor at least 12, in a non-reversible form.", layer: "spec" },
+  { id: "L4", text: "Authorised staff (Doctor, Nurse) shall be able to view and edit a patient's medical record.", layer: "user" },
+  { id: "L5", text: "All read or write access to patient records shall be logged with user ID, timestamp, and record ID.", layer: "system" },
+  { id: "L6", text: "The session token shall be a 256-bit cryptographically-random opaque string, stored in an HttpOnly Secure cookie.", layer: "spec" }
+];
+
+function renderLayers(el) {
+  if (!STATE.classified.layers) STATE.classified.layers = {};
+
+  const placed = STATE.classified.layers;
+  const remaining = LAYERS_ITEMS.filter(it => !placed[it.id]);
+  const correctCount = Object.entries(placed).filter(([id, layer]) => LAYERS_ITEMS.find(i => i.id === id).layer === layer).length;
+  const totalPlaced = Object.keys(placed).length;
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">ii.</span><span class="kicker">Three layers</span></div>
+      <h2>Same intent, <em>three audiences</em>, three levels of detail.</h2>
+      <p class="lede">User requirements are written for customers. System requirements are written for both customers (to confirm) and developers (to build). Software specifications are written for developers alone. Each layer trades readability for precision in a known way.</p>
+    </div>
+
+    <div class="prose">
+      <p>${term("Sommerville", "Ian Sommerville, author of the COMP433 reference textbook 'Software Engineering' (10th edition).", "")}'s three-layer model is the working spine of the lecture. Adel's slides use the same model, and so does the structured spec template you will use in your Phase 2 deliverable.</p>
+
+      <div class="three-col">
+        <div>
+          <h4><span class="iconbox">U</span>User requirements</h4>
+          <p>Natural language plus simple tables or diagrams. The customer reads them. No technical jargon, no design choices.</p>
+        </div>
+        <div>
+          <h4><span class="iconbox">S</span>System requirements</h4>
+          <p>Structured natural language. Both customers (to confirm) and developers (to build to) read them. Each UR expands into several SRs.</p>
+        </div>
+        <div>
+          <h4><span class="iconbox">D</span>Software specification</h4>
+          <p>Developer-level detail: programming-language signatures, algorithms, exact thresholds, hash parameters, protocol versions. Customers rarely read this.</p>
+        </div>
+      </div>
+
+      <h3>Try it: classify six Mentcare statements</h3>
+      <p>Drag each card below into the layer it belongs to. If you put one in the wrong bucket, drag it out and try again, or click it to send it back to the pool.</p>
+
+      <div id="layers-pool" class="classify-pool">
+        ${remaining.length === 0 ? '<span style="font-size:13px;color:var(--ink-mute);font-style:italic;">All six placed , see results below.</span>' : remaining.map(it => `<div class="classify-item" draggable="true" data-id="${it.id}" ondragstart="dragStart(event, '${it.id}')">${esc(it.text)}</div>`).join("")}
+      </div>
+
+      <div class="classify-zone">
+        <div class="classify-bucket" data-layer="user" ondragover="event.preventDefault(); this.classList.add('drop-hover');" ondragleave="this.classList.remove('drop-hover');" ondrop="dropLayer(event, 'user')">
+          <div class="bucket-head">User requirement<span class="hint">customer reads &amp; confirms</span></div>
+          ${renderPlaced(placed, "user")}
+        </div>
+        <div class="classify-bucket" data-layer="system" ondragover="event.preventDefault(); this.classList.add('drop-hover');" ondragleave="this.classList.remove('drop-hover');" ondrop="dropLayer(event, 'system')">
+          <div class="bucket-head">System requirement<span class="hint">both audiences</span></div>
+          ${renderPlaced(placed, "system")}
+        </div>
+        <div class="classify-bucket" data-layer="spec" ondragover="event.preventDefault(); this.classList.add('drop-hover');" ondragleave="this.classList.remove('drop-hover');" ondrop="dropLayer(event, 'spec')">
+          <div class="bucket-head">Software specification<span class="hint">developers</span></div>
+          ${renderPlaced(placed, "spec")}
+        </div>
+      </div>
+
+      <div class="classify-feedback">${totalPlaced === LAYERS_ITEMS.length ? `<span class="score">${correctCount} of ${LAYERS_ITEMS.length} correct</span> , the criterion is the audience that needs to verify the statement, not how technical the words look.` : `Placed ${totalPlaced} of ${LAYERS_ITEMS.length}. Drop each item into the layer whose audience needs to read it to confirm scope.`}</div>
+
+      <div class="callout aside">
+        <span class="lbl">A useful rule of thumb</span>
+        <p>If a customer can read a sentence and say "yes, that is what we want", it is a user requirement. If only a developer can confirm correctness (because it involves a specific protocol, library, or algorithm), it is a software specification. Everything in between is a system requirement.</p>
+      </div>
+
+    </div>
+
+    ${nav("Continue", "Next: functional, non-functional, or domain?")}
+  `;
+}
+
+function renderPlaced(placed, layer) {
+  const items = Object.entries(placed).filter(([id, l]) => l === layer);
+  if (items.length === 0) return '<div style="font-size:11px;color:var(--faint);font-style:italic;">drop here</div>';
+  return items.map(([id, l]) => {
+    const it = LAYERS_ITEMS.find(i => i.id === id);
+    const ok = it.layer === l;
+    return `<div class="classify-item ${ok ? "placed-correct" : "placed-wrong"}" onclick="unplaceLayers('${id}')">${esc(it.text)}</div>`;
+  }).join("");
+}
+
+function dragStart(ev, id) { ev.dataTransfer.setData("text/plain", id); }
+function dropLayer(ev, layer) {
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('drop-hover');
+  const id = ev.dataTransfer.getData("text/plain");
+  STATE.classified.layers[id] = layer;
+  renderStep();
+}
+function unplaceLayers(id) { delete STATE.classified.layers[id]; renderStep(); }
+
+/* ========================================================================
+   STEP iii: CATEGORIES , F vs NF vs Domain
+======================================================================== */
+
+const CATEGORIES_ITEMS = [
+  { id: "C1", text: "The Mentcare system shall let an authorised doctor view a patient's full medical record.", cat: "functional" },
+  { id: "C2", text: "The Mentcare system shall be available 99.5% of the time during business hours.", cat: "nonfunc" },
+  { id: "C3", text: "The Mentcare system shall enforce confidentiality rules in accordance with national mental-health-records practices.", cat: "domain" },
+  { id: "C4", text: "The Mentcare system shall generate, each day, for each clinic, a list of patients expected to attend that day.", cat: "functional" },
+  { id: "C5", text: "User-event response time shall not exceed 1.5 seconds at the 95th percentile.", cat: "nonfunc" },
+  { id: "C6", text: "Records of patients flagged as forensic shall be restricted to a named subset of staff per the national clinical-records standard.", cat: "domain" }
+];
+
+function renderCategories(el) {
+  if (!STATE.classified.categories) STATE.classified.categories = {};
+  const placed = STATE.classified.categories;
+  const remaining = CATEGORIES_ITEMS.filter(it => !placed[it.id]);
+  const correctCount = Object.entries(placed).filter(([id, cat]) => CATEGORIES_ITEMS.find(i => i.id === id).cat === cat).length;
+  const totalPlaced = Object.keys(placed).length;
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">iii.</span><span class="kicker">Three categories</span></div>
+      <h2>Functional, non-functional, <em>domain</em>.</h2>
+      <p class="lede">A second classification, orthogonal to the three layers above. Functional requirements describe what the system does. Non-functional requirements describe how well. Domain requirements come from the application area and reflect its rules.</p>
+    </div>
+
+    <div class="prose">
+
+      <div class="three-col">
+        <div>
+          <h4><span class="iconbox">F</span>Functional</h4>
+          <p><strong>What the system does.</strong> Services it provides, how it reacts to inputs, how it behaves in specific situations.</p>
+        </div>
+        <div>
+          <h4><span class="iconbox">N</span>Non-functional</h4>
+          <p><strong>How well it does it.</strong> Performance, reliability, security, usability, portability , and the constraints on how it is developed.</p>
+        </div>
+        <div>
+          <h4><span class="iconbox">D</span>Domain</h4>
+          <p><strong>What the application area demands.</strong> Constraints from the domain itself (medical confidentiality, train braking physics, banking regulation).</p>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <span class="lbl">Why NFRs sometimes matter more than FRs</span>
+        <p>If a functional requirement is missing, the system loses a feature. If a non-functional requirement is missed, the system can become unusable. "An aircraft control system that gives the right output thirty seconds late is not a slow aircraft control system; it is a crashed aircraft."</p>
+      </div>
+
+      <h3>Try it: classify six more Mentcare statements</h3>
+
+      <div id="cat-pool" class="classify-pool">
+        ${remaining.length === 0 ? '<span style="font-size:13px;color:var(--ink-mute);font-style:italic;">All six placed.</span>' : remaining.map(it => `<div class="classify-item" draggable="true" data-id="${it.id}" ondragstart="dragStartCat(event, '${it.id}')">${esc(it.text)}</div>`).join("")}
+      </div>
+
+      <div class="classify-zone">
+        <div class="classify-bucket" data-cat="functional" ondragover="event.preventDefault(); this.classList.add('drop-hover');" ondragleave="this.classList.remove('drop-hover');" ondrop="dropCat(event, 'functional')">
+          <div class="bucket-head">Functional<span class="hint">a service or behaviour</span></div>
+          ${renderPlacedCat(placed, "functional")}
+        </div>
+        <div class="classify-bucket" data-cat="nonfunc" ondragover="event.preventDefault(); this.classList.add('drop-hover');" ondragleave="this.classList.remove('drop-hover');" ondrop="dropCat(event, 'nonfunc')">
+          <div class="bucket-head">Non-functional<span class="hint">a quality threshold</span></div>
+          ${renderPlacedCat(placed, "nonfunc")}
+        </div>
+        <div class="classify-bucket" data-cat="domain" ondragover="event.preventDefault(); this.classList.add('drop-hover');" ondragleave="this.classList.remove('drop-hover');" ondrop="dropCat(event, 'domain')">
+          <div class="bucket-head">Domain<span class="hint">a rule from the application area</span></div>
+          ${renderPlacedCat(placed, "domain")}
+        </div>
+      </div>
+
+      <div class="classify-feedback">${totalPlaced === CATEGORIES_ITEMS.length ? `<span class="score">${correctCount} of ${CATEGORIES_ITEMS.length} correct</span> , domain requirements are the ones most often missed; they read like functional or non-functional but reference an authority outside the system.` : `Placed ${totalPlaced} of ${CATEGORIES_ITEMS.length}.`}</div>
+
+      <h3>NFR sub-classification</h3>
+      <p>Sommerville further classifies non-functional requirements by where they come from. The family determines who you have to negotiate with if it changes.</p>
+
+      <div class="three-col">
+        <div>
+          <h4>Product</h4>
+          <p>The product itself must behave a certain way. Efficiency, dependability, security, usability.</p>
+        </div>
+        <div>
+          <h4>Organisational</h4>
+          <p>From the customer's policies. Mandatory IDE, language, methodology, identity card for authentication.</p>
+        </div>
+        <div>
+          <h4>External</h4>
+          <p>Regulatory, ethical, legislative. GDPR-equivalent privacy, compliance with the Palestinian Personal Data Protection Law.</p>
+        </div>
+      </div>
+
+    </div>
+
+    ${nav("Continue", "Next: turning vague goals into testable NFRs")}
+  `;
+}
+
+function dragStartCat(ev, id) { ev.dataTransfer.setData("text/plain", id); }
+function dropCat(ev, cat) {
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('drop-hover');
+  const id = ev.dataTransfer.getData("text/plain");
+  STATE.classified.categories[id] = cat;
+  renderStep();
+}
+function renderPlacedCat(placed, cat) {
+  const items = Object.entries(placed).filter(([id, c]) => c === cat);
+  if (items.length === 0) return '<div style="font-size:11px;color:var(--faint);font-style:italic;">drop here</div>';
+  return items.map(([id, c]) => {
+    const it = CATEGORIES_ITEMS.find(i => i.id === id);
+    const ok = it.cat === c;
+    return `<div class="classify-item ${ok ? "placed-correct" : "placed-wrong"}" onclick="unplaceCat('${id}')">${esc(it.text)}</div>`;
+  }).join("");
+}
+function unplaceCat(id) { delete STATE.classified.categories[id]; renderStep(); }
+
+/* ========================================================================
+   STEP iv: GOALS → VERIFIABLE NFRs
+======================================================================== */
+
+const GOAL_PAIRS = [
+  {
+    id: "G1",
+    goal: "The Mentcare system should be easy to use by medical staff.",
+    options: [
+      { text: "The Mentcare system shall be intuitive and friendly for medical staff.", verifiable: false, why: "Replaces one vague word with two. Neither has a test." },
+      { text: "Medical staff shall be able to complete all Mentcare functions after four hours of training; after this training, experienced users shall make no more than two errors per hour of system use.", verifiable: true, why: "Names the cohort (experienced users after four hours of training), the measure (errors per hour), and the threshold (two)." },
+      { text: "The Mentcare system shall be modern and use the latest UI components.", verifiable: false, why: "Says nothing about ease of use; talks about implementation choices." }
+    ]
+  },
+  {
+    id: "G2",
+    goal: "Patient information must not leak.",
+    options: [
+      { text: "The Mentcare system shall be secure.", verifiable: false, why: "Restates the goal as a wish. No test." },
+      { text: "The Mentcare system shall protect patient information using the latest security standards.", verifiable: false, why: '"Latest" is undefined and unverifiable; "protect" has no measurable threshold.' },
+      { text: "All client-server traffic shall use TLS 1.3 or above. All read or write access to patient records shall be logged with user ID, timestamp, and record ID. Failed login attempts shall be rate-limited to five per ten minutes per account.", verifiable: true, why: "Three concrete, testable thresholds. Each clause maps to an acceptance test." }
+    ]
+  }
+];
+
+function renderGoals(el) {
+  if (!STATE.goalAnswers) STATE.goalAnswers = {};
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">iv.</span><span class="kicker">Goals → verifiable NFRs</span></div>
+      <h2>A goal is a wish. A verifiable NFR is a <em>contract</em>.</h2>
+      <p class="lede">Vague intentions are useful for direction, but useless as contracts. Converting one into the other is one of the most teachable skills in requirements engineering, because the failure mode (an adjective with no measure) is so easy to recognise once you've seen it.</p>
+    </div>
+
+    <div class="prose">
+
+      <h3>Two Mentcare goals; for each, which rewrite is verifiable?</h3>
+
+      ${GOAL_PAIRS.map((pair, idx) => {
+        const chosen = STATE.goalAnswers[pair.id];
+        return `
+        <div class="multicheck-card">
+          <div class="req">${esc(pair.goal)}<br><span style="color:var(--ink-mute);font-size:12px;font-family:var(--sans);font-style:italic;">A goal: a general intention. Not testable as written.</span></div>
+          <div class="pickone">
+            ${pair.options.map((opt, i) => {
+              let cls = "";
+              if (chosen !== undefined) {
+                if (i === chosen) cls = opt.verifiable ? "correct" : "wrong";
+                else if (opt.verifiable) cls = "correct";
+              }
+              return `<div class="pickone-card ${cls}" onclick="pickGoal('${pair.id}', ${i})"><h5>Option ${String.fromCharCode(65 + i)}</h5><p>${esc(opt.text)}</p></div>`;
+            }).join("")}
+          </div>
+          ${chosen !== undefined ? `<div class="multicheck-feedback ${pair.options[chosen].verifiable ? 'right' : 'wrong'}" style="margin-top:10px;"><strong>${pair.options[chosen].verifiable ? '✓ Correct.' : '✗ Not verifiable.'}</strong> ${esc(pair.options[chosen].why)}</div>` : ''}
+        </div>
+        `;
+      }).join("")}
+
+      <h3>What makes an NFR verifiable</h3>
+      <p>Whatever the property, the rewrite needs three things:</p>
+      <ul>
+        <li><strong>The cohort.</strong> Who is the requirement about? "Experienced users", "first-time users", "the 95th percentile", "all clinics".</li>
+        <li><strong>The measure.</strong> A property that can be observed. Errors per hour, seconds at percentile p, percentage of failed logins, MB of memory.</li>
+        <li><strong>The threshold.</strong> A specific value the system must satisfy. "Under 1.5 seconds", "at least 99.5%", "no more than two".</li>
+      </ul>
+
+      <p>If any of the three is missing, the statement is still a goal. The standard ${term("metrics", "Speed: transactions per second; response time. Size: MB. Ease of use: training time, help frames. Reliability: MTBF, availability. Robustness: time to restart. Portability: percentage of target-dependent statements.", "")} table in the lecture lists the most common measures by property.</p>
+
+    </div>
+
+    ${nav("Continue", "Next: the four sub-processes of RE")}
+  `;
+}
+
+function pickGoal(id, i) { STATE.goalAnswers[id] = i; renderStep(); }
+
+/* ========================================================================
+   STEP v: THE RE PROCESS
+======================================================================== */
+
+function renderProcess(el) {
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">v.</span><span class="kicker">The RE process</span></div>
+      <h2>Four interleaved sub-processes, <em>not a sequence</em>.</h2>
+      <p class="lede">Sommerville's RE process is often drawn as a four-step pipeline. In practice the steps interleave, loop back, and overlap. Knowing the four activities is essential; expecting them to run in order is naïve.</p>
+    </div>
+
+    <div class="prose">
+
+      <div class="three-col" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <div>
+          <h4><span class="iconbox">1</span>Elicitation</h4>
+          <p>Working with stakeholders to discover the application domain, the services the system should provide, and its constraints. The part of RE that cannot be done at your desk.</p>
+        </div>
+        <div>
+          <h4><span class="iconbox">2</span>Analysis</h4>
+          <p>Understanding the implications: classifying, organising, prioritising, negotiating between stakeholders. Output: the agreed specification.</p>
+        </div>
+        <div>
+          <h4><span class="iconbox">3</span>Validation</h4>
+          <p>Checking that the specified requirements actually define the system the customer wants. Six characteristics, three techniques.</p>
+        </div>
+        <div>
+          <h4><span class="iconbox">4</span>Management</h4>
+          <p>Managing change. Real projects discover new requirements after the spec is "frozen"; treating the document as immutable is unrealistic. RE management is what makes change tractable.</p>
+        </div>
+      </div>
+
+      <h3>Why analysis is hard</h3>
+      <p>Four recurring problems show up across industries and project sizes:</p>
+
+      <div class="checklist">
+        <div class="checklist-item"><span class="check-num">1.</span><div class="check-body"><strong>Stakeholders do not know what they want.</strong> They describe what currently exists, not what they need. Their answer to "what should the system do?" tends to describe the current process plus minor frustrations.</div></div>
+        <div class="checklist-item"><span class="check-num">2.</span><div class="check-body"><strong>They use their own language.</strong> Domain vocabulary is dense. Two stakeholders may use the same word for different things, or different words for the same thing. A requirements engineer is also a translator.</div></div>
+        <div class="checklist-item"><span class="check-num">3.</span><div class="check-body"><strong>Different stakeholders conflict.</strong> The doctor wants speed; the auditor wants extensive logging; the receptionist wants minimal data entry. Conflicts are not bugs in the elicitation; they are the work of the analyst.</div></div>
+        <div class="checklist-item"><span class="check-num">4.</span><div class="check-body"><strong>Requirements keep changing.</strong> The business changes while you are analysing. Regulations change. Mergers happen. RE management exists exactly because the spec is never truly frozen.</div></div>
+      </div>
+
+      <div class="callout note">
+        <span class="lbl">For Phase 2 of the project</span>
+        <p>"Requirements analysis" in your project is the step where you take raw interview notes, sort each statement (F / NF / Domain), decide which layer (user or system), write the user requirements, decompose each into system requirements, and apply the six validation characteristics as a sanity check before submission. That sequence is the Phase 2 deliverable.</p>
+      </div>
+
+      <h3>Requirements management, in detail</h3>
+      <p>Before a project begins, three decisions are made about how requirements will be managed:</p>
+
+      <div class="three-col">
+        <div>
+          <h4>Identification</h4>
+          <p>Every requirement gets a unique ID (UR1, SR1.1, ...). The ID is the entry point for traceability across the entire project lifecycle.</p>
+        </div>
+        <div>
+          <h4>Change management</h4>
+          <p>A defined process to assess the impact and cost of a proposed change before accepting it. Often involves a change-control board with both customer and supplier representation.</p>
+        </div>
+        <div>
+          <h4>Tool support</h4>
+          <p>From dedicated tools (DOORS, Jama) to lighter options (spreadsheets, Notion, a simple database). Pick what your team will actually maintain.</p>
+        </div>
+      </div>
+
+    </div>
+
+    ${nav("Continue", "Next: how to elicit requirements in practice")}
+  `;
+}
+
+/* ========================================================================
+   STEP vi: ELICITATION
+======================================================================== */
+
+const ELICIT_CASES = [
+  {
+    id: "EC1",
+    title: "Mentcare clinical workflow",
+    context: "You need to understand how doctors and nurses actually record clinical notes during a consultation. The official policy and the day-to-day practice may differ. There are five clinics across three cities; staff cannot easily be brought together for a single workshop.",
+    options: [
+      { tag: "Closed interviews", correct: false, why: "Closed interviews compare answers across stakeholders but cannot reveal tacit workflow. Staff will describe the policy, not what they actually do." },
+      { tag: "Ethnography", correct: true, why: "Tacit, cooperative work that stakeholders cannot articulate. Spending time inside the clinic, observing, is the only way to surface the actual workflow." },
+      { tag: "Prototyping", correct: false, why: "Prototyping is for getting reactions to a concrete proposal. Here we don't yet know enough about the work to propose anything." }
+    ]
+  },
+  {
+    id: "EC2",
+    title: "Mentcare appointment service",
+    context: "The clinic manager is a strong, articulate stakeholder. She has clear opinions about how appointment booking should work. There is one stakeholder, one short timescale, and the existing process is well documented.",
+    options: [
+      { tag: "Open interview + scenarios", correct: true, why: "A single articulate stakeholder, a well-defined sub-system. Open interview captures her intent; scenarios concretise edge cases." },
+      { tag: "Ethnography", correct: false, why: "Ethnography is expensive in time. Here there's no fragmentation or tacit coordination problem that warrants it." },
+      { tag: "Mathematical specification", correct: false, why: "Mathematical specifications are useful for safety-critical control systems; this is a customer-facing service the manager needs to confirm." }
+    ]
+  }
+];
+
+function renderElicit(el) {
+  if (!STATE.elicitChoice) STATE.elicitChoice = {};
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">vi.</span><span class="kicker">Elicitation</span></div>
+      <h2>Five techniques, <em>chosen by stakeholder structure</em>.</h2>
+      <p class="lede">Requirements do not arrive in an email. They are discovered by working with the people who will use, operate, regulate, or pay for the system. There is no single best technique; the right choice depends on the stakeholders and the nature of the system.</p>
+    </div>
+
+    <div class="prose">
+
+      <div class="body-table-card">
+        <table class="body-table">
+          <thead><tr><th>Technique</th><th>What it looks like</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td>${term("Interviewing", "Open, closed, or focused conversations with stakeholders.", "مقابلة")}</td><td>Formal or informal conversations with stakeholders. Open (exploratory), closed (pre-defined questions), or focused (cluster of stakeholders on a defined topic).</td><td>Stated needs, current systems, building relationships. Most projects start here.</td></tr>
+            <tr><td>${term("Scenarios", "Concrete real-life narratives of how the system is used.", "سيناريوهات")}</td><td>Narrative descriptions of how the system is used, with starting state, normal flow, exceptions, concurrent activities, and end state.</td><td>Making the abstract concrete; surfacing edge cases through reactions.</td></tr>
+            <tr><td>${term("Use cases", "Scenario-based UML technique identifying actors and interactions.", "حالات الاستخدام")}</td><td>UML formalisation of scenarios: actors, use cases, system boundary, include/extend/inherit. Treated in depth in <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html#usecase">Ch.4</a>.</td><td>Capturing all paths through a recurring interaction. Bridge from RE into design.</td></tr>
+            <tr><td>${term("Ethnography", "Observational technique; spend time watching people work.", "إثنوغرافيا")}</td><td>An observer (often with a social-science background) spends time inside the work setting, watching and learning by being present.</td><td>Tacit coordination, fragmented stakeholders, work that no one can articulate.</td></tr>
+            <tr><td>${term("Prototyping", "Build a partial system; let users react to something concrete.", "النمذجة الأولية")}</td><td>Build a partial system (low- or high-fidelity); let stakeholders interact with it and react.</td><td>Surfacing the requirements no review would find: confusing flows, missing affordances, mismatched mental models.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The interview, run well</h3>
+      <p>Most projects start with interviews; running them well is a craft worth practising.</p>
+
+      <div class="checklist">
+        <div class="checklist-item"><span class="check-num">1.</span><div class="check-body">Follow cultural introduction protocols at the start. Build trust before extracting information.</div></div>
+        <div class="checklist-item"><span class="check-num">2.</span><div class="check-body">First meeting: understand the business and its context before getting into specific services.</div></div>
+        <div class="checklist-item"><span class="check-num">3.</span><div class="check-body">Assign a chair. Define an agenda with outcomes; share in advance if possible. Set timescales per item.</div></div>
+        <div class="checklist-item"><span class="check-num">4.</span><div class="check-body">Capture actions and decisions in the meeting itself: who, by when. Summarise verbally at the close.</div></div>
+        <div class="checklist-item"><span class="check-num">5.</span><div class="check-body">Be open-minded: drop pre-conceived ideas about what the system should do. Listen first, propose later.</div></div>
+        <div class="checklist-item"><span class="check-num">6.</span><div class="check-body">Use a springboard: a draft requirement or a low-fidelity prototype is a much better discussion anchor than a blank page.</div></div>
+      </div>
+
+      <h3>Try it: pick the right technique</h3>
+      <p>For each scenario, pick the technique that fits the stakeholder structure.</p>
+
+      ${ELICIT_CASES.map(c => {
+        const choice = STATE.elicitChoice[c.id];
+        return `
+        <div class="multicheck-card">
+          <div class="req"><strong>${esc(c.title)}.</strong> ${esc(c.context)}</div>
+          <div class="pickone">
+            ${c.options.map((opt, i) => {
+              let cls = "";
+              if (choice !== undefined) {
+                if (i === choice) cls = opt.correct ? "correct" : "wrong";
+                else if (opt.correct) cls = "correct";
+              }
+              return `<div class="pickone-card ${cls}" onclick="pickElicit('${c.id}', ${i})"><h5>${esc(opt.tag)}</h5></div>`;
+            }).join("")}
+          </div>
+          ${choice !== undefined ? `<div class="multicheck-feedback ${c.options[choice].correct ? 'right' : 'wrong'}" style="margin-top:10px;"><strong>${c.options[choice].correct ? '✓ Right tool.' : '✗ Not the best fit.'}</strong> ${esc(c.options[choice].why)}</div>` : ''}
+        </div>
+        `;
+      }).join("")}
+
+      <div class="callout aside">
+        <span class="lbl">In practice</span>
+        <p>Real projects use a combination. Interviews to learn the territory, scenarios and use cases to concretise, ethnography on the parts that interviews cannot reach, prototyping to validate. The choice of technique is not "either / or"; it is "in what proportion".</p>
+      </div>
+
+    </div>
+
+    ${nav("Continue", "Next: write a user requirement and decompose it")}
+  `;
+}
+
+function pickElicit(id, i) { STATE.elicitChoice[id] = i; renderStep(); }
+
+/* ========================================================================
+   STEP vii: WRITE (UR -> SRs)
+======================================================================== */
+
+function renderWrite(el) {
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">vii.</span><span class="kicker">Writing requirements</span></div>
+      <h2>From a stakeholder need to <em>five testable obligations</em>.</h2>
+      <p class="lede">A user requirement is the one-sentence summary the customer signs off on. The system requirements are the testable refinements the developer builds and the tester verifies. Both layers stay in the document; the system requirements trace back to the user requirement they refine.</p>
+    </div>
+
+    <div class="prose">
+
+      <h3>The stakeholder need (Mentcare)</h3>
+      <div class="quotebox">
+        <p>"Receptionists at all five clinics should be able to set up new patients in the system. That's the bottleneck right now , we have to phone IT every time we get a referral, and they take a day to set up the account."</p>
+        <span class="source">Clinic manager, Mentcare elicitation interview (paraphrased).</span>
+      </div>
+
+      <h3>From need to user requirement</h3>
+      <p>The need above mixes business pain (waiting for IT) with desired capability (receptionist self-service). The user requirement strips out the pain and states the capability cleanly, in language the customer can confirm.</p>
+
+      <div class="req-card">
+        <span class="id">UR6:</span> Authorised staff (Receptionist, Nurse) shall be able to register a patient and create a patient medical record.
+      </div>
+
+      <p><strong>Why this is good as a user requirement.</strong> One sentence, plain English, names the actor (Authorised staff, with sub-roles), names the goal (register a patient, create the record), no implementation detail, no thresholds. The customer can read it and say "yes, that's what we mean".</p>
+
+      <h3>From user requirement to system requirements</h3>
+      <p>Now the system requirements. Each one is a testable, atomic obligation. Note the numbering: every system requirement carries the user requirement's prefix, which is the foundation of traceability.</p>
+
+      <div class="req-card system">
+        <span class="id">SR6.1:</span> The Mentcare system shall provide a "Create patient record" action accessible only to users whose role is Receptionist or Nurse.
+      </div>
+      <div class="req-card system">
+        <span class="id">SR6.2:</span> The "Create patient record" action shall accept the following mandatory fields: full name, date of birth, national identifier, registering clinic, primary doctor. Records with any mandatory field missing shall be rejected.
+      </div>
+      <div class="req-card system">
+        <span class="id">SR6.3:</span> The system shall reject any attempt to create a record with a national identifier that already exists in the system, and shall offer the existing record for inspection instead.
+      </div>
+      <div class="req-card system">
+        <span class="id">SR6.4:</span> The system shall assign a unique patient identifier on successful creation and shall display it to the receptionist for reference.
+      </div>
+      <div class="req-card system">
+        <span class="id">SR6.5:</span> All creation events shall be written to the audit log with the registering user, the patient identifier, the timestamp, and the registering clinic.
+      </div>
+
+      <p>${term("Trace back", "Each SR points to the UR it refines. The pattern UR# -> SR#.1, SR#.2, ... is the convention used in the lecture and in the Sommerville textbook.", "")}: every SR above includes the prefix "6." for traceability back to UR6. If UR6 is ever revised, the SRs are the immediate impact; the audit logging, the rejection on duplicate, and the role-based access are all derived from one user requirement that the customer signed off on.</p>
+
+      <h3>What did and did not make it into the SRs</h3>
+
+      <div class="two-col">
+        <div>
+          <h4>Made it in</h4>
+          <ul>
+            <li>Role-based access to the action (SR6.1)</li>
+            <li>Mandatory field list (SR6.2)</li>
+            <li>Duplicate detection (SR6.3)</li>
+            <li>Identifier assignment (SR6.4)</li>
+            <li>Audit logging (SR6.5)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Did not make it in (yet)</h4>
+          <ul>
+            <li>The UI design (a form? a wizard? a mobile flow?) , that is a software-specification or design decision.</li>
+            <li>The exact field validation rules (e.g., regex for national identifier) , those belong in the data dictionary or in a separate validation requirement.</li>
+            <li>Performance thresholds for creation , would be a separate NFR, traced to UR6 if relevant.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout note">
+        <span class="lbl">Writing rule</span>
+        <p>Use <strong>shall</strong> for mandatory requirements and <strong>should</strong> for desirable ones. SR6.3's "shall reject any attempt" leaves no room for the developer to soften the rule. If duplicate detection were "desirable but not blocking", we would write "should reject" , the project would still accept a release that didn't enforce it.</p>
+      </div>
+
+    </div>
+
+    ${nav("Continue", "Next: validate the requirements")}
+  `;
+}
+
+/* ========================================================================
+   STEP viii: VALIDATE
+======================================================================== */
+
+const VALIDATE_REQS = [
+  {
+    id: "V1",
+    text: "The system shall be easy to use by staff members.",
+    flaws: ["unambiguity", "verifiability"],
+    why: "\"Easy to use\" has no measure. Without a measurable threshold, the requirement cannot be verified, and reasonable people will interpret it differently."
+  },
+  {
+    id: "V2",
+    text: "Patient lookups shall return within 2 seconds at the 95th percentile, measured at the application layer under nominal load.",
+    flaws: [],
+    why: "Specific cohort (95th percentile), specific measure (seconds at the application layer), specific threshold (2). Verifiable, unambiguous, traceable."
+  },
+  {
+    id: "V3",
+    text: "The system shall be fast and secure.",
+    flaws: ["unambiguity", "verifiability", "atomicity"],
+    why: "Two unrelated NFRs in one sentence (fast, secure), each unverifiable. Split into two requirements, each with a measure and a threshold."
+  },
+  {
+    id: "V4",
+    text: "The Mentcare system shall comply with all relevant medical-records regulations.",
+    flaws: ["unambiguity", "verifiability", "completeness"],
+    why: "Names no specific regulation. \"All relevant\" leaves the supplier guessing. Rewrite to name the regulation explicitly (e.g., HStan-03-2006-priv) and the clauses being implemented."
+  }
+];
+
+function renderValidate(el) {
+  if (!STATE.classified.validate) STATE.classified.validate = {};
+  const checks = STATE.classified.validate;
+  const FLAW_OPTIONS = [
+    { key: "unambiguity", label: "Unambiguous" },
+    { key: "verifiability", label: "Verifiable" },
+    { key: "completeness", label: "Complete" },
+    { key: "consistency", label: "Consistent" },
+    { key: "traceability", label: "Traceable" },
+    { key: "atomicity", label: "Atomic (one requirement per statement)" }
+  ];
+
+  function score(reqId) {
+    const req = VALIDATE_REQS.find(r => r.id === reqId);
+    const userFlaws = checks[reqId] || [];
+    if (req.flaws.length === 0) {
+      return userFlaws.length === 0 ? "✓ correct: no flaws to flag" : `× flagged a flaw that isn't there; the requirement is well-formed.`;
+    }
+    const matched = req.flaws.filter(f => userFlaws.includes(f)).length;
+    const extra = userFlaws.filter(f => !req.flaws.includes(f)).length;
+    if (matched === req.flaws.length && extra === 0) return "✓ correct on all counts";
+    if (matched === req.flaws.length && extra > 0) return `partial: caught the right ${matched} flaws but also flagged ${extra} that don't apply.`;
+    return `partial: caught ${matched} of ${req.flaws.length} flaws.`;
+  }
+
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">viii.</span><span class="kicker">Validation</span></div>
+      <h2>Six characteristics, <em>applied to every requirement</em>.</h2>
+      <p class="lede">Requirements validation asks whether the specified requirements define the system the customer actually wants. It is distinct from verification, which checks whether the system meets the spec. For each requirement, ask the six (sometimes seven) questions.</p>
+    </div>
+
+    <div class="prose">
+
+      <h3>The six characteristics</h3>
+      <div class="body-table-card">
+        <table class="body-table">
+          <thead><tr><th>Characteristic</th><th>The question</th></tr></thead>
+          <tbody>
+            <tr><td>Correctness / Validity</td><td>Does this requirement reflect what the customer actually needs?</td></tr>
+            <tr><td>Unambiguity</td><td>Can it be interpreted in more than one way? If yes, rewrite.</td></tr>
+            <tr><td>Completeness</td><td>Are all the services the customer needs included? Are exception cases described?</td></tr>
+            <tr><td>Consistency</td><td>Does it conflict with any other requirement?</td></tr>
+            <tr><td>Verifiability</td><td>Can it be tested objectively? Is there a measure and a threshold?</td></tr>
+            <tr><td>Traceability</td><td>Does it carry a unique identifier and link to its source and to the design / tests that realise it?</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>A useful seventh is <strong>realism / feasibility</strong>: can the requirement be implemented in the available time, budget, team skills, and technology? An impossible requirement, no matter how desirable, must be revised before the contract is signed.</p>
+
+      <h3>The three techniques</h3>
+      <div class="three-col">
+        <div>
+          <h4>Reviews</h4>
+          <p>Structured walkthrough of the document by stakeholders. Cheap; good for ambiguity and inconsistency. Weak for gaps.</p>
+        </div>
+        <div>
+          <h4>Prototyping</h4>
+          <p>Executable model the customer interacts with. Surfaces requirements no review would find.</p>
+        </div>
+        <div>
+          <h4>Test-case generation</h4>
+          <p>Write an acceptance test against each requirement. If you can't write a test, the requirement is not verifiable.</p>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <span class="lbl">The economic case for validation</span>
+        <p>Boehm's classic finding: a requirements error fixed after release can cost up to 100 times the cost of the same error caught during requirements analysis. Validation is therefore done deliberately, not casually, before sign-off.</p>
+      </div>
+
+      <h3>Try it: flag the flaws in four Mentcare requirements</h3>
+      <p>For each requirement below, tick every characteristic the requirement <em>fails</em>. Some have multiple flaws; one is well-formed and needs nothing ticked.</p>
+
+      ${VALIDATE_REQS.map(req => {
+        const flagged = checks[req.id] || [];
+        const submitted = (req.id + "_submit") in checks;
+        return `
+        <div class="multicheck-card">
+          <div class="req"><span class="id">${esc(req.id)}:</span> ${esc(req.text)}</div>
+          <div class="multicheck-options">
+            ${FLAW_OPTIONS.map(opt => `
+              <label class="${flagged.includes(opt.key) ? 'checked' : ''}">
+                <input type="checkbox" ${flagged.includes(opt.key) ? 'checked' : ''} onclick="toggleFlaw('${req.id}', '${opt.key}')">
+                fails ${esc(opt.label)}
+              </label>
+            `).join("")}
+          </div>
+          <div class="multicheck-actions">
+            <button class="primary" onclick="submitValidate('${req.id}')">Check</button>
+            <span class="multicheck-feedback ${submitted ? (score(req.id).startsWith('✓') ? 'right' : 'wrong') : ''}">${submitted ? score(req.id) + " , " + esc(req.why) : ''}</span>
+          </div>
+        </div>
+        `;
+      }).join("")}
+
+    </div>
+
+    ${nav("Continue", "Next: place the requirement in the SRS document")}
+  `;
+}
+
+function toggleFlaw(reqId, key) {
+  if (!STATE.classified.validate[reqId]) STATE.classified.validate[reqId] = [];
+  const list = STATE.classified.validate[reqId];
+  const idx = list.indexOf(key);
+  if (idx >= 0) list.splice(idx, 1); else list.push(key);
+  delete STATE.classified.validate[reqId + "_submit"];
+  renderStep();
+}
+function submitValidate(reqId) { STATE.classified.validate[reqId + "_submit"] = true; renderStep(); }
+
+/* ========================================================================
+   STEP ix: DOCUMENT
+======================================================================== */
+
+function renderDocument(el) {
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">ix.</span><span class="kicker">Documentation</span></div>
+      <h2>The Software Requirements Specification, <em>section by section</em>.</h2>
+      <p class="lede">The requirements document, often called the SRS, is the agreed statement of what the system shall do. It serves five audiences over the project's lifetime; each section is for a different audience. Knowing what goes where prevents the most common SRS failure: putting everything everywhere.</p>
+    </div>
+
+    <div class="prose">
+
+      <h3>Sommerville's expanded structure (used in COMP433 Phase 2)</h3>
+
+      <div class="srs-map">
+        <div class="row"><span class="nr">1</span><span class="title">Preface</span><span class="what">Expected readership, version history, summary of changes since the last version.</span></div>
+        <div class="row"><span class="nr">2</span><span class="title">Introduction</span><span class="what">The need for the system. Brief description of its functions. How it works with other systems. How it fits into the customer's business objectives.</span></div>
+        <div class="row"><span class="nr">3</span><span class="title">Glossary</span><span class="what">Technical terms used in the document. Do not assume the reader is familiar with the application domain.</span></div>
+        <div class="row"><span class="nr">4</span><span class="title">User requirements definition</span><span class="what">The services provided for the user. Non-functional system requirements are also described here. Plain language, diagrams, no jargon. <strong>UR1, UR2, ...</strong> live here.</span></div>
+        <div class="row"><span class="nr">5</span><span class="title">System architecture</span><span class="what">High-level architecture overview. Distribution of functions across modules. Reused components highlighted.</span></div>
+        <div class="row"><span class="nr">6</span><span class="title">System requirements specification</span><span class="what">Functional and non-functional requirements in detail. <strong>SR1.1, SR1.2, ...</strong> live here. Each SR traces back to its parent UR.</span></div>
+        <div class="row"><span class="nr">7</span><span class="title">System models</span><span class="what">Graphical models showing the relationships between components and the environment. Use case, activity, class, sequence diagrams , see <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html">Ch.4</a>.</span></div>
+        <div class="row"><span class="nr">8</span><span class="title">System evolution</span><span class="what">Anticipated changes due to hardware evolution, changing user needs, evolving regulation. Helps designers avoid over-fitting to today.</span></div>
+        <div class="row"><span class="nr">9</span><span class="title">Appendices and index</span><span class="what">Detailed application-specific information: hardware configurations, database schemas, regulatory references.</span></div>
+      </div>
+
+      <h3>Five audiences, five reading patterns</h3>
+
+      <div class="body-table-card">
+        <table class="body-table">
+          <thead><tr><th>Audience</th><th>What they read most carefully</th></tr></thead>
+          <tbody>
+            <tr><td>System customers</td><td>User requirements definition; preface; introduction. Confirm the system you described is the system they need.</td></tr>
+            <tr><td>Managers</td><td>Preface, introduction, system architecture. Plan budget, schedule, and team. Negotiate scope when needed.</td></tr>
+            <tr><td>System engineers / developers</td><td>System requirements specification; system models; system architecture. Build to the SRs.</td></tr>
+            <tr><td>System test engineers</td><td>System requirements specification. Write acceptance tests against each requirement.</td></tr>
+            <tr><td>System maintenance engineers</td><td>Whole document, when investigating defects. Especially useful: rationale lines next to each requirement.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Writing rules (recap)</h3>
+      <ul>
+        <li>Invent a standard format and use it for every requirement; consistency reduces reading load.</li>
+        <li>Use <strong>shall</strong> for mandatory requirements; <strong>should</strong> for desirable; never mix without intent.</li>
+        <li>Use text highlighting to mark the key part of each requirement (bold the subject; italicise the obligation).</li>
+        <li>Include a rationale for every non-trivial requirement; six months later, you and the maintenance team will be glad of it.</li>
+        <li>Avoid computer jargon in the User requirements definition section; the customer is the audience there.</li>
+      </ul>
+
+      <h3>Where the UR6 / SR6.* go</h3>
+      <p>From the previous step:</p>
+      <ul>
+        <li><strong>UR6</strong> lives in Section 4 , User requirements definition. It's the line the customer signs off.</li>
+        <li><strong>SR6.1 through SR6.5</strong> live in Section 6 , System requirements specification. Each one is traceable back to UR6 by the shared prefix.</li>
+        <li>The audit-log structure (SR6.5) may also reference a separate logging architecture in Section 5, and a logging schema in Section 9 (Appendices).</li>
+      </ul>
+
+      <div class="callout note">
+        <span class="lbl">In practice</span>
+        <p>On a real project the SRS rarely starts complete. The first version is a skeleton; sections fill in as elicitation, analysis, and validation iterate. By Phase 2 of your project, sections 4, 6, and (partially) 5 and 7 should be in good shape; sections 2, 3, 8, 9 are easier to complete late.</p>
+      </div>
+
+    </div>
+
+    ${nav("Continue", "Next: estimate effort with the calculator")}
+  `;
+}
+
+/* ========================================================================
+   STEP x: ESTIMATE
+======================================================================== */
+
+function renderEstimate(el) {
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">x.</span><span class="kicker">Effort estimation</span></div>
+      <h2>From the UR list, <em>to person-weeks and cost</em>.</h2>
+      <p class="lede">Once user requirements are written and validated, the next question the project sponsor will ask is: how long, how much? The course uses a transparent per-UR method that converts the requirements list into person-weeks, schedule time, cost, and a price range. Edit the table below to see how each input drives the bottom line.</p>
+    </div>
+
+    <div class="prose">
+
+      <h3>The method, in one paragraph</h3>
+      <p>For each user requirement, decide two numbers: how many developers can work on it concurrently without stepping on each other, and how many person-weeks of average effort each developer needs. Multiply for the per-UR total; sum across URs for the project total. Apply a schedule buffer (commonly 30%) to absorb holidays, integration, and slack. Multiply by an average weekly salary to get cost. Add a margin range (e.g., 10% to 30%) to get the quote.</p>
+
+      <div class="calc-card">
+        <h4>Effort estimation calculator</h4>
+        <div class="sub">Pre-filled with the worked example from Adel's lecture notes. Edit any cell or parameter; the bottom panel recomputes live.</div>
+
+        <table class="calc-table" id="urTable">
+          <thead>
+            <tr><th>UR</th><th style="width:30%">Description</th><th>Concurrent developers</th><th>Effort per developer (person-weeks)</th><th>Total effort (person-weeks)</th><th></th></tr>
+          </thead>
+          <tbody id="urBody"></tbody>
+        </table>
+
+        <div class="calc-actions">
+          <button class="primary" onclick="addUR()">+ Add requirement</button>
+          <button class="secondary" onclick="resetUR()">Reset to example</button>
+        </div>
+
+        <div class="calc-params">
+          <div><label for="bufPct">Schedule buffer %</label><input type="number" id="bufPct" value="30" min="0" step="1" oninput="recompute()"></div>
+          <div><label for="wkSalary">Weekly salary ($)</label><input type="number" id="wkSalary" value="250" min="0" step="10" oninput="recompute()"></div>
+          <div><label for="minMargin">Min margin %</label><input type="number" id="minMargin" value="10" min="0" step="1" oninput="recompute()"></div>
+          <div><label for="maxMargin">Max margin %</label><input type="number" id="maxMargin" value="30" min="0" step="1" oninput="recompute()"></div>
+        </div>
+
+        <div class="calc-summary">
+          <div class="metric"><span class="lbl">Avg developers per UR</span><span class="val" id="outAvgDev">2.5</span></div>
+          <div class="metric"><span class="lbl">Avg effort per developer</span><span class="val" id="outAvgEff">2<span class="unit">pw</span></span></div>
+          <div class="metric"><span class="lbl">Total effort</span><span class="val" id="outTotEff">17<span class="unit">pw</span></span></div>
+          <div class="metric"><span class="lbl">Schedule w/ buffer</span><span class="val" id="outSched">22<span class="unit">weeks</span></span></div>
+          <div class="metric"><span class="lbl">Cost</span><span class="val">$<span id="outCost">5500</span></span></div>
+          <div class="metric"><span class="lbl">Quoted range</span><span class="val">$<span id="outMinPrice">6050</span><span class="unit">to $<span id="outMaxPrice">7150</span></span></span></div>
+        </div>
+      </div>
+
+      <h3>Where this method sits, among other estimation methods</h3>
+      <p>The course method is bottom-up and transparent. It is one entry in a long literature; you should know what else exists:</p>
+
+      <div class="body-table-card">
+        <table class="body-table">
+          <thead><tr><th>Method</th><th>When it fits</th></tr></thead>
+          <tbody>
+            <tr><td>Course's simplified per-UR method</td><td>Small to medium projects where URs are written before estimation. Adopted for COMP433 Phase 1.</td></tr>
+            <tr><td>COCOMO II (Boehm, 2000)</td><td>Larger projects where size can be estimated in KSLOC or function points. Uses 17 cost drivers.</td></tr>
+            <tr><td>Function points (Albrecht, 1979)</td><td>Information systems where requirements can be counted (inputs, outputs, files, inquiries, interfaces). Platform-independent.</td></tr>
+            <tr><td>Expert judgement / Delphi</td><td>Novel domain or technology where reference data is scarce. Structured aggregation of expert estimates.</td></tr>
+            <tr><td>Planning poker / story points (Cohn, 2005)</td><td>Agile teams estimating user stories continuously. Relative sizing, team consensus.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <span class="lbl">Two observations from the empirical literature</span>
+        <p><strong>No method is reliably accurate in absolute terms.</strong> Industrial studies (Jorgensen and Shepperd, IEEE TSE 2007) report typical errors of plus or minus 30 to 50 percent across major methods. Pick the method whose errors you understand and can revise as the project learns.</p>
+        <p><strong>The estimate that is revised survives.</strong> Methods that produce one number to defend for the project's life fail more often than methods that revise openly. Transparency is the per-UR method's main advantage.</p>
+      </div>
+
+    </div>
+
+    ${nav("Continue", "Next: references and where to go next")}
+  `;
+  setTimeout(() => { calcRender(); recompute(); }, 0);
+}
+
+/* ========================================================================
+   STEP xi: REFERENCE
+======================================================================== */
+
+function renderReference(el) {
+  el.innerHTML = `
+    <div class="sect-head">
+      <div><span class="num">xi.</span><span class="kicker">Reference</span></div>
+      <h2>The journey, the next step, and <em>the citations</em>.</h2>
+      <p class="lede">A short reference to take back into your Phase 2 work. The eleven steps you just walked through map directly to the Phase 2 deliverable; the references below are the standard practitioner and academic sources for each piece.</p>
+    </div>
+
+    <div class="prose">
+
+      <h3>The journey, laid flat</h3>
+      <p>Here is what you just did, in eight lines:</p>
+      <ol>
+        <li>Recognised the three layers (UR, SR, software spec) and the audience for each.</li>
+        <li>Classified six statements into functional, non-functional, and domain categories.</li>
+        <li>Converted a goal into a verifiable NFR by adding a cohort, measure, and threshold.</li>
+        <li>Mapped the four sub-processes of RE: elicitation, analysis, validation, management.</li>
+        <li>Chose elicitation techniques by stakeholder structure.</li>
+        <li>Wrote a user requirement and decomposed it into five system requirements.</li>
+        <li>Applied the six characteristics as a validation pass.</li>
+        <li>Placed the requirements in the SRS document and computed an effort estimate.</li>
+      </ol>
+
+      <h3>Bilingual glossary</h3>
+
+      <div class="three-col">
+        <div><h4>Requirement</h4><p>A description of a system service or constraint, generated during the requirements engineering process. ${term("متطلب", "متطلب", "متطلب")}</p></div>
+        <div><h4>Stakeholder</h4><p>Anyone with a stake in the system: end-user, manager, maintainer, regulator, customer. ${term("صاحب مصلحة", "صاحب مصلحة", "صاحب مصلحة")}</p></div>
+        <div><h4>Elicitation</h4><p>The activity of discovering requirements by working with stakeholders. ${term("استخلاص", "استخلاص", "استخلاص")}</p></div>
+        <div><h4>Validation</h4><p>Checking that the requirements define the system the customer actually wants. ${term("التحقق من الصحة", "التحقق من الصحة", "التحقق من الصحة")}</p></div>
+        <div><h4>Traceability</h4><p>The property of each requirement having a unique identifier and links to its source, design elements, and tests. ${term("القابلية للتتبع", "القابلية للتتبع", "القابلية للتتبع")}</p></div>
+        <div><h4>SRS</h4><p>Software Requirements Specification , the agreed statement of system requirements.${term("وثيقة مواصفات المتطلبات", "وثيقة مواصفات المتطلبات", "وثيقة مواصفات المتطلبات")}</p></div>
+      </div>
+
+      <h3>Next chapter</h3>
+      <div class="callout aside">
+        <span class="lbl">Where this goes next</span>
+        <p>The requirements above generate models: use case diagrams, activity diagrams, class diagrams, sequence diagrams. Chapter 4 of the course takes the UR6 / SR6.* requirements you have here and turns them into accurate UML. Read the <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html"><strong>Chapter 4 companion</strong></a> next, after this walkthrough.</p>
+      </div>
+
+      <h3>References</h3>
+      <div class="refs">
+        <p><strong>Sommerville, I.</strong> (2015). <em>Software Engineering</em>, 10th edition. Pearson. The course textbook. Chapter 4 covers requirements engineering with the Mentcare running example.</p>
+        <p><strong>Wiegers, K. and Beatty, J.</strong> (2013). <em>Software Requirements</em>, 3rd edition. Microsoft Press. The most-cited practitioner handbook.</p>
+        <p><strong>Cockburn, A.</strong> (2001). <em>Writing Effective Use Cases</em>. Addison-Wesley. The use-case-oriented structured-spec template.</p>
+        <p><strong>ISO/IEC/IEEE 29148</strong> (2018). <em>Systems and software engineering, Life cycle processes, Requirements engineering</em>. Current international standard.</p>
+        <p><strong>Boehm, B.</strong> (1981). <em>Software Engineering Economics</em>. Prentice-Hall. Original source of the cost-of-late-fix curve.</p>
+        <p><strong>Boehm, B. et al.</strong> (2000). <em>Software Cost Estimation with COCOMO II</em>. Prentice-Hall.</p>
+        <p><strong>Jorgensen, M. and Shepperd, M.</strong> (2007). A systematic review of software development cost estimation studies. <em>IEEE Transactions on Software Engineering</em>, 33(1), 33-53.</p>
+      </div>
+
+    </div>
+
+    ${nav("Start again", "Walkthrough complete")}
+  `;
+}
+
+/* ========================================================================
+   EFFORT CALCULATOR (shared with the handbook)
+======================================================================== */
+
+const EXAMPLE = [
+  { ur: "UR1", desc: "Account registration",      devs: 2, eff: 2 },
+  { ur: "UR2", desc: "Login & authentication",    devs: 1, eff: 3 },
+  { ur: "UR3", desc: "Patient record management", devs: 3, eff: 2 },
+  { ur: "UR4", desc: "Reporting & exports",       devs: 4, eff: 1 }
+];
+let calcRows = JSON.parse(JSON.stringify(EXAMPLE));
+
+function calcRender() {
+  const body = document.getElementById("urBody");
+  if (!body) return;
+  body.innerHTML = calcRows.map((r, i) => `
+    <tr>
+      <td><input type="text" value="${esc(r.ur)}" oninput="calcRows[${i}].ur=this.value; recompute();"></td>
+      <td><input type="text" value="${esc(r.desc)}" oninput="calcRows[${i}].desc=this.value;"></td>
+      <td><input type="number" min="0" step="1" value="${r.devs}" oninput="calcRows[${i}].devs=parseFloat(this.value)||0; recompute();"></td>
+      <td><input type="number" min="0" step="0.5" value="${r.eff}" oninput="calcRows[${i}].eff=parseFloat(this.value)||0; recompute();"></td>
+      <td><input type="text" readonly class="totalcol" value="${(r.devs*r.eff).toFixed(1)}"></td>
+      <td><button class="x-btn" onclick="calcRemove(${i})" title="Remove">&times;</button></td>
+    </tr>
+  `).join("");
+}
+function addUR() {
+  calcRows.push({ ur: "UR" + (calcRows.length + 1), desc: "", devs: 1, eff: 1 });
+  calcRender();
+  recompute();
+}
+function calcRemove(i) {
+  calcRows.splice(i, 1);
+  if (calcRows.length === 0) calcRows.push({ ur: "UR1", desc: "", devs: 1, eff: 1 });
+  calcRender();
+  recompute();
+}
+function resetUR() {
+  calcRows = JSON.parse(JSON.stringify(EXAMPLE));
+  ["bufPct","wkSalary","minMargin","maxMargin"].forEach((id, idx) => {
+    const v = [30, 250, 10, 30][idx];
+    const el = document.getElementById(id); if (el) el.value = v;
+  });
+  calcRender();
+  recompute();
+}
+function recompute() {
+  const buf = parseFloat(document.getElementById("bufPct")?.value) || 0;
+  const sal = parseFloat(document.getElementById("wkSalary")?.value) || 0;
+  const minM = parseFloat(document.getElementById("minMargin")?.value) || 0;
+  const maxM = parseFloat(document.getElementById("maxMargin")?.value) || 0;
+  const avgDev = calcRows.length ? calcRows.reduce((s, r) => s + (r.devs||0), 0) / calcRows.length : 0;
+  const avgEff = calcRows.length ? calcRows.reduce((s, r) => s + (r.eff||0), 0) / calcRows.length : 0;
+  const tot = calcRows.reduce((s, r) => s + (r.devs||0) * (r.eff||0), 0);
+  const sched = tot * (1 + buf / 100);
+  const cost = sched * sal;
+  const minP = cost * (1 + minM / 100);
+  const maxP = cost * (1 + maxM / 100);
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+  set("outAvgDev", avgDev.toFixed(1));
+  set("outAvgEff", avgEff.toFixed(1) + '<span class="unit">pw</span>');
+  set("outTotEff", tot.toFixed(1) + '<span class="unit">pw</span>');
+  set("outSched", sched.toFixed(1) + '<span class="unit">weeks</span>');
+  const fmt = v => v.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  const cEl = document.getElementById("outCost"); if (cEl) cEl.textContent = fmt(cost);
+  const minEl = document.getElementById("outMinPrice"); if (minEl) minEl.textContent = fmt(minP);
+  const maxEl = document.getElementById("outMaxPrice"); if (maxEl) maxEl.textContent = fmt(maxP);
+  // refresh table totals
+  document.querySelectorAll(".calc-table .totalcol").forEach((c, i) => {
+    if (calcRows[i]) c.value = ((calcRows[i].devs||0) * (calcRows[i].eff||0)).toFixed(1);
+  });
+}
+
+renderProgress();
+renderStep();
+</script>
+
+</body>
+</html>

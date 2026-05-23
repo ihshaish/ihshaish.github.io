@@ -431,111 +431,104 @@
 
     <div class="figure">
       <div class="figure-caption">Figure 2</div>
-      <div class="figure-title">A complete use case diagram: Library system (canonical course example)</div>
-      <svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg">
+      <div class="figure-title">A complete use case diagram: Library system</div>
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <marker id="ext-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker>
+          <marker id="ext-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker>
         </defs>
+
         <!-- System boundary -->
-        <rect x="260" y="40" width="500" height="450" rx="8" class="uml-box" stroke-width="1.8" fill="#faf7f2"/>
-        <text x="510" y="32" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Library System</text>
+        <rect x="220" y="50" width="600" height="380" rx="8" class="uml-box" stroke-width="1.8" fill="#faf7f2"/>
+        <text x="520" y="42" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Library System</text>
 
-        <!-- Use cases (ellipses) -->
-        <ellipse cx="400" cy="100" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="400" y="104" text-anchor="middle" class="uml-text">Borrow copy of a book</text>
+        <!-- Use cases (4 only; clean layout) -->
+        <!-- Top row -->
+        <ellipse cx="370" cy="130" rx="100" ry="28" class="uml-box" fill="white"/>
+        <text x="370" y="134" text-anchor="middle" class="uml-text">Borrow copy of a book</text>
 
-        <ellipse cx="620" cy="100" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="620" y="104" text-anchor="middle" class="uml-text">Renew loan of book</text>
+        <ellipse cx="650" cy="130" rx="100" ry="28" class="uml-box" fill="white"/>
+        <text x="650" y="134" text-anchor="middle" class="uml-text">Compute return date</text>
 
-        <ellipse cx="400" cy="180" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="400" y="184" text-anchor="middle" class="uml-text">Return copy of a book</text>
+        <!-- Middle row -->
+        <ellipse cx="370" cy="240" rx="100" ry="28" class="uml-box" fill="white"/>
+        <text x="370" y="244" text-anchor="middle" class="uml-text">Return copy of a book</text>
 
-        <ellipse cx="620" cy="180" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="620" y="184" text-anchor="middle" class="uml-text">Browse / search books</text>
+        <ellipse cx="650" cy="240" rx="100" ry="28" class="uml-box" fill="white"/>
+        <text x="650" y="244" text-anchor="middle" class="uml-text">Browse / search books</text>
 
-        <ellipse cx="400" cy="260" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="400" y="264" text-anchor="middle" class="uml-text">Pay fine</text>
+        <!-- Lower row -->
+        <ellipse cx="370" cy="350" rx="100" ry="28" class="uml-box" fill="white"/>
+        <text x="370" y="354" text-anchor="middle" class="uml-text">Refuse loan</text>
 
-        <ellipse cx="620" cy="260" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="620" y="264" text-anchor="middle" class="uml-text">Compute return date</text>
+        <ellipse cx="650" cy="350" rx="100" ry="28" class="uml-box" fill="white"/>
+        <text x="650" y="354" text-anchor="middle" class="uml-text">Renew loan of a book</text>
 
-        <ellipse cx="400" cy="340" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="400" y="344" text-anchor="middle" class="uml-text">Refuse loan</text>
-
-        <ellipse cx="620" cy="340" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="620" y="344" text-anchor="middle" class="uml-text">Send reminder by email</text>
-
-        <ellipse cx="510" cy="430" rx="80" ry="26" class="uml-box" fill="white"/>
-        <text x="510" y="434" text-anchor="middle" class="uml-text">Add new books</text>
-
-        <!-- Stick figures: actors -->
-        <g transform="translate(80, 110)">
-          <circle cx="20" cy="6" r="9" class="uml-box" fill="white"/>
-          <line x1="20" y1="15" x2="20" y2="45" class="uml-line"/>
-          <line x1="20" y1="22" x2="5" y2="34" class="uml-line"/>
-          <line x1="20" y1="22" x2="35" y2="34" class="uml-line"/>
-          <line x1="20" y1="45" x2="5" y2="65" class="uml-line"/>
-          <line x1="20" y1="45" x2="35" y2="65" class="uml-line"/>
-          <text x="20" y="86" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">BookBorrower</text>
-          <text x="20" y="100" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(member of library)</text>
+        <!-- Actors on the left (BookBorrower upper, Librarian lower) -->
+        <g transform="translate(60, 110)">
+          <circle cx="20" cy="6" r="8" class="uml-box" fill="white"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line"/>
+          <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">BookBorrower</text>
+          <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(library member)</text>
         </g>
 
-        <g transform="translate(80, 280)">
-          <circle cx="20" cy="6" r="9" class="uml-box" fill="white"/>
-          <line x1="20" y1="15" x2="20" y2="45" class="uml-line"/>
-          <line x1="20" y1="22" x2="5" y2="34" class="uml-line"/>
-          <line x1="20" y1="22" x2="35" y2="34" class="uml-line"/>
-          <line x1="20" y1="45" x2="5" y2="65" class="uml-line"/>
-          <line x1="20" y1="45" x2="35" y2="65" class="uml-line"/>
-          <text x="20" y="86" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Librarian</text>
+        <g transform="translate(60, 320)">
+          <circle cx="20" cy="6" r="8" class="uml-box" fill="white"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line"/>
+          <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Librarian</text>
         </g>
 
-        <g transform="translate(880, 110)">
-          <circle cx="20" cy="6" r="9" class="uml-box" fill="white"/>
-          <line x1="20" y1="15" x2="20" y2="45" class="uml-line"/>
-          <line x1="20" y1="22" x2="5" y2="34" class="uml-line"/>
-          <line x1="20" y1="22" x2="35" y2="34" class="uml-line"/>
-          <line x1="20" y1="45" x2="5" y2="65" class="uml-line"/>
-          <line x1="20" y1="45" x2="35" y2="65" class="uml-line"/>
-          <text x="20" y="86" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Browser</text>
-          <text x="20" y="100" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(public, not member)</text>
+        <!-- Actor on the right -->
+        <g transform="translate(880, 220)">
+          <circle cx="20" cy="6" r="8" class="uml-box" fill="white"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line"/>
+          <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Browser</text>
+          <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(non-member)</text>
         </g>
 
-        <g transform="translate(880, 320)">
-          <circle cx="20" cy="6" r="9" class="uml-box" fill="white"/>
-          <line x1="20" y1="15" x2="20" y2="45" class="uml-line"/>
-          <line x1="20" y1="22" x2="5" y2="34" class="uml-line"/>
-          <line x1="20" y1="22" x2="35" y2="34" class="uml-line"/>
-          <line x1="20" y1="45" x2="5" y2="65" class="uml-line"/>
-          <line x1="20" y1="45" x2="35" y2="65" class="uml-line"/>
-          <text x="20" y="86" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">SystemTimer</text>
-          <text x="20" y="100" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(secondary)</text>
-        </g>
+        <!-- Solid associations (clean: each line goes from actor body edge to nearest ellipse edge) -->
+        <!-- BookBorrower (right arm tip x=94, body y range 110..170) → Borrow (left edge 270, y=130) -->
+        <line x1="94" y1="132" x2="270" y2="130" class="uml-line"/>
+        <!-- BookBorrower → Return (left edge 270, y=240) -->
+        <line x1="94" y1="142" x2="270" y2="240" class="uml-line"/>
+        <!-- BookBorrower → Renew (left edge 550, y=350); routed below midline to avoid Return ellipse -->
+        <line x1="94" y1="152" x2="270" y2="350" class="uml-line"/>
 
-        <!-- Associations actor-usecase -->
-        <line x1="120" y1="135" x2="322" y2="105" class="uml-line"/>
-        <line x1="120" y1="145" x2="322" y2="180" class="uml-line"/>
-        <line x1="120" y1="160" x2="322" y2="260" class="uml-line"/>
-        <line x1="120" y1="160" x2="540" y2="105" class="uml-line"/>
-        <line x1="120" y1="305" x2="478" y2="100" class="uml-line"/>
-        <line x1="120" y1="315" x2="478" y2="180" class="uml-line"/>
-        <line x1="120" y1="335" x2="430" y2="430" class="uml-line"/>
-        <line x1="878" y1="135" x2="700" y2="180" class="uml-line"/>
-        <line x1="878" y1="345" x2="700" y2="340" class="uml-line"/>
+        <!-- Librarian → Borrow -->
+        <line x1="94" y1="338" x2="270" y2="130" class="uml-line"/>
+        <!-- Librarian → Return -->
+        <line x1="94" y1="346" x2="270" y2="240" class="uml-line"/>
+        <!-- Librarian → Refuse loan -->
+        <line x1="94" y1="354" x2="270" y2="350" class="uml-line"/>
 
-        <!-- include arrows (dashed) -->
-        <line x1="478" y1="100" x2="540" y2="260" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
-        <text x="540" y="160" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
+        <!-- Browser → Browse/search -->
+        <line x1="880" y1="246" x2="750" y2="240" class="uml-line"/>
 
-        <line x1="700" y1="100" x2="700" y2="260" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
-        <text x="710" y="180" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
+        <!-- &lt;&lt;include&gt;&gt;: Borrow → Compute return date (horizontal, top row, dashed) -->
+        <line x1="470" y1="130" x2="550" y2="130" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
+        <text x="510" y="122" text-anchor="middle" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
 
-        <!-- extend arrow (dashed) -->
-        <line x1="400" y1="313" x2="400" y2="128" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
-        <text x="320" y="225" class="uml-text-stereo">&lt;&lt;extend&gt;&gt;</text>
-        <text x="270" y="240" class="uml-text-stereo">[too many books]</text>
+        <!-- &lt;&lt;include&gt;&gt;: Renew → Compute return date (routed through the right column then up to top row, dashed) -->
+        <path d="M 650 322 L 650 290 Q 650 280 660 280 L 780 280 Q 800 280 800 260 L 800 165 Q 800 150 790 150 L 715 138" class="uml-line-dashed" fill="none" marker-end="url(#ext-arrow)"/>
+        <text x="800" y="200" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
+
+        <!-- &lt;&lt;extend&gt;&gt;: Refuse loan → Borrow (dashed, extension points UP to base) -->
+        <line x1="370" y1="322" x2="370" y2="158" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
+        <text x="290" y="232" class="uml-text-stereo">&lt;&lt;extend&gt;&gt;</text>
+        <text x="290" y="246" class="uml-text-stereo">[too many books]</text>
       </svg>
-      <div class="figure-note">Conventions in this diagram (all standard): stick figures are actors; ellipses are use cases; the rectangle is the system boundary; solid lines are associations; dashed arrows with stereotypes are <code>&lt;&lt;include&gt;&gt;</code> and <code>&lt;&lt;extend&gt;&gt;</code>. Arrow direction matters and is explained in detail just below.</div>
+      <div class="figure-note">Six use cases inside the Library System boundary. Solid lines are actor-use case associations. The two dashed arrows show the two refinement relationships. The <code>&lt;&lt;include&gt;&gt;</code> arrows go from base to included case ("Borrow" and "Renew" both include "Compute return date"). The <code>&lt;&lt;extend&gt;&gt;</code> arrow goes from the extending case "Refuse loan" up to the base "Borrow copy of a book", with the guard <code>[too many books]</code> next to it.</div>
     </div>
 
     <h3 class="subhead">Actors: principal and secondary</h3>
@@ -597,7 +590,7 @@
     <h3 class="subhead">Multi-level (composite) use cases</h3>
     <p class="body">For larger systems, a single top-level diagram becomes unreadable. The standard pattern is to draw a high-level diagram with composite use cases (each one labelled with a verb phrase like "Manage patient registration"), and to draw a separate first-level diagram for each composite that decomposes it into its constituent use cases. A second-level diagram may decompose a particular first-level use case further, if needed.</p>
 
-    <p class="body">For the MHC-PMS, Adel's notes use this exact pattern: the top-level diagram shows "Manage patient registration", "Manage patient medical record", "Generate reports", and "View patient info"; the "Generate reports" composite is then expanded in a first-level diagram with sub-cases like "Generate admitted patient report" and "Generate discharged patient reports".</p>
+    <p class="body">For the Mentcare system (the same example as in Ch.3), Adel's notes use this exact pattern: the top-level diagram shows "Manage patient registration", "Manage patient medical record", "Generate reports", and "View patient info"; the "Generate reports" composite is then expanded in a first-level diagram with sub-cases like "Generate admitted patient report" and "Generate discharged patient reports".</p>
   </div>
 </section>
 
@@ -684,7 +677,7 @@
 
     <div class="figure">
       <div class="figure-caption">Figure 3</div>
-      <div class="figure-title">Activity diagram with swimlanes: "Collect medical history" (MHC-PMS)</div>
+      <div class="figure-title">Activity diagram with swimlanes: "Collect medical history" (Mentcare)</div>
       <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="act-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker>
@@ -692,90 +685,87 @@
         <!-- Swimlane backgrounds -->
         <rect x="40" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
         <rect x="320" y="40" width="320" height="560" fill="white" stroke="#d8cfc0"/>
-        <rect x="640" y="40" width="320" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
+        <rect x="640" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
         <text x="180" y="64" text-anchor="middle" class="uml-text" font-weight="600">Patient</text>
         <text x="480" y="64" text-anchor="middle" class="uml-text" font-weight="600">Receptionist</text>
-        <text x="800" y="64" text-anchor="middle" class="uml-text" font-weight="600">Nurse</text>
-        <line x1="40" y1="80" x2="960" y2="80" class="uml-line"/>
+        <text x="780" y="64" text-anchor="middle" class="uml-text" font-weight="600">Nurse</text>
+        <line x1="40" y1="80" x2="920" y2="80" class="uml-line"/>
 
-        <!-- Initial -->
+        <!-- ===== Patient lane ===== -->
+        <!-- Initial node -->
         <circle cx="180" cy="110" r="9" fill="#0f1419"/>
-        <line x1="180" y1="119" x2="180" y2="148" class="uml-line" marker-end="url(#act-arrow)"/>
+        <line x1="180" y1="119" x2="180" y2="146" class="uml-line" marker-end="url(#act-arrow)"/>
 
         <!-- Decision: new patient? -->
-        <polygon points="180,150 220,180 180,210 140,180" class="uml-box" fill="white"/>
+        <polygon points="180,150 222,180 180,210 138,180" class="uml-box" fill="white"/>
         <text x="180" y="184" text-anchor="middle" class="uml-text" font-size="11">New patient?</text>
 
-        <!-- Yes path: receptionist creates record -->
-        <line x1="220" y1="180" x2="380" y2="180" class="uml-line" marker-end="url(#act-arrow)"/>
-        <text x="240" y="172" class="uml-text" font-size="11">Yes</text>
-        <rect x="380" y="165" width="160" height="42" rx="22" class="uml-box" fill="white"/>
-        <text x="460" y="190" text-anchor="middle" class="uml-text">Create patient record</text>
+        <!-- ===== Receptionist lane: two branches from Patient's decision ===== -->
+        <!-- [yes] crosses to "Create patient record" -->
+        <line x1="222" y1="180" x2="380" y2="170" class="uml-line" marker-end="url(#act-arrow)"/>
+        <text x="245" y="170" class="uml-text" font-size="11">[yes]</text>
+        <rect x="380" y="148" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+        <text x="480" y="174" text-anchor="middle" class="uml-text">Create patient record</text>
 
-        <!-- No path: receptionist searches -->
-        <line x1="180" y1="210" x2="180" y2="250" class="uml-line"/>
-        <text x="186" y="232" class="uml-text" font-size="11">No</text>
-        <line x1="180" y1="250" x2="460" y2="250" class="uml-line" marker-end="url(#act-arrow)"/>
-        <rect x="380" y="232" width="160" height="42" rx="22" class="uml-box" fill="white"/>
-        <text x="460" y="257" text-anchor="middle" class="uml-text">Search patient record</text>
+        <!-- [no] crosses to "Search patient record" -->
+        <line x1="180" y1="210" x2="180" y2="252" class="uml-line"/>
+        <text x="187" y="232" class="uml-text" font-size="11">[no]</text>
+        <line x1="180" y1="252" x2="380" y2="252" class="uml-line" marker-end="url(#act-arrow)"/>
+        <rect x="380" y="230" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+        <text x="480" y="256" text-anchor="middle" class="uml-text">Search patient record</text>
 
-        <!-- Merge -->
-        <line x1="460" y1="207" x2="460" y2="232" class="uml-line" marker-end="url(#act-arrow)"/>
-        <line x1="460" y1="274" x2="460" y2="305" class="uml-line" marker-end="url(#act-arrow)"/>
+        <!-- Merge node combines the two branches -->
+        <polygon points="480,304 510,322 480,340 450,322" class="uml-box" fill="white"/>
+        <line x1="480" y1="192" x2="480" y2="302" class="uml-line"/>
+        <line x1="480" y1="274" x2="480" y2="302" class="uml-line"/>
 
-        <!-- Action: record personal info -->
-        <rect x="380" y="305" width="160" height="42" rx="22" class="uml-box" fill="white"/>
-        <text x="460" y="330" text-anchor="middle" class="uml-text">Record personal info</text>
+        <!-- Record personal info -->
+        <rect x="380" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+        <text x="480" y="384" text-anchor="middle" class="uml-text">Record personal information</text>
+        <line x1="480" y1="340" x2="480" y2="356" class="uml-line" marker-end="url(#act-arrow)"/>
 
-        <!-- Receptionist passes to nurse -->
-        <line x1="460" y1="347" x2="460" y2="378" class="uml-line"/>
-        <line x1="460" y1="378" x2="800" y2="378" class="uml-line" marker-end="url(#act-arrow)"/>
+        <!-- Hand-off to Nurse: horizontal line -->
+        <line x1="580" y1="380" x2="700" y2="380" class="uml-line" marker-end="url(#act-arrow)"/>
 
-        <!-- Nurse records medical history -->
-        <rect x="700" y="358" width="200" height="42" rx="22" class="uml-box" fill="white"/>
-        <text x="800" y="383" text-anchor="middle" class="uml-text">Record medical history</text>
+        <!-- ===== Nurse lane ===== -->
+        <!-- Record medical history -->
+        <rect x="700" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+        <text x="800" y="384" text-anchor="middle" class="uml-text">Record medical history</text>
 
-        <!-- Decision: patient provides data? -->
-        <polygon points="800,420 850,450 800,480 750,450" class="uml-box" fill="white"/>
-        <text x="800" y="455" text-anchor="middle" class="uml-text" font-size="10">Patient provides data?</text>
-        <line x1="800" y1="400" x2="800" y2="420" class="uml-line" marker-end="url(#act-arrow)"/>
+        <!-- Decision: medication in menu? -->
+        <polygon points="800,420 858,452 800,484 742,452" class="uml-box" fill="white"/>
+        <text x="800" y="450" text-anchor="middle" class="uml-text" font-size="10">Medication in</text>
+        <text x="800" y="462" text-anchor="middle" class="uml-text" font-size="10">menu?</text>
+        <line x1="800" y1="402" x2="800" y2="420" class="uml-line" marker-end="url(#act-arrow)"/>
 
-        <!-- Accepted -->
-        <line x1="850" y1="450" x2="900" y2="450" class="uml-line" marker-end="url(#act-arrow)"/>
-        <text x="858" y="442" class="uml-text" font-size="11">Yes</text>
+        <!-- [found] left branch: Record as code -->
+        <line x1="742" y1="452" x2="700" y2="452" class="uml-line"/>
+        <line x1="700" y1="452" x2="700" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
+        <text x="690" y="445" class="uml-text" font-size="11" text-anchor="end">[found]</text>
+        <rect x="660" y="495" width="120" height="38" rx="19" class="uml-box" fill="white"/>
+        <text x="720" y="519" text-anchor="middle" class="uml-text">Record as code</text>
 
-        <!-- Refused: patient signs exclusion -->
-        <line x1="750" y1="450" x2="180" y2="450" class="uml-line"/>
-        <line x1="180" y1="450" x2="180" y2="490" class="uml-line" marker-end="url(#act-arrow)"/>
-        <text x="700" y="442" class="uml-text" font-size="11">No</text>
-        <rect x="100" y="490" width="160" height="42" rx="22" class="uml-box" fill="white"/>
-        <text x="180" y="515" text-anchor="middle" class="uml-text">Sign exclusion form</text>
+        <!-- [not found] right branch: Record as free text -->
+        <line x1="858" y1="452" x2="900" y2="452" class="uml-line"/>
+        <line x1="900" y1="452" x2="900" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
+        <text x="868" y="445" class="uml-text" font-size="11">[not found]</text>
+        <rect x="820" y="495" width="160" height="38" rx="19" class="uml-box" fill="white"/>
+        <text x="900" y="519" text-anchor="middle" class="uml-text">Record as free text</text>
 
-        <!-- Fork to parallel: code or text -->
-        <line x1="900" y1="450" x2="900" y2="475" class="uml-line"/>
-        <rect x="800" y="475" width="160" height="6" fill="#0f1419"/>
-        <!-- Fork outputs -->
-        <line x1="850" y1="481" x2="850" y2="500" class="uml-line" marker-end="url(#act-arrow)"/>
-        <line x1="910" y1="481" x2="910" y2="500" class="uml-line" marker-end="url(#act-arrow)"/>
-        <rect x="800" y="500" width="100" height="36" rx="18" class="uml-box" fill="white"/>
-        <text x="850" y="523" text-anchor="middle" class="uml-text">Code</text>
-        <rect x="880" y="500" width="80" height="36" rx="18" class="uml-box" fill="white"/>
-        <text x="920" y="523" text-anchor="middle" class="uml-text">Free text</text>
-        <line x1="850" y1="536" x2="850" y2="555" class="uml-line"/>
-        <line x1="920" y1="536" x2="920" y2="555" class="uml-line"/>
-        <rect x="800" y="555" width="160" height="6" fill="#0f1419"/>
-        <line x1="880" y1="561" x2="880" y2="578" class="uml-line" marker-end="url(#act-arrow)"/>
+        <!-- Merge of the two recording branches -->
+        <polygon points="800,548 830,566 800,584 770,566" class="uml-box" fill="white"/>
+        <line x1="720" y1="533" x2="720" y2="555" class="uml-line"/>
+        <line x1="720" y1="555" x2="770" y2="566" class="uml-line"/>
+        <line x1="900" y1="533" x2="900" y2="555" class="uml-line"/>
+        <line x1="900" y1="555" x2="830" y2="566" class="uml-line"/>
 
-        <!-- Final -->
-        <circle cx="880" cy="585" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
-        <circle cx="880" cy="585" r="5" fill="#0f1419"/>
+        <!-- Final node for the main path -->
+        <line x1="800" y1="584" x2="800" y2="592" class="uml-line" marker-end="url(#act-arrow)"/>
+        <circle cx="800" cy="599" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
+        <circle cx="800" cy="599" r="5" fill="#0f1419"/>
 
-        <!-- Patient sign final -->
-        <line x1="180" y1="532" x2="180" y2="578" class="uml-line" marker-end="url(#act-arrow)"/>
-        <circle cx="180" cy="585" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
-        <circle cx="180" cy="585" r="5" fill="#0f1419"/>
       </svg>
-      <div class="figure-note">The diagram shows the activity flow across three actors. The fork (thick horizontal bar) just before the end shows that "code" and "free text" recording can happen in parallel, and the matching join requires both before the activity ends. Decisions (diamonds) have guards in square brackets, here "yes / no".</div>
+      <div class="figure-note">The diagram shows the activity flow across three swimlanes. Two decision diamonds (with guards in square brackets) split the flow into mutually exclusive branches; matching merge diamonds rejoin them before the next action. The flow starts at the filled black circle in the Patient lane and ends at the bull's-eye in the Nurse lane.</div>
     </div>
 
     <h3 class="subhead">When to draw an activity diagram</h3>
@@ -857,81 +847,71 @@
     <div class="figure">
       <div class="figure-caption">Figure 5</div>
       <div class="figure-title">Class diagram with associations, multiplicity, generalisation, and aggregation (Library)</div>
-      <svg viewBox="0 0 1050 560" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 940 580" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <marker id="gen-arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 12 6 L 0 12 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker>
-          <marker id="agg-diamond" viewBox="0 0 14 12" refX="13" refY="6" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 6 L 7 0 L 14 6 L 7 12 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker>
+          <marker id="gen-arrow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker>
         </defs>
-        <!-- LibraryMember -->
-        <rect x="60" y="60" width="180" height="100" class="uml-box" fill="white"/>
-        <text x="150" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
-        <line x1="60" y1="96" x2="240" y2="96" class="uml-line"/>
-        <text x="72" y="116" class="uml-text-mono">+ memberId: String</text>
-        <text x="72" y="134" class="uml-text-mono">+ name: String</text>
-        <line x1="60" y1="148" x2="240" y2="148" class="uml-line"/>
 
-        <!-- StaffMember inherits from LibraryMember -->
-        <rect x="60" y="280" width="180" height="80" class="uml-box" fill="white"/>
-        <text x="150" y="304" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
-        <line x1="60" y1="316" x2="240" y2="316" class="uml-line"/>
-        <text x="72" y="336" class="uml-text-mono">+ department: String</text>
-        <text x="72" y="352" class="uml-text-mono">+ role: String</text>
+        <!-- LibraryMember (top-left) -->
+        <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
+        <text x="160" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+        <line x1="60" y1="96" x2="260" y2="96" class="uml-line"/>
+        <text x="74" y="116" class="uml-text-mono">+ memberId: String</text>
+        <text x="74" y="134" class="uml-text-mono">+ name: String</text>
+        <line x1="60" y1="148" x2="260" y2="148" class="uml-line"/>
+        <text x="74" y="166" class="uml-text-mono">+ register()</text>
 
-        <!-- Generalisation arrow -->
-        <line x1="150" y1="280" x2="150" y2="160" class="uml-line" marker-end="url(#gen-arrow)"/>
+        <!-- StaffMember (bottom-left), generalisation of LibraryMember -->
+        <rect x="60" y="320" width="200" height="100" class="uml-box" fill="white"/>
+        <text x="160" y="344" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
+        <line x1="60" y1="356" x2="260" y2="356" class="uml-line"/>
+        <text x="74" y="376" class="uml-text-mono">+ department: String</text>
+        <text x="74" y="394" class="uml-text-mono">+ role: String</text>
 
-        <!-- Book -->
-        <rect x="430" y="60" width="180" height="100" class="uml-box" fill="white"/>
-        <text x="520" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
-        <line x1="430" y1="96" x2="610" y2="96" class="uml-line"/>
-        <text x="442" y="116" class="uml-text-mono">+ ISBN: String</text>
-        <text x="442" y="134" class="uml-text-mono">+ title: String</text>
-        <line x1="430" y1="148" x2="610" y2="148" class="uml-line"/>
+        <!-- Generalisation arrow: StaffMember -> LibraryMember -->
+        <line x1="160" y1="320" x2="160" y2="170" class="uml-line" marker-end="url(#gen-arrow)"/>
 
-        <!-- BookCopy -->
-        <rect x="430" y="240" width="180" height="100" class="uml-box" fill="white"/>
-        <text x="520" y="264" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
-        <line x1="430" y1="276" x2="610" y2="276" class="uml-line"/>
-        <text x="442" y="296" class="uml-text-mono">+ barcode: String</text>
-        <text x="442" y="314" class="uml-text-mono">+ status: LoanStatus</text>
+        <!-- Book (top-right) -->
+        <rect x="540" y="60" width="200" height="110" class="uml-box" fill="white"/>
+        <text x="640" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+        <line x1="540" y1="96" x2="740" y2="96" class="uml-line"/>
+        <text x="554" y="116" class="uml-text-mono">+ ISBN: String</text>
+        <text x="554" y="134" class="uml-text-mono">+ title: String</text>
+        <line x1="540" y1="148" x2="740" y2="148" class="uml-line"/>
+        <text x="554" y="166" class="uml-text-mono">+ catalog()</text>
 
-        <!-- Aggregation Book <>--- BookCopy -->
-        <line x1="520" y1="160" x2="520" y2="240" class="uml-line" marker-start="url(#agg-diamond)"/>
-        <text x="528" y="180" class="uml-text-mono" font-size="10">1</text>
-        <text x="528" y="232" class="uml-text-mono" font-size="10">1..*</text>
-        <text x="540" y="200" class="uml-text-italic" font-size="11">has copies</text>
+        <!-- BookCopy (bottom-right) -->
+        <rect x="540" y="320" width="200" height="100" class="uml-box" fill="white"/>
+        <text x="640" y="344" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+        <line x1="540" y1="356" x2="740" y2="356" class="uml-line"/>
+        <text x="554" y="376" class="uml-text-mono">+ barcode: String</text>
+        <text x="554" y="394" class="uml-text-mono">+ status: LoanStatus</text>
 
-        <!-- LibraryMember borrows BookCopy -->
-        <line x1="240" y1="120" x2="430" y2="290" class="uml-line"/>
-        <text x="260" y="116" class="uml-text-mono" font-size="10">0..1</text>
-        <text x="408" y="296" class="uml-text-mono" font-size="10">0..6</text>
-        <text x="310" y="190" class="uml-text-italic" font-size="11">borrows / returns</text>
+        <!-- Aggregation: Book <>--- BookCopy. Diamond drawn explicitly at the Book end. -->
+        <line x1="640" y1="200" x2="640" y2="320" class="uml-line"/>
+        <polygon points="640,170 654,185 640,200 626,185" fill="white" stroke="#2c3540" stroke-width="1.4"/>
+        <text x="650" y="220" class="uml-text-mono" font-size="11">1</text>
+        <text x="650" y="312" class="uml-text-mono" font-size="11">1..*</text>
+        <text x="650" y="260" class="uml-text-italic" font-size="11">has copies</text>
 
-        <!-- Journal -->
-        <rect x="800" y="60" width="180" height="100" class="uml-box" fill="white"/>
-        <text x="890" y="84" text-anchor="middle" class="uml-text" font-weight="700">Journal</text>
-        <line x1="800" y1="96" x2="980" y2="96" class="uml-line"/>
-        <text x="812" y="116" class="uml-text-mono">+ ISSN: String</text>
-        <text x="812" y="134" class="uml-text-mono">+ title: String</text>
-        <line x1="800" y1="148" x2="980" y2="148" class="uml-line"/>
+        <!-- Association: LibraryMember borrows BookCopy (clean diagonal, no crossings) -->
+        <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
+        <text x="270" y="116" class="uml-text-mono" font-size="11">0..1</text>
+        <text x="520" y="376" class="uml-text-mono" font-size="11">0..6</text>
+        <text x="340" y="208" class="uml-text-italic" font-size="11">borrows / returns</text>
 
-        <!-- StaffMember borrows Journal -->
-        <line x1="240" y1="335" x2="800" y2="110" class="uml-line"/>
-        <text x="280" y="328" class="uml-text-mono" font-size="10">0..1</text>
-        <text x="770" y="100" class="uml-text-mono" font-size="10">0..12</text>
-        <text x="500" y="430" class="uml-text-italic" font-size="11">borrows / returns (staff only)</text>
-
-        <!-- Loan association class -->
-        <rect x="280" y="430" width="160" height="80" class="uml-box" fill="#faf7f2" stroke-dasharray="2,2"/>
-        <text x="360" y="454" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
-        <line x1="280" y1="466" x2="440" y2="466" class="uml-line"/>
-        <text x="292" y="486" class="uml-text-mono">+ startDate: Date</text>
-        <text x="292" y="502" class="uml-text-mono">+ returnDate: Date</text>
-
-        <line x1="360" y1="430" x2="360" y2="220" class="uml-line-dashed"/>
+        <!-- Loan association class (dashed link to the midpoint of the borrows line) -->
+        <!-- Midpoint of (260,120)-(540,360) is (400, 240) -->
+        <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
+        <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
+        <text x="400" y="484" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
+        <line x1="310" y1="496" x2="490" y2="496" class="uml-line"/>
+        <text x="324" y="516" class="uml-text-mono">+ startDate: Date</text>
+        <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
+        <text x="324" y="552" class="uml-text-mono">+ extend(): void</text>
 
       </svg>
-      <div class="figure-note">Five relationship types are shown: <strong>generalisation</strong> (StaffMember &rarr; LibraryMember; closed triangle on the parent), <strong>aggregation</strong> (Book contains BookCopy; open diamond on the whole), <strong>association</strong> with multiplicity (LibraryMember borrows BookCopy; 0..1 to 0..6), and an <strong>association class</strong> (Loan, attached to the borrows association with a dashed line). The directed arrow on the association indicates navigability when needed.</div>
+      <div class="figure-note">Four relationships are shown: <strong>generalisation</strong> (StaffMember &rarr; LibraryMember; closed triangle pointing at the parent), <strong>aggregation</strong> (Book contains BookCopy; open diamond at the whole), <strong>association</strong> with multiplicity (LibraryMember borrows BookCopy; 0..1 to 0..6), and an <strong>association class</strong> (Loan; attached to the borrows association line with a dashed link at the line's midpoint).</div>
     </div>
 
     <h3 class="subhead">Multiplicity, in detail</h3>
@@ -1029,54 +1009,53 @@
         <line x1="860" y1="76" x2="860" y2="560" class="uml-line-dashed"/>
 
         <!-- Activations -->
-        <rect x="105" y="110" width="10" height="380" fill="#d6e0e8" stroke="#2c5f7c"/>
-        <rect x="345" y="120" width="10" height="360" fill="#d6e0e8" stroke="#2c5f7c"/>
-        <rect x="585" y="160" width="10" height="80" fill="#d6e0e8" stroke="#2c5f7c"/>
-        <rect x="855" y="280" width="10" height="120" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <rect x="105" y="110" width="10" height="420" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <rect x="345" y="120" width="10" height="410" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <rect x="585" y="160" width="10" height="220" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <rect x="855" y="240" width="10" height="80" fill="#d6e0e8" stroke="#2c5f7c"/>
 
-        <!-- 1: requestView -->
+        <!-- 1: requestView (Doctor -> UI) -->
         <line x1="115" y1="120" x2="345" y2="120" class="uml-line" marker-end="url(#seq-arrow)"/>
         <text x="230" y="113" text-anchor="middle" class="uml-text" font-size="11">1: requestView(patientId)</text>
 
-        <!-- 2: authenticate -->
+        <!-- 2: authenticate (UI -> AuthService) -->
         <line x1="355" y1="160" x2="585" y2="160" class="uml-line" marker-end="url(#seq-arrow)"/>
         <text x="470" y="153" text-anchor="middle" class="uml-text" font-size="11">2: authenticate(token)</text>
 
-        <!-- Alt fragment -->
-        <rect x="40" y="200" width="920" height="240" fill="none" stroke="#2c5f7c" stroke-width="1.2"/>
-        <rect x="40" y="200" width="60" height="22" fill="#d6e0e8" stroke="#2c5f7c"/>
-        <text x="70" y="216" text-anchor="middle" class="uml-text-mono" font-size="10" font-weight="600">alt</text>
-        <text x="120" y="216" class="uml-text-mono" font-size="10">[authorised]</text>
+        <!-- Alt fragment, encloses both branches -->
+        <rect x="60" y="190" width="900" height="320" fill="none" stroke="#2c5f7c" stroke-width="1.4"/>
+        <rect x="60" y="190" width="64" height="24" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.4"/>
+        <text x="92" y="206" text-anchor="middle" class="uml-text-mono" font-size="10" font-weight="600">alt</text>
+        <text x="140" y="208" class="uml-text-mono" font-size="11">[authorised]</text>
 
-        <!-- 3: authorised return -->
+        <!-- 3a: return true (AuthService -> UI) -->
         <line x1="585" y1="240" x2="355" y2="240" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
-        <text x="470" y="232" text-anchor="middle" class="uml-text" font-size="11">3: authorised = true</text>
+        <text x="470" y="232" text-anchor="middle" class="uml-text" font-size="11">3: return authorised = true</text>
 
-        <!-- 4: fetch -->
+        <!-- 4a: fetchRecord (UI -> PatientRec) -->
         <line x1="355" y1="280" x2="855" y2="280" class="uml-line" marker-end="url(#seq-arrow)"/>
         <text x="600" y="272" text-anchor="middle" class="uml-text" font-size="11">4: fetchRecord(patientId)</text>
 
-        <!-- 5: record return -->
-        <line x1="855" y1="400" x2="355" y2="400" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
-        <text x="600" y="392" text-anchor="middle" class="uml-text" font-size="11">5: record</text>
+        <!-- 5a: return record (PatientRec -> UI) -->
+        <line x1="855" y1="320" x2="355" y2="320" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
+        <text x="600" y="312" text-anchor="middle" class="uml-text" font-size="11">5: return record</text>
 
-        <!-- Divider for else -->
-        <line x1="40" y1="340" x2="960" y2="340" stroke="#2c5f7c" stroke-dasharray="6,4"/>
-        <text x="120" y="356" class="uml-text-mono" font-size="10">[else]</text>
+        <!-- 6a: display (UI -> Doctor) -->
+        <line x1="345" y1="360" x2="115" y2="360" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
+        <text x="230" y="352" text-anchor="middle" class="uml-text" font-size="11">6: display(record)</text>
 
-        <!-- 6: deny -->
-        <line x1="585" y1="380" x2="355" y2="380" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
-        <text x="470" y="372" text-anchor="middle" class="uml-text" font-size="11">6: authorised = false</text>
+        <!-- Divider for [else] branch -->
+        <line x1="60" y1="390" x2="960" y2="390" stroke="#2c5f7c" stroke-dasharray="6,4" stroke-width="1.4"/>
+        <text x="140" y="408" class="uml-text-mono" font-size="11">[else]</text>
 
-        <!-- 7: showError -->
-        <line x1="350" y1="420" x2="115" y2="420" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
-        <text x="230" y="412" text-anchor="middle" class="uml-text" font-size="11">7: showError("not authorised")</text>
+        <!-- 3b: return false (AuthService -> UI) -->
+        <line x1="585" y1="430" x2="355" y2="430" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
+        <text x="470" y="422" text-anchor="middle" class="uml-text" font-size="11">3': return authorised = false</text>
 
-        <!-- End: display record (after alt) -->
-        <line x1="350" y1="470" x2="115" y2="470" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
-        <text x="230" y="462" text-anchor="middle" class="uml-text" font-size="11">8: display(record) [if authorised]</text>
+        <!-- 4b: showError (UI -> Doctor) -->
+        <line x1="345" y1="475" x2="115" y2="475" class="uml-line-dashed" marker-end="url(#seq-arrow-open)"/>
+        <text x="230" y="467" text-anchor="middle" class="uml-text" font-size="11">4': showError("not authorised")</text>
 
-        <!-- Final returns and end of activation rectangles -->
       </svg>
       <div class="figure-note">The <code>alt</code> fragment encloses two alternative behaviours separated by a horizontal dashed line. The guard in square brackets after each branch label indicates which one fires. Solid arrows are synchronous calls; dashed arrows with open heads are returns.</div>
     </div>
@@ -1299,53 +1278,63 @@
         <defs>
           <marker id="cmp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker>
         </defs>
-        <!-- Order component -->
-        <rect x="60" y="120" width="220" height="90" class="uml-box" fill="white"/>
-        <text x="170" y="148" text-anchor="middle" class="uml-text" font-weight="600">Order</text>
-        <text x="170" y="170" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
-        <!-- component icon -->
-        <rect x="252" y="128" width="20" height="14" fill="white" stroke="#2c3540" stroke-width="1.2"/>
-        <rect x="248" y="132" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
-        <rect x="248" y="142" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+        <!-- Order component (left) -->
+        <rect x="60" y="120" width="240" height="100" class="uml-box" fill="white"/>
+        <text x="180" y="150" text-anchor="middle" class="uml-text" font-weight="600">Order</text>
+        <text x="180" y="170" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <!-- Component icon (top-right corner of the box) -->
+        <g transform="translate(266, 128)">
+          <rect x="0" y="6" width="22" height="14" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+          <rect x="-4" y="9" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+          <rect x="-4" y="14" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+        </g>
 
-        <!-- CustomerRepository -->
+        <!-- CustomerRepository (top right) -->
         <rect x="700" y="60" width="240" height="90" class="uml-box" fill="white"/>
-        <text x="820" y="88" text-anchor="middle" class="uml-text" font-weight="600">CustomerRepository</text>
+        <text x="820" y="90" text-anchor="middle" class="uml-text" font-weight="600">CustomerRepository</text>
         <text x="820" y="110" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <g transform="translate(906, 68)">
+          <rect x="0" y="6" width="22" height="14" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+          <rect x="-4" y="9" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+          <rect x="-4" y="14" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+        </g>
 
-        <!-- Inventory -->
+        <!-- Inventory (bottom right) -->
         <rect x="700" y="200" width="240" height="90" class="uml-box" fill="white"/>
-        <text x="820" y="228" text-anchor="middle" class="uml-text" font-weight="600">Inventory</text>
+        <text x="820" y="230" text-anchor="middle" class="uml-text" font-weight="600">Inventory</text>
         <text x="820" y="250" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <g transform="translate(906, 208)">
+          <rect x="0" y="6" width="22" height="14" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+          <rect x="-4" y="9" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+          <rect x="-4" y="14" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/>
+        </g>
 
-        <!-- Required socket on Order for CustomerLookup -->
-        <path d="M 280 140 A 10 10 0 0 0 280 160" class="uml-line" fill="none"/>
-        <line x1="280" y1="140" x2="320" y2="140" class="uml-line"/>
-        <line x1="280" y1="160" x2="320" y2="160" class="uml-line"/>
+        <!-- Required interface (socket) on Order for CustomerLookup. Stem outward then "(" half-circle. -->
+        <line x1="300" y1="150" x2="316" y2="150" class="uml-line"/>
+        <path d="M 316 138 A 12 12 0 0 1 316 162" class="uml-line" fill="none"/>
 
-        <!-- Provided lollipop on CustomerRepository for CustomerLookup -->
-        <line x1="700" y1="105" x2="680" y2="105" class="uml-line"/>
-        <circle cx="660" cy="105" r="10" class="uml-line" fill="white"/>
+        <!-- Provided interface (lollipop) on CustomerRepository for CustomerLookup -->
+        <line x1="700" y1="105" x2="678" y2="105" class="uml-line"/>
+        <circle cx="668" cy="105" r="10" class="uml-line" fill="white"/>
 
-        <!-- assembly between socket and lollipop -->
-        <line x1="320" y1="150" x2="650" y2="105" class="uml-line"/>
-        <text x="430" y="120" class="uml-text-mono" font-size="11">CustomerLookup</text>
+        <!-- Assembly: dashed dependency from Order's socket area toward CustomerRepository's lollipop -->
+        <path d="M 328 150 L 460 130 L 660 110" class="uml-line-dashed" fill="none"/>
+        <text x="500" y="120" text-anchor="middle" class="uml-text-mono" font-size="11">CustomerLookup</text>
 
-        <!-- Required socket on Order for ProductLookup -->
-        <path d="M 280 180 A 10 10 0 0 0 280 200" class="uml-line" fill="none"/>
-        <line x1="280" y1="180" x2="320" y2="180" class="uml-line"/>
-        <line x1="280" y1="200" x2="320" y2="200" class="uml-line"/>
+        <!-- Required interface (socket) on Order for ProductLookup -->
+        <line x1="300" y1="190" x2="316" y2="190" class="uml-line"/>
+        <path d="M 316 178 A 12 12 0 0 1 316 202" class="uml-line" fill="none"/>
 
-        <!-- Provided lollipop on Inventory for ProductLookup -->
-        <line x1="700" y1="245" x2="680" y2="245" class="uml-line"/>
-        <circle cx="660" cy="245" r="10" class="uml-line" fill="white"/>
+        <!-- Provided interface (lollipop) on Inventory for ProductLookup -->
+        <line x1="700" y1="245" x2="678" y2="245" class="uml-line"/>
+        <circle cx="668" cy="245" r="10" class="uml-line" fill="white"/>
 
-        <line x1="320" y1="190" x2="650" y2="245" class="uml-line"/>
-        <text x="430" y="226" class="uml-text-mono" font-size="11">ProductLookup</text>
+        <!-- Assembly from Order to Inventory lollipop -->
+        <path d="M 328 190 L 460 220 L 660 240" class="uml-line-dashed" fill="none"/>
+        <text x="500" y="232" text-anchor="middle" class="uml-text-mono" font-size="11">ProductLookup</text>
 
-        <!-- Note -->
-        <text x="60" y="40" class="uml-text" font-size="11" fill="#5a6473" font-style="italic">Sockets on Order = required interfaces; lollipops on the right = provided interfaces.</text>
-        <text x="60" y="58" class="uml-text" font-size="11" fill="#5a6473" font-style="italic">Order needs CustomerLookup and ProductLookup; CustomerRepository and Inventory provide them.</text>
+        <!-- Legend -->
+        <text x="60" y="324" class="uml-text" font-size="11" fill="#5a6473" font-style="italic">Sockets ("(" on Order) = required interfaces. Lollipops (●) on the right = provided interfaces. Dashed dependency arrows connect a required-provided pair with the interface name as the label.</text>
       </svg>
       <div class="figure-note">Components with <code>&lt;&lt;component&gt;&gt;</code> stereotype and the small component icon (the two-rectangle glyph). Lollipop-and-socket notation makes the dependency between Order and the other two components explicit.</div>
     </div>
@@ -1483,7 +1472,7 @@
 
     <h3 class="subhead-small">Course material</h3>
     <div class="ref-list">
-      <div class="ref"><strong>Taweel, A.</strong> (2025/26). <em>COMP433 Software Engineering: Unified Modelling Language (Chapter 4)</em>. Birzeit University lecture notes. <em>The primary course source; the running examples (Library system, MHC-PMS), the diagram taxonomy, and the modelling conventions in this companion follow Adel's notes directly.</em></div>
+      <div class="ref"><strong>Taweel, A.</strong> (2025/26). <em>COMP433 Software Engineering: Unified Modelling Language (Chapter 4)</em>. Birzeit University lecture notes. <em>The primary course source; the running examples (Library system, Mentcare), the diagram taxonomy, and the modelling conventions in this companion follow Adel's notes directly.</em></div>
       <div class="ref"><strong>Sommerville, I.</strong> (2015). <em>Software Engineering</em> (10th ed.). Pearson. <em>Chapter 5 on System Modelling is the textbook treatment of the four model families (context, interaction, structural, behavioural) and the standard reference for the diagrams discussed here.</em></div>
     </div>
 
