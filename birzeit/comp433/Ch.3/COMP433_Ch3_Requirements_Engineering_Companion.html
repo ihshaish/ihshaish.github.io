@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Requirements Engineering: theory and practice · COMP433 · Chapter 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1419;
+    --ink-soft: #2c3540;
+    --ink-mute: #5a6473;
+    --paper: #faf7f2;
+    --paper-warm: #f3ede2;
+    --paper-deep: #ebe2d1;
+    --accent: #b85c38;
+    --accent-deep: #7a3a23;
+    --steel: #2c5f7c;
+    --steel-soft: #d6e0e8;
+    --steel-deep: #1a3d52;
+    --moss: #4a6b3a;
+    --moss-soft: #e0e8d8;
+    --gold: #c9a961;
+    --rule: #d8cfc0;
+    --rule-soft: #ebe2d1;
+    --shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px rgba(15,20,25,0.06);
+    --shadow-lg: 0 4px 12px rgba(15,20,25,0.08), 0 24px 48px rgba(15,20,25,0.10);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter Tight', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
+      radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
+    min-height: 100vh;
+  }
+
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,0.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 0; }
+  .topbar-inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { font-family: var(--serif); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 5px; background: linear-gradient(135deg, var(--steel) 0%, var(--accent) 100%); display: inline-block; box-shadow: 0 2px 6px rgba(184,92,56,0.25); }
+  .nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .nav a { color: var(--ink-soft); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 999px; transition: all 0.15s; }
+  .nav a:hover { background: var(--paper-warm); color: var(--ink); }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 80px 32px 60px; position: relative; }
+  .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+  .hero-eyebrow::before { content: ''; flex-shrink: 0; width: 32px; height: 1px; background: var(--accent); }
+  .hero-eyebrow::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: var(--accent); }
+  .hero h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(38px, 6.2vw, 72px); line-height: 1.02; letter-spacing: -0.03em; margin-bottom: 28px; font-variation-settings: "opsz" 144; max-width: 1100px; }
+  .hero h1 em { font-style: italic; color: var(--accent); font-variation-settings: "opsz" 144, "wght" 400; }
+  .hero-lede { font-size: 20px; max-width: 760px; color: var(--ink-soft); line-height: 1.55; font-family: var(--serif); font-weight: 400; }
+  .hero-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--rule); }
+  .hero-meta-item { font-size: 13px; }
+  .hero-meta-item span:first-child { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
+  .hero-meta-item span:last-child { font-weight: 600; color: var(--ink); }
+
+  .toc { max-width: 1240px; margin: 0 auto; padding: 36px 32px 24px; }
+  .toc-card { background: white; border: 1px solid var(--rule); border-radius: 12px; padding: 32px 36px; box-shadow: var(--shadow); }
+  .toc-card h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); font-weight: 600; margin-bottom: 20px; }
+  .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 4px 28px; list-style: none; }
+  .toc-list li { padding: 8px 0; border-bottom: 1px dashed var(--rule); display: flex; align-items: baseline; gap: 14px; }
+  .toc-list a { color: var(--ink); text-decoration: none; font-size: 14px; flex: 1; transition: color 0.15s; }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-list .toc-num { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--accent); min-width: 28px; }
+
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  section.block { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .section-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+  .section-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--steel); }
+  .section-eyebrow .num { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--accent); margin-left: -6px; }
+  h2.section-title { font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 4.6vw, 52px); letter-spacing: -0.025em; line-height: 1.04; margin-bottom: 20px; font-variation-settings: "opsz" 144; max-width: 900px; }
+  h2.section-title em { font-style: italic; color: var(--accent); }
+  .section-intro { font-size: 18px; max-width: 760px; color: var(--ink-soft); margin-bottom: 48px; line-height: 1.6; font-family: var(--serif); font-weight: 400; }
+  h3.subhead { font-family: var(--serif); font-weight: 600; font-size: 24px; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 14px; }
+  h3.subhead-small { font-family: var(--serif); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; margin-top: 32px; margin-bottom: 10px; }
+  p.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 14px; max-width: 820px; }
+  p.body strong { color: var(--ink); }
+  p.note { font-size: 13px; color: var(--ink-mute); font-style: italic; margin-top: 12px; max-width: 820px; }
+  ul.body, ol.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin: 12px 0 18px 24px; max-width: 820px; }
+  ul.body li, ol.body li { margin-bottom: 8px; }
+  ul.body li strong, ol.body li strong { color: var(--ink); }
+  a.inline { color: var(--accent-deep); border-bottom: 1px dotted; text-decoration: none; }
+  a.inline:hover { border-bottom-style: solid; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; max-width: 1100px; }
+  .cog-card { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 24px; transition: transform 0.2s, box-shadow 0.2s; }
+  .cog-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cog-card .icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 14px; background: var(--paper-warm); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 18px; color: var(--accent); }
+  .cog-card h4 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .cog-card p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 8px; }
+
+  .quotebox { background: var(--paper-warm); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 22px 28px; margin: 28px 0; max-width: 880px; }
+  .quotebox p { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .quotebox .source { display: block; margin-top: 10px; font-style: normal; font-size: 13px; font-family: var(--sans); color: var(--ink-mute); }
+
+  .table-card { background: white; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin: 24px 0; max-width: 1100px; }
+  table.body-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.body-table thead th { background: var(--paper-warm); padding: 14px 18px; text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  table.body-table tbody td { padding: 14px 18px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  table.body-table tbody tr:last-child td { border-bottom: none; }
+  table.body-table tbody td:first-child { font-weight: 600; color: var(--ink); }
+
+  .req-example { background: white; border: 1px solid var(--rule); border-radius: 8px; padding: 18px 22px; margin: 14px 0; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); max-width: 980px; }
+  .req-example .req-id { color: var(--accent); font-weight: 600; }
+  .req-example.user { border-left: 4px solid var(--steel); }
+  .req-example.system { border-left: 4px solid var(--moss); }
+  .req-example .tag-small { display: inline-block; font-family: var(--sans); font-size: 10px; padding: 2px 8px; border-radius: 8px; margin-right: 8px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+  .req-example.user .tag-small { background: var(--steel-soft); color: var(--steel-deep); }
+  .req-example.system .tag-small { background: var(--moss-soft); color: var(--moss); }
+
+  .practice-callout { background: var(--steel-soft); border: 1px solid var(--steel); border-radius: 10px; padding: 24px 28px; margin: 28px 0; max-width: 1000px; }
+  .practice-callout .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 10px; font-weight: 600; }
+  .practice-callout p { color: var(--steel-deep); font-size: 15px; line-height: 1.6; margin: 0 0 10px; }
+  .practice-callout p:last-child { margin-bottom: 0; }
+
+  .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 24px; max-width: 1100px; }
+  .pitfall { background: white; border-left: 4px solid var(--accent); padding: 18px 22px; border-radius: 0 8px 8px 0; box-shadow: var(--shadow); }
+  .pitfall h5 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+  .pitfall p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
+
+  .ref-list { max-width: 980px; margin-top: 32px; }
+  .ref-list .ref { padding: 14px 0; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; }
+  .ref-list .ref:last-child { border-bottom: none; }
+  .ref-list .ref strong { color: var(--ink); }
+  .ref-list .ref em { font-style: italic; }
+
+  .struct-spec { background: white; border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); margin: 22px 0; max-width: 1100px; overflow: hidden; }
+  .struct-spec table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .struct-spec th { background: var(--ink); color: var(--paper); padding: 12px 18px; text-align: left; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
+  .struct-spec td { padding: 12px 18px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  .struct-spec td:first-child { font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--ink); white-space: nowrap; background: var(--paper-warm); width: 160px; }
+  .struct-spec tr:last-child td { border-bottom: none; }
+
+  /* Effort estimation calculator */
+  .calc-card { background: white; border: 2px solid var(--steel); border-radius: 14px; padding: 28px 32px; margin: 28px 0; max-width: 1100px; box-shadow: var(--shadow-lg); }
+  .calc-card h4 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.015em; color: var(--steel-deep); }
+  .calc-card .sub { font-size: 14px; color: var(--ink-mute); margin-bottom: 22px; }
+  .calc-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 18px; }
+  .calc-table thead th { background: var(--paper-warm); padding: 10px 12px; text-align: left; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  .calc-table tbody td { padding: 8px 12px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); }
+  .calc-table input[type="text"], .calc-table input[type="number"] { width: 100%; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 5px; font-family: var(--sans); font-size: 13.5px; color: var(--ink); background: var(--paper); }
+  .calc-table input[type="text"]:focus, .calc-table input[type="number"]:focus { outline: none; border-color: var(--accent); background: white; }
+  .calc-table input[readonly] { background: var(--paper-warm); color: var(--ink); font-weight: 600; cursor: default; }
+  .calc-table input.totalcol { background: var(--steel-soft); color: var(--steel-deep); font-weight: 700; }
+  .calc-table .x-btn { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 16px; padding: 0 4px; }
+  .calc-table .x-btn:hover { color: var(--accent-deep); }
+  .calc-actions { display: flex; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .calc-actions button { background: var(--steel); color: white; border: none; padding: 9px 16px; border-radius: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+  .calc-actions button:hover { background: var(--steel-deep); }
+  .calc-actions button.secondary { background: var(--paper-deep); color: var(--ink); }
+  .calc-actions button.secondary:hover { background: var(--rule); }
+  .calc-params { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px 22px; padding: 18px; background: var(--paper-warm); border-radius: 8px; margin-bottom: 22px; }
+  .calc-params label { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 4px; font-weight: 600; }
+  .calc-params input { width: 100%; padding: 7px 10px; border: 1px solid var(--rule); border-radius: 5px; font-family: var(--sans); font-size: 14px; color: var(--ink); background: white; }
+  .calc-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; padding: 22px; background: var(--ink); border-radius: 10px; }
+  .calc-summary .metric { font-size: 13px; }
+  .calc-summary .metric .lbl { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; font-weight: 600; }
+  .calc-summary .metric .val { font-family: var(--serif); font-size: 24px; font-weight: 600; color: var(--paper); letter-spacing: -0.01em; }
+  .calc-summary .metric .unit { font-family: var(--sans); font-size: 13px; font-weight: 400; color: rgba(250,247,242,0.7); margin-left: 4px; }
+
+  .cta-card { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 36px 40px; margin: 32px 0; max-width: 980px; box-shadow: var(--shadow-lg); }
+  .cta-card .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .cta-card h4 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .cta-card p { font-size: 15px; line-height: 1.6; color: rgba(250,247,242,0.85); margin-bottom: 18px; }
+  .cta-card a.button { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: white; padding: 10px 20px; border-radius: 999px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: background 0.15s; }
+  .cta-card a.button:hover { background: var(--accent-deep); }
+
+  footer { background: var(--paper-deep); padding: 60px 32px; margin-top: 60px; border-top: 1px solid var(--rule); }
+  footer .inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  footer .inner a { color: var(--steel-deep); text-decoration: none; border-bottom: 1px dotted; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-mark"></span>COMP433 &middot; Ch. 3 &middot; Requirements engineering</div>
+    <nav class="nav">
+      <a href="/birzeit/comp433/">Course</a>
+      <a href="#what">i. Why RE</a>
+      <a href="#defn">ii. What a requirement is</a>
+      <a href="#layers">iii. Three layers</a>
+      <a href="#types">iv. Types</a>
+      <a href="#nfr">v. NFRs</a>
+      <a href="#process">vi. Process</a>
+      <a href="#notation">vii. Notations</a>
+      <a href="#spec">viii. Structured spec</a>
+      <a href="#doc">ix. The document</a>
+      <a href="#validation">x. Validation</a>
+      <a href="#effort">xi. Effort estimation</a>
+      <a href="#pitfalls">xii. Pitfalls</a>
+      <a href="#refs">xiii. References</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">COMP433 &middot; Software Engineering &middot; Chapter 3</div>
+  <h1>Requirements engineering: <em>turning need into a design contract</em>.</h1>
+  <p class="hero-lede">A research-grounded companion to Chapter 3 of the COMP433 syllabus. The work of requirements engineering decides what gets built and what the project costs; everything downstream is execution against the answer. This companion lays out the theory, the practitioner notation, the document structure, the validation checks, and the per-requirement effort-estimation method used in the course.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span>course</span><span>COMP433</span></div>
+    <div class="hero-meta-item"><span>chapter</span><span>3 of the syllabus</span></div>
+    <div class="hero-meta-item"><span>instructor</span><span>Hisham Ihshaish</span></div>
+    <div class="hero-meta-item"><span>textbook</span><span>Sommerville (10th ed.)</span></div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-card">
+    <h3>Contents</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">i.</span><a href="#what">Why requirements work carries the project</a></li>
+      <li><span class="toc-num">ii.</span><a href="#defn">What a requirement actually is</a></li>
+      <li><span class="toc-num">iii.</span><a href="#layers">The three abstraction layers</a></li>
+      <li><span class="toc-num">iv.</span><a href="#types">Functional, non-functional, domain</a></li>
+      <li><span class="toc-num">v.</span><a href="#nfr">NFR families and measurable metrics</a></li>
+      <li><span class="toc-num">vi.</span><a href="#process">The requirements engineering process</a></li>
+      <li><span class="toc-num">vii.</span><a href="#notation">Notation choices for specification</a></li>
+      <li><span class="toc-num">viii.</span><a href="#spec">The structured specification template</a></li>
+      <li><span class="toc-num">ix.</span><a href="#doc">The requirements document</a></li>
+      <li><span class="toc-num">x.</span><a href="#validation">Validation: reviews, prototypes, tests</a></li>
+      <li><span class="toc-num">xi.</span><a href="#effort">Effort estimation, with a calculator</a></li>
+      <li><span class="toc-num">xii.</span><a href="#pitfalls">Common pitfalls</a></li>
+      <li><span class="toc-num">xiii.</span><a href="#refs">References and further reading</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<section class="block" id="what">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">i.</span>Leverage</div>
+    <h2 class="section-title">Requirements work carries the project <em>more than any other phase</em>.</h2>
+    <p class="section-intro">The cost of fixing a defect rises sharply with the phase in which it is found. The classic numbers, originally from Boehm and now widely confirmed, are blunt: a requirements error fixed after release can cost 100 times what the same error would have cost to fix during requirements writing.</p>
+
+    <p class="body">Boehm's <em>Software Engineering Economics</em> (1981) is the source of the most-cited version of this curve. Subsequent industrial studies, including the IBM-led data summarised in Boehm and Basili's "Top 10 Software Defect Reduction List" (<em>IEEE Computer</em>, 2001), report the same pattern across very different organisations: defects whose root cause is in requirements dominate cost and schedule overruns. The leverage available at the requirements stage is therefore not procedural, it is economic.</p>
+
+    <div class="quotebox">
+      <p>"Fixing a requirements error after delivery may cost up to 100 times the cost of fixing an implementation error."</p>
+      <span class="source">Prof. Adel Taweel, COMP433 lecture notes (Spring 2025/26), restating Boehm's classic finding.</span>
+    </div>
+
+    <p class="body">A second, less obvious finding is that the requirements stage is also where the project's <em>identity</em> is decided. The Twitter 140-character limit was a requirement. The iPhone's no-stylus rule was a requirement. WhatsApp's end-to-end encryption was a requirement. None of these features were decided by writing code; they were decided by writing a sentence about what the system would or would not do. The same logic applies in every system that COMP433 students will work on: the requirements document sets the shape that the rest of the project will execute against.</p>
+
+    <p class="body">This companion treats requirements engineering with that weight. The first half covers what requirements <em>are</em> and how they are written; the second half covers how the work is <em>validated</em>, <em>documented</em>, and <em>estimated for effort</em>. The running example follows the course textbook: the Mental Health Care Patient Management System (MHC-PMS) used in Sommerville's tenth edition.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="defn">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ii.</span>Definition</div>
+    <h2 class="section-title">A requirement is a <em>statement</em> the system must satisfy.</h2>
+    <p class="section-intro">Requirements range from one-line wishes ("the system shall be easy to use") to formal mathematical specifications. Both ends of that range are still called requirements. The discipline is in knowing which end you are at and why.</p>
+
+    <p class="body">Sommerville's definition (<em>Software Engineering</em>, 10th ed., 2015) is the operational one: a requirement is "a description of a service that the system must provide, or a constraint on the system." The two clauses matter independently. A <em>service</em> is something the system does. A <em>constraint</em> is a property the system has. Most documents contain both, often mixed together.</p>
+
+    <p class="body">Adel's lecture notes add the practitioner observation that requirements serve <em>two functions in one artefact</em>, which explains why they are written in both abstract and detailed forms:</p>
+
+    <ul class="body">
+      <li><strong>As the basis for a bid.</strong> Before a contract is signed, the customer needs requirements they can understand, share, and compare across competing proposals. These are <em>abstract</em> by necessity. They will be interpreted differently by different bidders, and that is fine because the bidding process is also about <em>which</em> interpretation the customer prefers.</li>
+      <li><strong>As the basis for the contract itself.</strong> Once a supplier is chosen, the requirements stop being open to interpretation. They become a list of testable obligations against which the system will be accepted or rejected. The same word in the same document carries both meanings at different stages.</li>
+    </ul>
+
+    <p class="body">This dual role is the reason the abstraction layer of a requirement matters as much as its content. A statement that is perfect at the bidding stage may be useless at the acceptance stage, and vice versa.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="layers">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iii.</span>Layers</div>
+    <h2 class="section-title">User requirements, system requirements, <em>software specification</em>.</h2>
+    <p class="section-intro">Sommerville and Adel agree on a three-layer model. Each layer has a different audience and uses different language. A document that fails to distinguish them tends to be wrong for everyone reading it.</p>
+
+    <div class="grid-3">
+      <div class="cog-card">
+        <div class="icon">U</div>
+        <h4>User requirements</h4>
+        <p>Natural-language statements (plus diagrams) of the services the system provides and its operational constraints, written for the customer. The customer must be able to read, agree, and confirm. Technical jargon is excluded.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">S</div>
+        <h4>System requirements</h4>
+        <p>A structured document setting out detailed descriptions of system services and constraints, written for customers (to confirm) and developers (to build to). Often forms part of the contract between client and contractor.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">D</div>
+        <h4>Software specification</h4>
+        <p>A detailed software description, written for developers, that can serve as the basis for design and implementation. Programming-language abstractions, interface signatures, and algorithms are acceptable here.</p>
+      </div>
+    </div>
+
+    <h3 class="subhead">Worked pair: a user requirement and its system refinement</h3>
+    <p class="body">In Adel's lecture notes, every user requirement (UR) is numbered and refined into one or more system requirements (SR) with the same root. The notation is straightforward: <code style="font-family: var(--mono); color: var(--accent-deep);">UR4.0</code> refines into <code style="font-family: var(--mono); color: var(--accent-deep);">SR4.1</code>, <code style="font-family: var(--mono); color: var(--accent-deep);">SR4.2</code>, and so on. Below is the canonical course example for account registration.</p>
+
+    <div class="req-example user">
+      <span class="tag-small">User requirement</span><br>
+      <span class="req-id">UR4.0:</span> The system administrator shall be able to register and create user accounts, for new users, as members of staff, of the PMS system.
+    </div>
+
+    <div class="req-example system">
+      <span class="tag-small">System requirement</span><br>
+      <span class="req-id">SR4.1:</span> The system shall enable the system administrator to register and create an account for the user, as a member of staff. Created account shall include the user's personal information, including Full Name and Address.<br><br>
+      <span class="req-id">SR4.2:</span> The system shall ensure and enable the user to specify a valid email address. The system shall only include a validated email address. The system should prevent the system administrator from registering or creating user accounts without a valid email address.<br><br>
+      <span class="req-id">SR4.3:</span> The system administrator shall be able to specify a username, made up of a minimum of 8 characters, that include alphanumeric only.<br><br>
+      <span class="req-id">SR4.4:</span> The system shall enable the system administrator to specify a password, of a minimum of 8 characters. The password must include a minimum of three types of characters, of alphabets, numbers, special characters.<br><br>
+      <span class="req-id">SR4.5:</span> The system shall validate that usernames are uniquely identified in the system.<br><br>
+      <span class="req-id">SR4.6:</span> The system shall validate that passwords are stored encrypted in a non-reversible form.<br><br>
+      <span class="req-id">SR4.7:</span> The system should enable users to reset their passwords. The system shall send reset passwords to the registered, validated email address.
+    </div>
+
+    <p class="body">Notice the relationship. UR4.0 is a single sentence that the head of the clinic can read and confirm. SR4.1 through SR4.7 are seven sentences that the developer can build to and the tester can write acceptance tests against. They say the same thing at different levels of abstraction.</p>
+
+    <p class="body">The numbering is not decorative. It is the foundation of <em>traceability</em>: every SR carries the prefix of the UR it refines, so a question about why a particular system requirement exists has an answer ("it implements UR4.0"), and a question about what testing covers a user requirement has an answer ("the tests for SR4.1 through SR4.7"). Section x and the discussion of traceability matrices return to this.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="types">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iv.</span>Types</div>
+    <h2 class="section-title">Functional, non-functional, <em>and domain</em> requirements.</h2>
+    <p class="section-intro">Sommerville's classification, which Adel follows, separates requirements into three mutually exclusive categories. The third one (domain) is often skipped in lighter treatments and is exactly where most subtle errors come from.</p>
+
+    <h3 class="subhead-small">Functional requirements</h3>
+    <p class="body">Statements of the services the system should provide, how the system should react to particular inputs, and how the system should behave in particular situations. They are usually written with the system as subject and "shall" as the modal verb. Example, from the MHC-PMS:</p>
+
+    <div class="req-example">
+      <span class="req-id">2.3:</span> A user shall be able to search the appointments lists for all clinics.<br>
+      <span class="req-id">5.2:</span> The PMS system shall generate each day, for each clinic, a list of patients who are expected to attend appointments that day.<br>
+      <span class="req-id">6.1:</span> Each staff member using the system shall be uniquely identified by an 8-digit employee number.
+    </div>
+
+    <h3 class="subhead-small">Non-functional requirements</h3>
+    <p class="body">Constraints on the services or functions offered by the system. They describe how well, how fast, under what load, for whom, with what guarantees. They are not optional polish: if NFRs are not met, the system can be useless even when every functional requirement passes.</p>
+
+    <p class="body">A worked NFR example for the MHC-PMS:</p>
+
+    <div class="req-example">
+      <span class="req-id">3.C.8:</span> The MHC-PMS shall be available to all clinics during normal working hours (Mon to Fri, 08:30 to 17:30). Downtime within normal working hours shall not exceed five seconds in any one day.
+    </div>
+
+    <p class="body">Notice the verifiability: "available" is not abstract here, it has a measurable threshold (downtime under five seconds per day during stated hours). Section v returns to NFR families and metrics.</p>
+
+    <h3 class="subhead-small">Domain requirements</h3>
+    <p class="body">Requirements that come from the application domain of the system and that reflect characteristics of that domain. Adel's two examples:</p>
+
+    <ul class="body">
+      <li>A train control system has to take into account the braking characteristics in different weather conditions.</li>
+      <li>A PMS has to enforce all confidentiality rules in accordance with national medical domain practices.</li>
+    </ul>
+
+    <p class="body">Domain requirements have two characteristic problems, both consequences of the fact that the domain is not the developer's home discipline:</p>
+
+    <ul class="body">
+      <li><strong>Understandability.</strong> Requirements are expressed in the language of the application domain, which is often not understood by the software engineers developing the system. A developer reading "braking shall account for adhesion coefficient at the rail-wheel interface" needs a translator before they can build to it.</li>
+      <li><strong>Implicitness.</strong> Domain specialists understand the area so well that they do not think to make the requirement explicit. A pharmacist will not say "the dose field shall reject negative values" because to them negative doses are unthinkable, but the system will accept them unless the requirement is written down.</li>
+    </ul>
+
+    <p class="body">Domain requirements often <em>generate</em> additional functional and non-functional requirements when they are unpacked. They also have the highest unit cost of being missed, because a missed domain requirement usually surfaces during operation, not testing.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="nfr">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">v.</span>NFRs</div>
+    <h2 class="section-title">Three NFR families, <em>each with a measurable metric</em>.</h2>
+    <p class="section-intro">Sommerville's NFR classification (which Adel uses) sorts non-functional requirements into three families by where the constraint comes from. The families have different stakeholders, different acceptance criteria, and different test procedures.</p>
+
+    <h3 class="subhead-small">Product, organisational, external</h3>
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Family</th><th>Origin</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td>Product</td><td>The delivered product must behave in a particular way.</td><td>Execution speed, response time, reliability, availability, accessibility level, memory footprint, browser compatibility.</td></tr>
+          <tr><td>Organisational</td><td>Consequences of organisational policies and procedures.</td><td>Mandatory IDE, process standards, programming language, code-review process, mandatory development methodology.</td></tr>
+          <tr><td>External</td><td>Factors external to the system and its development process.</td><td>Interoperability with other systems, legislative or regulatory compliance, ethical constraints, accessibility law.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">From wish to verifiable NFR</h3>
+    <p class="body">An NFR is almost always wrong on its first draft. The natural English form is a wish, and a wish cannot be tested. Adel makes the conversion explicit by distinguishing a <em>goal</em> (a general intention) from a <em>verifiable non-functional requirement</em> (a statement with a measurable threshold).</p>
+
+    <div class="req-example user">
+      <span class="tag-small">Goal (not yet verifiable)</span><br>
+      <span class="req-id">G.8.1:</span> The PMS system should be easy to use by medical staff and should be organised in such a way that user errors are minimised.
+    </div>
+
+    <div class="req-example system">
+      <span class="tag-small">Verifiable NFR</span><br>
+      <span class="req-id">8.4.3:</span> Medical staff shall be able to use all the PMS system functions after four hours of training. After this training, the average number of errors made by experienced users shall not exceed two per hour of system use.
+    </div>
+
+    <p class="body">The goal is still useful: it tells the developers what the team is trying to achieve. The verifiable requirement tells the tester what to measure. Both belong in the document; they do not replace each other.</p>
+
+    <h3 class="subhead">NFR metrics, by property</h3>
+    <p class="body">Below is the standard metric table for the most common NFR types. The entries are not exhaustive, but the pattern they set is: every NFR can be reduced to one or more measurable properties.</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Property</th><th>Measure</th></tr></thead>
+        <tbody>
+          <tr><td>Speed</td><td>Processed transactions per second; user-event response time; screen refresh time.</td></tr>
+          <tr><td>Size</td><td>Megabytes; number of ROM chips; binary size; package count.</td></tr>
+          <tr><td>Ease of use</td><td>Training time required; number of help frames consulted; task completion rate; SUS score.</td></tr>
+          <tr><td>Reliability</td><td>Mean time to failure; probability of unavailability; rate of failure occurrence; availability percentage.</td></tr>
+          <tr><td>Robustness</td><td>Time to restart after failure; percentage of events causing failure; probability of data corruption on failure.</td></tr>
+          <tr><td>Portability</td><td>Percentage of target-dependent statements; number of target systems supported.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body">A useful editorial test: if an NFR cannot be tied to a row of this table or its extension, it is still a goal.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="process">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vi.</span>Process</div>
+    <h2 class="section-title">The five activities of <em>requirements engineering</em>.</h2>
+    <p class="section-intro">Sommerville's RE process model has five activities. They are not strictly sequential; the process is iterative, and Adel describes it as a spiral. The list below is the canonical decomposition.</p>
+
+    <div class="grid-3">
+      <div class="cog-card">
+        <div class="icon">1</div>
+        <h4>Elicitation and discovery</h4>
+        <p>Working with customers and other stakeholders to find out the application domain, the services the system should provide, the required performance, hardware constraints, and other relevant matters. Techniques include interviews, scenarios, use cases, and ethnography.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">2</div>
+        <h4>Analysis and negotiation</h4>
+        <p>Classifying and organising elicited requirements; identifying conflicts between requirements from different stakeholders; negotiating resolutions; ranking by priority. Two stakeholders rarely agree on every requirement, and the analysis step is where the disagreements are surfaced and resolved.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">3</div>
+        <h4>Specification</h4>
+        <p>Writing the requirements down in a structured form that is unambiguous, complete, and traceable. This is the most visible output of RE, and the activity that produces the requirements document.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">4</div>
+        <h4>Validation</h4>
+        <p>Checking that the specified requirements define the system the customer wants. Section x covers the three standard validation techniques (reviews, prototyping, test-case generation).</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">5</div>
+        <h4>Requirements management</h4>
+        <p>Managing change. Real projects discover new requirements after the spec is "frozen"; treating the document as immutable is unrealistic. RE management is the process of accepting, evaluating, and integrating those changes without losing the document's coherence.</p>
+      </div>
+    </div>
+
+    <p class="body">The five activities feed each other continuously. Elicitation in week 8 often invalidates a requirement specified in week 3; validation often surfaces an unstated stakeholder need; management often forces a re-prioritisation. The process is finished not when the activities stop but when the document is stable enough to commit to.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="notation">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vii.</span>Notation</div>
+    <h2 class="section-title">Five ways to <em>write</em> a system requirement.</h2>
+    <p class="section-intro">Sommerville's table of notation choices, used directly in Adel's lecture notes, is the standard taxonomy. Each row trades off readability against precision differently; most documents use more than one row.</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Notation</th><th>Description</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <tr><td>Natural language</td><td>Requirements written as numbered sentences in plain English. Each sentence expresses one requirement.</td><td>Maximum readability. Minimum precision. Prone to amalgamation (several requirements in one sentence) and confusion (functional and non-functional mixed).</td></tr>
+          <tr><td>Structured natural language</td><td>Requirements written in natural language on a standard template (form / table). Each field describes one aspect of the requirement.</td><td>Compromise. Reads almost like natural language, structure rules out the worst ambiguities. Section viii covers the template used in COMP433.</td></tr>
+          <tr><td>Design description languages</td><td>A language with programming-language abstractions, used to specify operational behaviour. Now rarely used; remains useful for interface specifications (e.g., IDL, OpenAPI).</td><td>High precision. Low customer accessibility. Customer cannot usually confirm it.</td></tr>
+          <tr><td>Graphical notations</td><td>Diagrams (UML use case, activity, sequence) supplemented by text. Common for functional requirements with non-trivial workflow.</td><td>Excellent for showing structure and flow. Weak for specifying constraints. Best combined with text.</td></tr>
+          <tr><td>Mathematical specifications</td><td>Notations based on finite-state machines, set theory, predicate logic. Used in safety-critical and regulated domains.</td><td>Unambiguous by construction. Most customers cannot read it. Rarely used outside specific industries (avionics, automotive safety, formal methods research).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body">Adel's lecture notes are blunt about the problems with relying on natural language alone:</p>
+
+    <ul class="body">
+      <li><strong>Lack of clarity.</strong> Precision is difficult without making the document hard to read.</li>
+      <li><strong>Requirements confusion.</strong> Functional and non-functional requirements tend to be mixed up.</li>
+      <li><strong>Requirements amalgamation.</strong> Several different requirements may be expressed together in one sentence.</li>
+    </ul>
+
+    <p class="body">The standard fix is to keep natural language for user requirements (so the customer can read them), then switch to structured natural language for system requirements (so the developer can build to them).</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="spec">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">viii.</span>Structured spec</div>
+    <h2 class="section-title">The structured specification template, in <em>nine fields</em>.</h2>
+    <p class="section-intro">Adel's lecture notes use a structured-natural-language template based directly on Cockburn's use case format. Every system requirement that is non-trivial gets one of these. The template's value is in the discipline it forces: a field that is blank is a question still open.</p>
+
+    <p class="body">The fields, in order, are: Title, Purpose, Description, Actors, Trigger, Pre-condition, Workflow, Alternative Workflow, Post-condition. The course's canonical worked example is the insulin pump's dose computation routine:</p>
+
+    <div class="struct-spec">
+      <table>
+        <thead><tr><th colspan="2">CompDose: Compute Insulin Dose</th></tr></thead>
+        <tbody>
+          <tr><td>Title</td><td>Compute Insulin Dose (CompDose)</td></tr>
+          <tr><td>Purpose</td><td>To compute the insulin dose based on the measured sugar level.</td></tr>
+          <tr><td>Description</td><td>Computes the dose of insulin to be delivered when the current measured level of sugar is in the safe zone between 3 and 7 units.</td></tr>
+          <tr><td>Actors</td><td>SystemTimer (the actor that interacts with this requirement).</td></tr>
+          <tr><td>Trigger</td><td>Automatic. Triggered automatically every 10 minutes by SystemTimer.</td></tr>
+          <tr><td>Pre-condition</td><td>The insulin reservoir contains at least the maximum allowed single dose of insulin.</td></tr>
+          <tr><td>Workflow</td><td>
+            1. Obtain current sugar level reading r2.<br>
+            2. Read stored previous two sugar level readings, r0 and r1.<br>
+            3. Compute increasing or decreasing level of sugar within the safe zone.<br>
+            4. Compute a single dose of insulin based on the sugar level.<br>
+            5. If the dose is within the allowed limits (5 to 15 mg), deliver the insulin dose; otherwise generate a beep sound.<br>
+            6. Replace previous readings with current readings: r0 = r1 and r1 = r2.
+          </td></tr>
+          <tr><td>Alternative workflow</td><td>If the computed dose is outside the allowed limits, no insulin is delivered; an audible alert is raised. The reading replacement step still executes.</td></tr>
+          <tr><td>Post-condition</td><td>Previous readings replaced and stored.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body">The fields are not optional. A spec with no actors does not say who triggers it; a spec with no pre-condition is unsafe; a spec with no post-condition cannot be tested. The "alternative workflow" field captures the most common source of bugs in production systems: the path that runs when the normal one does not work.</p>
+
+    <p class="body">For a more readable but equivalent version, the template can be flattened into a paragraph: "The CompDose requirement, triggered every 10 minutes by SystemTimer when the insulin reservoir is sufficient, reads the current sugar level, compares it against the previous two readings, computes a single dose between 5 and 15 mg, and either delivers it or raises an alert; in either case the reading buffer is updated." The structured form is preferred for the document; the paragraph form is useful for review meetings.</p>
+
+    <p class="body">Tabular specifications are useful when a requirement's behaviour is condition-driven, for example a decision table giving the dose for each combination of trend and rate. The course slides include the tabular form for CompDose; we omit it here for brevity.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="doc">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ix.</span>The document</div>
+    <h2 class="section-title">The requirements document has a <em>standard structure</em>.</h2>
+    <p class="section-intro">A requirements document is the agreed statement of the system requirements. It is an artefact that has to serve customers, developers, testers, regulators, and the project's own future. Sommerville's structure, which Adel uses, has nine sections and an index.</p>
+
+    <h3 class="subhead-small">What a requirements document must do</h3>
+    <p class="body">Before the structure, the obligations. A requirements document must:</p>
+
+    <ul class="body">
+      <li><strong>Specify external system behaviour.</strong> What the system does, as visible from outside.</li>
+      <li><strong>Specify implementation constraints.</strong> What the implementation must (or must not) do, regardless of how it does it.</li>
+      <li><strong>Be easy to change.</strong> Real projects revise requirements continuously; a document that cannot be revised becomes obsolete.</li>
+      <li><strong>Serve as a reference tool for maintenance.</strong> Years after the project ships, the maintenance team will read this document to understand why the system behaves the way it does.</li>
+      <li><strong>Record forethought about the life cycle of the system.</strong> What changes are anticipated, what is fixed, what is open.</li>
+      <li><strong>Characterise responses to unexpected events.</strong> The system's behaviour at the edges, not just on the happy path.</li>
+    </ul>
+
+    <h3 class="subhead">The IEEE / ISO structure, expanded</h3>
+    <p class="body">The high-level skeleton (IEEE Std 830-1998, now superseded by ISO/IEC/IEEE 29148:2018) is short:</p>
+
+    <ul class="body">
+      <li>Introduction</li>
+      <li>General description</li>
+      <li>Specific requirements</li>
+      <li>Appendices</li>
+      <li>Index</li>
+    </ul>
+
+    <p class="body">This is a generic skeleton that has to be instantiated for a specific system. The instantiation that COMP433 uses, drawn from Sommerville and Adel, expands it into nine sections:</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Chapter</th><th>What it contains</th></tr></thead>
+        <tbody>
+          <tr><td>Preface</td><td>Expected readership; version history; rationale for the current version; summary of changes since the previous version.</td></tr>
+          <tr><td>Introduction</td><td>The need for the system; brief description of its functions; how it works with other systems; how it fits into the business or strategic objectives of the organisation commissioning it.</td></tr>
+          <tr><td>Glossary</td><td>Technical terms used in the document. The document should not assume that the reader is familiar with the application domain.</td></tr>
+          <tr><td>User requirements definition</td><td>The services provided for the user. Non-functional system requirements are also described here. Natural language, diagrams, and other notations understandable to the customer.</td></tr>
+          <tr><td>System architecture</td><td>A high-level overview of the anticipated system architecture, showing the distribution of functions across system modules. Reused components are highlighted.</td></tr>
+          <tr><td>System requirements specification</td><td>Functional and non-functional requirements in detail. Interfaces to other systems may be defined here.</td></tr>
+          <tr><td>System models</td><td>Graphical system models showing the relationships between system components and the system's environment. Object models, data-flow models, or semantic data models, as appropriate. Chapter 4 covers these models in depth.</td></tr>
+          <tr><td>System evolution</td><td>Assumptions on which the system is based; anticipated changes due to hardware evolution, changing user needs, evolving regulation. Useful for designers, who can use it to avoid design decisions that would constrain likely future changes.</td></tr>
+          <tr><td>Appendices</td><td>Detailed application-specific information: hardware and database descriptions, minimal and optimal hardware configurations, database logical organisation, and so on.</td></tr>
+          <tr><td>Index</td><td>An alphabetic index plus, where useful, an index of diagrams, an index of functions, and so on.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Readers of the requirements document</h3>
+    <p class="body">The document is read by four kinds of audience, each looking for different things:</p>
+
+    <div class="grid-3">
+      <div class="cog-card">
+        <div class="icon">C</div>
+        <h4>System customers</h4>
+        <p>Want to confirm that the document captures what they asked for and that they can hold the supplier accountable to it. Read the User requirements definition closely; skim the rest.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">M</div>
+        <h4>Managers</h4>
+        <p>Want to estimate cost, schedule, and risk. Use the document for planning and for negotiating scope with the customer. Read the Preface, Introduction, and System architecture sections most carefully.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">D</div>
+        <h4>System engineers / developers</h4>
+        <p>Want to build the right system. Read the System requirements specification and System models in detail; refer to the System architecture for context.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">T</div>
+        <h4>System test engineers</h4>
+        <p>Want to verify that the system meets its requirements. Need every system requirement to be verifiable. Read the System requirements specification, then write acceptance tests against each requirement.</p>
+      </div>
+    </div>
+
+    <h3 class="subhead">Writing rules</h3>
+    <p class="body">Adel's lecture notes prescribe four writing rules that apply to every requirement, regardless of which section it is in:</p>
+
+    <ol class="body">
+      <li><strong>Invent a standard format and use it for every requirement.</strong> Consistency reduces the cognitive load of reading the document; readers learn the format once and then focus on content.</li>
+      <li><strong>Use language consistently.</strong> Use <em>shall</em> for mandatory requirements; use <em>should</em> for desirable but auxiliary requirements. Never mix the two without intent.</li>
+      <li><strong>Use text highlighting to identify the key parts of each requirement.</strong> Bold, italic, or a dedicated typographic style for the subject and the obligation.</li>
+      <li><strong>Include a rationale.</strong> Every non-trivial requirement should explain why it is there. Six months later, a reader will be glad of the explanation; six years later, the maintenance team will be glad of it.</li>
+    </ol>
+
+    <p class="body">And one negative rule: <strong>avoid computer jargon</strong>. The customer is the document's primary audience for the User requirements section; jargon there is a barrier, not precision.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="validation">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">x.</span>Validation</div>
+    <h2 class="section-title">Three techniques, <em>seven things to check</em>.</h2>
+    <p class="section-intro">Requirements validation asks whether the specified requirements define the system the customer actually wants. It is distinct from verification, which asks whether the system meets the specified requirements; validation is the upstream activity that decides whether the specification is right in the first place.</p>
+
+    <h3 class="subhead-small">The three validation techniques</h3>
+    <div class="grid-3">
+      <div class="cog-card">
+        <div class="icon">R</div>
+        <h4>Requirements reviews</h4>
+        <p>Systematic manual analysis of the requirements document by stakeholders, often in structured walk-throughs. Cheap, broad coverage, surfaces ambiguity and inconsistency well. Less effective for finding gaps in coverage.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">P</div>
+        <h4>Prototyping</h4>
+        <p>Using an executable model (low- or high-fidelity) of the system to let stakeholders interact with the proposed behaviour. Surfaces requirements that no review would find: confusing flows, missing affordances, mismatched mental models.</p>
+      </div>
+      <div class="cog-card">
+        <div class="icon">T</div>
+        <h4>Test-case generation</h4>
+        <p>Writing acceptance tests against each requirement before the system is built. A requirement that cannot be turned into a test is a requirement that has not been written precisely enough. Each test failure indicates either a system defect or a specification defect.</p>
+      </div>
+    </div>
+
+    <h3 class="subhead">The seven checks (Adel's requirements-checking list)</h3>
+    <p class="body">Whichever validation technique is used, the same questions are asked of each requirement:</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Property</th><th>The question</th></tr></thead>
+        <tbody>
+          <tr><td>Correctness / Validity</td><td>Does the system provide the functions that best support the customer's actual business needs?</td></tr>
+          <tr><td>Precision / Unambiguity</td><td>Can any of the requirements be interpreted in more than one way? If yes, rewrite until they cannot.</td></tr>
+          <tr><td>Consistency</td><td>Are there requirements that conflict? Where two requirements cannot both hold, one of them must be revised or dropped.</td></tr>
+          <tr><td>Completeness</td><td>Are all the functions the customer requires included? Completeness is the hardest property to check, because the gaps are exactly the things you have not thought of.</td></tr>
+          <tr><td>Verifiability</td><td>Can each requirement be verified and validated? A requirement that cannot be verified is a wish.</td></tr>
+          <tr><td>Traceability</td><td>Is each requirement uniquely identified? Can it be traced backward to its origin (a stakeholder, a regulation) and forward to the design and tests that realise it?</td></tr>
+          <tr><td>Realism / Feasibility</td><td>Can the requirements be implemented within the specified time and budget, given the available team skills and technology? An impossible requirement, no matter how desirable, must be revised before the contract is signed.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Traceability matrices</h3>
+    <p class="body">A traceability matrix is a tabular tool that records, for each requirement, where it comes from and where it goes. The minimal version is a two-column list: requirement ID and source. A richer version is a grid that maps every requirement to every test case, every design element, and every regulation it implements.</p>
+
+    <p class="body">The value of traceability matrices is measured in change. When a requirement is revised, the matrix tells you which tests need updating, which design elements may be affected, and which downstream documents need a corresponding edit. Without the matrix, the same question takes hours of manual cross-referencing.</p>
+
+    <div class="practice-callout">
+      <div class="tag">In practice</div>
+      <p>On a regulated project (medical, automotive, aviation), traceability is not optional; it is required for certification. On a non-regulated project, it is one of the cheapest forms of insurance: a small overhead during writing, in exchange for the ability to answer change-impact questions in seconds rather than days.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="effort">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xi.</span>Effort estimation</div>
+    <h2 class="section-title">Estimating effort, <em>requirement by requirement</em>.</h2>
+    <p class="section-intro">Once the requirements are specified, the natural next question is: what will this cost, and how long will it take? COMP433 uses a simplified, per-requirement estimation method described in Adel's lecture notes. The method is bottom-up, transparent, and easy to revise. Below: the method, its context among other estimation techniques, and an interactive calculator that runs it on whatever requirements list you enter.</p>
+
+    <h3 class="subhead">Adel's simplified per-UR method</h3>
+    <p class="body">The method's data model is small. For each user requirement, the estimator records two numbers:</p>
+
+    <ol class="body">
+      <li>The estimated <strong>number of developers</strong> who can work concurrently on the requirement without stepping on each other's work.</li>
+      <li>The estimated <strong>average effort per developer</strong>, in person-weeks.</li>
+    </ol>
+
+    <p class="body">From these, two derived quantities are computed:</p>
+
+    <ul class="body">
+      <li><strong>Total effort for the requirement</strong> = developers &times; effort per developer (in person-weeks).</li>
+      <li><strong>Total effort for the project</strong> = sum of the per-requirement totals.</li>
+    </ul>
+
+    <p class="body">Project-level numbers then follow:</p>
+
+    <ul class="body">
+      <li><strong>Average effort per requirement</strong> across the list (used as a sanity check).</li>
+      <li><strong>Schedule time</strong> with a 30% buffer for holidays, integration, and slack: total effort &times; 1.30.</li>
+      <li><strong>Cost</strong> = schedule time &times; average weekly salary.</li>
+      <li><strong>Quoted price range</strong>: minimum price = cost &times; 1.10 (10% margin); maximum price = cost &times; 1.30 (30% margin).</li>
+    </ul>
+
+    <p class="body">The method is not a black box. Every input is one the estimator chose, and every output is a direct arithmetic consequence of the inputs. That transparency is the method's value: a stakeholder who questions a number can be shown which input drives it, and an estimator who learns the project is slipping can revise one row of the table to absorb the new information.</p>
+
+    <h3 class="subhead">Interactive calculator</h3>
+    <p class="body">The calculator below ships with Adel's worked example from the lecture notes pre-filled. Edit any cell to recompute. Add or remove rows for your own requirements. Change the weekly salary, schedule buffer, or margin range to reflect your context.</p>
+
+    <div class="calc-card">
+      <h4>Effort estimation calculator</h4>
+      <div class="sub">Adel's simplified per-UR method, applied to whatever requirements list you enter.</div>
+
+      <table class="calc-table" id="urTable">
+        <thead>
+          <tr><th>UR</th><th style="width:30%">Description</th><th>Concurrent developers</th><th>Effort per developer (person-weeks)</th><th>Total effort (person-weeks)</th><th></th></tr>
+        </thead>
+        <tbody id="urBody"></tbody>
+      </table>
+
+      <div class="calc-actions">
+        <button onclick="addUR()">+ Add requirement</button>
+        <button class="secondary" onclick="resetUR()">Reset to example</button>
+      </div>
+
+      <div class="calc-params">
+        <div><label for="bufPct">Schedule buffer %</label><input type="number" id="bufPct" value="30" min="0" step="1" oninput="recompute()"></div>
+        <div><label for="wkSalary">Weekly salary ($)</label><input type="number" id="wkSalary" value="250" min="0" step="10" oninput="recompute()"></div>
+        <div><label for="minMargin">Min margin %</label><input type="number" id="minMargin" value="10" min="0" step="1" oninput="recompute()"></div>
+        <div><label for="maxMargin">Max margin %</label><input type="number" id="maxMargin" value="30" min="0" step="1" oninput="recompute()"></div>
+      </div>
+
+      <div class="calc-summary">
+        <div class="metric"><span class="lbl">Average developers per UR</span><span class="val" id="outAvgDev">2.5</span></div>
+        <div class="metric"><span class="lbl">Average effort per developer</span><span class="val" id="outAvgEff">2<span class="unit">pw</span></span></div>
+        <div class="metric"><span class="lbl">Total effort, one developer</span><span class="val" id="outTotEff">17<span class="unit">pw</span></span></div>
+        <div class="metric"><span class="lbl">Schedule with buffer</span><span class="val" id="outSched">22<span class="unit">weeks</span></span></div>
+        <div class="metric"><span class="lbl">Cost</span><span class="val">$<span id="outCost">5500</span></span></div>
+        <div class="metric"><span class="lbl">Quoted range</span><span class="val">$<span id="outMinPrice">6050</span><span class="unit">to $<span id="outMaxPrice">7150</span></span></span></div>
+      </div>
+    </div>
+
+    <p class="note">The example data above is the same as the worked example in Adel's lecture notes (slide 105). Reset returns to it. The four parameters underneath the table (buffer, salary, margins) are the dials a real estimator would adjust to match their context; defaults follow the course example.</p>
+
+    <h3 class="subhead">How this method compares to others</h3>
+    <p class="body">Adel's method is one entry in a long literature on software effort estimation. The most widely cited alternatives are listed below, with the kind of project each is best suited to. The course's simplified method is the appropriate choice for Phase 1 of the COMP433 project; the others are listed so students know what else exists and when to reach for them.</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Method</th><th>Origin</th><th>Where it shines</th></tr></thead>
+        <tbody>
+          <tr><td>Adel's per-UR simplified method</td><td>Course-specific; bottom-up by user requirement.</td><td>Small to medium projects where requirements are written before estimation. Transparent; revisable. Adopted for COMP433 Phase 1.</td></tr>
+          <tr><td>COCOMO II</td><td>Boehm, <em>Software Cost Estimation with COCOMO II</em> (2000); revision of COCOMO 81.</td><td>Larger projects where size can be estimated in KSLOC or function points. Uses 17 cost drivers (product, personnel, project, platform attributes) to scale a base estimate.</td></tr>
+          <tr><td>Function points</td><td>Albrecht (1979); standardised by IFPUG.</td><td>Information-system projects where requirements can be counted as inputs, outputs, files, inquiries, interfaces. Language- and platform-independent.</td></tr>
+          <tr><td>Use case points</td><td>Karner (1993); a function-points adaptation for use-case-driven projects.</td><td>Object-oriented projects where requirements are expressed primarily as use cases. Counts actors and use cases, weighted by complexity.</td></tr>
+          <tr><td>Expert judgement / Delphi</td><td>Originally RAND Corp. (1959); Wideband Delphi adapted by Boehm.</td><td>Projects with novel technology or domain where reference data is scarce. Structured aggregation of expert estimates with controlled iteration.</td></tr>
+          <tr><td>Analogous estimation</td><td>Estimation by analogy to historical projects.</td><td>Organisations with a deep historical record of similar projects. Cheap, fast, surprisingly accurate when the analogy is genuine.</td></tr>
+          <tr><td>Planning poker / story points</td><td>Grenning (2002); popularised by Cohn (2005).</td><td>Agile teams estimating user stories on a continuing basis. Relative sizing using a Fibonacci-style scale; team consensus through iterative card play.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body">Two observations from the literature, both well-supported by industrial data and worth carrying into any estimation exercise:</p>
+
+    <ul class="body">
+      <li><strong>No method is reliably accurate in absolute terms.</strong> Industrial surveys (e.g., Jorgensen and Shepperd, "A Systematic Review of Software Development Cost Estimation Studies", <em>IEEE Trans. Software Engineering</em>, 2007) report typical errors of plus or minus 30 to 50 percent across all major methods. The right question is not "which method is most accurate" but "which method's errors do I understand and can I revise as I learn more".</li>
+      <li><strong>The estimate that is revised survives.</strong> Methods that produce a single number which is then defended for the life of the project fail more often than methods that produce a number which is openly revised every time the team learns something new. The transparency of Adel's method is its main advantage here: a per-row number is easy to revise.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="pitfalls">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xii.</span>Pitfalls</div>
+    <h2 class="section-title">Eight failure modes <em>this chapter has seen too often</em>.</h2>
+    <p class="section-intro">Drawn from Sommerville, Wiegers, Robertson and Robertson, and the COMP433 marking history. Each one is the recurring source of a category of defects discovered too late.</p>
+
+    <div class="pitfall-list">
+      <div class="pitfall">
+        <h5>"Easy to use", "fast", "secure"</h5>
+        <p>Adjectives that pass natural-language reading but cannot be tested. Replace each with a measurable property and a threshold. "Fast" becomes "responds in under 1.5 seconds for 95% of queries".</p>
+      </div>
+      <div class="pitfall">
+        <h5>Two requirements in one sentence</h5>
+        <p>"The system shall be fast and secure" mixes two NFRs. They have different stakeholders, acceptance criteria, and test procedures. Split them.</p>
+      </div>
+      <div class="pitfall">
+        <h5>Solution language inside the requirement</h5>
+        <p>"The system shall use a drop-down list to select the doctor" prescribes a control before design. Write "the system shall let the user select a doctor from the available list" and leave the control to interaction design.</p>
+      </div>
+      <div class="pitfall">
+        <h5>Domain knowledge left implicit</h5>
+        <p>Domain experts forget to say things that, in their world, are obvious. Write down the obvious. A pharmacist will not say "doses are non-negative"; that does not mean the system can assume it.</p>
+      </div>
+      <div class="pitfall">
+        <h5>No ranking</h5>
+        <p>"All requirements are critical" is the same as "there is no plan for scope cuts under pressure". Rank explicitly so the team knows what survives.</p>
+      </div>
+      <div class="pitfall">
+        <h5>No traceability links</h5>
+        <p>A requirement with no link backward (to a stakeholder or regulation) and no link forward (to a test or design element) is an orphan. When asked "why is this here?", the answer should be in the document, not in memory.</p>
+      </div>
+      <div class="pitfall">
+        <h5>Frozen specifications</h5>
+        <p>Treating the document as immutable forces the team to ship the wrong thing or to maintain a shadow spec. Versioned, with a documented change process, is the working alternative.</p>
+      </div>
+      <div class="pitfall">
+        <h5>Effort estimated without requirements</h5>
+        <p>An estimate that pre-dates the requirements is a guess. Adel's per-UR method exists exactly to prevent this: if there are no URs, there is no number to compute.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="refs">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xiii.</span>References</div>
+    <h2 class="section-title">Sources cited above, <em>and where to go next</em>.</h2>
+    <p class="section-intro">The course textbook is identified at the head of the list; the rest are works directly referenced in the body and standard practitioner references.</p>
+
+    <h3 class="subhead-small">Course material</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Taweel, A.</strong> (2025/26). <em>COMP433 Software Engineering: Requirements Engineering (Chapter 3)</em>. Birzeit University lecture notes. <em>The primary course source; the framings, examples, and the simplified effort-estimation method in this companion follow Adel's notes directly.</em></div>
+      <div class="ref"><strong>Sommerville, I.</strong> (2015). <em>Software Engineering</em> (10th ed.). Pearson. <em>The standard textbook. Chapter 4 on Requirements Engineering is the canonical reference for the layered model, the FR/NFR/Domain classification, the IEEE document structure, and the process model.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Requirements engineering, practitioner</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Wiegers, K. and Beatty, J.</strong> (2013). <em>Software Requirements</em> (3rd ed.). Microsoft Press. <em>The most widely used practitioner handbook; substantial detail on elicitation, prioritisation, and change management.</em></div>
+      <div class="ref"><strong>Robertson, S. and Robertson, J.</strong> (2012). <em>Mastering the Requirements Process: Getting Requirements Right</em> (3rd ed.). Addison-Wesley. <em>The Volere methodology and template.</em></div>
+      <div class="ref"><strong>Cockburn, A.</strong> (2001). <em>Writing Effective Use Cases</em>. Addison-Wesley. <em>The reference for the structured specification template used in Section viii.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Standards</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>IEEE Std 830-1998</strong>. <em>Recommended Practice for Software Requirements Specifications</em>. IEEE. <em>The original document-structure standard; widely used in practice though now superseded.</em></div>
+      <div class="ref"><strong>ISO/IEC/IEEE 29148:2018</strong>. <em>Systems and software engineering, Life cycle processes, Requirements engineering</em>. International Organization for Standardization. <em>The current international standard; replaces IEEE 830.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Effort estimation</h3>
+    <div class="ref-list">
+      <div class="ref"><strong>Boehm, B.</strong> (1981). <em>Software Engineering Economics</em>. Prentice-Hall. <em>The original source of the cost-of-late-defect-fixing curve and of COCOMO 81.</em></div>
+      <div class="ref"><strong>Boehm, B. et al.</strong> (2000). <em>Software Cost Estimation with COCOMO II</em>. Prentice-Hall. <em>The current canonical reference for COCOMO; explains the 17 cost drivers and the calibration of the equations.</em></div>
+      <div class="ref"><strong>Albrecht, A. J.</strong> (1979). Measuring application development productivity. <em>Proceedings of the IBM Application Development Symposium</em>, 83-92. <em>The function points method.</em></div>
+      <div class="ref"><strong>Jorgensen, M. and Shepperd, M.</strong> (2007). A systematic review of software development cost estimation studies. <em>IEEE Transactions on Software Engineering</em>, 33(1), 33-53. <em>The most thorough survey of cost-estimation accuracy across methods; source of the plus-or-minus-30-to-50-percent observation in Section xi.</em></div>
+      <div class="ref"><strong>Cohn, M.</strong> (2005). <em>Agile Estimating and Planning</em>. Prentice-Hall. <em>The agile planning-poker / story-points methodology.</em></div>
+      <div class="ref"><strong>Boehm, B. and Basili, V.</strong> (2001). Software defect reduction top 10 list. <em>IEEE Computer</em>, 34(1), 135-137. <em>The defect-cost analysis underlying the cost-curve discussion in Section i.</em></div>
+    </div>
+
+    <h3 class="subhead-small">Adjacent course material</h3>
+    <div class="ref-list">
+      <div class="ref"><a class="inline" href="/birzeit/comp322/scenarios_requirements_companion.html"><strong>COMP322: Scenarios and requirements companion</strong></a>. <em>The HCI companion treating the same material from the user side; complementary reading.</em></div>
+      <div class="ref"><a class="inline" href="/birzeit/comp322/personas_companion.html"><strong>COMP322: Personas companion</strong></a>. <em>What sits upstream of requirements: research-grounded user archetypes.</em></div>
+    </div>
+
+    <div class="cta-card">
+      <div class="tag">Next chapter</div>
+      <h4>Chapter 4: System modelling and UML</h4>
+      <p>The requirements document is a text artefact. Most non-trivial systems also need graphical models: use case diagrams, activity diagrams, class diagrams, sequence diagrams. Chapter 4's companion covers the notation, history, and accurate drawing of each.</p>
+      <a class="button" href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html">Open Ch.4 companion &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div>COMP433 &middot; Software Engineering &middot; Birzeit University &middot; Spring 2025/2026</div>
+    <div><a href="/birzeit/comp433/">course page</a> &middot; <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html">Ch.4 companion</a></div>
+  </div>
+</footer>
+
+<script>
+const EXAMPLE = [
+  { ur: "UR1", desc: "Account registration",      devs: 2, eff: 2 },
+  { ur: "UR2", desc: "Login & authentication",    devs: 1, eff: 3 },
+  { ur: "UR3", desc: "Patient record management", devs: 3, eff: 2 },
+  { ur: "UR4", desc: "Reporting & exports",       devs: 4, eff: 1 }
+];
+
+let rows = JSON.parse(JSON.stringify(EXAMPLE));
+
+function render() {
+  const body = document.getElementById("urBody");
+  body.innerHTML = rows.map((r, i) => `
+    <tr>
+      <td><input type="text" value="${r.ur}" oninput="rows[${i}].ur=this.value; recompute();"></td>
+      <td><input type="text" value="${r.desc}" oninput="rows[${i}].desc=this.value;"></td>
+      <td><input type="number" min="0" step="1" value="${r.devs}" oninput="rows[${i}].devs=parseFloat(this.value)||0; recompute();"></td>
+      <td><input type="number" min="0" step="0.5" value="${r.eff}" oninput="rows[${i}].eff=parseFloat(this.value)||0; recompute();"></td>
+      <td><input type="text" readonly class="totalcol" value="${(r.devs*r.eff).toFixed(1)}"></td>
+      <td><button class="x-btn" onclick="removeRow(${i})" title="Remove">&times;</button></td>
+    </tr>
+  `).join("");
+}
+
+function addUR() {
+  const n = rows.length + 1;
+  rows.push({ ur: "UR" + n, desc: "", devs: 1, eff: 1 });
+  render();
+  recompute();
+}
+function removeRow(i) {
+  rows.splice(i, 1);
+  if (rows.length === 0) rows.push({ ur: "UR1", desc: "", devs: 1, eff: 1 });
+  render();
+  recompute();
+}
+function resetUR() {
+  rows = JSON.parse(JSON.stringify(EXAMPLE));
+  document.getElementById("bufPct").value = 30;
+  document.getElementById("wkSalary").value = 250;
+  document.getElementById("minMargin").value = 10;
+  document.getElementById("maxMargin").value = 30;
+  render();
+  recompute();
+}
+
+function recompute() {
+  const bufPct = parseFloat(document.getElementById("bufPct").value) || 0;
+  const wkSalary = parseFloat(document.getElementById("wkSalary").value) || 0;
+  const minM = parseFloat(document.getElementById("minMargin").value) || 0;
+  const maxM = parseFloat(document.getElementById("maxMargin").value) || 0;
+
+  const avgDev = rows.length ? rows.reduce((s, r) => s + (r.devs || 0), 0) / rows.length : 0;
+  const avgEff = rows.length ? rows.reduce((s, r) => s + (r.eff || 0), 0) / rows.length : 0;
+  const totEff = rows.reduce((s, r) => s + (r.devs || 0) * (r.eff || 0), 0);
+  const sched = totEff * (1 + bufPct / 100);
+  const cost = sched * wkSalary;
+  const minPrice = cost * (1 + minM / 100);
+  const maxPrice = cost * (1 + maxM / 100);
+
+  document.getElementById("outAvgDev").textContent = avgDev.toFixed(1);
+  document.getElementById("outAvgEff").innerHTML = avgEff.toFixed(1) + '<span class="unit">pw</span>';
+  document.getElementById("outTotEff").innerHTML = totEff.toFixed(1) + '<span class="unit">pw</span>';
+  document.getElementById("outSched").innerHTML = sched.toFixed(1) + '<span class="unit">weeks</span>';
+  document.getElementById("outCost").textContent = cost.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  document.getElementById("outMinPrice").textContent = minPrice.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  document.getElementById("outMaxPrice").textContent = maxPrice.toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+  // refresh total column for each row
+  const cells = document.querySelectorAll(".calc-table .totalcol");
+  cells.forEach((c, i) => {
+    if (rows[i]) c.value = ((rows[i].devs || 0) * (rows[i].eff || 0)).toFixed(1);
+  });
+}
+
+render();
+recompute();
+</script>
+
+</body>
+</html>
