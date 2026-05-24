@@ -177,13 +177,88 @@
   svg .uml-text-mono { font-family: var(--mono); font-size: 11px; fill: var(--ink); }
   svg .uml-text-italic { font-family: var(--serif); font-style: italic; font-size: 12px; fill: var(--ink); }
   svg .uml-text-stereo { font-family: var(--mono); font-size: 10px; fill: var(--steel-deep); }
+  svg .uml-text-mute { font-family: var(--sans); font-style: italic; font-size: 12px; fill: #8b94a3; }
   svg .uml-line { stroke: var(--ink); stroke-width: 1.4; fill: none; }
   svg .uml-line-dashed { stroke: var(--ink); stroke-width: 1.2; fill: none; stroke-dasharray: 4,3; }
+  svg .uml-line-blue { stroke: #4a8bb8; stroke-width: 1.4; fill: none; }
+  svg .uml-line-blue-dashed { stroke: #4a8bb8; stroke-width: 1.2; fill: none; stroke-dasharray: 4,3; }
   svg .uml-box { stroke: var(--ink); stroke-width: 1.4; fill: white; }
+  svg .uml-box-blue { stroke: #4a8bb8; stroke-width: 1.4; fill: #eaf3f9; }
   svg .uml-fill-accent { fill: var(--accent); }
   svg .uml-fill-steel { fill: var(--steel); }
   svg .uml-fill-warm { fill: var(--paper-warm); }
   svg .uml-fill-deep { fill: var(--paper-deep); }
+  svg .actor-blue { stroke: #2c6e9a; stroke-width: 1.4; fill: #eaf3f9; }
+
+  /* Inline concept tooltip: dotted underline term that reveals a small panel on hover/focus.
+     Default tooltip floats to the right of the term; .tip-right-anchor forces a left-edge anchor
+     for terms near the left page edge so the panel always stays inside the viewport. */
+  .term { border-bottom: 1.5px dotted var(--steel); cursor: help; position: relative; color: var(--ink); padding-bottom: 1px; }
+  .term:hover, .term:focus { background: rgba(74,139,184,0.10); border-bottom-color: var(--accent); outline: none; }
+  .term .tip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    z-index: 50;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    max-width: 80vw;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 14px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 400;
+    font-style: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    pointer-events: none;
+    transition: opacity 0.15s, visibility 0.15s;
+    text-align: left;
+    white-space: normal;
+  }
+  .term .tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .term:hover .tip, .term:focus .tip { visibility: visible; opacity: 1; }
+  /* Force left-edge anchor (tip extends to the right) — use for terms near the left of the page */
+  .term.tip-right .tip { left: 0; transform: translateX(0); }
+  .term.tip-right .tip::after { left: 20px; transform: translateX(0); }
+  /* Force right-edge anchor (tip extends to the left) — for terms near the right of the page */
+  .term.tip-left .tip { left: auto; right: 0; transform: translateX(0); }
+  .term.tip-left .tip::after { left: auto; right: 20px; transform: translateX(0); }
+
+  /* Diagram hot-spots: invisible <rect>/<circle> overlays on SVG glyphs make them hoverable.
+     Used to attach concept tooltips to use cases, actors, arrows, etc. The fixed-position
+     tooltip panel below the SVG is driven by JS; this just styles its appearance. */
+  svg .hotspot { fill: transparent; stroke: transparent; cursor: help; pointer-events: all; }
+  svg .hotspot:hover { fill: rgba(74,139,184,0.10); stroke: #4a8bb8; stroke-width: 1; stroke-dasharray: 3,2; }
+  .diagram-tooltip {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--paper-warm);
+    border-left: 3px solid var(--steel);
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    min-height: 44px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .diagram-tooltip strong { color: var(--ink); font-weight: 600; }
+  .diagram-tooltip.is-active { background: #eaf3f9; border-left-color: #2c6e9a; }
+  .diagram-tooltip .placeholder { color: var(--ink-mute); font-style: italic; }
 </style>
 </head>
 <body>
@@ -198,16 +273,17 @@
       <a href="#history">ii. History</a>
       <a href="#today">iii. Where used</a>
       <a href="#families">iv. Four families</a>
-      <a href="#types">v. The 14 diagrams</a>
-      <a href="#usecase">vi. Use case</a>
-      <a href="#ucdesc">vii. UC descriptions</a>
-      <a href="#activity">viii. Activity</a>
-      <a href="#class">ix. Class</a>
-      <a href="#sequence">x. Sequence</a>
-      <a href="#state">xi. State machine</a>
-      <a href="#archi">xii. Component &amp; deployment</a>
-      <a href="#pitfalls">xiii. Pitfalls</a>
-      <a href="#refs">xiv. References</a>
+      <a href="#journey">v. The journey</a>
+      <a href="#types">vi. The 14 diagrams</a>
+      <a href="#usecase">vii. Use case</a>
+      <a href="#ucdesc">viii. UC descriptions</a>
+      <a href="#activity">ix. Activity</a>
+      <a href="#class">x. Class</a>
+      <a href="#sequence">xi. Sequence</a>
+      <a href="#state">xii. State machine</a>
+      <a href="#archi">xiii. Component &amp; deployment</a>
+      <a href="#pitfalls">xiv. Pitfalls</a>
+      <a href="#refs">xv. References</a>
     </nav>
   </div>
 </div>
@@ -232,16 +308,17 @@
       <li><span class="toc-num">ii.</span><a href="#history">UML history and unification</a></li>
       <li><span class="toc-num">iii.</span><a href="#today">Where UML lives in current practice</a></li>
       <li><span class="toc-num">iv.</span><a href="#families">The four families of models</a></li>
-      <li><span class="toc-num">v.</span><a href="#types">The fourteen UML diagram types</a></li>
-      <li><span class="toc-num">vi.</span><a href="#usecase">Use case diagrams</a></li>
-      <li><span class="toc-num">vii.</span><a href="#ucdesc">Use case descriptions and scenarios</a></li>
-      <li><span class="toc-num">viii.</span><a href="#activity">Activity diagrams</a></li>
-      <li><span class="toc-num">ix.</span><a href="#class">Class diagrams</a></li>
-      <li><span class="toc-num">x.</span><a href="#sequence">Sequence diagrams (with step-through)</a></li>
-      <li><span class="toc-num">xi.</span><a href="#state">State machine diagrams (with simulator)</a></li>
-      <li><span class="toc-num">xii.</span><a href="#archi">Component and deployment diagrams</a></li>
-      <li><span class="toc-num">xiii.</span><a href="#pitfalls">Common pitfalls</a></li>
-      <li><span class="toc-num">xiv.</span><a href="#refs">References and further reading</a></li>
+      <li><span class="toc-num">v.</span><a href="#journey">The journey: where each model fits</a></li>
+      <li><span class="toc-num">vi.</span><a href="#types">The fourteen UML diagram types</a></li>
+      <li><span class="toc-num">vii.</span><a href="#usecase">Use case diagrams</a></li>
+      <li><span class="toc-num">viii.</span><a href="#ucdesc">Use case descriptions and scenarios</a></li>
+      <li><span class="toc-num">ix.</span><a href="#activity">Activity diagrams</a></li>
+      <li><span class="toc-num">x.</span><a href="#class">Class diagrams</a></li>
+      <li><span class="toc-num">xi.</span><a href="#sequence">Sequence diagrams (with step-through)</a></li>
+      <li><span class="toc-num">xii.</span><a href="#state">State machine diagrams (with simulator)</a></li>
+      <li><span class="toc-num">xiii.</span><a href="#archi">Component and deployment diagrams</a></li>
+      <li><span class="toc-num">xiv.</span><a href="#pitfalls">Common pitfalls</a></li>
+      <li><span class="toc-num">xv.</span><a href="#refs">References and further reading</a></li>
     </ul>
   </div>
 </div>
@@ -255,7 +332,24 @@
 
     <p class="body">Sommerville (10th ed., Chapter 5) defines a model as "an abstract view of a system that ignores some system details. Complementary system models can be developed to show the system's context, interactions, structure, and behaviour." Two words in that sentence carry the weight: <em>ignores</em> and <em>complementary</em>. A model ignores by design; complementary models compose into a full picture because each one ignores different things.</p>
 
-    <p class="body">Adel's lecture notes give the same idea from the practitioner side: "the language of the designer; (real-world) representations of the system to-be-built or as-built; a complete description of a system from a particular perspective; tools for communication with various stakeholders; allow reasoning about some characteristics of a system; often capture both structural and behavioural aspects."</p>
+    <p class="body">The practitioner's working definition is shorter but compatible: a model is the language of the designer; a description of the system-to-be-built or as-built from a particular perspective; a tool for communicating with different stakeholders; and a means of reasoning about some characteristic of the system without holding the whole of it in your head. The course lecture notes (Taweel, 2025) summarise it in the same terms.</p>
+
+    <h3 class="subhead">Two questions a model must answer</h3>
+    <p class="body">Before you draw a model, you should know which two questions it answers — because if it answers neither, it is not earning its place on the page:</p>
+    <ul class="body">
+      <li><strong>Who is the reader?</strong> A developer? An auditor? A clinical specialist? The customer's contracting officer? A model is a piece of communication; it has to be addressed to someone.</li>
+      <li><strong>What decision does it support?</strong> Scope confirmation? An algorithm choice? A staffing estimate? A deployment topology? A model that does not help anyone decide anything is decoration.</li>
+    </ul>
+    <p class="body">Every diagram in this companion is paired with a short "where it earns its place" panel that names the reader and the decision. Keep those two anchors in mind as you read; they are what separates a useful diagram from a textbook one.</p>
+
+    <h3 class="subhead">Three modelling moves</h3>
+    <p class="body">Underneath the fourteen UML diagram types are just three modelling moves you make again and again. Recognising which move you are making is the easiest way to pick the right diagram:</p>
+    <ul class="body">
+      <li><strong>Abstraction.</strong> Strip out detail to expose structure. The class diagram does this for code; the use case diagram does it for usage; the deployment diagram does it for infrastructure.</li>
+      <li><strong>Decomposition.</strong> Split one thing into parts that can be reasoned about separately. Composite use cases decompose system functionality; activity diagrams decompose a use case into ordered steps; component diagrams decompose the system into modules.</li>
+      <li><strong>Refinement.</strong> Take a sketched-in object and add detail. A use case sketch refines into an activity diagram; a class diagram refines into a sequence diagram; a state name refines into a sub-state machine.</li>
+    </ul>
+    <p class="body">If you find yourself drawing a diagram without doing one of these three moves, the diagram is probably not adding value — you are decorating.</p>
 
     <div class="quotebox">
       <p>"All models are wrong; some are useful."</p>
@@ -361,16 +455,204 @@
 </section>
 
 <!-- ===================================================================== -->
-<section class="block" id="types">
+<section class="block" id="journey">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">v.</span>Taxonomy</div>
-    <h2 class="section-title">UML 2.5: <em>fourteen diagram types</em>.</h2>
-    <p class="section-intro">The UML 2.5 specification defines fourteen diagram types, split into structural (seven) and behavioural (seven). Adel's lecture notes single out nine as "standard" diagrams for the course. The map below lists all fourteen for completeness; the rest of the companion focuses on the seven treated in depth.</p>
+    <div class="section-eyebrow"><span class="num">v.</span>The journey</div>
+    <h2 class="section-title">From <em>elicitation to deployment</em>: where each model fits.</h2>
+    <p class="section-intro">The diagrams in this chapter do not exist in isolation. Each one sits at a particular point in the software lifecycle, takes its input from the artefact that precedes it, and produces an output that the next artefact builds on. This section is the map that the rest of the companion fills in.</p>
+
+    <p class="body">A common student misconception is that UML diagrams are alternatives — "should I draw a use case or a class diagram?" The right framing is sequential: <strong>each diagram answers a question the previous one raised</strong>, at the right level of abstraction for the stage you are in. Knowing which question is on the table is what tells you which diagram to draw next.</p>
 
     <div class="figure">
       <div class="figure-caption">Figure 1</div>
+      <div class="figure-title">The modelling journey: from stakeholder needs to deployable system</div>
+      <svg viewBox="0 0 1180 540" xmlns="http://www.w3.org/2000/svg" id="journeyFig" role="img" aria-label="A horizontal pipeline of nine artefacts that compose the modelling journey, with effort estimation positioned between requirements and design.">
+        <defs>
+          <marker id="j-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4a8bb8"/></marker>
+          <marker id="j-arrow-mute" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#8b94a3"/></marker>
+        </defs>
+
+        <!-- Phase headers across the top -->
+        <text x="160" y="30" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" fill="#7a3a23">Requirements</text>
+        <text x="160" y="46" text-anchor="middle" class="uml-text" font-size="11" fill="#5a6473">"What must it do?"</text>
+        <line x1="40" y1="56" x2="280" y2="56" stroke="#7a3a23" stroke-width="1.4"/>
+
+        <text x="490" y="30" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" fill="#1a3d52">Analysis &amp; Design</text>
+        <text x="490" y="46" text-anchor="middle" class="uml-text" font-size="11" fill="#5a6473">"How will it work?"</text>
+        <line x1="320" y1="56" x2="660" y2="56" stroke="#1a3d52" stroke-width="1.4"/>
+
+        <text x="900" y="30" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" fill="#4a6b3a">Architecture</text>
+        <text x="900" y="46" text-anchor="middle" class="uml-text" font-size="11" fill="#5a6473">"Where will it run?"</text>
+        <line x1="730" y1="56" x2="1070" y2="56" stroke="#4a6b3a" stroke-width="1.4"/>
+
+        <!-- Row 1: Elicitation -> Requirements doc -> Effort estimation -->
+        <g class="j-step" id="jStep1" data-tip="Elicitation: structured interviews, observation, scenarios, and prototypes used to surface what the system must do. Not a UML artefact; this is where the inputs to the journey come from. (Ch.3)">
+          <rect x="40" y="80" width="240" height="62" rx="8" class="uml-box" fill="#f3ede2" stroke="#b85c38" stroke-width="1.6"/>
+          <text x="160" y="106" text-anchor="middle" class="uml-text" font-weight="700">1. Elicitation</text>
+          <text x="160" y="124" text-anchor="middle" class="uml-text" font-size="11" fill="#5a6473">interviews, scenarios, prototypes</text>
+        </g>
+
+        <line x1="280" y1="111" x2="320" y2="111" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <g class="j-step" id="jStep2" data-tip="Requirements document: structured User Requirements (UR) and System Requirements (SR), validated and signed off. The input to every subsequent diagram. (Ch.3)">
+          <rect x="320" y="80" width="240" height="62" rx="8" class="uml-box" fill="#f3ede2" stroke="#b85c38" stroke-width="1.6"/>
+          <text x="440" y="106" text-anchor="middle" class="uml-text" font-weight="700">2. Requirements doc</text>
+          <text x="440" y="124" text-anchor="middle" class="uml-text" font-size="11" fill="#5a6473">UR / SR, NFRs, domain</text>
+        </g>
+
+        <line x1="560" y1="111" x2="600" y2="111" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <g class="j-step" id="jStep3" data-tip="Effort estimation: the per-requirement, bottom-up cost &amp; schedule estimate. Done HERE — once requirements are stable but before any design commitment — because the estimate must price what the customer asked for, not what the team plans to build. (Ch.3 calculator)">
+          <rect x="600" y="80" width="240" height="62" rx="8" class="uml-box" fill="#fff3e0" stroke="#c9a961" stroke-width="2"/>
+          <text x="720" y="100" text-anchor="middle" class="uml-text" font-weight="700">3. Effort estimation</text>
+          <text x="720" y="116" text-anchor="middle" class="uml-text" font-size="11" fill="#5a6473">cost, schedule, quoted price</text>
+          <text x="720" y="132" text-anchor="middle" class="uml-text-mono" font-size="10" fill="#806113">decision gate</text>
+        </g>
+
+        <!-- Phase-crossing arrow with a "design begins" annotation -->
+        <line x1="840" y1="111" x2="880" y2="111" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+        <text x="860" y="76" text-anchor="middle" class="uml-text-stereo" font-size="10">go/no-go</text>
+
+        <g class="j-step" id="jStep4" data-tip="Use case diagram (Ch.4 §vii): converts the User Requirements into a one-page picture of who interacts with the system and for what purpose. The first UML diagram in the chain. Output: a list of named use cases each backed by a full textual description.">
+          <rect x="880" y="80" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
+          <text x="1000" y="106" text-anchor="middle" class="uml-text" font-weight="700">4. Use case diagram</text>
+          <text x="1000" y="124" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">actors, system boundary</text>
+        </g>
+
+        <!-- Drop down arrow -->
+        <line x1="1000" y1="142" x2="1000" y2="200" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <!-- Row 2: right-to-left flow -->
+        <g class="j-step" id="jStep5" data-tip="Activity diagram (Ch.4 §ix): unpacks the most complex use cases into ordered steps, decisions, parallel work, and the actor responsible for each step. Drawn when the workflow is non-trivial; skipped when the use case has one linear path.">
+          <rect x="880" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
+          <text x="1000" y="226" text-anchor="middle" class="uml-text" font-weight="700">5. Activity diagram</text>
+          <text x="1000" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">workflow, swimlanes</text>
+        </g>
+
+        <line x1="880" y1="231" x2="840" y2="231" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <g class="j-step" id="jStep6" data-tip="Class diagram (Ch.4 §x): the static structure of the system. Built from the noun-verb analysis of the requirements document and the responsibilities surfaced by the use cases. The longest-lived diagram on a project.">
+          <rect x="600" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
+          <text x="720" y="226" text-anchor="middle" class="uml-text" font-weight="700">6. Class diagram</text>
+          <text x="720" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">classes, associations</text>
+        </g>
+
+        <line x1="600" y1="231" x2="560" y2="231" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <g class="j-step" id="jStep7" data-tip="Sequence diagram (Ch.4 §xi): pins down the order of messages between objects for ONE specific interaction. Refines a chosen use case scenario; usually drawn for the two or three most non-trivial flows, not for every use case.">
+          <rect x="320" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
+          <text x="440" y="226" text-anchor="middle" class="uml-text" font-weight="700">7. Sequence diagram</text>
+          <text x="440" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">message order, fragments</text>
+        </g>
+
+        <line x1="320" y1="231" x2="280" y2="231" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <g class="j-step" id="jStep8" data-tip="State machine (Ch.4 §xii): the lifecycle of one domain object whose behaviour depends on its current state. Drawn only for objects that genuinely have states (Loan, Order, Ticket) — most classes don't need one.">
+          <rect x="40" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
+          <text x="160" y="226" text-anchor="middle" class="uml-text" font-weight="700">8. State machine</text>
+          <text x="160" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">states, transitions, events</text>
+        </g>
+
+        <line x1="160" y1="262" x2="160" y2="320" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <!-- Row 3: left-to-right -->
+        <g class="j-step" id="jStep9" data-tip="Component diagram (Ch.4 §xiii): packages the classes into modules with provided and required interfaces. Marks the boundary between design and architecture.">
+          <rect x="40" y="320" width="240" height="62" rx="8" class="uml-box" fill="#e0e8d8" stroke="#4a6b3a" stroke-width="1.6"/>
+          <text x="160" y="346" text-anchor="middle" class="uml-text" font-weight="700">9. Component diagram</text>
+          <text x="160" y="364" text-anchor="middle" class="uml-text" font-size="11" fill="#2d4220">modules, interfaces</text>
+        </g>
+
+        <line x1="280" y1="351" x2="320" y2="351" class="uml-line-blue" marker-end="url(#j-arrow)"/>
+
+        <g class="j-step" id="jStep10" data-tip="Deployment diagram (Ch.4 §xiii): which component runs on which physical or virtual node, and how the nodes talk to each other. The end of the journey for the modelling pass — what the operations team needs to provision the system.">
+          <rect x="320" y="320" width="240" height="62" rx="8" class="uml-box" fill="#e0e8d8" stroke="#4a6b3a" stroke-width="1.6"/>
+          <text x="440" y="346" text-anchor="middle" class="uml-text" font-weight="700">10. Deployment diagram</text>
+          <text x="440" y="364" text-anchor="middle" class="uml-text" font-size="11" fill="#2d4220">nodes, protocols, artefacts</text>
+        </g>
+
+        <!-- Refinement and iteration loops shown as muted curved arrows -->
+        <path d="M 720 262 Q 720 295 680 295 Q 460 295 440 270" class="uml-line-dashed" stroke="#8b94a3" stroke-width="1.2" fill="none" marker-end="url(#j-arrow-mute)"/>
+        <text x="560" y="290" text-anchor="middle" class="uml-text-mute" font-size="11">classes refine into sequence interactions</text>
+
+        <path d="M 720 200 Q 720 175 800 175 Q 950 175 1000 200" class="uml-line-dashed" stroke="#8b94a3" stroke-width="1.2" fill="none" marker-end="url(#j-arrow-mute)"/>
+        <text x="860" y="172" text-anchor="middle" class="uml-text-mute" font-size="11">classes carry the activities</text>
+
+        <!-- Iteration loop arrow looping from deployment back up to requirements -->
+        <path d="M 440 382 Q 440 460 200 460 Q 100 460 100 420 Q 100 380 130 380" class="uml-line-dashed" stroke="#b85c38" stroke-width="1.4" fill="none" marker-end="url(#j-arrow)"/>
+        <text x="270" y="478" text-anchor="middle" class="uml-text" font-size="11" fill="#7a3a23" font-style="italic">iterate: new requirements re-enter at step 1</text>
+
+        <!-- Legend -->
+        <g transform="translate(620, 410)">
+          <text x="0" y="0" class="uml-text" font-weight="600" font-size="12">Legend</text>
+          <rect x="0" y="14" width="14" height="14" fill="#f3ede2" stroke="#b85c38" stroke-width="1.4"/>
+          <text x="22" y="25" class="uml-text" font-size="12">Requirements artefact (Ch.3)</text>
+          <rect x="0" y="34" width="14" height="14" fill="#fff3e0" stroke="#c9a961" stroke-width="1.6"/>
+          <text x="22" y="45" class="uml-text" font-size="12">Decision gate</text>
+          <rect x="240" y="14" width="14" height="14" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.4"/>
+          <text x="262" y="25" class="uml-text" font-size="12">Analysis &amp; design diagram (Ch.4)</text>
+          <rect x="240" y="34" width="14" height="14" fill="#e0e8d8" stroke="#4a6b3a" stroke-width="1.4"/>
+          <text x="262" y="45" class="uml-text" font-size="12">Architectural diagram (Ch.4)</text>
+        </g>
+      </svg>
+      <div class="figure-note">Hover any box for a one-line description of what it is and why it sits where it does. Solid blue arrows show the main forward flow; dashed grey arrows show common refinement loops within design; the long dashed rust arrow shows the iteration that every project really has — deployed software exposes new requirements, which re-enter the pipeline at step&nbsp;1.</div>
+      <div class="diagram-tooltip" id="journeyTip"><span class="placeholder">Hover or tap a step in the journey above to see what it is, what feeds it, and what it produces.</span></div>
+    </div>
+
+    <h3 class="subhead">Reading the pipeline</h3>
+    <p class="body">Three observations worth pausing on:</p>
+
+    <ol class="body">
+      <li><strong>Cost estimation is a decision gate, not a deliverable.</strong> Steps 1 and 2 produce the requirements; step 3 prices them. The estimate is what the customer needs to authorise the design work (steps 4&ndash;10). Doing the estimate too early — before requirements are stable — produces a number nobody can defend. Doing it too late — after design has started — means the team is committed to a price that may not match the work.</li>
+      <li><strong>The arrows go forward but the work goes back and forward.</strong> A class diagram drawn at step 6 usually exposes a missing requirement at step 2, which is added and propagates back through the use cases (step 4). The pipeline is a thinking aid, not a waterfall.</li>
+      <li><strong>Not every step is mandatory.</strong> A small project may skip the activity diagram entirely; a project with no domain objects with lifecycles may skip the state machine. The skip rule is the same as the model rule: if it does not change anyone's decision, do not draw it.</li>
+    </ol>
+
+    <h3 class="subhead">Cost estimation in context</h3>
+    <p class="body">Cost estimation is treated in depth in the <a class="inline" href="/birzeit/comp433/Ch.3/COMP433_Ch3_Requirements_Engineering_Companion.html#effort">Ch.3 companion</a>, which includes an interactive calculator. The view from this chapter is about <em>when and why</em>, not <em>how</em>. The key implications:</p>
+
+    <ul class="body">
+      <li><strong>What you estimate.</strong> The unit of estimation is the <em>User Requirement</em>, not the use case. A single user requirement may map to several use cases (or none); the estimate has to attach to the requirement so it survives the design pass.</li>
+      <li><strong>What the estimate produces.</strong> Total effort (in person-weeks), schedule (effort &times; 1.30 buffer), cost (schedule &times; weekly salary), and a quoted price range (cost &times; 1.10 to 1.30). That price range is the artefact that goes back to the customer for sign-off.</li>
+      <li><strong>What changes the estimate.</strong> Anything that changes the requirements. A new UR added during use case modelling does not enter the pipeline silently — it goes back to step 3 and the estimate is revised. This is why the iteration loop in the figure points back to step 1 and not to step 2 or 3 alone.</li>
+      <li><strong>What the estimate does <em>not</em> do.</strong> It does not constrain how the team builds the system, which design patterns it uses, or which architectural style fits. Those are downstream choices that the estimate's coarseness has to absorb.</li>
+    </ul>
+
+    <h3 class="subhead">A worked thread through the journey</h3>
+    <p class="body">To make the pipeline concrete, follow one user requirement through it. The example is the Library System used as the running example in the rest of this companion:</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>Step</th><th>What it produces for "members can borrow books"</th></tr></thead>
+        <tbody>
+          <tr><td>1. Elicitation</td><td>Interview with the head librarian surfaces the rule "no more than six books on loan at once" and the existence of three loan periods (ShortLoan, MediumLoan, LongLoan).</td></tr>
+          <tr><td>2. Requirements doc</td><td>UR3: "A library member shall be able to borrow up to six copies of books at one time." SR3.1, SR3.2: derived system requirements with the loan periods and the maximum-loan check.</td></tr>
+          <tr><td>3. Effort estimation</td><td>UR3 is estimated at 2 developers &times; 1.5 person-weeks = 3 person-weeks. Sums into the project total; the customer signs the contract on the price that includes this number.</td></tr>
+          <tr><td>4. Use case</td><td>"Borrow copy of a book", with <code>&lt;&lt;include&gt;&gt;</code> "Compute return date" and <code>&lt;&lt;extend&gt;&gt;</code> "Refuse loan [too many books]". Use case description fully written out.</td></tr>
+          <tr><td>5. Activity</td><td>Swimlane diagram showing BookBorrower, Librarian, and System; covers the success path, the "too many books" branch, and the damaged-barcode error.</td></tr>
+          <tr><td>6. Class</td><td>Classes LibraryMember, Book, BookCopy, Loan (association class), Librarian. Method <code>borrow()</code> on LibraryMember; method <code>isAvailable()</code> on Book.</td></tr>
+          <tr><td>7. Sequence</td><td>Sequence diagram for the success scenario: BookBorrower &rarr; Librarian &rarr; System; messages for <code>checkAllowance()</code>, <code>createLoan()</code>, <code>updateStatus()</code>.</td></tr>
+          <tr><td>8. State machine</td><td>BookCopy lifecycle: <code>Available &rarr; OnLoan &rarr; Overdue &rarr; Lost</code> with the transitions and guards.</td></tr>
+          <tr><td>9. Component</td><td>LibraryFront (UI) component requires LoanManagement (app) component; LoanManagement requires PersistenceStore (infra).</td></tr>
+          <tr><td>10. Deployment</td><td>LibraryFront runs on each librarian desktop; LoanManagement on the library server; PersistenceStore on the central university database node.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body">One user requirement, ten artefacts. Most of the value is not in any single artefact; it is in the <em>traceability</em> from UR3 to the deployment node, which is what lets the team change the design and know which other artefacts to update. The rest of this companion is the toolkit for producing the entries in column two correctly.</p>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="types">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vi.</span>Taxonomy</div>
+    <h2 class="section-title">UML 2.5: <em>fourteen diagram types</em>.</h2>
+    <p class="section-intro">The UML 2.5 specification defines fourteen diagram types, split into structural (seven) and behavioural (seven). Nine of these are conventionally treated as the "standard" set you will encounter on real projects, and seven are covered in depth in this companion (and used in the COMP433 project). The map below lists all fourteen for completeness; the italicised types are part of the standard but encountered less often in practice.</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 2</div>
       <div class="figure-title">The UML 2.5 diagram taxonomy</div>
-      <svg viewBox="0 0 1100 480" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1100 510" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="tri" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker>
         </defs>
@@ -392,41 +674,50 @@
 
         <!-- Structural list -->
         <g transform="translate(160,180)">
-          <rect x="0" y="0" width="240" height="280" rx="6" fill="white" stroke="#d8cfc0"/>
-          <text x="14" y="22" class="uml-text" font-weight="600" fill="#b85c38">Class</text>
-          <text x="14" y="42" class="uml-text" font-size="11" fill="#5a6473">classes, attributes, operations, associations</text>
-          <text x="14" y="68" class="uml-text" font-weight="600" fill="#b85c38">Object</text>
-          <text x="14" y="88" class="uml-text" font-size="11" fill="#5a6473">instances of classes at a moment</text>
-          <text x="14" y="114" class="uml-text" font-weight="600" fill="#b85c38">Component</text>
-          <text x="14" y="134" class="uml-text" font-size="11" fill="#5a6473">components, provided/required interfaces</text>
-          <text x="14" y="160" class="uml-text" font-weight="600" fill="#b85c38">Deployment</text>
+          <rect x="0" y="0" width="240" height="296" rx="6" fill="white" stroke="#d8cfc0"/>
+          <!-- Section header: covered in depth -->
+          <text x="14" y="18" class="uml-text-mono" font-size="9" fill="#7a3a23" font-weight="600">COVERED IN DEPTH ↓</text>
+          <text x="14" y="36" class="uml-text" font-weight="600" fill="#b85c38">Class</text>
+          <text x="14" y="54" class="uml-text" font-size="11" fill="#5a6473">classes, attributes, operations, associations</text>
+          <text x="14" y="78" class="uml-text" font-weight="600" fill="#b85c38">Object</text>
+          <text x="14" y="96" class="uml-text" font-size="11" fill="#5a6473">instances of classes at a moment</text>
+          <text x="14" y="120" class="uml-text" font-weight="600" fill="#b85c38">Component</text>
+          <text x="14" y="138" class="uml-text" font-size="11" fill="#5a6473">components, provided/required interfaces</text>
+          <text x="14" y="162" class="uml-text" font-weight="600" fill="#b85c38">Deployment</text>
           <text x="14" y="180" class="uml-text" font-size="11" fill="#5a6473">runtime nodes and the artefacts on them</text>
-          <text x="14" y="206" class="uml-text" font-weight="600" fill="#5a6473">Package</text>
-          <text x="14" y="226" class="uml-text" font-size="11" fill="#5a6473">groupings of model elements</text>
-          <text x="14" y="252" class="uml-text" font-weight="600" fill="#5a6473">Composite structure</text>
-          <text x="14" y="272" class="uml-text" font-size="11" fill="#5a6473">internal structure of a classifier</text>
+          <!-- Divider -->
+          <line x1="14" y1="198" x2="226" y2="198" stroke="#d8cfc0" stroke-dasharray="3,3"/>
+          <!-- Section header: less common -->
+          <text x="14" y="216" class="uml-text-mono" font-size="9" fill="#8b94a3" font-weight="600">LESS COMMON IN PRACTICE ↓</text>
+          <text x="14" y="234" class="uml-text-mute" font-style="italic" font-weight="600">Package</text>
+          <text x="14" y="252" class="uml-text-mute" font-size="11" font-style="italic">groupings of model elements</text>
+          <text x="14" y="272" class="uml-text-mute" font-style="italic" font-weight="600">Composite structure</text>
+          <text x="14" y="290" class="uml-text-mute" font-size="11" font-style="italic">internal structure of a classifier</text>
         </g>
-        <text x="280" y="478" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(+ Profile diagram, for extensions)</text>
+        <text x="280" y="494" text-anchor="middle" class="uml-text-mute" font-style="italic" font-size="10">(+ Profile diagram, for extensions)</text>
 
         <!-- Behavioural list -->
         <g transform="translate(710,180)">
-          <rect x="0" y="0" width="240" height="280" rx="6" fill="white" stroke="#d8cfc0"/>
-          <text x="14" y="22" class="uml-text" font-weight="600" fill="#b85c38">Use case</text>
-          <text x="14" y="42" class="uml-text" font-size="11" fill="#5a6473">actors and what they do with the system</text>
-          <text x="14" y="68" class="uml-text" font-weight="600" fill="#b85c38">Activity</text>
-          <text x="14" y="88" class="uml-text" font-size="11" fill="#5a6473">workflows, decisions, parallelism</text>
-          <text x="14" y="114" class="uml-text" font-weight="600" fill="#b85c38">Sequence</text>
-          <text x="14" y="134" class="uml-text" font-size="11" fill="#5a6473">interactions over time</text>
-          <text x="14" y="160" class="uml-text" font-weight="600" fill="#b85c38">State machine</text>
+          <rect x="0" y="0" width="240" height="296" rx="6" fill="white" stroke="#d8cfc0"/>
+          <text x="14" y="18" class="uml-text-mono" font-size="9" fill="#7a3a23" font-weight="600">COVERED IN DEPTH ↓</text>
+          <text x="14" y="36" class="uml-text" font-weight="600" fill="#b85c38">Use case</text>
+          <text x="14" y="54" class="uml-text" font-size="11" fill="#5a6473">actors and what they do with the system</text>
+          <text x="14" y="78" class="uml-text" font-weight="600" fill="#b85c38">Activity</text>
+          <text x="14" y="96" class="uml-text" font-size="11" fill="#5a6473">workflows, decisions, parallelism</text>
+          <text x="14" y="120" class="uml-text" font-weight="600" fill="#b85c38">Sequence</text>
+          <text x="14" y="138" class="uml-text" font-size="11" fill="#5a6473">interactions over time</text>
+          <text x="14" y="162" class="uml-text" font-weight="600" fill="#b85c38">State machine</text>
           <text x="14" y="180" class="uml-text" font-size="11" fill="#5a6473">states and transitions of an object</text>
-          <text x="14" y="206" class="uml-text" font-weight="600" fill="#5a6473">Communication</text>
-          <text x="14" y="226" class="uml-text" font-size="11" fill="#5a6473">interaction with structure emphasis</text>
-          <text x="14" y="252" class="uml-text" font-weight="600" fill="#5a6473">Timing</text>
-          <text x="14" y="272" class="uml-text" font-size="11" fill="#5a6473">state changes against time</text>
+          <line x1="14" y1="198" x2="226" y2="198" stroke="#d8cfc0" stroke-dasharray="3,3"/>
+          <text x="14" y="216" class="uml-text-mono" font-size="9" fill="#8b94a3" font-weight="600">LESS COMMON IN PRACTICE ↓</text>
+          <text x="14" y="234" class="uml-text-mute" font-style="italic" font-weight="600">Communication</text>
+          <text x="14" y="252" class="uml-text-mute" font-size="11" font-style="italic">interaction with structure emphasis</text>
+          <text x="14" y="272" class="uml-text-mute" font-style="italic" font-weight="600">Timing</text>
+          <text x="14" y="290" class="uml-text-mute" font-size="11" font-style="italic">state changes against time</text>
         </g>
-        <text x="830" y="478" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(+ Interaction overview)</text>
+        <text x="830" y="494" text-anchor="middle" class="uml-text-mute" font-style="italic" font-size="10">(+ Interaction overview)</text>
       </svg>
-      <div class="figure-note">Rust-coloured labels indicate the diagrams covered in depth in the rest of this companion (and used in COMP433's project work). Grey-labelled types are part of the UML standard but encountered less often in practice.</div>
+      <div class="figure-note"><strong>Rust labels</strong> above the divider mark the seven diagrams covered in depth in the rest of this companion (and used in COMP433's project work). <em>Italic muted labels</em> below the divider are part of the UML standard but encountered less often in practice — knowing they exist is enough at this stage.</div>
     </div>
 
     <p class="body">The seven types covered in depth below are: use case, activity, class, sequence, state machine, component, and deployment. Together they cover the full life cycle of a typical project: requirements (use case, activity), analysis and design (class, sequence, state machine), and architecture (component, deployment).</p>
@@ -436,7 +727,7 @@
 <!-- ===================================================================== -->
 <section class="block" id="usecase">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">vi.</span>Use case diagrams</div>
+    <div class="section-eyebrow"><span class="num">vii.</span>Use case diagrams</div>
     <h2 class="section-title">Use case diagrams: <em>actors, tasks, system boundary</em>.</h2>
     <p class="section-intro">A use case diagram captures the system's behaviour from its users' point of view. It is usually the first UML diagram drawn on a project; it sits at the boundary between requirements and analysis.</p>
 
@@ -445,105 +736,131 @@
     <h3 class="subhead">Building blocks, drawn correctly</h3>
 
     <div class="figure">
-      <div class="figure-caption">Figure 2</div>
-      <div class="figure-title">A complete use case diagram: Library system</div>
-      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+      <div class="figure-caption">Figure 3</div>
+      <div class="figure-title">A complete use case diagram: Library system &mdash; <span style="font-weight:400;color:#5a6473;font-size:14px;">(hover any element for an explanation)</span></div>
+      <svg viewBox="0 0 1100 560" xmlns="http://www.w3.org/2000/svg" id="ucFig" role="img" aria-label="Library System use case diagram with three actors and six use cases.">
         <defs>
           <marker id="ext-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker>
         </defs>
 
         <!-- System boundary -->
-        <rect x="220" y="50" width="600" height="380" rx="8" class="uml-box" stroke-width="1.8" fill="#faf7f2"/>
-        <text x="520" y="42" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Library System</text>
+        <g data-tip="<strong>System boundary.</strong> The rectangle marks what is inside the system being built versus what is outside it. Actors stand outside the boundary; use cases stand inside it. The label at the top is the system name.">
+          <rect x="220" y="80" width="740" height="440" rx="8" class="uml-box" stroke-width="1.8" fill="#faf7f2"/>
+          <text x="590" y="70" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Library System</text>
+        </g>
 
-        <!-- Use cases (4 only; clean layout) -->
-        <!-- Top row -->
-        <ellipse cx="370" cy="130" rx="100" ry="28" class="uml-box" fill="white"/>
-        <text x="370" y="134" text-anchor="middle" class="uml-text">Borrow copy of a book</text>
+        <!-- Use cases: primary column (left, inside boundary) -->
+        <g data-tip="<strong>Use case &mdash; Borrow copy of a book.</strong> A task a BookBorrower needs to perform with the system, helped by the Librarian. Verb-phrase label, ellipse shape, inside the boundary. The full description (workflow, pre-/post-conditions, scenarios) lives in the requirements document, not on the diagram.">
+          <ellipse cx="400" cy="140" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="144" text-anchor="middle" class="uml-text">Borrow copy of a book</text>
+        </g>
 
-        <ellipse cx="650" cy="130" rx="100" ry="28" class="uml-box" fill="white"/>
-        <text x="650" y="134" text-anchor="middle" class="uml-text">Compute return date</text>
+        <g data-tip="<strong>Use case &mdash; Return copy of a book.</strong> A BookBorrower returns a copy they previously borrowed; the Librarian processes it. State of the BookCopy moves from OnLoan back to Available.">
+          <ellipse cx="400" cy="250" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="254" text-anchor="middle" class="uml-text">Return copy of a book</text>
+        </g>
 
-        <!-- Middle row -->
-        <ellipse cx="370" cy="240" rx="100" ry="28" class="uml-box" fill="white"/>
-        <text x="370" y="244" text-anchor="middle" class="uml-text">Return copy of a book</text>
+        <g data-tip="<strong>Use case &mdash; Renew loan of a book.</strong> Extend the loan period of a BookCopy already on loan. Reuses 'Compute return date' as an included sub-task (because every renewal needs a fresh return date).">
+          <ellipse cx="400" cy="360" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="364" text-anchor="middle" class="uml-text">Renew loan of a book</text>
+        </g>
 
-        <ellipse cx="650" cy="240" rx="100" ry="28" class="uml-box" fill="white"/>
-        <text x="650" y="244" text-anchor="middle" class="uml-text">Browse / search books</text>
+        <g data-tip="<strong>Use case &mdash; Browse / search books.</strong> Available to anyone, including non-members. Reads the catalogue but does not change system state. Only use case the Browser actor participates in.">
+          <ellipse cx="400" cy="470" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="474" text-anchor="middle" class="uml-text">Browse / search books</text>
+        </g>
 
-        <!-- Lower row -->
-        <ellipse cx="370" cy="350" rx="100" ry="28" class="uml-box" fill="white"/>
-        <text x="370" y="354" text-anchor="middle" class="uml-text">Refuse loan</text>
+        <!-- Use cases: refinement column (right, inside boundary) -->
+        <g data-tip="<strong>Included use case &mdash; Compute return date.</strong> A reusable sub-task: figures out the due date from the loan period (ShortLoan 2 days, MediumLoan 2 weeks, LongLoan 3 months). Included by both Borrow and Renew because both unconditionally need it.">
+          <ellipse cx="760" cy="200" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="760" y="204" text-anchor="middle" class="uml-text">Compute return date</text>
+        </g>
 
-        <ellipse cx="650" cy="350" rx="100" ry="28" class="uml-box" fill="white"/>
-        <text x="650" y="354" text-anchor="middle" class="uml-text">Renew loan of a book</text>
+        <g data-tip="<strong>Extending use case &mdash; Refuse loan.</strong> Fires conditionally when the BookBorrower already has the maximum number of items on loan. Does not participate in normal Borrow flow. Has no actor of its own; the system itself triggers it at the extension point in Borrow.">
+          <ellipse cx="760" cy="360" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="760" y="364" text-anchor="middle" class="uml-text">Refuse loan</text>
+        </g>
 
-        <!-- Actors on the left (BookBorrower upper, Librarian lower) -->
-        <g transform="translate(60, 110)">
-          <circle cx="20" cy="6" r="8" class="uml-box" fill="white"/>
-          <line x1="20" y1="14" x2="20" y2="42" class="uml-line"/>
-          <line x1="20" y1="22" x2="6" y2="32" class="uml-line"/>
-          <line x1="20" y1="22" x2="34" y2="32" class="uml-line"/>
-          <line x1="20" y1="42" x2="6" y2="58" class="uml-line"/>
-          <line x1="20" y1="42" x2="34" y2="58" class="uml-line"/>
+        <!-- ===== Actors ===== -->
+        <!-- BookBorrower (top-left, principal) -->
+        <g transform="translate(60, 110)" data-tip="<strong>Principal actor &mdash; BookBorrower.</strong> A member of the library who borrows physical copies. 'Principal' because they initiate the use cases. The same human could also be a Doctor in the hospital system; an actor is a ROLE, not a person.">
+          <circle cx="20" cy="6" r="8" class="actor-blue"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/>
           <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">BookBorrower</text>
           <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(library member)</text>
         </g>
 
-        <g transform="translate(60, 320)">
-          <circle cx="20" cy="6" r="8" class="uml-box" fill="white"/>
-          <line x1="20" y1="14" x2="20" y2="42" class="uml-line"/>
-          <line x1="20" y1="22" x2="6" y2="32" class="uml-line"/>
-          <line x1="20" y1="22" x2="34" y2="32" class="uml-line"/>
-          <line x1="20" y1="42" x2="6" y2="58" class="uml-line"/>
-          <line x1="20" y1="42" x2="34" y2="58" class="uml-line"/>
+        <!-- Librarian (middle-left, principal) -->
+        <g transform="translate(60, 290)" data-tip="<strong>Principal actor &mdash; Librarian.</strong> Operates the system on the borrower's behalf (scans the barcode, confirms the allowance, issues the loan). Principal because they directly act on the system.">
+          <circle cx="20" cy="6" r="8" class="actor-blue"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/>
           <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Librarian</text>
+          <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(staff)</text>
         </g>
 
-        <!-- Actor on the right -->
-        <g transform="translate(880, 220)">
-          <circle cx="20" cy="6" r="8" class="uml-box" fill="white"/>
-          <line x1="20" y1="14" x2="20" y2="42" class="uml-line"/>
-          <line x1="20" y1="22" x2="6" y2="32" class="uml-line"/>
-          <line x1="20" y1="22" x2="34" y2="32" class="uml-line"/>
-          <line x1="20" y1="42" x2="6" y2="58" class="uml-line"/>
-          <line x1="20" y1="42" x2="34" y2="58" class="uml-line"/>
+        <!-- Browser (right-bottom, non-member) -->
+        <g transform="translate(1020, 440)" data-tip="<strong>Principal actor &mdash; Browser.</strong> A non-member visitor (or a member acting in browse mode). Can search the catalogue but not borrow or renew. Placed on the right to make the asymmetry of its access visible at a glance.">
+          <circle cx="20" cy="6" r="8" class="actor-blue"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/>
           <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Browser</text>
           <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(non-member)</text>
         </g>
 
-        <!-- Solid associations (clean: each line goes from actor body edge to nearest ellipse edge) -->
-        <!-- BookBorrower (right arm tip x=94, body y range 110..170) → Borrow (left edge 270, y=130) -->
-        <line x1="94" y1="132" x2="270" y2="130" class="uml-line"/>
-        <!-- BookBorrower → Return (left edge 270, y=240) -->
-        <line x1="94" y1="142" x2="270" y2="240" class="uml-line"/>
-        <!-- BookBorrower → Renew (left edge 550, y=350); routed below midline to avoid Return ellipse -->
-        <line x1="94" y1="152" x2="270" y2="350" class="uml-line"/>
+        <!-- ===== Associations (solid, light blue) ===== -->
+        <!-- BookBorrower → Borrow / Return / Renew. Lines run from actor right edge (x=94, y=140) to ellipse left edges.
+             All three end points are at x=290 (ellipse left edge); start y at the actor center (140) staggered slightly. -->
+        <g data-tip="<strong>Association.</strong> A solid line between an actor and a use case means the actor participates in (initiates, or is involved in) that use case. No arrow head &mdash; participation is undirected.">
+          <line x1="94" y1="140" x2="290" y2="140" class="uml-line-blue"/>
+          <line x1="94" y1="142" x2="290" y2="250" class="uml-line-blue"/>
+          <line x1="94" y1="144" x2="290" y2="360" class="uml-line-blue"/>
+        </g>
 
-        <!-- Librarian → Borrow -->
-        <line x1="94" y1="338" x2="270" y2="130" class="uml-line"/>
-        <!-- Librarian → Return -->
-        <line x1="94" y1="346" x2="270" y2="240" class="uml-line"/>
-        <!-- Librarian → Refuse loan -->
-        <line x1="94" y1="354" x2="270" y2="350" class="uml-line"/>
+        <!-- Librarian → Borrow / Return -->
+        <g data-tip="<strong>Association.</strong> Librarian participates in Borrow and Return (helps process them). Renew is typically self-service via kiosk, so Librarian does not associate with Renew here.">
+          <line x1="94" y1="318" x2="290" y2="140" class="uml-line-blue"/>
+          <line x1="94" y1="320" x2="290" y2="250" class="uml-line-blue"/>
+        </g>
 
         <!-- Browser → Browse/search -->
-        <line x1="880" y1="246" x2="750" y2="240" class="uml-line"/>
+        <g data-tip="<strong>Association.</strong> Browser participates only in 'Browse / search books'. The shorter list of associations is the visual signal that Browser has narrower access than the other two actors.">
+          <line x1="1020" y1="470" x2="510" y2="470" class="uml-line-blue"/>
+        </g>
 
-        <!-- &lt;&lt;include&gt;&gt;: Borrow → Compute return date (horizontal, top row, dashed) -->
-        <line x1="470" y1="130" x2="550" y2="130" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
-        <text x="510" y="122" text-anchor="middle" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
+        <!-- ===== &lt;&lt;include&gt;&gt; ===== -->
+        <!-- Borrow (right edge 510, y=140) → Compute return date (left edge 650, y=200) -->
+        <g data-tip="<strong>&lt;&lt;include&gt;&gt; relationship.</strong> The BASE use case (Borrow) always uses the INCLUDED one (Compute return date) as part of its normal flow. Arrow direction: base → include (the base 'knows about' the include). Dashed line with open arrow head.">
+          <line x1="510" y1="146" x2="650" y2="194" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
+          <text x="568" y="158" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
+        </g>
 
-        <!-- &lt;&lt;include&gt;&gt;: Renew → Compute return date (routed through the right column then up to top row, dashed) -->
-        <path d="M 650 322 L 650 290 Q 650 280 660 280 L 780 280 Q 800 280 800 260 L 800 165 Q 800 150 790 150 L 715 138" class="uml-line-dashed" fill="none" marker-end="url(#ext-arrow)"/>
-        <text x="800" y="200" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
+        <!-- Renew (right edge 510, y=360) → Compute return date (left edge 650, y=200) -->
+        <g data-tip="<strong>&lt;&lt;include&gt;&gt; relationship (reused).</strong> Both Borrow and Renew reuse 'Compute return date'. Factoring it out as an included use case avoids restating the same sub-task in two descriptions.">
+          <line x1="510" y1="354" x2="650" y2="206" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
+          <text x="568" y="290" class="uml-text-stereo">&lt;&lt;include&gt;&gt;</text>
+        </g>
 
-        <!-- &lt;&lt;extend&gt;&gt;: Refuse loan → Borrow (dashed, extension points UP to base) -->
-        <line x1="370" y1="322" x2="370" y2="158" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
-        <text x="290" y="232" class="uml-text-stereo">&lt;&lt;extend&gt;&gt;</text>
-        <text x="290" y="246" class="uml-text-stereo">[too many books]</text>
+        <!-- ===== &lt;&lt;extend&gt;&gt; ===== -->
+        <!-- Refuse loan (top edge 760, y=330) → Borrow (right edge 510, y=140). Arrow tail at Refuse, head at Borrow. -->
+        <g data-tip="<strong>&lt;&lt;extend&gt;&gt; relationship.</strong> The EXTENDING use case (Refuse loan) fires CONDITIONALLY at a specific extension point in the BASE (Borrow), when the guard [too many books] holds. Arrow direction: extension → base (the extension 'knows about' the base — this is the OPPOSITE of include). The guard sits next to the arrow tail.">
+          <line x1="650" y1="350" x2="510" y2="146" class="uml-line-dashed" marker-end="url(#ext-arrow)"/>
+          <text x="610" y="270" class="uml-text-stereo">&lt;&lt;extend&gt;&gt;</text>
+          <text x="610" y="284" class="uml-text-stereo">[too many books]</text>
+        </g>
       </svg>
-      <div class="figure-note">Six use cases inside the Library System boundary. Solid lines are actor-use case associations. The two dashed arrows show the two refinement relationships. The <code>&lt;&lt;include&gt;&gt;</code> arrows go from base to included case ("Borrow" and "Renew" both include "Compute return date"). The <code>&lt;&lt;extend&gt;&gt;</code> arrow goes from the extending case "Refuse loan" up to the base "Borrow copy of a book", with the guard <code>[too many books]</code> next to it.</div>
+      <div class="figure-note">Six use cases inside the Library System boundary. Solid <strong style="color:#2c6e9a;">light-blue lines</strong> are actor &ndash; use case associations. The dark dashed arrows are refinement relationships: <code>&lt;&lt;include&gt;&gt;</code> points <em>from</em> the base <em>to</em> the included case (Borrow and Renew both include Compute return date); <code>&lt;&lt;extend&gt;&gt;</code> points <em>from</em> the extending case <em>to</em> the base (Refuse loan extends Borrow when the guard <code>[too many books]</code> holds). Two pieces of intuition help keep the arrows straight: the base of an <em>include</em> cannot run without its include, while the base of an <em>extend</em> usually runs without its extension.</div>
+      <div class="diagram-tooltip" id="ucTip"><span class="placeholder">Hover any actor, use case, line, or arrow to see what it represents and why it sits where it does.</span></div>
     </div>
 
     <div class="context-card">
@@ -582,7 +899,7 @@
     </div>
 
     <h3 class="subhead">Actors: principal and secondary</h3>
-    <p class="body">An actor is a role someone or something plays when interacting with the system. Actors are not specific people; the same person can be two actors at different times. Adel's lecture notes distinguish two types:</p>
+    <p class="body">An actor is a role someone or something plays when interacting with the system. Actors are not specific people; the same person can be two actors at different times — a doctor who also borrows books at the staff library is a Doctor in one system and a BookBorrower in the other. The course conventionally splits actors into two kinds:</p>
 
     <ul class="body">
       <li><strong>Principal actor.</strong> The user who initiates or benefits from a use case. Usually a human role (BookBorrower, Librarian, Doctor, Nurse).</li>
@@ -598,7 +915,7 @@
       <li>What external systems must the system communicate with?</li>
     </ul>
 
-    <p class="body">Adel's notation convention: each actor's name is a noun, and the actor is described in one sentence covering its role and how it interacts with the system. For example: "BookBorrower: This actor represents someone (or a user) that makes use of the library for borrowing books [Principal actor]."</p>
+    <p class="body"><strong>Notation convention.</strong> Each actor's name is a noun (CamelCase, no spaces), and the actor is documented in one sentence covering its role and how it interacts with the system. For example: <em>"BookBorrower &mdash; represents a member of the library who borrows physical copies of books [Principal]."</em> The description belongs in the requirements document next to the diagram; the diagram itself only carries the name.</p>
 
     <h3 class="subhead">Use cases: things actors do with the system</h3>
     <p class="body">A use case is a task an actor needs to perform with the help of the system. Two rules from the course notes:</p>
@@ -640,14 +957,14 @@
     <h3 class="subhead">Multi-level (composite) use cases</h3>
     <p class="body">For larger systems, a single top-level diagram becomes unreadable. The standard pattern is to draw a high-level diagram with composite use cases (each one labelled with a verb phrase like "Manage patient registration"), and to draw a separate first-level diagram for each composite that decomposes it into its constituent use cases. A second-level diagram may decompose a particular first-level use case further, if needed.</p>
 
-    <p class="body">For the Mentcare system (the same example as in Ch.3), Adel's notes use this exact pattern: the top-level diagram shows "Manage patient registration", "Manage patient medical record", "Generate reports", and "View patient info"; the "Generate reports" composite is then expanded in a first-level diagram with sub-cases like "Generate admitted patient report" and "Generate discharged patient reports".</p>
+    <p class="body">For the Mentcare system (the same running example as in Ch.3), the course uses this exact pattern: the top-level diagram shows "Manage patient registration", "Manage patient medical record", "Generate reports", and "View patient info"; the "Generate reports" composite is then expanded in a first-level diagram with sub-cases like "Generate admitted patient report" and "Generate discharged patient reports". Treat the top-level diagram as a map of the system, and each first-level diagram as a magnified region of that map.</p>
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="ucdesc">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">vii.</span>UC descriptions</div>
+    <div class="section-eyebrow"><span class="num">viii.</span>UC descriptions</div>
     <h2 class="section-title">Use case descriptions: <em>the diagram is the index</em>.</h2>
     <p class="section-intro">A use case ellipse on a diagram is barely a label. The use case itself is fully specified in a structured description. This is the same template the requirements companion uses in Section viii; here it is applied to use cases specifically.</p>
 
@@ -697,13 +1014,18 @@
     </div>
 
     <p class="body">Notice that the two error scenarios describe quite different failures: one is a business rule violation (too many books), the other is a physical/data integrity issue (damaged barcode). Both are equally valid sources of requirements: the first generates "the system shall enforce a maximum of six items on loan"; the second generates "the system shall provide a manual barcode entry option".</p>
+
+    <div class="practice-callout">
+      <div class="tag">Bridge to the next diagram</div>
+      <p>A use case ellipse is a label, the description is the contract, and the scenarios are the readable narratives that anchor the conversation with the customer. What none of them captures is the <em>order</em> of work, the <em>parallelism</em>, or the <em>cross-actor coordination</em> that a non-trivial workflow has. That is exactly what the next diagram &mdash; the activity diagram &mdash; is for. Pick the use case that has the most decisions or the most actors and draw its activity diagram first.</p>
+    </div>
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="activity">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">viii.</span>Activity diagrams</div>
+    <div class="section-eyebrow"><span class="num">ix.</span>Activity diagrams</div>
     <h2 class="section-title">Activity diagrams: <em>flow, decisions, parallelism</em>.</h2>
     <p class="section-intro">An activity diagram captures the workflow of a use case or a business process. It is the right diagram when the team needs to talk about the order of work, the decisions that branch the flow, and the activities that can run in parallel.</p>
 
@@ -726,84 +1048,114 @@
     </div>
 
     <div class="figure">
-      <div class="figure-caption">Figure 3</div>
-      <div class="figure-title">Activity diagram with swimlanes: "Collect medical history" (Mentcare)</div>
-      <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
+      <div class="figure-caption">Figure 4</div>
+      <div class="figure-title">Activity diagram with swimlanes: "Collect medical history" (Mentcare) &mdash; <span style="font-weight:400;color:#5a6473;font-size:14px;">(hover any element for an explanation)</span></div>
+      <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" id="actFig" role="img" aria-label="Activity diagram with three swimlanes showing the collect-medical-history workflow.">
         <defs>
           <marker id="act-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker>
         </defs>
         <!-- Swimlane backgrounds -->
-        <rect x="40" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
-        <rect x="320" y="40" width="320" height="560" fill="white" stroke="#d8cfc0"/>
-        <rect x="640" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
-        <text x="180" y="64" text-anchor="middle" class="uml-text" font-weight="600">Patient</text>
-        <text x="480" y="64" text-anchor="middle" class="uml-text" font-weight="600">Receptionist</text>
-        <text x="780" y="64" text-anchor="middle" class="uml-text" font-weight="600">Nurse</text>
+        <g data-tip="<strong>Swimlane.</strong> A vertical column that assigns activities to one actor (or department, or system). Useful as soon as more than one actor is involved &mdash; without lanes you lose 'who does what'. Lanes here: Patient, Receptionist, Nurse.">
+          <rect x="40" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
+          <text x="180" y="64" text-anchor="middle" class="uml-text" font-weight="600">Patient</text>
+        </g>
+        <g data-tip="<strong>Swimlane.</strong> Receptionist's lane. All actions inside this column are the Receptionist's responsibility. Arrows that CROSS lanes represent the hand-off of work from one actor to another.">
+          <rect x="320" y="40" width="320" height="560" fill="white" stroke="#d8cfc0"/>
+          <text x="480" y="64" text-anchor="middle" class="uml-text" font-weight="600">Receptionist</text>
+        </g>
+        <g data-tip="<strong>Swimlane.</strong> Nurse's lane. The hand-off arrow from Receptionist to Nurse marks the moment ownership of the workflow changes.">
+          <rect x="640" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
+          <text x="780" y="64" text-anchor="middle" class="uml-text" font-weight="600">Nurse</text>
+        </g>
         <line x1="40" y1="80" x2="920" y2="80" class="uml-line"/>
 
         <!-- ===== Patient lane ===== -->
         <!-- Initial node -->
-        <circle cx="180" cy="110" r="9" fill="#0f1419"/>
+        <g data-tip="<strong>Initial node.</strong> Filled black circle. The single starting point of the activity. Exactly one per diagram.">
+          <circle cx="180" cy="110" r="9" fill="#0f1419"/>
+        </g>
         <line x1="180" y1="119" x2="180" y2="146" class="uml-line" marker-end="url(#act-arrow)"/>
 
         <!-- Decision: new patient? -->
-        <polygon points="180,150 222,180 180,210 138,180" class="uml-box" fill="white"/>
-        <text x="180" y="184" text-anchor="middle" class="uml-text" font-size="11">New patient?</text>
+        <g data-tip="<strong>Decision node.</strong> Diamond with ONE input and TWO or more outputs, each labelled with a guard in square brackets. Exactly one branch fires per execution. The guards must be mutually exclusive and exhaustive.">
+          <polygon points="180,150 222,180 180,210 138,180" class="uml-box" fill="white"/>
+          <text x="180" y="184" text-anchor="middle" class="uml-text" font-size="11">New patient?</text>
+        </g>
 
         <!-- ===== Receptionist lane: two branches from Patient's decision ===== -->
         <!-- [yes] crosses to "Create patient record" -->
         <line x1="222" y1="180" x2="380" y2="170" class="uml-line" marker-end="url(#act-arrow)"/>
         <text x="245" y="170" class="uml-text" font-size="11">[yes]</text>
-        <rect x="380" y="148" width="200" height="44" rx="22" class="uml-box" fill="white"/>
-        <text x="480" y="174" text-anchor="middle" class="uml-text">Create patient record</text>
+        <g data-tip="<strong>Action node.</strong> Rounded rectangle. A unit of work performed by the actor whose lane it is in. Labelled with a verb phrase (Create&hellip;, Search&hellip;, Record&hellip;).">
+          <rect x="380" y="148" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="480" y="174" text-anchor="middle" class="uml-text">Create patient record</text>
+        </g>
 
         <!-- [no] crosses to "Search patient record" -->
         <line x1="180" y1="210" x2="180" y2="252" class="uml-line"/>
         <text x="187" y="232" class="uml-text" font-size="11">[no]</text>
         <line x1="180" y1="252" x2="380" y2="252" class="uml-line" marker-end="url(#act-arrow)"/>
-        <rect x="380" y="230" width="200" height="44" rx="22" class="uml-box" fill="white"/>
-        <text x="480" y="256" text-anchor="middle" class="uml-text">Search patient record</text>
+        <g data-tip="<strong>Action node (alternative branch).</strong> If the patient already has a record, search for it rather than creating a new one. Sits in the Receptionist lane because the receptionist performs the search.">
+          <rect x="380" y="230" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="480" y="256" text-anchor="middle" class="uml-text">Search patient record</text>
+        </g>
 
         <!-- Merge node combines the two branches -->
-        <polygon points="480,304 510,322 480,340 450,322" class="uml-box" fill="white"/>
+        <g data-tip="<strong>Merge node.</strong> Same diamond shape as a decision, but with TWO or more inputs and ONE output. Brings two alternative branches back together. Decisions and merges always pair; the merge is what gets the flow back on the main path.">
+          <polygon points="480,304 510,322 480,340 450,322" class="uml-box" fill="white"/>
+        </g>
         <line x1="480" y1="192" x2="480" y2="302" class="uml-line"/>
         <line x1="480" y1="274" x2="480" y2="302" class="uml-line"/>
 
         <!-- Record personal info -->
-        <rect x="380" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
-        <text x="480" y="384" text-anchor="middle" class="uml-text">Record personal information</text>
+        <g data-tip="<strong>Action node.</strong> Record personal information &mdash; happens regardless of which branch above was taken (because both branches merged before reaching here).">
+          <rect x="380" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="480" y="384" text-anchor="middle" class="uml-text">Record personal information</text>
+        </g>
         <line x1="480" y1="340" x2="480" y2="356" class="uml-line" marker-end="url(#act-arrow)"/>
 
         <!-- Hand-off to Nurse: horizontal line -->
-        <line x1="580" y1="380" x2="700" y2="380" class="uml-line" marker-end="url(#act-arrow)"/>
+        <g data-tip="<strong>Cross-lane edge.</strong> An arrow that crosses a swimlane boundary signals a hand-off of responsibility &mdash; from the Receptionist to the Nurse. These edges are usually the points where bugs hide on real projects.">
+          <line x1="580" y1="380" x2="700" y2="380" class="uml-line" marker-end="url(#act-arrow)"/>
+        </g>
 
         <!-- ===== Nurse lane ===== -->
         <!-- Record medical history -->
-        <rect x="700" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
-        <text x="800" y="384" text-anchor="middle" class="uml-text">Record medical history</text>
+        <g data-tip="<strong>Action node.</strong> The Nurse records the patient's medical history. This is the headline activity for which the whole diagram is named.">
+          <rect x="700" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="800" y="384" text-anchor="middle" class="uml-text">Record medical history</text>
+        </g>
 
         <!-- Decision: medication in menu? -->
-        <polygon points="800,420 858,452 800,484 742,452" class="uml-box" fill="white"/>
-        <text x="800" y="450" text-anchor="middle" class="uml-text" font-size="10">Medication in</text>
-        <text x="800" y="462" text-anchor="middle" class="uml-text" font-size="10">menu?</text>
+        <g data-tip="<strong>Decision node (nested).</strong> Within the Nurse's activity, a sub-decision: does the prescribed medication exist in the system's coded menu? Two guards split the flow.">
+          <polygon points="800,420 858,452 800,484 742,452" class="uml-box" fill="white"/>
+          <text x="800" y="450" text-anchor="middle" class="uml-text" font-size="10">Medication in</text>
+          <text x="800" y="462" text-anchor="middle" class="uml-text" font-size="10">menu?</text>
+        </g>
         <line x1="800" y1="402" x2="800" y2="420" class="uml-line" marker-end="url(#act-arrow)"/>
 
         <!-- [found] left branch: Record as code -->
         <line x1="742" y1="452" x2="700" y2="452" class="uml-line"/>
         <line x1="700" y1="452" x2="700" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
         <text x="690" y="445" class="uml-text" font-size="11" text-anchor="end">[found]</text>
-        <rect x="660" y="495" width="120" height="38" rx="19" class="uml-box" fill="white"/>
-        <text x="720" y="519" text-anchor="middle" class="uml-text">Record as code</text>
+        <g data-tip="<strong>Action node.</strong> Codified branch: the medication is in the menu, so record it as a code. Cheaper to analyse later (consistent vocabulary), harder for the nurse to enter (must match a menu item).">
+          <rect x="660" y="495" width="120" height="38" rx="19" class="uml-box" fill="white"/>
+          <text x="720" y="519" text-anchor="middle" class="uml-text">Record as code</text>
+        </g>
 
         <!-- [not found] right branch: Record as free text -->
         <line x1="858" y1="452" x2="900" y2="452" class="uml-line"/>
         <line x1="900" y1="452" x2="900" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
         <text x="868" y="445" class="uml-text" font-size="11">[not found]</text>
-        <rect x="820" y="495" width="160" height="38" rx="19" class="uml-box" fill="white"/>
-        <text x="900" y="519" text-anchor="middle" class="uml-text">Record as free text</text>
+        <g data-tip="<strong>Action node.</strong> Free-text branch: the medication is unknown to the system, so write a free-text description. Easier to enter, harder to aggregate later. This is a real trade-off that clinical systems wrestle with.">
+          <rect x="820" y="495" width="160" height="38" rx="19" class="uml-box" fill="white"/>
+          <text x="900" y="519" text-anchor="middle" class="uml-text">Record as free text</text>
+        </g>
 
         <!-- Merge of the two recording branches -->
-        <polygon points="800,548 830,566 800,584 770,566" class="uml-box" fill="white"/>
+        <g data-tip="<strong>Merge node.</strong> Rejoins the two recording branches before the activity ends.">
+          <polygon points="800,548 830,566 800,584 770,566" class="uml-box" fill="white"/>
+        </g>
         <line x1="720" y1="533" x2="720" y2="555" class="uml-line"/>
         <line x1="720" y1="555" x2="770" y2="566" class="uml-line"/>
         <line x1="900" y1="533" x2="900" y2="555" class="uml-line"/>
@@ -811,11 +1163,14 @@
 
         <!-- Final node for the main path -->
         <line x1="800" y1="584" x2="800" y2="592" class="uml-line" marker-end="url(#act-arrow)"/>
-        <circle cx="800" cy="599" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
-        <circle cx="800" cy="599" r="5" fill="#0f1419"/>
+        <g data-tip="<strong>Final node.</strong> Bull's-eye: a filled black circle inside a ring. The end of the activity. A diagram may have more than one final node (different ways the activity terminates).">
+          <circle cx="800" cy="599" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
+          <circle cx="800" cy="599" r="5" fill="#0f1419"/>
+        </g>
 
       </svg>
       <div class="figure-note">The diagram shows the activity flow across three swimlanes. Two decision diamonds (with guards in square brackets) split the flow into mutually exclusive branches; matching merge diamonds rejoin them before the next action. The flow starts at the filled black circle in the Patient lane and ends at the bull's-eye in the Nurse lane.</div>
+      <div class="diagram-tooltip" id="actTip"><span class="placeholder">Hover any node, edge, or swimlane to see what it represents.</span></div>
     </div>
 
     <h3 class="subhead">When to draw an activity diagram</h3>
@@ -861,20 +1216,25 @@
     <div class="project-note">
       <strong>Project link.</strong> Activity diagrams are most useful at the Phase 3 boundary between requirements and design, when your team needs to settle the cross-actor coordination of a complex use case before drawing class or sequence diagrams. Use them sparingly; one or two activity diagrams covering the most complex flows usually suffices for a project of your size.
     </div>
+
+    <div class="practice-callout">
+      <div class="tag">Bridge to the next diagram</div>
+      <p>An activity diagram answers <em>what happens, in what order, and who does it.</em> It says nothing about the <em>objects</em> that carry the activities &mdash; the Book, the Loan, the LibraryMember &mdash; or the data each one holds. To talk about those, you need a static-structure diagram. That is the job of the class diagram, the next stop on the journey.</p>
+    </div>
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="class">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">ix.</span>Class diagrams</div>
+    <div class="section-eyebrow"><span class="num">x.</span>Class diagrams</div>
     <h2 class="section-title">Class diagrams: <em>the system's static structure</em>.</h2>
     <p class="section-intro">A class diagram shows the classes in a system and the associations between them. It is the longest-lived diagram on most projects, because the static structure changes more slowly than any particular flow through it.</p>
 
     <h3 class="subhead">Anatomy of a class box</h3>
 
     <div class="figure">
-      <div class="figure-caption">Figure 4</div>
+      <div class="figure-caption">Figure 5</div>
       <div class="figure-title">A UML class, in full notation</div>
       <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
         <!-- Class box with three compartments -->
@@ -929,7 +1289,7 @@
     <h3 class="subhead">Relationships: associations, generalisation, aggregation</h3>
 
     <div class="figure">
-      <div class="figure-caption">Figure 5</div>
+      <div class="figure-caption">Figure 6</div>
       <div class="figure-title">Class diagram with associations, multiplicity, generalisation, and aggregation (Library)</div>
       <svg viewBox="0 0 940 580" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1029,7 +1389,17 @@
     <p class="body">When an association itself has attributes that do not belong to either of the connected classes, those attributes live on an <em>association class</em>. Example: a <code>Loan</code> between a <code>LibraryMember</code> and a <code>BookCopy</code> has its own <code>startDate</code> and <code>returnDate</code>; these are attributes of the borrowing relationship, not of the member or of the copy. The association class is drawn as a regular class box, connected to the association line by a dashed link.</p>
 
     <h3 class="subhead">Data-driven noun-verb analysis</h3>
-    <p class="body">Adel's lecture notes give the same practical recipe Shlaer and Mellor introduced in the 1980s. Underline every noun in the requirements document; create a candidate class list; discard the inappropriate ones (redundant, omnipotent, vague, meta-language, outside the system scope, or actually attributes); identify every verb; assign verbs to candidate classes as operations. The result is a first-cut class diagram that is grounded in the requirements rather than the developer's imagination.</p>
+    <p class="body">The standard recipe, introduced by Shlaer and Mellor in the late 1980s and used in the course, is the <em>noun-verb analysis</em>: read through the requirements document and underline every noun phrase; collect those noun phrases as a candidate class list; discard inappropriate ones (redundant, omnipotent, vague, meta-language, outside the system scope, or really attributes of something else); then identify every verb and assign verbs to candidate classes as operations. The result is a first-cut class diagram that is grounded in the requirements you wrote, rather than the developer's imagination.</p>
+
+    <p class="body">Six categories of "inappropriate" noun, worth memorising because they recur in marking:</p>
+    <ul class="body">
+      <li><strong>Redundant.</strong> Two nouns name the same thing (e.g., "library member" and "borrower" both refer to LibraryMember).</li>
+      <li><strong>Omnipotent / "manager" / "system".</strong> Vague catch-alls that would do everything — usually a sign the analyst stopped abstracting too early.</li>
+      <li><strong>Vague.</strong> "Information", "data", "item" — not concrete enough to model.</li>
+      <li><strong>Meta-language.</strong> Words about the requirements rather than the domain ("requirement", "feature", "constraint").</li>
+      <li><strong>Outside the system scope.</strong> Real things, but the system does not need to know about them.</li>
+      <li><strong>Actually attributes.</strong> "Title" and "ISBN" sound like classes but are attributes of Book.</li>
+    </ul>
 
     <p class="body">Heuristic categories from Booch's <em>Object-Oriented Analysis and Design</em> for which nouns make good classes:</p>
 
@@ -1041,7 +1411,7 @@
     </ul>
 
     <h3 class="subhead">What makes a good analysis class</h3>
-    <p class="body">Adel's lecture notes give five criteria, drawn from Cooper, Larman, and the broader OO design literature:</p>
+    <p class="body">Five criteria, drawn from Cooper, Larman, and the broader OO design literature, that the marking rubric looks for:</p>
 
     <ul class="body">
       <li><strong>Its name reflects its intent.</strong> "AccountManager" tells you what it does; "Util" or "Helper" tells you nothing.</li>
@@ -1085,13 +1455,18 @@
     <div class="project-note">
       <strong>Project link.</strong> The class diagram is the central deliverable of your Phase 3 design submission. Aim for an analysis-level class diagram with 8 to 15 classes from the noun-verb analysis of your Phase 2 requirements; reserve the deeper design-level class diagrams (with full method signatures, design patterns, and infrastructure classes) for Phase 4 or the implementation phase.
     </div>
+
+    <div class="practice-callout">
+      <div class="tag">Bridge to the next diagram</div>
+      <p>The class diagram tells you what exists; it tells you nothing about what <em>happens</em>. A method <code>borrow()</code> on LibraryMember might involve calls to Book, BookCopy, Loan and PersistenceStore in a specific order, with possible authorisation checks and error returns. That story &mdash; messages over time between a fixed cast of objects &mdash; is what the sequence diagram captures. Pick the use case scenario whose call chain is least obvious and draw that sequence diagram next.</p>
+    </div>
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="sequence">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">x.</span>Sequence diagrams</div>
+    <div class="section-eyebrow"><span class="num">xi.</span>Sequence diagrams</div>
     <h2 class="section-title">Sequence diagrams: <em>the order of messages</em>.</h2>
     <p class="section-intro">A sequence diagram shows one specific interaction: who sends what message to whom, in what order. Time runs top to bottom; participants are arranged left to right. Unlike a class diagram, which captures the system at rest, a sequence diagram captures the system in motion.</p>
 
@@ -1104,7 +1479,7 @@
     </ul>
 
     <div class="figure">
-      <div class="figure-caption">Figure 6</div>
+      <div class="figure-caption">Figure 7</div>
       <div class="figure-title">Sequence diagram: "View patient information" with alt fragment for authorisation</div>
       <svg viewBox="0 0 1000 580" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1269,13 +1644,18 @@
       <strong>Project link.</strong> For your Phase 3 deliverable, draw sequence diagrams for two or three non-trivial use cases (typically the ones with the most actors or the most alternative paths). Each sequence diagram refines a use case from the use-case diagram and feeds the design of the corresponding methods in the class diagram. Do not try to draw a sequence diagram for every use case; that is over-engineering.
     </div>
 
+    <div class="practice-callout">
+      <div class="tag">Bridge to the next diagram</div>
+      <p>A sequence diagram is a horizontal cut: one scenario, many objects. The next diagram is the vertical cut: one object, many scenarios over its lifetime. The state machine asks "what states does this object pass through, and which events cause which transitions?" &mdash; the question you should be asking about a Loan, an Order, or any other object whose behaviour <em>depends</em> on its current state.</p>
+    </div>
+
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="state">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xi.</span>State machines</div>
+    <div class="section-eyebrow"><span class="num">xii.</span>State machines</div>
     <h2 class="section-title">State machine diagrams: <em>the object's life</em>.</h2>
     <p class="section-intro">A state machine diagram captures the states an object passes through during its lifetime and the events that cause transitions between them. It is the right diagram whenever a class has a meaningful "current state" that callers must reason about.</p>
 
@@ -1290,7 +1670,7 @@
     </ul>
 
     <div class="figure">
-      <div class="figure-caption">Figure 7</div>
+      <div class="figure-caption">Figure 8</div>
       <div class="figure-title">State machine: the lifecycle of a <code>BookCopy</code></div>
       <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1397,6 +1777,11 @@
       <strong>Project link.</strong> Most COMP433 projects will have one or two domain objects with a meaningful lifecycle (a Loan, an Appointment, an Order, a Booking). Draw a state machine for each of those. Drawing one for a passive data class (e.g., a Patient record) is usually unnecessary; if you find yourself drawing it, ask whether the lifecycle is really about the record or about something else (the consultation, the registration).
     </div>
 
+    <div class="practice-callout">
+      <div class="tag">Bridge to the next diagram</div>
+      <p>State machines, sequence diagrams, class diagrams and activity diagrams all describe what one application <em>does</em>. The remaining question is what the application <em>is made of</em> and <em>where it runs</em>. That is the territory of the architectural diagrams &mdash; component (build-time structure) and deployment (run-time topology) &mdash; covered next.</p>
+    </div>
+
     <h3 class="subhead">Simulate the BookCopy state machine</h3>
     <p class="body">The interactive below runs the BookCopy state machine. Fire events with the buttons and watch the current state change, with guards enforced.</p>
 
@@ -1448,7 +1833,7 @@
 <!-- ===================================================================== -->
 <section class="block" id="archi">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xii.</span>Component &amp; deployment</div>
+    <div class="section-eyebrow"><span class="num">xiii.</span>Component &amp; deployment</div>
     <h2 class="section-title">Architectural diagrams: <em>components and deployment</em>.</h2>
     <p class="section-intro">Component and deployment diagrams sit higher up the abstraction ladder than the diagrams above. They are concerned with how the system is partitioned at build time and how it is distributed at run time.</p>
 
@@ -1463,7 +1848,7 @@
     <p class="body">A provided lollipop fits into a matching required socket; the connection is valid if the socket's required operations are a subset of the lollipop's provided operations and their signatures are compatible.</p>
 
     <div class="figure">
-      <div class="figure-caption">Figure 8</div>
+      <div class="figure-caption">Figure 9</div>
       <div class="figure-title">Component diagram with provided/required interfaces (Order example)</div>
       <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1553,7 +1938,7 @@
     </ul>
 
     <div class="figure">
-      <div class="figure-caption">Figure 9</div>
+      <div class="figure-caption">Figure 10</div>
       <div class="figure-title">Deployment diagram: 3-tier web application</div>
       <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
         <!-- PC client (3D box) -->
@@ -1601,7 +1986,7 @@
     </div>
 
     <h3 class="subhead-small">Architecture vs architectural style</h3>
-    <p class="body">A small but useful distinction from Adel's lecture notes:</p>
+    <p class="body">A small but useful distinction:</p>
 
     <ul class="body">
       <li>An <strong>architectural style</strong> is a pattern for a system layout. Examples: layered, client-server, peer-to-peer, three-tier, model-view-controller (MVC), pipes-and-filters, service-oriented (SOA).</li>
@@ -1648,7 +2033,7 @@
 <!-- ===================================================================== -->
 <section class="block" id="pitfalls">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xiii.</span>Pitfalls</div>
+    <div class="section-eyebrow"><span class="num">xiv.</span>Pitfalls</div>
     <h2 class="section-title">Eight modelling pitfalls <em>that show up in marking</em>.</h2>
     <p class="section-intro">Drawn from Fowler's <em>UML Distilled</em>, the COMP433 marking history, and Brooks' general observations about modelling.</p>
 
@@ -1692,7 +2077,7 @@
 <!-- ===================================================================== -->
 <section class="block" id="refs">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xiv.</span>References</div>
+    <div class="section-eyebrow"><span class="num">xv.</span>References</div>
     <h2 class="section-title">Sources cited above, <em>and where to go next</em>.</h2>
     <p class="section-intro">The course textbook and Prof Adel's lecture notes anchor the chapter; the books below are the works directly referenced in the text and the standard practitioner references.</p>
 
@@ -1857,6 +2242,39 @@ function stLogEntry(msg) {
   document.getElementById("stLog").innerHTML = "Current state: <b>" + stCurrent + "</b>. " + msg;
 }
 stRender();
+
+/* ===================================================================== */
+/* Diagram hotspot tooltips: any <g> or shape with a `data-tip` attribute
+   inside a figure-tooltip-bearing SVG updates the corresponding panel on
+   hover/focus/tap. The panel id is the SVG id + "Tip" by convention. */
+function wireDiagramTooltips(svgId, panelId, placeholder) {
+  const svg = document.getElementById(svgId);
+  const panel = document.getElementById(panelId);
+  if (!svg || !panel) return;
+  const defaultHTML = '<span class="placeholder">' + placeholder + '</span>';
+  const tipNodes = svg.querySelectorAll('[data-tip]');
+  tipNodes.forEach(n => {
+    n.style.cursor = 'help';
+    const show = () => {
+      panel.innerHTML = n.getAttribute('data-tip');
+      panel.classList.add('is-active');
+    };
+    const hide = () => {
+      panel.innerHTML = defaultHTML;
+      panel.classList.remove('is-active');
+    };
+    n.addEventListener('mouseenter', show);
+    n.addEventListener('mouseleave', hide);
+    n.addEventListener('focus', show);
+    n.addEventListener('blur', hide);
+    n.addEventListener('click', show);
+    n.setAttribute('tabindex', '0');
+  });
+}
+
+wireDiagramTooltips('journeyFig', 'journeyTip', 'Hover or tap a step in the journey above to see what it is, what feeds it, and what it produces.');
+wireDiagramTooltips('ucFig', 'ucTip', 'Hover any actor, use case, line, or arrow to see what it represents and why it sits where it does.');
+wireDiagramTooltips('actFig', 'actTip', 'Hover any node, edge, or swimlane to see what it represents.');
 </script>
 
 </body>
