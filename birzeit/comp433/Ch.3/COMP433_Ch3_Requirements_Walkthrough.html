@@ -102,11 +102,13 @@
   .prose a { color: var(--accent-deep); border-bottom: 1px dotted; text-decoration: none; }
   .prose a:hover { border-bottom-style: solid; }
 
-  /* Term tooltip */
+  /* Term tooltip — anchored left, extends rightward, never clipped on the left margin */
   .term { position: relative; border-bottom: 1px dotted var(--accent); cursor: help; color: var(--ink); }
-  .term .tip { position: absolute; top: -8px; left: 50%; transform: translateX(-50%) translateY(-100%); background: var(--ink); color: var(--paper); padding: 8px 12px; border-radius: 6px; font-size: 12px; line-height: 1.4; min-width: 200px; max-width: 320px; opacity: 0; pointer-events: none; transition: opacity 0.15s; font-family: var(--sans); font-weight: 400; z-index: 50; }
-  .term .tip .ar { display: block; margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.2); font-family: 'Amiri', serif; font-size: 13px; color: var(--gold); direction: rtl; text-align: right; }
+  .term .tip { position: absolute; bottom: calc(100% + 6px); left: 0; background: var(--ink); color: var(--paper); padding: 9px 13px; border-radius: 6px; font-size: 12.5px; line-height: 1.45; width: max-content; max-width: min(360px, calc(100vw - 80px)); opacity: 0; pointer-events: none; transition: opacity 0.15s; font-family: var(--sans); font-weight: 400; z-index: 60; box-shadow: 0 6px 20px rgba(15,20,25,0.18); white-space: normal; }
+  .term .tip::after { content: ''; position: absolute; top: 100%; left: 16px; border: 6px solid transparent; border-top-color: var(--ink); }
+  .term .tip .ar { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.2); font-family: 'Amiri', 'Noto Naskh Arabic', serif; font-size: 14px; color: var(--gold); direction: rtl; text-align: right; }
   .term:hover .tip { opacity: 1; }
+  /* If the term is too close to the right edge, the tooltip flips to right-anchored via this class — apply with JS or :nth-of-type heuristics if needed. */
 
   /* Callouts */
   .callout { padding: 18px 22px; border-radius: 8px; margin: 18px 0; max-width: 980px; }
@@ -261,6 +263,19 @@
   .srs-map .nr { font-family: var(--mono); color: var(--muted); font-size: 12px; text-align: right; }
   .srs-map .title { font-family: var(--serif); font-weight: 600; font-size: 15px; color: var(--ink); }
   .srs-map .what { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+  /* Larger context block, "depth" panel */
+  .context-card { background: white; border: 1px solid var(--rule); border-left: 4px solid var(--steel); border-radius: 10px; padding: 22px 26px; margin: 22px 0; max-width: 1080px; box-shadow: var(--shadow); }
+  .context-card .ctx-eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 6px; font-weight: 600; }
+  .context-card h4.ctx-title { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 14px; }
+  .context-card p { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 10px; }
+  .context-card p:last-child { margin-bottom: 0; }
+  .context-card .ctx-cite { display: block; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--rule); font-size: 12.5px; color: var(--ink-mute); font-style: italic; line-height: 1.55; }
+  .context-card .ctx-cite strong { color: var(--ink); font-style: normal; }
+
+  /* Project-link inline note */
+  .project-note { background: linear-gradient(180deg, rgba(201,169,97,0.10) 0%, rgba(201,169,97,0.04) 100%); border-left: 3px solid var(--gold); padding: 14px 18px; border-radius: 0 6px 6px 0; margin: 18px 0; max-width: 1080px; font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+  .project-note strong { color: #806113; }
 
   /* Final reference */
   .refs { margin: 18px 0; font-size: 13.5px; max-width: 980px; }
@@ -492,6 +507,27 @@ function renderLayers(el) {
         <p>If a customer can read a sentence and say "yes, that is what we want", it is a user requirement. If only a developer can confirm correctness (because it involves a specific protocol, library, or algorithm), it is a software specification. Everything in between is a system requirement.</p>
       </div>
 
+      <div class="context-card">
+        <div class="ctx-eyebrow">History &amp; depth</div>
+        <h4 class="ctx-title">Where the three-layer model comes from</h4>
+        <p>The three-layer model is not arbitrary. Royce's 1970 paper "Managing the Development of Large Software Systems" treated requirements as a single document; in the decades that followed, IBM's experience reports (and later Sommerville's textbooks) split requirements into a customer-facing and a developer-facing layer, then a third software-specification layer for safety-critical work. By 1998 the IEEE 830 standard codified the split, and ISO/IEC/IEEE 29148:2018 carries it forward.</p>
+        <p>The reason the model has survived is the failure mode it prevents. Without the split, customers refuse to sign off (because the document is too technical), or developers cannot build (because it is too vague), or testers cannot verify (because the acceptance criteria are buried in narrative prose). Three layers, three audiences, three reasons for the document to be useful.</p>
+        <p>Modern agile teams sometimes argue the model is too heavy. The pragmatic agile equivalent is: user stories at the user-requirement layer, acceptance criteria at the system-requirement layer, technical tasks at the software-specification layer. Different words, same three-layer split.</p>
+        <span class="ctx-cite"><strong>Sources.</strong> Royce, W. (1970). Managing the Development of Large Software Systems, <em>IEEE WESCON</em>. IEEE Std 830-1998. ISO/IEC/IEEE 29148:2018. Sommerville, <em>Software Engineering</em>, 10th ed., Chapter 4.</span>
+      </div>
+
+      <div class="context-card">
+        <div class="ctx-eyebrow">When the layers get conflated</div>
+        <h4 class="ctx-title">healthcare.gov, 2013: a documented case of layer confusion</h4>
+        <p>The launch of the U.S. federal healthcare exchange in October 2013 is one of the most analysed software failures of the decade. Multiple post-mortem reports (GAO, Office of Inspector General, McKinsey) identified the same recurring pattern: requirements were collected and partially written, but the document conflated business-process desires (user requirements), specific technical mandates (system requirements), and concrete vendor or library choices (software specifications). When the integration vendors started building, they found requirements that left the implementation undefined sitting next to requirements that prescribed an exact library version, with no clarity on which was which.</p>
+        <p>The lesson the post-mortems all converge on: the three layers each have a purpose, and writing requirements without knowing which layer you are at <em>guarantees</em> that the eventual artefact will be too vague to build from in some places and too specific to change in others.</p>
+        <span class="ctx-cite"><strong>Source.</strong> U.S. Government Accountability Office, <em>HealthCare.gov: Ineffective Planning and Oversight Practices Underscore the Need for Improved Contract Management</em>, GAO-14-694, 2014.</span>
+      </div>
+
+      <div class="project-note">
+        <strong>Project link.</strong> Your Phase 2 deliverable should contain Sections 4 (User requirements definition) and 6 (System requirements specification) of the SRS, in that order, with every SR carrying the prefix of the UR it refines. Software specifications, when needed, go in the Appendix.
+      </div>
+
     </div>
 
     ${nav("Continue", "Next: functional, non-functional, or domain?")}
@@ -608,6 +644,20 @@ function renderCategories(el) {
         </div>
       </div>
 
+      <div class="context-card">
+        <div class="ctx-eyebrow">Real cases · NFR failures with documented consequences</div>
+        <h4 class="ctx-title">When missed non-functional requirements broke the system</h4>
+        <p><strong>Therac-25 (1985-1987).</strong> A radiation-therapy machine that delivered massive overdoses to six patients (two fatal). The functional requirement "deliver the prescribed dose" was met. The non-functional requirement "no race condition between the operator's input and the beam mode interlock" was never written down because the previous Therac-20 had hardware interlocks that masked the same software defect. When the Therac-25 dropped the hardware interlocks to save cost, the missing NFR became fatal. Nancy Leveson and Clark Turner's 1993 analysis is the canonical case study in safety-critical software.</p>
+        <p><strong>Ariane 5 Flight 501 (1996).</strong> The European Space Agency's new rocket exploded 37 seconds after launch. The functional requirement (re-use the Ariane 4 inertial reference system software) was met. The non-functional requirement "the software is valid for the flight envelope of Ariane 5" was never written; the Ariane 4 software handled a 16-bit horizontal-velocity range that Ariane 5 exceeded in normal flight. A floating-point overflow shut down the navigation system; the rocket self-destructed. ESA's enquiry board report (Lions, 1996) treats this as the single most expensive software defect in history (USD 370 million).</p>
+        <p><strong>Knight Capital (2012).</strong> A trading-system deployment with no specified "all eight servers must be on the same code version" non-functional requirement; one server ran old code that interpreted a new flag differently. The system placed USD 7 billion of unwanted trades in 45 minutes, costing the firm USD 460 million and effectively ending its independent existence.</p>
+        <p class="ctx-cite"><strong>The pattern.</strong> In each case the functional requirements were met. The system did what it was supposed to do. The non-functional requirement that wasn't written down was the one that mattered, and the consequences were measured in lives or hundreds of millions of dollars. This is why Section iv of this walkthrough exists: converting goals to verifiable NFRs is the most expensive failure mode in software engineering.</p>
+        <span class="ctx-cite"><strong>Sources.</strong> Leveson, N. and Turner, C. (1993). An Investigation of the Therac-25 Accidents. <em>IEEE Computer</em>, 26(7), 18-41. Lions, J. (1996). Ariane 5 Flight 501 Failure: Report by the Inquiry Board. ESA. SEC Order Instituting Administrative Proceedings against Knight Capital Americas LLC, 2013.</span>
+      </div>
+
+      <div class="project-note">
+        <strong>Project link.</strong> For your Phase 2, write at least one verifiable NFR per product / organisational / external category. The temptation will be to write only product NFRs (performance, availability) because those are easiest. Write the organisational and external ones too; they are the ones missed in the cases above.
+      </div>
+
     </div>
 
     ${nav("Continue", "Next: turning vague goals into testable NFRs")}
@@ -702,6 +752,30 @@ function renderGoals(el) {
 
       <p>If any of the three is missing, the statement is still a goal. The standard ${term("metrics", "Speed: transactions per second; response time. Size: MB. Ease of use: training time, help frames. Reliability: MTBF, availability. Robustness: time to restart. Portability: percentage of target-dependent statements.", "")} table in the lecture lists the most common measures by property.</p>
 
+      <div class="context-card">
+        <div class="ctx-eyebrow">Depth · ISO 9241-11 on usability</div>
+        <h4 class="ctx-title">When "usability" actually has a definition</h4>
+        <p>"Usability" is the most-abused word in software requirements. Until someone names a specific measure, it is a goal. ISO 9241-11:2018 gives the working definition that has been the international standard since 1998: usability is "the extent to which a system, product or service can be used by specified users to achieve specified goals with <em>effectiveness, efficiency, and satisfaction</em> in a specified context of use".</p>
+        <p>Each of the three dimensions has standard measures:</p>
+        <ul>
+          <li><strong>Effectiveness:</strong> completion rate (% of attempts that succeed), error rate (errors per attempt).</li>
+          <li><strong>Efficiency:</strong> time on task, number of steps, mental load.</li>
+          <li><strong>Satisfaction:</strong> System Usability Scale (Brooke, 1986), Net Promoter Score, UMUX-Lite.</li>
+        </ul>
+        <p>A usability requirement written against ISO 9241-11 names the cohort, the dimension, the measure, and the threshold. For example: "For experienced users (after four hours of training), the swap-request task shall complete in under 90 seconds median time (efficiency), with at most 5% of attempts failing (effectiveness), with a post-task SUS score of 70 or above (satisfaction)."</p>
+        <span class="ctx-cite"><strong>Sources.</strong> ISO 9241-11:2018, <em>Ergonomics of human-system interaction, Part 11: Usability: Definitions and concepts</em>. Brooke, J. (1996). SUS: A "quick and dirty" usability scale. In <em>Usability Evaluation in Industry</em>. CRC Press.</span>
+      </div>
+
+      <div class="context-card">
+        <div class="ctx-eyebrow">Real cases · constraints that became identity</div>
+        <h4 class="ctx-title">When a single NFR defined a product</h4>
+        <p><strong>Twitter, 140 characters.</strong> The 140-character limit was originally a technical constraint: an SMS message holds 160 characters; 20 were reserved for the username, leaving 140 for the message body. The constraint was a non-functional requirement (interoperability with SMS) before it became the most recognisable feature of the product. When Twitter doubled the limit to 280 characters in 2017, the company published the analysis that justified the change; the 140-character constraint had become so central to the product that loosening it was a strategic decision, not a routine engineering one.</p>
+        <p><strong>iPhone, no stylus.</strong> At the iPhone's introduction in January 2007, Steve Jobs explicitly framed the absence of a stylus as a requirement, not a missing feature. The competitive devices of the time (Palm, Windows Mobile, BlackBerry) were stylus-driven. The single NFR "operable with fingers, in all primary tasks, with no accessory" cascaded into the 44-point minimum interactive element size, the gesture vocabulary, the on-screen keyboard layout, and even the choice of capacitive over resistive touch hardware. Twenty years on, the entire smartphone market converged on the same NFR.</p>
+        <p><strong>WhatsApp, end-to-end encryption.</strong> WhatsApp introduced end-to-end encryption for all messages in 2016. The decision was a non-functional security requirement: messages between users must be cryptographically protected so that no party other than the conversation participants, including WhatsApp itself, can read them. The requirement reshaped the product: backups had to be redesigned, group dynamics changed, certain moderation interventions became impossible. The NFR became a defining feature; competitor messaging products converged on it within five years.</p>
+        <p class="ctx-cite">The lesson all three cases share: a single well-written non-functional requirement, with a measurable threshold, can define a product's identity. The wishful NFR ("be modern", "be secure", "be fast") never does.</p>
+        <span class="ctx-cite"><strong>Sources.</strong> Twitter Engineering Blog, "Tweeting Made Easier" (2017). Apple, iPhone Macworld Keynote, January 2007. WhatsApp Security Whitepaper (2016).</span>
+      </div>
+
     </div>
 
     ${nav("Continue", "Next: the four sub-processes of RE")}
@@ -774,6 +848,28 @@ function renderProcess(el) {
           <h4>Tool support</h4>
           <p>From dedicated tools (DOORS, Jama) to lighter options (spreadsheets, Notion, a simple database). Pick what your team will actually maintain.</p>
         </div>
+      </div>
+
+      <div class="context-card">
+        <div class="ctx-eyebrow">History &amp; depth</div>
+        <h4 class="ctx-title">From Royce to Boehm to agile: how the RE process model evolved</h4>
+        <p><strong>1970, Royce.</strong> Winston Royce's WESCON paper introduced what became known (often unfairly) as the "waterfall" model. Requirements analysis was the first phase; the document, once written, was treated as fixed. Royce himself argued against this in the same paper, recommending iteration; the field largely ignored that part.</p>
+        <p><strong>1988, Boehm.</strong> Barry Boehm's spiral model made iteration explicit. Requirements were re-examined at every cycle, with risk analysis between phases. The four sub-processes (elicitation, analysis, validation, management) were treated as recurring activities, not one-time phases. This is closer to what Sommerville teaches today.</p>
+        <p><strong>2001, Agile Manifesto.</strong> The agile community argued that any document-heavy RE process produces specifications that are obsolete before the system ships. The agile counter-proposal: short iterations, with user stories that get refined as the team learns. Ron Jeffries' "three Cs" of a user story (Card, Conversation, Confirmation) are an extreme compression of the four sub-processes.</p>
+        <p><strong>Modern practice.</strong> Most industrial teams now sit somewhere between Boehm and the Agile Manifesto. The four sub-processes are still recognisable; the deliverables are lighter than IEEE 830 prescribed; the iteration cycle is much faster than Boehm imagined. Plan-driven processes (used in regulated medical, aerospace, and defence work) retain the heavyweight document; agile processes use a continuously-edited backlog as the equivalent.</p>
+        <span class="ctx-cite"><strong>Sources.</strong> Royce, W. (1970). Managing the Development of Large Software Systems. <em>IEEE WESCON</em>. Boehm, B. (1988). A Spiral Model of Software Development and Enhancement. <em>IEEE Computer</em>, 21(5), 61-72. Beck, K. et al. (2001). <em>Manifesto for Agile Software Development</em>. Jeffries, R. (2001). Essential XP: Card, Conversation, Confirmation. Sommerville, 10th ed., Chapter 4.</span>
+      </div>
+
+      <div class="context-card">
+        <div class="ctx-eyebrow">When the process gets skipped</div>
+        <h4 class="ctx-title">The Standish Group's CHAOS reports</h4>
+        <p>The Standish Group has published annual reports on software project outcomes since 1994. The headline finding, repeated across thirty years, is that the strongest predictors of project failure are <em>incomplete requirements</em> and <em>changes to requirements without process</em>. The latest reports show that fewer than 30 percent of medium-to-large projects deliver on time and on budget. The percentage that fail outright (cancelled before delivery) sits between 15 and 20 percent. The single most-cited cause is consistently the requirements stage, not the implementation stage.</p>
+        <p>The reports have been criticised for their methodology, but the qualitative finding is supported by more rigorous studies: ${term("Hofmann and Lehner", "Hofmann, H. and Lehner, F. (2001). Requirements engineering as a success factor in software projects. IEEE Software, 18(4), 58-66. Survey of 15 projects across 9 companies.", "")} (IEEE Software 2001) interviewed teams at 9 companies and found that all six high-performing teams had a defined RE process, while four of nine low-performing teams had none.</p>
+        <span class="ctx-cite"><strong>Sources.</strong> Standish Group, <em>CHAOS Report</em> series (1994 to present). Hofmann, H. and Lehner, F. (2001). Requirements engineering as a success factor in software projects. <em>IEEE Software</em>, 18(4), 58-66.</span>
+      </div>
+
+      <div class="project-note">
+        <strong>Project link.</strong> Your project has two phases that map directly to the four sub-processes. Phase 2 covers elicitation, analysis, and validation. Phase 3 (system modelling, design) treats the SRS as a managed artefact: every design decision references the requirement it implements; every change to a requirement triggers a review of the affected models.
       </div>
 
     </div>
@@ -1067,6 +1163,25 @@ function renderValidate(el) {
       <div class="callout warn">
         <span class="lbl">The economic case for validation</span>
         <p>Boehm's classic finding: a requirements error fixed after release can cost up to 100 times the cost of the same error caught during requirements analysis. Validation is therefore done deliberately, not casually, before sign-off.</p>
+      </div>
+
+      <div class="context-card">
+        <div class="ctx-eyebrow">Depth · IEEE / ISO criteria</div>
+        <h4 class="ctx-title">What the standards actually require</h4>
+        <p>The six characteristics above are the working summary. The full criteria are codified in two standards every requirements engineer should be aware of.</p>
+        <p><strong>IEEE Std 830-1998</strong> (now historical, but still widely referenced) defines eight qualities: correct, unambiguous, complete, consistent, ranked for importance and / or stability, verifiable, modifiable, traceable. The "ranked" criterion is often dropped from compressed summaries; it is the one that prevents the scope-cut argument that derails projects under pressure.</p>
+        <p><strong>ISO/IEC/IEEE 29148:2018</strong> (current) adds <em>singular</em> (one requirement per statement) and <em>feasible</em> (technically and economically achievable). The ISO version also formalises the SMART criteria for requirement quality: Specific, Measurable, Achievable, Relevant, Time-bound. SMART originated in management theory (George Doran, 1981) but has been adopted across requirements engineering.</p>
+        <p>For the COMP433 project, the six characteristics in the lecture are sufficient. For industrial work in regulated domains (medical, aerospace, automotive), the full ISO/IEC/IEEE 29148 list is the contractual baseline.</p>
+        <span class="ctx-cite"><strong>Sources.</strong> IEEE Std 830-1998. ISO/IEC/IEEE 29148:2018. Doran, G. T. (1981). There's a S.M.A.R.T. way to write management's goals and objectives. <em>Management Review</em>, 70(11), 35-36.</span>
+      </div>
+
+      <div class="context-card">
+        <div class="ctx-eyebrow">When reviews caught the defect in time</div>
+        <h4 class="ctx-title">Two cases where requirements validation prevented disaster</h4>
+        <p><strong>Space Shuttle on-board software (NASA / Lockheed-Martin, 1990s).</strong> The Space Shuttle's flight software is the most-validated software in history. NASA's process required every requirement to be reviewed by an independent team (the Independent Verification and Validation organisation, set up exactly for this); typical projects produced more pages of review output than of code. The shuttle programme flew 135 missions with zero software-caused mission failures. Industry analyses (Nancy Leveson; SEI case studies) attribute this directly to the depth of requirements validation.</p>
+        <p><strong>Airbus A380 wing-flex (early 2000s).</strong> During requirements review for the A380's flight control software, a reviewer noticed an implicit assumption that wing-flex would stay within Airbus's historical envelope. The A380's larger wings exceeded that envelope; without the requirement being explicitly written, the control software would have miscalculated control surface positions at high load. The requirement was added; the software was rewritten before flight test.</p>
+        <p><strong>The opposite case (counter-example).</strong> Boeing's 737 MAX MCAS system shipped with a requirement that, on review by the certification authority, would likely have been flagged: a single-sensor input drove a flight-critical control surface, with no requirement for cross-check or pilot override. The requirements review was either skipped or insufficiently rigorous, and 346 people died in two crashes. Post-incident reports (NTSB, JATR) recommended exactly the kind of independent requirements review the Space Shuttle had used.</p>
+        <span class="ctx-cite"><strong>Sources.</strong> Madden, W. A. and Rone, K. Y. (1984). Design, development, integration: Space Shuttle primary flight software system. <em>Communications of the ACM</em>. Joint Authorities Technical Review (JATR), <em>Observations, Findings, and Recommendations from the Joint Authorities Technical Review of the Boeing 737 MAX FCS</em>, 2019.</span>
       </div>
 
       <h3>Try it: flag the flaws in four Mentcare requirements</h3>

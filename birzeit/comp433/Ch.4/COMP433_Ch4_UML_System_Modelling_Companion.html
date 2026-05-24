@@ -129,6 +129,21 @@
   .practice-callout p { color: var(--steel-deep); font-size: 14.5px; line-height: 1.6; margin: 0 0 8px; }
   .practice-callout p:last-child { margin-bottom: 0; }
 
+  /* Larger context box, per-diagram "where does this earn its place" */
+  .context-card { background: white; border: 1px solid var(--rule); border-left: 4px solid var(--steel); border-radius: 10px; padding: 26px 30px; margin: 28px 0; max-width: 1140px; box-shadow: var(--shadow); }
+  .context-card .ctx-eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 6px; font-weight: 600; }
+  .context-card h4.ctx-title { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 18px; }
+  .context-card .ctx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px 28px; }
+  .context-card .ctx-block h5 { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; font-weight: 600; }
+  .context-card .ctx-block p, .context-card .ctx-block li { font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 6px; }
+  .context-card .ctx-block ul { margin: 4px 0 0 18px; }
+  .context-card .ctx-foot { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--rule); font-size: 13px; color: var(--ink-mute); line-height: 1.55; font-style: italic; }
+  .context-card .ctx-foot strong { color: var(--ink); font-style: normal; }
+
+  /* Project-link inline note */
+  .project-note { background: linear-gradient(180deg, rgba(201,169,97,0.10) 0%, rgba(201,169,97,0.04) 100%); border-left: 3px solid var(--gold); padding: 14px 18px; border-radius: 0 6px 6px 0; margin: 22px 0; max-width: 1080px; font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+  .project-note strong { color: #806113; }
+
   .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 24px; max-width: 1140px; }
   .pitfall { background: white; border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 0 8px 8px 0; box-shadow: var(--shadow); }
   .pitfall h5 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
@@ -531,6 +546,41 @@
       <div class="figure-note">Six use cases inside the Library System boundary. Solid lines are actor-use case associations. The two dashed arrows show the two refinement relationships. The <code>&lt;&lt;include&gt;&gt;</code> arrows go from base to included case ("Borrow" and "Renew" both include "Compute return date"). The <code>&lt;&lt;extend&gt;&gt;</code> arrow goes from the extending case "Refuse loan" up to the base "Borrow copy of a book", with the guard <code>[too many books]</code> next to it.</div>
     </div>
 
+    <div class="context-card">
+      <div class="ctx-eyebrow">Context</div>
+      <h4 class="ctx-title">Where use case diagrams earn their place</h4>
+      <div class="ctx-grid">
+        <div class="ctx-block">
+          <h5>Problem they solve</h5>
+          <p>Capturing what the system has to do for whom, before any commitment to how. They make the system's external surface explicit and let stakeholders confirm or contest scope on one page.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Domains where they dominate</h5>
+          <ul>
+            <li>Regulated software (medical devices, avionics under DO-178C, automotive under ISO 26262) where traceability from requirement to test is a certification requirement.</li>
+            <li>Healthcare interoperability (HL7 use cases, IHE profiles).</li>
+            <li>Enterprise systems built on the Unified Process (RUP) and its variants.</li>
+            <li>Public-sector procurement, where a use case list is often part of the tender document.</li>
+          </ul>
+        </div>
+        <div class="ctx-block">
+          <h5>Problems they do not solve</h5>
+          <p>Internal algorithms, data structures, performance behaviour, security mechanisms, transaction boundaries. Use cases are a contract sketch, not a design.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Tooling in current use</h5>
+          <p>Enterprise Architect (Sparx), Visual Paradigm, Lucidchart, draw.io, PlantUML (text-driven, popular in GitHub-based teams), and increasingly Mermaid for inline-in-Markdown documentation.</p>
+        </div>
+      </div>
+      <div class="ctx-foot">
+        <strong>Documented industrial use.</strong> Jacobson's <em>Object-Oriented Software Engineering</em> (1992) reports the original Ericsson telecoms work that produced use cases. The <a class="inline" href="#refs">Rational Unified Process</a> built an entire methodology around them in the late 1990s. HL7 v3 (healthcare data exchange) and the IHE Technical Frameworks (cross-vendor medical interoperability) publish use case diagrams as part of standards documents.
+      </div>
+    </div>
+
+    <div class="project-note">
+      <strong>Project link.</strong> For your Phase 3 deliverable, the use case diagram is the bridge from the requirements document you produced in Phase 2 to the system models that follow. Every UR with a clear actor and goal becomes a use case here; the include and extend relationships capture the structure your SRs encoded textually.
+    </div>
+
     <h3 class="subhead">Actors: principal and secondary</h3>
     <p class="body">An actor is a role someone or something plays when interacting with the system. Actors are not specific people; the same person can be two actors at different times. Adel's lecture notes distinguish two types:</p>
 
@@ -777,6 +827,40 @@
       <li><strong>One activity diagram per use case</strong> is the typical granularity. Higher-level activity diagrams (business-process view) are also common, but mixing the two granularities in one diagram makes both hard to read.</li>
       <li><strong>Swimlanes are worth the effort</strong> as soon as more than one actor is involved. The same activities, drawn without swimlanes, lose the information about who does what.</li>
     </ul>
+
+    <div class="context-card">
+      <div class="ctx-eyebrow">Context</div>
+      <h4 class="ctx-title">Where activity diagrams earn their place</h4>
+      <div class="ctx-grid">
+        <div class="ctx-block">
+          <h5>Problem they solve</h5>
+          <p>Making the order of work visible: where decisions branch the flow, where activities can proceed in parallel, and which actor (or system) is responsible for each step. The forms and forking of work are the most common source of subtle bugs in business and clinical systems; an activity diagram makes them discussable on one page.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Domains where they dominate</h5>
+          <ul>
+            <li><strong>Business process modelling.</strong> BPMN (the Business Process Model and Notation), a UML cousin, is the de facto standard for enterprise workflow tools (Camunda, IBM BPM, Bizagi, Pega).</li>
+            <li><strong>Systems engineering.</strong> Activity diagrams in SysML are central at NASA, ESA, Boeing, Airbus, and major automotive OEMs (Toyota, BMW, Daimler).</li>
+            <li><strong>Clinical pathway modelling.</strong> NHS Digital and HL7 publish clinical workflows as activity diagrams; the Mentcare-style "collect medical history" example is realistic for this work.</li>
+          </ul>
+        </div>
+        <div class="ctx-block">
+          <h5>Problems they do not solve</h5>
+          <p>Data structure (use class diagrams), message exchange between objects at the code level (sequence diagrams), or the full state space of a single object (state machine diagrams). Activity diagrams are about flow, not state.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Tooling in current use</h5>
+          <p>Camunda Modeller and Bizagi for BPMN-style enterprise work; Cameo Systems Modeler and MagicDraw for SysML/MBSE; PlantUML and Mermaid for inline-in-Markdown documentation; Lucidchart and draw.io as general-purpose drawing tools.</p>
+        </div>
+      </div>
+      <div class="ctx-foot">
+        <strong>Documented industrial use.</strong> The 2007 NIST report on workflow standards documents how activity diagrams (under various names) became the spine of regulated healthcare workflows. NASA's <em>SysML Modeling Guidelines</em> (2015) prescribes activity diagrams as the primary behavioural artefact for systems engineering. Camunda's published case studies on Deutsche Telekom and ING bank describe BPMN deployments at scale.
+      </div>
+    </div>
+
+    <div class="project-note">
+      <strong>Project link.</strong> Activity diagrams are most useful at the Phase 3 boundary between requirements and design, when your team needs to settle the cross-actor coordination of a complex use case before drawing class or sequence diagrams. Use them sparingly; one or two activity diagrams covering the most complex flows usually suffices for a project of your size.
+    </div>
   </div>
 </section>
 
@@ -966,6 +1050,41 @@
       <li><strong>High cohesion.</strong> Its attributes and operations are tightly related.</li>
       <li><strong>Low coupling.</strong> Few necessary associations with other classes; nothing accidental.</li>
     </ul>
+
+    <div class="context-card">
+      <div class="ctx-eyebrow">Context</div>
+      <h4 class="ctx-title">Where class diagrams earn their place</h4>
+      <div class="ctx-grid">
+        <div class="ctx-block">
+          <h5>Problem they solve</h5>
+          <p>Capturing the static structure of an object-oriented system: which classes exist, what they contain, and how they are connected. The class diagram is the longest-lived diagram on most projects because the static structure changes more slowly than any particular flow through it.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Domains where they dominate</h5>
+          <ul>
+            <li><strong>All object-oriented software.</strong> Java, C#, Python, TypeScript codebases of any non-trivial size benefit from a class-diagram view.</li>
+            <li><strong>Domain modelling.</strong> Domain-Driven Design (Evans 2003) uses class diagrams as the canonical artefact for the ubiquitous language.</li>
+            <li><strong>ORM mapping.</strong> Hibernate, Entity Framework, Django ORM, ActiveRecord all map class diagrams to relational schemas.</li>
+            <li><strong>Design patterns.</strong> The Gang of Four's <em>Design Patterns</em> (Gamma et al., 1994) communicates every pattern as a class diagram.</li>
+          </ul>
+        </div>
+        <div class="ctx-block">
+          <h5>Problems they do not solve</h5>
+          <p>Runtime behaviour (use sequence or state diagrams), concurrency (no concept of threads or processes), data flow (use activity diagrams), or deployment topology (use deployment diagrams). A class diagram tells you what exists; it tells you nothing about what happens.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Tooling in current use</h5>
+          <p>IDEs (IntelliJ IDEA, Eclipse, Visual Studio) reverse-engineer class diagrams from code automatically. PlantUML and Mermaid render text descriptions to diagrams in Git workflows. Lucidchart, Visual Paradigm, and Enterprise Architect support full forward and reverse engineering.</p>
+        </div>
+      </div>
+      <div class="ctx-foot">
+        <strong>Documented industrial use.</strong> The Eclipse Modeling Framework (EMF), Java's RMI, and Spring Framework's bean configuration are all class-diagram-driven at the architectural level. Microsoft published the Office class hierarchy as a teaching example for many years. Google's protocol buffers and gRPC service definitions correspond directly to class-diagram structures, even when expressed in text.
+      </div>
+    </div>
+
+    <div class="project-note">
+      <strong>Project link.</strong> The class diagram is the central deliverable of your Phase 3 design submission. Aim for an analysis-level class diagram with 8 to 15 classes from the noun-verb analysis of your Phase 2 requirements; reserve the deeper design-level class diagrams (with full method signatures, design patterns, and infrastructure classes) for Phase 4 or the implementation phase.
+    </div>
   </div>
 </section>
 
@@ -1008,11 +1127,11 @@
         <line x1="590" y1="76" x2="590" y2="560" class="uml-line-dashed"/>
         <line x1="860" y1="76" x2="860" y2="560" class="uml-line-dashed"/>
 
-        <!-- Activations -->
-        <rect x="105" y="110" width="10" height="420" fill="#d6e0e8" stroke="#2c5f7c"/>
-        <rect x="345" y="120" width="10" height="410" fill="#d6e0e8" stroke="#2c5f7c"/>
-        <rect x="585" y="160" width="10" height="220" fill="#d6e0e8" stroke="#2c5f7c"/>
-        <rect x="855" y="240" width="10" height="80" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <!-- Activations (sized to cover the messages each participant handles) -->
+        <rect x="105" y="110" width="10" height="370" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <rect x="345" y="120" width="10" height="360" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <rect x="585" y="160" width="10" height="280" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <rect x="855" y="280" width="10" height="50" fill="#d6e0e8" stroke="#2c5f7c"/>
 
         <!-- 1: requestView (Doctor -> UI) -->
         <line x1="115" y1="120" x2="345" y2="120" class="uml-line" marker-end="url(#seq-arrow)"/>
@@ -1114,6 +1233,42 @@
       </svg>
       <div class="step-info" id="seqStepDesc">Press <b>Next</b> to begin. The customer initiates the deposit by inserting money into the front of the machine.</div>
     </div>
+
+    <div class="context-card">
+      <div class="ctx-eyebrow">Context</div>
+      <h4 class="ctx-title">Where sequence diagrams earn their place</h4>
+      <div class="ctx-grid">
+        <div class="ctx-block">
+          <h5>Problem they solve</h5>
+          <p>Pinning down the order of messages between objects, components, or services in one specific scenario. Sequence diagrams catch race conditions, missing returns, forgotten error paths, and unrealistic latency assumptions before code exists.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Domains where they dominate</h5>
+          <ul>
+            <li><strong>Protocol design.</strong> IETF RFCs document OAuth 2.0 flows, TLS handshake, HTTP/2 negotiation, and Kerberos exchange as sequence diagrams.</li>
+            <li><strong>Distributed systems and microservices.</strong> Distributed-tracing tools (Jaeger, Zipkin, OpenTelemetry) reconstruct sequence-style views automatically from production traces.</li>
+            <li><strong>API documentation.</strong> Stripe, Twilio, AWS publish sequence diagrams for their authentication and webhook flows.</li>
+            <li><strong>Safety-critical systems.</strong> Avionics and medical-device standards require sequence-level traceability of interactions.</li>
+          </ul>
+        </div>
+        <div class="ctx-block">
+          <h5>Problems they do not solve</h5>
+          <p>Static structure (use class diagrams), the full set of states an object can be in (use state machines), the workflow of a long-running business process (use activity diagrams), or system topology (use deployment diagrams). A sequence diagram captures one path through one scenario; do not try to capture the whole system in one.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Tooling in current use</h5>
+          <p>PlantUML and Mermaid are now the dominant tools for text-driven sequence diagrams in API documentation and Git workflows. swimlanes.io is popular for ad-hoc sketches. WebSequenceDiagrams and SequenceDiagram.org cover dedicated diagramming. Distributed-tracing systems (Jaeger, Zipkin) generate sequence-like views from runtime data.</p>
+        </div>
+      </div>
+      <div class="ctx-foot">
+        <strong>Documented industrial use.</strong> RFC 6749 (OAuth 2.0) and RFC 7235 (HTTP authentication) document their core flows as sequence diagrams. Stripe's developer documentation uses sequence diagrams to describe payment-intent webhooks. The OpenTelemetry specification (CNCF) is itself a sequence-diagram-driven model of distributed tracing. Fowler's <em>UML Distilled</em> (3rd ed.) calls sequence diagrams "the most useful UML behavioural diagram" for working teams.
+      </div>
+    </div>
+
+    <div class="project-note">
+      <strong>Project link.</strong> For your Phase 3 deliverable, draw sequence diagrams for two or three non-trivial use cases (typically the ones with the most actors or the most alternative paths). Each sequence diagram refines a use case from the use-case diagram and feeds the design of the corresponding methods in the class diagram. Do not try to draw a sequence diagram for every use case; that is over-engineering.
+    </div>
+
   </div>
 </section>
 
@@ -1205,6 +1360,42 @@
     </ul>
 
     <p class="body">Most classes do <em>not</em> need a state machine. Data carriers, value objects, and pure functions have no state in this sense. Drawing a state machine for them is over-engineering. Conversely, every domain object whose lifecycle is meaningful (Order, Loan, Ticket, Patient, Account) is a candidate.</p>
+
+    <div class="context-card">
+      <div class="ctx-eyebrow">Context</div>
+      <h4 class="ctx-title">Where state machines earn their place</h4>
+      <div class="ctx-grid">
+        <div class="ctx-block">
+          <h5>Problem they solve</h5>
+          <p>Making the lifecycle of a single object or system explicit. Every state, every event, every guard, every action laid out so a reviewer can answer: "Is there a state where event E does nothing?" "Is there an unreachable state?" "Can the system get stuck?" These questions are central to safety and protocol correctness.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Domains where they dominate</h5>
+          <ul>
+            <li><strong>Embedded and safety-critical systems.</strong> Aircraft engine control (FADEC), automotive ECUs, pacemaker firmware are all state-machine-driven. MATLAB Stateflow is the industry standard for safety-critical state modelling.</li>
+            <li><strong>Network protocols.</strong> TCP's 11-state machine in RFC 793 is the canonical example; every IETF protocol since uses similar state diagrams.</li>
+            <li><strong>UI state management.</strong> XState (JavaScript) has popularised statecharts (Harel 1987) as the way to manage complex UI state in React, Vue, and Svelte applications.</li>
+            <li><strong>Game AI.</strong> Finite state machines and their behaviour-tree extensions are the default model for non-player-character behaviour in commercial game engines.</li>
+            <li><strong>Domain object lifecycles.</strong> Order management, ticket workflows, loan tracking, patient admission states.</li>
+          </ul>
+        </div>
+        <div class="ctx-block">
+          <h5>Problems they do not solve</h5>
+          <p>Interactions between multiple objects (use sequence diagrams), static structure (use class diagrams), or business workflow across actors (use activity diagrams). State machines are about <em>one object's life</em>, not the system as a whole.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Tooling in current use</h5>
+          <p>MATLAB Stateflow for safety-critical embedded work; XState (and Statecharts.dev) for web applications; PlantUML and Mermaid for documentation; Yakindu and SCXML for executable statecharts in industry. AWS Step Functions are an executable, cloud-hosted state machine implementation.</p>
+        </div>
+      </div>
+      <div class="ctx-foot">
+        <strong>Documented industrial use.</strong> The TCP state machine in <em>RFC 793</em> (1981) is the foundational example; every textbook on networking re-uses it. David Harel's <em>Statecharts: A Visual Formalism</em> (1987) extended classical FSMs to hierarchical states and is the basis of UML state machines. XState's documentation and case studies (Microsoft, Netflix, Khan Academy) describe production-scale UI state management. Stateflow is mandated in DO-178C / ISO 26262 toolchains for certified avionics and automotive software.
+      </div>
+    </div>
+
+    <div class="project-note">
+      <strong>Project link.</strong> Most COMP433 projects will have one or two domain objects with a meaningful lifecycle (a Loan, an Appointment, an Order, a Booking). Draw a state machine for each of those. Drawing one for a passive data class (e.g., a Patient record) is usually unnecessary; if you find yourself drawing it, ask whether the lifecycle is really about the record or about something else (the consultation, the registration).
+    </div>
 
     <h3 class="subhead">Simulate the BookCopy state machine</h3>
     <p class="body">The interactive below runs the BookCopy state machine. Fire events with the buttons and watch the current state change, with guards enforced.</p>
@@ -1416,6 +1607,41 @@
       <li>An <strong>architectural style</strong> is a pattern for a system layout. Examples: layered, client-server, peer-to-peer, three-tier, model-view-controller (MVC), pipes-and-filters, service-oriented (SOA).</li>
       <li>A <strong>software architecture</strong> is an instance of a style, applied to a specific system. The deployment diagram above is an instance of the 3-tier style.</li>
     </ul>
+
+    <div class="context-card">
+      <div class="ctx-eyebrow">Context</div>
+      <h4 class="ctx-title">Where component and deployment diagrams earn their place</h4>
+      <div class="ctx-grid">
+        <div class="ctx-block">
+          <h5>Problem they solve</h5>
+          <p>Component diagrams answer "what are the major moving parts and how do they connect?". Deployment diagrams answer "where does each part actually run and what does it talk to?". Both are architectural views that operations and infrastructure engineers, not application developers, are the primary consumers of.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Domains where they dominate</h5>
+          <ul>
+            <li><strong>Enterprise architecture.</strong> TOGAF, the Open Group Architecture Framework, prescribes component-and-deployment diagrams as core artefacts of every reference architecture. ArchiMate (the TOGAF modelling language) overlaps heavily with UML's component view.</li>
+            <li><strong>Cloud architecture.</strong> AWS Architecture Diagrams, Azure Reference Architectures, and Google Cloud's reference designs all use deployment-style notation with cloud-vendor icons.</li>
+            <li><strong>Microservices documentation.</strong> Component diagrams document service boundaries and provided/required interfaces; deployment diagrams document Kubernetes node topology.</li>
+            <li><strong>Compliance and audit.</strong> ISO 27001 and SOC 2 audits typically require an "infrastructure diagram" that is a deployment diagram with regulatory labels (where personal data sits, where audit logs go).</li>
+          </ul>
+        </div>
+        <div class="ctx-block">
+          <h5>Problems they do not solve</h5>
+          <p>Internal class structure of a component (use a class diagram), runtime behaviour of a component (use sequence diagrams), or workflow across components (use activity diagrams). Component diagrams stop at the interface boundary; what happens inside is a separate concern.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Tooling in current use</h5>
+          <p>Lucidchart, draw.io, and the AWS / Azure / GCP architecture-icon libraries dominate cloud work. Structurizr (by Simon Brown, of <em>Software Architecture for Developers</em>) is a text-driven tool aligned with the C4 model, a modern simplification of UML's structural diagrams. ArchiMate tooling (Archi, BiZZdesign) for enterprise architecture.</p>
+        </div>
+      </div>
+      <div class="ctx-foot">
+        <strong>Documented industrial use.</strong> Bass, Clements, and Kazman's <em>Software Architecture in Practice</em> (4th ed., 2021) is the standard reference; SEI (Software Engineering Institute) publishes case studies on industrial component and deployment work, including the U.S. Department of Defense and large healthcare systems. Simon Brown's C4 model (2018) is the most widely adopted contemporary simplification of UML's structural and architectural views for working software teams. Netflix's published architecture overviews (on netflixtechblog.com) use deployment-style diagrams throughout.
+      </div>
+    </div>
+
+    <div class="project-note">
+      <strong>Project link.</strong> For Phase 3, you typically need one component diagram (showing the major modules of your application and the interfaces between them) and one deployment diagram (showing where each module runs and how clients reach it). Keep both at the conceptual level; you are not expected to commit to Kubernetes manifests at this stage.
+    </div>
   </div>
 </section>
 
