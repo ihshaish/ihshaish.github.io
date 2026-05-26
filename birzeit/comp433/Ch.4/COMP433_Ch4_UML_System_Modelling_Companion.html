@@ -430,7 +430,7 @@
     </div>
 
     <h3 class="subhead">UML is a language, not a method</h3>
-    <p class="body">A common student confusion is to expect UML to tell you <em>when</em> to draw each diagram. It does not. UML is a notation only: it standardises the shape of an ellipse for a use case, the rules for an include arrow, the compartments of a class box. The decisions about <em>which</em> diagrams to draw, in what order, and how much detail to put on them belong to the <em>process</em>, which is a separate concern. The most-cited process built around UML is the Rational Unified Process (RUP, Kruchten, 2003), but agile teams routinely use a small subset of UML inside Scrum or XP without adopting RUP at all. The course's structure follows this separation: chapter 3 covers the process by which requirements are produced; this chapter covers the language in which the resulting models are drawn.</p>
+    <p class="body">A common confusion is to expect UML to tell you <em>when</em> to draw each diagram. It does not. UML is a notation only: it standardises the shape of an ellipse for a use case, the rules for an include arrow, the compartments of a class box. The decisions about <em>which</em> diagrams to draw, in what order, and how much detail to put on them belong to the <em>process</em>, which is a separate concern. The most-cited process built around UML is the Rational Unified Process (RUP, Kruchten, 2003), but agile teams routinely use a small subset of UML inside Scrum or XP without adopting RUP at all. The course's structure follows this separation: chapter 3 covers the process by which requirements are produced; this chapter covers the language in which the resulting models are drawn.</p>
   </div>
 </section>
 
@@ -493,7 +493,7 @@
     <h2 class="section-title">From <em>elicitation to deployment</em>: where each model fits.</h2>
     <p class="section-intro">The diagrams in this chapter do not exist in isolation. Each one sits at a particular point in the software lifecycle, takes its input from the artefact that precedes it, and produces an output that the next artefact builds on. This section is the map that the rest of the companion fills in.</p>
 
-    <p class="body">A common student misconception is that UML diagrams are alternatives ("should I draw a use case or a class diagram?"). The right framing is sequential: <strong>each diagram answers a question the previous one raised</strong>, at the right level of abstraction for the stage you are in. Knowing which question is on the table is what tells you which diagram to draw next.</p>
+    <p class="body">A common misconception is that UML diagrams are alternatives ("should I draw a use case or a class diagram?"). The right framing is sequential: <strong>each diagram answers a question the previous one raised</strong>, at the right level of abstraction for the stage you are in. Knowing which question is on the table is what tells you which diagram to draw next.</p>
 
     <div class="figure">
       <div class="figure-caption">Figure 1</div>
@@ -1048,7 +1048,7 @@
     </ul>
 
     <h3 class="subhead">Relationships between use cases: include, extend, generalisation</h3>
-    <p class="body">Once you have more than a handful of use cases, you will start to see that some use cases share sub-tasks with each other, others fire only in exceptional circumstances, and others are variations on a common theme. UML 2.5 gives three stereotypes for these refinements. Each has a precise meaning and a precise arrow direction, and confusing them is the single most common marking deduction on this material.</p>
+    <p class="body">Once you have more than a handful of use cases, you will start to see that some use cases share sub-tasks with each other, others fire only in exceptional circumstances, and others are variations on a common theme. UML 2.5 gives three stereotypes for these refinements. Each has a precise meaning and a precise arrow direction, and confusing them is the single most common notation error on this material.</p>
 
     <div class="table-card">
       <table class="body-table">
@@ -1079,7 +1079,7 @@
     <p class="body">The teaching point: <code>&lt;&lt;include&gt;&gt;</code> exists to avoid duplication when two or more base use cases share a sub-task (Authenticate customer is shared by Withdraw, Deposit, Transfer, and Check balance). <code>&lt;&lt;extend&gt;&gt;</code> exists to keep the base description clean when an optional or exceptional behaviour would otherwise crowd it (Print receipt and Refuse transaction only run sometimes; they belong on a separate ellipse, not as a footnote inside Withdraw).</p>
 
     <h3 class="subhead">Extension points</h3>
-    <p class="body">A common student question is "where in the base does the extension fire?" The answer is given by an <em>extension point</em>: a named position in the base's workflow, declared inside the base ellipse (in a third compartment) or in the base's textual description. Borrow copy of a book typically declares two extension points:</p>
+    <p class="body">A common question is "where in the base does the extension fire?" The answer is given by an <em>extension point</em>: a named position in the base's workflow, declared inside the base ellipse (in a third compartment) or in the base's textual description. Borrow copy of a book typically declares two extension points:</p>
 
     <ul class="body">
       <li><code>maxItemsCheck</code>, located after the system has counted the borrower's current loans. The Refuse loan extension fires here with guard <code>[items on loan == 6]</code>.</li>
@@ -1534,7 +1534,7 @@
     <h3 class="subhead">Data-driven noun-verb analysis</h3>
     <p class="body">The standard recipe, introduced by Shlaer and Mellor in the late 1980s and used in the course, is the <em>noun-verb analysis</em>: read through the requirements document and underline every noun phrase; collect those noun phrases as a candidate class list; discard inappropriate ones (redundant, omnipotent, vague, meta-language, outside the system scope, or really attributes of something else); then identify every verb and assign verbs to candidate classes as operations. The result is a first-cut class diagram that is grounded in the requirements you wrote, rather than the developer's imagination.</p>
 
-    <p class="body">Six categories of "inappropriate" noun, worth memorising because they recur in marking:</p>
+    <p class="body">Six categories of "inappropriate" noun, worth memorising because they recur in reviews of analysis-level class lists:</p>
     <ul class="body">
       <li><strong>Redundant.</strong> Two nouns name the same thing (e.g., "library member" and "borrower" both refer to LibraryMember).</li>
       <li><strong>Omnipotent / "manager" / "system".</strong> Vague catch-alls that would do everything; usually a sign the analyst stopped abstracting too early.</li>
@@ -1554,7 +1554,7 @@
     </ul>
 
     <h3 class="subhead">What makes a good analysis class</h3>
-    <p class="body">Five criteria, drawn from Cooper, Larman, and the broader OO design literature, that the marking rubric looks for:</p>
+    <p class="body">Five criteria, drawn from Cooper, Larman, and the broader OO design literature, that practitioner reviews look for:</p>
 
     <ul class="body">
       <li><strong>Its name reflects its intent.</strong> "AccountManager" tells you what it does; "Util" or "Helper" tells you nothing.</li>
@@ -2326,8 +2326,8 @@
 <section class="block" id="pitfalls">
   <div class="container">
     <div class="section-eyebrow"><span class="num">15.</span>Pitfalls</div>
-    <h2 class="section-title">Eight modelling pitfalls <em>that show up in marking</em>.</h2>
-    <p class="section-intro">Drawn from Fowler's <em>UML Distilled</em>, the COMP433 marking history, and Brooks' general observations about modelling.</p>
+    <h2 class="section-title">Eight modelling pitfalls <em>that show up in practice</em>.</h2>
+    <p class="section-intro">Drawn from Fowler's <em>UML Distilled</em>, recurring review findings on real UML models, and Brooks' general observations about modelling.</p>
 
     <div class="pitfall-list">
       <div class="pitfall">
