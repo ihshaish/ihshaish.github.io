@@ -43,6 +43,14 @@
       radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
       radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
     min-height: 100vh;
+    /* Use only common ligatures and kerning; disable Fraunces' stylistic
+       alternates that render letter pairs like "ss" oddly in titles. */
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures no-discretionary-ligatures no-historical-ligatures;
+  }
+  h1, h2, h3, h4, h5, h6, em, .hero h1 em, h2.section-title em {
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures no-discretionary-ligatures no-historical-ligatures;
   }
 
   .topbar { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,0.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 0; }
@@ -188,19 +196,20 @@
     <div class="brand"><span class="brand-mark"></span>COMP433 &middot; Ch. 3 &middot; Requirements engineering</div>
     <nav class="nav">
       <a href="/birzeit/comp433/">Course</a>
-      <a href="#what">i. Why RE</a>
-      <a href="#defn">ii. What a requirement is</a>
-      <a href="#layers">iii. Three layers</a>
-      <a href="#types">iv. Types</a>
-      <a href="#nfr">v. NFRs</a>
-      <a href="#process">vi. Process</a>
-      <a href="#notation">vii. Notations</a>
-      <a href="#spec">viii. Structured spec</a>
-      <a href="#doc">ix. The document</a>
-      <a href="#validation">x. Validation</a>
-      <a href="#effort">xi. Effort estimation</a>
-      <a href="#pitfalls">xii. Pitfalls</a>
-      <a href="#refs">xiii. References</a>
+      <a href="#what">1. Why RE</a>
+      <a href="#defn">2. What a requirement is</a>
+      <a href="#layers">3. Three layers</a>
+      <a href="#types">4. Types</a>
+      <a href="#nfr">5. NFRs</a>
+      <a href="#process">6. Process</a>
+      <a href="#notation">7. Notations</a>
+      <a href="#spec">8. Structured spec</a>
+      <a href="#doc">9. The document</a>
+      <a href="#validation">10. Validation</a>
+      <a href="#effort">11. Effort estimation</a>
+      <a href="#phase2">12. Phase 2 deliverables</a>
+      <a href="#pitfalls">13. Pitfalls</a>
+      <a href="#refs">14. References</a>
     </nav>
   </div>
 </div>
@@ -208,7 +217,7 @@
 <div class="hero">
   <div class="hero-eyebrow">COMP433 &middot; Software Engineering &middot; Chapter 3</div>
   <h1>Requirements engineering: <em>turning need into a design contract</em>.</h1>
-  <p class="hero-lede">A research-grounded companion to Chapter 3 of the COMP433 syllabus. The work of requirements engineering decides what gets built and what the project costs; everything downstream is execution against the answer. This companion lays out the theory, the practitioner notation, the document structure, the validation checks, and the per-requirement effort-estimation method used in the course.</p>
+  <p class="hero-lede">A research-grounded companion to Chapter 3 of the COMP433 syllabus. Requirements engineering is the sub-discipline of software engineering that elicits, analyses, specifies, validates, and manages what a system must do and the constraints under which it must do it (Zave, 1997; IEEE 830; ISO/IEC/IEEE 29148). It is the work that decides what gets built and what the project costs; everything downstream is execution against the answer it produces. This companion lays out the theory, the practitioner notation, the document structure, the validation checks, the per-requirement effort estimation method used in the course, and the tangible artefacts that make up the Phase 2 deliverable.</p>
   <div class="hero-meta">
     <div class="hero-meta-item"><span>course</span><span>COMP433</span></div>
     <div class="hero-meta-item"><span>chapter</span><span>3 of the syllabus</span></div>
@@ -221,19 +230,20 @@
   <div class="toc-card">
     <h3>Contents</h3>
     <ul class="toc-list">
-      <li><span class="toc-num">i.</span><a href="#what">Why requirements work carries the project</a></li>
-      <li><span class="toc-num">ii.</span><a href="#defn">What a requirement actually is</a></li>
-      <li><span class="toc-num">iii.</span><a href="#layers">The three abstraction layers</a></li>
-      <li><span class="toc-num">iv.</span><a href="#types">Functional, non-functional, domain</a></li>
-      <li><span class="toc-num">v.</span><a href="#nfr">NFR families and measurable metrics</a></li>
-      <li><span class="toc-num">vi.</span><a href="#process">The requirements engineering process</a></li>
-      <li><span class="toc-num">vii.</span><a href="#notation">Notation choices for specification</a></li>
-      <li><span class="toc-num">viii.</span><a href="#spec">The structured specification template</a></li>
-      <li><span class="toc-num">ix.</span><a href="#doc">The requirements document</a></li>
-      <li><span class="toc-num">x.</span><a href="#validation">Validation: reviews, prototypes, tests</a></li>
-      <li><span class="toc-num">xi.</span><a href="#effort">Effort estimation, with a calculator</a></li>
-      <li><span class="toc-num">xii.</span><a href="#pitfalls">Common pitfalls</a></li>
-      <li><span class="toc-num">xiii.</span><a href="#refs">References and further reading</a></li>
+      <li><span class="toc-num">1.</span><a href="#what">Why requirements work carries the project</a></li>
+      <li><span class="toc-num">2.</span><a href="#defn">What a requirement actually is</a></li>
+      <li><span class="toc-num">3.</span><a href="#layers">The three abstraction layers</a></li>
+      <li><span class="toc-num">4.</span><a href="#types">Functional, non-functional, domain</a></li>
+      <li><span class="toc-num">5.</span><a href="#nfr">NFR families and measurable metrics</a></li>
+      <li><span class="toc-num">6.</span><a href="#process">The requirements engineering process</a></li>
+      <li><span class="toc-num">7.</span><a href="#notation">Notation choices for specification</a></li>
+      <li><span class="toc-num">8.</span><a href="#spec">The structured specification template</a></li>
+      <li><span class="toc-num">9.</span><a href="#doc">The requirements document</a></li>
+      <li><span class="toc-num">10.</span><a href="#validation">Validation: reviews, prototypes, tests</a></li>
+      <li><span class="toc-num">11.</span><a href="#effort">Effort estimation, with a calculator</a></li>
+      <li><span class="toc-num">12.</span><a href="#phase2">Phase 2 deliverables checklist</a></li>
+      <li><span class="toc-num">13.</span><a href="#pitfalls">Common pitfalls</a></li>
+      <li><span class="toc-num">14.</span><a href="#refs">References and further reading</a></li>
     </ul>
   </div>
 </div>
@@ -241,33 +251,38 @@
 <!-- ===================================================================== -->
 <section class="block" id="what">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">i.</span>Leverage</div>
-    <h2 class="section-title">Requirements work carries the project <em>more than any other phase</em>.</h2>
-    <p class="section-intro">The cost of fixing a defect rises sharply with the phase in which it is found. The classic numbers, originally from Boehm and now widely confirmed, are blunt: a requirements error fixed after release can cost 100 times what the same error would have cost to fix during requirements writing.</p>
+    <div class="section-eyebrow"><span class="num">1.</span>Leverage</div>
+    <h2 class="section-title">Why requirements work carries <em>more weight than any other phase</em>.</h2>
+    <p class="section-intro">Requirements engineering exists because the largest single source of software project failure, measured across half a century of empirical studies, is not bad code or missed deadlines but a system that does not match what its users need. The leverage available at the requirements stage is therefore economic, not procedural: time spent here saves orders of magnitude later.</p>
 
-    <p class="body">Boehm's <em>Software Engineering Economics</em> (1981) is the source of the most-cited version of this curve. Subsequent industrial studies, including the IBM-led data summarised in Boehm and Basili's "Top 10 Software Defect Reduction List" (<em>IEEE Computer</em>, 2001), report the same pattern across very different organisations: defects whose root cause is in requirements dominate cost and schedule overruns. The leverage available at the requirements stage is therefore not procedural, it is economic.</p>
+    <h3 class="subhead">The economic case</h3>
+    <p class="body">The classic curve comes from Barry Boehm's <em>Software Engineering Economics</em> (Prentice-Hall, 1981), which used data from TRW Inc. and IBM to plot the cost of fixing a defect against the phase in which the defect is detected. Boehm found the cost grows roughly exponentially with the lag between the introduction of the defect and its discovery. A defect introduced during requirements that is caught and fixed during requirements costs unit value; the same defect caught during coding costs 5 to 10 times more; caught during system test, 10 to 25 times more; caught after release, 50 to 200 times more. Subsequent industrial replications across very different organisations (IBM, NASA, Hewlett-Packard, GTE; summarised in Boehm and Basili, "Software Defect Reduction Top 10 List", <em>IEEE Computer</em>, 34(1), 2001) confirm the shape of the curve, with the post-release multiplier most often falling in the 50-to-100 range.</p>
+
+    <p class="body">Two consequences follow. First, defects whose root cause is in requirements dominate the cost-and-schedule overruns of large projects (Standish Group <em>CHAOS</em> reports, 1994 to present, and the McConnell <em>Code Complete</em> survey). Second, even modest investment in requirements <em>quality</em> at the start (more elicitation interviews, a structured specification template, a peer review) pays back many times over by the end of the project. This is the empirical foundation for treating requirements engineering as a distinct sub-discipline, with its own standards (IEEE 830 in 1998, superseded by ISO/IEC/IEEE 29148 in 2011 and revised in 2018) and its own dedicated literature.</p>
 
     <div class="quotebox">
       <p>"Fixing a requirements error after delivery may cost up to 100 times the cost of fixing an implementation error."</p>
-      <span class="source">Prof. Adel Taweel, COMP433 lecture notes (Spring 2025/26), restating Boehm's classic finding.</span>
+      <span class="source">Boehm (1981), restated in Boehm and Basili (2001) and in every modern RE textbook (Sommerville; Wiegers and Beatty; Robertson and Robertson).</span>
     </div>
 
-    <p class="body">A second, less obvious finding is that the requirements stage is also where the project's <em>identity</em> is decided. The Twitter 140-character limit was a requirement. The iPhone's no-stylus rule was a requirement. WhatsApp's end-to-end encryption was a requirement. None of these features were decided by writing code; they were decided by writing a sentence about what the system would or would not do. The same logic applies in every system that COMP433 students will work on: the requirements document sets the shape that the rest of the project will execute against.</p>
+    <h3 class="subhead">Why this is the project's identity stage</h3>
+    <p class="body">A second, less obvious point follows from the economics: the requirements stage is also where the project's <em>identity</em> is decided. The Twitter 140-character limit was a requirement, not an implementation accident. The iPhone's "no-stylus" rule was a requirement that ruled out a whole class of hardware solutions before Jonathan Ive's industrial-design team ever opened a CAD file. WhatsApp's end-to-end encryption guarantee was a requirement, not a feature added later. None of these defining properties were decided by writing code; each was decided by someone writing a sentence about what the system would or would not do. For the COMP433 project, the same logic applies on a smaller scale: the requirements document is the artefact in which your team decides what the system is, not just what it does.</p>
 
-    <p class="body">This companion treats requirements engineering with that weight. The first half covers what requirements <em>are</em> and how they are written; the second half covers how the work is <em>validated</em>, <em>documented</em>, and <em>estimated for effort</em>. The running example follows the course lecture deck: the <strong>Mentcare</strong> patient information system for mental health care (called MHC-PMS in older editions of Sommerville; the same system).</p>
+    <h3 class="subhead">How this companion is organised</h3>
+    <p class="body">The first half covers <em>what</em> requirements are and <em>how</em> they are written: the definition (section 2), the three abstraction layers (section 3), the functional/non-functional/domain taxonomy (sections 4 and 5), and the five-activity RE process (section 6). The second half covers <em>how the work becomes an artefact</em>: notation choices (section 7), the structured specification template (section 8), the requirements document structure (section 9), validation (section 10), and per-requirement effort estimation with a working calculator (section 11). Section 12 then collects what is concretely due at the Phase 2 deadline. Section 13 lists the marking pitfalls; section 14 lists the references. The running example throughout follows the course lecture deck: the <strong>Mentcare</strong> patient information system for mental health care (called MHC-PMS in older editions of Sommerville; the same system).</p>
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="defn">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">ii.</span>Definition</div>
+    <div class="section-eyebrow"><span class="num">2.</span>Definition</div>
     <h2 class="section-title">A requirement is a <em>statement</em> the system must satisfy.</h2>
     <p class="section-intro">Requirements range from one-line wishes ("the system shall be easy to use") to formal mathematical specifications. Both ends of that range are still called requirements. The discipline is in knowing which end you are at and why.</p>
 
     <p class="body">Sommerville's definition (<em>Software Engineering</em>, 10th ed., 2015) is the operational one: a requirement is "a description of a service that the system must provide, or a constraint on the system." The two clauses matter independently. A <em>service</em> is something the system does. A <em>constraint</em> is a property the system has. Most documents contain both, often mixed together.</p>
 
-    <p class="body">Adel's lecture notes add the practitioner observation that requirements serve <em>two functions in one artefact</em>, which explains why they are written in both abstract and detailed forms:</p>
+    <p class="body">Beyond the bare definition, a practitioner-facing observation matters: requirements serve <em>two functions in one artefact</em>, which explains why they are written in both abstract and detailed forms:</p>
 
     <ul class="body">
       <li><strong>As the basis for a bid.</strong> Before a contract is signed, the customer needs requirements they can understand, share, and compare across competing proposals. These are <em>abstract</em> by necessity. They will be interpreted differently by different bidders, and that is fine because the bidding process is also about <em>which</em> interpretation the customer prefers.</li>
@@ -281,9 +296,9 @@
 <!-- ===================================================================== -->
 <section class="block" id="layers">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">iii.</span>Layers</div>
+    <div class="section-eyebrow"><span class="num">3.</span>Layers</div>
     <h2 class="section-title">User requirements, system requirements, <em>software specification</em>.</h2>
-    <p class="section-intro">Sommerville and Adel agree on a three-layer model. Each layer has a different audience and uses different language. A document that fails to distinguish them tends to be wrong for everyone reading it.</p>
+    <p class="section-intro">The canonical three-layer model (Sommerville, 10th ed.) distinguishes user requirements, system requirements, and software specification. Each layer has a different audience and uses different language. A document that fails to distinguish them tends to be wrong for everyone reading it.</p>
 
     <div class="grid-3">
       <div class="cog-card">
@@ -304,7 +319,7 @@
     </div>
 
     <h3 class="subhead">Worked pair: a user requirement and its system refinement</h3>
-    <p class="body">In Adel's lecture notes, every user requirement (UR) is numbered and refined into one or more system requirements (SR) with the same root. The notation is straightforward: <code style="font-family: var(--mono); color: var(--accent-deep);">UR4.0</code> refines into <code style="font-family: var(--mono); color: var(--accent-deep);">SR4.1</code>, <code style="font-family: var(--mono); color: var(--accent-deep);">SR4.2</code>, and so on. Below is the canonical course example for account registration.</p>
+    <p class="body">By convention used throughout the course, every user requirement (UR) is numbered and refined into one or more system requirements (SR) with the same root. The notation is straightforward: <code style="font-family: var(--mono); color: var(--accent-deep);">UR4.0</code> refines into <code style="font-family: var(--mono); color: var(--accent-deep);">SR4.1</code>, <code style="font-family: var(--mono); color: var(--accent-deep);">SR4.2</code>, and so on. The shared root carries the traceability: any change to UR4.0 propagates to every SR4.x, and any test result against SR4.x rolls up to UR4.0. Below is the canonical example for account registration.</p>
 
     <div class="req-example user">
       <span class="tag-small">User requirement</span><br>
@@ -324,16 +339,16 @@
 
     <p class="body">Notice the relationship. UR4.0 is a single sentence that the head of the clinic can read and confirm. SR4.1 through SR4.7 are seven sentences that the developer can build to and the tester can write acceptance tests against. They say the same thing at different levels of abstraction.</p>
 
-    <p class="body">The numbering is not decorative. It is the foundation of <em>traceability</em>: every SR carries the prefix of the UR it refines, so a question about why a particular system requirement exists has an answer ("it implements UR4.0"), and a question about what testing covers a user requirement has an answer ("the tests for SR4.1 through SR4.7"). Section x and the discussion of traceability matrices return to this.</p>
+    <p class="body">The numbering is not decorative. It is the foundation of <em>traceability</em>: every SR carries the prefix of the UR it refines, so a question about why a particular system requirement exists has an answer ("it implements UR4.0"), and a question about what testing covers a user requirement has an answer ("the tests for SR4.1 through SR4.7"). Section 10 and the discussion of traceability matrices return to this.</p>
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="types">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">iv.</span>Types</div>
+    <div class="section-eyebrow"><span class="num">4.</span>Types</div>
     <h2 class="section-title">Functional, non-functional, <em>and domain</em> requirements.</h2>
-    <p class="section-intro">Sommerville's classification, which Adel follows, separates requirements into three mutually exclusive categories. The third one (domain) is often skipped in lighter treatments and is exactly where most subtle errors come from.</p>
+    <p class="section-intro">Sommerville's classification separates requirements into three mutually exclusive categories: functional, non-functional, and domain. The third one is often skipped in lighter treatments and is exactly where the most subtle errors come from.</p>
 
     <h3 class="subhead-small">Functional requirements</h3>
     <p class="body">Statements of the services the system should provide, how the system should react to particular inputs, and how the system should behave in particular situations. They are usually written with the system as subject and "shall" as the modal verb. Example, from the Mentcare system:</p>
@@ -353,10 +368,10 @@
       <span class="req-id">3.C.8:</span> The Mentcare system shall be available to all clinics during normal working hours (Mon to Fri, 08:30 to 17:30). Downtime within normal working hours shall not exceed five seconds in any one day.
     </div>
 
-    <p class="body">Notice the verifiability: "available" is not abstract here, it has a measurable threshold (downtime under five seconds per day during stated hours). Section v returns to NFR families and metrics.</p>
+    <p class="body">Notice the verifiability: "available" is not abstract here, it has a measurable threshold (downtime under five seconds per day during stated hours). Section 5 returns to NFR families and metrics.</p>
 
     <h3 class="subhead-small">Domain requirements</h3>
-    <p class="body">Requirements that come from the application domain of the system and that reflect characteristics of that domain. Adel's two examples:</p>
+    <p class="body">Requirements that come from the application domain of the system and that reflect characteristics of that domain. Two examples from the course's lecture material:</p>
 
     <ul class="body">
       <li>A train control system has to take into account the braking characteristics in different weather conditions.</li>
@@ -377,9 +392,9 @@
 <!-- ===================================================================== -->
 <section class="block" id="nfr">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">v.</span>NFRs</div>
+    <div class="section-eyebrow"><span class="num">5.</span>NFRs</div>
     <h2 class="section-title">Three NFR families, <em>each with a measurable metric</em>.</h2>
-    <p class="section-intro">Sommerville's NFR classification (which Adel uses) sorts non-functional requirements into three families by where the constraint comes from. The families have different stakeholders, different acceptance criteria, and different test procedures.</p>
+    <p class="section-intro">Sommerville's NFR classification sorts non-functional requirements into three families by where the constraint comes from. The families have different stakeholders, different acceptance criteria, and different test procedures.</p>
 
     <h3 class="subhead-small">Product, organisational, external</h3>
     <div class="table-card">
@@ -394,7 +409,7 @@
     </div>
 
     <h3 class="subhead">From wish to verifiable NFR</h3>
-    <p class="body">An NFR is almost always wrong on its first draft. The natural English form is a wish, and a wish cannot be tested. Adel makes the conversion explicit by distinguishing a <em>goal</em> (a general intention) from a <em>verifiable non-functional requirement</em> (a statement with a measurable threshold).</p>
+    <p class="body">An NFR is almost always wrong on its first draft. The natural English form is a wish, and a wish cannot be tested. The conversion to a testable form is made explicit by distinguishing a <em>goal</em> (a general intention) from a <em>verifiable non-functional requirement</em> (a statement with a measurable threshold).</p>
 
     <div class="req-example user">
       <span class="tag-small">Goal (not yet verifiable)</span><br>
@@ -432,9 +447,9 @@
 <!-- ===================================================================== -->
 <section class="block" id="process">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">vi.</span>Process</div>
+    <div class="section-eyebrow"><span class="num">6.</span>Process</div>
     <h2 class="section-title">The five activities of <em>requirements engineering</em>.</h2>
-    <p class="section-intro">Sommerville's RE process model has five activities. They are not strictly sequential; the process is iterative, and Adel describes it as a spiral. The list below is the canonical decomposition.</p>
+    <p class="section-intro">Sommerville's RE process model has five activities. They are not strictly sequential; the process is iterative, conventionally drawn as a spiral that re-enters each activity as new information arrives. The list below is the canonical decomposition.</p>
 
     <div class="grid-3">
       <div class="cog-card">
@@ -455,7 +470,7 @@
       <div class="cog-card">
         <div class="icon">4</div>
         <h4>Validation</h4>
-        <p>Checking that the specified requirements define the system the customer wants. Section x covers the three standard validation techniques (reviews, prototyping, test-case generation).</p>
+        <p>Checking that the specified requirements define the system the customer wants. Section 10 covers the three standard validation techniques (reviews, prototyping, test-case generation).</p>
       </div>
       <div class="cog-card">
         <div class="icon">5</div>
@@ -471,16 +486,16 @@
 <!-- ===================================================================== -->
 <section class="block" id="notation">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">vii.</span>Notation</div>
+    <div class="section-eyebrow"><span class="num">7.</span>Notation</div>
     <h2 class="section-title">Five ways to <em>write</em> a system requirement.</h2>
-    <p class="section-intro">Sommerville's table of notation choices, used directly in Adel's lecture notes, is the standard taxonomy. Each row trades off readability against precision differently; most documents use more than one row.</p>
+    <p class="section-intro">Sommerville's table of notation choices is the standard taxonomy used in the course. Each row trades off readability against precision differently; most documents use more than one row.</p>
 
     <div class="table-card">
       <table class="body-table">
         <thead><tr><th>Notation</th><th>Description</th><th>Trade-off</th></tr></thead>
         <tbody>
           <tr><td>Natural language</td><td>Requirements written as numbered sentences in plain English. Each sentence expresses one requirement.</td><td>Maximum readability. Minimum precision. Prone to amalgamation (several requirements in one sentence) and confusion (functional and non-functional mixed).</td></tr>
-          <tr><td>Structured natural language</td><td>Requirements written in natural language on a standard template (form / table). Each field describes one aspect of the requirement.</td><td>Compromise. Reads almost like natural language, structure rules out the worst ambiguities. Section viii covers the template used in COMP433.</td></tr>
+          <tr><td>Structured natural language</td><td>Requirements written in natural language on a standard template (form / table). Each field describes one aspect of the requirement.</td><td>Compromise. Reads almost like natural language, structure rules out the worst ambiguities. Section 8 covers the template used in COMP433.</td></tr>
           <tr><td>Design description languages</td><td>A language with programming-language abstractions, used to specify operational behaviour. Now rarely used; remains useful for interface specifications (e.g., IDL, OpenAPI).</td><td>High precision. Low customer accessibility. Customer cannot usually confirm it.</td></tr>
           <tr><td>Graphical notations</td><td>Diagrams (UML use case, activity, sequence) supplemented by text. Common for functional requirements with non-trivial workflow.</td><td>Excellent for showing structure and flow. Weak for specifying constraints. Best combined with text.</td></tr>
           <tr><td>Mathematical specifications</td><td>Notations based on finite-state machines, set theory, predicate logic. Used in safety-critical and regulated domains.</td><td>Unambiguous by construction. Most customers cannot read it. Rarely used outside specific industries (avionics, automotive safety, formal methods research).</td></tr>
@@ -488,7 +503,7 @@
       </table>
     </div>
 
-    <p class="body">Adel's lecture notes are blunt about the problems with relying on natural language alone:</p>
+    <p class="body">The problems with relying on natural language alone are well-documented (Meyer 1985; Sommerville 2015, ch.4):</p>
 
     <ul class="body">
       <li><strong>Lack of clarity.</strong> Precision is difficult without making the document hard to read.</li>
@@ -503,9 +518,9 @@
 <!-- ===================================================================== -->
 <section class="block" id="spec">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">viii.</span>Structured spec</div>
+    <div class="section-eyebrow"><span class="num">8.</span>Structured spec</div>
     <h2 class="section-title">The structured specification template, in <em>nine fields</em>.</h2>
-    <p class="section-intro">Adel's lecture notes use a structured-natural-language template based directly on Cockburn's use case format. Every system requirement that is non-trivial gets one of these. The template's value is in the discipline it forces: a field that is blank is a question still open.</p>
+    <p class="section-intro">The structured-natural-language template used in the course is adapted from Cockburn's use case format (Cockburn, 2001). Every system requirement that is non-trivial gets one of these. The template's value is in the discipline it forces: a field that is blank is a question still open.</p>
 
     <p class="body">The fields, in order, are: Title, Purpose, Description, Actors, Trigger, Pre-condition, Workflow, Alternative Workflow, Post-condition. The course's canonical worked example is the insulin pump's dose computation routine:</p>
 
@@ -544,9 +559,9 @@
 <!-- ===================================================================== -->
 <section class="block" id="doc">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">ix.</span>The document</div>
+    <div class="section-eyebrow"><span class="num">9.</span>The document</div>
     <h2 class="section-title">The requirements document has a <em>standard structure</em>.</h2>
-    <p class="section-intro">A requirements document is the agreed statement of the system requirements. It is an artefact that has to serve customers, developers, testers, regulators, and the project's own future. Sommerville's structure, which Adel uses, has nine sections and an index.</p>
+    <p class="section-intro">A requirements document is the agreed statement of the system requirements. It is an artefact that has to serve customers, developers, testers, regulators, and the project's own future. The structure used in the course follows Sommerville's nine-section template, anchored in the IEEE 830 (1998) recommended practice and its successor ISO/IEC/IEEE 29148 (2018).</p>
 
     <h3 class="subhead-small">What a requirements document must do</h3>
     <p class="body">Before the structure, the obligations. A requirements document must:</p>
@@ -571,7 +586,7 @@
       <li>Index</li>
     </ul>
 
-    <p class="body">This is a generic skeleton that has to be instantiated for a specific system. The instantiation that COMP433 uses, drawn from Sommerville and Adel, expands it into nine sections:</p>
+    <p class="body">This is a generic skeleton that has to be instantiated for a specific system. The COMP433 instantiation, drawn from Sommerville's chapter 4 and the IEEE 830 outline, expands it into nine sections:</p>
 
     <div class="table-card">
       <table class="body-table">
@@ -618,7 +633,7 @@
     </div>
 
     <h3 class="subhead">Writing rules</h3>
-    <p class="body">Adel's lecture notes prescribe four writing rules that apply to every requirement, regardless of which section it is in:</p>
+    <p class="body">Four writing rules apply to every requirement, regardless of which section it is in. They are restated in every modern RE textbook (Sommerville; Robertson and Robertson, <em>Mastering the Requirements Process</em>, 3rd ed.; Wiegers and Beatty, <em>Software Requirements</em>, 3rd ed.):</p>
 
     <ol class="body">
       <li><strong>Invent a standard format and use it for every requirement.</strong> Consistency reduces the cognitive load of reading the document; readers learn the format once and then focus on content.</li>
@@ -634,7 +649,7 @@
 <!-- ===================================================================== -->
 <section class="block" id="validation">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">x.</span>Validation</div>
+    <div class="section-eyebrow"><span class="num">10.</span>Validation</div>
     <h2 class="section-title">Three techniques, <em>seven things to check</em>.</h2>
     <p class="section-intro">Requirements validation asks whether the specified requirements define the system the customer actually wants. It is distinct from verification, which asks whether the system meets the specified requirements; validation is the upstream activity that decides whether the specification is right in the first place.</p>
 
@@ -657,7 +672,7 @@
       </div>
     </div>
 
-    <h3 class="subhead">The seven checks (Adel's requirements-checking list)</h3>
+    <h3 class="subhead">The seven validation checks</h3>
     <p class="body">Whichever validation technique is used, the same questions are asked of each requirement:</p>
 
     <div class="table-card">
@@ -690,11 +705,11 @@
 <!-- ===================================================================== -->
 <section class="block" id="effort">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xi.</span>Effort estimation</div>
+    <div class="section-eyebrow"><span class="num">11.</span>Effort estimation</div>
     <h2 class="section-title">Estimating effort, <em>requirement by requirement</em>.</h2>
-    <p class="section-intro">Once the requirements are specified, the natural next question is: what will this cost, and how long will it take? COMP433 uses a simplified, per-requirement estimation method described in Adel's lecture notes. The method is bottom-up, transparent, and easy to revise. Below: the method, its context among other estimation techniques, and an interactive calculator that runs it on whatever requirements list you enter.</p>
+    <p class="section-intro">Once the requirements are specified, the natural next question is: what will this cost, and how long will it take? COMP433 uses a simplified, per-requirement estimation method specified in the course lecture notes. The method is bottom-up, transparent, and easy to revise. Below: the method, its context among other estimation techniques, and an interactive calculator that runs it on whatever requirements list you enter.</p>
 
-    <h3 class="subhead">Adel's simplified per-UR method</h3>
+    <h3 class="subhead">The simplified per-UR method</h3>
     <p class="body">The method's data model is small. For each user requirement, the estimator records two numbers:</p>
 
     <ol class="body">
@@ -721,11 +736,11 @@
     <p class="body">The method is not a black box. Every input is one the estimator chose, and every output is a direct arithmetic consequence of the inputs. That transparency is the method's value: a stakeholder who questions a number can be shown which input drives it, and an estimator who learns the project is slipping can revise one row of the table to absorb the new information.</p>
 
     <h3 class="subhead">Interactive calculator</h3>
-    <p class="body">The calculator below ships with Adel's worked example from the lecture notes pre-filled. Edit any cell to recompute. Add or remove rows for your own requirements. Change the weekly salary, schedule buffer, or margin range to reflect your context.</p>
+    <p class="body">The calculator below ships with the worked example from the course lecture notes pre-filled. Edit any cell to recompute. Add or remove rows for your own requirements. Change the weekly salary, schedule buffer, or margin range to reflect your context.</p>
 
     <div class="calc-card">
       <h4>Effort estimation calculator</h4>
-      <div class="sub">Adel's simplified per-UR method, applied to whatever requirements list you enter.</div>
+      <div class="sub">The simplified per-UR method, applied to whatever requirements list you enter.</div>
 
       <table class="calc-table" id="urTable">
         <thead>
@@ -756,16 +771,16 @@
       </div>
     </div>
 
-    <p class="note">The example data above is the same as the worked example in Adel's lecture notes (slide 105). Reset returns to it. The four parameters underneath the table (buffer, salary, margins) are the dials a real estimator would adjust to match their context; defaults follow the course example.</p>
+    <p class="note">The example data above matches the worked example in the course lecture notes (slide 105). Reset returns to it. The four parameters underneath the table (buffer, salary, margins) are the dials a real estimator would adjust to match their context; defaults follow the course example.</p>
 
     <h3 class="subhead">How this method compares to others</h3>
-    <p class="body">Adel's method is one entry in a long literature on software effort estimation. The most widely cited alternatives are listed below, with the kind of project each is best suited to. The course's simplified method is the appropriate choice for Phase 1 of the COMP433 project; the others are listed so students know what else exists and when to reach for them.</p>
+    <p class="body">The per-UR method is one entry in a long literature on software effort estimation. The most widely cited alternatives are listed below, with the kind of project each is best suited to. The course's simplified method is the appropriate choice for Phase 1 of the COMP433 project; the others are listed so students know what else exists and when to reach for them.</p>
 
     <div class="table-card">
       <table class="body-table">
         <thead><tr><th>Method</th><th>Origin</th><th>Where it shines</th></tr></thead>
         <tbody>
-          <tr><td>Adel's per-UR simplified method</td><td>Course-specific; bottom-up by user requirement.</td><td>Small to medium projects where requirements are written before estimation. Transparent; revisable. Adopted for COMP433 Phase 1.</td></tr>
+          <tr><td>Per-UR simplified method (course)</td><td>Bottom-up by user requirement; developers and weeks per UR.</td><td>Small to medium projects where requirements are written before estimation. Transparent; revisable. Adopted for COMP433 Phase 1.</td></tr>
           <tr><td>COCOMO II</td><td>Boehm, <em>Software Cost Estimation with COCOMO II</em> (2000); revision of COCOMO 81.</td><td>Larger projects where size can be estimated in KSLOC or function points. Uses 17 cost drivers (product, personnel, project, platform attributes) to scale a base estimate.</td></tr>
           <tr><td>Function points</td><td>Albrecht (1979); standardised by IFPUG.</td><td>Information-system projects where requirements can be counted as inputs, outputs, files, inquiries, interfaces. Language- and platform-independent.</td></tr>
           <tr><td>Use case points</td><td>Karner (1993); a function-points adaptation for use-case-driven projects.</td><td>Object-oriented projects where requirements are expressed primarily as use cases. Counts actors and use cases, weighted by complexity.</td></tr>
@@ -780,15 +795,83 @@
 
     <ul class="body">
       <li><strong>No method is reliably accurate in absolute terms.</strong> Industrial surveys (e.g., Jorgensen and Shepperd, "A Systematic Review of Software Development Cost Estimation Studies", <em>IEEE Trans. Software Engineering</em>, 2007) report typical errors of plus or minus 30 to 50 percent across all major methods. The right question is not "which method is most accurate" but "which method's errors do I understand and can I revise as I learn more".</li>
-      <li><strong>The estimate that is revised survives.</strong> Methods that produce a single number which is then defended for the life of the project fail more often than methods that produce a number which is openly revised every time the team learns something new. The transparency of Adel's method is its main advantage here: a per-row number is easy to revise.</li>
+      <li><strong>The estimate that is revised survives.</strong> Methods that produce a single number which is then defended for the life of the project fail more often than methods that produce a number which is openly revised every time the team learns something new. The transparency of the per-UR method is its main advantage here: a per-row number is easy to revise.</li>
     </ul>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="phase2">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">12.</span>Phase 2 deliverables</div>
+    <h2 class="section-title">What is concretely <em>due at the Phase 2 deadline</em>.</h2>
+    <p class="section-intro">The first eleven sections lay out the discipline. This one lists exactly what your team submits at the Phase 2 deadline. Treat the checklist as the marking grid: each row is graded independently, and a missing row is the most common cause of marks lost in this phase.</p>
+
+    <h3 class="subhead">The five artefacts</h3>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th>#</th><th>Artefact</th><th>Where defined</th><th>Acceptance criterion</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>Numbered User Requirements (UR) list</strong></td>
+            <td>Section 3, plus the writing rules in section 9.</td>
+            <td>Each UR has a stable identifier (UR1, UR2, ...). Each is one sentence in customer-readable language. Each names a clear actor or goal. No UR mixes a function with a constraint; no UR contains two requirements joined by 'and'.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>System Requirements (SR) refinements</strong></td>
+            <td>Section 3 (the URn / SRn.m convention).</td>
+            <td>Every UR that needs refinement decomposes into one or more SRs that share its prefix (UR4 -&gt; SR4.1, SR4.2). Each SR is developer-precise and testable. Trivial URs (one-line wishes that need no refinement) may stand on their own.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>Non-Functional Requirements (NFR) table</strong></td>
+            <td>Sections 4 and 5.</td>
+            <td>At least one NFR per applicable family (product, organisational, external). Each NFR has a measurable threshold (a number, a unit, and a verification method). Wishes are not accepted: "the system shall be fast" is rejected; "p95 page load shall be under 800 ms on 4G" is accepted.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Structured specifications</strong> for the non-trivial SRs</td>
+            <td>Section 8 (the nine-field template).</td>
+            <td>Every SR whose workflow has at least one decision or one alternative path gets a structured spec. All nine fields populated: Title, Purpose, Description, Actors, Trigger, Pre-condition, Workflow, Alternative Workflow, Post-condition.</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Effort estimation</strong> against the UR list</td>
+            <td>Section 11 (the calculator).</td>
+            <td>Per-UR estimate: concurrent developers, person-weeks per developer, total person-weeks. Roll-up: total effort, schedule (1.30 buffer), cost, quoted price range (1.10 to 1.30 of cost). Numbers must be defensible against a sanity check (average effort per UR, anomalies flagged).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">A practical pre-submission checklist</h3>
+    <p class="body">Before you submit, the team runs through the following list together. Each item should be answerable with "yes, page N" or "yes, section N". Any "no" is rework before the deadline, not after.</p>
+
+    <ol class="body">
+      <li>Does the document have the nine-section structure from section 9 (Preface, Introduction, Glossary, User Requirements Definition, System Architecture, System Requirements Specification, System Models, System Evolution, Appendices)?</li>
+      <li>Is every UR uniquely numbered and addressed to a named actor or stakeholder goal?</li>
+      <li>For each UR that is more than one line of behaviour, are there explicit SR refinements with a shared identifier prefix?</li>
+      <li>Does every NFR have a number and a unit? If you cannot test it, it is not yet a requirement.</li>
+      <li>Are the non-trivial SRs written up in the nine-field structured spec template, including the Alternative Workflow field?</li>
+      <li>Does the effort estimate cover all URs, with the cost and price-range roll-up?</li>
+      <li>Has at least one team member (not the author) read each section against the seven validation checks in section 10 (valid, consistent, complete, realistic, verifiable, comprehensible, traceable)?</li>
+      <li>Has the requirements document been version-stamped and signed off by the team for submission?</li>
+    </ol>
+
+    <div class="practice-callout">
+      <div class="tag">Marking note</div>
+      <p>The Phase 2 deliverable is marked on what is <em>in</em> the document, not on what the team intends to add later. A UR that is "going to be" detailed in Phase 3 is, for the purposes of this grade, missing. The most common cause of marks lost in this phase is incomplete NFRs and missing alternative-workflow fields in structured specs, both of which are easy to add before submission.</p>
+    </div>
   </div>
 </section>
 
 <!-- ===================================================================== -->
 <section class="block" id="pitfalls">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xii.</span>Pitfalls</div>
+    <div class="section-eyebrow"><span class="num">13.</span>Pitfalls</div>
     <h2 class="section-title">Eight failure modes <em>this chapter has seen too often</em>.</h2>
     <p class="section-intro">Drawn from Sommerville, Wiegers, Robertson and Robertson, and the COMP433 marking history. Each one is the recurring source of a category of defects discovered too late.</p>
 
@@ -823,7 +906,7 @@
       </div>
       <div class="pitfall">
         <h5>Effort estimated without requirements</h5>
-        <p>An estimate that pre-dates the requirements is a guess. Adel's per-UR method exists exactly to prevent this: if there are no URs, there is no number to compute.</p>
+        <p>An estimate that pre-dates the requirements is a guess. The per-UR method exists exactly to prevent this: if there are no URs, there is no number to compute.</p>
       </div>
     </div>
   </div>
@@ -832,13 +915,13 @@
 <!-- ===================================================================== -->
 <section class="block" id="refs">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">xiii.</span>References</div>
+    <div class="section-eyebrow"><span class="num">14.</span>References</div>
     <h2 class="section-title">Sources cited above, <em>and where to go next</em>.</h2>
     <p class="section-intro">The course textbook is identified at the head of the list; the rest are works directly referenced in the body and standard practitioner references.</p>
 
     <h3 class="subhead-small">Course material</h3>
     <div class="ref-list">
-      <div class="ref"><strong>Taweel, A.</strong> (2025/26). <em>COMP433 Software Engineering: Requirements Engineering (Chapter 3)</em>. Birzeit University lecture notes. <em>The primary course source; the framings, examples, and the simplified effort-estimation method in this companion follow Adel's notes directly.</em></div>
+      <div class="ref"><strong>Taweel, A.</strong> (2025/26). <em>COMP433 Software Engineering: Requirements Engineering (Chapter 3)</em>. Birzeit University lecture notes. <em>The primary course source; the running Mentcare example and the simplified per-UR effort-estimation method follow the lecture deck directly.</em></div>
       <div class="ref"><strong>Sommerville, I.</strong> (2015). <em>Software Engineering</em> (10th ed.). Pearson. <em>The standard textbook. Chapter 4 on Requirements Engineering is the canonical reference for the layered model, the FR/NFR/Domain classification, the IEEE document structure, and the process model.</em></div>
     </div>
 
@@ -846,7 +929,7 @@
     <div class="ref-list">
       <div class="ref"><strong>Wiegers, K. and Beatty, J.</strong> (2013). <em>Software Requirements</em> (3rd ed.). Microsoft Press. <em>The most widely used practitioner handbook; substantial detail on elicitation, prioritisation, and change management.</em></div>
       <div class="ref"><strong>Robertson, S. and Robertson, J.</strong> (2012). <em>Mastering the Requirements Process: Getting Requirements Right</em> (3rd ed.). Addison-Wesley. <em>The Volere methodology and template.</em></div>
-      <div class="ref"><strong>Cockburn, A.</strong> (2001). <em>Writing Effective Use Cases</em>. Addison-Wesley. <em>The reference for the structured specification template used in Section viii.</em></div>
+      <div class="ref"><strong>Cockburn, A.</strong> (2001). <em>Writing Effective Use Cases</em>. Addison-Wesley. <em>The reference for the structured specification template used in Section 8.</em></div>
     </div>
 
     <h3 class="subhead-small">Standards</h3>
@@ -860,15 +943,9 @@
       <div class="ref"><strong>Boehm, B.</strong> (1981). <em>Software Engineering Economics</em>. Prentice-Hall. <em>The original source of the cost-of-late-defect-fixing curve and of COCOMO 81.</em></div>
       <div class="ref"><strong>Boehm, B. et al.</strong> (2000). <em>Software Cost Estimation with COCOMO II</em>. Prentice-Hall. <em>The current canonical reference for COCOMO; explains the 17 cost drivers and the calibration of the equations.</em></div>
       <div class="ref"><strong>Albrecht, A. J.</strong> (1979). Measuring application development productivity. <em>Proceedings of the IBM Application Development Symposium</em>, 83-92. <em>The function points method.</em></div>
-      <div class="ref"><strong>Jorgensen, M. and Shepperd, M.</strong> (2007). A systematic review of software development cost estimation studies. <em>IEEE Transactions on Software Engineering</em>, 33(1), 33-53. <em>The most thorough survey of cost-estimation accuracy across methods; source of the plus-or-minus-30-to-50-percent observation in Section xi.</em></div>
+      <div class="ref"><strong>Jorgensen, M. and Shepperd, M.</strong> (2007). A systematic review of software development cost estimation studies. <em>IEEE Transactions on Software Engineering</em>, 33(1), 33-53. <em>The most thorough survey of cost-estimation accuracy across methods; source of the plus-or-minus-30-to-50-percent observation in Section 11.</em></div>
       <div class="ref"><strong>Cohn, M.</strong> (2005). <em>Agile Estimating and Planning</em>. Prentice-Hall. <em>The agile planning-poker / story-points methodology.</em></div>
-      <div class="ref"><strong>Boehm, B. and Basili, V.</strong> (2001). Software defect reduction top 10 list. <em>IEEE Computer</em>, 34(1), 135-137. <em>The defect-cost analysis underlying the cost-curve discussion in Section i.</em></div>
-    </div>
-
-    <h3 class="subhead-small">Adjacent course material</h3>
-    <div class="ref-list">
-      <div class="ref"><a class="inline" href="/birzeit/comp322/scenarios_requirements_companion.html"><strong>COMP322: Scenarios and requirements companion</strong></a>. <em>The HCI companion treating the same material from the user side; complementary reading.</em></div>
-      <div class="ref"><a class="inline" href="/birzeit/comp322/personas_companion.html"><strong>COMP322: Personas companion</strong></a>. <em>What sits upstream of requirements: research-grounded user archetypes.</em></div>
+      <div class="ref"><strong>Boehm, B. and Basili, V.</strong> (2001). Software defect reduction top 10 list. <em>IEEE Computer</em>, 34(1), 135-137. <em>The defect-cost analysis underlying the cost-curve discussion in Section 1.</em></div>
     </div>
 
     <div class="cta-card">
