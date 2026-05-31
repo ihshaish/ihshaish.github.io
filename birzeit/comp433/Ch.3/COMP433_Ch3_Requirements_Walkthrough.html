@@ -320,7 +320,7 @@ const STEPS = [
   { id: "intro",        num: "i",    label: "Start" },
   { id: "layers",       num: "ii",   label: "Three layers" },
   { id: "categories",   num: "iii",  label: "Categories" },
-  { id: "goals",        num: "iv",   label: "Goals → NFRs" },
+  { id: "goals",        num: "iv",   label: "Goals to NFRs" },
   { id: "process",      num: "v",    label: "The RE process" },
   { id: "elicit",       num: "vi",   label: "Elicitation" },
   { id: "write",        num: "vii",  label: "Write" },
@@ -359,9 +359,9 @@ function setStep(n) {
 }
 
 function nav(label = "Continue", hint = "") {
-  const back = STATE.step > 0 ? `<button class="ghost" onclick="setStep(STATE.step - 1)">&larr; Back</button>` : `<span></span>`;
+  const back = STATE.step > 0 ? `<button class="ghost" onclick="setStep(STATE.step - 1)">Back</button>` : `<span></span>`;
   const fwd = STATE.step < STEPS.length - 1
-    ? `<button class="primary" onclick="setStep(STATE.step + 1)">${esc(label)} &rarr;</button>`
+    ? `<button class="primary" onclick="setStep(STATE.step + 1)">${esc(label)}</button>`
     : `<button class="primary" onclick="setStep(0)">Start again</button>`;
   const hintHtml = hint ? `<span class="next-hint">${esc(hint)}</span>` : '<span></span>';
   return `<div class="nav-row">${back}${hintHtml}${fwd}</div>`;
@@ -684,7 +684,7 @@ function renderPlacedCat(placed, cat) {
 function unplaceCat(id) { delete STATE.classified.categories[id]; renderStep(); }
 
 /* ========================================================================
-   STEP iv: GOALS → VERIFIABLE NFRs
+   STEP iv: GOALS TO VERIFIABLE NFRs
 ======================================================================== */
 
 const GOAL_PAIRS = [
@@ -713,7 +713,7 @@ function renderGoals(el) {
 
   el.innerHTML = `
     <div class="sect-head">
-      <div><span class="num">iv.</span><span class="kicker">Goals → verifiable NFRs</span></div>
+      <div><span class="num">iv.</span><span class="kicker">Goals to verifiable NFRs</span></div>
       <h2>A goal is a wish. A verifiable NFR is a <em>contract</em>.</h2>
       <p class="lede">Vague intentions are useful for direction, but useless as contracts. Converting one into the other is one of the most teachable skills in requirements engineering, because the failure mode (an adjective with no measure) is so easy to recognise once you've seen it.</p>
     </div>
