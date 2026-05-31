@@ -723,10 +723,15 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">11.</span>Effort estimation</div>
     <h2 class="section-title">Estimating effort, <em>requirement by requirement</em>.</h2>
-    <p class="section-intro">Once the requirements are specified, the natural next question is: what will this cost, and how long will it take? COMP433 uses a simplified, per-requirement estimation method specified in the course lecture notes. The method is bottom-up, transparent, and easy to revise. Below: the method, its context among other estimation techniques, and an interactive calculator that runs it on whatever requirements list you enter.</p>
+    <p class="section-intro">Once the requirements are specified, the natural next question is: what will this cost, and how long will it take? COMP433 uses a simplified, <strong>per-user-requirement (per-UR)</strong> estimation method, specified in Prof Adel Taweel's lecture notes (slide 105). The estimate is at the UR level: one row per UR in the table, with no breakdown into SRs. The method is bottom-up, transparent, and easy to revise. Below: the method, an interactive calculator that runs it on whatever UR list you enter, and the place this method occupies in the wider literature.</p>
+
+    <div class="practice-callout">
+      <div class="tag">Scope in the course</div>
+      <p>The per-UR method below is <strong>the only effort-estimation method used in COMP433</strong>. It is what Phase 2 submissions are expected to use, and what marking is anchored against. The comparison table further down lists the standard alternatives from the literature for context only; none of them is part of the course submission. Read them as background, not as options.</p>
+    </div>
 
     <h3 class="subhead">The simplified per-UR method</h3>
-    <p class="body">The method's data model is small. For each user requirement, the estimator records two numbers:</p>
+    <p class="body">The method's data model is small. The unit of estimation is the <strong>user requirement</strong> (the UR, not the SR): one row in the table is one UR. For each UR, the estimator records two numbers:</p>
 
     <ol class="body">
       <li>The estimated <strong>number of developers</strong> who can work concurrently on the requirement without stepping on each other's work.</li>
@@ -794,8 +799,8 @@
       <p>All monetary values on this page and in the Phase 2 template use <strong>US dollars (USD)</strong> by convention. This is a working convention only, chosen so estimates from different teams are comparable; it carries no claim about which currency a real customer would actually pay in. Substitute another currency in your own estimate if it makes the assumptions clearer, and state the substitution alongside the weekly salary value so the reader can interpret the rest of the roll-up correctly.</p>
     </div>
 
-    <h3 class="subhead">How this method compares to others</h3>
-    <p class="body">The per-UR method is one entry in a long literature on software effort estimation. The most widely cited alternatives are listed below, with the kind of project each is best suited to. The course's simplified method is the appropriate choice for Phase 1 of the COMP433 project; the others are listed so the reader knows what else exists and when to reach for them.</p>
+    <h3 class="subhead">Background: how the per-UR method sits in the wider literature</h3>
+    <p class="body">The methods below are listed for context only; none of them is part of the COMP433 course submission. The course method is the per-UR method described above. The methods below are summarised so the reader knows what else exists, what each is best suited to, and where the per-UR method fits in the family.</p>
 
     <div class="table-card">
       <table class="body-table">
@@ -811,6 +816,17 @@
         </tbody>
       </table>
     </div>
+
+    <h3 class="subhead-small">Where the course method sits in this family</h3>
+    <p class="body">The per-UR method is not isolated from the literature; it is a deliberately stripped-down combination of three established practices that are well-known in industry:</p>
+
+    <ul class="body">
+      <li><strong>Expert judgement</strong> is the engine. Each pair of numbers in the per-UR table (developers, person-weeks per developer) is an expert estimate by the team. There is no formula doing the work behind it. The Delphi variants of expert judgement add structured aggregation across multiple experts; the per-UR method skips that step and trusts a single team's call, on the understanding that the small project size makes the cost of disagreement low.</li>
+      <li><strong>Use case points</strong> (Karner, 1993) is the closest cousin in the requirements-driven family. Use case points counts use cases, weights them by actor and use-case complexity, and applies technical and environmental factors. When the UR list happens to align with use cases, the per-UR method is structurally identical to an <em>unweighted</em> use case points exercise: one row per unit, expert-judged effort, summed up. The course method drops the weighting and the multipliers because they require historical calibration data that a student team does not have.</li>
+      <li><strong>Planning poker and story points</strong> (Grenning, 2002; Cohn, 2005) is the agile analogue. A user story is conceptually the same artefact as a user requirement, and the planning-poker output is a per-story effort number arrived at by team consensus. Strip away the Fibonacci cards and the relative-sizing rounds, and what remains is per-item expert judgement, which is exactly the per-UR method. The two are best read as the same practice at different ceremony levels.</li>
+    </ul>
+
+    <p class="body">Where the per-UR method is unlike anything else in the table is in <em>not</em> trying to convert requirement counts into a calibrated formula. COCOMO II and function points both aim at calibration: large historical datasets are used to fit a formula, and the formula is then applied to new projects. The per-UR method has no such calibration. Its accuracy depends entirely on the team's judgement, which is honest about what it is and revisable when the team learns more.</p>
 
     <p class="body">Two observations from the literature, both well-supported by industrial data and worth carrying into any estimation exercise:</p>
 
