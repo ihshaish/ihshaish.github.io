@@ -830,7 +830,7 @@
             <td>2</td>
             <td><strong>System Requirements (SR refinements)</strong></td>
             <td>Sections 3, 7 (notation choices), 8 (structured spec template), 10 (the seven validation checks).</td>
-            <td>Each UR that needs refinement decomposes into one or more SRs that share its prefix (UR4 -&gt; SR4.1, SR4.2). Each SR is developer-precise and testable. Non-trivial SRs (any whose workflow has decisions or alternative paths) are written using the nine-field structured specification template from section 8.</td>
+            <td>Each UR that needs refinement decomposes into one or more SRs that share its prefix (UR4 becomes SR4.1, SR4.2). Each SR is developer-precise and testable. SRs whose workflow has decisions or alternative paths must cover those alternative or error paths in their text; the nine-field structured specification template from section 8 is a useful writing aid for these, but its use is optional.</td>
           </tr>
           <tr>
             <td>3</td>
@@ -847,7 +847,7 @@
 
     <ul class="body">
       <li><strong>Where do non-functional requirements live?</strong> Inside the UR list (deliverable 1) and the SR list (deliverable 2), not as a separate artefact. A user-level NFR ("the system shall be available during clinic hours") is a UR; the testable refinement with a measurable threshold ("downtime shall not exceed five seconds in any one day during Mon to Fri 08:30 to 17:30") is its SR. Both belong in the same document as everything else.</li>
-      <li><strong>Where do the structured specs live?</strong> Inside the SR list (deliverable 2). Trivial SRs can be one-line statements; non-trivial SRs are filled out using the nine-field template from section 8. The template is not a separate deliverable; it is the form a non-trivial SR takes.</li>
+      <li><strong>Where do the structured specs live?</strong> Inside the SR list (deliverable 2). The nine-field template from section 8 is a <em>writing aid</em> for SRs whose workflow needs more structure than a one-line statement; it is not a separate deliverable, and its use is optional even for non-trivial SRs. What the deliverable requires is that alternative or error paths are covered; the template is one good way to keep all the relevant fields in view while writing.</li>
     </ul>
 
     <h3 class="subhead">A practical pre-submission checklist</h3>
@@ -858,7 +858,7 @@
       <li>Every UR uniquely numbered and addressed to a named actor or stakeholder goal.</li>
       <li>For each UR that is more than one line of behaviour, explicit SR refinements with a shared identifier prefix.</li>
       <li>Non-functional content covered at both UR and SR level; every measurable threshold has a number and a unit (if you cannot test it, it is not yet a requirement).</li>
-      <li>Non-trivial SRs written out in the nine-field structured spec template, including the Alternative Workflow field.</li>
+      <li>For any SR whose workflow has decisions, alternative paths, or error conditions, the alternative-workflow and error-handling content is present (in plain prose or in the structured-spec template from section 8, whichever the team prefers).</li>
       <li>Effort estimate covers all URs, with the cost and price-range roll-up from section 11.</li>
       <li>At least one team member (not the author) has read each section against the seven validation checks in section 10 (valid, consistent, complete, realistic, verifiable, comprehensible, traceable).</li>
       <li>Document version-stamped and signed off by the team for submission.</li>
@@ -866,7 +866,7 @@
 
     <div class="practice-callout">
       <div class="tag">Submission note</div>
-      <p>The Phase 2 deliverable is assessed on what is <em>in</em> the document, not on what the team intends to add later. A UR that is "going to be" detailed later is, for the purposes of this submission, missing. The most common cause of weak submissions at this stage is incomplete non-functional refinement and missing alternative-workflow fields in structured specs, both of which are easy to add before submission.</p>
+      <p>The Phase 2 deliverable is assessed on what is <em>in</em> the document, not on what the team intends to add later. A UR that is "going to be" detailed later is, for the purposes of this submission, missing. The most common cause of weak submissions at this stage is incomplete non-functional refinement and missing alternative or error content for SRs with non-trivial workflow; both are easy to add before submission.</p>
     </div>
   </div>
 </section>
