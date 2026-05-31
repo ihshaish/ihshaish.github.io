@@ -662,8 +662,8 @@
           <tr><td>4. Use case</td><td>"Borrow copy of a book", with <code>&lt;&lt;include&gt;&gt;</code> "Compute return date" and <code>&lt;&lt;extend&gt;&gt;</code> "Refuse loan [too many books]". Use case description fully written out.</td></tr>
           <tr><td>5. Activity</td><td>Swimlane diagram showing BookBorrower, Librarian, and System; covers the success path, the "too many books" branch, and the damaged-barcode error.</td></tr>
           <tr><td>6. Class</td><td>Classes LibraryMember, Book, BookCopy, Loan (association class), Librarian. Method <code>borrow()</code> on LibraryMember; method <code>isAvailable()</code> on Book.</td></tr>
-          <tr><td>7. Sequence</td><td>Sequence diagram for the success scenario: BookBorrower &rarr; Librarian &rarr; System; messages for <code>checkAllowance()</code>, <code>createLoan()</code>, <code>updateStatus()</code>.</td></tr>
-          <tr><td>8. State machine</td><td>BookCopy lifecycle: <code>Available &rarr; OnLoan &rarr; Overdue &rarr; Lost</code> with the transitions and guards.</td></tr>
+          <tr><td>7. Sequence</td><td>Sequence diagram for the success scenario: messages flow from BookBorrower to Librarian to System; <code>checkAllowance()</code>, <code>createLoan()</code>, <code>updateStatus()</code>.</td></tr>
+          <tr><td>8. State machine</td><td>BookCopy lifecycle: states <code>Available</code>, <code>OnLoan</code>, <code>Overdue</code>, <code>Lost</code>, in that order, with the transitions and guards.</td></tr>
           <tr><td>9. Component</td><td>LibraryFront (UI) component requires LoanManagement (app) component; LoanManagement requires PersistenceStore (infra).</td></tr>
           <tr><td>10. Deployment</td><td>LibraryFront runs on each librarian desktop; LoanManagement on the library server; PersistenceStore on the central university database node.</td></tr>
         </tbody>
@@ -1498,7 +1498,7 @@
         <text x="324" y="552" class="uml-text-mono">+ extend(): void</text>
 
       </svg>
-      <div class="figure-note">Four relationships are shown: <strong>generalisation</strong> (StaffMember &rarr; LibraryMember; closed triangle pointing at the parent), <strong>aggregation</strong> (Book contains BookCopy; open diamond at the whole), <strong>association</strong> with multiplicity (LibraryMember borrows BookCopy; 0..1 to 0..6), and an <strong>association class</strong> (Loan; attached to the borrows association line with a dashed link at the line's midpoint).</div>
+      <div class="figure-note">Four relationships are shown: <strong>generalisation</strong> (StaffMember to LibraryMember; closed triangle pointing at the parent), <strong>aggregation</strong> (Book contains BookCopy; open diamond at the whole), <strong>association</strong> with multiplicity (LibraryMember borrows BookCopy; 0..1 to 0..6), and an <strong>association class</strong> (Loan; attached to the borrows association line with a dashed link at the line's midpoint).</div>
     </div>
 
     <h3 class="subhead">Multiplicity, in detail</h3>
@@ -1720,8 +1720,8 @@
       <h4>Sequence-diagram player</h4>
       <div class="sub">"Deposit cash" use case at an ATM-style machine: front UI, money register, dispenser. Step through to see each message and the activation bars it grows.</div>
       <div class="controls">
-        <button onclick="seqPrev()" id="seqPrevBtn">&larr; Previous</button>
-        <button onclick="seqNext()" id="seqNextBtn">Next &rarr;</button>
+        <button onclick="seqPrev()" id="seqPrevBtn">Previous</button>
+        <button onclick="seqNext()" id="seqNextBtn">Next</button>
         <button onclick="seqReset()" class="secondary">Reset</button>
         <button onclick="seqPlay()" class="secondary" id="seqPlayBtn">&#9658; Auto-play</button>
         <span id="seqStepLabel" style="font-family: var(--mono); font-size: 12px; color: var(--ink-mute); margin-left: auto;">Step 0 of 7</span>
@@ -2509,7 +2509,7 @@ function stEvent(ev) {
     return;
   }
   const next = trans[ev];
-  stHistory.push(`${stCurrent} &rarr; ${next} on <b>${ev}</b>`);
+  stHistory.push(`${stCurrent} to ${next} on <b>${ev}</b>`);
   stCurrent = next;
   stRender();
 }
