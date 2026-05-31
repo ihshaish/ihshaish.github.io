@@ -805,65 +805,63 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">12.</span>Phase 2 deliverables</div>
     <h2 class="section-title">What is concretely <em>due at the Phase 2 deadline</em>.</h2>
-    <p class="section-intro">The first eleven sections lay out the discipline. This one lists exactly what your team submits at the Phase 2 deadline. Treat the checklist as the assessment grid: each row is evaluated independently, and a missing row is the most common cause of weak submissions.</p>
+    <p class="section-intro">The first eleven sections lay out the discipline. This one lists exactly what is submitted at the Phase 2 deadline. The list is the same across all sections of COMP433. Treat each deliverable as evaluated independently; a missing one is the most common cause of weak submissions.</p>
 
-    <h3 class="subhead">The five artefacts</h3>
+    <h3 class="subhead">The three deliverables</h3>
+
+    <p class="body">The submission is <strong>one document</strong> containing the three deliverables below in order, preceded by a cover page (group letter, member names, IDs, roles) and a one-page introduction restating the business and the assumptions the requirements rest on. The companion section pointed at in each row is the authoritative reference for how to write that deliverable; the syllabus anchors the same content in Sommerville (10th edition, chapter 4) per the course outline.</p>
 
     <div class="table-card">
       <table class="body-table">
-        <thead><tr><th>#</th><th>Artefact</th><th>Where defined</th><th>Acceptance criterion</th></tr></thead>
+        <thead><tr><th>#</th><th>Deliverable</th><th>Where defined</th><th>Acceptance criterion</th></tr></thead>
         <tbody>
           <tr>
             <td>1</td>
-            <td><strong>Numbered User Requirements (UR) list</strong></td>
-            <td>Section 3, plus the writing rules in section 9.</td>
-            <td>Each UR has a stable identifier (UR1, UR2, ...). Each is one sentence in customer-readable language. Each names a clear actor or goal. No UR mixes a function with a constraint; no UR contains two requirements joined by 'and'.</td>
+            <td><strong>User Requirements (UR list)</strong></td>
+            <td>Sections 3 (layers), 4 and 5 (functional, non-functional, domain types), plus the writing rules in section 9.</td>
+            <td>Numbered list (UR1, UR2, ...) written in natural language for the customer to read. Each UR names a clear actor or stakeholder goal, states one requirement (no "and"-joins), and is free of premature design choices. The list covers both functional and non-functional aspects at user level; domain requirements included where the application area imposes them.</td>
           </tr>
           <tr>
             <td>2</td>
-            <td><strong>System Requirements (SR) refinements</strong></td>
-            <td>Section 3 (the URn / SRn.m convention).</td>
-            <td>Every UR that needs refinement decomposes into one or more SRs that share its prefix (UR4 -&gt; SR4.1, SR4.2). Each SR is developer-precise and testable. Trivial URs (one-line wishes that need no refinement) may stand on their own.</td>
+            <td><strong>System Requirements (SR refinements)</strong></td>
+            <td>Sections 3, 7 (notation choices), 8 (structured spec template), 10 (the seven validation checks).</td>
+            <td>Each UR that needs refinement decomposes into one or more SRs that share its prefix (UR4 -&gt; SR4.1, SR4.2). Each SR is developer-precise and testable. Non-trivial SRs (any whose workflow has decisions or alternative paths) are written using the nine-field structured specification template from section 8.</td>
           </tr>
           <tr>
             <td>3</td>
-            <td><strong>Non-Functional Requirements (NFR) table</strong></td>
-            <td>Sections 4 and 5.</td>
-            <td>At least one NFR per applicable family (product, organisational, external). Each NFR has a measurable threshold (a number, a unit, and a verification method). Wishes are not accepted: "the system shall be fast" is rejected; "p95 page load shall be under 800 ms on 4G" is accepted.</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td><strong>Structured specifications</strong> for the non-trivial SRs</td>
-            <td>Section 8 (the nine-field template).</td>
-            <td>Every SR whose workflow has at least one decision or one alternative path gets a structured spec. All nine fields populated: Title, Purpose, Description, Actors, Trigger, Pre-condition, Workflow, Alternative Workflow, Post-condition.</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td><strong>Effort estimation</strong> against the UR list</td>
-            <td>Section 11 (the calculator).</td>
-            <td>Per-UR estimate: concurrent developers, person-weeks per developer, total person-weeks. Roll-up: total effort, schedule (1.30 buffer), cost, quoted price range (1.10 to 1.30 of cost). Numbers must be defensible against a sanity check (average effort per UR, anomalies flagged).</td>
+            <td><strong>Effort and Cost Estimation</strong></td>
+            <td>Section 11 (with interactive calculator).</td>
+            <td>Per-UR estimate: number of concurrent developers and person-weeks per developer. Roll-up: total effort, schedule (with buffer), cost (schedule times weekly salary), and a quoted price range. Numbers must be defensible against a sanity check.</td>
           </tr>
         </tbody>
       </table>
     </div>
 
+    <h3 class="subhead">Where NFRs and structured specs fit</h3>
+    <p class="body">Two questions come up every year and are worth nailing down:</p>
+
+    <ul class="body">
+      <li><strong>Where do non-functional requirements live?</strong> Inside the UR list (deliverable 1) and the SR list (deliverable 2), not as a separate artefact. A user-level NFR ("the system shall be available during clinic hours") is a UR; the testable refinement with a measurable threshold ("downtime shall not exceed five seconds in any one day during Mon to Fri 08:30 to 17:30") is its SR. Both belong in the same document as everything else.</li>
+      <li><strong>Where do the structured specs live?</strong> Inside the SR list (deliverable 2). Trivial SRs can be one-line statements; non-trivial SRs are filled out using the nine-field template from section 8. The template is not a separate deliverable; it is the form a non-trivial SR takes.</li>
+    </ul>
+
     <h3 class="subhead">A practical pre-submission checklist</h3>
-    <p class="body">Before you submit, the team runs through the following list together. Each item should be answerable with "yes, page N" or "yes, section N". Any "no" is rework before the deadline, not after.</p>
+    <p class="body">Before submitting, the team runs through the following together. Each item should be answerable with "yes, page N" or "yes, section N". Any "no" is rework before the deadline, not after.</p>
 
     <ol class="body">
-      <li>Does the document have the nine-section structure from section 9 (Preface, Introduction, Glossary, User Requirements Definition, System Architecture, System Requirements Specification, System Models, System Evolution, Appendices)?</li>
-      <li>Is every UR uniquely numbered and addressed to a named actor or stakeholder goal?</li>
-      <li>For each UR that is more than one line of behaviour, are there explicit SR refinements with a shared identifier prefix?</li>
-      <li>Does every NFR have a number and a unit? If you cannot test it, it is not yet a requirement.</li>
-      <li>Are the non-trivial SRs written up in the nine-field structured spec template, including the Alternative Workflow field?</li>
-      <li>Does the effort estimate cover all URs, with the cost and price-range roll-up?</li>
-      <li>Has at least one team member (not the author) read each section against the seven validation checks in section 10 (valid, consistent, complete, realistic, verifiable, comprehensible, traceable)?</li>
-      <li>Has the requirements document been version-stamped and signed off by the team for submission?</li>
+      <li>Cover page present (group letter, member names, IDs, roles) and one-page business introduction stating the assumptions the requirements rest on.</li>
+      <li>Every UR uniquely numbered and addressed to a named actor or stakeholder goal.</li>
+      <li>For each UR that is more than one line of behaviour, explicit SR refinements with a shared identifier prefix.</li>
+      <li>Non-functional content covered at both UR and SR level; every measurable threshold has a number and a unit (if you cannot test it, it is not yet a requirement).</li>
+      <li>Non-trivial SRs written out in the nine-field structured spec template, including the Alternative Workflow field.</li>
+      <li>Effort estimate covers all URs, with the cost and price-range roll-up from section 11.</li>
+      <li>At least one team member (not the author) has read each section against the seven validation checks in section 10 (valid, consistent, complete, realistic, verifiable, comprehensible, traceable).</li>
+      <li>Document version-stamped and signed off by the team for submission.</li>
     </ol>
 
     <div class="practice-callout">
       <div class="tag">Submission note</div>
-      <p>The Phase 2 deliverable is assessed on what is <em>in</em> the document, not on what the team intends to add later. A UR that is "going to be" detailed later is, for the purposes of this submission, missing. The most common cause of weak submissions at this stage is incomplete NFRs and missing alternative-workflow fields in structured specs, both of which are easy to add before submission.</p>
+      <p>The Phase 2 deliverable is assessed on what is <em>in</em> the document, not on what the team intends to add later. A UR that is "going to be" detailed later is, for the purposes of this submission, missing. The most common cause of weak submissions at this stage is incomplete non-functional refinement and missing alternative-workflow fields in structured specs, both of which are easy to add before submission.</p>
     </div>
   </div>
 </section>
