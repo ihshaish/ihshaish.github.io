@@ -315,7 +315,7 @@
   <div style="background: white; border: 1px solid var(--rule); border-radius: 14px; box-shadow: var(--shadow); padding: 28px 32px;">
     <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; font-weight: 600;">Recorded session by Prof Adel Taweel</div>
     <h3 style="font-family: var(--serif); font-weight: 600; font-size: 22px; margin: 0 0 8px; color: var(--ink); letter-spacing: -0.01em;">Chapter 4 lecture: UML and system modelling</h3>
-    <p style="font-size: 15px; color: var(--ink-soft); margin: 0 0 18px; max-width: 800px;">Recorded session covering Chapter 4 in full. Read this companion alongside the recording for notation references, hover-enabled diagrams, and the worked example tracing one user requirement through to a first-cut class fragment.</p>
+    <p style="font-size: 15px; color: var(--ink-soft); margin: 0 0 18px; max-width: 800px;">Recorded session covering much of Chapter 4. Read this companion alongside the recording for notation references, hover-enabled diagrams, and the worked example tracing one user requirement through to a first-cut class fragment.</p>
     <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; background: #000;">
       <iframe src="https://drive.google.com/file/d/16SKqDryzUTxji2u5EXq84JIqlPyBMae6/preview"
               style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
@@ -338,6 +338,7 @@
       <li><span class="toc-num">7.</span><a href="#usecase">Use case diagrams</a></li>
       <li><span class="toc-num">8.</span><a href="#ucdesc">Use case descriptions and scenarios</a></li>
       <li><span class="toc-num">9.</span><a href="#activity">Activity diagrams</a></li>
+      <li><span class="toc-num">9b.</span><a href="#casestudy">Case study: requirements to use case and activity</a></li>
       <li><span class="toc-num">10.</span><a href="#class">Class diagrams</a></li>
       <li><span class="toc-num">11.</span><a href="#sequence">Sequence diagrams (with step-through)</a></li>
       <li><span class="toc-num">12.</span><a href="#state">State machine diagrams (with simulator)</a></li>
@@ -490,7 +491,7 @@
         <h4>Structural models</h4>
         <p>Parts and their static relationships. Show the organisation of the system without time. Nothing moves; the diagram captures what <em>exists</em>, not what happens. Answer the question: <em>what is the system made of, and how are the parts connected?</em></p>
       </div>
-      <div class="cog-card" data-tip="<strong>Behavioural model &middot; example.</strong> A BookCopy's lifecycle is Available -&gt; OnLoan -&gt; Overdue -&gt; Lost, with transitions triggered by borrow(), return(), overdue [days&gt;30], and reportedLost. A state machine diagram (section 12) captures every legal state, every event, every guard, and reveals (for example) that a Lost copy cannot transition back to Available without an admin override; that is a missing requirement worth surfacing. <em>Decision supported:</em> reachability, deadlock detection, missing transitions. <em>Typical UML form:</em> state machine and activity diagrams.">
+      <div class="cog-card" data-tip="<strong>Behavioural model &middot; example.</strong> A BookCopy's lifecycle runs Available, then OnLoan, then Overdue, then Lost, with transitions triggered by borrow(), return(), overdue [days&gt;30], and reportedLost. A state machine diagram (section 12) captures every legal state, every event, every guard, and reveals (for example) that a Lost copy cannot transition back to Available without an admin override; that is a missing requirement worth surfacing. <em>Decision supported:</em> reachability, deadlock detection, missing transitions. <em>Typical UML form:</em> state machine and activity diagrams.">
         <div class="icon">B</div>
         <h4>Behavioural models</h4>
         <p>What the system <em>does</em> over time, in response to internal or external stimuli. Dynamic view; states change. Answer the question: <em>given an event, what does the system do next, and could it get stuck somewhere?</em></p>
@@ -561,7 +562,7 @@
         <line x1="840" y1="111" x2="880" y2="111" class="uml-line-blue" marker-end="url(#j-arrow)"/>
         <text x="860" y="76" text-anchor="middle" class="uml-text-stereo" font-size="10">go/no-go</text>
 
-        <g class="j-step" id="jStep4" data-tip="Use case diagram (Ch.4 §7): converts the User Requirements into a one-page picture of who interacts with the system and for what purpose. The first UML diagram in the chain. Output: a list of named use cases each backed by a full textual description.">
+        <g class="j-step" id="jStep4" data-tip="Use case diagram (Ch.4 section 7): converts the User Requirements into a one-page picture of who interacts with the system and for what purpose. The first UML diagram in the chain. Output: a list of named use cases each backed by a full textual description.">
           <rect x="880" y="80" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
           <text x="1000" y="106" text-anchor="middle" class="uml-text" font-weight="700">4. Use case diagram</text>
           <text x="1000" y="124" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">actors, system boundary</text>
@@ -571,7 +572,7 @@
         <line x1="1000" y1="142" x2="1000" y2="200" class="uml-line-blue" marker-end="url(#j-arrow)"/>
 
         <!-- Row 2: right-to-left flow -->
-        <g class="j-step" id="jStep5" data-tip="Activity diagram (Ch.4 §9): unpacks the most complex use cases into ordered steps, decisions, parallel work, and the actor responsible for each step. Drawn when the workflow is non-trivial; skipped when the use case has one linear path.">
+        <g class="j-step" id="jStep5" data-tip="Activity diagram (Ch.4 section 9): unpacks the most complex use cases into ordered steps, decisions, parallel work, and the actor responsible for each step. Drawn when the workflow is non-trivial; skipped when the use case has one linear path.">
           <rect x="880" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
           <text x="1000" y="226" text-anchor="middle" class="uml-text" font-weight="700">5. Activity diagram</text>
           <text x="1000" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">workflow, swimlanes</text>
@@ -579,7 +580,7 @@
 
         <line x1="880" y1="231" x2="840" y2="231" class="uml-line-blue" marker-end="url(#j-arrow)"/>
 
-        <g class="j-step" id="jStep6" data-tip="Class diagram (Ch.4 §10): the static structure of the system. Built from the noun-verb analysis of the requirements document and the responsibilities surfaced by the use cases. The longest-lived diagram on a project.">
+        <g class="j-step" id="jStep6" data-tip="Class diagram (Ch.4 section 10): the static structure of the system. Built from the noun-verb analysis of the requirements document and the responsibilities surfaced by the use cases. The longest-lived diagram on a project.">
           <rect x="600" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
           <text x="720" y="226" text-anchor="middle" class="uml-text" font-weight="700">6. Class diagram</text>
           <text x="720" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">classes, associations</text>
@@ -587,7 +588,7 @@
 
         <line x1="600" y1="231" x2="560" y2="231" class="uml-line-blue" marker-end="url(#j-arrow)"/>
 
-        <g class="j-step" id="jStep7" data-tip="Sequence diagram (Ch.4 §11): pins down the order of messages between objects for ONE specific interaction. Refines a chosen use case scenario; usually drawn for the two or three most non-trivial flows, not for every use case.">
+        <g class="j-step" id="jStep7" data-tip="Sequence diagram (Ch.4 section 11): pins down the order of messages between objects for ONE specific interaction. Refines a chosen use case scenario; usually drawn for the two or three most non-trivial flows, not for every use case.">
           <rect x="320" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
           <text x="440" y="226" text-anchor="middle" class="uml-text" font-weight="700">7. Sequence diagram</text>
           <text x="440" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">message order, fragments</text>
@@ -595,7 +596,7 @@
 
         <line x1="320" y1="231" x2="280" y2="231" class="uml-line-blue" marker-end="url(#j-arrow)"/>
 
-        <g class="j-step" id="jStep8" data-tip="State machine (Ch.4 §12): the lifecycle of one domain object whose behaviour depends on its current state. Drawn only for objects that genuinely have states (Loan, Order, Ticket); most classes don't need one.">
+        <g class="j-step" id="jStep8" data-tip="State machine (Ch.4 section 12): the lifecycle of one domain object whose behaviour depends on its current state. Drawn only for objects that genuinely have states (Loan, Order, Ticket); most classes don't need one.">
           <rect x="40" y="200" width="240" height="62" rx="8" class="uml-box" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.6"/>
           <text x="160" y="226" text-anchor="middle" class="uml-text" font-weight="700">8. State machine</text>
           <text x="160" y="244" text-anchor="middle" class="uml-text" font-size="11" fill="#1a3d52">states, transitions, events</text>
@@ -604,7 +605,7 @@
         <line x1="160" y1="262" x2="160" y2="320" class="uml-line-blue" marker-end="url(#j-arrow)"/>
 
         <!-- Row 3: left-to-right -->
-        <g class="j-step" id="jStep9" data-tip="Component diagram (Ch.4 §13): packages the classes into modules with provided and required interfaces. Marks the boundary between design and architecture.">
+        <g class="j-step" id="jStep9" data-tip="Component diagram (Ch.4 section 13): packages the classes into modules with provided and required interfaces. Marks the boundary between design and architecture.">
           <rect x="40" y="320" width="240" height="62" rx="8" class="uml-box" fill="#e0e8d8" stroke="#4a6b3a" stroke-width="1.6"/>
           <text x="160" y="346" text-anchor="middle" class="uml-text" font-weight="700">9. Component diagram</text>
           <text x="160" y="364" text-anchor="middle" class="uml-text" font-size="11" fill="#2d4220">modules, interfaces</text>
@@ -612,7 +613,7 @@
 
         <line x1="280" y1="351" x2="320" y2="351" class="uml-line-blue" marker-end="url(#j-arrow)"/>
 
-        <g class="j-step" id="jStep10" data-tip="Deployment diagram (Ch.4 §13): which component runs on which physical or virtual node, and how the nodes talk to each other. The end of the journey for the modelling pass: what the operations team needs to provision the system.">
+        <g class="j-step" id="jStep10" data-tip="Deployment diagram (Ch.4 section 13): which component runs on which physical or virtual node, and how the nodes talk to each other. The end of the journey for the modelling pass: what the operations team needs to provision the system.">
           <rect x="320" y="320" width="240" height="62" rx="8" class="uml-box" fill="#e0e8d8" stroke="#4a6b3a" stroke-width="1.6"/>
           <text x="440" y="346" text-anchor="middle" class="uml-text" font-weight="700">10. Deployment diagram</text>
           <text x="440" y="364" text-anchor="middle" class="uml-text" font-size="11" fill="#2d4220">nodes, protocols, artefacts</text>
@@ -1068,8 +1069,8 @@
     </div>
     <p class="body">The last four are all the same human, the <strong>Librarian</strong>; listing them as separate fine-grained roles first and then grouping them is the normal route to a clean actor. Where one actor can do everything another can and more, the relationship is <strong>actor generalisation</strong>, drawn with the hollow-triangle inheritance arrow (as in a class diagram), pointing from the specialised actor to the general one. For the Library, the primary-actor hierarchy is:</p>
     <ul class="body">
-      <li><code>LibraryUser</code> (most general) &rarr; <code>Browser</code> &rarr; <code>BookBorrower</code> &rarr; <code>JournalBorrower</code>. Each inherits the use cases of the one before it and adds its own: a Browser can search, a BookBorrower is a Browser who can also borrow books, a JournalBorrower is a BookBorrower who can also borrow journals.</li>
-      <li><code>Browser</code> &rarr; <code>Librarian</code>. The staff actor inherits the ability to browse and adds the management use cases (add, update, catalog, remove).</li>
+      <li>From most general to most specific: <code>LibraryUser</code>, then <code>Browser</code>, then <code>BookBorrower</code>, then <code>JournalBorrower</code>. Each inherits the use cases of the one before it and adds its own: a Browser can search, a BookBorrower is a Browser who can also borrow books, a JournalBorrower is a BookBorrower who can also borrow journals.</li>
+      <li><code>Browser</code> is also specialised by <code>Librarian</code>. The staff actor inherits the ability to browse and adds the management use cases (add, update, catalog, remove).</li>
     </ul>
     <p class="body">Generalisation keeps the diagram honest: rather than repeating every borrowing association on JournalBorrower, you draw it once on BookBorrower and let JournalBorrower inherit it. This is the actor-side counterpart of the use case generalisation covered below.</p>
 
@@ -1093,9 +1094,9 @@
     <h3 class="subhead">Building the diagram from the requirements: noun-verb analysis</h3>
     <p class="body">The course's standard technique for turning a written requirements document into a first-cut use case diagram is <strong>noun-verb analysis</strong>. Read the requirements text and mark it up in two colours:</p>
     <ul class="body">
-      <li><strong>Nouns and noun phrases &rarr; candidate actors</strong> (and, later, candidate classes and attributes). "library member", "member of staff", "member of the public" become BookBorrower, JournalBorrower, BookBrowser; "email" and "bank" surface secondary actors.</li>
-      <li><strong>Verbs and verb phrases &rarr; candidate use cases.</strong> "borrow", "renew", "return", "browse / search", "pay a fine", "send", "manage / add / update / catalog / remove" each become a use case.</li>
-      <li><strong>Noun-verb interactions &rarr; associations.</strong> "a <em>member</em> may <em>borrow</em>" is the association line between the BookBorrower actor and the Borrow use case.</li>
+      <li><strong>Nouns and noun phrases map to candidate actors</strong> (and, later, candidate classes and attributes). "library member", "member of staff", "member of the public" become BookBorrower, JournalBorrower, BookBrowser; "email" and "bank" surface secondary actors.</li>
+      <li><strong>Verbs and verb phrases map to candidate use cases.</strong> "borrow", "renew", "return", "browse / search", "pay a fine", "send", "manage / add / update / catalog / remove" each become a use case.</li>
+      <li><strong>Noun-verb interactions map to associations.</strong> "a <em>member</em> may <em>borrow</em>" is the association line between the BookBorrower actor and the Borrow use case.</li>
     </ul>
     <p class="body">Not every candidate survives. Discard: redundant or omnipotent nouns (a catch-all "system" that does everything), vague entities, meta-language (words about the document rather than the domain), entities outside the system scope, pure attributes, and constraints or events that are not tasks. What remains, read straight off the marked-up text, is the actor list down the side, the use case ellipses in the middle, and the association lines between them. The same noun-verb pass later seeds the class diagram, so it is worth doing carefully.</p>
     <div class="practice-callout">
@@ -1122,17 +1123,22 @@
       <p>The two arrows go opposite ways and this is the single most-marked notation error. The rule: <strong>the arrow tail is on the use case that knows about the other one</strong>. With <code>&lt;&lt;include&gt;&gt;</code>, the BASE knows it includes a sub-task (the base description literally contains "include Compute return date" as a step), so the arrow tail sits on the base. With <code>&lt;&lt;extend&gt;&gt;</code>, the EXTENSION knows which base it modifies (the extension description names the base and the extension point), so the arrow tail sits on the extension. Generalisation follows the class-diagram convention: tail on the specialised case, head pointing at the general one.</p>
     </div>
 
-    <h3 class="subhead">Worked second example: ATM cash withdrawal</h3>
-    <p class="body">The Library example shows the mechanics; an ATM example shows when the stereotypes pay back in a different domain.</p>
+    <h3 class="subhead">Worked second example: online food ordering</h3>
+    <p class="body">The Library example shows the mechanics; an online food-ordering app shows the same stereotypes paying back in a different domain.</p>
 
     <ul class="body">
-      <li><strong>Withdraw cash</strong> is the primary use case (initiated by Cardholder).</li>
-      <li><strong>Authenticate customer</strong> is <code>&lt;&lt;include&gt;&gt;</code>-d from Withdraw cash (and from every other transactional use case: Deposit, Transfer, Check balance). It is factored out because the authentication policy will change later (PIN, biometric, multi-factor) and all five base use cases must change together.</li>
-      <li><strong>Print receipt</strong> is <code>&lt;&lt;extend&gt;&gt;</code>-ed from Withdraw cash, at the extension point "after dispensing cash", with guard <code>[customer chose receipt]</code>. Most withdrawals do not print a receipt; the extension exists to keep the Withdraw description clean.</li>
-      <li><strong>Refuse transaction</strong> is <code>&lt;&lt;extend&gt;&gt;</code>-ed from Withdraw cash, at the extension point "after balance check", with guard <code>[insufficient funds]</code>. This is structurally identical to the Library's Refuse loan, and demonstrates that the same pattern recurs across very different domains.</li>
+      <li><strong>Place order</strong> is the primary use case (initiated by the Customer).</li>
+      <li><strong>Calculate order total</strong> is <code>&lt;&lt;include&gt;&gt;</code>-d from Place order, and also from Modify order, because both always need the running total (items, delivery fee, tax). It is factored out so the pricing rules live in one place and both base use cases change together.</li>
+      <li><strong>Apply promo code</strong> is <code>&lt;&lt;extend&gt;&gt;</code>-ed from Place order, at an extension point "before payment", with guard <code>[customer has a promo]</code>. Most orders carry no promo; the extension keeps the Place order description clean.</li>
+      <li><strong>Refuse order</strong> is <code>&lt;&lt;extend&gt;&gt;</code>-ed from Place order, at the extension point "after stock check", with guard <code>[item unavailable]</code>. This is structurally identical to the Library's Refuse loan, and shows the same conditional-alternative pattern recurring across very different domains.</li>
     </ul>
 
-    <p class="body">The teaching point: <code>&lt;&lt;include&gt;&gt;</code> exists to avoid duplication when two or more base use cases share a sub-task (Authenticate customer is shared by Withdraw, Deposit, Transfer, and Check balance). <code>&lt;&lt;extend&gt;&gt;</code> exists to keep the base description clean when an optional or exceptional behaviour would otherwise crowd it (Print receipt and Refuse transaction only run sometimes; they belong on a separate ellipse, not as a footnote inside Withdraw).</p>
+    <p class="body">The teaching point: <code>&lt;&lt;include&gt;&gt;</code> exists to avoid duplication when two or more base use cases share a sub-task (Calculate order total is shared by Place order and Modify order). <code>&lt;&lt;extend&gt;&gt;</code> exists to keep the base description clean when an optional or exceptional behaviour would otherwise crowd it (Apply promo code and Refuse order only run sometimes; each belongs on a separate ellipse, not as a footnote inside Place order).</p>
+
+    <div class="practice-callout">
+      <div class="tag">External systems are secondary actors</div>
+      <p>When a use case depends on an external system to do its job, that system is a <strong>secondary actor</strong>: a payment provider, an SMS or email service, an identity or verification provider, a maps service. Draw it as an actor <em>outside</em> the boundary, with the association running <em>from the use case to it</em> (the use case reaches out to the service to finish its work). It also appears in the use case description's Actors row. The distinction to hold: the <strong>primary</strong> actor starts the use case for their own goal; the <strong>secondary</strong> actor is the one the system calls on to complete it.</p>
+    </div>
 
     <h3 class="subhead">Generalisation, and all three refinements together</h3>
     <p class="body">The third refinement, <strong>generalisation</strong> (informally <code>&lt;&lt;inherit&gt;&gt;</code>), applies when one use case is a more specific version of another. A library borrower can <strong>Pay fine</strong> in two ways: <strong>Pay by cash</strong> and <strong>Pay by credit card</strong> each specialise Pay fine, inheriting its general workflow and adding their own steps. The notation is the class-diagram one: a solid line with a hollow triangle, pointing from the specialised case to the general Pay fine.</p>
@@ -1190,8 +1196,8 @@
     <p class="body">A composite use case is marked with a small grid icon to signal that it decomposes further. For the MHC-PMS, the course uses three levels:</p>
     <ul class="body">
       <li><strong>Top level (overall system).</strong> Composite use cases "Manage patient registration", "Manage patient medical record", "Generate medical report", alongside simple ones such as "View patient info", "Export statistics report" and "Setup consultation".</li>
-      <li><strong>First level.</strong> Each composite is magnified: "Manage patient registration" &rarr; Register new patient, De-register existing patient; "Manage patient medical record" &rarr; View patient medical record, Edit patient medical record; "Generate reports" &rarr; Generate prescribed drugs report, Generate patient reports (itself still composite).</li>
-      <li><strong>Second level.</strong> The still-composite "Generate patient reports" &rarr; Generate admitted-patient report, Generate discharged-patient reports.</li>
+      <li><strong>First level.</strong> Each composite is magnified: "Manage patient registration" splits into Register new patient and De-register existing patient; "Manage patient medical record" splits into View patient medical record and Edit patient medical record; "Generate reports" splits into Generate prescribed drugs report and Generate patient reports (itself still composite).</li>
+      <li><strong>Second level.</strong> The still-composite "Generate patient reports" splits into Generate admitted-patient report and Generate discharged-patient reports.</li>
     </ul>
     <p class="body">Each level keeps the same system boundary (MHC-PMS) and shows only the actors relevant to that region. Treat the top-level diagram as a map of the system, and each lower-level diagram as a magnified region of that map; decompose only as far as readability requires.</p>
   </div>
@@ -1458,6 +1464,15 @@
       <div class="figure-note">The Member chooses to borrow or return; the Librarian does the work. On the borrow path a <strong>fork</strong> stamps the book and records the borrowing in parallel, rejoined by a <strong>join</strong>. Both paths reach a <strong>merge</strong>, then a decision: <code>[another book]</code> loops back to the start so the member can process the next item, and <code>[no]</code> ends the activity. The loop is how an activity diagram expresses "repeat until done"; without it the diagram would describe a single book only.</div>
     </div>
 
+    <h3 class="subhead">Loops: repeat, retry, and guarded exit</h3>
+    <p class="body">Loops are how an activity diagram expresses "do this more than once", and they take a few shapes worth recognising, all built from an ordinary decision whose branch points back into the flow:</p>
+    <ul class="body">
+      <li><strong>Repeat</strong> returns to an earlier action to process the next item, the <code>[another book]</code> edge above.</li>
+      <li><strong>Retry</strong> returns to a step after a check fails, so the actor can correct and try again, a declined payment or an invalid entry that must be re-entered.</li>
+      <li><strong>Guarded exit</strong> leaves the loop when a condition is met or a limit is reached, a maximum number of attempts, or a timeout that routes to an alternative ending.</li>
+    </ul>
+    <p class="body">A retry loop and a guarded exit usually appear together: try, check, and on failure either loop back or, once the attempts run out, leave by a different edge. The case study in the next section draws a retry loop in full.</p>
+
     <h3 class="subhead">When to draw an activity diagram</h3>
     <p class="body">Activity diagrams pay back when the workflow has at least one of: a non-trivial number of decisions, parallel work that the team needs to discuss explicitly, or coordination across multiple actors. They are over-engineering for use cases with a single linear path of three or four steps.</p>
 
@@ -1504,7 +1519,74 @@
 
     <div class="practice-callout">
       <div class="tag">Bridge to the next diagram</div>
-      <p>An activity diagram answers <em>what happens, in what order, and who does it.</em> It says nothing about the <em>objects</em> that carry the activities (the Book, the Loan, the LibraryMember), or the data each one holds. To talk about those, you need a static-structure diagram. That is the job of the class diagram, the next stop on the journey.</p>
+      <p>An activity diagram answers <em>what happens, in what order, and who does it.</em> It says nothing about the <em>objects</em> that carry the activities (the Book, the Loan, the LibraryMember), or the data each one holds. The next section first pulls these two behavioural views together on one small system, end to end; after that, the class diagram captures the static structure those activities run on.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="casestudy">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">9b.</span>Case study</div>
+    <h2 class="section-title">From requirements to models: <em>a booking system, end to end</em>.</h2>
+    <p class="section-intro">The two behavioural views in this chapter, the use case diagram and the activity diagram, are usually drawn back to back from the same requirements. This case study takes one small system from a short requirements description through to both diagrams, so the bridge between them is concrete. The worked example in section 14 carries a single requirement all the way to a class fragment; here the focus is the two diagrams an analyst draws first.</p>
+
+    <h3 class="subhead">Stage 1: the requirement description</h3>
+    <p class="body">A boutique hotel wants a small online booking system. From a stakeholder workshop, the analyst captures:</p>
+    <div class="struct-spec"><table><tbody>
+      <tr><td>Context</td><td>Guests book rooms online; the hotel manager maintains the room list and rates; payments are taken through an external payment provider.</td></tr>
+      <tr><td>Description</td><td>"A guest searches for rooms by date and the system shows what is available. The guest picks a room, enters their details and card, and we take the payment through our payment provider; if the card is declined the guest can try again. When payment succeeds we reserve the room and confirm the booking. Guests can cancel a booking, and the manager keeps the room list up to date."</td></tr>
+    </tbody></table></div>
+
+    <h3 class="subhead">Stage 2: user requirements</h3>
+    <p class="body">The description yields a short set of user requirements (UR), each a complete task from someone's point of view:</p>
+    <div class="struct-spec"><table><tbody>
+      <tr><td><strong>UR1</strong></td><td>A Guest shall be able to search for available rooms by date.</td></tr>
+      <tr><td><strong>UR2</strong></td><td>A Guest shall be able to book an available room, paying through the payment provider, and receive a confirmation.</td></tr>
+      <tr><td><strong>UR3</strong></td><td>A Guest shall be able to cancel an existing booking.</td></tr>
+      <tr><td><strong>UR4</strong></td><td>A Hotel Manager shall be able to maintain the room list and rates.</td></tr>
+    </tbody></table></div>
+    <p class="body">Reading the nouns and verbs (section 7): the nouns Guest, Hotel Manager, and the external payment provider become actors; "search", "book", "cancel", "maintain", "pay", and "check availability" become candidate use cases; the guest-verb pairings become associations.</p>
+
+    <h3 class="subhead">Stage 3: the use case diagram</h3>
+    <p class="body">Two principal actors (Guest, Hotel Manager) and one secondary actor (Payment Provider) sit around the boundary. Every booking checks availability and takes payment, so both are <code>&lt;&lt;include&gt;&gt;</code> sub-tasks (Check availability is shared by Search rooms and Book room); a promo code is optional, so it <code>&lt;&lt;extend&gt;&gt;</code>s Book room.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 9b.1</div>
+      <div class="figure-title">Use case diagram: the hotel booking system.</div>
+      <svg viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" id="csUcFig" role="img" aria-label="Hotel booking use case diagram: Guest and Hotel Manager as principal actors, Payment Provider as a secondary actor, with include and extend relationships."><defs><marker id="ucOpenE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker><marker id="assocE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4a8bb8"/></marker></defs><rect x="250" y="70" width="740" height="600" rx="8" class="uml-box" fill="#faf7f2" stroke-width="1.8"/><text x="620" y="60" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Hotel Booking System</text><g transform="translate(60,250)"><circle cx="20" cy="6" r="8" class="actor-blue"/><line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/><line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/><line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/><line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/><line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/><text x="20" y="76" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Guest</text></g><g transform="translate(60,560)"><circle cx="20" cy="6" r="8" class="actor-blue"/><line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/><line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/><line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/><line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/><line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/><text x="20" y="76" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Hotel Manager</text></g><g transform="translate(1110,420)"><circle cx="20" cy="6" r="8" class="actor-blue"/><line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/><line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/><line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/><line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/><line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/><text x="20" y="76" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Payment Provider</text></g><ellipse cx="440" cy="160" rx="86" ry="26" class="uml-box"/><text x="440" y="164" text-anchor="middle" class="uml-text" font-size="11">Search rooms</text><ellipse cx="440" cy="300" rx="86" ry="26" class="uml-box"/><text x="440" y="304" text-anchor="middle" class="uml-text" font-size="11">Book room</text><ellipse cx="440" cy="440" rx="88" ry="26" class="uml-box"/><text x="440" y="444" text-anchor="middle" class="uml-text" font-size="11">Cancel booking</text><ellipse cx="440" cy="575" rx="92" ry="26" class="uml-box"/><text x="440" y="572" text-anchor="middle" class="uml-text" font-size="11">Manage room</text><text x="440" y="587" text-anchor="middle" class="uml-text" font-size="11">inventory</text><ellipse cx="720" cy="160" rx="90" ry="26" class="uml-box"/><text x="720" y="164" text-anchor="middle" class="uml-text" font-size="11">Check availability</text><ellipse cx="720" cy="300" rx="96" ry="26" class="uml-box"/><text x="720" y="304" text-anchor="middle" class="uml-text" font-size="11">Apply discount code</text><ellipse cx="720" cy="440" rx="90" ry="26" class="uml-box"/><text x="720" y="444" text-anchor="middle" class="uml-text" font-size="11">Process payment</text><line x1="94" y1="268" x2="354" y2="165" class="uml-line-blue"/><line x1="94" y1="274" x2="354" y2="300" class="uml-line-blue"/><line x1="94" y1="280" x2="352" y2="440" class="uml-line-blue"/><line x1="94" y1="585" x2="348" y2="575" class="uml-line-blue"/><line x1="810" y1="440" x2="1104" y2="424" class="uml-line-blue" marker-end="url(#assocE)"/><line x1="526" y1="160" x2="630" y2="160" class="uml-line-dashed" marker-end="url(#ucOpenE)"/><text x="578" y="150" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text><line x1="520" y1="290" x2="632" y2="172" class="uml-line-dashed" marker-end="url(#ucOpenE)"/><text x="548" y="212" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text><line x1="520" y1="312" x2="632" y2="432" class="uml-line-dashed" marker-end="url(#ucOpenE)"/><text x="548" y="388" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text><line x1="624" y1="300" x2="528" y2="300" stroke="#7a3a23" stroke-width="1.2" stroke-dasharray="4,3" fill="none" marker-end="url(#ucOpenE)"/><text x="578" y="291" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a3a23" font-weight="600">&lt;&lt;extend&gt;&gt;</text><text x="578" y="314" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a3a23" font-weight="600">[has code]</text></svg>
+      <div class="figure-note">Two principal actors (Guest, Hotel Manager) and one secondary actor (Payment Provider). Check availability is <code>&lt;&lt;include&gt;&gt;</code>d by both Search rooms and Book room; Process payment is <code>&lt;&lt;include&gt;&gt;</code>d by Book room and reaches the Payment Provider; Apply discount code <code>&lt;&lt;extend&gt;&gt;</code>s Book room under <code>[has code]</code>. The single arrowed association leaving the boundary marks the Payment Provider as the system the use case calls on to finish its work.</div>
+    </div>
+
+
+    <h3 class="subhead">Stage 4: the use case description</h3>
+    <p class="body">The central use case, Book room, expands into the template from section 8:</p>
+    <div class="struct-spec"><table>
+      <thead><tr><th colspan="2">Use Case: Book room (refines UR2)</th></tr></thead>
+      <tbody>
+        <tr><td>Actors</td><td>Guest (Principal), Payment Provider (Secondary).</td></tr>
+        <tr><td>Pre-conditions</td><td>(a) The Guest has chosen dates. (b) At least one room is available for those dates.</td></tr>
+        <tr><td>Trigger</td><td>The Guest selects an available room.</td></tr>
+        <tr><td>Workflow (normal)</td><td>1. Guest selects a room. 2. Guest enters their details and card. 3. System requests authorisation from the Payment Provider. 4. On approval, the system reserves the room. 5. System confirms the booking and shows the confirmation.</td></tr>
+        <tr><td>Alternative / error</td><td>At step 3, if the card is declined, the Guest re-enters payment details and the request is retried; no booking is made until a payment is approved. If no room is available earlier, the flow ends without a booking.</td></tr>
+        <tr><td>Post-conditions</td><td>(a) On success: a reserved booking exists and is confirmed. (b) On failure: no room is reserved.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="subhead">Stage 5: the activity diagram</h3>
+    <p class="body">The same Book room flow, drawn as an activity diagram, makes the order of work, the decisions, the retry loop, and the hand-off to the external provider explicit. Swimlanes assign each step to the Guest, the Booking System, or the Payment Provider.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 9b.2</div>
+      <div class="figure-title">Activity diagram: the Book room flow, with a retry loop and an external provider.</div>
+      <svg viewBox="0 0 1140 870" xmlns="http://www.w3.org/2000/svg" id="csActFig" role="img" aria-label="Hotel booking activity diagram across Guest, Booking System and Payment Provider swimlanes, with two decisions and a payment-retry loop."><defs><marker id="fArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs><rect x="40" y="60" width="370" height="780" fill="#faf7f2" stroke="#d8cfc0"/><rect x="410" y="60" width="370" height="780" fill="white" stroke="#d8cfc0"/><rect x="780" y="60" width="320" height="780" fill="#faf7f2" stroke="#d8cfc0"/><text x="225" y="88" text-anchor="middle" class="uml-text" font-weight="600">Guest</text><text x="595" y="88" text-anchor="middle" class="uml-text" font-weight="600">Booking System</text><text x="940" y="88" text-anchor="middle" class="uml-text" font-weight="600">Payment Provider</text><line x1="40" y1="112" x2="1100" y2="112" class="uml-line"/><circle cx="225" cy="142" r="9" fill="#0f1419"/><line x1="225" y1="151" x2="225" y2="178" class="uml-line" marker-end="url(#fArrow)"/><rect x="150" y="180" width="150" height="40" rx="20" class="uml-box"/><text x="225" y="204" text-anchor="middle" class="uml-text">Search rooms</text><line x1="300" y1="200" x2="505" y2="200" class="uml-line" marker-end="url(#fArrow)"/><rect x="510" y="180" width="170" height="40" rx="20" class="uml-box"/><text x="595" y="204" text-anchor="middle" class="uml-text">Find available rooms</text><line x1="595" y1="220" x2="595" y2="262" class="uml-line" marker-end="url(#fArrow)"/><polygon points="595,262 647,290 595,318 543,290" class="uml-box"/><text x="595" y="288" text-anchor="middle" class="uml-text" font-size="10">rooms</text><text x="595" y="300" text-anchor="middle" class="uml-text" font-size="10">available?</text><polyline points="595,318 595,360 470,360" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="498" y="352" text-anchor="start" class="uml-text" font-size="11">[no]</text><circle cx="455" cy="360" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="455" cy="360" r="5" fill="#0f1419"/><polyline points="647,290 700,290 700,420 300,420" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="662" y="283" text-anchor="start" class="uml-text" font-size="11">[yes]</text><rect x="150" y="400" width="150" height="40" rx="20" class="uml-box"/><text x="225" y="424" text-anchor="middle" class="uml-text">Select room</text><line x1="225" y1="440" x2="225" y2="478" class="uml-line" marker-end="url(#fArrow)"/><rect x="150" y="480" width="150" height="40" rx="20" class="uml-box"/><text x="225" y="504" text-anchor="middle" class="uml-text">Enter payment details</text><line x1="300" y1="500" x2="865" y2="500" class="uml-line" marker-end="url(#fArrow)"/><rect x="860" y="480" width="160" height="40" rx="20" class="uml-box"/><text x="940" y="504" text-anchor="middle" class="uml-text">Authorise payment</text><line x1="940" y1="520" x2="940" y2="556" class="uml-line" marker-end="url(#fArrow)"/><polygon points="940,566 986,590 940,614 894,590" class="uml-box"/><text x="940" y="594" text-anchor="middle" class="uml-text" font-size="10">approved?</text><polyline points="940,614 940,820 225,820 225,522" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="582" y="812" text-anchor="middle" class="uml-text" font-size="11">[declined]: retry payment</text><polyline points="894,590 595,590 595,628" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="735" y="583" text-anchor="start" class="uml-text" font-size="11">[approved]</text><rect x="520" y="630" width="150" height="40" rx="20" class="uml-box"/><text x="595" y="654" text-anchor="middle" class="uml-text">Reserve room</text><line x1="595" y1="670" x2="595" y2="706" class="uml-line" marker-end="url(#fArrow)"/><rect x="520" y="708" width="150" height="40" rx="20" class="uml-box"/><text x="595" y="732" text-anchor="middle" class="uml-text">Confirm booking</text><line x1="595" y1="748" x2="595" y2="778" class="uml-line" marker-end="url(#fArrow)"/><circle cx="595" cy="791" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="595" cy="791" r="5" fill="#0f1419"/></svg>
+      <div class="figure-note">Three swimlanes assign each step to the Guest, the Booking System, or the Payment Provider. The <code>[rooms available?]</code> decision either ends the flow (no rooms) or continues; the cross-lane arrow to <em>Authorise payment</em> is the hand-off to the external provider; the <code>[declined]</code> branch is the retry loop, returning to <em>Enter payment details</em> until a payment is approved; the <code>[approved]</code> branch reserves and confirms. Two final nodes: one for "no rooms", one for a confirmed booking.</div>
+    </div>
+
+
+    <p class="body">Read it against the description: the <code>[rooms available?]</code> decision either ends the flow or continues; the cross-lane arrow to <em>Authorise payment</em> is the hand-off to the external provider; the <code>[declined]</code> branch is the retry loop, returning to <em>Enter payment details</em> until a payment is approved; and the <code>[approved]</code> branch reserves and confirms. The use case description and the activity diagram describe the same behaviour at two levels: the description in words, the diagram in flow.</p>
+
+    <div class="practice-callout">
+      <div class="tag">What the bridge shows</div>
+      <p>One short description produced four artefacts in sequence: user requirements, a use case diagram, a use case description, and an activity diagram. Each adds precision the previous one left implicit: the diagram names the actors and tasks, the description pins down the steps and conditions, and the activity diagram fixes the order, the decisions, and the loop. Drawing them in this order is the everyday rhythm of the analysis stage.</p>
     </div>
   </div>
 </section>
@@ -1860,7 +1942,7 @@
 
     <div class="interactive">
       <h4>Sequence-diagram player</h4>
-      <div class="sub">"Deposit cash" use case at an ATM-style machine: front UI, money register, dispenser. Step through to see each message and the activation bars it grows.</div>
+      <div class="sub">"Buy a drink" at a vending machine: front UI, vending controller, dispenser. Step through to see each message and the activation bars it grows.</div>
       <div class="controls">
         <button onclick="seqPrev()" id="seqPrevBtn">Previous</button>
         <button onclick="seqNext()" id="seqNextBtn">Next</button>
@@ -1880,7 +1962,7 @@
         <rect x="300" y="40" width="160" height="36" class="uml-box" fill="white"/>
         <text x="380" y="62" text-anchor="middle" class="uml-text" font-weight="600">front : UI</text>
         <rect x="540" y="40" width="160" height="36" class="uml-box" fill="white"/>
-        <text x="620" y="62" text-anchor="middle" class="uml-text" font-weight="600">register : Money</text>
+        <text x="620" y="62" text-anchor="middle" class="uml-text" font-weight="600">controller : Vending</text>
         <rect x="780" y="40" width="160" height="36" class="uml-box" fill="white"/>
         <text x="860" y="62" text-anchor="middle" class="uml-text" font-weight="600">: Dispenser</text>
         <!-- Lifelines -->
@@ -1891,7 +1973,7 @@
         <g id="seqMessages"></g>
         <g id="seqActivations"></g>
       </svg>
-      <div class="step-info" id="seqStepDesc">Press <b>Next</b> to begin. The customer initiates the deposit by inserting money into the front of the machine.</div>
+      <div class="step-info" id="seqStepDesc">Press <b>Next</b> to begin. The customer initiates the purchase by inserting money into the front of the machine.</div>
     </div>
 
     <div class="context-card">
@@ -2560,12 +2642,12 @@
 /* ===================================================================== */
 /* Sequence diagram player */
 const seqSteps = [
-  { msg: "1: insertMoney(amount)", from: 140, to: 380, y: 110, sync: true, desc: "<b>Step 1.</b> The customer inserts money in the front of the machine. Synchronous call; the front UI lifeline begins its activation." },
-  { msg: "2: selectAccount(id)",   from: 140, to: 380, y: 140, sync: true, desc: "<b>Step 2.</b> The customer selects which account to deposit into via the front UI. A second call to the UI." },
-  { msg: "3: deposit(amount)",     from: 380, to: 620, y: 175, sync: true, desc: "<b>Step 3.</b> The UI forwards the deposit request to the money register. The register's lifeline becomes active." },
-  { msg: "4: validate()",          from: 620, to: 620, y: 210, sync: true, self: true, desc: "<b>Step 4.</b> The register validates the deposit internally (self-call). A small activation extension on its own lifeline." },
-  { msg: "5: notify()",            from: 620, to: 860, y: 250, sync: false, desc: "<b>Step 5.</b> The register notifies the dispenser asynchronously. Open arrowhead indicates async; the register does not wait." },
-  { msg: "6: receipt",             from: 860, to: 380, y: 320, sync: false, returnArrow: true, desc: "<b>Step 6.</b> The dispenser delivers the receipt to the front UI (return / async). Dashed line, open head." },
+  { msg: "1: insertMoney(amount)", from: 140, to: 380, y: 110, sync: true, desc: "<b>Step 1.</b> The customer inserts money at the front of the machine. Synchronous call; the front UI lifeline begins its activation." },
+  { msg: "2: selectDrink(id)",     from: 140, to: 380, y: 140, sync: true, desc: "<b>Step 2.</b> The customer selects which drink to buy via the front UI. A second call to the UI." },
+  { msg: "3: purchase(drink)",     from: 380, to: 620, y: 175, sync: true, desc: "<b>Step 3.</b> The UI forwards the purchase request to the vending controller. The controller's lifeline becomes active." },
+  { msg: "4: checkStock()",        from: 620, to: 620, y: 210, sync: true, self: true, desc: "<b>Step 4.</b> The controller checks stock internally (self-call). A small activation extension on its own lifeline." },
+  { msg: "5: release(drink)",      from: 620, to: 860, y: 250, sync: false, desc: "<b>Step 5.</b> The controller signals the dispenser asynchronously. Open arrowhead indicates async; the controller does not wait." },
+  { msg: "6: drink dispensed",     from: 860, to: 380, y: 320, sync: false, returnArrow: true, desc: "<b>Step 6.</b> The dispenser delivers the drink and a return signal to the front UI (return / async). Dashed line, open head." },
   { msg: "7: confirmed",           from: 380, to: 140, y: 370, sync: false, returnArrow: true, desc: "<b>Step 7.</b> The UI confirms to the customer. Transaction complete." }
 ];
 
@@ -2614,7 +2696,7 @@ function renderSeq() {
   document.getElementById("seqPrevBtn").disabled = seqStep === 0;
   document.getElementById("seqNextBtn").disabled = seqStep >= seqSteps.length;
   document.getElementById("seqStepDesc").innerHTML = seqStep === 0
-    ? "Press <b>Next</b> to begin. The customer initiates the deposit by inserting money into the front of the machine."
+    ? "Press <b>Next</b> to begin. The customer initiates the purchase by inserting money into the front of the machine."
     : seqSteps[seqStep - 1].desc;
 }
 

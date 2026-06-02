@@ -12,6 +12,12 @@ birzeit/**/Answer*Key*.pdf
 birzeit/**/*exam papers/
 birzeit/comp233/Exams/first exam papers/
 
+# Private folders and exam drafts (never publish)
+birzeit/**/_Private/
+birzeit/**/_private/
+birzeit/**/*Exam*.pdf
+birzeit/**/*exam*.docx
+
 birzeit/encrypted-blob.txt
 birzeit/protected-content.html
 birzeit/encrypt.js
