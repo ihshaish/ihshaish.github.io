@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" id="actFig" role="img" aria-label="Activity diagram with three swimlanes showing the collect-medical-history workflow.">
+  <style>
+    .uml-text { font-family: "Inter Tight", -apple-system, Helvetica, Arial, sans-serif; font-size: 12px; fill: #0f1419; }
+    .uml-line { stroke: #0f1419; stroke-width: 1.4; fill: none; }
+    .uml-line-dashed { stroke: #0f1419; stroke-width: 1.2; fill: none; stroke-dasharray: 4,3; }
+    .uml-line-blue { stroke: #4a8bb8; stroke-width: 1.4; fill: none; }
+    .uml-box { stroke: #0f1419; stroke-width: 1.4; fill: white; }
+    .actor-blue { stroke: #2c6e9a; stroke-width: 1.4; fill: #eaf3f9; }
+  </style>
+  <rect x="0" y="0" width="1000" height="620" fill="white"/>
+        <defs>
+          <marker id="act-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker>
+        </defs>
+        <!-- Swimlane backgrounds -->
+        <g>
+          <rect x="40" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
+          <text x="180" y="64" text-anchor="middle" class="uml-text" font-weight="600">Patient</text>
+        </g>
+        <g>
+          <rect x="320" y="40" width="320" height="560" fill="white" stroke="#d8cfc0"/>
+          <text x="480" y="64" text-anchor="middle" class="uml-text" font-weight="600">Receptionist</text>
+        </g>
+        <g>
+          <rect x="640" y="40" width="280" height="560" fill="#faf7f2" stroke="#d8cfc0"/>
+          <text x="780" y="64" text-anchor="middle" class="uml-text" font-weight="600">Nurse</text>
+        </g>
+        <line x1="40" y1="80" x2="920" y2="80" class="uml-line"/>
+
+        <!-- ===== Patient lane ===== -->
+        <!-- Initial node -->
+        <g>
+          <circle cx="180" cy="110" r="9" fill="#0f1419"/>
+        </g>
+        <line x1="180" y1="119" x2="180" y2="146" class="uml-line" marker-end="url(#act-arrow)"/>
+
+        <!-- Decision: new patient? -->
+        <g>
+          <polygon points="180,150 222,180 180,210 138,180" class="uml-box" fill="white"/>
+          <text x="180" y="184" text-anchor="middle" class="uml-text" font-size="11">New patient?</text>
+        </g>
+
+        <!-- ===== Receptionist lane: two branches from Patient's decision ===== -->
+        <!-- [yes] crosses to "Create patient record" -->
+        <line x1="222" y1="180" x2="380" y2="170" class="uml-line" marker-end="url(#act-arrow)"/>
+        <text x="245" y="170" class="uml-text" font-size="11">[yes]</text>
+        <g>
+          <rect x="380" y="148" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="480" y="174" text-anchor="middle" class="uml-text">Create patient record</text>
+        </g>
+
+        <!-- [no] crosses to "Search patient record" -->
+        <line x1="180" y1="210" x2="180" y2="252" class="uml-line"/>
+        <text x="187" y="232" class="uml-text" font-size="11">[no]</text>
+        <line x1="180" y1="252" x2="380" y2="252" class="uml-line" marker-end="url(#act-arrow)"/>
+        <g>
+          <rect x="380" y="230" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="480" y="256" text-anchor="middle" class="uml-text">Search patient record</text>
+        </g>
+
+        <!-- Merge node combines the two branches -->
+        <g>
+          <polygon points="480,304 510,322 480,340 450,322" class="uml-box" fill="white"/>
+        </g>
+        <line x1="480" y1="192" x2="480" y2="302" class="uml-line"/>
+        <line x1="480" y1="274" x2="480" y2="302" class="uml-line"/>
+
+        <!-- Record personal info -->
+        <g>
+          <rect x="380" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="480" y="384" text-anchor="middle" class="uml-text">Record personal information</text>
+        </g>
+        <line x1="480" y1="340" x2="480" y2="356" class="uml-line" marker-end="url(#act-arrow)"/>
+
+        <!-- Hand-off to Nurse: horizontal line -->
+        <g>
+          <line x1="580" y1="380" x2="700" y2="380" class="uml-line" marker-end="url(#act-arrow)"/>
+        </g>
+
+        <!-- ===== Nurse lane ===== -->
+        <!-- Record medical history -->
+        <g>
+          <rect x="700" y="358" width="200" height="44" rx="22" class="uml-box" fill="white"/>
+          <text x="800" y="384" text-anchor="middle" class="uml-text">Record medical history</text>
+        </g>
+
+        <!-- Decision: medication in menu? -->
+        <g>
+          <polygon points="800,420 858,452 800,484 742,452" class="uml-box" fill="white"/>
+          <text x="800" y="450" text-anchor="middle" class="uml-text" font-size="10">Medication in</text>
+          <text x="800" y="462" text-anchor="middle" class="uml-text" font-size="10">menu?</text>
+        </g>
+        <line x1="800" y1="402" x2="800" y2="420" class="uml-line" marker-end="url(#act-arrow)"/>
+
+        <!-- [found] left branch: Record as code -->
+        <line x1="742" y1="452" x2="700" y2="452" class="uml-line"/>
+        <line x1="700" y1="452" x2="700" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
+        <text x="690" y="445" class="uml-text" font-size="11" text-anchor="end">[found]</text>
+        <g>
+          <rect x="660" y="495" width="120" height="38" rx="19" class="uml-box" fill="white"/>
+          <text x="720" y="519" text-anchor="middle" class="uml-text">Record as code</text>
+        </g>
+
+        <!-- [not found] right branch: Record as free text -->
+        <line x1="858" y1="452" x2="900" y2="452" class="uml-line"/>
+        <line x1="900" y1="452" x2="900" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
+        <text x="868" y="445" class="uml-text" font-size="11">[not found]</text>
+        <g>
+          <rect x="820" y="495" width="160" height="38" rx="19" class="uml-box" fill="white"/>
+          <text x="900" y="519" text-anchor="middle" class="uml-text">Record as free text</text>
+        </g>
+
+        <!-- Merge of the two recording branches -->
+        <g>
+          <polygon points="800,548 830,566 800,584 770,566" class="uml-box" fill="white"/>
+        </g>
+        <line x1="720" y1="533" x2="720" y2="555" class="uml-line"/>
+        <line x1="720" y1="555" x2="770" y2="566" class="uml-line"/>
+        <line x1="900" y1="533" x2="900" y2="555" class="uml-line"/>
+        <line x1="900" y1="555" x2="830" y2="566" class="uml-line"/>
+
+        <!-- Final node for the main path -->
+        <line x1="800" y1="584" x2="800" y2="592" class="uml-line" marker-end="url(#act-arrow)"/>
+        <g>
+          <circle cx="800" cy="599" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
+          <circle cx="800" cy="599" r="5" fill="#0f1419"/>
+        </g>
+
+      </svg>
