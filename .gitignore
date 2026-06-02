@@ -8,6 +8,10 @@ birzeit/**/midterm*.pdf
 birzeit/**/answer*key*.pdf
 birzeit/**/Answer*Key*.pdf
 
+# Student exam scripts (never publish)
+birzeit/**/*exam papers/
+birzeit/comp233/Exams/first exam papers/
+
 birzeit/encrypted-blob.txt
 birzeit/protected-content.html
 birzeit/encrypt.js

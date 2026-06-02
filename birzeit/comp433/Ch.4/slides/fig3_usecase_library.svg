@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      <svg viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg" id="ucFig" role="img" aria-label="Library System use case diagram with three actors and six use cases.">
+  <style>
+    .uml-text { font-family: "Inter Tight", -apple-system, Helvetica, Arial, sans-serif; font-size: 12px; fill: #0f1419; }
+    .uml-line { stroke: #0f1419; stroke-width: 1.4; fill: none; }
+    .uml-line-dashed { stroke: #0f1419; stroke-width: 1.2; fill: none; stroke-dasharray: 4,3; }
+    .uml-line-blue { stroke: #4a8bb8; stroke-width: 1.4; fill: none; }
+    .uml-box { stroke: #0f1419; stroke-width: 1.4; fill: white; }
+    .actor-blue { stroke: #2c6e9a; stroke-width: 1.4; fill: #eaf3f9; }
+  </style>
+  <rect x="0" y="0" width="1100" height="600" fill="white"/>
+        <defs>
+          <!-- Include arrow head: dark grey -->
+          <marker id="inc-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker>
+          <!-- Extend arrow head: same shape, drawn in a slightly warmer ink so the two stereotypes read as distinct at a glance -->
+          <marker id="ext-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#7a3a23" stroke-width="1.4"/></marker>
+        </defs>
+
+        <!-- ===== System boundary ===== -->
+        <g>
+          <rect x="220" y="80" width="740" height="470" rx="8" class="uml-box" stroke-width="1.8" fill="#faf7f2"/>
+          <text x="590" y="70" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Library System</text>
+        </g>
+
+        <!-- ===== Use cases ===== Layout reasoning:
+             Refuse loan sits IMMEDIATELY to the right of Borrow (same y) so the extend
+             arrow is a single short horizontal hop, with no chance of being confused
+             for an include arrow elsewhere on the page.
+             Compute return date sits BELOW the primary column, between Borrow and Renew
+             vertically, so the two include arrows (from Borrow and Renew) both reach it
+             without crossing the extend band at y=140 or each other.  -->
+
+        <!-- Borrow (primary, top) -->
+        <g>
+          <ellipse cx="400" cy="160" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="164" text-anchor="middle" class="uml-text">Borrow copy of a book</text>
+        </g>
+
+        <!-- Refuse loan (right of Borrow, same y; extending) -->
+        <g>
+          <ellipse cx="760" cy="160" rx="100" ry="30" class="uml-box" fill="white"/>
+          <text x="760" y="164" text-anchor="middle" class="uml-text">Refuse loan</text>
+        </g>
+
+        <!-- Return (primary) -->
+        <g>
+          <ellipse cx="400" cy="270" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="274" text-anchor="middle" class="uml-text">Return copy of a book</text>
+        </g>
+
+        <!-- Compute return date (included; sits between Borrow and Renew on the right) -->
+        <g>
+          <ellipse cx="760" cy="320" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="760" y="324" text-anchor="middle" class="uml-text">Compute return date</text>
+        </g>
+
+        <!-- Renew (primary) -->
+        <g>
+          <ellipse cx="400" cy="395" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="399" text-anchor="middle" class="uml-text">Renew loan of a book</text>
+        </g>
+
+        <!-- Browse / search books (primary, bottom) -->
+        <g>
+          <ellipse cx="400" cy="500" rx="110" ry="30" class="uml-box" fill="white"/>
+          <text x="400" y="504" text-anchor="middle" class="uml-text">Browse / search books</text>
+        </g>
+
+        <!-- ===== Actors ===== -->
+        <!-- BookBorrower (top-left) -->
+        <g transform="translate(60, 130)">
+          <circle cx="20" cy="6" r="8" class="actor-blue"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/>
+          <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">BookBorrower</text>
+          <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(library member)</text>
+        </g>
+
+        <!-- Librarian (mid-left) -->
+        <g transform="translate(60, 320)">
+          <circle cx="20" cy="6" r="8" class="actor-blue"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/>
+          <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Librarian</text>
+          <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(staff)</text>
+        </g>
+
+        <!-- Browser (bottom-right, only reaches Browse) -->
+        <g transform="translate(1020, 470)">
+          <circle cx="20" cy="6" r="8" class="actor-blue"/>
+          <line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/>
+          <line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/>
+          <text x="20" y="78" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Browser</text>
+          <text x="20" y="92" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">(non-member)</text>
+        </g>
+
+        <!-- ===== Associations (solid light-blue lines, no arrow heads) ===== -->
+
+        <!-- BookBorrower (right edge x=94, mid y=160) to Borrow / Return / Renew. -->
+        <g>
+          <line x1="94" y1="160" x2="290" y2="160" class="uml-line-blue"/>
+          <line x1="94" y1="162" x2="290" y2="270" class="uml-line-blue"/>
+          <line x1="94" y1="164" x2="290" y2="395" class="uml-line-blue"/>
+        </g>
+
+        <!-- Librarian (right edge x=94, mid y=350) to Borrow / Return. -->
+        <g>
+          <line x1="94" y1="346" x2="290" y2="160" class="uml-line-blue"/>
+          <line x1="94" y1="350" x2="290" y2="270" class="uml-line-blue"/>
+        </g>
+
+        <!-- Browser (left edge x=1020, mid y=500) to Browse only. -->
+        <g>
+          <line x1="1020" y1="500" x2="510" y2="500" class="uml-line-blue"/>
+        </g>
+
+        <!-- ===== &lt;&lt;extend&gt;&gt; ===== (one short horizontal band at y=160)
+             Tail at Refuse loan (left edge 660), head at Borrow (right edge 510).
+             Same-y, no interaction with includes below. Label sits ABOVE the arrow,
+             guard sits BELOW; both well clear of the ellipses.
+             Drawn in a warmer ink (#7a3a23) so it is visually distinguishable from
+             the include arrows below. -->
+        <g>
+          <line x1="660" y1="160" x2="510" y2="160" stroke="#7a3a23" stroke-width="1.2" stroke-dasharray="4,3" fill="none" marker-end="url(#ext-arrow)"/>
+          <text x="585" y="148" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a3a23" font-weight="600">&lt;&lt;extend&gt;&gt;</text>
+          <text x="585" y="178" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a3a23">[too many books]</text>
+        </g>
+
+        <!-- ===== &lt;&lt;include&gt;&gt; arrows ===== (lower band, both reach Compute at y=320)
+             Drawn in standard ink, dashed with the include arrow head. The two arrows
+             approach Compute from opposite vertical directions (Borrow above, Renew below)
+             so they form a clear V into Compute's left side with the labels sitting
+             cleanly on the outside of the V. -->
+
+        <!-- Borrow (right edge 510, y=170) to Compute (left edge 650, y=310) -->
+        <g>
+          <line x1="510" y1="180" x2="650" y2="310" class="uml-line-dashed" marker-end="url(#inc-arrow)"/>
+          <text x="540" y="252" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text>
+        </g>
+
+        <!-- Renew (right edge 510, y=385) to Compute (left edge 650, y=330) -->
+        <g>
+          <line x1="510" y1="385" x2="650" y2="330" class="uml-line-dashed" marker-end="url(#inc-arrow)"/>
+          <text x="540" y="385" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text>
+        </g>
+      </svg>
