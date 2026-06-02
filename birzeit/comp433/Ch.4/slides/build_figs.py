@@ -82,7 +82,7 @@ A.append(dash(715,535,815,470)); A.append(lbl(792,520,"&lt;&lt;include&gt;&gt;")
 # extends (ext -> base) open arrow dashed, rust
 def dashx(x1,y1,x2,y2):
     return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#7a3a23" stroke-width="1.2" stroke-dasharray="4,3" fill="none" marker-end="url(#ucOpen)"/>'
-A.append(dashx(594,112,452,138)); A.append(lbl(516,104,"&lt;&lt;extend&gt;&gt;","#7a3a23")); A.append(lbl(540,120,"[too many books]","#7a3a23"))  # Refuse->Borrow
+A.append(dashx(596,110,452,136)); A.append(lbl(512,98,"&lt;&lt;extend&gt;&gt;","#7a3a23")); A.append(lbl(560,113,"[too many books]","#7a3a23"))  # Refuse->Borrow
 A.append(dashx(880,600,700,558)); A.append(lbl(800,612,"&lt;&lt;extend&gt;&gt;","#7a3a23"))  # Validate->credit card
 # inherit (special -> general) hollow triangle solid
 def gen(x1,y1,x2,y2):
@@ -123,8 +123,8 @@ B.append(plain(485,158,485,184)); B.append(arr(485,184,485,205))
 B.append(act(485,226,"Send Invoice"))
 B.append(arr(255,247,255,288))                                          # fill->decision
 B.append(dia(255,310,"Priority?"))
-B.append(arr(221,310,200,380)); B.append(gl(150,345,"[priority order]"))
-B.append(arr(289,310,350,380)); B.append(gl(300,345,"[else]"))
+B.append(arr(221,310,200,380)); B.append(gl(78,348,"[priority order]"))
+B.append(arr(289,310,350,380)); B.append(gl(340,348,"[else]"))
 B.append(act(200,400,"Overnight",w=120,h=40))
 B.append(act(350,400,"Regular",w=120,h=40))
 B.append(plain(200,420,200,448)); B.append(arr(200,448,232,468))        # overnight->merge
