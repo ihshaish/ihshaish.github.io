@@ -46,19 +46,19 @@ S.append(g(9, parr("225,517 225,607"), gl(238,560,"[no]"),
 S.append(g(10, arr(300,690,865,690), act(940,690,"Authorise payment",w=160)))
 # 11 decision approved?
 S.append(g(11, arr(940,710,940,748), dia(940,778,"approved?",hw=48)))
-# 12 [declined] retry loop (routed clear of the fork/join on the right)
-S.append(g(12, parr("988,778 1060,778 1060,1042 225,1042 225,712"), gl(582,1034,"[declined]: retry payment","middle")))
-# 13 [approved] -> Reserve room
-S.append(g(13, parr("892,778 595,778 595,803"), gl(735,771,"[approved]"), act(595,825,"Reserve room")))
-# 14 fork
-S.append(g(14, arr(595,845,595,867), bar(560,975,873)))
-# 15 parallel branches: Confirm booking || Capture payment
-S.append(g(15, arr(595,876,595,902), act(595,923,"Confirm booking"),
+# 12 [approved] -> Reserve room (success path first)
+S.append(g(12, parr("892,778 595,778 595,803"), gl(735,771,"[approved]"), act(595,825,"Reserve room")))
+# 13 fork
+S.append(g(13, arr(595,845,595,867), bar(560,975,873)))
+# 14 parallel branches: Confirm booking || Capture payment
+S.append(g(14, arr(595,876,595,902), act(595,923,"Confirm booking"),
                arr(940,876,940,902), act(940,923,"Capture payment",w=160)))
-# 16 join
-S.append(g(16, arr(595,943,595,967), arr(940,943,940,967), bar(560,975,971)))
-# 17 final
-S.append(g(17, arr(595,977,595,1000), fin(595,1013)))
+# 15 join
+S.append(g(15, arr(595,943,595,967), arr(940,943,940,967), bar(560,975,971)))
+# 16 final
+S.append(g(16, arr(595,977,595,1000), fin(595,1013)))
+# 17 [declined] retry loop, the alternative path (routed clear of the fork/join on the right)
+S.append(g(17, parr("988,778 1060,778 1060,1042 225,1042 225,712"), gl(582,1034,"[declined]: retry payment","middle")))
 SVG="".join(S)
 
 NARR=[
@@ -73,16 +73,16 @@ NARR=[
  "If they do, a promo code is applied and a discount taken; if not, the step is skipped. An optional extend use case appears in the flow as exactly this kind of guarded branch.",
  "The two branches merge, and the Guest enters payment details: step 3.",
  "A hand-off to the external Payment Provider, the same secondary actor from the use case diagram, shown here as its own lane. It authorises the payment: step 4.",
- "A second decision: was the payment approved?",
- "If declined, the flow loops back to Enter payment details so the Guest can try again. This is a retry loop, a decision branch that returns into the flow.",
+ "A second decision: was the payment approved? Take the success path first.",
  "If approved, the Booking System reserves the room: step 5.",
  "Now two things happen at once. A fork node, the heavy bar, splits the flow into concurrent branches that proceed independently.",
  "The Booking System confirms the booking to the Guest (step 6) while, in parallel, the Payment Provider captures the authorised payment. Neither branch waits for the other.",
  "A join node, the second bar, synchronises the branches: the flow waits until both finish before it goes on.",
- "The bull's-eye final node ends the successful path. The diagram is complete: swimlanes, an initial node, actions, three decisions (including the optional promo branch), a retry loop, a hand-off to an external provider, a parallel fork and join, and two final nodes, all traceable to the use case.",
+ "The bull's-eye final node ends the successful path.",
+ "Now the alternative. Back at the approved? decision, if the payment is declined the flow loops back to Enter payment details so the Guest can try again, a retry loop. The diagram is complete: swimlanes, an initial node, actions, three decisions (including the optional promo branch), this retry loop, a hand-off to an external provider, a parallel fork and join, and two final nodes, all traceable to the use case.",
 ]
 MAX=len(NARR)-1
-HL={4:['wf-pre'],6:['wf1'],7:['wf-promo'],8:['wf-promo'],9:['wf2'],10:['wf3'],12:['wf-alt'],13:['wf4'],15:['wf5']}
+HL={4:['wf-pre'],6:['wf1'],7:['wf-promo'],8:['wf-promo'],9:['wf2'],10:['wf3'],12:['wf4'],14:['wf5'],17:['wf-alt']}
 import json
 HTML=f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
