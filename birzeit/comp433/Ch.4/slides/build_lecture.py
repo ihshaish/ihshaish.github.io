@@ -1,42 +1,44 @@
-# COMP433 Ch.4 lecture deck (page-by-page HTML). Contextual + notation-reference slides,
-# with the five verified animated builder pages embedded in full for the worked builds.
-# Use case and activity shown comprehensively, contextualised from requirements.
+# COMP433 Ch.4 lecture deck (page-by-page HTML), expanded for full depth/breadth.
+# Contextual + notation-reference + worked-content slides, with the five verified
+# animated builder pages embedded for the from-requirements builds.
 
-def ucmini():  # small labelled use case diagram for the "building blocks" slide
-    return '''<svg viewBox="0 0 920 230" class="ref" role="img" aria-label="Use case building blocks">
-      <rect x="300" y="40" width="320" height="150" rx="8" stroke="#0f1419" stroke-width="1.6" fill="#faf7f2"/>
-      <text x="460" y="32" text-anchor="middle" class="t" font-weight="600">Library System</text>
-      <g transform="translate(150,95)"><circle cx="16" cy="6" r="8" stroke="#2c6e9a" stroke-width="1.4" fill="#eaf3f9"/><line x1="16" y1="14" x2="16" y2="40" stroke="#4a8bb8" stroke-width="1.4"/><line x1="16" y1="20" x2="4" y2="30" stroke="#4a8bb8" stroke-width="1.4"/><line x1="16" y1="20" x2="28" y2="30" stroke="#4a8bb8" stroke-width="1.4"/><line x1="16" y1="40" x2="4" y2="54" stroke="#4a8bb8" stroke-width="1.4"/><line x1="16" y1="40" x2="28" y2="54" stroke="#4a8bb8" stroke-width="1.4"/><text x="16" y="74" text-anchor="middle" class="t" font-weight="600">Member</text></g>
-      <line x1="200" y1="110" x2="360" y2="110" stroke="#4a8bb8" stroke-width="1.4"/>
-      <ellipse cx="460" cy="110" rx="110" ry="34" stroke="#0f1419" stroke-width="1.4" fill="#fff"/><text x="460" y="114" text-anchor="middle" class="t">Borrow book</text>
-      <text x="120" y="172" class="lab">actor</text>
-      <text x="270" y="96" class="lab">association</text>
-      <text x="460" y="172" text-anchor="middle" class="lab">use case</text>
-      <text x="700" y="60" class="lab">system boundary</text>
-      <line x1="690" y1="56" x2="618" y2="70" class="ld"/>
-    </svg>'''
+def ucref():  # use case building blocks as a clean legend (no overlapping labels)
+    rows=[("actor","Actor","a role, a person or an external system, that uses the system; drawn outside the boundary"),
+          ("uc","Use case","a task the system provides, named with a verb; drawn inside the boundary"),
+          ("rect","System boundary","separates what is inside the system from the actors outside it"),
+          ("line","Association","links an actor to a use case it takes part in; a plain line, no arrowhead")]
+    out='<svg viewBox="0 0 940 270" class="ref" role="img" aria-label="Use case building blocks legend">'
+    y=46
+    for sym,name,desc in rows:
+        if sym=="actor": g=f'<g transform="translate(26,{y-26})"><circle cx="14" cy="6" r="7" stroke="#2c6e9a" stroke-width="1.4" fill="#eaf3f9"/><line x1="14" y1="13" x2="14" y2="34" stroke="#4a8bb8" stroke-width="1.4"/><line x1="14" y1="18" x2="4" y2="26" stroke="#4a8bb8" stroke-width="1.4"/><line x1="14" y1="18" x2="24" y2="26" stroke="#4a8bb8" stroke-width="1.4"/><line x1="14" y1="34" x2="4" y2="46" stroke="#4a8bb8" stroke-width="1.4"/><line x1="14" y1="34" x2="24" y2="46" stroke="#4a8bb8" stroke-width="1.4"/></g>'
+        elif sym=="uc": g=f'<ellipse cx="40" cy="{y}" rx="34" ry="17" stroke="#0f1419" stroke-width="1.4" fill="#fff"/>'
+        elif sym=="rect": g=f'<rect x="14" y="{y-17}" width="54" height="34" rx="6" stroke="#0f1419" stroke-width="1.4" fill="#faf7f2"/>'
+        else: g=f'<line x1="14" y1="{y}" x2="70" y2="{y}" stroke="#4a8bb8" stroke-width="1.6"/>'
+        out+=g+f'<text x="100" y="{y-3}" class="t" font-weight="600">{name}</text><text x="100" y="{y+15}" class="lab">{desc}</text>'
+        y+=60
+    return out+'</svg>'
 
 def actref():  # activity notation legend
-    rows=[("&#9679;","Initial node","where the flow starts (exactly one)"),
-          ("&#9673;","Final node","where a path ends (may be several)"),
-          ("rect","Action","a unit of work (verb phrase)"),
-          ("dia","Decision / Merge","split on a guard / re-join alternatives"),
-          ("bar","Fork / Join","start parallel flows / wait for all"),
-          ("lane","Swimlane","assign actions to an actor or system")]
-    out='<svg viewBox="0 0 920 360" class="ref" role="img" aria-label="Activity notation legend">'
-    y=40
+    rows=[("ini","Initial node","where the flow starts (exactly one)"),
+          ("fin","Final node","where a path ends (there may be several)"),
+          ("rect","Action","a unit of work, named with a verb phrase"),
+          ("dia","Decision / Merge","split on a guard (one branch runs) / re-join the alternatives"),
+          ("bar","Fork / Join","start parallel flows / wait for every flow to finish"),
+          ("lane","Swimlane","assign each action to an actor or system")]
+    out='<svg viewBox="0 0 940 386" class="ref" role="img" aria-label="Activity notation legend">'
+    y=42
     for sym,name,desc in rows:
-        if sym=="&#9679;": g=f'<circle cx="40" cy="{y}" r="10" fill="#0f1419"/>'
-        elif sym=="&#9673;": g=f'<circle cx="40" cy="{y}" r="10" fill="#fff" stroke="#0f1419" stroke-width="1.5"/><circle cx="40" cy="{y}" r="5" fill="#0f1419"/>'
-        elif sym=="rect": g=f'<rect x="16" y="{y-13}" width="50" height="26" rx="13" stroke="#0f1419" stroke-width="1.4" fill="#fff"/>'
+        if sym=="ini": g=f'<circle cx="40" cy="{y}" r="10" fill="#0f1419"/>'
+        elif sym=="fin": g=f'<circle cx="40" cy="{y}" r="10" fill="#fff" stroke="#0f1419" stroke-width="1.5"/><circle cx="40" cy="{y}" r="5" fill="#0f1419"/>'
+        elif sym=="rect": g=f'<rect x="14" y="{y-13}" width="52" height="26" rx="13" stroke="#0f1419" stroke-width="1.4" fill="#fff"/>'
         elif sym=="dia": g=f'<polygon points="40,{y-15} 62,{y} 40,{y+15} 18,{y}" stroke="#0f1419" stroke-width="1.4" fill="#fff"/>'
         elif sym=="bar": g=f'<rect x="14" y="{y-4}" width="54" height="8" rx="2" fill="#2c3540"/>'
         else: g=f'<rect x="20" y="{y-15}" width="20" height="30" stroke="#d8cfc0" fill="#faf7f2"/><rect x="40" y="{y-15}" width="20" height="30" stroke="#d8cfc0" fill="#fff"/>'
         out+=g+f'<text x="92" y="{y-2}" class="t" font-weight="600">{name}</text><text x="92" y="{y+15}" class="lab">{desc}</text>'
-        y+=56
+        y+=58
     return out+'</svg>'
 
-def pipeline():  # context pipeline
+def pipeline():
     boxes=[("Requirements","elicited + analysed"),("Use case diagram","who + what"),("Use case description","the contract"),("Activity diagram","the flow")]
     out='<svg viewBox="0 0 980 150" class="ref" role="img" aria-label="From requirements to models"><defs><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>'
     x=20
@@ -44,49 +46,64 @@ def pipeline():  # context pipeline
         out+=f'<rect x="{x}" y="40" width="200" height="64" rx="10" stroke="#0f1419" stroke-width="1.5" fill="#fff"/><text x="{x+100}" y="68" text-anchor="middle" class="t" font-weight="600">{a}</text><text x="{x+100}" y="88" text-anchor="middle" class="lab">{b}</text>'
         if i<3: out+=f'<line x1="{x+200}" y1="72" x2="{x+240}" y2="72" stroke="#0f1419" stroke-width="1.6" marker-end="url(#pa)"/>'
         x+=240
-    return out+"</svg>"
+    return out+'</svg>'
 
 SLIDES=[]
-def slide(html): SLIDES.append(html)
+def slide(h): SLIDES.append(h)
 
-# 1 title
 slide('''<div class="center">
   <div class="kicker">COMP433 &middot; Software Engineering &middot; Chapter 4</div>
   <h1 class="title">UML: Use Case &amp; Activity Diagrams</h1>
-  <p class="subtitle">How to read the requirements, then build each diagram, step by step.</p>
-  <p class="hint">Use the arrows or the buttons below to move between slides. Slides with a builder have their own Next / Play controls.</p>
+  <p class="subtitle">Read the requirements, then build each diagram, step by step, with every part traceable to where it came from.</p>
+  <p class="hint">Move with the arrow keys or the buttons below. Slides with a builder have their own Next / Play controls.</p>
 </div>''')
 
-# 2 context
 slide(f'''<h2>Where these diagrams come from</h2>
-<p class="lead">UML is a notation, not a method: it fixes the shapes, you decide which diagram to draw and when. In <strong>analysis</strong>, once requirements are elicited, two behavioural views are drawn first, in order. Each is read out of the one before it.</p>
+<p class="lead">UML is a notation, not a method: it fixes the shapes; you decide which diagram to draw and when. In <strong>analysis</strong>, once requirements are elicited, two behavioural views are drawn first, in order, and each is read out of the one before it.</p>
 {pipeline()}
-<ul class="pts">
-  <li>The <strong>use case diagram</strong> turns the requirements into a one-page picture of <em>who</em> uses the system and <em>what</em> they can do.</li>
-  <li>Each use case gets a <strong>description</strong>, the contract the team builds against.</li>
-  <li>A <strong>use case with a non-trivial flow</strong> is unpacked into an <strong>activity diagram</strong>.</li>
-</ul>
-<p class="foot">History in one line: UML was unified at Rational by Booch, Rumbaugh and Jacobson and standardised by the OMG in 1997; these are two of its behavioural views.</p>''')
+<div class="two">
+  <div class="box"><h3>UML at a glance</h3><p style="font-size:14px;margin:0">14 diagram types, 9 standard, in two groups:</p><ul><li><strong>Structure (static):</strong> use case, class, object, component, deployment</li><li><strong>Behaviour (dynamic):</strong> activity, sequence, communication, state</li></ul></div>
+  <div class="box"><h3>This chapter</h3><ul><li>The <strong>use case diagram</strong>: who uses the system and what they can do.</li><li>The <strong>use case description</strong>: the contract behind each ellipse.</li><li>The <strong>activity diagram</strong>: the flow of a non-trivial use case.</li></ul></div>
+</div>
+<p class="foot">History in one line: UML was unified at Rational by Booch, Rumbaugh and Jacobson and standardised by the OMG in 1997.</p>''')
 
-# 3 use case: what & when
 slide('''<h2>Use case diagrams: what and when</h2>
 <p class="lead">A use case diagram is usually the first model in analysis. On a single page it shows the system's <strong>actors</strong> and the <strong>tasks</strong> they perform with it, so stakeholders can confirm scope before any design.</p>
 <div class="two">
-  <div class="box"><h3>What it shows</h3><ul><li>Actors: the roles and external systems that interact with the system.</li><li>Use cases: the tasks the system provides, named with a verb.</li><li>The system boundary, and associations between actors and use cases.</li></ul></div>
-  <div class="box"><h3>What it does not show</h3><ul><li>The order of steps inside a use case (that is the activity diagram).</li><li>The data, the messages, or where the system runs.</li><li>A use case ellipse is just a labelled entry point; the detail lives in its description.</li></ul></div>
+  <div class="box"><h3>It serves three decisions</h3><ul><li><strong>Scope</strong>: is this the right set of tasks?</li><li><strong>Actor inventory</strong>: who and what interacts with the system.</li><li><strong>Task index</strong>: each use case points to its description, an activity diagram, a sequence diagram.</li></ul></div>
+  <div class="box"><h3>What it does not show</h3><ul><li>The order of steps inside a use case (activity diagram).</li><li>The messages between objects (sequence diagram).</li><li>The data, or where the system runs.</li></ul></div>
 </div>''')
 
-# 4 building blocks
 slide(f'''<h2>Use case building blocks</h2>
-<p class="lead">Five symbols. Actors (stick figures) sit outside the boundary; use cases (ellipses, verb-named) sit inside; a plain line is an association, with no arrowhead because participation is undirected.</p>
-{ucmini()}''')
+<p class="lead">Four symbols. Actors sit outside the boundary; use cases (verb-named ellipses) sit inside; a plain line is an association, with no arrowhead because participation is undirected.</p>
+{ucref()}<div class="key"><span class="tag">Key</span><p>A plain association has <strong>no arrowhead</strong>. A verb-phrase ellipse is a use case; a noun is a class, not a use case.</p></div>''')
 
-# 5 build use case (embed)
+slide('''<h2>Finding the actors</h2>
+<p class="lead">Read the requirements and ask four questions; each answer is an actor.</p>
+<ul class="pts">
+  <li>Which <strong>roles</strong> do the direct users play?</li>
+  <li>Who <strong>provides</strong> information to the system?</li>
+  <li>Who <strong>receives</strong> information from it?</li>
+  <li>Which <strong>external systems</strong> must it communicate with?</li>
+</ul>
+<div class="two">
+  <div class="box"><h3>Primary actor</h3><p style="margin:0;font-size:14.5px">A role (usually human) that starts a use case for its own goal: Guest, Librarian, Doctor.</p></div>
+  <div class="box"><h3>Secondary actor</h3><p style="margin:0;font-size:14.5px">An external system the system depends on and calls out to: payment provider, email or SMS service, verification service.</p></div>
+</div>
+<div class="key"><span class="tag">Key</span><p><strong>Primary</strong> actor starts a use case for its own goal; <strong>secondary</strong> actor is the external system the system calls out to.</p></div>\n<p class="foot">An actor is a <em>role</em>, not a person; the same person can be two actors. Name each actor with a noun.</p>''')
+
+slide('''<h2>Finding the use cases</h2>
+<p class="lead">Two complementary techniques, then a quick check.</p>
+<div class="two">
+  <div class="box"><h3>Scenario-based</h3><p style="margin:0;font-size:14.5px">Write the system's processes as scenarios; each interaction with the system is a candidate use case.</p></div>
+  <div class="box"><h3>Actor-based</h3><p style="margin:0;font-size:14.5px">For each actor, ask what they need from the system, and what else they take part in for someone else's benefit.</p></div>
+</div>
+<p class="lead" style="margin-top:14px"><strong>Noun-verb analysis</strong> ties it to the text: in the requirements, nouns and roles become <strong>actors</strong>, verbs become <strong>use cases</strong>, and the noun-verb pairings become <strong>associations</strong>. Name every use case with a verb, "Borrow book", not "Book borrowing".</p><div class="key"><span class="tag">Key</span><p>Name every use case with a <strong>verb</strong>. Nouns become <strong>actors</strong>; verbs become <strong>use cases</strong>.</p></div>''')
+
 slide('''<h2>Building a use case diagram, from the requirements</h2>
-<p class="lead">Watch it built one element at a time, with each actor and use case traced back to the narrative and the user requirements it came from. Use the builder's Next / Play.</p>
+<p class="lead">Built one element at a time, with each actor and use case traced back to the narrative and the user requirement it came from. Use the builder's Next / Play.</p>
 <iframe class="embed" src="poc_usecase_build.html" title="Use case build"></iframe>''')
 
-# 6 include/extend/generalisation rule
 slide('''<h2>Relationships: include, extend, generalisation</h2>
 <table class="rel">
   <thead><tr><th>Relationship</th><th>Meaning</th><th>Arrow (dashed unless noted)</th></tr></thead>
@@ -96,51 +113,74 @@ slide('''<h2>Relationships: include, extend, generalisation</h2>
     <tr><td>generalisation</td><td>One use case (or actor) is a <strong>more specific kind</strong> of another and inherits it.</td><td>solid line, hollow triangle, specific &rarr; general</td></tr>
   </tbody>
 </table>
-<p class="foot"><strong>The directionality rule:</strong> the arrow tail sits on the case that "knows about" the other. The base names its include as a step; the extension names the base it attaches to; the specialisation points at its parent.</p>''')
+<div class="key"><span class="tag">Key &middot; direction</span><p><code>&lt;&lt;include&gt;&gt;</code> points <strong>base &rarr; included</strong> (always performed); <code>&lt;&lt;extend&gt;&gt;</code> points <strong>extension &rarr; base</strong> (conditional). They go opposite ways. The tail sits on the case that "knows about" the other.</p></div>''')
 
-# 7 remaining notations (embed)
 slide('''<h2>The remaining use case notations</h2>
-<p class="lead">Actor generalisation, use-case generalisation, composite (multi-level) use cases, and extension points, each shown on a small example with a note on when to use it.</p>
+<p class="lead">Actor generalisation, use-case generalisation, composite (multi-level) use cases, and extension points, each on a small example with a note on when to use it.</p>
 <iframe class="embed" src="poc_usecase_notations.html" title="Use case notations"></iframe>''')
 
-# 8 descriptions & scenarios
-slide('''<h2>Use case descriptions and scenarios</h2>
-<p class="lead">The ellipse is the index; the <strong>description</strong> is the contract. Each non-trivial use case is also written as <strong>scenarios</strong>, single branch-free traces.</p>
+slide('''<h2>Use case descriptions</h2>
+<p class="lead">The ellipse is the index; the <strong>description</strong> is the contract the team builds against. Worked example for a Library use case:</p>
+<table class="rel desc">
+  <tbody>
+    <tr><td>Title</td><td>Borrow copy of a book</td></tr>
+    <tr><td>Actors</td><td>BookBorrower (primary), Librarian (primary)</td></tr>
+    <tr><td>Pre-conditions</td><td>1. Borrower is a member. 2. Borrower is below the loan limit.</td></tr>
+    <tr><td>Trigger</td><td>Borrower asks the Librarian to borrow a copy.</td></tr>
+    <tr><td>Workflow</td><td>1. System checks the allowance. 2. If allowed: record the loan and compute the due date. 3. Issue the copy (status &rarr; on-loan).</td></tr>
+    <tr><td>Post-conditions</td><td>Loan recorded; copy on-loan; loan count incremented (on success only).</td></tr>
+  </tbody>
+</table>''')
+
+slide('''<h2>Scenarios</h2>
+<p class="lead">A scenario is one specific path through a use case, with <strong>no branching</strong>. Each non-trivial use case gets at least three:</p>
 <div class="two">
-  <div class="box"><h3>Description fields</h3><ul><li>System &middot; Title &middot; Description</li><li>Actors &middot; Data &middot; Stimulus / Trigger</li><li>Pre-conditions</li><li>Workflow (flow of events)</li><li>Post-conditions &middot; Comments</li></ul></div>
-  <div class="box"><h3>Scenarios</h3><ul><li><strong>Normal</strong>: the happy path that succeeds.</li><li><strong>Alternative</strong>: a different but successful path.</li><li><strong>Error</strong>: an unsuccessful outcome with explicit handling.</li><li>Each scenario has no branching; "if X else Y" is two scenarios.</li></ul></div>
-</div>''')
+  <div class="box"><h3>The three kinds</h3><ul><li><strong>Normal</strong>: the happy path that succeeds.</li><li><strong>Alternative</strong>: a different but successful path.</li><li><strong>Error</strong>: an unsuccessful outcome with explicit handling.</li></ul></div>
+  <div class="box"><h3>Example: Borrow a book</h3><ul><li><strong>Normal</strong>: Joe (no books out) borrows a copy; it is issued.</li><li><strong>Alternative</strong>: Joe uses the self-service kiosk instead of the desk.</li><li><strong>Error</strong>: Joe already has six books out; the loan is refused.</li></ul></div>
+</div>
+<div class="key"><span class="tag">Key</span><p>A scenario has <strong>no branching</strong>: "if X else Y" is two scenarios, not one.</p></div>''')
 
-# 9 activity what & when
 slide('''<h2>Activity diagrams: what and when</h2>
-<p class="lead">An activity diagram unpacks <em>how one use case flows</em>: the order of work, the decisions that branch it, the steps that run in parallel, and which actor performs each. Draw one when a use case has real decisions, parallelism, or several actors, not for a simple linear path.</p>
-<ul class="pts"><li>It answers: what happens, in what order, and who does it.</li><li>The flow must not get "stuck": every path reaches a final node.</li><li>One activity diagram per use case is the usual granularity.</li></ul>''')
+<p class="lead">An activity diagram unpacks <em>how one use case flows</em>: the order of work, the decisions that branch it, the steps that run in parallel, and which actor performs each. It answers: what happens, in what order, and who does it.</p>
+<ul class="pts"><li>Draw one when a use case has real <strong>decisions</strong>, <strong>parallelism</strong>, or <strong>several actors</strong>, not for a simple linear path.</li><li>One activity diagram per use case is the usual granularity.</li><li>It is also an elicitation tool: it surfaces use cases and steps the static view missed.</li></ul>''')
 
-# 10 activity notation
 slide(f'''<h2>Activity notation</h2>
-<p class="lead">A small, fixed vocabulary. Two pairs are easy to confuse: a <strong>decision</strong> picks one branch, a <strong>fork</strong> runs all; a <strong>merge</strong> re-joins a choice, a <strong>join</strong> waits for parallel flows.</p>
-{actref()}''')
+<p class="lead">A small, fixed vocabulary. Two pairs are easy to confuse: a <strong>decision</strong> picks one branch while a <strong>fork</strong> runs all; a <strong>merge</strong> re-joins a choice while a <strong>join</strong> waits for parallel flows.</p>
+{actref()}<div class="key"><span class="tag">Key</span><p><strong>Decision</strong> = exactly one branch runs (a choice). <strong>Fork</strong> = all branches run (concurrency). This is the most common confusion.</p></div>''')
 
-# 11 build activity (embed)
 slide('''<h2>From a use case to an activity diagram</h2>
-<p class="lead">The Book room use case, unpacked into a flow. Each workflow step in the description lights up as its action appears. Swimlanes assign each step to the Guest, the system, or the external provider.</p>
+<p class="lead">The Book room use case, unpacked into a flow. Each step of its description lights up as the matching action appears; swimlanes assign each step to the Guest, the system, or the external provider.</p>
 <iframe class="embed" src="poc_activity_build.html" title="Activity build"></iframe>''')
 
-# 12 activity notations (embed)
+slide('''<h2>Swimlanes, loops, and a well-formed flow</h2>
+<div class="two">
+  <div class="box"><h3>Swimlanes</h3><p style="margin:0;font-size:14.5px">Columns that assign each action to an actor or system. An arrow that crosses a lane boundary is a <strong>hand-off</strong> of responsibility, often where bugs hide.</p></div>
+  <div class="box"><h3>Loops</h3><p style="margin:0;font-size:14.5px"><strong>Repeat</strong> (do the next item), <strong>retry</strong> (a check failed, correct and try again), and <strong>guarded exit / timeout</strong> (leave after a limit). Each is a decision that points back into the flow.</p></div>
+</div>
+<div class="key"><span class="tag">Key</span><p>Every <strong>decision</strong> is closed by a <strong>merge</strong>, every <strong>fork</strong> by a <strong>join</strong>, and every path must reach a final node, the flow must not get "stuck".</p></div>''')
+
 slide('''<h2>Activity notations: parallel work and choices</h2>
-<p class="lead">The fork and join for work that happens at once, and the merge that closes a decision.</p>
+<p class="lead">The fork and join for steps that run at once, and the merge that closes a decision. The key distinction: a fork runs all branches; a decision runs exactly one.</p>
 <iframe class="embed" src="poc_activity_notations.html" title="Activity notations"></iframe>''')
 
-# 13 helpdesk recap (embed)
 slide('''<h2>A second domain, end to end: the Help Desk</h2>
 <p class="lead">The same method on a fresh scenario, both diagrams. This one also shows actor generalisation (a Senior Agent is a kind of Support Agent).</p>
 <iframe class="embed tall" src="poc_helpdesk.html" title="Helpdesk worked example"></iframe>''')
 
-# 14 summary
+slide('''<h2>Common pitfalls</h2>
+<ul class="pts">
+  <li><strong>Include vs extend direction.</strong> The base points to its include; the extension points to its base. They go opposite ways.</li>
+  <li><strong>Decision vs fork.</strong> A decision picks one guarded branch; a fork starts all of them. Choose deliberately.</li>
+  <li><strong>Unbalanced control.</strong> Every decision needs a matching merge; every fork a matching join.</li>
+  <li><strong>Missing boundary.</strong> Without the system boundary you lose what is in versus out, and which actors are external.</li>
+  <li><strong>Noun-named use cases.</strong> "Book borrowing" is a class, not a use case; name it with a verb.</li>
+  <li><strong>Over-modelling.</strong> Do not draw an activity diagram for a trivial linear flow, and do not factor an include used by only one base.</li>
+</ul>''')
+
 slide('''<h2>How to create them</h2>
 <div class="two">
-  <div class="box"><h3>Use case diagram</h3><ol><li>Read the requirements; the people, roles and outside systems become <strong>actors</strong>.</li><li>The tasks they need become <strong>use cases</strong> (verb-named).</li><li>Draw the boundary; connect actors to their use cases with associations.</li><li>Factor shared steps as <code>&lt;&lt;include&gt;&gt;</code>; optional/conditional ones as <code>&lt;&lt;extend&gt;&gt;</code>; specialise with generalisation.</li><li>Write a description and scenarios for each.</li></ol></div>
-  <div class="box"><h3>Activity diagram</h3><ol><li>Pick a use case with a non-trivial flow; take its description.</li><li>Lay out swimlanes for the participants.</li><li>Start at the initial node; add actions in order.</li><li>Branch with decisions (close each with a merge); run parallel work with a fork (close with a join); loop where steps repeat or retry.</li><li>End every path at a final node; check the flow never gets stuck.</li></ol></div>
+  <div class="box"><h3>Use case diagram</h3><ol><li>From the requirements, the people, roles and outside systems become <strong>actors</strong>.</li><li>The tasks they need become <strong>use cases</strong> (verb-named).</li><li>Draw the boundary; connect actors to use cases with associations.</li><li>Factor shared steps as <code>&lt;&lt;include&gt;&gt;</code>; optional ones as <code>&lt;&lt;extend&gt;&gt;</code>; specialise with generalisation.</li><li>Write a description and scenarios for each.</li></ol></div>
+  <div class="box"><h3>Activity diagram</h3><ol><li>Pick a use case with a non-trivial flow; take its description.</li><li>Lay out swimlanes for the participants.</li><li>Start at the initial node; add actions in order.</li><li>Branch with decisions (close with merges); run parallel work with forks (close with joins); loop where steps repeat or retry.</li><li>End every path at a final node; check the flow never gets stuck.</li></ol></div>
 </div>
 <p class="foot">Both come straight from the requirements: that traceability is the point of drawing them.</p>''')
 
@@ -159,32 +199,32 @@ HTML=f'''<!DOCTYPE html>
   html,body {{ margin:0; height:100%; }}
   body {{ font-family:var(--sans); color:var(--ink); background:#f3efe9; }}
   .stage {{ height:100vh; display:flex; flex-direction:column; }}
-  .slidewrap {{ flex:1; overflow:auto; padding:48px 56px 24px; }}
+  .slidewrap {{ flex:1; overflow:auto; padding:44px 56px 24px; }}
   .slide {{ display:none; max-width:1080px; margin:0 auto; }}
   .slide.active {{ display:block; animation:fade .3s ease; }}
   @keyframes fade {{ from{{opacity:0; transform:translateY(8px);}} to{{opacity:1; transform:none;}} }}
   .kicker {{ font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:18px; }}
   h1.title {{ font-family:var(--serif); font-weight:500; font-size:clamp(34px,5vw,58px); letter-spacing:-.025em; line-height:1.05; margin:0 0 18px; }}
-  .subtitle {{ font-family:var(--serif); font-size:21px; color:var(--ink-soft); max-width:760px; }}
+  .subtitle {{ font-family:var(--serif); font-size:21px; color:var(--ink-soft); max-width:780px; }}
   .hint {{ color:var(--ink-mute); font-size:14px; margin-top:28px; }}
   .center {{ min-height:64vh; display:flex; flex-direction:column; justify-content:center; }}
-  h2 {{ font-family:var(--serif); font-weight:600; font-size:clamp(26px,3.4vw,38px); letter-spacing:-.02em; margin:0 0 14px; }}
-  h3 {{ font-family:var(--serif); font-size:18px; margin:0 0 8px; }}
-  .lead {{ font-size:17px; color:var(--ink-soft); max-width:900px; line-height:1.55; }}
-  .foot {{ font-size:14px; color:var(--ink-mute); margin-top:16px; max-width:900px; }}
-  ul,ol {{ color:var(--ink-soft); line-height:1.55; }} .pts li {{ margin:6px 0; }}
-  .two {{ display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:14px; }}
+  h2 {{ font-family:var(--serif); font-weight:600; font-size:clamp(25px,3.2vw,36px); letter-spacing:-.02em; margin:0 0 14px; }}
+  h3 {{ font-family:var(--serif); font-size:17px; margin:0 0 8px; }}
+  .lead {{ font-size:17px; color:var(--ink-soft); max-width:920px; line-height:1.55; }}
+  .foot {{ font-size:14px; color:var(--ink-mute); margin-top:16px; max-width:920px; }}
+  ul,ol {{ color:var(--ink-soft); line-height:1.5; }} .pts li {{ margin:7px 0; font-size:15.5px; }}
+  .two {{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:14px; }}
   @media (max-width:760px) {{ .two {{ grid-template-columns:1fr; }} }}
-  .box {{ background:#fff; border:1px solid var(--rule); border-radius:12px; padding:18px 20px; }}
-  .box ul,.box ol {{ margin:0; padding-left:18px; font-size:14.5px; }}
+  .box {{ background:#fff; border:1px solid var(--rule); border-radius:12px; padding:16px 18px; }}
+  .box ul,.box ol {{ margin:6px 0 0; padding-left:18px; font-size:14.5px; }} .box li {{ margin:4px 0; }}
   table.rel {{ border-collapse:collapse; width:100%; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:10px; overflow:hidden; }}
   table.rel th {{ background:var(--paper-warm); text-align:left; padding:10px 14px; font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; }}
   table.rel td {{ padding:11px 14px; border-top:1px solid var(--rule); font-size:14.5px; color:var(--ink-soft); vertical-align:top; }}
+  table.desc td:first-child {{ font-family:var(--mono); font-size:12px; color:var(--steel); white-space:nowrap; width:150px; background:var(--paper); }}
   code {{ font-family:var(--mono); font-size:13px; background:#ece3d4; padding:1px 6px; border-radius:4px; }}
-  svg.ref {{ width:100%; height:auto; max-height:420px; display:block; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }}
+  svg.ref {{ width:100%; height:auto; max-height:60vh; display:block; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }}
   svg.ref .t {{ font-family:var(--sans); font-size:13px; fill:var(--ink); }}
   svg.ref .lab {{ font-family:var(--sans); font-size:12px; fill:var(--ink-mute); }}
-  svg.ref .ld {{ stroke:var(--ink-mute); stroke-width:1; stroke-dasharray:3,2; }}
   .embed {{ width:100%; height:78vh; border:1px solid var(--rule); border-radius:12px; background:#fff; margin-top:10px; }}
   .embed.tall {{ height:80vh; }}
   .nav {{ flex-shrink:0; display:flex; align-items:center; gap:14px; padding:12px 24px; background:#fff; border-top:1px solid var(--rule); }}
@@ -192,12 +232,14 @@ HTML=f'''<!DOCTYPE html>
   .nav button:disabled {{ opacity:.4; cursor:default; }}
   .nav .count {{ font-family:var(--mono); font-size:13px; color:var(--ink-mute); margin-left:auto; }}
   .nav .title-mini {{ font-family:var(--serif); font-size:14px; color:var(--ink-soft); }}
+  .key {{ display:flex; gap:12px; align-items:flex-start; background:#fbf0e9; border:1px solid #e6b89c; border-left:4px solid var(--accent); border-radius:8px; padding:13px 16px; margin-top:18px; }}
+  .key .tag {{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7a3a23; font-weight:700; padding-top:3px; white-space:nowrap; }}
+  .key p {{ margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }}
 </style></head>
 <body>
 <div class="stage">
   <div class="slidewrap" id="slidewrap">
-    {slides_html}
-  </div>
+{slides_html}  </div>
   <div class="nav">
     <button id="prev">&larr; Prev</button>
     <button id="next">Next &rarr;</button>
@@ -224,4 +266,4 @@ show();
 </script>
 </body></html>'''
 open("COMP433_Ch4_UML_Lecture.html","w",encoding="utf-8").write(HTML)
-print("wrote lecture deck; slides:", N)
+print("wrote expanded lecture; slides:", N)
