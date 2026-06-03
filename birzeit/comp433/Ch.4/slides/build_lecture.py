@@ -102,7 +102,7 @@ slide('''<h2>Finding the use cases</h2>
 
 slide('''<h2>Building a use case diagram, from the requirements</h2>
 <p class="lead">Built one element at a time, with each actor and use case traced back to the narrative and the user requirement it came from. Use the builder's Next / Play.</p>
-<iframe class="embed" src="poc_usecase_build.html" title="Use case build"></iframe>''')
+<iframe class="embed" allowfullscreen src="poc_usecase_build.html" title="Use case build"></iframe>''')
 
 slide('''<h2>Relationships: include, extend, generalisation</h2>
 <table class="rel">
@@ -117,7 +117,7 @@ slide('''<h2>Relationships: include, extend, generalisation</h2>
 
 slide('''<h2>The remaining use case notations</h2>
 <p class="lead">Actor generalisation, use-case generalisation, composite (multi-level) use cases, and extension points, each on a small example with a note on when to use it.</p>
-<iframe class="embed" src="poc_usecase_notations.html" title="Use case notations"></iframe>''')
+<iframe class="embed" allowfullscreen src="poc_usecase_notations.html" title="Use case notations"></iframe>''')
 
 slide('''<h2>Use case descriptions</h2>
 <p class="lead">The ellipse is the index; the <strong>description</strong> is the contract the team builds against, the full template: pre-conditions, trigger, the main flow, and the <strong>alternative / exception flows</strong>. Worked example for a Library use case:</p>
@@ -152,7 +152,7 @@ slide(f'''<h2>Activity notation</h2>
 
 slide('''<h2>From a use case to an activity diagram</h2>
 <p class="lead">The Book room use case, unpacked into a flow. Each step of its description lights up as the matching action appears; the description's <strong>alternative flows</strong> become the diagram's <strong>decision branches and loops</strong>, and swimlanes assign each step to the Guest, the system, or the external provider.</p>
-<iframe class="embed" src="poc_activity_build.html" title="Activity build"></iframe>''')
+<iframe class="embed" allowfullscreen src="poc_activity_build.html" title="Activity build"></iframe>''')
 
 slide('''<h2>Swimlanes, loops, and a well-formed flow</h2>
 <div class="two">
@@ -168,7 +168,7 @@ slide('''<h2>The other granularity: a whole business process</h2>
 
 slide('''<h2>Activity notations: parallel work and choices</h2>
 <p class="lead">The fork and join for steps that run at once, and the merge that closes a decision. The key distinction: a fork runs all branches; a decision runs exactly one.</p>
-<iframe class="embed" src="poc_activity_notations.html" title="Activity notations"></iframe>''')
+<iframe class="embed" allowfullscreen src="poc_activity_notations.html" title="Activity notations"></iframe>''')
 
 slide('''<h2>A second domain, end to end: the Help Desk</h2>
 <p class="lead">The same method on a fresh scenario, both diagrams. This one also shows actor generalisation (a Senior Agent is a kind of Support Agent).</p>
