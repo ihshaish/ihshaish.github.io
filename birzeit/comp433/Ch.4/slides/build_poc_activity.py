@@ -16,9 +16,9 @@ def g(n,*p,cls="bstep"): return f'<g class="{cls}" data-step="{n}">'+''.join(p)+
 S=['<defs><marker id="fArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs>']
 # 1 lanes
 S.append(g(1,
- '<rect x="40" y="60" width="370" height="1020" fill="#faf7f2" stroke="#d8cfc0"/>',
- '<rect x="410" y="60" width="370" height="1020" fill="white" stroke="#d8cfc0"/>',
- '<rect x="780" y="60" width="320" height="1020" fill="#faf7f2" stroke="#d8cfc0"/>',
+ '<rect x="40" y="60" width="370" height="980" fill="#faf7f2" stroke="#d8cfc0"/>',
+ '<rect x="410" y="60" width="370" height="980" fill="white" stroke="#d8cfc0"/>',
+ '<rect x="780" y="60" width="320" height="980" fill="#faf7f2" stroke="#d8cfc0"/>',
  '<text x="225" y="88" text-anchor="middle" class="uml-text" font-weight="600">Guest</text>',
  '<text x="595" y="88" text-anchor="middle" class="uml-text" font-weight="600">Booking System</text>',
  '<text x="940" y="88" text-anchor="middle" class="uml-text" font-weight="600">Payment Provider</text>',
@@ -36,7 +36,7 @@ S.append(g(6, parr("647,290 700,290 700,420 300,420"), gl(662,283,"[yes]"), act(
 # 7 promo decision (the activity form of the Apply promo code <<extend>>)
 S.append(g(7, arr(225,440,225,461), dia(225,490,"has promo?",hw=60,hh=27)))
 # 8 [yes] -> Apply promo code
-S.append(g(8, parr("165,490 120,490 120,558"), gl(132,482,"[yes]","middle"), act(120,580,"Apply promo code",w=150)))
+S.append(g(8, parr("165,490 120,490 120,558"), gl(132,482,"[yes]","middle"), act(120,580,"Enter promo code",w=150)))
 # 9 [no] + merge -> Enter payment details
 S.append(g(9, parr("225,517 225,607"), gl(238,560,"[no]"),
               parr("120,600 120,625 197,625"),
@@ -58,7 +58,7 @@ S.append(g(15, arr(595,943,595,967), arr(940,943,940,967), bar(560,975,971)))
 # 16 final
 S.append(g(16, arr(595,977,595,1000), fin(595,1013)))
 # 17 [declined] retry loop, the alternative path (routed clear of the fork/join on the right)
-S.append(g(17, parr("988,778 1060,778 1060,1042 225,1042 225,712"), gl(582,1034,"[declined]: retry payment","middle")))
+S.append(g(17, parr("988,778 1060,778 1060,724 225,724 225,712"), gl(610,717,"[declined]: retry payment","middle")))
 SVG="".join(S)
 
 NARR=[
@@ -66,11 +66,11 @@ NARR=[
  "First, swimlanes: one column per participant, the Guest, the Booking System, and the external Payment Provider. Each action goes in the lane of whoever performs it, and an arrow that crosses a lane boundary is a hand-off.",
  "The initial node, a filled circle, marks where the flow begins. There is exactly one. The Guest's first action is Search rooms.",
  "Control hands off to the Booking System, which finds the available rooms. The arrow crossing into the system's lane is that hand-off.",
- "A decision node, the diamond, asks whether rooms are available. A decision has guarded branches and exactly one is taken. It reflects the pre-condition that a room must be available.",
+ "A decision node, the diamond, asks whether rooms are available. A decision has guarded branches and exactly one is taken; here it checks availability before the booking can go on.",
  "If none are available, the flow stops at a final node. An activity can have more than one final node, this is one way it can end.",
  "Otherwise the Guest selects a room: workflow step 1 of the description.",
  "Before paying comes an optional step (step 2): does the Guest have a promo code? This [has promo?] decision is the activity-diagram form of the Apply promo code <<extend>> you saw on the use case diagram.",
- "If they do, a promo code is applied and a discount taken; if not, the step is skipped. An optional extend use case appears in the flow as exactly this kind of guarded branch.",
+ "If they do, the Guest enters a promo code and the system applies the discount; if not, the step is skipped. An optional extend use case shows up in the flow as exactly this kind of guarded branch.",
  "The two branches merge, and the Guest enters payment details: step 3.",
  "A hand-off to the external Payment Provider, the same secondary actor from the use case diagram, shown here as its own lane. It authorises the payment: step 4.",
  "A second decision: was the payment approved? Take the success path first.",
@@ -155,7 +155,7 @@ HTML=f'''<!DOCTYPE html>
             <span class="row"><span class="k">Actors</span>Guest, Payment Provider</span>
             <span class="row" id="wf-pre"><span class="k">Pre</span>at least one room is available</span>
             <span class="row" id="wf1"><span class="k">1</span>Guest selects a room</span>
-            <span class="row" id="wf-promo"><span class="k">2</span>Guest may apply a promo code (optional)</span>
+            <span class="row" id="wf-promo"><span class="k">2</span>Guest enters a promo code (optional)</span>
             <span class="row" id="wf2"><span class="k">3</span>Guest enters details and card</span>
             <span class="row" id="wf3"><span class="k">4</span>System requests authorisation from the provider</span>
             <span class="row" id="wf4"><span class="k">5</span>On approval, the room is reserved</span>
@@ -165,7 +165,7 @@ HTML=f'''<!DOCTYPE html>
         </div>
       </div>
       <div class="diagram">
-        <svg viewBox="0 0 1140 1080" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Activity diagram being constructed step by step from the Book room use case.">{SVG}</svg>
+        <svg viewBox="0 0 1140 1040" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Activity diagram being constructed step by step from the Book room use case.">{SVG}</svg>
       </div>
     </div>
   </div>
