@@ -24,29 +24,33 @@ UCDEFS=('<defs>'
 
 # ---------- USE CASE build ----------
 U=[UCDEFS]
-U.append(gs(1,'<rect x="240" y="70" width="700" height="500" rx="8" class="uml-box" fill="#faf7f2" stroke-width="1.8"/>','<text x="590" y="60" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Help Desk System</text>'))
-U.append(gs(2, actorNL(60,190), nm(76,256,"Customer")))
-U.append(gs(3, uc(400,200,"Submit ticket"), bl(92,210,314,200)))
-U.append(gs(4, actorNL(1090,150), nm(1106,138,"Support Agent")))
-U.append(gs(5, uc(620,300,"Resolve ticket"), bl(1090,176,706,295)))
-U.append(gs(6, uc(430,410,"Search knowledge base",rx=98), inc(556,316,500,388), lblm(560,372,"&lt;&lt;include&gt;&gt;")))
-U.append(gs(7, uc(780,430,"Notify customer"), inc(648,318,732,408), lblm(740,372,"&lt;&lt;include&gt;&gt;")))
-U.append(gs(8, actorNL(1090,500), nm(1106,566,"Notification Service"), assoc(866,432,1086,512)))
-U.append(gs(9, uc(780,200,"Escalate ticket"), extl(700,210,556,288), lblm(636,196,"&lt;&lt;extend&gt;&gt;","#7a3a23"), lblm(636,219,"[complex]","#7a3a23")))
-U.append(gs(10, actorNL(1090,330), nm(1106,396,"Senior Agent"), gen(1106,330,1106,214), bl(1090,352,866,210)))
+U.append(gs(1,'<rect x="240" y="70" width="700" height="520" rx="8" class="uml-box" fill="#faf7f2" stroke-width="1.8"/>','<text x="590" y="60" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Help Desk System</text>'))
+U.append(gs(2, actorNL(60,250), nm(76,316,"Customer")))
+U.append(gs(3, uc(400,160,"Submit ticket"), bl(92,266,314,166)))
+U.append(gs(4, uc(400,270,"Track ticket"), bl(92,272,314,270)))
+U.append(gs(5, uc(400,380,"Reopen ticket"), bl(92,278,314,380)))
+U.append(gs(6, actorNL(1090,140), nm(1106,128,"Support Agent")))
+U.append(gs(7, uc(650,300,"Resolve ticket"), bl(1090,166,736,296)))
+U.append(gs(8, uc(450,490,"Search knowledge base",rx=100), inc(588,322,512,468), lblm(580,398,"&lt;&lt;include&gt;&gt;")))
+U.append(gs(9, uc(800,470,"Notify customer"), inc(706,318,746,448), lblm(752,388,"&lt;&lt;include&gt;&gt;")))
+U.append(gs(10, actorNL(1090,500), nm(1106,566,"Notification Service"), assoc(886,472,1086,512)))
+U.append(gs(11, uc(820,190,"Escalate ticket"), extl(760,212,673,287), lblm(648,236,"&lt;&lt;extend&gt;&gt;","#7a3a23"), lblm(648,253,"[complex]","#7a3a23")))
+U.append(gs(12, actorNL(1090,330), nm(1106,396,"Senior Agent"), gen(1106,330,1106,212), bl(1090,352,890,212)))
 UC_SVG="".join(U)
 UC_NARR=[
  "A second worked example: a Help Desk system. The same notation, a new domain. Use Next, or press Play.",
  "The system boundary: the Help Desk System.",
- "The Customer is a primary actor: they raise and follow tickets.",
- "Submit ticket is the Customer's task, joined by a plain association.",
+ "The Customer is a primary actor, the person who raises and follows tickets.",
+ "Submit ticket is the Customer's first task, joined by a plain association.",
+ "The Customer can also Track ticket, to follow its progress.",
+ "and Reopen ticket if the problem comes back. One actor usually has several use cases.",
  "The Support Agent is the actor who works on tickets.",
  "Resolve ticket is the agent's main task.",
- "Resolving a ticket always begins by checking the knowledge base, so Search knowledge base is an <<include>>: an always-performed sub-task, arrow from base to included.",
- "It also always ends by telling the customer, so Notify customer is a second <<include>>.",
- "Notify customer reaches an external Notification Service: a secondary actor outside the boundary, the association arrow pointing to it.",
- "Hard tickets are sometimes escalated. Escalate ticket is an <<extend>> on Resolve ticket, firing only under the guard [complex]; its arrow points back to the base.",
- "A Senior Agent is a kind of Support Agent (the hollow triangle points to the general actor): it inherits every Support Agent use case and also handles escalations. That is actor generalisation, the notation the first example did not need.",
+ "Resolving a ticket always starts by checking the knowledge base, so Search knowledge base is an &lt;&lt;include&gt;&gt;: an always-performed sub-task, with the arrow from the base to the included use case.",
+ "It also always ends by telling the customer, so Notify customer is a second &lt;&lt;include&gt;&gt;.",
+ "Notify customer reaches an external Notification Service, a secondary actor outside the boundary, with the association arrow pointing to it.",
+ "Hard tickets are sometimes escalated. Escalate ticket is an &lt;&lt;extend&gt;&gt; on Resolve ticket, firing only under the guard [complex]; its arrow points back to the base.",
+ "A Senior Agent is a kind of Support Agent (the hollow triangle points to the general actor): it inherits every Support Agent use case and also handles escalations. That is actor generalisation.",
 ]
 
 # ---------- ACTIVITY build ----------
@@ -61,8 +65,9 @@ def agl(x,y,t,anc="start"): return f'<text x="{x}" y="{y}" text-anchor="{anc}" c
 def initial(cx,cy): return f'<circle cx="{cx}" cy="{cy}" r="9" fill="#0f1419"/>'
 def final(cx,cy): return f'<circle cx="{cx}" cy="{cy}" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="{cx}" cy="{cy}" r="5" fill="#0f1419"/>'
 ADEFS='<defs><marker id="hdA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs>'
+def abar(cx,y,w=384): return f'<rect x="{cx-w//2}" y="{y}" width="{w}" height="7" rx="2" fill="#2c3540"/>'
 A=[ADEFS]
-A.append(gs(1,'<rect x="40" y="60" width="320" height="670" fill="#faf7f2" stroke="#d8cfc0"/>','<rect x="360" y="60" width="400" height="670" fill="white" stroke="#d8cfc0"/>','<rect x="760" y="60" width="300" height="670" fill="#faf7f2" stroke="#d8cfc0"/>',
+A.append(gs(1,'<rect x="40" y="60" width="320" height="800" fill="#faf7f2" stroke="#d8cfc0"/>','<rect x="360" y="60" width="400" height="800" fill="white" stroke="#d8cfc0"/>','<rect x="760" y="60" width="300" height="800" fill="#faf7f2" stroke="#d8cfc0"/>',
  '<text x="200" y="88" text-anchor="middle" class="uml-text" font-weight="600">Customer</text>','<text x="560" y="88" text-anchor="middle" class="uml-text" font-weight="600">Support Agent</text>','<text x="910" y="88" text-anchor="middle" class="uml-text" font-weight="600">Notification Service</text>','<line x1="40" y1="112" x2="1060" y2="112" class="uml-line"/>'))
 A.append(gs(2, initial(200,142), aarr(200,151,200,176), act(200,198,"Submit ticket")))
 A.append(gs(3, aarr(276,198,485,198), act(560,198,"Log ticket")))
@@ -70,8 +75,8 @@ A.append(gs(4, aarr(560,217,560,254), act(560,288,"Search knowledge base",w=180)
 A.append(gs(5, aarr(560,307,560,338), dia(560,366,"resolved?")))
 A.append(gs(6, aparr("560,392 560,440"), agl(572,422,"[no]"), act(560,464,"Escalate to senior",w=170)))
 A.append(gs(7, aarr(560,483,560,540), aparr("606,366 700,366 700,560 590,560"), agl(712,360,"[yes]"), dia(560,560,"",hw=30,hh=18)))
-A.append(gs(8, aparr("560,578 560,612 832,612"), act(910,612,"Notify customer",w=156)))
-A.append(gs(9, aparr("910,631 910,668 638,668"), act(560,668,"Close ticket"), aarr(560,687,560,697), final(560,709)))
+A.append(gs(8, aarr(560,578,560,606), abar(735,608), aarr(560,615,560,648), act(560,670,"Update knowledge base",w=180), aarr(910,615,910,648), act(910,670,"Notify customer",w=156)))
+A.append(gs(9, apl(560,692,560,728), apl(910,692,910,728), abar(735,728), aarr(560,735,560,768), act(560,790,"Close ticket"), aarr(560,809,560,819), final(560,831)))
 ACT_SVG="".join(A)
 ACT_NARR=[
  "Now the Resolve ticket flow as an activity diagram, across three lanes. Use Next, or press Play.",
@@ -82,8 +87,8 @@ ACT_NARR=[
  "A decision: was it resolved?",
  "If not, the agent escalates it to a senior, who resolves it.",
  "If it was resolved, that branch skips ahead; either way a merge brings the two paths back together.",
- "The merge hands off to the external Notification Service, which notifies the customer.",
- "Back in the agent's lane, the ticket is closed, and a final node ends the flow.",
+ "Then a fork splits the flow so two things happen in parallel: the agent updates the knowledge base while the Notification Service notifies the customer.",
+ "A join waits for both to finish; the agent then closes the ticket and the flow ends at the final node.",
 ]
 
 import json
@@ -141,8 +146,8 @@ HTML=f'''<!DOCTYPE html>
   <h1>A second domain: the Help Desk system</h1>
   <p class="lead">The same use case and activity notations applied to a fresh scenario, so you can see the method again, end to end.</p>
   <div class="scenario"><strong>Scenario.</strong> Customers raise support tickets. A support agent works each ticket: they always check the knowledge base first and always notify the customer of the outcome through an external notification service. Hard ("complex") tickets are escalated to a senior agent, who is a more capable kind of support agent. The system also lets agents follow tickets through to closure.</div>
-{builder("hduc", UC_SVG, "0 0 1180 600", UC_NARR, "Use case diagram", "Built from the scenario: actors, use cases, include, extend, a secondary actor, and actor generalisation.")}
-{builder("hdact", ACT_SVG, "0 0 1080 750", ACT_NARR, "Activity diagram", "The Resolve ticket flow across three swimlanes, with a decision, a merge, and an external hand-off.")}
+{builder("hduc", UC_SVG, "0 0 1180 620", UC_NARR, "Use case diagram", "Built from the scenario: actors, use cases, include, extend, a secondary actor, and actor generalisation.")}
+{builder("hdact", ACT_SVG, "0 0 1080 880", ACT_NARR, "Activity diagram", "The Resolve ticket flow across three swimlanes, with a decision, a merge, and an external hand-off.")}
 </div>
 <script>
 const NARR={{ "hduc": {json.dumps(UC_NARR)}, "hdact": {json.dumps(ACT_NARR)} }};
