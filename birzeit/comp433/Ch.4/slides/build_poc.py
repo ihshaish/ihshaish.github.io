@@ -71,14 +71,14 @@ HTML=f'''<!DOCTYPE html>
   h2 {{ font-family:var(--serif); font-weight:600; font-size:20px; margin:28px 0 10px; }}
   p {{ color:var(--ink-soft); }}
   .lead {{ font-size:14.5px; max-width:1000px; margin:0 0 12px; }} .lead strong {{ color:var(--ink); }}
-  .layout {{ display:grid; grid-template-columns:1fr; gap:14px; align-items:start; }}
-  .leftcol {{ display:flex; gap:14px; align-items:stretch; }}
-  .leftcol .card {{ flex:1; }}
-  @media (max-width:760px) {{ .leftcol {{ flex-direction:column; }} }}
-  .card {{ background:#fff; border:1px solid var(--rule); border-radius:12px; padding:14px 18px; box-shadow:0 1px 0 rgba(15,20,25,.03); }}
-  .card h3 {{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--steel); margin:0 0 10px; }}
+  .stage {{ display:grid; grid-template-columns:minmax(250px,0.36fr) 1fr; gap:18px; align-items:start; margin-top:4px; }}
+  @media (max-width:820px) {{ .stage {{ grid-template-columns:1fr; }} .srccol {{ position:static !important; max-height:none !important; }} }}
+  .srccol {{ display:flex; flex-direction:column; gap:12px; position:sticky; top:6px; max-height:calc(100vh - 40px); overflow:auto; }}
+  .diagram {{ min-width:0; }}
+  .card {{ background:#fff; border:1px solid var(--rule); border-radius:12px; padding:13px 16px; box-shadow:0 1px 0 rgba(15,20,25,.03); }}
+  .card h3 {{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--steel); margin:0 0 9px; }}
   .urs {{ list-style:none; margin:0; padding:0; }}
-  .urs li {{ padding:7px 0; border-bottom:1px dashed var(--rule); font-size:14px; }}
+  .urs li {{ padding:6px 0; border-bottom:1px dashed var(--rule); font-size:13.5px; }}
   .urs li:last-child {{ border-bottom:none; }} .urs b {{ font-family:var(--mono); font-size:12px; color:var(--steel); margin-right:8px; }}
   .hl {{ background:#fbe3d0; border-radius:3px; padding:0 3px; box-shadow:0 0 0 1px #eebf9f; transition:background .15s, box-shadow .15s; }}
   .builder {{ border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }}
@@ -93,6 +93,11 @@ HTML=f'''<!DOCTYPE html>
   .narration {{ background:var(--paper-warm); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:15px 19px; margin:4px 0 14px; font-size:16px; color:var(--ink-soft); line-height:1.5; min-height:70px; text-align:left; }}
   .narration b, .narration code {{ color:var(--ink); }} .narration code {{ font-family:var(--mono); font-size:13px; background:#ece3d4; padding:1px 6px; border-radius:4px; }}
   svg {{ width:100%; height:auto; display:block; }}
+  .builder:fullscreen {{ background:#fbfaf8; padding:18px 28px; overflow:auto; border-radius:0; }}
+  .builder:fullscreen .stage {{ grid-template-columns:minmax(300px,0.3fr) 1fr; }}
+  .builder:fullscreen .narration {{ font-size:18px; }}
+  .builder:fullscreen .srccol {{ max-height:calc(100vh - 150px); }}
+  .fsbtn {{ margin-left:6px; }}
   .uml-text {{ font-family:var(--sans); font-size:13px; fill:var(--ink); }}
   .uml-line {{ stroke:var(--ink); stroke-width:1.4; fill:none; }}
   .uml-line-dashed {{ stroke:var(--ink); stroke-width:1.2; fill:none; stroke-dasharray:4,3; }}
@@ -109,37 +114,40 @@ HTML=f'''<!DOCTYPE html>
 <body><div class="wrap">
   <div class="eyebrow">COMP433 &middot; Chapter 4 &middot; building a use case diagram</div>
   <h1>From requirements to a use case diagram</h1>
-  <p class="lead"><strong>What it is and where it comes from.</strong> A use case diagram is usually the first model drawn in analysis. On a single page it captures <em>who</em> uses the system (the <strong>actors</strong>) and <em>what</em> they can do with it (the <strong>use cases</strong>), so stakeholders can confirm the scope before any design starts. It is read directly out of the requirements. You do not always begin from a narrative: often the requirements phase has already produced a User Requirements (UR) list and you work from that, the narrative is simply where URs usually come from. Below are both; as the diagram is built, the source of each actor and use case lights up.</p>
+  <p class="lead"><strong>What it is and where it comes from.</strong> A use case diagram is usually the first model drawn in analysis. On a single page it captures <em>who</em> uses the system (the <strong>actors</strong>) and <em>what</em> they can do with it (the <strong>use cases</strong>), so stakeholders can confirm the scope before any design starts. It is read directly out of the requirements. You do not always begin from a narrative: often the requirements phase has already produced a User Requirements (UR) list and you work from that, the narrative is simply where URs usually come from. The narrative and the URs sit beside the diagram, and as each element is drawn the text it came from lights up. Press <strong>Full screen</strong> to see both at full size.</p>
 
-  <div class="layout">
-    <div class="leftcol">
-    <div class="card"><h3>The narrative</h3>
-      <p style="margin:0; font-size:14.5px">A boutique hotel wants a small online booking system. <span id="nar-guest">A guest</span> <span id="nar-search">searches for rooms by date</span> and <span id="nar-avail">the system shows what is available</span>. The guest <span id="nar-book">picks and books a room</span>, entering details and card, and the system <span id="nar-pay">takes payment through an external payment provider</span>; if the card is declined the guest can try again. A guest may also <span id="nar-discount">enter a promo code for a discount</span>. Guests can <span id="nar-cancel">cancel a booking</span>, and <span id="nar-manager">the manager keeps the room list up to date</span>.</p>
-    </div>
-    <div class="card"><h3>User requirements (read from it)</h3>
-      <ul class="urs">
-        <li id="ur1"><b>UR1</b> A Guest can search for available rooms by date.</li>
-        <li id="ur2"><b>UR2</b> A Guest can book an available room and pay for it through the payment provider.</li>
-        <li id="ur3"><b>UR3</b> A Guest can cancel an existing booking.</li>
-        <li id="ur4"><b>UR4</b> A Hotel Manager can maintain the room list and rates.</li>
-        <li id="ur5"><b>UR5</b> A Guest may apply a promo code for a discount when booking.</li>
-      </ul>
-    </div>
-    </div>
-    <div class="builder">
+  <div class="builder" id="builder">
     <div class="controls">
       <button id="prev" onclick="bPrev()">Previous</button>
       <button id="next" onclick="bNext()">Next</button>
       <button class="secondary" onclick="bReset()">Reset</button>
       <button class="secondary" id="play" onclick="bPlay()">&#9658; Play</button>
+      <button class="secondary fsbtn" id="fs" onclick="toggleFs()">&#9974; Full screen</button>
       <span class="steplabel" id="lbl"></span>
     </div>
     <div class="prog"><div class="prog-fill" id="progfill"></div></div>
     <div class="narration" id="narr"></div>
-    <svg viewBox="22 46 1176 652" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Use case diagram being constructed step by step from the requirements.">{SVG}</svg>
-    </div>
+    <div class="stage">
+      <div class="srccol">
+        <div class="card"><h3>The narrative</h3>
+          <p style="margin:0; font-size:13.5px">A boutique hotel wants a small online booking system. <span id="nar-guest">A guest</span> <span id="nar-search">searches for rooms by date</span> and <span id="nar-avail">the system shows what is available</span>. The guest <span id="nar-book">picks and books a room</span>, entering details and card, and the system <span id="nar-pay">takes payment through an external payment provider</span>; if the card is declined the guest can try again. A guest may also <span id="nar-discount">enter a promo code for a discount</span>. Guests can <span id="nar-cancel">cancel a booking</span>, and <span id="nar-manager">the manager keeps the room list up to date</span>.</p>
+        </div>
+        <div class="card"><h3>User requirements (read from it)</h3>
+          <ul class="urs">
+            <li id="ur1"><b>UR1</b> A Guest can search for available rooms by date.</li>
+            <li id="ur2"><b>UR2</b> A Guest can book an available room and pay for it through the payment provider.</li>
+            <li id="ur3"><b>UR3</b> A Guest can cancel an existing booking.</li>
+            <li id="ur4"><b>UR4</b> A Hotel Manager can maintain the room list and rates.</li>
+            <li id="ur5"><b>UR5</b> A Guest may apply a promo code for a discount when booking.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="diagram">
+        <svg viewBox="22 46 1176 652" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Use case diagram being constructed step by step from the requirements.">{SVG}</svg>
+      </div>
     </div>
   </div>
+</div>
 <script>
 const NARR={json.dumps(NARR)}, HL={json.dumps(HL)}, MAX={MAX};
 let cur=0, timer=null;
@@ -156,6 +164,7 @@ function render(){{
 }}
 function bNext(){{ if(cur<MAX){{cur++;render();}} }}
 function bPrev(){{ if(cur>0){{cur--;render();}} }}
+function toggleFs(){{ const b=document.getElementById('builder'); if(document.fullscreenElement){{document.exitFullscreen();}} else if(b.requestFullscreen){{b.requestFullscreen();}} }}
 function bReset(){{ cur=0; stopPlay(); render(); }}
 function stopPlay(){{ if(timer){{clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';}} }}
 function bPlay(){{ if(timer){{stopPlay();return;}} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{{ if(cur>=MAX){{stopPlay();return;}} cur++; render(); }}, 2100); }}

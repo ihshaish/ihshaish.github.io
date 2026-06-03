@@ -1121,7 +1121,7 @@
 
     <div class="embed-cap">Interactive: build it from the requirements</div>
     <p class="embed-note">Step through (or play) the construction of a use case diagram from a short narrative and its user requirements, with each actor and use case traced back to the line it came from.</p>
-    <iframe class="builder-embed" src="slides/poc_usecase_build.html" loading="lazy" title="Animated use case diagram build"></iframe>
+    <iframe class="builder-embed" allowfullscreen src="slides/poc_usecase_build.html" loading="lazy" title="Animated use case diagram build"></iframe>
 
     <h3 class="subhead">Relationships between use cases: include, extend, generalisation</h3>
     <p class="body">Once you have more than a handful of use cases, you will start to see that some use cases share sub-tasks with each other, others fire only in exceptional circumstances, and others are variations on a common theme. UML 2.5 gives three stereotypes for these refinements. Each has a precise meaning and a precise arrow direction, and confusing them is the single most common notation error on this material.</p>
@@ -1180,18 +1180,18 @@
     </div>
 
     <h3 class="subhead">Extension points</h3>
-    <p class="body">A common question is "where in the base does the extension fire?" The answer is given by an <em>extension point</em>: a named position in the base's workflow, declared inside the base ellipse (in a third compartment) or in the base's textual description. Borrow copy of a book typically declares two extension points:</p>
+    <p class="body">A common question is "where in the base does the extension fire?" The answer is given by an <em>extension point</em>: a named position in the base's workflow, written in a compartment <em>inside the base ellipse</em> (or in the base's textual description). Borrow copy of a book declares two:</p>
 
     <ul class="body">
-      <li><code>maxItemsCheck</code>, located after the system has counted the borrower's current loans. The Refuse loan extension fires here with guard <code>[items on loan == 6]</code>.</li>
-      <li><code>identityValidation</code>, located after the BookBorrower's identity has been confirmed. A separate extension (say, RequireGuardian) might fire here with guard <code>[member is minor]</code>.</li>
+      <li><strong>maximum no. of items on loan</strong>, reached after the system has counted the borrower's current loans. The Refuse loan extension fires here with guard <code>[too many books on loan]</code>.</li>
+      <li><strong>status validation</strong>, reached after the BookBorrower's identity has been confirmed. No extension attaches to it in this example; a point is declared whenever the requirements might later hang a conditional behaviour there.</li>
     </ul>
 
-    <p class="body">Extension points keep the base's flow auditable: a reader of the base description sees the named hooks and can look up which extensions attach to each. Without them, an <code>&lt;&lt;extend&gt;&gt;</code> arrow is just "this fires somewhere in here", which is too vague to be useful in a contract.</p>
+    <p class="body">Extension points keep the base's flow auditable: a reader of the base ellipse sees the named hooks and can look up which extensions attach to each. Without them, an <code>&lt;&lt;extend&gt;&gt;</code> arrow is just "this fires somewhere in here", which is too vague to be useful in a contract.</p>
 
     <div class="embed-cap">Interactive: the remaining notations</div>
     <p class="embed-note">Actor generalisation, use-case generalisation, composite (multi-level) use cases, and extension points, each on a small worked example with a note on when to use it.</p>
-    <iframe class="builder-embed" src="slides/poc_usecase_notations.html" loading="lazy" title="Animated use case notations"></iframe>
+    <iframe class="builder-embed" allowfullscreen src="slides/poc_usecase_notations.html" loading="lazy" title="Animated use case notations"></iframe>
 
     <h3 class="subhead">When NOT to use these refinements</h3>
     <p class="body">A diagram with more refinement arrows than associations is over-modelled. Three signs that you are overusing the stereotypes:</p>
@@ -1465,7 +1465,7 @@
 
     <div class="embed-cap">Interactive: unpack a use case into a flow</div>
     <p class="embed-note">Watch the Book room use case become an activity diagram, with each step of its description highlighted as the matching action appears.</p>
-    <iframe class="builder-embed" src="slides/poc_activity_build.html" loading="lazy" title="Animated activity diagram build"></iframe>
+    <iframe class="builder-embed" allowfullscreen src="slides/poc_activity_build.html" loading="lazy" title="Animated activity diagram build"></iframe>
 
     <h3 class="subhead">Decision vs fork, merge vs join</h3>
     <p class="body">Two pairs of symbols are routinely confused, and the distinction is the most-marked correctness point on this material. A <strong>decision</strong> (diamond) chooses <em>one</em> of several guarded branches: its branches are <em>alternatives</em>, and exactly one fires. A <strong>fork</strong> (bar) starts <em>all</em> of its branches at once: its branches are <em>concurrent</em>. The test is simple. Are the branches a choice (one of them) or parallel work (all of them)? "New patient? create vs search record" is a decision; "place order, then send the confirmation email and update inventory" is a fork, because both happen.</p>
@@ -1481,7 +1481,7 @@
 
     <div class="embed-cap">Interactive: parallel work and choices</div>
     <p class="embed-note">The fork and join for steps that run at the same time, and the merge that closes a decision.</p>
-    <iframe class="builder-embed" src="slides/poc_activity_notations.html" loading="lazy" title="Animated activity notations"></iframe>
+    <iframe class="builder-embed" allowfullscreen src="slides/poc_activity_notations.html" loading="lazy" title="Animated activity notations"></iframe>
 
     <h3 class="subhead">Two granularities: a use case flow, or a whole process</h3>
     <p class="body">The same notation serves two levels. At the <strong>use case level</strong>, an activity diagram unpacks one use case ("Borrow copy of a book": locate the book, then fork to stamp the book and record the borrowing in parallel, then join). At the <strong>business-process level</strong>, it spans several use cases and actors ("book a journey": reserve flight, hotel and car in parallel, with a loop that repeats the car reservation until it succeeds, then confirm). Iteration like that loop, and parallelism like those reservations, are exactly what an activity diagram adds over a numbered list. Keep one granularity per diagram; mixing a single use case and a whole process on one page makes both hard to read.</p>
@@ -2501,7 +2501,7 @@
           <tr><td>Pre-condition</td><td>(a) BookBorrower is a registered member. (b) BookBorrower has fewer than 6 items on loan. (c) The BookCopy is in state Available.</td></tr>
           <tr><td>Trigger</td><td>BookBorrower presents the copy to the Librarian.</td></tr>
           <tr><td>Workflow (normal)</td><td>1. Librarian scans the copy's barcode. 2. System retrieves the BookCopy and its parent Book. 3. System counts BookBorrower's current loans. 4. System invokes Compute return date (using Book.type to choose ShortLoan, MediumLoan, or LongLoan). 5. System creates a Loan(start_date, return_date, copy, member). 6. BookCopy.status becomes OnLoan. 7. Librarian hands the copy and printed slip to BookBorrower.</td></tr>
-          <tr><td>Alternative workflow</td><td>At step 3, if currentLoans == 6, invoke Refuse loan (the <code>&lt;&lt;extend&gt;&gt;</code> at the maxItemsCheck extension point); inform BookBorrower; no Loan is created.</td></tr>
+          <tr><td>Alternative workflow</td><td>At step 3, if currentLoans == 6, invoke Refuse loan (the <code>&lt;&lt;extend&gt;&gt;</code> at the "maximum no. of items on loan" extension point); inform BookBorrower; no Loan is created.</td></tr>
           <tr><td>Error workflow</td><td>At step 1, if the barcode is unreadable, Librarian enters the barcode manually; a damaged-barcode exception is logged against the BookCopy (SR3.3).</td></tr>
           <tr><td>Post-condition</td><td>(a) On success: a new Loan exists; BookBorrower's loan count is +1; BookCopy.status == OnLoan. (b) On refusal: no system state change.</td></tr>
         </tbody>
