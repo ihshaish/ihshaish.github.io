@@ -26,6 +26,7 @@
   .hl { background:#fbe3d0; border-radius:3px; padding:0 3px; box-shadow:0 0 0 1px #eebf9f; transition:background .15s, box-shadow .15s; }
   .builder { border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }
   .controls { display:flex; align-items:center; gap:10px; }
+  .bhead { position:sticky; top:0; z-index:5; background:#fff; padding:6px 0 8px; border-bottom:1px solid var(--rule); margin-bottom:4px; }
   button { background:var(--steel); color:#fff; border:none; padding:9px 16px; border-radius:7px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; cursor:pointer; transition:background .15s; }
   button:hover:not(:disabled) { background:var(--steel-deep,#1a3d52); }
   button.secondary { background:#fff; color:var(--steel); border:1px solid var(--steel); }
@@ -60,6 +61,7 @@
   <p class="lead"><strong>What it is and where it comes from.</strong> A use case diagram is usually the first model drawn in analysis. On a single page it captures <em>who</em> uses the system (the <strong>actors</strong>) and <em>what</em> they can do with it (the <strong>use cases</strong>), so stakeholders can confirm the scope before any design starts. It is read directly out of the requirements. You do not always begin from a narrative: often the requirements phase has already produced a User Requirements (UR) list and you work from that, the narrative is simply where URs usually come from. The narrative and the URs sit beside the diagram, and as each element is drawn the text it came from lights up. Press <strong>Full screen</strong> to see both at full size.</p>
 
   <div class="builder" id="builder">
+    <div class="bhead">
     <div class="controls">
       <button id="prev" onclick="bPrev()">Previous</button>
       <button id="next" onclick="bNext()">Next</button>
@@ -70,6 +72,7 @@
     </div>
     <div class="prog"><div class="prog-fill" id="progfill"></div></div>
     <div class="narration" id="narr"></div>
+    </div>
     <div class="stage">
       <div class="srccol">
         <div class="card"><h3>The narrative</h3>
@@ -110,7 +113,7 @@ function bPrev(){ if(cur>0){cur--;render();} }
 function toggleFs(){ const b=document.getElementById('builder'); if(document.fullscreenElement){document.exitFullscreen();} else if(b.requestFullscreen){b.requestFullscreen();} }
 function bReset(){ cur=0; stopPlay(); render(); }
 function stopPlay(){ if(timer){clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';} }
-function bPlay(){ if(timer){stopPlay();return;} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stopPlay();return;} cur++; render(); }, 2100); }
+function bPlay(){ if(timer){stopPlay();return;} if(cur===MAX)cur=0; const _b=document.getElementById('builder'); if(_b&&!document.fullscreenElement&&_b.requestFullscreen) _b.requestFullscreen(); document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stopPlay();return;} cur++; render(); }, 2100); }
 render();
 </script>
 </body></html>
