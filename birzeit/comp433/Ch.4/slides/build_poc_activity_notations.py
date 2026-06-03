@@ -69,10 +69,10 @@ HTML=f'''<!DOCTYPE html>
   :root {{ --ink:#0f1419; --ink-soft:#2c3540; --ink-mute:#5a6473; --paper:#faf7f2; --paper-warm:#f3ede2; --accent:#b85c38; --steel:#2c5f7c; --rule:#d8cfc0;
     --serif:'Fraunces',Georgia,serif; --sans:'Inter Tight',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace; }}
   * {{ box-sizing:border-box; }}
-  body {{ font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:44px 24px 90px; line-height:1.55; }}
-  .wrap {{ max-width:1120px; margin:0 auto; }}
-  .eyebrow {{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:10px; }}
-  h1 {{ font-family:var(--serif); font-weight:500; font-size:34px; letter-spacing:-.02em; margin:0 0 10px; }}
+  body {{ font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:24px 22px 44px; line-height:1.55; }}
+  .wrap {{ max-width:1180px; margin:0 auto; }}
+  .eyebrow {{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:8px; }}
+  h1 {{ font-family:var(--serif); font-weight:500; font-size:25px; letter-spacing:-.02em; margin:0 0 8px; }}
   p {{ color:var(--ink-soft); }} .lead {{ font-size:16px; max-width:900px; }}
   .builder {{ border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; margin-top:16px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }}
   .controls {{ display:flex; align-items:center; gap:10px; }}
@@ -83,13 +83,13 @@ HTML=f'''<!DOCTYPE html>
   .prog {{ height:4px; background:#efe7da; border-radius:3px; margin:12px 0 8px; overflow:hidden; }}
   .prog-fill {{ height:100%; width:0; background:linear-gradient(90deg,var(--accent),#d98a5f); border-radius:3px; transition:width .35s ease; }}
   .narration {{ background:var(--paper-warm); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:14px 18px; margin:4px 0 16px; font-size:15.5px; color:var(--ink-soft); line-height:1.5; min-height:52px; }}
-  .ncard {{ display:grid; grid-template-columns:1fr 1.1fr; gap:18px; align-items:center; padding:16px 0; border-bottom:1px dashed #e9e0d0; }}
+  .ncard {{ display:grid; grid-template-columns:1.3fr 1fr; gap:20px; align-items:center; padding:16px 0; border-bottom:1px dashed #e9e0d0; }}
   .ncard:last-child {{ border-bottom:none; }}
   @media (max-width:780px) {{ .ncard {{ grid-template-columns:1fr; }} }}
-  .cardsvg {{ width:100%; height:auto; max-height:430px; display:block; }}
+  .cardsvg {{ width:100%; height:auto; max-height:620px; display:block; }}
   .nexplain h4 {{ font-family:var(--serif); font-size:18px; font-weight:600; margin:0 0 6px; }}
   .nexplain p {{ margin:0; font-size:14.5px; }}
-  .uml-text {{ font-family:var(--sans); font-size:12px; fill:var(--ink); }}
+  .uml-text {{ font-family:var(--sans); font-size:13px; fill:var(--ink); }}
   .uml-line {{ stroke:var(--ink); stroke-width:1.4; fill:none; }}
   .uml-box {{ stroke:var(--ink); stroke-width:1.4; fill:#fff; }}
   .bstep {{ opacity:0; transform:translateY(8px) scale(.95); transform-box:fill-box; transform-origin:center; transition:opacity .3s ease, transform .42s cubic-bezier(.2,.8,.3,1), filter .35s ease; }}
