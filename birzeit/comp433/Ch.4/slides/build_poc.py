@@ -10,6 +10,7 @@ def actor(x,y,name,sub=""):
     s+=f'<text x="20" y="76" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">{name}</text>'
     if sub: s+=f'<text x="20" y="90" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">{sub}</text>'
     return s+'</g>'
+def comp(cx,cy): return f'<rect x="{cx-7}" y="{cy-7}" width="14" height="14" fill="none" stroke="#0f1419" stroke-width="1.1"/><line x1="{cx}" y1="{cy-7}" x2="{cx}" y2="{cy+7}" stroke="#0f1419" stroke-width="1.1"/><line x1="{cx-7}" y1="{cy}" x2="{cx+7}" y2="{cy}" stroke="#0f1419" stroke-width="1.1"/>'
 def bl(x1,y1,x2,y2): return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" class="uml-line-blue"/>'
 def inc(x1,y1,x2,y2): return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" class="uml-line-dashed" marker-end="url(#ucOpen)"/>'
 def lblm(x,y,t,c="#2c3540"): return f'<text x="{x}" y="{y}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="{c}" font-weight="600">{t}</text>'
@@ -21,7 +22,7 @@ S.append(g(2, actor(60,250,"Guest","")))
 S.append(g(3, uc(440,160,"Search rooms",rx=86), bl(94,268,354,165)))
 S.append(g(4, uc(440,300,"Book room",rx=86), bl(94,274,354,300)))
 S.append(g(5, uc(440,440,"Cancel booking",rx=88), bl(94,280,352,440)))
-S.append(g(6, actor(60,560,"Hotel Manager",""), uc(440,575,"Manage room|inventory",rx=92), bl(94,585,348,575)))
+S.append(g(6, actor(60,560,"Hotel Manager",""), uc(440,575,"Manage room|inventory",rx=92), comp(497,589), bl(94,585,348,575)))
 S.append(g(7, uc(720,160,"Check availability",rx=90)))
 S.append(g(8, inc(526,160,630,160), inc(520,290,632,172)))
 S.append(g(9, lblm(578,150,"&lt;&lt;include&gt;&gt;"), lblm(548,212,"&lt;&lt;include&gt;&gt;")))
@@ -41,7 +42,7 @@ NARR=[
  "Finding use cases: each task an actor performs becomes a use case, named with the verb from the requirements. UR1 says the guest can search rooms, so that is our first use case. The plain line is an association, with no arrowhead, it only says the Guest takes part.",
  "UR2 gives the guest's main task, Book room. Same actor, another association.",
  "UR3 gives a third task, Cancel booking. One actor usually has several use cases.",
- "Re-scan for other roles. UR4 names a Hotel Manager who maintains the rooms, a different actor with its own use case, Manage room inventory. Separate roles become separate actors.",
+ "Re-scan for other roles. UR4 names a Hotel Manager who maintains the rooms, a different actor with its own use case, Manage room inventory. Separate roles become separate actors. This one bundles several tasks (add a room, update a rate, set availability), so it is a composite use case, marked with the small grid icon and expanded in its own lower-level diagram, rather than one vague catch-all.",
  "Not every use case is stated word for word. The narrative only says the system shows what is available, but working through searching and booking we see both rely on the same step. We recognise that shared, implied step and name it as its own use case, Check availability. Spotting shared steps is part of analysis, not just copying verbs.",
  "First we connect it: a dashed line runs from each base use case to the shared one. We draw the lines first, then say what the relationship is.",
  f"This relationship is an {inc_chip}: the base use case ALWAYS performs the included step, and the arrow points from the base to the included use case. Include exists so a shared step is written once, not repeated.",
