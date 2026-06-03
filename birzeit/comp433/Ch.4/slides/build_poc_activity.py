@@ -9,14 +9,15 @@ def dia(cx,cy,t1,t2="",hw=40,hh=24):
     else: p+=f'<text x="{cx}" y="{cy+4}" text-anchor="middle" class="uml-text" font-size="10">{t1}</text>'
     return p
 def gl(x,y,t,anc="start"): return f'<text x="{x}" y="{y}" text-anchor="{anc}" class="uml-text" font-size="11">{t}</text>'
+def bar(x1,x2,y): return f'<rect x="{x1}" y="{y-3}" width="{x2-x1}" height="6" rx="2" fill="#2c3540"/>'
 def g(n,*p,cls="bstep"): return f'<g class="{cls}" data-step="{n}">'+''.join(p)+'</g>'
 
 S=['<defs><marker id="fArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs>']
 # 1 lanes
 S.append(g(1,
- '<rect x="40" y="60" width="370" height="780" fill="#faf7f2" stroke="#d8cfc0"/>',
- '<rect x="410" y="60" width="370" height="780" fill="white" stroke="#d8cfc0"/>',
- '<rect x="780" y="60" width="320" height="780" fill="#faf7f2" stroke="#d8cfc0"/>',
+ '<rect x="40" y="60" width="370" height="840" fill="#faf7f2" stroke="#d8cfc0"/>',
+ '<rect x="410" y="60" width="370" height="840" fill="white" stroke="#d8cfc0"/>',
+ '<rect x="780" y="60" width="320" height="840" fill="#faf7f2" stroke="#d8cfc0"/>',
  '<text x="225" y="88" text-anchor="middle" class="uml-text" font-weight="600">Guest</text>',
  '<text x="595" y="88" text-anchor="middle" class="uml-text" font-weight="600">Booking System</text>',
  '<text x="940" y="88" text-anchor="middle" class="uml-text" font-weight="600">Payment Provider</text>',
@@ -39,13 +40,18 @@ S.append(g(8, arr(300,500,865,500), act(940,500,"Authorise payment",w=160)))
 # 9 decision approved?
 S.append(g(9, arr(940,520,940,556), dia(940,590,"approved?",hw=46)))
 # 10 [declined] retry loop
-S.append(g(10, parr("940,614 940,820 225,820 225,522"), gl(582,812,"[declined]: retry payment","middle")))
+S.append(g(10, parr("940,614 940,880 225,880 225,522"), gl(582,872,"[declined]: retry payment","middle")))
 # 11 [approved] -> Reserve room
 S.append(g(11, parr("894,590 595,590 595,628"), gl(735,583,"[approved]"), act(595,650,"Reserve room")))
-# 12 Confirm booking
-S.append(g(12, arr(595,670,595,706), act(595,728,"Confirm booking")))
-# 13 final
-S.append(g(13, arr(595,748,595,778), '<circle cx="595" cy="791" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="595" cy="791" r="5" fill="#0f1419"/>'))
+# 12 fork
+S.append(g(12, arr(595,670,595,692), bar(560,975,698)))
+# 13 parallel branches: Confirm booking || Capture payment
+S.append(g(13, arr(595,701,595,727), act(595,748,"Confirm booking"),
+               arr(940,701,940,727), act(940,748,"Capture payment",w=160)))
+# 14 join
+S.append(g(14, arr(595,768,595,792), arr(940,768,940,792), bar(560,975,796)))
+# 15 final
+S.append(g(15, arr(595,802,595,828), '<circle cx="595" cy="841" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="595" cy="841" r="5" fill="#0f1419"/>'))
 SVG="".join(S)
 
 NARR=[
@@ -61,11 +67,13 @@ NARR=[
  "A second decision: was the payment approved?",
  "If declined, the flow loops back to Enter payment details so the Guest can try again. This is a retry loop, a decision branch that returns into the flow, the alternative path named in the description.",
  "If approved, the Booking System reserves the room: step 4.",
- "and confirms the booking: step 5.",
- "The bull's-eye final node ends the successful path. The diagram is complete: swimlanes, an initial node, actions, two decisions, a retry loop, a hand-off to an external provider, and two final nodes, all unpacked from one use case.",
+ "Now two things happen at once. A fork node, the heavy bar, splits the flow into concurrent branches that proceed independently.",
+ "The Booking System confirms the booking to the Guest (step 5) while, in parallel, the Payment Provider captures the authorised payment. Neither branch waits for the other.",
+ "A join node, the second bar, synchronises the branches: the flow waits until both have finished before it goes on.",
+ "The bull's-eye final node ends the successful path. The diagram is complete: swimlanes, an initial node, actions, two decisions, a retry loop, a hand-off to an external provider, a parallel fork and join, and two final nodes, all unpacked from one use case.",
 ]
 MAX=len(NARR)-1
-HL={4:['wf-pre'],6:['wf1'],7:['wf2'],8:['wf3'],10:['wf-alt'],11:['wf4'],12:['wf5']}
+HL={4:['wf-pre'],6:['wf1'],7:['wf2'],8:['wf3'],10:['wf-alt'],11:['wf4'],13:['wf5']}
 import json
 HTML=f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -132,7 +140,7 @@ HTML=f'''<!DOCTYPE html>
       </div>
       <div class="prog"><div class="prog-fill" id="progfill"></div></div>
       <div class="narration" id="narr"></div>
-      <svg viewBox="0 0 1140 870" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Activity diagram being constructed step by step from the Book room use case.">{SVG}</svg>
+      <svg viewBox="0 0 1140 920" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Activity diagram being constructed step by step from the Book room use case.">{SVG}</svg>
     </div>
   </div>
 </div>
