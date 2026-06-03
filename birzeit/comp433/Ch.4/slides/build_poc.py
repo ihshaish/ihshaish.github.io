@@ -27,8 +27,8 @@ S.append(g(8, inc(526,160,630,160), inc(520,290,632,172)))
 S.append(g(9, lblm(578,150,"&lt;&lt;include&gt;&gt;"), lblm(548,212,"&lt;&lt;include&gt;&gt;")))
 S.append(g(10, uc(720,440,"Process payment",rx=90), inc(520,312,632,432)))
 S.append(g(11, lblm(548,388,"&lt;&lt;include&gt;&gt;")))
-S.append(g(12, uc(720,300,"Apply discount code",rx=96), '<line x1="624" y1="300" x2="528" y2="300" stroke="#7a3a23" stroke-width="1.2" stroke-dasharray="4,3" fill="none" marker-end="url(#ucOpen)"/>'))
-S.append(g(13, lblm(578,291,"&lt;&lt;extend&gt;&gt;","#7a3a23"), lblm(578,314,"[has code]","#7a3a23")))
+S.append(g(12, uc(720,300,"Apply promo code",rx=92), '<line x1="628" y1="300" x2="528" y2="300" stroke="#7a3a23" stroke-width="1.2" stroke-dasharray="4,3" fill="none" marker-end="url(#ucOpen)"/>'))
+S.append(g(13, lblm(578,291,"&lt;&lt;extend&gt;&gt;","#7a3a23"), lblm(578,314,"[has promo]","#7a3a23")))
 S.append(g(14, actor(1110,420,"Payment Provider","")))
 S.append(g(15, '<line x1="810" y1="440" x2="1104" y2="424" class="uml-line-blue drawn" marker-end="url(#assoc)"/>', cls="bstep draw"))
 SVG="".join(S)
@@ -48,7 +48,7 @@ NARR=[
  "Booking always takes payment too (UR2), so Book room also includes Process payment.",
  f"Again an {inc_chip}: a step that is always part of Book room.",
  "Some steps run only sometimes. UR5 lets a guest apply a promo code, an optional step, so we connect it to Book room with a dashed line.",
- f"This one is an {ext_chip}, not an include: the extending use case runs ONLY when its guard is true, here <code>[has code]</code>. And its arrow points the other way, from the optional use case back to the base it extends.",
+ f"This one is an {ext_chip}, not an include: the extending use case runs ONLY when its guard is true, here <code>[has promo]</code>. And its arrow points the other way, from the optional use case back to the base it extends.",
  "Re-scan once more for outside systems. The requirements say payment goes through an external payment provider, so it is an actor too, a secondary actor, drawn outside the boundary.",
  "Why an arrow here, when the Guest's lines had none? Because the system reaches out to the Payment Provider; the arrow shows the direction of that call. A secondary actor starts nothing itself, the system calls it. The diagram is complete, every part traceable to a requirement.",
 ]
@@ -64,23 +64,24 @@ HTML=f'''<!DOCTYPE html>
   :root {{ --ink:#0f1419; --ink-soft:#2c3540; --ink-mute:#5a6473; --paper:#faf7f2; --paper-warm:#f3ede2; --accent:#b85c38; --accent-deep:#7a3a23; --steel:#2c5f7c; --rule:#d8cfc0;
     --serif:'Fraunces',Georgia,serif; --sans:'Inter Tight',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace; }}
   * {{ box-sizing:border-box; }}
-  body {{ font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:44px 24px 90px; line-height:1.55; }}
+  body {{ font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:24px 22px 44px; line-height:1.55; }}
   .wrap {{ max-width:1180px; margin:0 auto; }}
-  .eyebrow {{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:10px; }}
-  h1 {{ font-family:var(--serif); font-weight:500; font-size:36px; letter-spacing:-.02em; margin:0 0 12px; }}
+  .eyebrow {{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:8px; }}
+  h1 {{ font-family:var(--serif); font-weight:500; font-size:25px; letter-spacing:-.02em; margin:0 0 8px; }}
   h2 {{ font-family:var(--serif); font-weight:600; font-size:20px; margin:28px 0 10px; }}
-  p {{ max-width:900px; color:var(--ink-soft); }}
-  .lead {{ font-size:16px; max-width:900px; }} .lead strong {{ color:var(--ink); }}
-  .layout {{ display:grid; grid-template-columns:320px 1fr; gap:18px; align-items:start; margin-top:16px; }}
-  @media (max-width:900px) {{ .layout {{ grid-template-columns:1fr; }} .leftcol {{ position:static; }} }}
-  .leftcol {{ position:sticky; top:16px; display:flex; flex-direction:column; gap:14px; }}
-  .card {{ background:#fff; border:1px solid var(--rule); border-radius:12px; padding:18px 20px; box-shadow:0 1px 0 rgba(15,20,25,.03); }}
+  p {{ color:var(--ink-soft); }}
+  .lead {{ font-size:14.5px; max-width:1000px; margin:0 0 12px; }} .lead strong {{ color:var(--ink); }}
+  .layout {{ display:grid; grid-template-columns:1fr; gap:14px; align-items:start; }}
+  .leftcol {{ display:flex; gap:14px; align-items:stretch; }}
+  .leftcol .card {{ flex:1; }}
+  @media (max-width:760px) {{ .leftcol {{ flex-direction:column; }} }}
+  .card {{ background:#fff; border:1px solid var(--rule); border-radius:12px; padding:14px 18px; box-shadow:0 1px 0 rgba(15,20,25,.03); }}
   .card h3 {{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--steel); margin:0 0 10px; }}
   .urs {{ list-style:none; margin:0; padding:0; }}
   .urs li {{ padding:7px 0; border-bottom:1px dashed var(--rule); font-size:14px; }}
   .urs li:last-child {{ border-bottom:none; }} .urs b {{ font-family:var(--mono); font-size:12px; color:var(--steel); margin-right:8px; }}
   .hl {{ background:#fbe3d0; border-radius:3px; padding:0 3px; box-shadow:0 0 0 1px #eebf9f; transition:background .15s, box-shadow .15s; }}
-  .builder {{ border:1px solid var(--rule); border-radius:16px; padding:20px 22px 26px; margin-top:18px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }}
+  .builder {{ border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }}
   .controls {{ display:flex; align-items:center; gap:10px; }}
   button {{ background:var(--steel); color:#fff; border:none; padding:9px 16px; border-radius:7px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; cursor:pointer; transition:background .15s; }}
   button:hover:not(:disabled) {{ background:var(--steel-deep,#1a3d52); }}
@@ -92,7 +93,7 @@ HTML=f'''<!DOCTYPE html>
   .narration {{ background:var(--paper-warm); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:15px 19px; margin:4px 0 14px; font-size:16px; color:var(--ink-soft); line-height:1.5; min-height:70px; text-align:left; }}
   .narration b, .narration code {{ color:var(--ink); }} .narration code {{ font-family:var(--mono); font-size:13px; background:#ece3d4; padding:1px 6px; border-radius:4px; }}
   svg {{ width:100%; height:auto; display:block; }}
-  .uml-text {{ font-family:var(--sans); font-size:12px; fill:var(--ink); }}
+  .uml-text {{ font-family:var(--sans); font-size:13px; fill:var(--ink); }}
   .uml-line {{ stroke:var(--ink); stroke-width:1.4; fill:none; }}
   .uml-line-dashed {{ stroke:var(--ink); stroke-width:1.2; fill:none; stroke-dasharray:4,3; }}
   .uml-line-blue {{ stroke:#4a8bb8; stroke-width:1.4; fill:none; }}
@@ -135,7 +136,7 @@ HTML=f'''<!DOCTYPE html>
     </div>
     <div class="prog"><div class="prog-fill" id="progfill"></div></div>
     <div class="narration" id="narr"></div>
-    <svg viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Use case diagram being constructed step by step from the requirements.">{SVG}</svg>
+    <svg viewBox="22 46 1176 652" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Use case diagram being constructed step by step from the requirements.">{SVG}</svg>
     </div>
     </div>
   </div>
@@ -151,6 +152,7 @@ function render(){{
   document.getElementById('progfill').style.width=(cur/MAX*100)+'%';
   document.getElementById('prev').disabled=cur===0;
   document.getElementById('next').disabled=cur===MAX;
+  if(cur>0){{ const cu=document.querySelector('#buildSvg .bstep.current'); if(cu&&cu.scrollIntoView) cu.scrollIntoView({{behavior:'smooth',block:'center'}}); }}
 }}
 function bNext(){{ if(cur<MAX){{cur++;render();}} }}
 function bPrev(){{ if(cur>0){{cur--;render();}} }}

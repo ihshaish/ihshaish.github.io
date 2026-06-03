@@ -7,10 +7,10 @@
   :root { --ink:#0f1419; --ink-soft:#2c3540; --ink-mute:#5a6473; --paper:#faf7f2; --paper-warm:#f3ede2; --accent:#b85c38; --steel:#2c5f7c; --rule:#d8cfc0;
     --serif:'Fraunces',Georgia,serif; --sans:'Inter Tight',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace; }
   * { box-sizing:border-box; }
-  body { font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:44px 24px 90px; line-height:1.55; }
-  .wrap { max-width:1120px; margin:0 auto; }
-  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:10px; }
-  h1 { font-family:var(--serif); font-weight:500; font-size:34px; letter-spacing:-.02em; margin:0 0 10px; }
+  body { font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:24px 22px 44px; line-height:1.55; }
+  .wrap { max-width:1180px; margin:0 auto; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:8px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:25px; letter-spacing:-.02em; margin:0 0 8px; }
   p { color:var(--ink-soft); } .lead { font-size:16px; max-width:900px; }
   .builder { border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; margin-top:16px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }
   .controls { display:flex; align-items:center; gap:10px; }
@@ -21,13 +21,13 @@
   .prog { height:4px; background:#efe7da; border-radius:3px; margin:12px 0 8px; overflow:hidden; }
   .prog-fill { height:100%; width:0; background:linear-gradient(90deg,var(--accent),#d98a5f); border-radius:3px; transition:width .35s ease; }
   .narration { background:var(--paper-warm); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:14px 18px; margin:4px 0 16px; font-size:15.5px; color:var(--ink-soft); line-height:1.5; min-height:52px; }
-  .ncard { display:grid; grid-template-columns:1fr 1.1fr; gap:18px; align-items:center; padding:16px 0; border-bottom:1px dashed #e9e0d0; }
+  .ncard { display:grid; grid-template-columns:1.3fr 1fr; gap:20px; align-items:center; padding:16px 0; border-bottom:1px dashed #e9e0d0; }
   .ncard:last-child { border-bottom:none; }
   @media (max-width:780px) { .ncard { grid-template-columns:1fr; } }
-  .cardsvg { width:100%; height:auto; max-height:430px; display:block; }
+  .cardsvg { width:100%; height:auto; max-height:620px; display:block; }
   .nexplain h4 { font-family:var(--serif); font-size:18px; font-weight:600; margin:0 0 6px; }
   .nexplain p { margin:0; font-size:14.5px; }
-  .uml-text { font-family:var(--sans); font-size:12px; fill:var(--ink); }
+  .uml-text { font-family:var(--sans); font-size:13px; fill:var(--ink); }
   .uml-line { stroke:var(--ink); stroke-width:1.4; fill:none; }
   .uml-box { stroke:var(--ink); stroke-width:1.4; fill:#fff; }
   .bstep { opacity:0; transform:translateY(8px) scale(.95); transform-box:fill-box; transform-origin:center; transition:opacity .3s ease, transform .42s cubic-bezier(.2,.8,.3,1), filter .35s ease; }
@@ -35,15 +35,13 @@
   .bstep.current { filter:drop-shadow(0 0 6px rgba(184,92,56,.5)); }
   .estep { opacity:.25; transform:translateY(6px); transition:opacity .35s ease, transform .4s ease; }
   .estep.on { opacity:1; transform:none; }
-  .bhead { position: sticky; top: 0; z-index: 6; background: #fff; padding: 10px 0 8px; box-shadow: 0 8px 12px -8px rgba(15,20,25,0.18); }
-  .bstep { scroll-margin-top: 150px; }
 </style></head>
 <body><div class="wrap">
   <div class="eyebrow">COMP433 &middot; Chapter 4 &middot; activity notations</div>
   <h1>Activity diagrams: parallel work and choices</h1>
   <p class="lead">The booking flow used an initial node, actions, decisions, a loop and final nodes. Two more notations complete the set: the fork and join for parallel work, and the merge that closes a decision.</p>
   <div class="builder">
-    <div class="bhead"><div class="controls">
+    <div class="controls">
       <button id="prev" onclick="bPrev()">Previous</button>
       <button id="next" onclick="bNext()">Next</button>
       <button class="secondary" onclick="bReset()">Reset</button>
@@ -51,7 +49,7 @@
       <span class="steplabel" id="lbl"></span>
     </div>
     <div class="prog"><div class="prog-fill" id="progfill"></div></div>
-    <div class="narration" id="narr"></div></div>
+    <div class="narration" id="narr"></div>
     <div class="ncard">
       <div class="ndiagram"><svg viewBox="0 0 460 430" xmlns="http://www.w3.org/2000/svg" class="cardsvg" role="img" aria-label="Fork and join  (parallel work) example."><defs><marker id="aArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs><g class="bstep" data-step="1"><circle cx="230" cy="40" r="9" fill="#0f1419"/><line x1="230" y1="49" x2="230" y2="70" class="uml-line" marker-end="url(#aArrow)"/><rect x="160" y="73" width="140" height="38" rx="19" class="uml-box"/><text x="230" y="96" text-anchor="middle" class="uml-text" font-size="11">Confirm order</text></g><g class="bstep" data-step="2"><line x1="230" y1="111" x2="230" y2="140" class="uml-line" marker-end="url(#aArrow)"/><rect x="145" y="141" width="170" height="7" rx="2" fill="#2c3540"/><line x1="160" y1="148" x2="160" y2="192" class="uml-line" marker-end="url(#aArrow)"/><rect x="101" y="195" width="118" height="38" rx="19" class="uml-box"/><text x="160" y="218" text-anchor="middle" class="uml-text" font-size="11">Pack items</text><line x1="310" y1="148" x2="310" y2="192" class="uml-line" marker-end="url(#aArrow)"/><rect x="251" y="195" width="118" height="38" rx="19" class="uml-box"/><text x="310" y="218" text-anchor="middle" class="uml-text" font-size="11">Charge card</text></g><g class="bstep" data-step="3"><line x1="160" y1="233" x2="160" y2="286" class="uml-line"/><line x1="310" y1="233" x2="310" y2="286" class="uml-line"/><rect x="145" y="286" width="170" height="7" rx="2" fill="#2c3540"/><line x1="230" y1="293" x2="230" y2="322" class="uml-line" marker-end="url(#aArrow)"/><rect x="160" y="325" width="140" height="38" rx="19" class="uml-box"/><text x="230" y="348" text-anchor="middle" class="uml-text" font-size="11">Dispatch order</text><line x1="230" y1="363" x2="230" y2="392" class="uml-line" marker-end="url(#aArrow)"/><circle cx="230" cy="404" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="230" cy="404" r="5" fill="#0f1419"/></g></svg></div>
       <div class="nexplain estep" data-step="1"><h4>Fork and join  (parallel work)</h4><p>Fork and join model concurrency. A fork (the bar) starts several flows at once; a join (the matching bar) waits for all of them to finish before the flow continues. Use them when steps genuinely happen in parallel and none of the later work may start until every branch is done.</p></div>
@@ -78,13 +76,5 @@ function bReset(){ cur=0; stopPlay(); render(); }
 function stopPlay(){ if(timer){clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';} }
 function bPlay(){ if(timer){stopPlay();return;} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stopPlay();return;} cur++; render(); }, 2100); }
 render();
-</script>
-<script>
-(function(){
-  new MutationObserver(function(muts){
-    for (var i=0;i<muts.length;i++){ var t=muts[i].target;
-      if (t.classList && t.classList.contains('current')) { t.scrollIntoView({behavior:'smooth', block:'center'}); break; } }
-  }).observe(document.body, {subtree:true, attributes:true, attributeFilter:['class']});
-})();
 </script>
 </body></html>

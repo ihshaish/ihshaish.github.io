@@ -7,10 +7,10 @@
   :root { --ink:#0f1419; --ink-soft:#2c3540; --ink-mute:#5a6473; --paper:#faf7f2; --paper-warm:#f3ede2; --accent:#b85c38; --steel:#2c5f7c; --rule:#d8cfc0;
     --serif:'Fraunces',Georgia,serif; --sans:'Inter Tight',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace; }
   * { box-sizing:border-box; }
-  body { font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:44px 24px 90px; line-height:1.55; }
-  .wrap { max-width:1120px; margin:0 auto; }
-  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:10px; }
-  h1 { font-family:var(--serif); font-weight:500; font-size:34px; letter-spacing:-.02em; margin:0 0 10px; }
+  body { font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:24px 22px 44px; line-height:1.55; }
+  .wrap { max-width:1180px; margin:0 auto; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:8px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:25px; letter-spacing:-.02em; margin:0 0 8px; }
   p { color:var(--ink-soft); } .lead { font-size:16px; max-width:900px; }
   .builder { border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; margin-top:16px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }
   .controls { display:flex; align-items:center; gap:10px; }
@@ -21,13 +21,13 @@
   .prog { height:4px; background:#efe7da; border-radius:3px; margin:12px 0 8px; overflow:hidden; }
   .prog-fill { height:100%; width:0; background:linear-gradient(90deg,var(--accent),#d98a5f); border-radius:3px; transition:width .35s ease; }
   .narration { background:var(--paper-warm); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:14px 18px; margin:4px 0 16px; font-size:15.5px; color:var(--ink-soft); line-height:1.5; min-height:52px; }
-  .ncard { display:grid; grid-template-columns:1.25fr 1fr; gap:18px; align-items:center; padding:16px 0; border-bottom:1px dashed #e9e0d0; }
+  .ncard { display:grid; grid-template-columns:1.55fr 1fr; gap:20px; align-items:center; padding:16px 0; border-bottom:1px dashed #e9e0d0; }
   .ncard:last-child { border-bottom:none; }
   @media (max-width:780px) { .ncard { grid-template-columns:1fr; } }
   .cardsvg { width:100%; height:auto; display:block; }
   .nexplain h4 { font-family:var(--serif); font-size:18px; font-weight:600; margin:0 0 6px; }
   .nexplain p { margin:0; font-size:14.5px; }
-  .uml-text { font-family:var(--sans); font-size:12px; fill:var(--ink); }
+  .uml-text { font-family:var(--sans); font-size:13px; fill:var(--ink); }
   .uml-line { stroke:var(--ink); stroke-width:1.4; fill:none; }
   .uml-line-dashed { stroke:var(--ink); stroke-width:1.2; fill:none; stroke-dasharray:4,3; }
   .uml-line-blue { stroke:#4a8bb8; stroke-width:1.4; fill:none; }
@@ -38,15 +38,13 @@
   .bstep.current { filter:drop-shadow(0 0 6px rgba(184,92,56,.5)); }
   .estep { opacity:.25; transform:translateY(6px); transition:opacity .35s ease, transform .4s ease; }
   .estep.on { opacity:1; transform:none; }
-  .bhead { position: sticky; top: 0; z-index: 6; background: #fff; padding: 10px 0 8px; box-shadow: 0 8px 12px -8px rgba(15,20,25,0.18); }
-  .bstep { scroll-margin-top: 150px; }
 </style></head>
 <body><div class="wrap">
   <div class="eyebrow">COMP433 &middot; Chapter 4 &middot; use case notations</div>
   <h1>Use case diagrams: the remaining notations</h1>
   <p class="lead">The core diagram uses actors, use cases, associations, include and extend. Four more notations appear in larger systems, each shown here on a small example, with a note on what it is and when to use it.</p>
   <div class="builder">
-    <div class="bhead"><div class="controls">
+    <div class="controls">
       <button id="prev" onclick="bPrev()">Previous</button>
       <button id="next" onclick="bNext()">Next</button>
       <button class="secondary" onclick="bReset()">Reset</button>
@@ -54,7 +52,7 @@
       <span class="steplabel" id="lbl"></span>
     </div>
     <div class="prog"><div class="prog-fill" id="progfill"></div></div>
-    <div class="narration" id="narr"></div></div>
+    <div class="narration" id="narr"></div>
     <div class="ncard">
       <div class="ndiagram"><svg viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg" class="cardsvg" role="img" aria-label="Actor generalisation example."><defs><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 1 1 L 13 7 L 1 13 Z" fill="white" stroke="#0f1419" stroke-width="1.2"/></marker><marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#7a3a23" stroke-width="1.4"/></marker></defs><g class="bstep" data-step="1"><g transform="translate(200,52)"><circle cx="16" cy="6" r="7" class="actor-blue"/><line x1="16" y1="13" x2="16" y2="34" class="uml-line-blue"/><line x1="16" y1="18" x2="5" y2="27" class="uml-line-blue"/><line x1="16" y1="18" x2="27" y2="27" class="uml-line-blue"/><line x1="16" y1="34" x2="5" y2="46" class="uml-line-blue"/><line x1="16" y1="34" x2="27" y2="46" class="uml-line-blue"/></g><text x="216" y="40" text-anchor="middle" class="uml-text" font-size="10" font-weight="600">Library user</text><ellipse cx="460" cy="76" rx="86" ry="23" class="uml-box"/><text x="460" y="80" text-anchor="middle" class="uml-text" font-size="11">Search catalogue</text><line x1="230" y1="76" x2="374" y2="76" class="uml-line-blue"/></g><g class="bstep" data-step="2"><g transform="translate(200,158)"><circle cx="16" cy="6" r="7" class="actor-blue"/><line x1="16" y1="13" x2="16" y2="34" class="uml-line-blue"/><line x1="16" y1="18" x2="5" y2="27" class="uml-line-blue"/><line x1="16" y1="18" x2="27" y2="27" class="uml-line-blue"/><line x1="16" y1="34" x2="5" y2="46" class="uml-line-blue"/><line x1="16" y1="34" x2="27" y2="46" class="uml-line-blue"/></g><text x="216" y="224" text-anchor="middle" class="uml-text" font-size="10" font-weight="600">Member</text><line x1="216" y1="158" x2="216" y2="106" class="uml-line" marker-end="url(#gen)"/><text x="150" y="130" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#5a6473" font-weight="600">generalisation</text><ellipse cx="460" cy="182" rx="86" ry="23" class="uml-box"/><text x="460" y="186" text-anchor="middle" class="uml-text" font-size="11">Borrow book</text><line x1="230" y1="182" x2="374" y2="182" class="uml-line-blue"/></g></svg></div>
       <div class="nexplain estep" data-step="1"><h4>Actor generalisation</h4><p>A specialised actor is a kind of a more general one, and it inherits all of the general actor's use cases. Reach for it when two roles overlap heavily, one can do everything the other can and a little more, so the shared use cases are drawn once on the general actor instead of being repeated.</p></div>
@@ -89,13 +87,5 @@ function bReset(){ cur=0; stopPlay(); render(); }
 function stopPlay(){ if(timer){clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';} }
 function bPlay(){ if(timer){stopPlay();return;} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stopPlay();return;} cur++; render(); }, 2100); }
 render();
-</script>
-<script>
-(function(){
-  new MutationObserver(function(muts){
-    for (var i=0;i<muts.length;i++){ var t=muts[i].target;
-      if (t.classList && t.classList.contains('current')) { t.scrollIntoView({behavior:'smooth', block:'center'}); break; } }
-  }).observe(document.body, {subtree:true, attributes:true, attributeFilter:['class']});
-})();
 </script>
 </body></html>
