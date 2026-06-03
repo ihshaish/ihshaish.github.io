@@ -267,6 +267,21 @@
   .diagram-tooltip strong { color: var(--ink); font-weight: 600; }
   .diagram-tooltip.is-active { background: #eaf3f9; border-left-color: #2c6e9a; }
   .diagram-tooltip .placeholder { color: var(--ink-mute); font-style: italic; }
+  /* below-figure panels replaced by a floating tooltip */
+  .diagram-tooltip { display: none; }
+  .hotspot-tip {
+    position: fixed; z-index: 1000; max-width: 340px;
+    padding: 12px 15px; background: var(--ink); color: var(--paper);
+    border-radius: 6px; font-size: 13px; line-height: 1.5; text-align: left;
+    box-shadow: 0 6px 24px rgba(15,20,25,0.28);
+    pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 0.12s;
+  }
+  .hotspot-tip.is-visible { opacity: 1; visibility: visible; }
+  .hotspot-tip strong { color: #fff; font-weight: 600; }
+  .hotspot-tip code { background: rgba(255,255,255,0.16); padding: 1px 4px; border-radius: 3px; font-family: var(--mono); font-size: 12px; }
+  .builder-embed { width: 100%; height: 78vh; min-height: 540px; border: 1px solid var(--rule); border-radius: 12px; background: #fff; margin: 12px 0 6px; }
+  .embed-cap { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-top: 26px; }
+  .embed-note { font-size: 13.5px; color: var(--ink-mute); margin: 4px 0 0; max-width: 820px; }
 </style>
 </head>
 <body>
@@ -1104,6 +1119,10 @@
       <p>"The library contains <strong>books</strong> and <strong>journals</strong>; it may have several <strong>copies</strong> of a book. A <strong>library member</strong> may <em>borrow</em> for three weeks; members <em>borrow</em> up to six items, <strong>staff</strong> up to 12; only staff <em>borrow</em> <strong>journals</strong>. <strong>Members of the public</strong> can <em>browse / search</em> but cannot borrow. Late returns <em>pay a fine</em>, in cash or by <strong>credit card</strong>; an <strong>email</strong> reminder is <em>sent</em> automatically. Staff <em>manage</em> books: <em>add</em>, <em>update</em>, <em>catalog</em>, <em>remove</em>." Bold marks nouns (actors and entities); italic marks verbs (use cases). The credit card and the email pull in the Bank and Email secondary actors, and the verbs become the Borrow / Renew / Return / Browse / Pay&nbsp;fine / Send&nbsp;reminder / Manage use cases on the diagram.</p>
     </div>
 
+    <div class="embed-cap">Interactive: build it from the requirements</div>
+    <p class="embed-note">Step through (or play) the construction of a use case diagram from a short narrative and its user requirements, with each actor and use case traced back to the line it came from.</p>
+    <iframe class="builder-embed" src="slides/poc_usecase_build.html" loading="lazy" title="Animated use case diagram build"></iframe>
+
     <h3 class="subhead">Relationships between use cases: include, extend, generalisation</h3>
     <p class="body">Once you have more than a handful of use cases, you will start to see that some use cases share sub-tasks with each other, others fire only in exceptional circumstances, and others are variations on a common theme. UML 2.5 gives three stereotypes for these refinements. Each has a precise meaning and a precise arrow direction, and confusing them is the single most common notation error on this material.</p>
 
@@ -1133,7 +1152,7 @@
       <li><strong>Refuse order</strong> is <code>&lt;&lt;extend&gt;&gt;</code>-ed from Place order, at the extension point "after stock check", with guard <code>[item unavailable]</code>. This is structurally identical to the Library's Refuse loan, and shows the same conditional-alternative pattern recurring across very different domains.</li>
     </ul>
 
-    <p class="body">The teaching point: <code>&lt;&lt;include&gt;&gt;</code> exists to avoid duplication when two or more base use cases share a sub-task (Calculate order total is shared by Place order and Modify order). <code>&lt;&lt;extend&gt;&gt;</code> exists to keep the base description clean when an optional or exceptional behaviour would otherwise crowd it (Apply promo code and Refuse order only run sometimes; each belongs on a separate ellipse, not as a footnote inside Place order).</p>
+    <p class="body">The two stereotypes answer two different needs. <code>&lt;&lt;include&gt;&gt;</code> exists to avoid duplication when two or more base use cases share a sub-task (Calculate order total is shared by Place order and Modify order). <code>&lt;&lt;extend&gt;&gt;</code> exists to keep the base description clean when an optional or exceptional behaviour would otherwise crowd it (Apply promo code and Refuse order only run sometimes; each belongs on a separate ellipse, not as a footnote inside Place order).</p>
 
     <div class="practice-callout">
       <div class="tag">External systems are secondary actors</div>
@@ -1169,6 +1188,10 @@
     </ul>
 
     <p class="body">Extension points keep the base's flow auditable: a reader of the base description sees the named hooks and can look up which extensions attach to each. Without them, an <code>&lt;&lt;extend&gt;&gt;</code> arrow is just "this fires somewhere in here", which is too vague to be useful in a contract.</p>
+
+    <div class="embed-cap">Interactive: the remaining notations</div>
+    <p class="embed-note">Actor generalisation, use-case generalisation, composite (multi-level) use cases, and extension points, each on a small worked example with a note on when to use it.</p>
+    <iframe class="builder-embed" src="slides/poc_usecase_notations.html" loading="lazy" title="Animated use case notations"></iframe>
 
     <h3 class="subhead">When NOT to use these refinements</h3>
     <p class="body">A diagram with more refinement arrows than associations is over-modelled. Three signs that you are overusing the stereotypes:</p>
@@ -1440,6 +1463,10 @@
       <div class="diagram-tooltip" id="actTip"><span class="placeholder">Hover any node, edge, or swimlane to see what it represents.</span></div>
     </div>
 
+    <div class="embed-cap">Interactive: unpack a use case into a flow</div>
+    <p class="embed-note">Watch the Book room use case become an activity diagram, with each step of its description highlighted as the matching action appears.</p>
+    <iframe class="builder-embed" src="slides/poc_activity_build.html" loading="lazy" title="Animated activity diagram build"></iframe>
+
     <h3 class="subhead">Decision vs fork, merge vs join</h3>
     <p class="body">Two pairs of symbols are routinely confused, and the distinction is the most-marked correctness point on this material. A <strong>decision</strong> (diamond) chooses <em>one</em> of several guarded branches: its branches are <em>alternatives</em>, and exactly one fires. A <strong>fork</strong> (bar) starts <em>all</em> of its branches at once: its branches are <em>concurrent</em>. The test is simple. Are the branches a choice (one of them) or parallel work (all of them)? "New patient? create vs search record" is a decision; "place order, then send the confirmation email and update inventory" is a fork, because both happen.</p>
     <p class="body">Each opening symbol must be closed by its partner: <strong>a decision is closed by a matching merge</strong> (the diamond that brings the alternatives back to one path), and <strong>a fork is closed by a matching join</strong> (the bar that waits for every parallel branch to finish before continuing). An unmatched decision usually means a branch that silently never rejoins; an unmatched fork means concurrency that is never synchronised. Guards on a decision should be <em>mutually exclusive and exhaustive</em>, so exactly one branch is always taken.</p>
@@ -1451,6 +1478,10 @@
       <svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" id="procFig" role="img" aria-label="Process-order activity diagram with a fork into two parallel paths and a join."><defs><marker id="actArrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs><circle cx="360" cy="45" r="9" fill="#0f1419"/><line x1="360" y1="54" x2="360" y2="80" class="uml-line" marker-end="url(#actArrow2)"/><rect x="295" y="80" width="130" height="42" rx="21" class="uml-box"/><text x="360" y="105" text-anchor="middle" class="uml-text">Receive Order</text><line x1="360" y1="122" x2="360" y2="150" class="uml-line" marker-end="url(#actArrow2)"/><rect x="180" y="151" width="360" height="7" rx="2" fill="#2c3540"/><line x1="255" y1="158" x2="255" y2="205" class="uml-line"/><line x1="255" y1="205" x2="255" y2="205" class="uml-line" marker-end="url(#actArrow2)"/><line x1="255" y1="158" x2="255" y2="184" class="uml-line"/><line x1="255" y1="184" x2="255" y2="205" class="uml-line" marker-end="url(#actArrow2)"/><rect x="190" y="205" width="130" height="42" rx="21" class="uml-box"/><text x="255" y="230" text-anchor="middle" class="uml-text">Fill Order</text><line x1="485" y1="158" x2="485" y2="184" class="uml-line"/><line x1="485" y1="184" x2="485" y2="205" class="uml-line" marker-end="url(#actArrow2)"/><rect x="420" y="205" width="130" height="42" rx="21" class="uml-box"/><text x="485" y="230" text-anchor="middle" class="uml-text">Send Invoice</text><line x1="255" y1="247" x2="255" y2="288" class="uml-line" marker-end="url(#actArrow2)"/><polygon points="255,288 289,310 255,332 221,310" class="uml-box"/><text x="255" y="314" text-anchor="middle" class="uml-text" font-size="10">Priority?</text><line x1="221" y1="310" x2="200" y2="380" class="uml-line" marker-end="url(#actArrow2)"/><text x="78" y="348" class="uml-text" font-size="11">[priority order]</text><line x1="289" y1="310" x2="350" y2="380" class="uml-line" marker-end="url(#actArrow2)"/><text x="340" y="348" class="uml-text" font-size="11">[else]</text><rect x="140" y="380" width="120" height="40" rx="20" class="uml-box"/><text x="200" y="404" text-anchor="middle" class="uml-text">Overnight</text><rect x="290" y="380" width="120" height="40" rx="20" class="uml-box"/><text x="350" y="404" text-anchor="middle" class="uml-text">Regular</text><line x1="200" y1="420" x2="200" y2="448" class="uml-line"/><line x1="200" y1="448" x2="232" y2="468" class="uml-line" marker-end="url(#actArrow2)"/><line x1="350" y1="420" x2="350" y2="448" class="uml-line"/><line x1="350" y1="448" x2="278" y2="468" class="uml-line" marker-end="url(#actArrow2)"/><polygon points="255,448 289,470 255,492 221,470" class="uml-box"/><text x="255" y="474" text-anchor="middle" class="uml-text" font-size="10"></text><line x1="255" y1="492" x2="255" y2="557" class="uml-line" marker-end="url(#actArrow2)"/><line x1="485" y1="247" x2="485" y2="300" class="uml-line" marker-end="url(#actArrow2)"/><rect x="420" y="300" width="130" height="42" rx="21" class="uml-box"/><text x="485" y="325" text-anchor="middle" class="uml-text">Receive Payment</text><line x1="485" y1="342" x2="485" y2="557" class="uml-line" marker-end="url(#actArrow2)"/><rect x="180" y="558" width="360" height="7" rx="2" fill="#2c3540"/><line x1="360" y1="565" x2="360" y2="595" class="uml-line" marker-end="url(#actArrow2)"/><rect x="295" y="595" width="130" height="42" rx="21" class="uml-box"/><text x="360" y="620" text-anchor="middle" class="uml-text">Close Order</text><line x1="360" y1="637" x2="360" y2="663" class="uml-line" marker-end="url(#actArrow2)"/><circle cx="360" cy="676" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="360" cy="676" r="5" fill="#0f1419"/></svg>
       <div class="figure-note">The upper bar is a <strong>fork</strong>: it starts two paths at once, so filling the order and invoicing proceed in parallel. The left path carries its own <strong>decision</strong> (priority delivery or not), closed by a <strong>merge</strong>. The lower bar is a <strong>join</strong>: it waits for both the goods and the payment before Close Order runs. Replace the fork with a decision and you would assert the system either fills the order or invoices it but never both, a different and wrong claim about the behaviour. Every fork is closed by a join, and every decision by a merge.</div>
     </div>
+
+    <div class="embed-cap">Interactive: parallel work and choices</div>
+    <p class="embed-note">The fork and join for steps that run at the same time, and the merge that closes a decision.</p>
+    <iframe class="builder-embed" src="slides/poc_activity_notations.html" loading="lazy" title="Animated activity notations"></iframe>
 
     <h3 class="subhead">Two granularities: a use case flow, or a whole process</h3>
     <p class="body">The same notation serves two levels. At the <strong>use case level</strong>, an activity diagram unpacks one use case ("Borrow copy of a book": locate the book, then fork to stamp the book and record the borrowing in parallel, then join). At the <strong>business-process level</strong>, it spans several use cases and actors ("book a journey": reserve flight, hotel and car in parallel, with a loop that repeats the car reservation until it succeeds, then confirm). Iteration like that loop, and parallelism like those reservations, are exactly what an activity diagram adds over a numbered list. Keep one granularity per diagram; mixing a single use case and a whole process on one page makes both hard to read.</p>
@@ -2759,39 +2790,45 @@ function stLogEntry(msg) {
 stRender();
 
 /* ===================================================================== */
-/* Diagram hotspot tooltips: any <g> or shape with a `data-tip` attribute
-   inside a figure-tooltip-bearing SVG updates the corresponding panel on
-   hover/focus/tap. The panel id is the SVG id + "Tip" by convention. */
-function wireDiagramTooltips(svgId, panelId, placeholder) {
-  const svg = document.getElementById(svgId);
-  const panel = document.getElementById(panelId);
-  if (!svg || !panel) return;
-  const defaultHTML = '<span class="placeholder">' + placeholder + '</span>';
-  const tipNodes = svg.querySelectorAll('[data-tip]');
-  tipNodes.forEach(n => {
-    n.style.cursor = 'help';
-    const show = () => {
-      panel.innerHTML = n.getAttribute('data-tip');
-      panel.classList.add('is-active');
-    };
-    const hide = () => {
-      panel.innerHTML = defaultHTML;
-      panel.classList.remove('is-active');
-    };
-    n.addEventListener('mouseenter', show);
-    n.addEventListener('mouseleave', hide);
-    n.addEventListener('focus', show);
-    n.addEventListener('blur', hide);
-    n.addEventListener('click', show);
-    n.setAttribute('tabindex', '0');
-  });
-}
+/* Diagram hotspot tooltips: any element with a `data-tip` attribute inside a
+   wired container shows a single floating tooltip next to the pointer. The tip
+   is left-aligned, offset to the right of the cursor, and clamped to the
+   viewport so it never runs off an edge or sticks in a corner. */
+(function () {
+  const tip = document.createElement('div');
+  tip.className = 'hotspot-tip';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
 
-wireDiagramTooltips('journeyFig', 'journeyTip', 'Hover or tap a step in the journey above to see what it is, what feeds it, and what it produces.');
-wireDiagramTooltips('ucFig', 'ucTip', 'Hover any actor, use case, line, or arrow to see what it represents and why it sits where it does.');
-wireDiagramTooltips('actFig', 'actTip', 'Hover any node, edge, or swimlane to see what it represents.');
-wireDiagramTooltips('familiesGrid', 'familiesTip', 'Hover any family card above for a concrete example and the decisions that family supports.');
-wireDiagramTooltips('taxonomyFig', 'taxonomyTip', 'Hover any diagram name in the taxonomy for a one-line definition and a pointer to where it is covered.');
+  function place(x, y) {
+    const pad = 14, ow = tip.offsetWidth, oh = tip.offsetHeight;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    let nx = x + 18, ny = y + 18;
+    if (nx + ow + pad > vw) nx = x - ow - 18;   // flip left near the right edge
+    if (nx < pad) nx = pad;
+    if (ny + oh + pad > vh) ny = y - oh - 18;    // flip up near the bottom edge
+    if (ny < pad) ny = pad;
+    tip.style.left = nx + 'px';
+    tip.style.top = ny + 'px';
+  }
+  function show(html, x, y) { tip.innerHTML = html; tip.classList.add('is-visible'); place(x, y); }
+  function hide() { tip.classList.remove('is-visible'); }
+
+  function wire(containerId) {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    c.querySelectorAll('[data-tip]').forEach(n => {
+      n.style.cursor = 'help';
+      n.setAttribute('tabindex', '0');
+      n.addEventListener('mouseenter', e => show(n.getAttribute('data-tip'), e.clientX, e.clientY));
+      n.addEventListener('mousemove', e => { if (tip.classList.contains('is-visible')) place(e.clientX, e.clientY); });
+      n.addEventListener('mouseleave', hide);
+      n.addEventListener('focus', () => { const r = n.getBoundingClientRect(); show(n.getAttribute('data-tip'), r.left + r.width / 2, r.top + r.height / 2); });
+      n.addEventListener('blur', hide);
+    });
+  }
+  ['journeyFig', 'ucFig', 'actFig', 'familiesGrid', 'taxonomyFig'].forEach(wire);
+})();
 </script>
 
 </body>

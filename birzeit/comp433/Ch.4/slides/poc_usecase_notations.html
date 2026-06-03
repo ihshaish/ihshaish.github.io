@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use case notations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0f1419; --ink-soft:#2c3540; --ink-mute:#5a6473; --paper:#faf7f2; --paper-warm:#f3ede2; --accent:#b85c38; --steel:#2c5f7c; --rule:#d8cfc0;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter Tight',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace; }
+  * { box-sizing:border-box; }
+  body { font-family:var(--sans); color:var(--ink); background:#fbfaf8; margin:0; padding:44px 24px 90px; line-height:1.55; }
+  .wrap { max-width:1120px; margin:0 auto; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:10px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:34px; letter-spacing:-.02em; margin:0 0 10px; }
+  p { color:var(--ink-soft); } .lead { font-size:16px; max-width:900px; }
+  .builder { border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; margin-top:16px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }
+  .controls { display:flex; align-items:center; gap:10px; }
+  button { background:var(--steel); color:#fff; border:none; padding:9px 16px; border-radius:7px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; cursor:pointer; }
+  button.secondary { background:#fff; color:var(--steel); border:1px solid var(--steel); }
+  button:disabled { opacity:.4; cursor:default; }
+  .steplabel { font-family:var(--mono); font-size:12px; color:var(--ink-mute); margin-left:auto; }
+  .prog { height:4px; background:#efe7da; border-radius:3px; margin:12px 0 8px; overflow:hidden; }
+  .prog-fill { height:100%; width:0; background:linear-gradient(90deg,var(--accent),#d98a5f); border-radius:3px; transition:width .35s ease; }
+  .narration { background:var(--paper-warm); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:14px 18px; margin:4px 0 16px; font-size:15.5px; color:var(--ink-soft); line-height:1.5; min-height:52px; }
+  .ncard { display:grid; grid-template-columns:1.25fr 1fr; gap:18px; align-items:center; padding:16px 0; border-bottom:1px dashed #e9e0d0; }
+  .ncard:last-child { border-bottom:none; }
+  @media (max-width:780px) { .ncard { grid-template-columns:1fr; } }
+  .cardsvg { width:100%; height:auto; display:block; }
+  .nexplain h4 { font-family:var(--serif); font-size:18px; font-weight:600; margin:0 0 6px; }
+  .nexplain p { margin:0; font-size:14.5px; }
+  .uml-text { font-family:var(--sans); font-size:12px; fill:var(--ink); }
+  .uml-line { stroke:var(--ink); stroke-width:1.4; fill:none; }
+  .uml-line-dashed { stroke:var(--ink); stroke-width:1.2; fill:none; stroke-dasharray:4,3; }
+  .uml-line-blue { stroke:#4a8bb8; stroke-width:1.4; fill:none; }
+  .uml-box { stroke:var(--ink); stroke-width:1.4; fill:#fff; }
+  .actor-blue { stroke:#2c6e9a; stroke-width:1.4; fill:#eaf3f9; }
+  .bstep { opacity:0; transform:translateY(8px) scale(.94); transform-box:fill-box; transform-origin:center; transition:opacity .3s ease, transform .42s cubic-bezier(.2,.8,.3,1), filter .35s ease; }
+  .bstep.on { opacity:1; transform:translateY(0) scale(1); }
+  .bstep.current { filter:drop-shadow(0 0 6px rgba(184,92,56,.5)); }
+  .estep { opacity:.25; transform:translateY(6px); transition:opacity .35s ease, transform .4s ease; }
+  .estep.on { opacity:1; transform:none; }
+</style></head>
+<body><div class="wrap">
+  <div class="eyebrow">COMP433 &middot; Chapter 4 &middot; use case notations</div>
+  <h1>Use case diagrams: the remaining notations</h1>
+  <p class="lead">The core diagram uses actors, use cases, associations, include and extend. Four more notations appear in larger systems, each shown here on a small example, with a note on what it is and when to use it.</p>
+  <div class="builder">
+    <div class="controls">
+      <button id="prev" onclick="bPrev()">Previous</button>
+      <button id="next" onclick="bNext()">Next</button>
+      <button class="secondary" onclick="bReset()">Reset</button>
+      <button class="secondary" id="play" onclick="bPlay()">&#9658; Play</button>
+      <span class="steplabel" id="lbl"></span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="progfill"></div></div>
+    <div class="narration" id="narr"></div>
+    <div class="ncard">
+      <div class="ndiagram"><svg viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg" class="cardsvg" role="img" aria-label="Actor generalisation example."><defs><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 1 1 L 13 7 L 1 13 Z" fill="white" stroke="#0f1419" stroke-width="1.2"/></marker><marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#7a3a23" stroke-width="1.4"/></marker></defs><g class="bstep" data-step="1"><g transform="translate(200,52)"><circle cx="16" cy="6" r="7" class="actor-blue"/><line x1="16" y1="13" x2="16" y2="34" class="uml-line-blue"/><line x1="16" y1="18" x2="5" y2="27" class="uml-line-blue"/><line x1="16" y1="18" x2="27" y2="27" class="uml-line-blue"/><line x1="16" y1="34" x2="5" y2="46" class="uml-line-blue"/><line x1="16" y1="34" x2="27" y2="46" class="uml-line-blue"/></g><text x="216" y="40" text-anchor="middle" class="uml-text" font-size="10" font-weight="600">Library user</text><ellipse cx="460" cy="76" rx="86" ry="23" class="uml-box"/><text x="460" y="80" text-anchor="middle" class="uml-text" font-size="11">Search catalogue</text><line x1="230" y1="76" x2="374" y2="76" class="uml-line-blue"/></g><g class="bstep" data-step="2"><g transform="translate(200,158)"><circle cx="16" cy="6" r="7" class="actor-blue"/><line x1="16" y1="13" x2="16" y2="34" class="uml-line-blue"/><line x1="16" y1="18" x2="5" y2="27" class="uml-line-blue"/><line x1="16" y1="18" x2="27" y2="27" class="uml-line-blue"/><line x1="16" y1="34" x2="5" y2="46" class="uml-line-blue"/><line x1="16" y1="34" x2="27" y2="46" class="uml-line-blue"/></g><text x="216" y="224" text-anchor="middle" class="uml-text" font-size="10" font-weight="600">Member</text><line x1="216" y1="158" x2="216" y2="106" class="uml-line" marker-end="url(#gen)"/><text x="150" y="130" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#5a6473" font-weight="600">generalisation</text><ellipse cx="460" cy="182" rx="86" ry="23" class="uml-box"/><text x="460" y="186" text-anchor="middle" class="uml-text" font-size="11">Borrow book</text><line x1="230" y1="182" x2="374" y2="182" class="uml-line-blue"/></g></svg></div>
+      <div class="nexplain estep" data-step="1"><h4>Actor generalisation</h4><p>A specialised actor is a kind of a more general one, and it inherits all of the general actor's use cases. Reach for it when two roles overlap heavily, one can do everything the other can and a little more, so the shared use cases are drawn once on the general actor instead of being repeated.</p></div>
+    </div>
+    <div class="ncard">
+      <div class="ndiagram"><svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" class="cardsvg" role="img" aria-label="Use-case generalisation  (inherit) example."><defs><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 1 1 L 13 7 L 1 13 Z" fill="white" stroke="#0f1419" stroke-width="1.2"/></marker><marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#7a3a23" stroke-width="1.4"/></marker></defs><g class="bstep" data-step="3"><g transform="translate(40,96)"><circle cx="16" cy="6" r="7" class="actor-blue"/><line x1="16" y1="13" x2="16" y2="34" class="uml-line-blue"/><line x1="16" y1="18" x2="5" y2="27" class="uml-line-blue"/><line x1="16" y1="18" x2="27" y2="27" class="uml-line-blue"/><line x1="16" y1="34" x2="5" y2="46" class="uml-line-blue"/><line x1="16" y1="34" x2="27" y2="46" class="uml-line-blue"/></g><text x="56" y="162" text-anchor="middle" class="uml-text" font-size="10" font-weight="600">Customer</text><ellipse cx="250" cy="120" rx="64" ry="23" class="uml-box"/><text x="250" y="124" text-anchor="middle" class="uml-text" font-size="11">Pay</text><line x1="72" y1="120" x2="186" y2="120" class="uml-line-blue"/></g><g class="bstep" data-step="4"><ellipse cx="470" cy="80" rx="82" ry="23" class="uml-box"/><text x="470" y="84" text-anchor="middle" class="uml-text" font-size="11">Pay by card</text><line x1="392" y1="90" x2="320" y2="112" class="uml-line" marker-end="url(#gen)"/></g><g class="bstep" data-step="5"><ellipse cx="470" cy="176" rx="82" ry="23" class="uml-box"/><text x="470" y="180" text-anchor="middle" class="uml-text" font-size="11">Pay by cash</text><line x1="392" y1="166" x2="320" y2="130" class="uml-line" marker-end="url(#gen)"/></g></svg></div>
+      <div class="nexplain estep" data-step="3"><h4>Use-case generalisation  (inherit)</h4><p>One use case can be a specific variant of another, inheriting its behaviour and adding its own steps. Use it when several use cases are the same task done in different ways, to capture the shared behaviour once and let each variant specialise it.</p></div>
+    </div>
+    <div class="ncard">
+      <div class="ndiagram"><svg viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg" class="cardsvg" role="img" aria-label="Composite (multi-level) use case example."><defs><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 1 1 L 13 7 L 1 13 Z" fill="white" stroke="#0f1419" stroke-width="1.2"/></marker><marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#7a3a23" stroke-width="1.4"/></marker></defs><g class="bstep" data-step="6"><ellipse cx="150" cy="130" rx="92" ry="23" class="uml-box"/><text x="150" y="134" text-anchor="middle" class="uml-text" font-size="11">Manage booking</text><rect x="222" y="123" width="13" height="13" fill="none" stroke="#2c5f7c" stroke-width="1.1"/><line x1="228.5" y1="123" x2="228.5" y2="136" stroke="#2c5f7c" stroke-width="1"/><line x1="222" y1="129.5" x2="235" y2="129.5" stroke="#2c5f7c" stroke-width="1"/></g><g class="bstep" data-step="7"><rect x="350" y="60" width="230" height="170" rx="6" fill="none" stroke="#bcae97" stroke-dasharray="4,3"/><text x="465" y="80" text-anchor="middle" class="uml-text" font-size="10" fill="#5a6473">first-level diagram</text><ellipse cx="465" cy="120" rx="78" ry="23" class="uml-box"/><text x="465" y="124" text-anchor="middle" class="uml-text" font-size="11">Change dates</text><ellipse cx="465" cy="185" rx="78" ry="23" class="uml-box"/><text x="465" y="189" text-anchor="middle" class="uml-text" font-size="11">Cancel booking</text><line x1="244" y1="130" x2="350" y2="120" class="uml-line-dashed"/><text x="300" y="116" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#5a6473" font-weight="600">decomposes</text></g></svg></div>
+      <div class="nexplain estep" data-step="6"><h4>Composite (multi-level) use case</h4><p>A composite use case stands in for a group of finer ones and is expanded in its own lower-level diagram. Use it when a system has too many use cases for one readable page: the top diagram stays a map, and each composite opens into its own detail.</p></div>
+    </div>
+    <div class="ncard">
+      <div class="ndiagram"><svg viewBox="0 0 600 210" xmlns="http://www.w3.org/2000/svg" class="cardsvg" role="img" aria-label="Extension points example."><defs><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 1 1 L 13 7 L 1 13 Z" fill="white" stroke="#0f1419" stroke-width="1.2"/></marker><marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#7a3a23" stroke-width="1.4"/></marker></defs><g class="bstep" data-step="8"><ellipse cx="170" cy="120" rx="118" ry="56" class="uml-box"/><text x="170" y="98" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Checkout</text><line x1="70" y1="110" x2="270" y2="110" class="uml-line"/><text x="170" y="128" text-anchor="middle" class="uml-text" font-size="9.5" fill="#5a6473">extension points</text><text x="170" y="144" text-anchor="middle" class="uml-text" font-size="9.5">afterTotals</text></g><g class="bstep" data-step="9"><ellipse cx="500" cy="120" rx="80" ry="23" class="uml-box"/><text x="500" y="124" text-anchor="middle" class="uml-text" font-size="11">Apply coupon</text><line x1="420" y1="120" x2="292" y2="120" stroke="#7a3a23" stroke-width="1.2" stroke-dasharray="4,3" fill="none" marker-end="url(#open)"/><text x="356" y="109" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#7a3a23" font-weight="600">&lt;&lt;extend&gt;&gt;</text><text x="356" y="132" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#7a3a23" font-weight="600">[has coupon]</text></g></svg></div>
+      <div class="nexplain estep" data-step="8"><h4>Extension points</h4><p>An extension point is a named place in a base use case where an extension can attach. Use them when a base has more than one optional or exceptional path, so each extend states exactly where it fires rather than vaguely somewhere inside.</p></div>
+    </div>
+  </div>
+</div>
+<script>
+const NARR=["These are the use case notations that the main example did not need. Each appears with a small example and a note on what it is and when to use it. Use Next, or press Play.", "Actor generalisation. The general actor, a Library user, can Search the catalogue.", "A Member is a kind of Library user: the hollow triangle points to the general actor. The Member inherits Search catalogue and adds its own use case, Borrow book.", "Use-case generalisation. A Customer can Pay.", "Pay by card is a kind of Pay: the triangle points to the general use case. It inherits Pay and adds the card-specific steps.", "Pay by cash is another variant of Pay. Both share Pay's behaviour and specialise it.", "Composite use cases. Manage booking, marked with the small grid icon, stands for a group of finer use cases.", "It is expanded in its own lower-level diagram, into Change dates and Cancel booking, so the top diagram stays readable.", "Extension points. The base use case Checkout names a point in its flow, afterTotals, in a second compartment.", "An extend attaches there: Apply coupon extends Checkout at afterTotals when [has coupon]. The named point says exactly where the optional behaviour fires."], MAX=9;
+let cur=0, timer=null;
+function render(){
+  document.querySelectorAll('[data-step]').forEach(el=>{ const n=parseInt(el.getAttribute('data-step')); el.classList.toggle('on', n<=cur); if(el.classList.contains('bstep')) el.classList.toggle('current', n===cur); });
+  document.getElementById('narr').innerHTML=NARR[cur];
+  document.getElementById('lbl').textContent='Step '+cur+' of '+MAX;
+  document.getElementById('progfill').style.width=(cur/MAX*100)+'%';
+  document.getElementById('prev').disabled=cur===0; document.getElementById('next').disabled=cur===MAX;
+}
+function bNext(){ if(cur<MAX){cur++;render();} }
+function bPrev(){ if(cur>0){cur--;render();} }
+function bReset(){ cur=0; stopPlay(); render(); }
+function stopPlay(){ if(timer){clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';} }
+function bPlay(){ if(timer){stopPlay();return;} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stopPlay();return;} cur++; render(); }, 2100); }
+render();
+</script>
+</body></html>
