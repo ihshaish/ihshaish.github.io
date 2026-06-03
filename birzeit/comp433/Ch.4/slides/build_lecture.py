@@ -90,7 +90,7 @@ slide('''<h2>Finding the actors</h2>
   <div class="box"><h3>Primary actor</h3><p style="margin:0;font-size:14.5px">A role (usually human) that starts a use case for its own goal: Guest, Librarian, Doctor.</p></div>
   <div class="box"><h3>Secondary actor</h3><p style="margin:0;font-size:14.5px">An external system the system depends on and calls out to: payment provider, email or SMS service, verification service.</p></div>
 </div>
-<div class="key"><span class="tag">Key</span><p><strong>Primary</strong> actor starts a use case for its own goal; <strong>secondary</strong> actor is the external system the system calls out to.</p></div>\n<p class="foot">An actor is a <em>role</em>, not a person; the same person can be two actors. Name each actor with a noun.</p>''')
+<div class="key"><span class="tag">Key</span><p><strong>Primary</strong> actor starts a use case for its own goal; <strong>secondary</strong> actor is the external system the system calls out to.</p></div>\n<p class="foot">An actor is a <em>role</em>, not a person; the same person can be two actors. Name each actor with a noun. Not every use case is started by a person: <strong>time or another system</strong> can trigger one (a temporal / clock actor, e.g. a nightly report or a scheduled message).</p>''')
 
 slide('''<h2>Finding the use cases</h2>
 <p class="lead">Two complementary techniques, then a quick check.</p>
