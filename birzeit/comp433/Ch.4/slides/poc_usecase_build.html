@@ -47,6 +47,8 @@
   .bstep.draw { transform:none; transition:opacity .2s ease, filter .35s ease; }
   .drawn { stroke-dasharray:320; stroke-dashoffset:320; }
   .bstep.draw.on .drawn { stroke-dashoffset:0; transition:stroke-dashoffset .85s ease .12s; }
+  .bhead { position: sticky; top: 0; z-index: 6; background: #fff; padding: 10px 0 8px; box-shadow: 0 8px 12px -8px rgba(15,20,25,0.18); }
+  .bstep { scroll-margin-top: 150px; }
 </style></head>
 <body><div class="wrap">
   <div class="eyebrow">COMP433 &middot; Chapter 4 &middot; building a use case diagram</div>
@@ -69,7 +71,7 @@
     </div>
     </div>
     <div class="builder">
-    <div class="controls">
+    <div class="bhead"><div class="controls">
       <button id="prev" onclick="bPrev()">Previous</button>
       <button id="next" onclick="bNext()">Next</button>
       <button class="secondary" onclick="bReset()">Reset</button>
@@ -77,7 +79,7 @@
       <span class="steplabel" id="lbl"></span>
     </div>
     <div class="prog"><div class="prog-fill" id="progfill"></div></div>
-    <div class="narration" id="narr"></div>
+    <div class="narration" id="narr"></div></div>
     <svg viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Use case diagram being constructed step by step from the requirements."><defs><marker id="ucOpen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker><marker id="assoc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4a8bb8"/></marker></defs><g class="bstep" data-step="1"><rect x="250" y="70" width="740" height="600" rx="8" class="uml-box" fill="#faf7f2" stroke-width="1.8"/><text x="620" y="60" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Hotel Booking System</text></g><g class="bstep" data-step="2"><g transform="translate(60,250)"><circle cx="20" cy="6" r="8" class="actor-blue"/><line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/><line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/><line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/><line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/><line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/><text x="20" y="76" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Guest</text></g></g><g class="bstep" data-step="3"><ellipse cx="440" cy="160" rx="86" ry="26" class="uml-box"/><text x="440" y="164" text-anchor="middle" class="uml-text" font-size="11">Search rooms</text><line x1="94" y1="268" x2="354" y2="165" class="uml-line-blue"/></g><g class="bstep" data-step="4"><ellipse cx="440" cy="300" rx="86" ry="26" class="uml-box"/><text x="440" y="304" text-anchor="middle" class="uml-text" font-size="11">Book room</text><line x1="94" y1="274" x2="354" y2="300" class="uml-line-blue"/></g><g class="bstep" data-step="5"><ellipse cx="440" cy="440" rx="88" ry="26" class="uml-box"/><text x="440" y="444" text-anchor="middle" class="uml-text" font-size="11">Cancel booking</text><line x1="94" y1="280" x2="352" y2="440" class="uml-line-blue"/></g><g class="bstep" data-step="6"><g transform="translate(60,560)"><circle cx="20" cy="6" r="8" class="actor-blue"/><line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/><line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/><line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/><line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/><line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/><text x="20" y="76" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Hotel Manager</text></g><ellipse cx="440" cy="575" rx="92" ry="26" class="uml-box"/><text x="440" y="572" text-anchor="middle" class="uml-text" font-size="11">Manage room</text><text x="440" y="587" text-anchor="middle" class="uml-text" font-size="11">inventory</text><line x1="94" y1="585" x2="348" y2="575" class="uml-line-blue"/></g><g class="bstep" data-step="7"><ellipse cx="720" cy="160" rx="90" ry="26" class="uml-box"/><text x="720" y="164" text-anchor="middle" class="uml-text" font-size="11">Check availability</text></g><g class="bstep" data-step="8"><line x1="526" y1="160" x2="630" y2="160" class="uml-line-dashed" marker-end="url(#ucOpen)"/><line x1="520" y1="290" x2="632" y2="172" class="uml-line-dashed" marker-end="url(#ucOpen)"/></g><g class="bstep" data-step="9"><text x="578" y="150" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text><text x="548" y="212" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text></g><g class="bstep" data-step="10"><ellipse cx="720" cy="440" rx="90" ry="26" class="uml-box"/><text x="720" y="444" text-anchor="middle" class="uml-text" font-size="11">Process payment</text><line x1="520" y1="312" x2="632" y2="432" class="uml-line-dashed" marker-end="url(#ucOpen)"/></g><g class="bstep" data-step="11"><text x="548" y="388" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#2c3540" font-weight="600">&lt;&lt;include&gt;&gt;</text></g><g class="bstep" data-step="12"><ellipse cx="720" cy="300" rx="96" ry="26" class="uml-box"/><text x="720" y="304" text-anchor="middle" class="uml-text" font-size="11">Apply discount code</text><line x1="624" y1="300" x2="528" y2="300" stroke="#7a3a23" stroke-width="1.2" stroke-dasharray="4,3" fill="none" marker-end="url(#ucOpen)"/></g><g class="bstep" data-step="13"><text x="578" y="291" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a3a23" font-weight="600">&lt;&lt;extend&gt;&gt;</text><text x="578" y="314" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a3a23" font-weight="600">[has code]</text></g><g class="bstep" data-step="14"><g transform="translate(1110,420)"><circle cx="20" cy="6" r="8" class="actor-blue"/><line x1="20" y1="14" x2="20" y2="42" class="uml-line-blue"/><line x1="20" y1="22" x2="6" y2="32" class="uml-line-blue"/><line x1="20" y1="22" x2="34" y2="32" class="uml-line-blue"/><line x1="20" y1="42" x2="6" y2="58" class="uml-line-blue"/><line x1="20" y1="42" x2="34" y2="58" class="uml-line-blue"/><text x="20" y="76" text-anchor="middle" class="uml-text" font-size="11" font-weight="600">Payment Provider</text></g></g><g class="bstep draw" data-step="15"><line x1="810" y1="440" x2="1104" y2="424" class="uml-line-blue drawn" marker-end="url(#assoc)"/></g></svg>
     </div>
     </div>
@@ -101,5 +103,13 @@ function bReset(){ cur=0; stopPlay(); render(); }
 function stopPlay(){ if(timer){clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';} }
 function bPlay(){ if(timer){stopPlay();return;} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stopPlay();return;} cur++; render(); }, 2100); }
 render();
+</script>
+<script>
+(function(){
+  new MutationObserver(function(muts){
+    for (var i=0;i<muts.length;i++){ var t=muts[i].target;
+      if (t.classList && t.classList.contains('current')) { t.scrollIntoView({behavior:'smooth', block:'center'}); break; } }
+  }).observe(document.body, {subtree:true, attributes:true, attributeFilter:['class']});
+})();
 </script>
 </body></html>
