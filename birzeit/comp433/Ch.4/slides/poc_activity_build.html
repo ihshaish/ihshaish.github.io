@@ -36,6 +36,8 @@
   .bstep { opacity:0; transform:translateY(12px) scale(.92); transform-box:fill-box; transform-origin:center; transition:opacity .3s ease, transform .42s cubic-bezier(.2,.8,.3,1), filter .35s ease; }
   .bstep.on { opacity:1; transform:translateY(0) scale(1); }
   .bstep.current { filter:drop-shadow(0 0 7px rgba(184,92,56,.55)); }
+  .bhead { position: sticky; top: 0; z-index: 6; background: #fff; padding: 10px 0 8px; box-shadow: 0 8px 12px -8px rgba(15,20,25,0.18); }
+  .bstep { scroll-margin-top: 150px; }
 </style></head>
 <body><div class="wrap">
   <div class="eyebrow">COMP433 &middot; Chapter 4 &middot; building an activity diagram</div>
@@ -54,7 +56,7 @@
       <div class="row" id="wf-alt"><span class="k">Alt</span> &nbsp;if declined, re-enter and retry; if no room, end</div>
     </div>
     <div class="builder">
-      <div class="controls">
+      <div class="bhead"><div class="controls">
         <button id="prev" onclick="bPrev()">Previous</button>
         <button id="next" onclick="bNext()">Next</button>
         <button class="secondary" onclick="bReset()">Reset</button>
@@ -62,7 +64,7 @@
         <span class="steplabel" id="lbl"></span>
       </div>
       <div class="prog"><div class="prog-fill" id="progfill"></div></div>
-      <div class="narration" id="narr"></div>
+      <div class="narration" id="narr"></div></div>
       <svg viewBox="0 0 1140 870" xmlns="http://www.w3.org/2000/svg" id="buildSvg" role="img" aria-label="Activity diagram being constructed step by step from the Book room use case."><defs><marker id="fArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs><g class="bstep" data-step="1"><rect x="40" y="60" width="370" height="780" fill="#faf7f2" stroke="#d8cfc0"/><rect x="410" y="60" width="370" height="780" fill="white" stroke="#d8cfc0"/><rect x="780" y="60" width="320" height="780" fill="#faf7f2" stroke="#d8cfc0"/><text x="225" y="88" text-anchor="middle" class="uml-text" font-weight="600">Guest</text><text x="595" y="88" text-anchor="middle" class="uml-text" font-weight="600">Booking System</text><text x="940" y="88" text-anchor="middle" class="uml-text" font-weight="600">Payment Provider</text><line x1="40" y1="112" x2="1100" y2="112" class="uml-line"/></g><g class="bstep" data-step="2"><circle cx="225" cy="142" r="9" fill="#0f1419"/><line x1="225" y1="151" x2="225" y2="178" class="uml-line" marker-end="url(#fArrow)"/><rect x="150" y="180" width="150" height="40" rx="20" class="uml-box"/><text x="225" y="204" text-anchor="middle" class="uml-text">Search rooms</text></g><g class="bstep" data-step="3"><line x1="300" y1="200" x2="505" y2="200" class="uml-line" marker-end="url(#fArrow)"/><rect x="510" y="180" width="170" height="40" rx="20" class="uml-box"/><text x="595" y="204" text-anchor="middle" class="uml-text">Find available rooms</text></g><g class="bstep" data-step="4"><line x1="595" y1="220" x2="595" y2="262" class="uml-line" marker-end="url(#fArrow)"/><polygon points="595,262 647,290 595,318 543,290" class="uml-box"/><text x="595" y="288" text-anchor="middle" class="uml-text" font-size="10">rooms</text><text x="595" y="300" text-anchor="middle" class="uml-text" font-size="10">available?</text></g><g class="bstep" data-step="5"><polyline points="595,318 595,360 470,360" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="498" y="352" text-anchor="start" class="uml-text" font-size="11">[no]</text><circle cx="455" cy="360" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="455" cy="360" r="5" fill="#0f1419"/></g><g class="bstep" data-step="6"><polyline points="647,290 700,290 700,420 300,420" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="662" y="283" text-anchor="start" class="uml-text" font-size="11">[yes]</text><rect x="150" y="400" width="150" height="40" rx="20" class="uml-box"/><text x="225" y="424" text-anchor="middle" class="uml-text">Select room</text></g><g class="bstep" data-step="7"><line x1="225" y1="440" x2="225" y2="478" class="uml-line" marker-end="url(#fArrow)"/><rect x="150" y="480" width="150" height="40" rx="20" class="uml-box"/><text x="225" y="504" text-anchor="middle" class="uml-text">Enter payment details</text></g><g class="bstep" data-step="8"><line x1="300" y1="500" x2="865" y2="500" class="uml-line" marker-end="url(#fArrow)"/><rect x="860" y="480" width="160" height="40" rx="20" class="uml-box"/><text x="940" y="504" text-anchor="middle" class="uml-text">Authorise payment</text></g><g class="bstep" data-step="9"><line x1="940" y1="520" x2="940" y2="556" class="uml-line" marker-end="url(#fArrow)"/><polygon points="940,566 986,590 940,614 894,590" class="uml-box"/><text x="940" y="594" text-anchor="middle" class="uml-text" font-size="10">approved?</text></g><g class="bstep" data-step="10"><polyline points="940,614 940,820 225,820 225,522" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="582" y="812" text-anchor="middle" class="uml-text" font-size="11">[declined]: retry payment</text></g><g class="bstep" data-step="11"><polyline points="894,590 595,590 595,628" class="uml-line" fill="none" marker-end="url(#fArrow)"/><text x="735" y="583" text-anchor="start" class="uml-text" font-size="11">[approved]</text><rect x="520" y="630" width="150" height="40" rx="20" class="uml-box"/><text x="595" y="654" text-anchor="middle" class="uml-text">Reserve room</text></g><g class="bstep" data-step="12"><line x1="595" y1="670" x2="595" y2="706" class="uml-line" marker-end="url(#fArrow)"/><rect x="520" y="708" width="150" height="40" rx="20" class="uml-box"/><text x="595" y="732" text-anchor="middle" class="uml-text">Confirm booking</text></g><g class="bstep" data-step="13"><line x1="595" y1="748" x2="595" y2="778" class="uml-line" marker-end="url(#fArrow)"/><circle cx="595" cy="791" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="595" cy="791" r="5" fill="#0f1419"/></g></svg>
     </div>
   </div>
@@ -86,5 +88,13 @@ function bReset(){ cur=0; stopPlay(); render(); }
 function stopPlay(){ if(timer){clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';} }
 function bPlay(){ if(timer){stopPlay();return;} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stopPlay();return;} cur++; render(); }, 2100); }
 render();
+</script>
+<script>
+(function(){
+  new MutationObserver(function(muts){
+    for (var i=0;i<muts.length;i++){ var t=muts[i].target;
+      if (t.classList && t.classList.contains('current')) { t.scrollIntoView({behavior:'smooth', block:'center'}); break; } }
+  }).observe(document.body, {subtree:true, attributes:true, attributeFilter:['class']});
+})();
 </script>
 </body></html>
