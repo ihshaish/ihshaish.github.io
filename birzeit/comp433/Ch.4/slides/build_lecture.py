@@ -120,17 +120,19 @@ slide('''<h2>The remaining use case notations</h2>
 <iframe class="embed" src="poc_usecase_notations.html" title="Use case notations"></iframe>''')
 
 slide('''<h2>Use case descriptions</h2>
-<p class="lead">The ellipse is the index; the <strong>description</strong> is the contract the team builds against. Worked example for a Library use case:</p>
+<p class="lead">The ellipse is the index; the <strong>description</strong> is the contract the team builds against, the full template: pre-conditions, trigger, the main flow, and the <strong>alternative / exception flows</strong>. Worked example for a Library use case:</p>
 <table class="rel desc">
   <tbody>
     <tr><td>Title</td><td>Borrow copy of a book</td></tr>
     <tr><td>Actors</td><td>BookBorrower (primary), Librarian (primary)</td></tr>
     <tr><td>Pre-conditions</td><td>1. Borrower is a member. 2. Borrower is below the loan limit.</td></tr>
     <tr><td>Trigger</td><td>Borrower asks the Librarian to borrow a copy.</td></tr>
-    <tr><td>Workflow</td><td>1. System checks the allowance. 2. If allowed: record the loan and compute the due date. 3. Issue the copy (status &rarr; on-loan).</td></tr>
-    <tr><td>Post-conditions</td><td>Loan recorded; copy on-loan; loan count incremented (on success only).</td></tr>
+    <tr><td>Main flow</td><td>1. System checks the allowance. 2. Record the loan and compute the due date. 3. Issue the copy (status &rarr; on-loan).</td></tr>
+    <tr><td>Alternative / exception</td><td>1a. Limit reached: the loan is refused and the flow ends. 3a. Barcode unreadable: the Librarian records the problem; no copy is issued.</td></tr>
+    <tr><td>Post-conditions</td><td>On success: loan recorded, copy on-loan, loan count incremented. On failure: nothing changes.</td></tr>
   </tbody>
-</table>''')
+</table>
+<div class="key"><span class="tag">Key &middot; the connection</span><p>The <strong>main flow</strong> and each <strong>alternative / exception</strong> are the same paths you write as <strong>scenarios</strong> (next slide) and draw as the <strong>decision branches and loops</strong> of the activity diagram. One description, three consistent views.</p></div>''')
 
 slide('''<h2>Scenarios</h2>
 <p class="lead">A scenario is one specific path through a use case, with <strong>no branching</strong>. Each non-trivial use case gets at least three:</p>
@@ -149,7 +151,7 @@ slide(f'''<h2>Activity notation</h2>
 {actref()}<div class="key"><span class="tag">Key</span><p><strong>Decision</strong> = exactly one branch runs (a choice). <strong>Fork</strong> = all branches run (concurrency). This is the most common confusion.</p></div>''')
 
 slide('''<h2>From a use case to an activity diagram</h2>
-<p class="lead">The Book room use case, unpacked into a flow. Each step of its description lights up as the matching action appears; swimlanes assign each step to the Guest, the system, or the external provider.</p>
+<p class="lead">The Book room use case, unpacked into a flow. Each step of its description lights up as the matching action appears; the description's <strong>alternative flows</strong> become the diagram's <strong>decision branches and loops</strong>, and swimlanes assign each step to the Guest, the system, or the external provider.</p>
 <iframe class="embed" src="poc_activity_build.html" title="Activity build"></iframe>''')
 
 slide('''<h2>Swimlanes, loops, and a well-formed flow</h2>

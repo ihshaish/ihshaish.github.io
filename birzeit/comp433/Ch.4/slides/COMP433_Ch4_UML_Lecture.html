@@ -114,17 +114,19 @@
 <p class="lead">Actor generalisation, use-case generalisation, composite (multi-level) use cases, and extension points, each on a small example with a note on when to use it.</p>
 <iframe class="embed" src="poc_usecase_notations.html" title="Use case notations"></iframe></section>
 <section class="slide"><h2>Use case descriptions</h2>
-<p class="lead">The ellipse is the index; the <strong>description</strong> is the contract the team builds against. Worked example for a Library use case:</p>
+<p class="lead">The ellipse is the index; the <strong>description</strong> is the contract the team builds against, the full template: pre-conditions, trigger, the main flow, and the <strong>alternative / exception flows</strong>. Worked example for a Library use case:</p>
 <table class="rel desc">
   <tbody>
     <tr><td>Title</td><td>Borrow copy of a book</td></tr>
     <tr><td>Actors</td><td>BookBorrower (primary), Librarian (primary)</td></tr>
     <tr><td>Pre-conditions</td><td>1. Borrower is a member. 2. Borrower is below the loan limit.</td></tr>
     <tr><td>Trigger</td><td>Borrower asks the Librarian to borrow a copy.</td></tr>
-    <tr><td>Workflow</td><td>1. System checks the allowance. 2. If allowed: record the loan and compute the due date. 3. Issue the copy (status &rarr; on-loan).</td></tr>
-    <tr><td>Post-conditions</td><td>Loan recorded; copy on-loan; loan count incremented (on success only).</td></tr>
+    <tr><td>Main flow</td><td>1. System checks the allowance. 2. Record the loan and compute the due date. 3. Issue the copy (status &rarr; on-loan).</td></tr>
+    <tr><td>Alternative / exception</td><td>1a. Limit reached: the loan is refused and the flow ends. 3a. Barcode unreadable: the Librarian records the problem; no copy is issued.</td></tr>
+    <tr><td>Post-conditions</td><td>On success: loan recorded, copy on-loan, loan count incremented. On failure: nothing changes.</td></tr>
   </tbody>
-</table></section>
+</table>
+<div class="key"><span class="tag">Key &middot; the connection</span><p>The <strong>main flow</strong> and each <strong>alternative / exception</strong> are the same paths you write as <strong>scenarios</strong> (next slide) and draw as the <strong>decision branches and loops</strong> of the activity diagram. One description, three consistent views.</p></div></section>
 <section class="slide"><h2>Scenarios</h2>
 <p class="lead">A scenario is one specific path through a use case, with <strong>no branching</strong>. Each non-trivial use case gets at least three:</p>
 <div class="two">
@@ -139,7 +141,7 @@
 <p class="lead">A small, fixed vocabulary. Two pairs are easy to confuse: a <strong>decision</strong> picks one branch while a <strong>fork</strong> runs all; a <strong>merge</strong> re-joins a choice while a <strong>join</strong> waits for parallel flows.</p>
 <svg viewBox="0 0 940 386" class="ref" role="img" aria-label="Activity notation legend"><circle cx="40" cy="42" r="10" fill="#0f1419"/><text x="92" y="40" class="t" font-weight="600">Initial node</text><text x="92" y="57" class="lab">where the flow starts (exactly one)</text><circle cx="40" cy="100" r="10" fill="#fff" stroke="#0f1419" stroke-width="1.5"/><circle cx="40" cy="100" r="5" fill="#0f1419"/><text x="92" y="98" class="t" font-weight="600">Final node</text><text x="92" y="115" class="lab">where a path ends (there may be several)</text><rect x="14" y="145" width="52" height="26" rx="13" stroke="#0f1419" stroke-width="1.4" fill="#fff"/><text x="92" y="156" class="t" font-weight="600">Action</text><text x="92" y="173" class="lab">a unit of work, named with a verb phrase</text><polygon points="40,201 62,216 40,231 18,216" stroke="#0f1419" stroke-width="1.4" fill="#fff"/><text x="92" y="214" class="t" font-weight="600">Decision / Merge</text><text x="92" y="231" class="lab">split on a guard (one branch runs) / re-join the alternatives</text><rect x="14" y="270" width="54" height="8" rx="2" fill="#2c3540"/><text x="92" y="272" class="t" font-weight="600">Fork / Join</text><text x="92" y="289" class="lab">start parallel flows / wait for every flow to finish</text><rect x="20" y="317" width="20" height="30" stroke="#d8cfc0" fill="#faf7f2"/><rect x="40" y="317" width="20" height="30" stroke="#d8cfc0" fill="#fff"/><text x="92" y="330" class="t" font-weight="600">Swimlane</text><text x="92" y="347" class="lab">assign each action to an actor or system</text></svg><div class="key"><span class="tag">Key</span><p><strong>Decision</strong> = exactly one branch runs (a choice). <strong>Fork</strong> = all branches run (concurrency). This is the most common confusion.</p></div></section>
 <section class="slide"><h2>From a use case to an activity diagram</h2>
-<p class="lead">The Book room use case, unpacked into a flow. Each step of its description lights up as the matching action appears; swimlanes assign each step to the Guest, the system, or the external provider.</p>
+<p class="lead">The Book room use case, unpacked into a flow. Each step of its description lights up as the matching action appears; the description's <strong>alternative flows</strong> become the diagram's <strong>decision branches and loops</strong>, and swimlanes assign each step to the Guest, the system, or the external provider.</p>
 <iframe class="embed" src="poc_activity_build.html" title="Activity build"></iframe></section>
 <section class="slide"><h2>Swimlanes, loops, and a well-formed flow</h2>
 <div class="two">
