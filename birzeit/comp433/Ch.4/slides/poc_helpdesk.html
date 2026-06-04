@@ -15,7 +15,8 @@
   p { color:var(--ink-soft); } .lead { font-size:16px; max-width:900px; } .sub { font-size:14px; color:var(--ink-mute); margin:0 0 8px; }
   .scenario { background:#fff; border:1px solid var(--rule); border-radius:12px; padding:16px 20px; margin-top:14px; font-size:14.5px; }
   .builder { border:1px solid var(--rule); border-radius:16px; padding:16px 18px 22px; margin-top:8px; background:#fff; box-shadow:0 8px 28px rgba(15,20,25,.06); }
-  .controls { display:flex; align-items:center; gap:10px; }
+  .controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:sticky; top:0; background:#fff; z-index:5; padding:6px 0 8px; border-bottom:1px solid var(--rule); }
+  .builder:fullscreen { background:#fbfaf8; padding:16px 28px; overflow:auto; border-radius:0; }
   button { background:var(--steel); color:#fff; border:none; padding:9px 16px; border-radius:7px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; cursor:pointer; }
   button.secondary { background:#fff; color:var(--steel); border:1px solid var(--steel); }
   button:disabled { opacity:.4; cursor:default; }
@@ -44,7 +45,7 @@
   <div class="builder" id="hduc">
     <div class="controls">
       <button class="bprev">Previous</button><button class="bnext">Next</button>
-      <button class="breset secondary">Reset</button><button class="bplay secondary">&#9658; Play</button>
+      <button class="breset secondary">Reset</button><button class="bplay secondary">&#9658; Play</button><button class="bfs secondary">&#9974; Full screen</button>
       <span class="lbl steplabel"></span>
     </div>
     <div class="prog"><div class="pfill"></div></div>
@@ -56,7 +57,7 @@
   <div class="builder" id="hdact">
     <div class="controls">
       <button class="bprev">Previous</button><button class="bnext">Next</button>
-      <button class="breset secondary">Reset</button><button class="bplay secondary">&#9658; Play</button>
+      <button class="breset secondary">Reset</button><button class="bplay secondary">&#9658; Play</button><button class="bfs secondary">&#9974; Full screen</button>
       <span class="lbl steplabel"></span>
     </div>
     <div class="prog"><div class="pfill"></div></div>
@@ -75,12 +76,14 @@ function makeBuilder(root){
     el('.lbl').textContent='Step '+cur+' of '+MAX;
     el('.pfill').style.width=(cur/MAX*100)+'%';
     el('.bprev').disabled=cur===0; el('.bnext').disabled=cur===MAX;
+    if(cur>0){ const cu=el('.bstep.current'); if(cu&&cu.scrollIntoView) cu.scrollIntoView({behavior:'smooth',block:'center'}); }
   }
   function stop(){ if(timer){clearInterval(timer);timer=null;el('.bplay').innerHTML='&#9658; Play';} }
   el('.bprev').onclick=()=>{ if(cur>0){cur--;render();} };
   el('.bnext').onclick=()=>{ if(cur<MAX){cur++;render();} };
   el('.breset').onclick=()=>{ cur=0; stop(); render(); };
-  el('.bplay').onclick=()=>{ if(timer){stop();return;} if(cur===MAX)cur=0; el('.bplay').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stop();return;} cur++; render(); }, 2100); };
+  el('.bplay').onclick=()=>{ if(timer){stop();return;} if(cur===MAX)cur=0; if(!document.fullscreenElement&&root.requestFullscreen) root.requestFullscreen(); el('.bplay').textContent='Pause'; timer=setInterval(()=>{ if(cur>=MAX){stop();return;} cur++; render(); }, 2100); };
+  const fsb=el('.bfs'); if(fsb) fsb.onclick=()=>{ if(document.fullscreenElement){document.exitFullscreen();} else if(root.requestFullscreen){root.requestFullscreen();} };
   render();
 }
 document.querySelectorAll('.builder').forEach(makeBuilder);

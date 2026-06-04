@@ -95,7 +95,9 @@ HTML=f'''<!DOCTYPE html>
   h1 {{ font-family:var(--serif); font-weight:500; font-size:25px; letter-spacing:-.02em; margin:0 0 8px; }}
   p {{ color:var(--ink-soft); }} .lead {{ font-size:16px; max-width:900px; }}
   .builder {{ border:1px solid var(--rule); border-radius:16px; padding:18px 20px 22px; margin-top:16px; background:#fff; box-shadow:0 10px 34px rgba(15,20,25,.07); }}
-  .controls {{ display:flex; align-items:center; gap:10px; }}
+  .controls {{ display:flex; align-items:center; gap:10px; position:sticky; top:0; background:#fff; z-index:5; padding:6px 0 8px; border-bottom:1px solid var(--rule); }}
+  .builder:fullscreen {{ background:#fbfaf8; padding:16px 28px; overflow:auto; border-radius:0; }}
+  .fsbtn {{ margin-left:6px; }}
   button {{ background:var(--steel); color:#fff; border:none; padding:9px 16px; border-radius:7px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; cursor:pointer; }}
   button.secondary {{ background:#fff; color:var(--steel); border:1px solid var(--steel); }}
   button:disabled {{ opacity:.4; cursor:default; }}
@@ -125,7 +127,7 @@ HTML=f'''<!DOCTYPE html>
   <div class="eyebrow">COMP433 &middot; Chapter 4 &middot; use case notations</div>
   <h1>Use case diagrams: the remaining notations</h1>
   <p class="lead">The core diagram uses actors, use cases, associations, include and extend. Four more notations appear in larger systems, each shown here on a small example, with a note on what it is and when to use it.</p>
-  <div class="builder">
+  <div class="builder" id="builder">
     <div class="controls">
       <button id="prev" onclick="bPrev()">Previous</button>
       <button id="next" onclick="bNext()">Next</button>
@@ -151,7 +153,7 @@ function bNext(){{ if(cur<MAX){{cur++;render();}} }}
 function bPrev(){{ if(cur>0){{cur--;render();}} }}
 function bReset(){{ cur=0; stopPlay(); render(); }}
 function stopPlay(){{ if(timer){{clearInterval(timer);timer=null;document.getElementById('play').innerHTML='&#9658; Play';}} }}
-function bPlay(){{ if(timer){{stopPlay();return;}} if(cur===MAX)cur=0; document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{{ if(cur>=MAX){{stopPlay();return;}} cur++; render(); }}, 2100); }}
+function bPlay(){{ if(timer){{stopPlay();return;}} if(cur===MAX)cur=0; const _b=document.getElementById('builder'); if(_b&&!document.fullscreenElement&&_b.requestFullscreen) _b.requestFullscreen(); document.getElementById('play').textContent='Pause'; timer=setInterval(()=>{{ if(cur>=MAX){{stopPlay();return;}} cur++; render(); }}, 2100); }}
 render();
 </script>
 </body></html>'''

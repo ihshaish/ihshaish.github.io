@@ -193,7 +193,7 @@ slide('''<h2>The other granularity: a whole business process</h2>
 
 slide('''<h2>A second domain, end to end: the Help Desk</h2>
 <p class="lead">The same method on a fresh scenario, both diagrams. This one also shows actor generalisation (a Senior Agent is a kind of Support Agent).</p>
-<iframe class="embed tall" src="poc_helpdesk.html" title="Helpdesk worked example"></iframe>''')
+<iframe class="embed tall" allowfullscreen src="poc_helpdesk.html" title="Helpdesk worked example"></iframe>''')
 
 slide('''<h2>Common pitfalls</h2>
 <ul class="pts">
