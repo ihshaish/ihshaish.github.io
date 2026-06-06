@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Chapter 4 Interactive Companion: number theory, direct proof, counterexample, rationals, divisibility, the quotient-remainder theorem." />
+
+  <title>COMP233 Ch.6 Companion: Set Theory</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-critical: #fff9c4;
+      --c-broken-bg: #ffcdd2;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-critical: #4e4322;
+      --c-broken-bg: #5a2727;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .companion-hero { text-align: center; padding: 30px 0 12px; }
+    .companion-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 700; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .companion-hero h1 { font-size: 1.8rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .companion-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .companion-hero .back-link { font-size: 0.88rem; color: var(--c-primary); text-decoration: none; font-weight: 600; }
+    .companion-hero .back-link:hover { text-decoration: underline; }
+
+    .intro-card {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-primary); border-radius: 8px;
+      padding: 16px 22px; margin: 24px 0 0;
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
+    }
+    .intro-card h4 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .intro-card p { margin: 0 0 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    .toc {
+      background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-primary); border-radius: 12px;
+      padding: 18px 24px 14px; margin: 22px 0 18px;
+      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
+    }
+    body.dark .toc { background: linear-gradient(180deg, rgba(100,181,246,0.10) 0%, var(--c-card-bg) 100%); }
+    .toc-title {
+      margin: 0 0 12px; font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-primary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toc-section { margin-bottom: 10px; }
+    .toc-section:last-child { margin-bottom: 0; }
+    .toc-section h5 {
+      margin: 0 0 6px; font-size: 0.9rem; font-weight: 700;
+      color: var(--c-text); line-height: 1.4;
+    }
+    .toc-section h5 .toc-num {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      color: var(--c-primary); margin-right: 8px;
+    }
+    .toc-links {
+      display: flex; flex-wrap: wrap; gap: 6px 8px;
+      padding-left: 14px; border-left: 2px solid var(--c-border);
+    }
+    body.dark .toc-links { border-left-color: #2a3a4a; }
+    .toc-links a {
+      display: inline-block; font-size: 0.84rem;
+      color: var(--c-primary); background: var(--c-card-bg);
+      text-decoration: none; padding: 4px 12px;
+      border: 1px solid var(--c-border); border-radius: 16px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .toc-links a:hover { background: var(--c-primary); color: #fff; border-color: var(--c-primary); text-decoration: none; }
+    @media (max-width: 640px) { .toc { padding: 16px 18px 12px; } .toc-links { padding-left: 10px; } }
+
+    .chapter-section { margin-top: 44px; }
+    .chapter-section > h2 {
+      font-size: 1.45rem; font-weight: 700; color: var(--c-primary);
+      border-bottom: 2px solid var(--c-border); padding-bottom: 10px; margin: 0 0 22px;
+    }
+    .chapter-section > h2 .ch-num {
+      font-family: 'Roboto Mono', monospace; font-size: 1.15rem;
+      margin-right: 10px; color: var(--c-muted);
+    }
+
+    .section-intro {
+      font-size: 0.96rem; line-height: 1.65; color: var(--c-text); margin-bottom: 22px;
+    }
+    .section-intro ul { padding-left: 22px; }
+    .section-intro li { margin-bottom: 4px; }
+    .section-intro code, .section-intro .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86em;
+    }
+
+    .widget-card {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 22px 26px; margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .widget-card h3 {
+      font-size: 1.05rem; font-weight: 700; color: var(--c-primary); margin: 0 0 6px;
+    }
+    .widget-card .widget-desc {
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.55; margin-bottom: 16px;
+    }
+    .widget-card .widget-desc code,
+    .widget-card .widget-desc .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.88em;
+    }
+
+    /* Hover terms */
+    .term {
+      position: relative; cursor: help;
+      border-bottom: 1px dotted var(--c-primary);
+      color: inherit; font-weight: 700;
+    }
+    .term::after {
+      content: attr(data-tip); position: absolute;
+      bottom: calc(100% + 8px); left: 0;
+      background: #263238; color: #fff;
+      padding: 9px 13px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 400; line-height: 1.55;
+      white-space: normal; word-wrap: break-word; width: max-content;
+      max-width: min(360px, calc(100vw - 32px));
+      text-align: left; opacity: 0; pointer-events: none;
+      transition: opacity 0.15s; z-index: 50;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .term::before {
+      content: ''; position: absolute;
+      bottom: calc(100% + 3px); left: 14px;
+      border: 5px solid transparent; border-top-color: #263238;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50;
+    }
+    .term:hover::after, .term:focus::after,
+    .term:hover::before, .term:focus::before { opacity: 1; }
+
+    .mono-inline {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg);
+      padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+
+    /* Floating "How to use" widget */
+    .howto-fab {
+      position: fixed; top: 100px; right: 18px; z-index: 30;
+      max-width: 300px; display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .howto-fab-toggle {
+      background: var(--c-primary); color: #fff; border: none;
+      border-radius: 8px; padding: 10px 16px; cursor: pointer;
+      font-size: 0.84rem; font-weight: 700;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    .howto-fab-toggle:hover, .howto-fab-toggle:focus { background: var(--c-primary-dark); outline: none; }
+    .howto-fab-toggle .chev { font-size: 0.72rem; transition: transform 0.2s; }
+    .howto-fab[data-open="true"] .howto-fab-toggle .chev { transform: rotate(180deg); }
+    .howto-fab-body {
+      width: 300px; margin-top: 8px;
+      background: var(--c-card-bg); border: 1px solid var(--c-primary);
+      border-radius: 10px; padding: 14px 18px;
+      font-size: 0.86rem; line-height: 1.55;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+    .howto-fab-body[hidden] { display: none; }
+    .howto-fab-body h5 {
+      margin: 0 0 8px; font-size: 0.72rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+    }
+    .howto-fab-body ul { margin: 0; padding-left: 20px; }
+    .howto-fab-body li { margin-bottom: 8px; }
+    .howto-fab-body li:last-child { margin-bottom: 0; }
+    @media (max-width: 980px) {
+      .howto-fab { position: static; max-width: 100%; align-items: stretch; margin: 18px 0 0; }
+      .howto-fab-toggle { align-self: flex-start; }
+      .howto-fab-body { width: auto; }
+    }
+
+    /* Numeric input row */
+    .num-row {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .num-row label {
+      font-size: 0.88rem; color: var(--c-text);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .num-row input[type="number"], .num-row select {
+      padding: 7px 12px; border: 1px solid var(--c-border); border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.95rem;
+      background: var(--c-card-bg); color: var(--c-text);
+      width: 130px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .num-row input[type="number"]:focus, .num-row select:focus {
+      border-color: var(--c-primary); box-shadow: 0 0 0 2px rgba(21,101,192,0.13);
+    }
+
+    /* Result panels */
+    .result-panel {
+      background: var(--c-page-bg); border-radius: 8px;
+      padding: 12px 16px; margin-top: 8px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem; line-height: 1.7;
+    }
+    .result-panel .res-row {
+      display: flex; gap: 14px; align-items: baseline; padding: 4px 0;
+    }
+    .result-panel .res-row + .res-row {
+      border-top: 1px dotted var(--c-border);
+    }
+    .result-panel .res-label {
+      min-width: 130px; color: var(--c-muted); font-weight: 600;
+    }
+    .result-panel .res-val { color: var(--c-text); font-weight: 700; }
+    .result-panel .res-val.t { color: var(--c-true); }
+    .result-panel .res-val.f { color: var(--c-false); }
+    .result-panel .res-note {
+      font-family: 'Roboto', sans-serif; font-style: italic;
+      color: var(--c-muted); font-size: 0.86rem;
+    }
+
+    /* Verdict pill */
+    .verdict {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 16px;
+      font-size: 0.88rem; font-weight: 700; margin-top: 12px;
+    }
+    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
+    .verdict.warn { background: #fff3e0; color: #e65100; }
+    body.dark .verdict.warn { background: #3a2410; color: #ffb74d; }
+
+    /* Conjecture lab */
+    .conj-card {
+      background: var(--c-page-bg); border-radius: 8px;
+      padding: 14px 18px; margin-top: 8px;
+      font-size: 0.9rem; line-height: 1.65;
+    }
+    .conj-card .conj-stmt {
+      font-style: italic; color: var(--c-text); margin-bottom: 8px;
+    }
+    .conj-card .conj-result {
+      font-family: 'Roboto Mono', monospace; font-size: 0.86rem; line-height: 1.7;
+    }
+    .conj-card .conj-cex {
+      color: var(--c-false); font-weight: 700;
+    }
+    .conj-card .conj-note {
+      font-style: italic; color: var(--c-muted); font-size: 0.82rem;
+      margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--c-border);
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    .data-table th, .data-table td {
+      padding: 7px 12px; border-bottom: 1px solid var(--c-border);
+      text-align: left;
+    }
+    .data-table th {
+      background: var(--c-page-bg); color: var(--c-primary);
+      font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .data-table tr:hover { background: var(--c-page-bg); }
+    .data-table td.formal, .data-table td.mono {
+      font-family: 'Roboto Mono', monospace;
+    }
+    .data-table td.t { color: var(--c-true); font-weight: 700; }
+    .data-table td.f { color: var(--c-false); font-weight: 700; }
+    .data-table td.center { text-align: center; }
+
+    /* Theorem / definition box */
+    .thm-box {
+      border-left: 3px solid var(--c-primary);
+      background: var(--c-primary-light);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: 0.93rem; line-height: 1.65;
+    }
+    .thm-box .thm-title {
+      font-weight: 800; color: var(--c-primary); margin-bottom: 4px;
+      font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .thm-box .thm-body { color: var(--c-text); }
+    .thm-box.def { border-left-color: #2e7d32; background: var(--c-true-bg); }
+    .thm-box.def .thm-title { color: var(--c-true); }
+    body.dark .thm-box.def { background: rgba(46,125,50,0.18); }
+
+    /* Proof callout */
+    .proof-callout {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 14px 18px; margin: 12px 0;
+      font-family: 'Roboto', sans-serif; font-size: 0.9rem; line-height: 1.7;
+    }
+    .proof-callout .proof-label {
+      font-size: 0.74rem; font-weight: 800; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+    .proof-callout .proof-step { padding: 3px 0; }
+    .proof-callout .proof-step.mono {
+      font-family: 'Roboto Mono', monospace; padding-left: 18px;
+    }
+    .proof-callout .end-of-proof {
+      font-weight: 800; color: var(--c-primary); float: right;
+    }
+
+    /* Properties grid (the 7 even/odd properties) */
+    .props-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .prop-cell {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-radius: 6px; padding: 10px 14px;
+      font-size: 0.86rem; line-height: 1.5;
+    }
+    .prop-cell .prop-num {
+      font-size: 0.7rem; font-weight: 800; color: var(--c-primary);
+      letter-spacing: 0.5px;
+    }
+
+    /* Parity-class visualisation */
+    .class-row {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      align-items: baseline; padding: 6px 0;
+    }
+    .class-row + .class-row {
+      border-top: 1px dotted var(--c-border);
+    }
+    .class-row .class-label {
+      min-width: 130px; font-family: 'Roboto Mono', monospace;
+      font-weight: 700; color: var(--c-primary); font-size: 0.86rem;
+    }
+    .class-row .class-chip {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 12px;
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      font-family: 'Roboto Mono', monospace; font-size: 0.82rem;
+    }
+
+    /* Exercises */
+    .exercises-block { margin-top: 18px; }
+    .exercises-block > h3 { font-size: 1.05rem; color: var(--c-primary); margin: 0 0 6px; }
+    .exercises-block .ex-source { font-size: 0.82rem; color: var(--c-muted); font-style: italic; margin-bottom: 16px; }
+    .exercise {
+      background: var(--c-card-bg); border-left: 4px solid var(--c-primary);
+      border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px;
+    }
+    .exercise .ex-label {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+    .exercise .ex-body {
+      font-size: 0.94rem; color: var(--c-text); line-height: 1.6; margin-bottom: 10px;
+    }
+    .solution-btn {
+      background: var(--c-primary-light); color: var(--c-primary);
+      border: 1px solid var(--c-primary); padding: 5px 14px; border-radius: 6px;
+      font-size: 0.84rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-primary); color: #fff; }
+    .solution-btn.open { background: var(--c-primary); color: #fff; }
+    .solution {
+      margin-top: 12px; padding: 14px 18px;
+      background: var(--c-page-bg); border-radius: 6px;
+      font-size: 0.9rem; line-height: 1.65; color: var(--c-text); display: none;
+    }
+    .solution.open { display: block; }
+    .solution code, .solution .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px;
+    }
+    .solution strong { color: var(--c-primary); }
+
+    .recap-card {
+      background: var(--c-primary-light); border-radius: 10px;
+      padding: 22px 28px; margin-top: 36px;
+    }
+    .recap-card h3 { color: var(--c-primary); margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; }
+    .recap-card ul { margin: 0 0 12px; padding-left: 22px; line-height: 1.75; font-size: 0.92rem; }
+    .recap-card .preview {
+      font-size: 0.88rem; color: var(--c-text);
+      padding-top: 12px; border-top: 1px solid rgba(21,101,192,0.2); line-height: 1.6;
+    }
+    body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
+
+    @media (max-width: 640px) {
+      .companion-hero h1 { font-size: 1.4rem; }
+      .widget-card { padding: 16px 18px; }
+    }
+  </style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+
+  <aside class="howto-fab" id="howto-fab" data-open="false">
+    <button type="button" class="howto-fab-toggle" aria-expanded="false" aria-controls="howto-fab-body">
+      <i class="fas fa-question-circle"></i>
+      <span>How to use</span>
+      <i class="fas fa-chevron-down chev"></i>
+    </button>
+    <div class="howto-fab-body" id="howto-fab-body" hidden>
+      <h5>Using this companion</h5>
+      <ul>
+        <li><strong>Set widgets</strong>: type elements as a comma-separated list (e.g. <span class="mono-inline">a, b, c</span> or <span class="mono-inline">1, 2, 3</span>). The panels compute operations, subsets, power sets and products live.</li>
+        <li><strong>The element method</strong>: every set fact is proved by taking an arbitrary element and unfolding the procedural definitions. The proof walker shows this step by step.</li>
+        <li><strong>Hover any underlined term</strong> for its symbol, Arabic name, and definition.</li>
+        <li><strong>Practice and worked solutions</strong> use Epp's recommended problems (4th ed.), listed per section. Attempt each on paper first, then reveal the solution.</li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="companion-hero">
+          <div class="eyebrow">COMP233 &middot; Chapter 6 Interactive Companion</div>
+          <h1>Set Theory</h1>
+          <div class="subtitle">Sets and operations, the element method of proof, the catalogue of set identities, algebraic proofs, and Boolean algebra. Sections 6.1&ndash;6.4.</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="intro-card">
+          <h4><i class="fas fa-compass"></i> About this chapter</h4>
+          <p>Sets are the language the rest of mathematics is written in: relations, functions, sequences, probability, and the formal models of computation are all built from them. Chapter 6 does two things at once. It gives you the <strong>vocabulary</strong> (subset, union, intersection, complement, power set, product, partition), and it teaches the <span class="term" data-tip="طريقة العنصر · take an arbitrary element x, unfold the definitions, follow the logic to the other side"><strong>element method</strong></span>, the single proof technique that settles almost every set fact by reducing it to the logic of Chapters 2 and 3.</p>
+          <p><strong>The thread that runs through it.</strong> A set identity such as <span class="mono-inline">(A &cup; B)&#7580; = A&#7580; &cap; B&#7580;</span> is the logical equivalence <span class="mono-inline">&not;(p &or; q) &equiv; &not;p &and; &not;q</span> wearing different clothes. By 6.4 this is made precise: logic, sets, and bits are all the same algebraic structure, a <strong>Boolean algebra</strong>. That is why the chapter ends where digital hardware begins.</p>
+          <div class="preview"><strong>A note on Chapter 5.</strong> One result here, that an <span class="mono-inline">n</span>-element set has <span class="mono-inline">2&#8319;</span> subsets, is proved in the book by mathematical induction (Chapter 5, not yet covered). This companion gives a complete <em>counting</em> argument for it that needs no induction, and flags the induction proof as a preview.</p></div>
+        </div>
+
+        <nav class="toc" aria-label="Companion contents">
+          <div class="toc-title"><i class="fas fa-list"></i> Contents</div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 6.1</span>Set basics</h5>
+            <div class="toc-links">
+              <a href="#sec611">Notation and the element relation</a>
+              <a href="#sec612">Subsets and equality</a>
+              <a href="#sec613">Set-operations calculator</a>
+              <a href="#sec614">Subset &amp; equality checker</a>
+              <a href="#sec615">Empty set and partitions</a>
+              <a href="#sec616">Power sets and products</a>
+              <a href="#ex61">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 6.2</span>Properties of sets</h5>
+            <div class="toc-links">
+              <a href="#sec621">Procedural definitions</a>
+              <a href="#sec622">The set identities (Theorem 6.2.2)</a>
+              <a href="#sec623">Element-method proof walker</a>
+              <a href="#sec624">Proving a set is empty</a>
+              <a href="#ex62">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 6.3</span>Disproofs and algebraic proofs</h5>
+            <div class="toc-links">
+              <a href="#sec631">Disproof by counterexample</a>
+              <a href="#sec632">Counting subsets: 2&#8319;</a>
+              <a href="#sec633">Algebraic proofs</a>
+              <a href="#sec634">Symmetric difference</a>
+              <a href="#ex63">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 6.4</span>Boolean algebra</h5>
+            <div class="toc-links">
+              <a href="#sec641">The five axioms</a>
+              <a href="#sec642">B = {0, 1}</a>
+              <a href="#sec643">Duality</a>
+              <a href="#ex64">Practice exercises</a>
+              <a href="#appendix">Enrichment: two paradoxes</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Worked</span>Taught solutions</h5>
+            <div class="toc-links">
+              <a href="#worked">Recommended exercises, solved</a>
+              <a href="#recap">Chapter recap</a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- ===================== SECTION 6.1 ===================== -->
+        <div class="chapter-section" id="section-61">
+          <h2><span class="ch-num">Section 6.1</span>Set basics</h2>
+
+          <div class="section-intro" id="sec611">
+            <div class="thm-box def">
+              <div class="thm-title">Definitions (Epp &sect;6.1)</div>
+              <div class="thm-body">
+                A <span class="term" data-tip="مجموعة · a collection of distinct objects, considered as one whole"><strong>set</strong></span> is a collection of distinct objects; each object is an <span class="term" data-tip="عنصر · a member of the set"><strong>element</strong></span> (member) of the set. We write <span class="mono-inline">a &isin; S</span> for &ldquo;<span class="mono-inline">a</span> is an element of <span class="mono-inline">S</span>&rdquo; and <span class="mono-inline">a &notin; S</span> for its negation.<br>
+                <strong>Roster notation:</strong> list the elements, <span class="mono-inline">S = {1, 2, 3}</span>. <strong>Set-builder notation:</strong> <span class="mono-inline">A = {x &isin; S | P(x)}</span>, &ldquo;the set of all <span class="mono-inline">x</span> in <span class="mono-inline">S</span> such that <span class="mono-inline">P(x)</span> is true&rdquo;.
+              </div>
+            </div>
+            <p><strong>Three facts that the notation hides.</strong> (1) <em>Order does not matter</em>: <span class="mono-inline">{a, b, c} = {c, a, b}</span>. (2) <em>Repetition does not matter</em>: <span class="mono-inline">{a, a, b} = {a, b}</span>, a set has no multiplicities. (3) <em>A set may be an element of another set</em>: <span class="mono-inline">{1, {1}}</span> has two elements, <span class="mono-inline">1</span> and the set <span class="mono-inline">{1}</span>. In particular a one-element set is not the same as its element: <span class="mono-inline">{a} &ne; a</span>.</p>
+            <p>A set-builder can be empty: <span class="mono-inline">{x &isin; &#8477; | 3 &lt; x &lt; 2} = &empty;</span>, since no real number is both greater than 3 and less than 2.</p>
+          </div>
+
+          <div class="widget-card" id="sec612">
+            <h3>6.1.1 Subsets, proper subsets, and equality</h3>
+            <div class="thm-box def">
+              <div class="thm-title">Definitions (Epp &sect;6.1)</div>
+              <div class="thm-body">
+                <span class="mono-inline">A &sube; B</span> (<span class="term" data-tip="مجموعة جزئية · every element of A is also an element of B"><strong>A is a subset of B</strong></span>) means <span class="mono-inline">&forall;x, (x &isin; A &rarr; x &isin; B)</span>.<br>
+                Its negation: <span class="mono-inline">A &nsube; B</span> means <span class="mono-inline">&exist;x</span> such that <span class="mono-inline">x &isin; A</span> and <span class="mono-inline">x &notin; B</span>.<br>
+                <span class="mono-inline">A</span> is a <span class="term" data-tip="مجموعة جزئية فعلية · A is a subset of B and B has at least one element not in A"><strong>proper subset</strong></span> of <span class="mono-inline">B</span> when <span class="mono-inline">A &sube; B</span> and there is an element of <span class="mono-inline">B</span> not in <span class="mono-inline">A</span>.<br>
+                <strong>Set equality:</strong> <span class="mono-inline">A = B</span> if and only if <span class="mono-inline">A &sube; B</span> and <span class="mono-inline">B &sube; A</span>.
+              </div>
+            </div>
+            <div class="widget-desc"><strong>Do not confuse <span class="mono-inline">&isin;</span> with <span class="mono-inline">&sube;</span>.</strong> The symbol <span class="mono-inline">&isin;</span> relates an <em>element</em> to a set; <span class="mono-inline">&sube;</span> relates a <em>set</em> to a set.</div>
+            <table class="data-table">
+              <thead><tr><th>Statement</th><th>Value</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">2 &isin; {1, 2, 3}</td><td class="t">TRUE</td><td>2 is one of the listed elements</td></tr>
+                <tr><td class="mono">{2} &isin; {1, 2, 3}</td><td class="f">FALSE</td><td>the element {2} is not listed; only 1, 2, 3 are</td></tr>
+                <tr><td class="mono">{2} &sube; {1, 2, 3}</td><td class="t">TRUE</td><td>every element of {2}, namely 2, is in the set</td></tr>
+                <tr><td class="mono">2 &sube; {1, 2, 3}</td><td class="f">FALSE</td><td>2 is a number, not a set; &sube; needs a set on the left</td></tr>
+                <tr><td class="mono">{2} &isin; {{1}, {2}}</td><td class="t">TRUE</td><td>the element {2} is listed</td></tr>
+                <tr><td class="mono">{2} &sube; {{1}, {2}}</td><td class="f">FALSE</td><td>{2}'s element is 2, and 2 is not an element of {{1},{2}}</td></tr>
+              </tbody>
+            </table>
+            <div class="thm-box">
+              <div class="thm-title">The element argument for <span class="mono-inline">A &sube; B</span> (Epp &sect;6.1)</div>
+              <div class="thm-body">To prove <span class="mono-inline">A &sube; B</span>: (1) suppose <span class="mono-inline">x</span> is a particular but arbitrarily chosen element of <span class="mono-inline">A</span>; (2) show, using definitions, that this <span class="mono-inline">x</span> must also be in <span class="mono-inline">B</span>.</div>
+            </div>
+            <div class="proof-callout">
+              <div class="proof-label">Worked example (Epp 6.1.2): prove <span class="mono">A &sube; B</span>, where <span class="mono">A = {n &isin; &#8484; | n = 6r + 12 for some r &isin; &#8484;}</span> and <span class="mono">B = {n &isin; &#8484; | n = 3s for some s &isin; &#8484;}</span></div>
+              <div class="proof-step">Suppose <span class="mono">x &isin; A</span>. <em>[We must show <span class="mono">x &isin; B</span>.]</em></div>
+              <div class="proof-step">By definition of <span class="mono">A</span>, <span class="mono">x = 6r + 12</span> for some integer <span class="mono">r</span>.</div>
+              <div class="proof-step mono">x = 6r + 12 = 3(2r + 4).</div>
+              <div class="proof-step">Let <span class="mono">s = 2r + 4</span>. Then <span class="mono">s</span> is an integer (sums and products of integers are integers), and <span class="mono">x = 3s</span>.</div>
+              <div class="proof-step">So <span class="mono">x</span> has the form required by <span class="mono">B</span>, hence <span class="mono">x &isin; B</span>. Since every element of <span class="mono">A</span> is in <span class="mono">B</span>, <span class="mono">A &sube; B</span>. &#9632;</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec613">
+            <h3>6.1.2 Set-operations calculator</h3>
+            <div class="thm-box def">
+              <div class="thm-title">Definitions (Epp &sect;6.1)</div>
+              <div class="thm-body">For sets inside a universe <span class="mono-inline">U</span>:<br>
+                <span class="mono-inline">A &cup; B = {x | x &isin; A or x &isin; B}</span> (<span class="term" data-tip="اتحاد · all elements in A or B or both"><strong>union</strong></span>) &nbsp;&middot;&nbsp; <span class="mono-inline">A &cap; B = {x | x &isin; A and x &isin; B}</span> (<span class="term" data-tip="تقاطع · elements common to both"><strong>intersection</strong></span>)<br>
+                <span class="mono-inline">B &minus; A = {x | x &isin; B and x &notin; A}</span> (<span class="term" data-tip="الفرق · in B but not in A"><strong>difference</strong></span>) &nbsp;&middot;&nbsp; <span class="mono-inline">A&#7580; = {x &isin; U | x &notin; A}</span> (<span class="term" data-tip="المتممة · everything in the universe U that is not in A"><strong>complement</strong></span>)
+              </div>
+            </div>
+            <div class="widget-desc">Enter each set as a comma-separated list. The complement is taken inside the universe <span class="mono-inline">U</span>. (Worked example, Epp 6.1.5: try <span class="mono-inline">U = a,b,c,d,e,f,g</span>, <span class="mono-inline">A = a,c,e,g</span>, <span class="mono-inline">B = d,e,f,g</span>.)</div>
+            <div class="num-row">
+              <label>U =&nbsp;<input type="text" id="so-U" value="a, b, c, d, e, f, g" size="22"></label>
+              <label>A =&nbsp;<input type="text" id="so-A" value="a, c, e, g" size="16"></label>
+              <label>B =&nbsp;<input type="text" id="so-B" value="d, e, f, g" size="16"></label>
+            </div>
+            <div class="result-panel" id="so-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec614">
+            <h3>6.1.3 Subset &amp; equality checker</h3>
+            <div class="widget-desc">Test the relationships between two sets. The panel reports each containment, equality, and proper-subset status, and gives a witnessing element when a containment fails.</div>
+            <div class="num-row">
+              <label>A =&nbsp;<input type="text" id="ss-A" value="2, 4, 6" size="16"></label>
+              <label>B =&nbsp;<input type="text" id="ss-B" value="1, 2, 3, 4, 5, 6" size="20"></label>
+            </div>
+            <div class="result-panel" id="ss-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec615">
+            <h3>6.1.4 The empty set and partitions</h3>
+            <div class="thm-box def">
+              <div class="thm-title">Definitions (Epp &sect;6.1)</div>
+              <div class="thm-body">The <span class="term" data-tip="المجموعة الخالية · the unique set with no elements"><strong>empty set</strong></span> <span class="mono-inline">&empty;</span> is the set with no elements. Two facts: there is only <em>one</em> empty set (proved in 6.2), and <span class="mono-inline">&empty;</span> is a subset of every set. Note <span class="mono-inline">&empty; &ne; {&empty;}</span>: the right side has one element.<br>
+                Two sets are <span class="term" data-tip="منفصلتان · they share no element"><strong>disjoint</strong></span> when <span class="mono-inline">A &cap; B = &empty;</span>. A collection <span class="mono-inline">{A&#8321;, A&#8322;, &hellip;}</span> is a <span class="term" data-tip="تجزئة · a split of A into non-overlapping pieces whose union is all of A"><strong>partition</strong></span> of <span class="mono-inline">A</span> when (1) their union is all of <span class="mono-inline">A</span>, and (2) they are pairwise disjoint and non-empty.</div>
+            </div>
+            <div class="widget-desc">Validate a candidate partition. Enter the whole set <span class="mono-inline">A</span>, then the blocks separated by a semicolon. Example: <span class="mono-inline">A = 1,2,3,4,5,6</span> with blocks <span class="mono-inline">1,2 ; 3,4 ; 5,6</span>.</div>
+            <div class="num-row">
+              <label>A =&nbsp;<input type="text" id="pt-U" value="1, 2, 3, 4, 5, 6" size="20"></label>
+              <label>blocks =&nbsp;<input type="text" id="pt-blocks" value="1,2 ; 3,4 ; 5,6" size="22"></label>
+            </div>
+            <div class="result-panel" id="pt-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec616">
+            <h3>6.1.5 Power sets and Cartesian products</h3>
+            <div class="thm-box def">
+              <div class="thm-title">Definitions (Epp &sect;6.1)</div>
+              <div class="thm-body">The <span class="term" data-tip="مجموعة القوة · the set of all subsets of A"><strong>power set</strong></span> <span class="mono-inline">&#8473;(A)</span> is the set of all subsets of <span class="mono-inline">A</span>. If <span class="mono-inline">A</span> has <span class="mono-inline">n</span> elements then <span class="mono-inline">&#8473;(A)</span> has <span class="mono-inline">2&#8319;</span> elements (proved in 6.3).<br>
+                An <span class="term" data-tip="الزوج المرتب · order matters: (a,b)=(c,d) only if a=c and b=d"><strong>ordered pair</strong></span> <span class="mono-inline">(a, b)</span> satisfies <span class="mono-inline">(a, b) = (c, d)</span> iff <span class="mono-inline">a = c</span> and <span class="mono-inline">b = d</span>. The <span class="term" data-tip="الجداء الديكارتي · all ordered pairs with first from A and second from B"><strong>Cartesian product</strong></span> is <span class="mono-inline">A &times; B = {(a, b) | a &isin; A and b &isin; B}</span>, with <span class="mono-inline">|A &times; B| = |A| &middot; |B|</span>.</div>
+            </div>
+            <div class="num-row">
+              <label>Power set of:&nbsp;<input type="text" id="ps-set" value="x, y, z" size="14"></label>
+            </div>
+            <div class="result-panel" id="ps-out"></div>
+            <div class="num-row" style="margin-top:14px;">
+              <label>A =&nbsp;<input type="text" id="cp-A" value="x, y" size="12"></label>
+              <label>B =&nbsp;<input type="text" id="cp-B" value="1, 2, 3" size="12"></label>
+            </div>
+            <div class="result-panel" id="cp-out"></div>
+          </div>
+
+          <div class="exercises-block" id="ex61">
+            <h3>Practice exercises &middot; Section 6.1</h3>
+            <div class="ex-source">Recommended (Epp 4th ed., &sect;6.1): subsets, prove or disprove <strong>3&ndash;7</strong>; operations &amp; Venn diagrams <strong>10&ndash;14, 17</strong>; partitions <strong>27&ndash;30</strong>; power sets &amp; Cartesian products <strong>31&ndash;35</strong>. Full taught solutions to a selection are in the <a href="#worked">Worked solutions</a> section.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 6.1.A &middot; Epp 6.1 #5</div>
+              <div class="ex-body">Let <span class="mono-inline">C = {n &isin; &#8484; | n = 6r &minus; 5 for some r &isin; &#8484;}</span> and <span class="mono-inline">D = {m &isin; &#8484; | m = 3s + 1 for some s &isin; &#8484;}</span>. Prove or disprove: (a) <span class="mono-inline">C &sube; D</span>; (b) <span class="mono-inline">D &sube; C</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-61A">Show solution</button>
+              <div class="solution" id="sol-61A">
+                <p><strong>(a) <span class="mono">C &sube; D</span> is true.</strong> Suppose <span class="mono">x &isin; C</span>, so <span class="mono">x = 6r &minus; 5</span> for some integer <span class="mono">r</span>. Then <span class="mono">x = 6r &minus; 6 + 1 = 3(2r &minus; 2) + 1</span>. Let <span class="mono">s = 2r &minus; 2</span>, an integer; then <span class="mono">x = 3s + 1</span>, so <span class="mono">x &isin; D</span>. Hence <span class="mono">C &sube; D</span>.</p>
+                <p><strong>(b) <span class="mono">D &sube; C</span> is false.</strong> Take <span class="mono">x = 4</span> (from <span class="mono">s = 1</span>: <span class="mono">3&middot;1 + 1 = 4</span>), so <span class="mono">4 &isin; D</span>. If <span class="mono">4 &isin; C</span> then <span class="mono">4 = 6r &minus; 5</span>, forcing <span class="mono">r = 3/2</span>, not an integer. So <span class="mono">4 &notin; C</span>, and this one witness disproves the universal claim.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 6.1.B &middot; cf. Epp 6.1 #31&ndash;35</div>
+              <div class="ex-body">Find <span class="mono-inline">&#8473;(&empty;)</span>, <span class="mono-inline">&#8473;({&empty;})</span>, and <span class="mono-inline">&#8473;({a, b})</span>. State the size of each and check it against <span class="mono-inline">2&#8319;</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-61B">Show solution</button>
+              <div class="solution" id="sol-61B">
+                <p><span class="mono">&#8473;(&empty;) = {&empty;}</span>: the empty set has exactly one subset, itself. Size <span class="mono">1 = 2&#8304;</span>. (Note this is <em>not</em> the empty set; it has one element.)</p>
+                <p><span class="mono">&#8473;({&empty;}) = {&empty;, {&empty;}}</span>: the set <span class="mono">{&empty;}</span> has one element, so two subsets. Size <span class="mono">2 = 2&#185;</span>.</p>
+                <p><span class="mono">&#8473;({a, b}) = {&empty;, {a}, {b}, {a, b}}</span>. Size <span class="mono">4 = 2&#178;</span>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 6.2 ===================== -->
+        <div class="chapter-section" id="section-62">
+          <h2><span class="ch-num">Section 6.2</span>Properties of sets</h2>
+
+          <div class="section-intro" id="sec621">
+            <p>The goal of 6.2 is to prove set facts <em>rigorously</em>, not by shading a Venn diagram. A Venn picture is a guide; the proof is the element argument. The engine is a small set of <strong>procedural definitions</strong>, the rules that turn membership in a compound set into a logical sentence.</p>
+            <div class="thm-box">
+              <div class="thm-title">Procedural definitions (the proof engine)</div>
+              <div class="thm-body">
+                <span class="mono-inline">x &isin; X &cup; Y &hArr; (x &isin; X) or (x &isin; Y)</span><br>
+                <span class="mono-inline">x &isin; X &cap; Y &hArr; (x &isin; X) and (x &isin; Y)</span><br>
+                <span class="mono-inline">x &isin; X &minus; Y &hArr; (x &isin; X) and (x &notin; Y)</span><br>
+                <span class="mono-inline">x &isin; X&#7580; &hArr; x &notin; X</span><br>
+                <span class="mono-inline">(x, y) &isin; X &times; Y &hArr; (x &isin; X) and (y &isin; Y)</span>
+              </div>
+            </div>
+            <div class="thm-box">
+              <div class="thm-title">Theorem 6.2.1 (some subset relations)</div>
+              <div class="thm-body"><span class="mono-inline">A &cap; B &sube; A</span>; &nbsp; <span class="mono-inline">A &cap; B &sube; B</span>; &nbsp; <span class="mono-inline">A &sube; A &cup; B</span>; &nbsp; <span class="mono-inline">B &sube; A &cup; B</span>. &nbsp;&nbsp;<strong>Transitivity:</strong> if <span class="mono-inline">A &sube; B</span> and <span class="mono-inline">B &sube; C</span> then <span class="mono-inline">A &sube; C</span>.</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec622">
+            <h3>6.2.1 The set identities (Theorem 6.2.2)</h3>
+            <div class="widget-desc">These hold for all subsets <span class="mono-inline">A, B, C</span> of a universe <span class="mono-inline">U</span>. They are the toolkit for every algebraic proof in 6.3, and each one mirrors a logical equivalence from Chapter 2.</div>
+            <table class="data-table">
+              <thead><tr><th>Law</th><th>Statement</th></tr></thead>
+              <tbody>
+                <tr><td>Commutative</td><td class="mono">A &cup; B = B &cup; A &nbsp;&middot;&nbsp; A &cap; B = B &cap; A</td></tr>
+                <tr><td>Associative</td><td class="mono">(A &cup; B) &cup; C = A &cup; (B &cup; C) &nbsp;&middot;&nbsp; (A &cap; B) &cap; C = A &cap; (B &cap; C)</td></tr>
+                <tr><td>Distributive</td><td class="mono">A &cup; (B &cap; C) = (A &cup; B) &cap; (A &cup; C) &nbsp;&middot;&nbsp; A &cap; (B &cup; C) = (A &cap; B) &cup; (A &cap; C)</td></tr>
+                <tr><td>Identity</td><td class="mono">A &cup; &empty; = A &nbsp;&middot;&nbsp; A &cap; U = A</td></tr>
+                <tr><td>Complement</td><td class="mono">A &cup; A&#7580; = U &nbsp;&middot;&nbsp; A &cap; A&#7580; = &empty;</td></tr>
+                <tr><td>Double complement</td><td class="mono">(A&#7580;)&#7580; = A</td></tr>
+                <tr><td>Idempotent</td><td class="mono">A &cup; A = A &nbsp;&middot;&nbsp; A &cap; A = A</td></tr>
+                <tr><td>Universal bound</td><td class="mono">A &cup; U = U &nbsp;&middot;&nbsp; A &cap; &empty; = &empty;</td></tr>
+                <tr><td>De Morgan</td><td class="mono">(A &cup; B)&#7580; = A&#7580; &cap; B&#7580; &nbsp;&middot;&nbsp; (A &cap; B)&#7580; = A&#7580; &cup; B&#7580;</td></tr>
+                <tr><td>Absorption</td><td class="mono">A &cup; (A &cap; B) = A &nbsp;&middot;&nbsp; A &cap; (A &cup; B) = A</td></tr>
+                <tr><td>Complements of U, &empty;</td><td class="mono">U&#7580; = &empty; &nbsp;&middot;&nbsp; &empty;&#7580; = U</td></tr>
+                <tr><td>Set difference</td><td class="mono">A &minus; B = A &cap; B&#7580;</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="widget-card" id="sec623">
+            <h3>6.2.2 Element-method proof walker</h3>
+            <div class="thm-box">
+              <div class="thm-title">Method: proving two sets equal</div>
+              <div class="thm-body">To prove <span class="mono-inline">X = Y</span>, prove <em>both</em> containments: (1) <span class="mono-inline">X &sube; Y</span> and (2) <span class="mono-inline">Y &sube; X</span>. For each, take an arbitrary element of the left side and drive it to the right using the procedural definitions.</div>
+            </div>
+            <div class="widget-desc">Choose an identity to see its element-method proof, written out step by step.</div>
+            <div class="num-row">
+              <label>Identity:&nbsp;
+                <select id="em-sel">
+                  <option value="cap-sub">A &cap; B &sube; A (Epp 6.2.1)</option>
+                  <option value="distrib">A &cup; (B &cap; C) = (A &cup; B) &cap; (A &cup; C) (Epp 6.2.2)</option>
+                  <option value="demorgan">(A &cup; B)&#7580; = A&#7580; &cap; B&#7580; (Epp 6.2.3)</option>
+                </select>
+              </label>
+            </div>
+            <div class="result-panel" id="em-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec624">
+            <h3>6.2.3 Proving a set is empty</h3>
+            <div class="thm-box">
+              <div class="thm-title">Method (proof by contradiction)</div>
+              <div class="thm-body">To prove <span class="mono-inline">X = &empty;</span>: suppose <span class="mono-inline">X</span> has an element <span class="mono-inline">x</span>, and derive a contradiction. This works because there is only one empty set, so &ldquo;no elements&rdquo; forces <span class="mono-inline">X = &empty;</span>.</div>
+            </div>
+            <div class="proof-callout">
+              <div class="proof-label">Worked example (Epp 6.2.4): prove <span class="mono">A &cap; &empty; = &empty;</span></div>
+              <div class="proof-step">Suppose, for contradiction, that <span class="mono">A &cap; &empty;</span> has an element <span class="mono">x</span>.</div>
+              <div class="proof-step">By the procedural definition of intersection, <span class="mono">x &isin; A</span> and <span class="mono">x &isin; &empty;</span>.</div>
+              <div class="proof-step">But <span class="mono">x &isin; &empty;</span> is impossible: the empty set has no elements. Contradiction.</div>
+              <div class="proof-step">So <span class="mono">A &cap; &empty;</span> has no element, hence <span class="mono">A &cap; &empty; = &empty;</span>. &#9632;</div>
+            </div>
+          </div>
+
+          <div class="exercises-block" id="ex62">
+            <h3>Practice exercises &middot; Section 6.2</h3>
+            <div class="ex-source">Recommended (Epp 4th ed., &sect;6.2): element-argument proofs <strong>5, 7, 8, 9, 11, 13, 14, 15</strong>; find the mistake <strong>20, 21, 22</strong>; proving a set is empty <strong>27&ndash;31</strong>. Taught solutions to a selection are in the <a href="#worked">Worked solutions</a> section.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 6.2.A &middot; cf. Epp 6.2 #5&ndash;15</div>
+              <div class="ex-body">Prove by the element method that <span class="mono-inline">A &cap; (B &cup; C) = (A &cap; B) &cup; (A &cap; C)</span> (the second distributive law), giving both containments.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-62A">Show solution</button>
+              <div class="solution" id="sol-62A">
+                <p><strong>(&sube;)</strong> Suppose <span class="mono">x &isin; A &cap; (B &cup; C)</span>. Then <span class="mono">x &isin; A</span>, and <span class="mono">x &isin; B &cup; C</span>, i.e. <span class="mono">x &isin; B</span> or <span class="mono">x &isin; C</span>.</p>
+                <p>Case <span class="mono">x &isin; B</span>: then <span class="mono">x &isin; A</span> and <span class="mono">x &isin; B</span>, so <span class="mono">x &isin; A &cap; B</span>. Case <span class="mono">x &isin; C</span>: then <span class="mono">x &isin; A &cap; C</span>. Either way <span class="mono">x &isin; (A &cap; B) &cup; (A &cap; C)</span>.</p>
+                <p><strong>(&supe;)</strong> Suppose <span class="mono">x &isin; (A &cap; B) &cup; (A &cap; C)</span>. Then <span class="mono">x &isin; A &cap; B</span> or <span class="mono">x &isin; A &cap; C</span>; in both cases <span class="mono">x &isin; A</span>, and <span class="mono">x &isin; B</span> or <span class="mono">x &isin; C</span>, so <span class="mono">x &isin; A</span> and <span class="mono">x &isin; B &cup; C</span>, i.e. <span class="mono">x &isin; A &cap; (B &cup; C)</span>.</p>
+                <p>Both containments hold, so the two sets are equal. &#9632;</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 6.2.B &middot; Find the mistake &middot; Epp 6.2 #20</div>
+              <div class="ex-body">Find the mistake in the following &ldquo;proof&rdquo; that for all sets <span class="mono-inline">A, B, C</span>, if <span class="mono-inline">A &sube; B</span> and <span class="mono-inline">B &sube; C</span> then <span class="mono-inline">A &sube; C</span>.
+                <div style="margin:10px 0; padding:12px 16px; background:var(--c-page-bg); border-left:3px solid var(--c-false); border-radius:0 6px 6px 0; font-size:0.9rem; line-height:1.6;">
+                  <strong>&ldquo;Proof.&rdquo;</strong> Suppose <span class="mono-inline">A, B, C</span> are sets such that <span class="mono-inline">A &sube; B</span> and <span class="mono-inline">B &sube; C</span>. Since <span class="mono-inline">A &sube; B</span>, there is an element <span class="mono-inline">x</span> such that <span class="mono-inline">x &isin; A</span> and <span class="mono-inline">x &isin; B</span>. Since <span class="mono-inline">B &sube; C</span>, there is an element <span class="mono-inline">x</span> such that <span class="mono-inline">x &isin; B</span> and <span class="mono-inline">x &isin; C</span>. Hence there is an element <span class="mono-inline">x</span> such that <span class="mono-inline">x &isin; A</span> and <span class="mono-inline">x &isin; C</span>, and so <span class="mono-inline">A &sube; C</span>.
+                </div>
+              </div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-62B">Show solution</button>
+              <div class="solution" id="sol-62B">
+                <p><strong>The mistake.</strong> <span class="mono">A &sube; B</span> is a universal conditional, <span class="mono">&forall;x, (x &isin; A &rarr; x &isin; B)</span>, not the existential &ldquo;there is an <span class="mono">x</span> with <span class="mono">x &isin; A</span> and <span class="mono">x &isin; B</span>.&rdquo; The flawed proof misreads both subset relations as existential and silently reuses the <em>same</em> <span class="mono">x</span> for two unrelated ones. Even a genuine <span class="mono">x &isin; A &cap; C</span> would not establish the universal <span class="mono">A &sube; C</span>.</p>
+                <p><strong>Correct proof.</strong> Suppose <span class="mono">A &sube; B</span> and <span class="mono">B &sube; C</span>, and let <span class="mono">x</span> be a particular but arbitrarily chosen element of <span class="mono">A</span>. Since <span class="mono">A &sube; B</span>, <span class="mono">x &isin; B</span>; since <span class="mono">B &sube; C</span>, <span class="mono">x &isin; C</span>. As <span class="mono">x</span> was arbitrary, every element of <span class="mono">A</span> is in <span class="mono">C</span>, so <span class="mono">A &sube; C</span>. &#9632;</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 6.3 ===================== -->
+        <div class="chapter-section" id="section-63">
+          <h2><span class="ch-num">Section 6.3</span>Disproofs and algebraic proofs</h2>
+
+          <div class="section-intro" id="sec631">
+            <p>Two new skills. First, <strong>disproving</strong> a proposed set property: a claim &ldquo;for all sets <span class="mono-inline">A, B, C</span>&hellip;&rdquo; is universal, so one counterexample kills it. Second, the <strong>algebraic method</strong>: instead of arguing element by element, transform one side into the other using the identities of Theorem 6.2.2, citing one law per step.</p>
+            <div class="thm-box">
+              <div class="thm-title">Worked disproof (Epp 6.3.1)</div>
+              <div class="thm-body">Claim: for all sets <span class="mono-inline">A, B, C</span>, <span class="mono-inline">(A &minus; B) &cup; (B &minus; C) = A &minus; C</span>. Shading a Venn diagram suggests the two sides differ (the left can shade part of <span class="mono-inline">B</span> outside <span class="mono-inline">A</span>; the right never does). The counterexample <span class="mono-inline">A = &empty;, B = {3}, C = &empty;</span> settles it: left <span class="mono-inline">= &empty; &cup; {3} = {3}</span>, right <span class="mono-inline">= &empty;</span>, and <span class="mono-inline">{3} &ne; &empty;</span>.</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec631b">
+            <h3>6.3.1 Counterexample tester</h3>
+            <div class="widget-desc">Test the claim <span class="mono-inline">(A &minus; B) &cup; (B &minus; C) = A &minus; C</span> on your own sets. The panel computes both sides; if they differ, you have a counterexample.</div>
+            <div class="num-row">
+              <label>A =&nbsp;<input type="text" id="ce-A" value="" size="12" placeholder="(empty)"></label>
+              <label>B =&nbsp;<input type="text" id="ce-B" value="3" size="12"></label>
+              <label>C =&nbsp;<input type="text" id="ce-C" value="" size="12" placeholder="(empty)"></label>
+            </div>
+            <div class="result-panel" id="ce-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec632">
+            <h3>6.3.2 Counting subsets: |&#8473;(X)| = 2&#8319;</h3>
+            <div class="thm-box">
+              <div class="thm-title">Theorem 6.3.1</div>
+              <div class="thm-body">For every integer <span class="mono-inline">n &ge; 0</span>: if a set <span class="mono-inline">X</span> has <span class="mono-inline">n</span> elements, then <span class="mono-inline">&#8473;(X)</span> has <span class="mono-inline">2&#8319;</span> elements.</div>
+            </div>
+            <p><strong>Counting argument (no induction needed).</strong> To build a subset of <span class="mono-inline">X = {x&#8321;, &hellip;, x&#8345;}</span>, decide for each element independently whether to <em>include</em> it or <em>leave it out</em>: two choices per element, made <span class="mono-inline">n</span> times. Distinct sequences of choices give distinct subsets, and every subset arises from exactly one sequence. By the multiplication rule the number of subsets is <span class="mono-inline">2 &middot; 2 &middot; &hellip; &middot; 2 = 2&#8319;</span>. Equivalently, subsets of an <span class="mono-inline">n</span>-set correspond one-to-one with binary strings of length <span class="mono-inline">n</span> (bit <span class="mono-inline">i</span> = 1 means &ldquo;<span class="mono-inline">x&#7522;</span> is in&rdquo;), and there are <span class="mono-inline">2&#8319;</span> such strings.</p>
+            <div class="preview"><strong>Preview of Chapter 5.</strong> Epp proves this by induction on <span class="mono-inline">n</span>: the base case <span class="mono-inline">n = 0</span> gives <span class="mono-inline">&#8473;(&empty;) = {&empty;}</span>, one subset <span class="mono-inline">= 2&#8304;</span>; the inductive step pairs each subset of an <span class="mono-inline">(k+1)</span>-set by whether it contains a fixed element, doubling the count from <span class="mono-inline">2&#7503;</span> to <span class="mono-inline">2&#7503;&#8314;&#185;</span>. We will revisit it once induction is in hand.</div>
+            <div class="widget-desc" style="margin-top:14px;">Generate every subset and watch the count: try sets of size 0, 1, 2, 3, 4.</div>
+            <div class="num-row"><label>X =&nbsp;<input type="text" id="cnt-set" value="a, b, c" size="16"></label></div>
+            <div class="result-panel" id="cnt-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec633">
+            <h3>6.3.3 Algebraic proofs</h3>
+            <div class="widget-desc">An algebraic proof transforms one side into the other, citing one identity of Theorem 6.2.2 per step. The law <span class="mono-inline">A &minus; B = A &cap; B&#7580;</span> turns every difference into an intersection with a complement, which is what lets the other laws apply. Choose a worked proof:</div>
+            <div class="num-row">
+              <label>Prove:&nbsp;
+                <select id="alg-sel">
+                  <option value="p1">(A &cup; B) &minus; C = (A &minus; C) &cup; (B &minus; C) (Epp 6.3.2)</option>
+                  <option value="p2">A &minus; (A &cap; B) = A &minus; B (Epp 6.3.3)</option>
+                </select>
+              </label>
+            </div>
+            <div class="result-panel" id="alg-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec634">
+            <h3>6.3.4 Symmetric difference (enrichment)</h3>
+            <div class="thm-box def">
+              <div class="thm-title">Definition (Epp &sect;6.3, enrichment)</div>
+              <div class="thm-body">The <span class="term" data-tip="الفرق المتماثل · elements in exactly one of A, B"><strong>symmetric difference</strong></span> is <span class="mono-inline">A &#9651; B = (A &minus; B) &cup; (B &minus; A)</span>: the elements in exactly one of <span class="mono-inline">A, B</span> (not both). Properties (Epp 6.3 #46&ndash;50): <span class="mono-inline">A &#9651; B = B &#9651; A</span>, <span class="mono-inline">A &#9651; &empty; = A</span>, <span class="mono-inline">A &#9651; A = &empty;</span>, <span class="mono-inline">A &#9651; A&#7580; = U</span>.</div>
+            </div>
+            <div class="widget-desc">It is the set analogue of logical XOR. Compute it on two sets:</div>
+            <div class="num-row">
+              <label>A =&nbsp;<input type="text" id="sd-A" value="1, 2, 3" size="14"></label>
+              <label>B =&nbsp;<input type="text" id="sd-B" value="2, 3, 4" size="14"></label>
+            </div>
+            <div class="result-panel" id="sd-out"></div>
+          </div>
+
+          <div class="exercises-block" id="ex63">
+            <h3>Practice exercises &middot; Section 6.3</h3>
+            <div class="ex-source">Recommended (Epp 4th ed., &sect;6.3): find a counterexample <strong>1&ndash;4</strong>; prove or disprove <strong>5, 6, 7, 9, 10, 13</strong>; algebraic proofs (cite each step) <strong>30, 31, 32, 34, 35, 38</strong>; simplify an expression <strong>41&ndash;43</strong>; symmetric difference (enrichment) <strong>46&ndash;50</strong>. Taught solutions are in the <a href="#worked">Worked solutions</a> section.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 6.3.A &middot; cf. Epp 6.3 #41&ndash;43 (simplify)</div>
+              <div class="ex-body">Simplify <span class="mono-inline">(A &cap; B) &cup; (A &cap; B&#7580;)</span> to a single set, citing each law.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-63A">Show solution</button>
+              <div class="solution" id="sol-63A">
+                <table class="data-table"><tbody>
+                  <tr><td class="mono">(A &cap; B) &cup; (A &cap; B&#7580;)</td><td></td></tr>
+                  <tr><td class="mono">= A &cap; (B &cup; B&#7580;)</td><td>distributive law</td></tr>
+                  <tr><td class="mono">= A &cap; U</td><td>complement law</td></tr>
+                  <tr><td class="mono">= A</td><td>identity law</td></tr>
+                </tbody></table>
+                <p>So <span class="mono">(A &cap; B) &cup; (A &cap; B&#7580;) = A</span>: splitting <span class="mono">A</span> by whether an element is in <span class="mono">B</span> and rejoining recovers all of <span class="mono">A</span>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 6.4 ===================== -->
+        <div class="chapter-section" id="section-64">
+          <h2><span class="ch-num">Section 6.4</span>Boolean algebra</h2>
+
+          <div class="section-intro" id="sec641">
+            <p>Logic, sets, and bits keep obeying the <em>same</em> laws: commutative, associative, distributive, identity, complement, De Morgan. Boolean algebra is the abstract structure that captures exactly those laws once, so a theorem proved for the abstract structure holds for all three at once.</p>
+            <div class="thm-box def">
+              <div class="thm-title">Definition (Epp &sect;6.4)</div>
+              <div class="thm-body">A <span class="term" data-tip="جبر بولي · a set with two operations, a complement, and two distinguished elements, satisfying five axioms"><strong>Boolean algebra</strong></span> is a set <span class="mono-inline">B</span> with two operations <span class="mono-inline">+</span> and <span class="mono-inline">&middot;</span>, a unary complement <span class="mono-inline">&#773;</span>, and two distinguished elements <span class="mono-inline">0</span> and <span class="mono-inline">1</span>, satisfying for all <span class="mono-inline">a, b, c &isin; B</span>:</div>
+            </div>
+            <table class="data-table">
+              <thead><tr><th>Axiom</th><th>for +</th><th>for &middot;</th></tr></thead>
+              <tbody>
+                <tr><td>Commutative</td><td class="mono">a + b = b + a</td><td class="mono">a &middot; b = b &middot; a</td></tr>
+                <tr><td>Associative</td><td class="mono">(a + b) + c = a + (b + c)</td><td class="mono">(a &middot; b) &middot; c = a &middot; (b &middot; c)</td></tr>
+                <tr><td>Distributive</td><td class="mono">a + (b &middot; c) = (a + b) &middot; (a + c)</td><td class="mono">a &middot; (b + c) = (a &middot; b) + (a &middot; c)</td></tr>
+                <tr><td>Identity</td><td class="mono">a + 0 = a</td><td class="mono">a &middot; 1 = a</td></tr>
+                <tr><td>Complement</td><td class="mono">a + a&#773; = 1</td><td class="mono">a &middot; a&#773; = 0</td></tr>
+              </tbody>
+            </table>
+            <p>Sets are a Boolean algebra with <span class="mono-inline">+ = &cup;</span>, <span class="mono-inline">&middot; = &cap;</span>, complement <span class="mono-inline">= &#7580;</span>, <span class="mono-inline">0 = &empty;</span>, <span class="mono-inline">1 = U</span>. Propositional logic is one with <span class="mono-inline">+ = &or;</span>, <span class="mono-inline">&middot; = &and;</span>, complement <span class="mono-inline">= &not;</span>, <span class="mono-inline">0 = </span>F, <span class="mono-inline">1 = </span>T.</p>
+          </div>
+
+          <div class="widget-card" id="sec642">
+            <h3>6.4.1 The smallest Boolean algebra: B = {0, 1}</h3>
+            <div class="widget-desc">With <span class="mono-inline">+ = </span>OR (max), <span class="mono-inline">&middot; = </span>AND (min), and <span class="mono-inline">0&#773; = 1, 1&#773; = 0</span>, the two-element set <span class="mono-inline">{0, 1}</span> is a Boolean algebra: this is the algebra of a single bit, and of a logic gate. Pick values and check the axioms hold.</div>
+            <div class="num-row">
+              <label>a =&nbsp;<select id="ba-a"><option>0</option><option>1</option></select></label>
+              <label>b =&nbsp;<select id="ba-b"><option>0</option><option>1</option></select></label>
+            </div>
+            <div class="result-panel" id="ba-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec643">
+            <h3>6.4.2 Duality</h3>
+            <div class="thm-box">
+              <div class="thm-title">The duality principle (Epp &sect;6.4)</div>
+              <div class="thm-body">If you take any identity that holds in every Boolean algebra and swap <span class="mono-inline">+ &harr; &middot;</span> and <span class="mono-inline">0 &harr; 1</span> throughout, the result is also a valid identity (its <em>dual</em>). This is why the axioms and identities always come in pairs.</div>
+            </div>
+            <div class="proof-callout">
+              <div class="proof-label">Worked proof from the axioms: the idempotent law <span class="mono">a + a = a</span></div>
+              <div class="proof-step mono">a + a = (a + a) &middot; 1 &nbsp;&nbsp; [identity for &middot;]</div>
+              <div class="proof-step mono">= (a + a) &middot; (a + a&#773;) &nbsp;&nbsp; [complement for +]</div>
+              <div class="proof-step mono">= a + (a &middot; a&#773;) &nbsp;&nbsp; [distributive]</div>
+              <div class="proof-step mono">= a + 0 &nbsp;&nbsp; [complement for &middot;]</div>
+              <div class="proof-step mono">= a &nbsp;&nbsp; [identity for +]</div>
+              <div class="proof-step">By duality, swapping <span class="mono">+ &harr; &middot;</span> and <span class="mono">0 &harr; 1</span> gives the dual law <span class="mono">a &middot; a = a</span> for free. &#9632;</div>
+            </div>
+          </div>
+
+          <div class="exercises-block" id="ex64">
+            <h3>Practice exercises &middot; Section 6.4</h3>
+            <div class="ex-source">Recommended (Epp 4th ed., &sect;6.4): Boolean-algebra proofs from the axioms <strong>1&ndash;5</strong>; work in <span class="mono-inline">B = {0, 1}</span> <strong>10, 11</strong>. A taught axiom-only proof is in the <a href="#worked">Worked solutions</a> section.</div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 6.4.A &middot; cf. Epp 6.4 #1&ndash;5</div>
+              <div class="ex-body">Prove the universal-bound law <span class="mono-inline">a + 1 = 1</span> using only the five axioms.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-64A">Show solution</button>
+              <div class="solution" id="sol-64A">
+                <table class="data-table"><tbody>
+                  <tr><td class="mono">a + 1</td><td></td></tr>
+                  <tr><td class="mono">= (a + 1) &middot; 1</td><td>identity for &middot;</td></tr>
+                  <tr><td class="mono">= (a + 1) &middot; (a + a&#773;)</td><td>complement for +</td></tr>
+                  <tr><td class="mono">= a + (1 &middot; a&#773;)</td><td>distributive</td></tr>
+                  <tr><td class="mono">= a + (a&#773; &middot; 1)</td><td>commutative for &middot;</td></tr>
+                  <tr><td class="mono">= a + a&#773;</td><td>identity for &middot;</td></tr>
+                  <tr><td class="mono">= 1</td><td>complement for +</td></tr>
+                </tbody></table>
+                <p>Its dual, <span class="mono">a &middot; 0 = 0</span>, follows by swapping <span class="mono">+ &harr; &middot;</span> and <span class="mono">0 &harr; 1</span>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="thm-box" id="appendix" style="margin-top:26px;">
+            <div class="thm-title"><i class="fas fa-flask"></i> Enrichment appendix &middot; not examinable</div>
+            <div class="thm-body">
+              <p style="margin-top:0;"><strong>Russell's paradox.</strong> Let <span class="mono-inline">S = {A | A is a set and A &notin; A}</span>, the set of all sets that are not members of themselves. Ask: is <span class="mono-inline">S &isin; S</span>? If <span class="mono-inline">S &isin; S</span>, then by its defining property <span class="mono-inline">S &notin; S</span>; if <span class="mono-inline">S &notin; S</span>, then it satisfies the property, so <span class="mono-inline">S &isin; S</span>. Both lead to contradiction. The lesson: &ldquo;the set of all sets satisfying any property&rdquo; is not always a set, naive set theory needs axioms (ZFC) to forbid such self-membership.</p>
+              <p style="margin-bottom:0;"><strong>The halting problem.</strong> The same self-reference defeats any supposed program <span class="mono-inline">H(p, x)</span> that decides whether program <span class="mono-inline">p</span> halts on input <span class="mono-inline">x</span>. Build <span class="mono-inline">D(p)</span> that loops forever if <span class="mono-inline">H(p, p)</span> says &ldquo;halts&rdquo; and halts otherwise; then <span class="mono-inline">D(D)</span> halts iff it does not. No such <span class="mono-inline">H</span> can exist. Russell's set and Turing's program are the same trick, applied to sets and to computation.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== WORKED SOLUTIONS ===================== -->
+        <div class="chapter-section" id="worked">
+          <h2><span class="ch-num">Worked</span>Taught solutions to recommended exercises</h2>
+          <div class="section-intro">
+            <p>A selection of the exercises recommended on the slides, solved in full. Several are the textbook's own worked examples re-taught at exam depth; the rest are representative problems of the recommended type. Each cites its Epp section and the recommended item range. Attempt on paper before revealing.</p>
+            <p style="font-size:0.85rem; color:var(--c-muted);">Statements follow Epp, <em>Discrete Mathematics with Applications</em> (4th ed.). Where a single textbook problem number is not reproduced verbatim, the exercise is marked &ldquo;cf.&rdquo; and matches the type and difficulty of the recommended range.</p>
+          </div>
+
+          <div class="exercises-block">
+            <div class="exercise">
+              <div class="ex-label">W1 &middot; Epp 6.1 #10 (operations)</div>
+              <div class="ex-body">Let <span class="mono-inline">A = {1, 3, 5, 7, 9}</span>, <span class="mono-inline">B = {3, 6, 9}</span>, <span class="mono-inline">C = {2, 4, 6, 8}</span>. Find <span class="mono-inline">A &cup; B</span>, <span class="mono-inline">A &cap; B</span>, <span class="mono-inline">A &cap; C</span>, <span class="mono-inline">A &minus; B</span>, <span class="mono-inline">B &minus; A</span>, and <span class="mono-inline">B &cap; C</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W1">Show solution</button>
+              <div class="solution" id="sol-W1">
+                <p>Read each operation straight off the definitions.</p>
+                <ul>
+                  <li><span class="mono">A &cup; B = {1, 3, 5, 6, 7, 9}</span> (every element in either set).</li>
+                  <li><span class="mono">A &cap; B = {3, 9}</span> (in both).</li>
+                  <li><span class="mono">A &cap; C = &empty;</span> (nothing is in both: <span class="mono">A</span> is all odd, <span class="mono">C</span> all even).</li>
+                  <li><span class="mono">A &minus; B = {1, 5, 7}</span> (in <span class="mono">A</span>, not in <span class="mono">B</span>).</li>
+                  <li><span class="mono">B &minus; A = {6}</span> (in <span class="mono">B</span>, not in <span class="mono">A</span>).</li>
+                  <li><span class="mono">B &cap; C = {6}</span> (the only common element).</li>
+                </ul>
+                <p><em>Note:</em> <span class="mono">A &cap; C = &empty;</span> says <span class="mono">A</span> and <span class="mono">C</span> are disjoint.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W2 &middot; Epp 6.1, intervals (cf. #11, 12)</div>
+              <div class="ex-body">With <span class="mono-inline">A = (&minus;1, 0]</span> and <span class="mono-inline">B = [0, 1)</span> as sets of real numbers, find <span class="mono-inline">A &cup; B</span>, <span class="mono-inline">A &cap; B</span>, and <span class="mono-inline">B &minus; A</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W2">Show solution</button>
+              <div class="solution" id="sol-W2">
+                <p>A round bracket excludes the endpoint (open); a square bracket includes it (closed).</p>
+                <ul>
+                  <li><span class="mono">A &cup; B = (&minus;1, 1)</span>: every <span class="mono">x</span> with <span class="mono">&minus;1 &lt; x &le; 0</span> or <span class="mono">0 &le; x &lt; 1</span>, which together cover <span class="mono">&minus;1 &lt; x &lt; 1</span>.</li>
+                  <li><span class="mono">A &cap; B = {0}</span>: the only real in both is <span class="mono">0</span> (it is in <span class="mono">A</span> since <span class="mono">(&minus;1,0]</span> includes 0, and in <span class="mono">B</span> since <span class="mono">[0,1)</span> includes 0).</li>
+                  <li><span class="mono">B &minus; A = (0, 1)</span>: in <span class="mono">B</span> but not in <span class="mono">A</span>; removing <span class="mono">0</span> from <span class="mono">[0,1)</span> leaves <span class="mono">(0,1)</span>.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W3 &middot; Epp 6.1, partitions (cf. #27&ndash;30)</div>
+              <div class="ex-body">Is <span class="mono-inline">{{1, 2}, {3}, {4, 5}}</span> a partition of <span class="mono-inline">{1, 2, 3, 4, 5}</span>? Is <span class="mono-inline">{{1, 2, 3}, {3, 4, 5}}</span>? Justify.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W3">Show solution</button>
+              <div class="solution" id="sol-W3">
+                <p><strong>First: yes.</strong> The blocks are non-empty, pairwise disjoint (<span class="mono">{1,2}&cap;{3}=&empty;</span>, etc.), and their union is <span class="mono">{1,2,3,4,5}</span>. Both partition conditions hold.</p>
+                <p><strong>Second: no.</strong> The blocks are not disjoint: <span class="mono">{1,2,3} &cap; {3,4,5} = {3} &ne; &empty;</span>. The element <span class="mono">3</span> lies in two blocks, which a partition forbids.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W4 &middot; Epp 6.2, element proof (cf. #5&ndash;15) &middot; the distributive law</div>
+              <div class="ex-body">Prove <span class="mono-inline">A &cup; (B &cap; C) = (A &cup; B) &cap; (A &cup; C)</span> by the element method, both directions.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W4">Show solution</button>
+              <div class="solution" id="sol-W4">
+                <p><strong>(&sube;)</strong> Suppose <span class="mono">x &isin; A &cup; (B &cap; C)</span>, so <span class="mono">x &isin; A</span>, or <span class="mono">x &isin; B &cap; C</span>.</p>
+                <p>If <span class="mono">x &isin; A</span>: then <span class="mono">x &isin; A &cup; B</span> and <span class="mono">x &isin; A &cup; C</span>, so <span class="mono">x</span> is in their intersection. If <span class="mono">x &isin; B &cap; C</span>: then <span class="mono">x &isin; B</span> (so <span class="mono">x &isin; A &cup; B</span>) and <span class="mono">x &isin; C</span> (so <span class="mono">x &isin; A &cup; C</span>), again in the intersection. So the left side is contained in <span class="mono">(A &cup; B) &cap; (A &cup; C)</span>.</p>
+                <p><strong>(&supe;)</strong> Suppose <span class="mono">x &isin; (A &cup; B) &cap; (A &cup; C)</span>, so <span class="mono">x &isin; A &cup; B</span> and <span class="mono">x &isin; A &cup; C</span>. If <span class="mono">x &isin; A</span> we are done (<span class="mono">x &isin;</span> left side). Otherwise <span class="mono">x &notin; A</span>; then from <span class="mono">x &isin; A &cup; B</span> we get <span class="mono">x &isin; B</span>, and from <span class="mono">x &isin; A &cup; C</span> we get <span class="mono">x &isin; C</span>, so <span class="mono">x &isin; B &cap; C</span>, hence <span class="mono">x &isin; A &cup; (B &cap; C)</span>.</p>
+                <p>Both containments hold, so the sets are equal. &#9632; <em>This is the set form of the logical equivalence <span class="mono">p &or; (q &and; r) &equiv; (p &or; q) &and; (p &or; r)</span>.</em></p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W5 &middot; Epp 6.2, proving empty (cf. #27&ndash;31)</div>
+              <div class="ex-body">Prove that for all sets <span class="mono-inline">A</span> and <span class="mono-inline">B</span>, <span class="mono-inline">A &cap; (B &minus; A) = &empty;</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W5">Show solution</button>
+              <div class="solution" id="sol-W5">
+                <p>Suppose, for contradiction, that <span class="mono">A &cap; (B &minus; A)</span> has an element <span class="mono">x</span>.</p>
+                <p>By the definition of intersection, <span class="mono">x &isin; A</span> and <span class="mono">x &isin; B &minus; A</span>. By the definition of difference, <span class="mono">x &isin; B &minus; A</span> means <span class="mono">x &isin; B</span> and <span class="mono">x &notin; A</span>.</p>
+                <p>So <span class="mono">x &isin; A</span> and <span class="mono">x &notin; A</span>, a contradiction. Therefore <span class="mono">A &cap; (B &minus; A)</span> has no element, hence equals <span class="mono">&empty;</span>. &#9632;</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W6 &middot; Epp 6.3 #1 (counterexample)</div>
+              <div class="ex-body">Find a counterexample to show the statement is false: for all sets <span class="mono-inline">A, B, C</span>, <span class="mono-inline">(A &cap; B) &cup; C = A &cap; (B &cup; C)</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W6">Show solution</button>
+              <div class="solution" id="sol-W6">
+                <p>The claim is universal, so a single counterexample disproves it.</p>
+                <p>Let <span class="mono">A = {1}</span>, <span class="mono">B = &empty;</span>, <span class="mono">C = {2}</span>. Then:</p>
+                <ul>
+                  <li>Left: <span class="mono">(A &cap; B) &cup; C = &empty; &cup; {2} = {2}</span>.</li>
+                  <li>Right: <span class="mono">A &cap; (B &cup; C) = {1} &cap; {2} = &empty;</span>.</li>
+                </ul>
+                <p>Since <span class="mono">{2} &ne; &empty;</span>, the two sides differ. The identity fails because <span class="mono">&cup;</span> and <span class="mono">&cap;</span> do not re-bracket freely; it would hold only when <span class="mono">C &sube; A</span>.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W7 &middot; Epp 6.3, algebraic proof (cf. #29&ndash;38)</div>
+              <div class="ex-body">Prove <span class="mono-inline">(A &cup; B) &minus; C = (A &minus; C) &cup; (B &minus; C)</span> algebraically, citing one law of Theorem 6.2.2 per step.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W7">Show solution</button>
+              <div class="solution" id="sol-W7">
+                <table class="data-table"><tbody>
+                  <tr><td class="mono">(A &cup; B) &minus; C</td><td></td></tr>
+                  <tr><td class="mono">= (A &cup; B) &cap; C&#7580;</td><td>set difference law</td></tr>
+                  <tr><td class="mono">= C&#7580; &cap; (A &cup; B)</td><td>commutative for &cap;</td></tr>
+                  <tr><td class="mono">= (C&#7580; &cap; A) &cup; (C&#7580; &cap; B)</td><td>distributive law</td></tr>
+                  <tr><td class="mono">= (A &cap; C&#7580;) &cup; (B &cap; C&#7580;)</td><td>commutative for &cap;</td></tr>
+                  <tr><td class="mono">= (A &minus; C) &cup; (B &minus; C)</td><td>set difference law</td></tr>
+                </tbody></table>
+                <p>Every step is an equality of sets justified by a single named identity, the hallmark of an algebraic proof. &#9632;</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W8 &middot; Epp 6.4, axiom-only proof (cf. #1&ndash;5)</div>
+              <div class="ex-body">In any Boolean algebra, prove the absorption law <span class="mono-inline">a + (a &middot; b) = a</span> from the axioms.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W8">Show solution</button>
+              <div class="solution" id="sol-W8">
+                <table class="data-table"><tbody>
+                  <tr><td class="mono">a + (a &middot; b)</td><td></td></tr>
+                  <tr><td class="mono">= (a &middot; 1) + (a &middot; b)</td><td>identity for &middot;</td></tr>
+                  <tr><td class="mono">= a &middot; (1 + b)</td><td>distributive for &middot;</td></tr>
+                  <tr><td class="mono">= a &middot; (b + 1)</td><td>commutative for +</td></tr>
+                  <tr><td class="mono">= a &middot; 1</td><td>universal bound b + 1 = 1 (Exercise 6.4.A)</td></tr>
+                  <tr><td class="mono">= a</td><td>identity for &middot;</td></tr>
+                </tbody></table>
+                <p>By duality, <span class="mono">a &middot; (a + b) = a</span> holds as well. &#9632;</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== RECAP ===================== -->
+        <div class="chapter-section" id="recap">
+          <h3>Recap: Chapter 6</h3>
+          <ul>
+            <li>A <strong>set</strong> is a collection of distinct elements, written by roster or by a property. Order and repetition do not matter; <span class="mono-inline">{a} &ne; a</span>.</li>
+            <li>Keep <span class="mono-inline">&isin;</span> (element-to-set) and <span class="mono-inline">&sube;</span> (set-to-set) apart. <span class="mono-inline">A &sube; B</span> means <span class="mono-inline">&forall;x, (x &isin; A &rarr; x &isin; B)</span>; <span class="mono-inline">A = B</span> means <span class="mono-inline">A &sube; B</span> and <span class="mono-inline">B &sube; A</span>.</li>
+            <li>The <strong>element method</strong> proves a set fact by taking an arbitrary element and unfolding the procedural definitions of <span class="mono-inline">&cup;, &cap;, &minus;, &#7580;</span>. To prove equality, prove both containments.</li>
+            <li>To <strong>disprove</strong> a universal set property, one counterexample is enough. To prove a set <strong>empty</strong>, assume it has an element and reach a contradiction.</li>
+            <li>The identities of <strong>Theorem 6.2.2</strong> let you prove facts <strong>algebraically</strong>, one law per step; <span class="mono-inline">A &minus; B = A &cap; B&#7580;</span> is the bridge that turns differences into intersections.</li>
+            <li>A set with <span class="mono-inline">n</span> elements has <span class="mono-inline">2&#8319;</span> subsets (counting argument now; induction proof in Chapter 5).</li>
+            <li>Logic, sets, and bits are all <strong>Boolean algebras</strong>: one set of axioms, with <strong>duality</strong> (swap <span class="mono-inline">+ &harr; &middot;</span>, <span class="mono-inline">0 &harr; 1</span>) giving every identity a twin. This is the bridge to digital logic.</li>
+          </ul>
+          <div class="preview"><strong>What's next.</strong> Chapter 7 (Functions): a function is a special kind of subset of a Cartesian product <span class="mono-inline">A &times; B</span>, so everything here, products, subsets, the element method, is the groundwork for one-to-one, onto, and inverse functions.</div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+
+    /* ===================================================== Set helpers ===================================================== */
+    function parseSet(str) {
+      const seen = new Set(), out = [];
+      (str || '').split(',').forEach(function (tok) {
+        const t = tok.trim();
+        if (t.length && !seen.has(t)) { seen.add(t); out.push(t); }
+      });
+      return out;
+    }
+    function fmt(arr) { return arr.length ? '{' + arr.join(', ') + '}' : '∅'; }
+    function inA(arr, x) { return arr.indexOf(x) !== -1; }
+    function union(A, B) { const r = A.slice(); B.forEach(function (x) { if (!inA(r, x)) r.push(x); }); return r; }
+    function inter(A, B) { return A.filter(function (x) { return inA(B, x); }); }
+    function diff(A, B) { return A.filter(function (x) { return !inA(B, x); }); }
+    function isSubset(A, B) { return A.every(function (x) { return inA(B, x); }); }
+    function setEq(A, B) { return isSubset(A, B) && isSubset(B, A); }
+    function row(label, val, cls, note) {
+      return '<div class="res-row"><span class="res-label">' + label + '</span><span class="res-val ' + (cls || '') + '">' + val + '</span>' + (note ? '<span class="res-note">' + note + '</span>' : '') + '</div>';
+    }
+
+    /* 6.1.2 Set-operations calculator */
+    (function () {
+      const U = document.getElementById('so-U'), A = document.getElementById('so-A'), B = document.getElementById('so-B'), out = document.getElementById('so-out');
+      if (!U || !A || !B || !out) return;
+      function render() {
+        const u = parseSet(U.value), a = parseSet(A.value), b = parseSet(B.value);
+        const stray = union(diff(a, u), diff(b, u));
+        let warn = stray.length ? '<span class="res-note">note: ' + fmt(stray) + ' not in U</span>' : '';
+        out.innerHTML =
+          row('A ∪ B', fmt(union(a, b)), 't') +
+          row('A ∩ B', fmt(inter(a, b)), 't') +
+          row('A − B', fmt(diff(a, b)), 't') +
+          row('B − A', fmt(diff(b, a)), 't') +
+          row('Aᶜ', fmt(diff(u, a)), 't', 'complement within U') +
+          row('Bᶜ', fmt(diff(u, b)), 't', warp(warn));
+      }
+      function warp(w) { return w ? w.replace(/<[^>]+>/g, '') : ''; }
+      U.addEventListener('input', render); A.addEventListener('input', render); B.addEventListener('input', render); render();
+    })();
+
+    /* 6.1.3 Subset & equality checker */
+    (function () {
+      const A = document.getElementById('ss-A'), B = document.getElementById('ss-B'), out = document.getElementById('ss-out');
+      if (!A || !B || !out) return;
+      function witness(X, Y) { const w = diff(X, Y); return w.length ? w[0] : null; }
+      function render() {
+        const a = parseSet(A.value), b = parseSet(B.value);
+        const ab = isSubset(a, b), ba = isSubset(b, a), eq = ab && ba;
+        const wAB = witness(a, b), wBA = witness(b, a);
+        out.innerHTML =
+          row('A ⊆ B', ab ? 'TRUE' : 'FALSE', ab ? 't' : 'f', ab ? '' : 'witness: ' + wAB + ' ∈ A but ∉ B') +
+          row('B ⊆ A', ba ? 'TRUE' : 'FALSE', ba ? 't' : 'f', ba ? '' : 'witness: ' + wBA + ' ∈ B but ∉ A') +
+          row('A = B', eq ? 'TRUE' : 'FALSE', eq ? 't' : 'f', eq ? 'each contains the other' : 'one containment fails') +
+          row('A ⊊ B (proper)', (ab && !eq) ? 'TRUE' : 'FALSE', (ab && !eq) ? 't' : 'f', (ab && !eq) ? 'A ⊆ B and B has an extra element' : '');
+      }
+      A.addEventListener('input', render); B.addEventListener('input', render); render();
+    })();
+
+    /* 6.1.4 Partition validator */
+    (function () {
+      const U = document.getElementById('pt-U'), Bl = document.getElementById('pt-blocks'), out = document.getElementById('pt-out');
+      if (!U || !Bl || !out) return;
+      function render() {
+        const u = parseSet(U.value);
+        const blocks = (Bl.value || '').split(';').map(parseSet).filter(function (b) { return b.length || true; });
+        // union of blocks
+        let uni = []; blocks.forEach(function (b) { uni = union(uni, b); });
+        const coversUp = isSubset(u, uni) && isSubset(uni, u);
+        // pairwise disjoint
+        let overlap = null;
+        for (let i = 0; i < blocks.length && !overlap; i++)
+          for (let j = i + 1; j < blocks.length && !overlap; j++) {
+            const o = inter(blocks[i], blocks[j]); if (o.length) overlap = { i: i, j: j, o: o };
+          }
+        const anyEmpty = blocks.some(function (b) { return b.length === 0; });
+        const ok = coversUp && !overlap && !anyEmpty;
+        out.innerHTML =
+          row('Blocks', blocks.map(fmt).join('  '), '') +
+          row('Union = A ?', coversUp ? 'YES' : 'NO', coversUp ? 't' : 'f', coversUp ? '' : 'union is ' + fmt(uni)) +
+          row('Pairwise disjoint ?', overlap ? 'NO' : 'YES', overlap ? 'f' : 't', overlap ? 'blocks ' + (overlap.i + 1) + ' & ' + (overlap.j + 1) + ' share ' + fmt(overlap.o) : '') +
+          row('Non-empty blocks ?', anyEmpty ? 'NO' : 'YES', anyEmpty ? 'f' : 't', '') +
+          row('Is a partition ?', ok ? 'YES' : 'NO', ok ? 't' : 'f', '');
+      }
+      U.addEventListener('input', render); Bl.addEventListener('input', render); render();
+    })();
+
+    /* 6.1.5 Power set + Cartesian product */
+    function powerSet(arr) {
+      const res = [[]];
+      for (let i = 0; i < arr.length; i++) { const cur = res.slice(); for (let j = 0; j < cur.length; j++) res.push(cur[j].concat(arr[i])); }
+      return res;
+    }
+    (function () {
+      const S = document.getElementById('ps-set'), out = document.getElementById('ps-out');
+      if (!S || !out) return;
+      function render() {
+        const s = parseSet(S.value);
+        if (s.length > 6) { out.innerHTML = row('Power set', 'too large to list (' + s.length + ' elements)', '', '2^' + s.length + ' = ' + Math.pow(2, s.length) + ' subsets'); return; }
+        const ps = powerSet(s).map(fmt);
+        out.innerHTML =
+          row('ℙ(X)', '{ ' + ps.join(',  ') + ' }', 't') +
+          row('|ℙ(X)|', ps.length + '', 't', '2^' + s.length + ' = ' + Math.pow(2, s.length) + ' ✓');
+      }
+      S.addEventListener('input', render); render();
+    })();
+    (function () {
+      const A = document.getElementById('cp-A'), B = document.getElementById('cp-B'), out = document.getElementById('cp-out');
+      if (!A || !B || !out) return;
+      function render() {
+        const a = parseSet(A.value), b = parseSet(B.value);
+        if (a.length * b.length > 40) { out.innerHTML = row('A × B', 'too large to list', '', '|A×B| = ' + (a.length * b.length)); return; }
+        const pairs = []; a.forEach(function (x) { b.forEach(function (y) { pairs.push('(' + x + ', ' + y + ')'); }); });
+        out.innerHTML =
+          row('A × B', pairs.length ? '{ ' + pairs.join(',  ') + ' }' : '∅', 't') +
+          row('|A × B|', (a.length * b.length) + '', 't', a.length + ' × ' + b.length);
+      }
+      A.addEventListener('input', render); B.addEventListener('input', render); render();
+    })();
+
+    /* 6.2.2 Element-method proof walker (static) */
+    (function () {
+      const sel = document.getElementById('em-sel'), out = document.getElementById('em-out');
+      if (!sel || !out) return;
+      const proofs = {
+        'cap-sub':
+          '<div class="proof-step"><strong>Claim.</strong> A ∩ B ⊆ A.</div>' +
+          '<div class="proof-step">Suppose x ∈ A ∩ B.</div>' +
+          '<div class="proof-step">By the procedural definition of ∩, x ∈ A and x ∈ B.</div>' +
+          '<div class="proof-step">In particular, x ∈ A.</div>' +
+          '<div class="proof-step">Since every element of A ∩ B is in A, A ∩ B ⊆ A. ■</div>',
+        'distrib':
+          '<div class="proof-step"><strong>Claim.</strong> A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C). Prove both containments.</div>' +
+          '<div class="proof-step"><strong>(⊆)</strong> Suppose x ∈ A ∪ (B ∩ C). Then x ∈ A, or x ∈ B ∩ C.</div>' +
+          '<div class="proof-step">If x ∈ A: then x ∈ A∪B and x ∈ A∪C, so x ∈ (A∪B) ∩ (A∪C).</div>' +
+          '<div class="proof-step">If x ∈ B ∩ C: then x ∈ B and x ∈ C, so x ∈ A∪B and x ∈ A∪C. Either way x is in the intersection.</div>' +
+          '<div class="proof-step"><strong>(⊇)</strong> Suppose x ∈ (A∪B) ∩ (A∪C). If x ∈ A, done. Else x ∉ A, so x ∈ B and x ∈ C, giving x ∈ B∩C, hence x ∈ A ∪ (B∩C).</div>' +
+          '<div class="proof-step">Both containments hold, so the sets are equal. ■</div>',
+        'demorgan':
+          '<div class="proof-step"><strong>Claim.</strong> (A ∪ B)ᶜ = Aᶜ ∩ Bᶜ. (One direction shown; the converse reverses each step.)</div>' +
+          '<div class="proof-step">Suppose x ∈ (A ∪ B)ᶜ. Then x ∉ A ∪ B, i.e. NOT(x ∈ A or x ∈ B).</div>' +
+          '<div class="proof-step">By De Morgan’s law of logic, x ∉ A and x ∉ B.</div>' +
+          '<div class="proof-step">So x ∈ Aᶜ and x ∈ Bᶜ, hence x ∈ Aᶜ ∩ Bᶜ. ■</div>'
+      };
+      function render() { out.innerHTML = '<div class="proof-callout" style="margin:0">' + proofs[sel.value] + '</div>'; }
+      sel.addEventListener('change', render); render();
+    })();
+
+    /* 6.3.1 Counterexample tester: (A-B) u (B-C) =? A-C */
+    (function () {
+      const A = document.getElementById('ce-A'), B = document.getElementById('ce-B'), C = document.getElementById('ce-C'), out = document.getElementById('ce-out');
+      if (!A || !B || !C || !out) return;
+      function render() {
+        const a = parseSet(A.value), b = parseSet(B.value), c = parseSet(C.value);
+        const left = union(diff(a, b), diff(b, c)), right = diff(a, c);
+        const eq = setEq(left, right);
+        out.innerHTML =
+          row('(A − B) ∪ (B − C)', fmt(left), '') +
+          row('A − C', fmt(right), '') +
+          row('Equal ?', eq ? 'YES' : 'NO', eq ? 't' : 'f', eq ? 'no counterexample here' : 'these sets are a counterexample: the claim is false');
+      }
+      A.addEventListener('input', render); B.addEventListener('input', render); C.addEventListener('input', render); render();
+    })();
+
+    /* 6.3.2 Subset counter */
+    (function () {
+      const S = document.getElementById('cnt-set'), out = document.getElementById('cnt-out');
+      if (!S || !out) return;
+      function render() {
+        const s = parseSet(S.value); const n = s.length;
+        if (n > 6) { out.innerHTML = row('|ℙ(X)|', Math.pow(2, n) + '', 't', 'n = ' + n + ', so 2^' + n); return; }
+        const ps = powerSet(s).map(fmt);
+        out.innerHTML =
+          row('n = |X|', n + '', 't') +
+          row('subsets', ps.join(',  '), '') +
+          row('count', ps.length + '', 't', 'matches 2^' + n + ' = ' + Math.pow(2, n) + ' ✓');
+      }
+      S.addEventListener('input', render); render();
+    })();
+
+    /* 6.3.3 Algebraic proof viewer (static) */
+    (function () {
+      const sel = document.getElementById('alg-sel'), out = document.getElementById('alg-out');
+      if (!sel || !out) return;
+      function tbl(rows) { return '<table class="data-table"><tbody>' + rows.map(function (r) { return '<tr><td class="mono">' + r[0] + '</td><td>' + (r[1] || '') + '</td></tr>'; }).join('') + '</tbody></table>'; }
+      const proofs = {
+        'p1': tbl([
+          ['(A ∪ B) − C', ''],
+          ['= (A ∪ B) ∩ Cᶜ', 'set difference law'],
+          ['= Cᶜ ∩ (A ∪ B)', 'commutative for ∩'],
+          ['= (Cᶜ ∩ A) ∪ (Cᶜ ∩ B)', 'distributive law'],
+          ['= (A ∩ Cᶜ) ∪ (B ∩ Cᶜ)', 'commutative for ∩'],
+          ['= (A − C) ∪ (B − C)', 'set difference law']
+        ]),
+        'p2': tbl([
+          ['A − (A ∩ B)', ''],
+          ['= A ∩ (A ∩ B)ᶜ', 'set difference law'],
+          ['= A ∩ (Aᶜ ∪ Bᶜ)', 'De Morgan’s law'],
+          ['= (A ∩ Aᶜ) ∪ (A ∩ Bᶜ)', 'distributive law'],
+          ['= ∅ ∪ (A ∩ Bᶜ)', 'complement law'],
+          ['= (A ∩ Bᶜ) ∪ ∅', 'commutative for ∪'],
+          ['= A ∩ Bᶜ', 'identity law for ∪'],
+          ['= A − B', 'set difference law']
+        ])
+      };
+      function render() { out.innerHTML = proofs[sel.value]; }
+      sel.addEventListener('change', render); render();
+    })();
+
+    /* 6.3.4 Symmetric difference */
+    (function () {
+      const A = document.getElementById('sd-A'), B = document.getElementById('sd-B'), out = document.getElementById('sd-out');
+      if (!A || !B || !out) return;
+      function render() {
+        const a = parseSet(A.value), b = parseSet(B.value);
+        out.innerHTML =
+          row('A − B', fmt(diff(a, b)), '') +
+          row('B − A', fmt(diff(b, a)), '') +
+          row('A △ B', fmt(union(diff(a, b), diff(b, a))), 't', 'in exactly one of A, B');
+      }
+      A.addEventListener('input', render); B.addEventListener('input', render); render();
+    })();
+
+    /* 6.4.1 Boolean algebra on B = {0,1} */
+    (function () {
+      const A = document.getElementById('ba-a'), B = document.getElementById('ba-b'), out = document.getElementById('ba-out');
+      if (!A || !B || !out) return;
+      function render() {
+        const a = parseInt(A.value, 10), b = parseInt(B.value, 10);
+        const plus = Math.max(a, b), times = Math.min(a, b), na = 1 - a;
+        out.innerHTML =
+          row('a + b  (OR / max)', plus + '', 't') +
+          row('a · b  (AND / min)', times + '', 't') +
+          row('ā  (complement)', na + '', 't') +
+          row('a + ā = 1 ?', (Math.max(a, na) === 1) ? 'TRUE' : 'FALSE', 't', 'complement axiom for +') +
+          row('a · ā = 0 ?', (Math.min(a, na) === 0) ? 'TRUE' : 'FALSE', 't', 'complement axiom for ·');
+      }
+      A.addEventListener('change', render); B.addEventListener('change', render); render();
+    })();
+
+    /* ===================================================== Generic behaviours ===================================================== */
+    /* Solution toggles */
+    document.querySelectorAll('.solution-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const sol = document.getElementById(btn.dataset.toggleSol);
+        if (!sol) return;
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+
+    /* Floating "How to use" toggle */
+    (function () {
+      const root = document.getElementById('howto-fab');
+      if (!root) return;
+      const toggle = root.querySelector('.howto-fab-toggle');
+      const body = root.querySelector('.howto-fab-body');
+      toggle.addEventListener('click', function () {
+        const willOpen = body.hasAttribute('hidden');
+        if (willOpen) { body.removeAttribute('hidden'); root.setAttribute('data-open', 'true'); toggle.setAttribute('aria-expanded', 'true'); }
+        else { body.setAttribute('hidden', ''); root.setAttribute('data-open', 'false'); toggle.setAttribute('aria-expanded', 'false'); }
+      });
+    })();
+
+  </script>
+</body>
+</html>
