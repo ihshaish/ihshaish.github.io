@@ -442,6 +442,11 @@
       .companion-hero h1 { font-size: 1.4rem; }
       .widget-card { padding: 16px 18px; }
     }
+  
+  /* stacked summation/product operator with limits above and below */
+  .bigop { display:inline-flex; flex-direction:column; align-items:center; justify-content:center; vertical-align:middle; line-height:1.0; margin:0 .18em; }
+  .bigop .bo-sym { font-size:1.5em; font-weight:400; }
+  .bigop .bo-lim { font-size:.58em; white-space:nowrap; padding:1px 0; }
   </style>
   <script src="/birzeit/gate.js"></script>
 </head>
@@ -591,7 +596,7 @@
             <h3>5.1.2 Summation and product notation</h3>
             <div class="thm-box def">
               <div class="thm-title">Definitions (Epp &sect;5.1)</div>
-              <div class="thm-body">The Greek capital sigma means &ldquo;add&rdquo;: <span class="mono-inline">&Sigma;<sub>k=m</sub><sup>n</sup> a<sub>k</sub> = a<sub>m</sub> + a<sub>m+1</sub> + &hellip; + a<sub>n</sub></span>. The capital pi means &ldquo;multiply&rdquo;: <span class="mono-inline">&Pi;<sub>k=m</sub><sup>n</sup> a<sub>k</sub> = a<sub>m</sub> &middot; a<sub>m+1</sub> &middot; &hellip; &middot; a<sub>n</sub></span>. Read three things off the symbol: the lower limit <span class="mono-inline">m</span> (where to start), the upper limit <span class="mono-inline">n</span> (where to stop), and the index <span class="mono-inline">k</span> (which steps up by 1).</div>
+              <div class="thm-body">The Greek capital sigma means &ldquo;add&rdquo;: <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=m</span></span> a<sub>k</sub> = a<sub>m</sub> + a<sub>m+1</sub> + &hellip; + a<sub>n</sub></span>. The capital pi means &ldquo;multiply&rdquo;: <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Pi;</span><span class="bo-lim">k=m</span></span> a<sub>k</sub> = a<sub>m</sub> &middot; a<sub>m+1</sub> &middot; &hellip; &middot; a<sub>n</sub></span>. Read three things off the symbol: the lower limit <span class="mono-inline">m</span> (where to start), the upper limit <span class="mono-inline">n</span> (where to stop), and the index <span class="mono-inline">k</span> (which steps up by 1).</div>
             </div>
             <div class="widget-desc">Four moves let you reshape a sum, and each is a loop transformation: <strong>expand</strong> (write every term), <strong>fold back to &Sigma;</strong>, <strong>separate or absorb</strong> the last term, and <strong>telescope</strong> (consecutive pieces cancel).</div>
           </div>
@@ -619,7 +624,7 @@
             <h3>5.1.4 Telescoping</h3>
             <div class="thm-box">
               <div class="thm-title">The idea</div>
-              <div class="thm-body">Split each term into a difference of two pieces; consecutive pieces cancel, leaving only the two ends. Classic example: <span class="mono-inline">1/(k(k+1)) = 1/k &minus; 1/(k+1)</span>, so <span class="mono-inline">&Sigma;<sub>k=1</sub><sup>n</sup> 1/(k(k+1)) = 1 &minus; 1/(n+1) = n/(n+1)</span>.</div>
+              <div class="thm-body">Split each term into a difference of two pieces; consecutive pieces cancel, leaving only the two ends. In general, <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=m</span></span> (b<sub>k</sub> &minus; b<sub>k+1</sub>) = b<sub>m</sub> &minus; b<sub>n+1</sub></span>: only the first and last pieces survive. Classic example: <span class="mono-inline">1/(k(k+1)) = 1/k &minus; 1/(k+1)</span>, so <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=1</span></span> 1/(k(k+1)) = 1 &minus; 1/(n+1) = n/(n+1)</span>.</div>
             </div>
             <div class="widget-desc">Watch the cancellation and the closed form for your chosen <span class="mono-inline">n</span>:</div>
             <div class="num-row"><label>n =&nbsp;<input type="number" id="tel-n" value="5" style="width:60px"></label></div>
@@ -644,9 +649,16 @@
                 <span class="mono-inline">&Sigma; (a<sub>k</sub> + b<sub>k</sub>) = &Sigma; a<sub>k</sub> + &Sigma; b<sub>k</sub></span> (split / combine) &nbsp;&middot;&nbsp; <span class="mono-inline">&Sigma; c&middot;a<sub>k</sub> = c &middot; &Sigma; a<sub>k</sub></span> (pull out a constant) &nbsp;&middot;&nbsp; <span class="mono-inline">&Pi; (a<sub>k</sub> b<sub>k</sub>) = (&Pi; a<sub>k</sub>)(&Pi; b<sub>k</sub>)</span> (multiply termwise).</div>
             </div>
             <p>The index is a <span class="term" data-tip="متغير وهمي · its name carries no meaning and can be renamed or shifted"><strong>dummy variable</strong></span>: its name carries no meaning, so you may rename or <strong>shift</strong> it, as long as you adjust the limits to match. Shifting the index is exactly how you fix an off-by-one when re-indexing a loop.</p>
+            <div class="proof-callout">
+              <div class="proof-label">Worked example: shifting the index by a substitution</div>
+              <div class="proof-step">Rewrite <span class="mono"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=3</span></span> (k &minus; 2)<sup>2</sup></span> with a new index <span class="mono">j = k &minus; 2</span>.</div>
+              <div class="proof-step">Substitute <span class="mono">k = j + 2</span>. The summand <span class="mono">(k &minus; 2)<sup>2</sup></span> becomes <span class="mono">j<sup>2</sup></span>.</div>
+              <div class="proof-step">Fix the limits from the substitution: <span class="mono">k = 3 &rArr; j = 1</span>, and <span class="mono">k = n &rArr; j = n &minus; 2</span>.</div>
+              <div class="proof-step">So <span class="mono"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=3</span></span> (k &minus; 2)<sup>2</sup> = <span class="bigop"><span class="bo-lim">n&minus;2</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">j=1</span></span> j<sup>2</sup></span>, the same sum with a cleaner index. The rule: change every <span class="mono">k</span> in the summand <em>and</em> recompute both limits. &#9632;</div>
+            </div>
             <div class="thm-box">
               <div class="thm-title">A summation is a loop</div>
-              <div class="thm-body"><span class="mono-inline">&Sigma;<sub>k=1</sub><sup>n</sup> a<sub>k</sub></span> &nbsp;&equiv;&nbsp; <span class="mono-inline">s = 0; for (k = 1; k &le; n; k++) s = s + a[k];</span><br>The index is the loop counter; the limits are the loop bounds; separating a term or changing variable is adjusting those bounds; a recursive definition (product, factorial) is an accumulator loop.</div>
+              <div class="thm-body"><span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=1</span></span> a<sub>k</sub></span> &nbsp;&equiv;&nbsp; <span class="mono-inline">s = 0; for (k = 1; k &le; n; k++) s = s + a[k];</span><br>The index is the loop counter; the limits are the loop bounds; separating a term or changing variable is adjusting those bounds; a recursive definition (product, factorial) is an accumulator loop.</div>
             </div>
           </div>
 
@@ -671,6 +683,16 @@
               <div class="solution" id="sol-51B">
                 <p>Two patterns. <strong>Size:</strong> the magnitudes are <span class="mono">0, 1, 2, 3, 4, 5</span>, i.e. <span class="mono">n &minus; 1</span>. <strong>Sign:</strong> term <span class="mono">n = 1</span> is <span class="mono">+</span>, term <span class="mono">n = 2</span> is <span class="mono">+</span>&hellip; check parities: <span class="mono">a&#8322; = +1, a&#8323; = &minus;2, a&#8324; = +3</span>, so the sign is <span class="mono">+</span> on even <span class="mono">n</span> and <span class="mono">&minus;</span> on odd <span class="mono">n</span>, i.e. <span class="mono">(&minus;1)<sup>n</sup></span>.</p>
                 <p>Combine: <span class="mono">a<sub>n</sub> = (&minus;1)<sup>n</sup>(n &minus; 1)</span>. Check: <span class="mono">a&#8321; = (&minus;1)(0) = 0</span>, <span class="mono">a&#8322; = (1)(1) = 1</span>, <span class="mono">a&#8323; = (&minus;1)(2) = &minus;2</span>. &#10003;</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 5.1.C &middot; change of variable (cf. Epp 5.1 #53&ndash;58)</div>
+              <div class="ex-body">Re-index <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=2</span></span> 1/(k &minus; 1)</span> using the substitution <span class="mono-inline">j = k &minus; 1</span>. State the new summand and both limits.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-51C">Show solution</button>
+              <div class="solution" id="sol-51C">
+                <p>Substitute <span class="mono">k = j + 1</span>. The summand <span class="mono">1/(k &minus; 1)</span> becomes <span class="mono">1/j</span>.</p>
+                <p>Recompute the limits: <span class="mono">k = 2 &rArr; j = 1</span> and <span class="mono">k = n &rArr; j = n &minus; 1</span>. Hence <span class="mono"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=2</span></span> 1/(k&minus;1) = <span class="bigop"><span class="bo-lim">n&minus;1</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">j=1</span></span> 1/j</span>. Same value; lower the start and the summand together.</p>
               </div>
             </div>
           </div>
@@ -769,6 +791,16 @@
                 <p><strong>Step.</strong> Add the next term <span class="mono">2(k+1)</span>:</p>
                 <p class="mono">2 + 4 + &hellip; + 2k + 2(k+1) = (k<sup>2</sup> + k) + 2(k+1) = k<sup>2</sup> + 3k + 2 = (k+1)<sup>2</sup> + (k+1).</p>
                 <p>That is the formula at <span class="mono">n = k+1</span>, so it holds for all <span class="mono">n &ge; 1</span>. &#9632;</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">Exercise 5.2.B &middot; evaluate a geometric sum (cf. Epp 5.2 #20&ndash;26)</div>
+              <div class="ex-body">Use the geometric-sum formula to write <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=0</span></span> 3<sup>k</sup></span> in closed form, then compute <span class="mono-inline"><span class="bigop"><span class="bo-lim">5</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=1</span></span> 3<sup>k</sup></span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-52B">Show solution</button>
+              <div class="solution" id="sol-52B">
+                <p>By Theorem 5.2.3 with <span class="mono">r = 3</span>: <span class="mono"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=0</span></span> 3<sup>k</sup> = (3<sup>n+1</sup> &minus; 1)/(3 &minus; 1) = (3<sup>n+1</sup> &minus; 1)/2</span>.</p>
+                <p>For <span class="mono">k = 1</span> to <span class="mono">5</span>, drop the <span class="mono">k = 0</span> term (which is 1): <span class="mono">(3<sup>6</sup> &minus; 1)/2 &minus; 1 = 728/2 &minus; 1 = 364 &minus; 1 = 363</span>. Check: <span class="mono">3 + 9 + 27 + 81 + 243 = 363</span>. &#10003;</p>
               </div>
             </div>
           </div>
@@ -888,7 +920,7 @@
 
             <div class="exercise">
               <div class="ex-label">W2 &middot; Epp 5.1, telescoping (cf. #18&ndash;28, 40&ndash;42)</div>
-              <div class="ex-body">Evaluate <span class="mono-inline">&Sigma;<sub>k=1</sub><sup>n</sup> 1/(k(k+1))</span> in closed form.</div>
+              <div class="ex-body">Evaluate <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=1</span></span> 1/(k(k+1))</span> in closed form.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-W2">Show solution</button>
               <div class="solution" id="sol-W2">
                 <p>Split by partial fractions: <span class="mono">1/(k(k+1)) = 1/k &minus; 1/(k+1)</span>. The sum telescopes:</p>
@@ -970,6 +1002,28 @@
                 <p><strong>Step.</strong> By the recurrence, <span class="mono">b<sub>k+1</sub> = 4 + b<sub>k</sub> &gt; 4 + 4k = 4(k+1)</span>, using the hypothesis. So <span class="mono">b<sub>k+1</sub> &gt; 4(k+1)</span>, and by induction <span class="mono">b<sub>n</sub> &gt; 4n</span> for all <span class="mono">n &ge; 0</span>. &#9632;</p>
               </div>
             </div>
+
+            <div class="exercise">
+              <div class="ex-label">W9 &middot; Epp 5.1, factorial simplification (cf. #62&ndash;70)</div>
+              <div class="ex-body">Using the recursive definition of factorial, simplify <span class="mono-inline">(2n + 1)! / (2n &minus; 1)!</span> completely (no factorial notation), for an integer <span class="mono-inline">n &ge; 1</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W9">Show solution</button>
+              <div class="solution" id="sol-W9">
+                <p>Expand the larger factorial just far enough to reach the smaller one, using <span class="mono">m! = m &middot; (m&minus;1)!</span> twice:</p>
+                <p class="mono">(2n + 1)! = (2n + 1) &middot; (2n)! = (2n + 1) &middot; (2n) &middot; (2n &minus; 1)!</p>
+                <p>So <span class="mono">(2n + 1)! / (2n &minus; 1)! = (2n + 1)(2n) = 4n<sup>2</sup> + 2n</span>. The <span class="mono">(2n &minus; 1)!</span> cancels entirely, leaving a polynomial.</p>
+              </div>
+            </div>
+
+            <div class="exercise">
+              <div class="ex-label">W10 &middot; Epp 5.1, telescoping a difference (cf. #18&ndash;28)</div>
+              <div class="ex-body">Evaluate <span class="mono-inline"><span class="bigop"><span class="bo-lim">n</span><span class="bo-sym">&Sigma;</span><span class="bo-lim">k=1</span></span> (&radic;(k+1) &minus; &radic;k)</span> in closed form.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W10">Show solution</button>
+              <div class="solution" id="sol-W10">
+                <p>This is already in difference form <span class="mono">b<sub>k</sub> &minus; b<sub>k+1</sub></span> with <span class="mono">b<sub>k</sub> = &radic;k</span> (written as <span class="mono">&radic;(k+1) &minus; &radic;k = &minus;(b<sub>k</sub> &minus; b<sub>k+1</sub>)</span>), so it telescopes:</p>
+                <p class="mono">(&radic;2 &minus; &radic;1) + (&radic;3 &minus; &radic;2) + &hellip; + (&radic;(n+1) &minus; &radic;n) = &radic;(n+1) &minus; 1.</p>
+                <p>Every interior <span class="mono">&radic;</span> appears once with each sign and cancels; only <span class="mono">&radic;(n+1)</span> and <span class="mono">&minus;&radic;1 = &minus;1</span> survive. So the sum is <span class="mono">&radic;(n+1) &minus; 1</span>.</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1020,6 +1074,7 @@
       return d === 1 ? '' + n : n + '/' + d;
     }
     function ipow(base, exp) { let r = 1n; const b = BigInt(base); for (let i = 0; i < exp; i++) r *= b; return r; }
+    function bigop(sym, lo, up) { return '<span class="bigop"><span class="bo-lim">' + up + '</span><span class="bo-sym">' + sym + '</span><span class="bo-lim">' + lo + '</span></span>'; }
 
     /* 5.1.1 Sequence-term generator */
     (function () {
@@ -1070,15 +1125,15 @@
           let closed = '';
           if (op === 'sum' && m === 1 && f === 'k') closed = 'closed form: n(n+1)/2 = ' + (BigInt(n) * BigInt(n + 1) / 2n).toString();
           if (op === 'sum' && m === 1 && f === 'k2') closed = 'closed form: n(n+1)(2n+1)/6 = ' + (BigInt(n) * BigInt(n + 1) * BigInt(2 * n + 1) / 6n).toString();
-          if (op === 'sum' && f === 'pow2') closed = 'closed form: 2^(n+1) &minus; 2^m = ' + (ipow(2, n + 1) - ipow(2, m)).toString();
-          out.innerHTML = row(op === 'sum' ? '&Sigma;' : '&Pi;', (op === 'sum' ? labels.join(' + ') : labels.join(' &middot; ')), '') + row('Value', acc.toString(), 't', closed);
+          if (op === 'sum' && f === 'pow2') closed = 'closed form: 2<sup>n+1</sup> &minus; 2<sup>m</sup> = ' + (ipow(2, n + 1) - ipow(2, m)).toString();
+          out.innerHTML = row(bigop(op === 'sum' ? '&Sigma;' : '&Pi;', 'k=' + m, n), (op === 'sum' ? labels.join(' + ') : labels.join(' &middot; ')), '') + row('Value', acc.toString(), 't', closed);
         } else {
           // telescoping 1/(k(k+1)), sum only meaningful
           let acc = 0;
           for (let k = m; k <= n; k++) { acc += 1 / (k * (k + 1)); if (k - m < 6) labels.push('1/' + (k * (k + 1))); }
           if (n - m >= 6) labels.push('&hellip;');
           let closed = (m === 1) ? 'closed form: n/(n+1) = ' + frac(n, n + 1) : '';
-          out.innerHTML = row('&Sigma;', labels.join(' + '), '') + row('Value', frac(/*approx as fraction for m=1*/ (m === 1 ? n : Math.round(acc * 1e6)), (m === 1 ? n + 1 : 1e6)), 't', closed || ('&asymp; ' + acc.toFixed(6)));
+          out.innerHTML = row(bigop('&Sigma;', 'k=' + m, n), labels.join(' + '), '') + row('Value', frac(/*approx as fraction for m=1*/ (m === 1 ? n : Math.round(acc * 1e6)), (m === 1 ? n + 1 : 1e6)), 't', closed || ('&asymp; ' + acc.toFixed(6)));
         }
       }
       [F, OP, M, N].forEach(function (e) { e.addEventListener('input', render); e.addEventListener('change', render); });
@@ -1097,7 +1152,7 @@
         if (n > 4) parts.push('&hellip;');
         out.innerHTML =
           row('Split', parts.join(' + '), '', 'each interior piece cancels') +
-          row('&Sigma; 1/(k(k+1))', '1 &minus; 1/' + (n + 1) + ' = ' + frac(n, n + 1), 't', 'closed form n/(n+1)');
+          row(bigop('&Sigma;', 'k=1', n) + ' 1/(k(k+1))', '1 &minus; 1/' + (n + 1) + ' = ' + frac(n, n + 1), 't', 'closed form n/(n+1)');
       }
       N.addEventListener('input', render); render();
     })();
@@ -1128,7 +1183,7 @@
         const closed = n * (n + 1) / 2;
         const loopShown = (n <= 200000) ? loop : closed; // avoid long loops; equality is the point
         out.innerHTML =
-          row('Loop &Sigma;<sub>k=1</sub><sup>n</sup> k', loopShown.toLocaleString(), 't', n > 200000 ? '(computed via the formula for large n)' : '') +
+          row('Loop ' + bigop('&Sigma;', 'k=1', 'n') + ' k', loopShown.toLocaleString(), 't', n > 200000 ? '(computed via the formula for large n)' : '') +
           row('Closed form n(n+1)/2', closed.toLocaleString(), 't') +
           row('Agree?', (loopShown === closed) ? 'YES' : 'YES', 't', 'induction proves they always match');
       }
@@ -1147,9 +1202,9 @@
         if (n >= 7) terms.push('&hellip;');
         const closed = (ipow(r, n + 1) - 1n) / (BigInt(r) - 1n);
         out.innerHTML =
-          row('1 + r + &hellip; + r^n', terms.join(' + '), '') +
+          row('1 + r + &hellip; + r<sup>n</sup>', terms.join(' + '), '') +
           row('Sum', sum.toString(), 't') +
-          row('(r^(n+1) &minus; 1)/(r &minus; 1)', closed.toString(), 't', 'closed form matches');
+          row('(r<sup>n+1</sup> &minus; 1)/(r &minus; 1)', closed.toString(), 't', 'closed form matches');
       }
       [R, N].forEach(function (e) { e.addEventListener('input', render); }); render();
     })();
@@ -1179,7 +1234,7 @@
       sel.addEventListener('change', render); render();
     })();
 
-    /* 5.3.1 Divisibility: 2^(2n) - 1 divisible by 3 */
+    /* 5.3.1 Divisibility: 2<sup>2n</sup> - 1 divisible by 3 */
     (function () {
       const N = document.getElementById('div-n'), out = document.getElementById('div-out');
       if (!N || !out) return;
@@ -1189,14 +1244,14 @@
         const val = ipow(2, 2 * n) - 1n;
         const q = val / 3n, rem = val % 3n;
         out.innerHTML =
-          row('2^(2n) &minus; 1', val.toString(), '') +
+          row('2<sup>2n</sup> &minus; 1', val.toString(), '') +
           row('&divide; 3', q.toString(), 't', 'remainder ' + rem.toString()) +
           row('Divisible by 3?', rem === 0n ? 'YES' : 'NO', rem === 0n ? 't' : 'f');
       }
       N.addEventListener('input', render); render();
     })();
 
-    /* 5.3.2 Inequality: 2n+1 vs 2^n */
+    /* 5.3.2 Inequality: 2n+1 vs 2<sup>n</sup> */
     (function () {
       const N = document.getElementById('ineq-n'), out = document.getElementById('ineq-out');
       if (!N || !out) return;
@@ -1207,13 +1262,13 @@
         const holds = lhs < rhs;
         out.innerHTML =
           row('2n + 1', lhs + '', '') +
-          row('2^n', rhs.toLocaleString(), '') +
-          row('2n + 1 &lt; 2^n?', holds ? 'TRUE' : 'FALSE', holds ? 't' : 'f', n < 3 ? 'fails below n = 3' : 'holds for all n &ge; 3');
+          row('2<sup>n</sup>', rhs.toLocaleString(), '') +
+          row('2n + 1 &lt; 2<sup>n</sup>?', holds ? 'TRUE' : 'FALSE', holds ? 't' : 'f', n < 3 ? 'fails below n = 3' : 'holds for all n &ge; 3');
       }
       N.addEventListener('input', render); render();
     })();
 
-    /* 5.3.3 Recurrence vs closed form: a1=3, ak=7a(k-1) ; an = 3*7^(n-1) */
+    /* 5.3.3 Recurrence vs closed form: a1=3, ak=7a(k-1) ; an = 3*7<sup>n-1</sup> */
     (function () {
       const N = document.getElementById('rec-n'), out = document.getElementById('rec-out');
       if (!N || !out) return;
@@ -1224,7 +1279,7 @@
         const closed = 3n * ipow(7, n - 1);
         out.innerHTML =
           row('by recurrence', a.toString(), 't') +
-          row('by closed form 3&middot;7^(n&minus;1)', closed.toString(), 't') +
+          row('by closed form 3&middot;7<sup>n&minus;1</sup>', closed.toString(), 't') +
           row('Agree?', a === closed ? 'YES' : 'NO', a === closed ? 't' : 'f', 'induction proves they always match');
       }
       N.addEventListener('input', render); render();
