@@ -518,6 +518,8 @@
               <a href="#sec611">Notation and the element relation</a>
               <a href="#sec612">Subsets and equality</a>
               <a href="#sec613">Set-operations calculator</a>
+              <a href="#sec613b">Venn diagrams</a>
+              <a href="#sec613c">Intervals as sets</a>
               <a href="#sec614">Subset &amp; equality checker</a>
               <a href="#sec615">Empty set and partitions</a>
               <a href="#sec616">Power sets and products</a>
@@ -634,6 +636,60 @@
             <div class="result-panel" id="so-out"></div>
           </div>
 
+          <div class="widget-card" id="sec613b">
+            <h3>6.1.2a Seeing the operations: Venn diagrams</h3>
+            <div class="widget-desc">A Venn diagram draws the universe <span class="mono-inline">U</span> as a rectangle and each set as a circle inside it; you <strong>shade</strong> the region an operation produces. It is the fastest way to <em>see</em> what an operation means.</div>
+            <svg viewBox="0 0 720 168" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four Venn diagrams shading A union B, A intersect B, A minus B, and the complement of A" style="width:100%;height:auto;max-width:720px;display:block;margin:6px auto;background:#fff;border:1px solid #e6ddcd;border-radius:10px;padding:8px;">
+              <defs>
+                <clipPath id="cvenn2"><circle cx="284" cy="92" r="34"/></clipPath>
+              </defs>
+              <!-- 1. A u B -->
+              <text x="85" y="16" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1f4459">A &cup; B</text>
+              <rect x="10" y="26" width="150" height="118" fill="none" stroke="#c8c8c8"/>
+              <circle cx="66" cy="92" r="34" fill="#cfe3ee" stroke="none"/>
+              <circle cx="104" cy="92" r="34" fill="#cfe3ee" stroke="none"/>
+              <circle cx="66" cy="92" r="34" fill="none" stroke="#2c5f7c" stroke-width="1.3"/>
+              <circle cx="104" cy="92" r="34" fill="none" stroke="#2c5f7c" stroke-width="1.3"/>
+              <text x="44" y="96" font-size="12" fill="#1f4459">A</text><text x="120" y="96" font-size="12" fill="#1f4459">B</text>
+              <text x="150" y="14" fill="#c8c8c8" font-size="10">U</text>
+              <!-- 2. A n B -->
+              <text x="285" y="16" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1f4459">A &cap; B</text>
+              <rect x="210" y="26" width="150" height="118" fill="none" stroke="#c8c8c8"/>
+              <g clip-path="url(#cvenn2)"><circle cx="246" cy="92" r="34" fill="#cfe3ee"/></g>
+              <circle cx="246" cy="92" r="34" fill="none" stroke="#2c5f7c" stroke-width="1.3"/>
+              <circle cx="284" cy="92" r="34" fill="none" stroke="#2c5f7c" stroke-width="1.3"/>
+              <text x="224" y="96" font-size="12" fill="#1f4459">A</text><text x="300" y="96" font-size="12" fill="#1f4459">B</text>
+              <!-- 3. A - B -->
+              <text x="485" y="16" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1f4459">A &minus; B</text>
+              <rect x="410" y="26" width="150" height="118" fill="none" stroke="#c8c8c8"/>
+              <circle cx="446" cy="92" r="34" fill="#cfe3ee" stroke="none"/>
+              <circle cx="484" cy="92" r="34" fill="#fff" stroke="none"/>
+              <circle cx="446" cy="92" r="34" fill="none" stroke="#2c5f7c" stroke-width="1.3"/>
+              <circle cx="484" cy="92" r="34" fill="none" stroke="#2c5f7c" stroke-width="1.3"/>
+              <text x="424" y="96" font-size="12" fill="#1f4459">A</text><text x="500" y="96" font-size="12" fill="#1f4459">B</text>
+              <!-- 4. A complement -->
+              <text x="645" y="16" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1f4459">A&#7580;</text>
+              <rect x="610" y="26" width="100" height="118" fill="#cfe3ee" stroke="#c8c8c8"/>
+              <circle cx="646" cy="92" r="30" fill="#fff" stroke="none"/>
+              <circle cx="646" cy="92" r="30" fill="none" stroke="#2c5f7c" stroke-width="1.3"/>
+              <text x="624" y="96" font-size="12" fill="#1f4459">A</text>
+            </svg>
+            <div class="thm-box" style="margin-top:10px;">
+              <div class="thm-title">Use it, but mind its limit</div>
+              <div class="thm-body">A Venn diagram is the right <strong>starting point</strong>: shade both sides of a proposed identity to <em>guess</em> whether it is true, or, when they differ, to <em>hunt for a counterexample</em> (Section 6.3). But a diagram shows one drawn arrangement, not all possible sets, so it <strong>suggests, it does not prove</strong>. The proof is the element method of Section 6.2.</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec613c">
+            <h3>6.1.2b Intervals are sets of real numbers</h3>
+            <div class="thm-box def">
+              <div class="thm-title">Definition (Epp &sect;6.1)</div>
+              <div class="thm-body">An <span class="term" data-tip="فترة · a set of all real numbers between two endpoints"><strong>interval</strong></span> is the set of all real numbers between two endpoints. A <strong>round bracket excludes</strong> the endpoint (open), a <strong>square bracket includes</strong> it (closed):<br>
+                <span class="mono-inline">(a, b) = {x &isin; &#8477; | a &lt; x &lt; b}</span> &nbsp;&middot;&nbsp; <span class="mono-inline">[a, b] = {x &isin; &#8477; | a &le; x &le; b}</span> &nbsp;&middot;&nbsp; half-open <span class="mono-inline">(a, b]</span>, <span class="mono-inline">[a, b)</span>.</div>
+            </div>
+            <p>Because an interval <em>is</em> a set, the operations <span class="mono-inline">&cup;, &cap;, &minus;, &#7580;</span> apply unchanged; the only care needed is the endpoints. For <span class="mono-inline">A = (&minus;1, 0]</span> and <span class="mono-inline">B = [0, 1)</span>: <span class="mono-inline">A &cup; B = (&minus;1, 1)</span>, <span class="mono-inline">A &cap; B = {0}</span> (only <span class="mono-inline">0</span> lies in both), and <span class="mono-inline">B &minus; A = (0, 1)</span>. Drawing them on a number line is the interval version of a Venn diagram. (Worked in full as <a href="#worked">W2</a>.)</p>
+          </div>
+
           <div class="widget-card" id="sec614">
             <h3>6.1.3 Subset &amp; equality checker</h3>
             <div class="widget-desc">Test the relationships between two sets. The panel reports each containment, equality, and proper-subset status, and gives a witnessing element when a containment fails.</div>
@@ -723,6 +779,18 @@
             <div class="thm-box">
               <div class="thm-title">Theorem 6.2.1 (some subset relations)</div>
               <div class="thm-body"><span class="mono-inline">A &cap; B &sube; A</span>; &nbsp; <span class="mono-inline">A &cap; B &sube; B</span>; &nbsp; <span class="mono-inline">A &sube; A &cup; B</span>; &nbsp; <span class="mono-inline">B &sube; A &cup; B</span>. &nbsp;&nbsp;<strong>Transitivity:</strong> if <span class="mono-inline">A &sube; B</span> and <span class="mono-inline">B &sube; C</span> then <span class="mono-inline">A &sube; C</span>.</div>
+            </div>
+            <div class="thm-box def">
+              <div class="thm-title">The move: how to find a set proof</div>
+              <div class="thm-body">Every set fact reduces to the logic of Chapters 2&ndash;3. The recipe never changes:
+                <ol style="margin:6px 0 0; padding-left:20px;">
+                  <li>To prove <span class="mono-inline">X &sube; Y</span>, take an <strong>arbitrary</strong> <span class="mono-inline">x &isin; X</span>.</li>
+                  <li><strong>Translate</strong> &ldquo;<span class="mono-inline">x &isin; X</span>&rdquo; into a logical sentence with the procedural definitions: <span class="mono-inline">&cup; &rarr; or</span>, <span class="mono-inline">&cap; &rarr; and</span>, <span class="mono-inline">&#7580; &rarr; not</span>, <span class="mono-inline">&minus; &rarr; and not</span>.</li>
+                  <li><strong>Reason</strong> with that sentence (using logical equivalences such as De Morgan or distributive, named as you go).</li>
+                  <li><strong>Translate back</strong> to read off &ldquo;<span class="mono-inline">x &isin; Y</span>&rdquo;.</li>
+                  <li>To prove <span class="mono-inline">X = Y</span>, run this <strong>both ways</strong> (<span class="mono-inline">&sube;</span> and <span class="mono-inline">&supe;</span>).</li>
+                </ol>
+                <strong>What to look for:</strong> the connective each symbol unfolds to is your next step. The Venn diagram tells you <em>what</em> the answer should be; this argument is <em>why</em> it holds.</div>
             </div>
           </div>
 
@@ -853,6 +921,17 @@
           <div class="widget-card" id="sec633">
             <h3>6.3.3 Algebraic proofs</h3>
             <div class="widget-desc">An algebraic proof transforms one side into the other, citing one identity of Theorem 6.2.2 per step. The law <span class="mono-inline">A &minus; B = A &cap; B&#7580;</span> turns every difference into an intersection with a complement, which is what lets the other laws apply. Choose a worked proof:</div>
+            <div class="thm-box def">
+              <div class="thm-title">The move: how to drive an algebraic proof</div>
+              <div class="thm-body">
+                <ol style="margin:6px 0 0; padding-left:20px;">
+                  <li><strong>Clear the differences first:</strong> rewrite every <span class="mono-inline">X &minus; Y</span> as <span class="mono-inline">X &cap; Y&#7580;</span>, so only <span class="mono-inline">&cup;, &cap;, &#7580;</span> remain , the forms the laws are written in.</li>
+                  <li><strong>Push complements inward</strong> with De Morgan whenever you see <span class="mono-inline">(&hellip;)&#7580;</span>, and cancel any double complement.</li>
+                  <li><strong>Look for a law's left-hand side</strong> inside your expression: a distributive pattern to factor, an <span class="mono-inline">A &cap; A&#7580;</span> that collapses to <span class="mono-inline">&empty;</span>, an <span class="mono-inline">A &cup; &empty;</span> or <span class="mono-inline">A &cap; U</span> to drop by identity.</li>
+                  <li><strong>Cite one named law per step</strong>, and stop when the two sides match.</li>
+                </ol>
+                When stuck, transform the more complicated side toward the simpler one.</div>
+            </div>
             <div class="num-row">
               <label>Prove:&nbsp;
                 <select id="alg-sel">
@@ -919,7 +998,18 @@
                 <tr><td>Complement</td><td class="mono">a + a&#773; = 1</td><td class="mono">a &middot; a&#773; = 0</td></tr>
               </tbody>
             </table>
-            <p>Sets are a Boolean algebra with <span class="mono-inline">+ = &cup;</span>, <span class="mono-inline">&middot; = &cap;</span>, complement <span class="mono-inline">= &#7580;</span>, <span class="mono-inline">0 = &empty;</span>, <span class="mono-inline">1 = U</span>. Propositional logic is one with <span class="mono-inline">+ = &or;</span>, <span class="mono-inline">&middot; = &and;</span>, complement <span class="mono-inline">= &not;</span>, <span class="mono-inline">0 = </span>F, <span class="mono-inline">1 = </span>T.</p>
+            <p>The point is not three separate theories but <strong>one structure with three readings</strong>. Read the table across a row to translate any statement between logic, sets, and digital circuits; a law proved once from the axioms holds in all three at once. This is why De Morgan and the distributive law keep reappearing.</p>
+            <table class="data-table">
+              <thead><tr><th>Boolean algebra</th><th>Logic (Ch 2&ndash;3)</th><th>Sets (this chapter)</th><th>Bits / gates</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">a + b</td><td class="mono">p &or; q (or)</td><td class="mono">A &cup; B (union)</td><td class="mono">OR</td></tr>
+                <tr><td class="mono">a &middot; b</td><td class="mono">p &and; q (and)</td><td class="mono">A &cap; B (intersection)</td><td class="mono">AND</td></tr>
+                <tr><td class="mono">a&#773;</td><td class="mono">&not;p (not)</td><td class="mono">A&#7580; (complement)</td><td class="mono">NOT</td></tr>
+                <tr><td class="mono">0</td><td class="mono">F (false)</td><td class="mono">&empty; (empty set)</td><td class="mono">0</td></tr>
+                <tr><td class="mono">1</td><td class="mono">T (true)</td><td class="mono">U (universe)</td><td class="mono">1</td></tr>
+              </tbody>
+            </table>
+            <p>So &ldquo;De Morgan&rdquo; is the <em>same</em> fact three times: <span class="mono-inline">&not;(p &or; q) &equiv; &not;p &and; &not;q</span>, &nbsp;<span class="mono-inline">(A &cup; B)&#7580; = A&#7580; &cap; B&#7580;</span>, &nbsp;and the rule for combining NOR gates. Telling the three apart is just a matter of which symbols are in front of you; the algebra underneath is identical.</p>
           </div>
 
           <div class="widget-card" id="sec642">
