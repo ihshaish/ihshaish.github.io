@@ -534,6 +534,7 @@
             <h5><span class="toc-num">Section 5.2</span>Mathematical induction I</h5>
             <div class="toc-links">
               <a href="#sec521">The principle of induction</a>
+              <a href="#sec521b">How to find a proof</a>
               <a href="#sec522">The coin problem</a>
               <a href="#sec523">Sum of the first n integers</a>
               <a href="#sec524">The geometric sum</a>
@@ -712,6 +713,22 @@
                 Then <span class="mono-inline">P(n)</span> holds for all <span class="mono-inline">n &ge; a</span>. The basis topples the first domino; the inductive step makes each falling domino topple the next.</div>
             </div>
             <p>The assumption <span class="mono-inline">P(k)</span> in the inductive step is the <span class="term" data-tip="فرض الاستقراء · the assumption that P(k) holds for one integer k, used to prove P(k+1)"><strong>inductive hypothesis</strong></span>. This is <em>not</em> circular: we assume <span class="mono-inline">P(k)</span> for a single <span class="mono-inline">k</span> and show that this forces <span class="mono-inline">P(k+1)</span>. We never assume the conclusion for all <span class="mono-inline">n</span>; the basis plus that single link is what makes the whole chain fall.</p>
+          </div>
+
+          <div class="widget-card" id="sec521b">
+            <h3>5.2.0 How to find an induction proof: the strategy</h3>
+            <div class="widget-desc">The skeleton never changes, so the real work is the <strong>inductive step</strong>, and it is always algebra. First write <span class="mono-inline">P(n)</span> explicitly, then write out <span class="mono-inline">P(1)</span> (or <span class="mono-inline">P(a)</span>), <span class="mono-inline">P(k)</span>, and <span class="mono-inline">P(k+1)</span> on paper so you can see exactly what to prove. The single trick that makes the step work: <strong>make <span class="mono-inline">P(k)</span> appear inside <span class="mono-inline">P(k+1)</span></strong>, then substitute the hypothesis.</div>
+            <div class="thm-box def">
+              <div class="thm-title">The move, by problem type</div>
+              <div class="thm-body">
+                <ul style="margin:6px 0 0; padding-left:20px;">
+                  <li><strong>Sums.</strong> The left side of <span class="mono-inline">P(k+1)</span> is the left side of <span class="mono-inline">P(k)</span> <em>plus the next term</em>. Peel off that last term, replace the rest by the closed form (the hypothesis), then do algebra to reach <span class="mono-inline">P(k+1)</span>'s right side. The term you add is always the <span class="mono-inline">(k+1)</span>-th.</li>
+                  <li><strong>Divisibility</strong> (<span class="mono-inline">d | f(n)</span>). Write the hypothesis as <span class="mono-inline">f(k) = d&middot;r</span>. In <span class="mono-inline">f(k+1)</span>, factor so a copy of <span class="mono-inline">f(k)</span> (or of <span class="mono-inline">d</span>) appears, leaving a visible multiple of <span class="mono-inline">d</span>.</li>
+                  <li><strong>Inequalities.</strong> Start the basis at the <em>first</em> <span class="mono-inline">n</span> where the claim actually holds. In the step, transform the <span class="mono-inline">k+1</span> side and bound the new piece using the hypothesis plus one small estimate (e.g. <span class="mono-inline">2 &le; 2<sup>k</sup></span>).</li>
+                  <li><strong>Recurrences.</strong> The recurrence is the link: substitute <span class="mono-inline">a<sub>k+1</sub> = (the recurrence in a<sub>k</sub>)</span>, then apply the hypothesis.</li>
+                </ul>
+                <strong>What to look for:</strong> the part of <span class="mono-inline">P(k+1)</span> that matches <span class="mono-inline">P(k)</span> , that is where the hypothesis plugs in. <strong>If you never use the hypothesis, it is not an induction proof.</strong> Common slips: choosing the wrong basis, and asserting algebra instead of deriving it.</div>
+            </div>
           </div>
 
           <div class="widget-card" id="sec522">
