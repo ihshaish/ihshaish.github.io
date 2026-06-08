@@ -104,6 +104,55 @@
 </div>
 <div class="key"><span class="tag">Why it matters</span><p>It is the <strong>longest-lived diagram</strong> on most projects: the static structure changes far more slowly than any one flow through it, so it is the artefact teams maintain and design against.</p></div></section>
 
+<!-- 2b. OPENING VIEW: a complete class diagram -->
+<section class="slide"><h2>A class diagram at a glance</h2>
+<p class="lead">Before any details, here is a complete class diagram for a small library. Do not decode every symbol yet, the rest of the deck explains each labelled part. Keep returning to this picture: everything that follows is a piece of it.</p>
+<svg viewBox="0 0 940 580" class="ref" role="img" aria-label="Library class diagram with LibraryMember, StaffMember, Book, BookCopy and a Loan association class">
+  <defs><marker id="gen-arrow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+  <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="160" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+  <line x1="60" y1="96" x2="260" y2="96" class="uml-line"/>
+  <text x="74" y="116" class="uml-text-mono">+ memberId: String</text>
+  <text x="74" y="134" class="uml-text-mono">+ name: String</text>
+  <line x1="60" y1="148" x2="260" y2="148" class="uml-line"/>
+  <text x="74" y="166" class="uml-text-mono">+ register()</text>
+  <rect x="60" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="160" y="344" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
+  <line x1="60" y1="356" x2="260" y2="356" class="uml-line"/>
+  <text x="74" y="376" class="uml-text-mono">+ department: String</text>
+  <text x="74" y="394" class="uml-text-mono">+ role: String</text>
+  <line x1="160" y1="320" x2="160" y2="170" class="uml-line" marker-end="url(#gen-arrow)"/>
+  <rect x="540" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="640" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <line x1="540" y1="96" x2="740" y2="96" class="uml-line"/>
+  <text x="554" y="116" class="uml-text-mono">+ ISBN: String</text>
+  <text x="554" y="134" class="uml-text-mono">+ title: String</text>
+  <line x1="540" y1="148" x2="740" y2="148" class="uml-line"/>
+  <text x="554" y="166" class="uml-text-mono">+ catalog()</text>
+  <rect x="540" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="640" y="344" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <line x1="540" y1="356" x2="740" y2="356" class="uml-line"/>
+  <text x="554" y="376" class="uml-text-mono">+ barcode: String</text>
+  <text x="554" y="394" class="uml-text-mono">+ status: LoanStatus</text>
+  <line x1="640" y1="200" x2="640" y2="320" class="uml-line"/>
+  <polygon points="640,170 654,185 640,200 626,185" fill="white" stroke="#2c3540" stroke-width="1.4"/>
+  <text x="650" y="220" class="uml-text-mono" font-size="13">1</text>
+  <text x="650" y="312" class="uml-text-mono" font-size="13">1..*</text>
+  <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
+  <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
+  <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
+  <text x="520" y="376" class="uml-text-mono" font-size="13">0..6</text>
+  <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
+  <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
+  <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
+  <text x="400" y="484" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
+  <line x1="310" y1="496" x2="490" y2="496" class="uml-line"/>
+  <text x="324" y="516" class="uml-text-mono">+ startDate: Date</text>
+  <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
+  <text x="324" y="552" class="uml-text-mono">+ extend()</text>
+</svg>
+<div class="key steel"><span class="tag">What you are looking at</span><p>Four <strong>classes</strong> (each a box of name / attributes / operations); a <strong>generalisation</strong> (StaffMember <em>is a</em> LibraryMember, the hollow triangle); an <strong>aggregation</strong> (a Book <em>has</em> copies, the diamond); an <strong>association</strong> with <strong>multiplicity</strong> (a member borrows 0..6 copies); and an <strong>association class</strong> (Loan, holding the borrow dates). Each one gets its own slide next.</p></div></section>
+
 <!-- 3b. DESIGN APPROACHES -->
 <section class="slide"><h2>Where the classes come from: three design approaches</h2>
 <p class="lead">Before any class is drawn you decide how to <em>decompose</em> the system. Adel's notes name three classic strategies; analysis-level class modelling usually blends them, but it helps to know which one you are leaning on.</p>
@@ -173,23 +222,8 @@
   <text x="512" y="220" class="uml-text-italic" font-size="11">from dateOfBirth</text>
 </svg></section>
 
-<!-- 6. VISIBILITY -->
-<section class="slide"><h2>Visibility markers</h2>
-<p class="lead">UML's five visibility markers map directly onto the access modifiers of mainstream object-oriented languages.</p>
-<table class="rel">
-  <thead><tr><th>Symbol</th><th>Meaning</th><th>Who can access it</th></tr></thead>
-  <tbody>
-    <tr><td><code>+</code></td><td>public</td><td>any client of the class</td></tr>
-    <tr><td><code>-</code></td><td>private</td><td>only members of the same class</td></tr>
-    <tr><td><code>#</code></td><td>protected</td><td>members of the class or any subclass</td></tr>
-    <tr><td><code>~</code></td><td>package</td><td>classes in the same package</td></tr>
-    <tr><td><code>/</code></td><td>derived</td><td>a value computed from other attributes, not stored on its own (e.g. <code>/age</code> from <code>dateOfBirth</code>)</td></tr>
-  </tbody>
-</table>
-<div class="key"><span class="tag">Analysis vs design</span><p>At <strong>analysis</strong> level, leave most attributes public and skip types and signatures, you are modelling the domain, not the code. Tighten visibility, add types and full signatures at <strong>design</strong> level.</p></div></section>
-
-<!-- 6b. VISIBILITY WORKED EXAMPLE -->
-<section class="slide"><h2>Visibility: one example of each marker</h2>
+<!-- 6b. VISIBILITY MARKERS (by example) -->
+<section class="slide"><h2>The visibility markers</h2>
 <p class="lead">The marker sits before the member name and records a design decision: <em>who is allowed to touch this member</em>. One <code>BankAccount</code> class shows all five at once.</p>
 <svg viewBox="0 0 900 300" class="ref" role="img" aria-label="A BankAccount class showing public, private, protected, package and derived members, with a legend explaining each marker">
   <rect x="24" y="26" width="300" height="252" class="uml-box"/>
@@ -211,11 +245,11 @@
   <text x="372" y="200" class="uml-text-mono" font-weight="700" fill="#b85c38">~</text><text x="398" y="200" class="uml-text" font-weight="600">package</text><text x="470" y="200" class="lab">classes in the same package – <tspan font-style="italic">logger</tspan></text>
   <text x="372" y="242" class="uml-text-mono" font-weight="700" fill="#b85c38">/</text><text x="398" y="242" class="uml-text" font-weight="600">derived</text><text x="470" y="242" class="lab">computed, not stored – <tspan font-style="italic">availableBalance = balance &minus; holds</tspan></text>
 </svg>
-<div class="key"><span class="tag">How to choose</span><p>Default to <strong>private data, public operations</strong> (encapsulation): the outside world calls methods and never reaches in to a field. Use <strong>protected</strong> (<code>#</code>) for what subclasses must reuse, <strong>package</strong> (<code>~</code>) for collaborators in the same module, and <strong>derived</strong> (<code>/</code>) for any value you can compute from others instead of storing, which removes a chance for the data to fall out of step.</p></div>
+<div class="key"><span class="tag">How to choose</span><p>Default to <strong>private data, public operations</strong> (encapsulation): the outside world calls methods and never reaches in to a field. Use <strong>protected</strong> (<code>#</code>) for what subclasses must reuse, <strong>package</strong> (<code>~</code>) for collaborators in the same module, and <strong>derived</strong> (<code>/</code>) for any value you can compute from others instead of storing, which removes a chance for the data to fall out of step. At <strong>analysis</strong> level keep it light (mostly public, no types); tighten visibility and add full signatures at <strong>design</strong> level.</p></div>
 <div class="key steel"><span class="tag">Real-life analogy</span><p>Think of a house. <strong>public</strong> is the <em>doorbell</em>, anyone may ring it. <strong>private</strong> is your <em>diary</em>, only you read it. <strong>protected</strong> is a <em>spare key the family shares</em> (the subclasses). <strong>package</strong> is a <em>key the other flats in your building hold</em> (classes in the same module). <strong>derived</strong> is your <em>age</em>, nobody stores it, you work it out from the birth date on demand.</p></div></section>
 
 <!-- 6c. VISIBILITY CLARIFIED -->
-<section class="slide"><h2>Visibility: the two things people get wrong</h2>
+<section class="slide"><h2>How visibility actually works</h2>
 <p class="lead">Two clarifications make the markers click. Both are exactly how Java, C#, C++ and UML define visibility.</p>
 <div class="two">
   <div class="box"><h3>1. It governs code, not people</h3><p style="margin:0;font-size:14.5px">Visibility says which <strong>code</strong> (which classes) may read or call a member, and the <em>compiler</em> enforces it. It is nothing to do with end-users or runtime permissions. A bank <em>customer</em> is a person, modelled as a separate <code>Customer</code> class, whose code may only call an account's <strong>public</strong> methods.</p></div>
@@ -448,55 +482,6 @@ class StatementPrinter {                     // a different class
 </svg>
 <div class="key"><span class="tag">Where it belongs</span><p><code>mark</code> is not a property of the Student (they have many marks) nor of the Course (it has many) but of the specific <em>Student-takes-Course</em> pairing. A <strong>ternary</strong> association class does the same for a three-way relationship (e.g. Doctor-Patient-Treatment).</p></div></section>
 
-<!-- 18. FULL LIBRARY DIAGRAM (reuse companion Fig 6) -->
-<section class="slide"><h2>Putting it together: the Library class diagram</h2>
-<p class="lead">One diagram with all four relationship kinds: <strong>generalisation</strong>, <strong>aggregation</strong>, an <strong>association</strong> with multiplicity, and an <strong>association class</strong>.</p>
-<svg viewBox="0 0 940 580" class="ref" role="img" aria-label="Library class diagram with LibraryMember, StaffMember, Book, BookCopy and a Loan association class">
-  <defs><marker id="gen-arrow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
-  <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
-  <text x="160" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
-  <line x1="60" y1="96" x2="260" y2="96" class="uml-line"/>
-  <text x="74" y="116" class="uml-text-mono">+ memberId: String</text>
-  <text x="74" y="134" class="uml-text-mono">+ name: String</text>
-  <line x1="60" y1="148" x2="260" y2="148" class="uml-line"/>
-  <text x="74" y="166" class="uml-text-mono">+ register()</text>
-  <rect x="60" y="320" width="200" height="100" class="uml-box" fill="white"/>
-  <text x="160" y="344" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
-  <line x1="60" y1="356" x2="260" y2="356" class="uml-line"/>
-  <text x="74" y="376" class="uml-text-mono">+ department: String</text>
-  <text x="74" y="394" class="uml-text-mono">+ role: String</text>
-  <line x1="160" y1="320" x2="160" y2="170" class="uml-line" marker-end="url(#gen-arrow)"/>
-  <rect x="540" y="60" width="200" height="110" class="uml-box" fill="white"/>
-  <text x="640" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
-  <line x1="540" y1="96" x2="740" y2="96" class="uml-line"/>
-  <text x="554" y="116" class="uml-text-mono">+ ISBN: String</text>
-  <text x="554" y="134" class="uml-text-mono">+ title: String</text>
-  <line x1="540" y1="148" x2="740" y2="148" class="uml-line"/>
-  <text x="554" y="166" class="uml-text-mono">+ catalog()</text>
-  <rect x="540" y="320" width="200" height="100" class="uml-box" fill="white"/>
-  <text x="640" y="344" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
-  <line x1="540" y1="356" x2="740" y2="356" class="uml-line"/>
-  <text x="554" y="376" class="uml-text-mono">+ barcode: String</text>
-  <text x="554" y="394" class="uml-text-mono">+ status: LoanStatus</text>
-  <line x1="640" y1="200" x2="640" y2="320" class="uml-line"/>
-  <polygon points="640,170 654,185 640,200 626,185" fill="white" stroke="#2c3540" stroke-width="1.4"/>
-  <text x="650" y="220" class="uml-text-mono" font-size="13">1</text>
-  <text x="650" y="312" class="uml-text-mono" font-size="13">1..*</text>
-  <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
-  <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
-  <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
-  <text x="520" y="376" class="uml-text-mono" font-size="13">0..6</text>
-  <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
-  <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
-  <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
-  <text x="400" y="484" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
-  <line x1="310" y1="496" x2="490" y2="496" class="uml-line"/>
-  <text x="324" y="516" class="uml-text-mono">+ startDate: Date</text>
-  <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
-  <text x="324" y="552" class="uml-text-mono">+ extend()</text>
-</svg>
-<div class="key steel"><span class="tag">Read it</span><p>StaffMember <em>is a</em> LibraryMember (generalisation). A Book <em>has</em> 1..* BookCopies (aggregation). A LibraryMember <em>borrows</em> 0..6 BookCopies (association); the <strong>Loan</strong>'s dates live on the association, not on either class.</p></div></section>
-
 <!-- 18b. MHC-PMS SECOND EXAMPLE -->
 <section class="slide"><h2>A second domain: the MHC-PMS (patient records)</h2>
 <p class="lead">Adel's other running example, from Sommerville's mental-health-care patient management system. It shows a different shape: one <strong>central, attribute-rich class</strong>, <code>Consultation</code>, that anchors the whole model.</p>
@@ -566,7 +551,7 @@ class StatementPrinter {                     // a different class
   <li><strong>High cohesion:</strong> it holds only the attributes and operations that genuinely belong together; unrelated ones lower cohesion.</li>
   <li><strong>Low coupling:</strong> it has only the associations it truly needs; accidental links raise coupling and spread change.</li>
 </ul>
-<h3 style="margin-top:8px">Cohesion, shown not told</h3>
+<h3 style="margin-top:8px">Cohesion: high versus low</h3>
 <div class="two">
   <div class="box" style="border-color:#d99; background:#fdf6f4;"><h3 style="color:#a23">Low cohesion (bad)</h3><pre style="margin:0;font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--ink-soft);white-space:pre-wrap">Patient
   + name, dateOfBirth
@@ -613,7 +598,7 @@ PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:1
 
 <!-- BACK TO BACK 3: class -->
 <section class="slide"><h2>Back to back: one system, three views (3 of 4)</h2>
-<p class="lead">Now the <strong>structure</strong> the behaviour ran on. The nouns from the description are classes; the data they hold are attributes; the use cases and activity actions are operations; the noun-verb pairings are the associations.</p>
+<p class="lead">This is the diagram from the opening &ldquo;at a glance&rdquo; slide, now read <em>against the description</em>. The nouns are classes; the data they hold are attributes; the use cases and activity actions are operations; the noun-verb pairings are the associations.</p>
 <svg viewBox="0 0 940 580" class="ref" role="img" aria-label="Library class diagram derived from the description: LibraryMember, StaffMember, Book, BookCopy and a Loan association class">
   <defs><marker id="gen-arrow-bb" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
   <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
