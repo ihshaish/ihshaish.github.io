@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMP433 Ch.4 - UML: Class Diagrams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0f1419; --ink-soft:#2c3540; --ink-mute:#5a6473; --paper:#faf7f2; --paper-warm:#f3ede2; --accent:#b85c38; --steel:#2c5f7c; --rule:#d8cfc0;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter Tight',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; }
+  body { font-family:var(--sans); color:var(--ink); background:#f3efe9; }
+  .stage { height:100vh; display:flex; flex-direction:column; }
+  .slidewrap { flex:1; overflow:auto; padding:44px 56px 24px; }
+  .slide { display:none; max-width:1080px; margin:0 auto; }
+  .slide.active { display:block; animation:fade .3s ease; }
+  @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .kicker { font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:18px; }
+  h1.title { font-family:var(--serif); font-weight:500; font-size:clamp(34px,5vw,58px); letter-spacing:-.025em; line-height:1.05; margin:0 0 18px; }
+  .subtitle { font-family:var(--serif); font-size:21px; color:var(--ink-soft); max-width:820px; }
+  .hint { color:var(--ink-mute); font-size:14px; margin-top:28px; }
+  .center { min-height:64vh; display:flex; flex-direction:column; justify-content:center; }
+  h2 { font-family:var(--serif); font-weight:600; font-size:clamp(25px,3.2vw,36px); letter-spacing:-.02em; margin:0 0 14px; }
+  h3 { font-family:var(--serif); font-size:17px; margin:0 0 8px; }
+  .lead { font-size:17px; color:var(--ink-soft); max-width:920px; line-height:1.55; }
+  .foot { font-size:14px; color:var(--ink-mute); margin-top:16px; max-width:920px; }
+  ul,ol { color:var(--ink-soft); line-height:1.5; } .pts li { margin:7px 0; font-size:15.5px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:14px; }
+  .three { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:14px; }
+  @media (max-width:760px) { .two,.three { grid-template-columns:1fr; } }
+  .box { background:#fff; border:1px solid var(--rule); border-radius:12px; padding:16px 18px; }
+  .box ul,.box ol { margin:6px 0 0; padding-left:18px; font-size:14.5px; } .box li { margin:4px 0; }
+  .box h3 { margin-bottom:6px; }
+  table.rel { border-collapse:collapse; width:100%; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:10px; overflow:hidden; }
+  table.rel th { background:var(--paper-warm); text-align:left; padding:10px 14px; font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+  table.rel td { padding:11px 14px; border-top:1px solid var(--rule); font-size:14.5px; color:var(--ink-soft); vertical-align:top; }
+  table.desc td:first-child { font-family:var(--mono); font-size:12px; color:var(--steel); white-space:nowrap; width:150px; background:var(--paper); }
+  code { font-family:var(--mono); font-size:13px; background:#ece3d4; padding:1px 6px; border-radius:4px; }
+  svg.ref { width:100%; height:auto; max-height:62vh; display:block; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }
+  svg.ref .t { font-family:var(--sans); font-size:13px; fill:var(--ink); }
+  svg.ref .lab { font-family:var(--sans); font-size:12px; fill:var(--ink-mute); }
+  svg.ref .uml-box { fill:#fff; stroke:var(--ink); stroke-width:1.4; }
+  svg.ref .uml-line { fill:none; stroke:var(--ink); stroke-width:1.4; }
+  svg.ref .uml-line-dashed { fill:none; stroke:var(--ink); stroke-width:1.3; stroke-dasharray:5 4; }
+  svg.ref .uml-text { font-family:var(--sans); font-size:13px; fill:var(--ink); }
+  svg.ref .uml-text-mono { font-family:var(--mono); font-size:12px; fill:var(--ink); }
+  svg.ref .uml-text-italic { font-family:var(--sans); font-style:italic; font-size:13px; fill:var(--ink-mute); }
+  img.refimg { width:100%; height:auto; max-height:64vh; display:block; margin:8px auto; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }
+  .trace { border-collapse:collapse; width:100%; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:10px; overflow:hidden; font-size:13.5px; }
+  .trace th { background:var(--paper-warm); text-align:left; padding:9px 12px; font-family:var(--mono); font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; }
+  .trace td { padding:9px 12px; border-top:1px solid var(--rule); color:var(--ink-soft); vertical-align:top; }
+  .trace td.k { font-family:var(--mono); font-size:12px; color:var(--steel); }
+  .nav { flex-shrink:0; display:flex; align-items:center; gap:14px; padding:12px 24px; background:#fff; border-top:1px solid var(--rule); }
+  .nav button { background:var(--steel); color:#fff; border:none; padding:10px 18px; border-radius:7px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; cursor:pointer; }
+  .nav button:disabled { opacity:.4; cursor:default; }
+  .nav .count { font-family:var(--mono); font-size:13px; color:var(--ink-mute); margin-left:auto; }
+  .nav .title-mini { font-family:var(--serif); font-size:14px; color:var(--ink-soft); }
+  .key { display:flex; gap:12px; align-items:flex-start; background:#fbf0e9; border:1px solid #e6b89c; border-left:4px solid var(--accent); border-radius:8px; padding:13px 16px; margin-top:18px; }
+  .key.steel { background:#eaf2f7; border-color:#a9cbdd; border-left-color:var(--steel); }
+  .key .tag { font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7a3a23; font-weight:700; padding-top:3px; white-space:nowrap; }
+  .key.steel .tag { color:#1f4459; }
+  .key p { margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
+</style></head>
+<body>
+<div class="stage">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker>
+  </defs></svg>
+  <div class="slidewrap" id="slidewrap">
+
+<!-- 1. TITLE -->
+<section class="slide"><div class="center">
+  <div class="kicker">COMP433 &middot; Software Engineering &middot; Chapter 4</div>
+  <h1 class="title">UML: Class Diagrams</h1>
+  <p class="subtitle">From the behaviour we have already modelled to the system's static structure: the classes, what they hold, and how they connect, read straight out of the requirements.</p>
+  <p class="hint">Move with the arrow keys or the buttons below.</p>
+</div></section>
+
+<!-- 2. WHERE THIS FITS -->
+<section class="slide"><h2>Where we are: from behaviour to structure</h2>
+<p class="lead">We have built the two <strong>behavioural</strong> views: the <strong>use case diagram</strong> (<em>who</em> uses the system and <em>what</em> they can do) and the <strong>activity diagram</strong> (<em>how</em> one use case flows). The class diagram is the first <strong>structural</strong> view: the fixed cast of objects the behaviour acts on.</p>
+<svg viewBox="0 0 980 150" class="ref" role="img" aria-label="From requirements to use case to activity to class to sequence"><defs><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <rect x="14" y="48" width="150" height="56" rx="10" class="uml-box"/><text x="89" y="73" text-anchor="middle" class="t" font-weight="600">Requirements</text><text x="89" y="91" text-anchor="middle" class="lab">elicited + analysed</text>
+  <line x1="164" y1="76" x2="196" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="198" y="48" width="150" height="56" rx="10" class="uml-box"/><text x="273" y="73" text-anchor="middle" class="t" font-weight="600">Use case</text><text x="273" y="91" text-anchor="middle" class="lab">who + what</text>
+  <line x1="348" y1="76" x2="380" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="382" y="48" width="150" height="56" rx="10" class="uml-box"/><text x="457" y="73" text-anchor="middle" class="t" font-weight="600">Activity</text><text x="457" y="91" text-anchor="middle" class="lab">the flow</text>
+  <line x1="532" y1="76" x2="564" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="566" y="44" width="150" height="64" rx="10" class="uml-box" fill="#fbf0e9" stroke="#b85c38"/><text x="641" y="73" text-anchor="middle" class="t" font-weight="700">Class</text><text x="641" y="91" text-anchor="middle" class="lab">what exists</text>
+  <line x1="716" y1="76" x2="748" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="750" y="48" width="160" height="56" rx="10" class="uml-box"/><text x="830" y="73" text-anchor="middle" class="t" font-weight="600">Sequence</text><text x="830" y="91" text-anchor="middle" class="lab">what happens</text>
+</svg>
+<div class="two">
+  <div class="box"><h3>Behaviour (done)</h3><ul><li><strong>Use case:</strong> the tasks and the actors.</li><li><strong>Activity:</strong> the order of steps inside a task.</li></ul></div>
+  <div class="box"><h3>Structure (here)</h3><ul><li><strong>Class:</strong> the objects, their data and operations, and how they relate, the long-lived skeleton the behaviour runs on.</li><li>Next: <strong>sequence</strong>, how those objects message one another over time.</li></ul></div>
+</div>
+<div class="key steel"><span class="tag">Link</span><p>The two views are not separate work: the <strong>actors and entities</strong> of the use case diagram, the <strong>data</strong> a use case reads or writes, and the <strong>operations</strong> it needs all reappear here as classes, attributes and methods.</p></div></section>
+
+<!-- 3. WHAT IT IS -->
+<section class="slide"><h2>What a class diagram is, and when to draw it</h2>
+<p class="lead">A class diagram is used when developing an <strong>object-oriented system model</strong> to show the <strong>classes</strong> in a system and the <strong>associations</strong> between them. An object class is a general definition of one kind of system object; an association is a link saying two classes are related. In early analysis, objects represent things in the real world: a patient, a prescription, a doctor, a book.</p>
+<div class="two">
+  <div class="box"><h3>What it captures</h3><ul><li>The <strong>classes</strong>: each kind of object the system knows about.</li><li>Their <strong>attributes</strong> (data) and <strong>operations</strong> (behaviour).</li><li>The <strong>associations</strong>, with multiplicity, that connect them.</li></ul></div>
+  <div class="box"><h3>What it does not capture</h3><ul><li>The <strong>order</strong> in which operations run (sequence / activity).</li><li>An object's <strong>lifecycle</strong> over time (state machine).</li><li>Concurrency, data flow, or where the code is deployed.</li></ul></div>
+</div>
+<div class="key"><span class="tag">Why it matters</span><p>It is the <strong>longest-lived diagram</strong> on most projects: the static structure changes far more slowly than any one flow through it, so it is the artefact teams maintain and design against.</p></div></section>
+
+<!-- 3b. DESIGN APPROACHES -->
+<section class="slide"><h2>Where the classes come from: three design approaches</h2>
+<p class="lead">Before any class is drawn you decide how to <em>decompose</em> the system. Adel's notes name three classic strategies; analysis-level class modelling usually blends them, but it helps to know which one you are leaning on.</p>
+<div class="three">
+  <div class="box"><h3>Top-down</h3><p style="margin:0;font-size:14.5px">Begin with the whole system, split it into subsystems, then into classes. Strong when the high-level architecture is already understood; the risk is inventing classes the requirements never asked for.</p></div>
+  <div class="box"><h3>Bottom-up</h3><p style="margin:0;font-size:14.5px">Begin with concrete domain things, a book, a copy, a member, and compose them upward. This is exactly what <strong>noun-verb analysis</strong> does, and it keeps the model anchored to the requirements text.</p></div>
+  <div class="box"><h3>Middle-out</h3><p style="margin:0;font-size:14.5px">Begin with the few central concepts you are sure of, then work outward in both directions. Common in practice when one or two entities (Patient, Loan) clearly anchor the domain.</p></div>
+</div>
+<div class="key steel"><span class="tag">In analysis</span><p>We work mostly <strong>bottom-up</strong> from the requirements, using the noun-verb method on the next slides, and sanity-check it against a top-down view of the whole. The goal is classes <em>justified by the text</em>, not by the developer's imagination.</p></div></section>
+
+<!-- 4. SIMPLE CLASS DIAGRAM / THE LINK -->
+<section class="slide"><h2>Reading a class out of the other diagrams</h2>
+<p class="lead">A single class box has three compartments, and each maps to something you have already produced. This is the bridge from the behavioural views to the structural one.</p>
+<svg viewBox="0 0 940 280" class="ref" role="img" aria-label="A class box's three compartments map to actor/entity, the data a use case stores, and the use cases/operations it provides">
+  <rect x="360" y="30" width="230" height="210" class="uml-box"/>
+  <line x1="360" y1="74" x2="590" y2="74" class="uml-line"/>
+  <line x1="360" y1="160" x2="590" y2="160" class="uml-line"/>
+  <text x="475" y="58" text-anchor="middle" class="uml-text" font-weight="700" font-size="15">Patient</text>
+  <text x="372" y="96" class="uml-text-mono">+ name: String</text>
+  <text x="372" y="116" class="uml-text-mono">+ dateOfBirth: Date</text>
+  <text x="372" y="136" class="uml-text-mono">- record: PatientRecord</text>
+  <text x="372" y="186" class="uml-text-mono">+ register()</text>
+  <text x="372" y="206" class="uml-text-mono">+ viewRecord()</text>
+  <text x="372" y="226" class="uml-text-mono">+ bookAppointment()</text>
+  <text x="120" y="56" class="t" font-weight="600">An actor or entity</text>
+  <text x="120" y="74" class="lab">a person, role or thing the</text><text x="120" y="90" class="lab">use case diagram identified</text>
+  <line x1="250" y1="55" x2="358" y2="52" stroke="#0f1419" stroke-width="1.2" marker-end="url(#arw)"/>
+  <text x="120" y="124" class="t" font-weight="600">The data it must store</text>
+  <text x="120" y="142" class="lab">becomes the attributes</text>
+  <line x1="250" y1="125" x2="358" y2="120" stroke="#0f1419" stroke-width="1.2" marker-end="url(#arw)"/>
+  <text x="640" y="180" class="t" font-weight="600">The use cases / services</text>
+  <text x="640" y="198" class="lab">it provides become the</text><text x="640" y="214" class="lab">operations (methods)</text>
+  <line x1="592" y1="195" x2="635" y2="195" stroke="#0f1419" stroke-width="1.2" marker-end="url(#arw)"/>
+</svg>
+<div class="key steel"><span class="tag">Traceability</span><p>Name compartment &larr; an actor/entity. Attributes &larr; the data the use cases touch. Operations &larr; the use cases that object performs. Every part of the class is justified by an earlier model.</p></div></section>
+
+<!-- 5. ANATOMY (reuse companion Fig 5) -->
+<section class="slide"><h2>Anatomy of a class box, in full notation</h2>
+<p class="lead">Three compartments: <strong>name</strong> (top), <strong>attributes</strong> (middle), <strong>operations</strong> (bottom). Every attribute and operation carries a <strong>visibility</strong> marker; attributes and parameters carry a <strong>type</strong> after a colon.</p>
+<svg viewBox="0 0 700 280" class="ref" role="img" aria-label="A UML class in full notation with name, attributes and operations compartments and a visibility legend">
+  <rect x="240" y="40" width="220" height="220" class="uml-box" fill="white"/>
+  <line x1="240" y1="80" x2="460" y2="80" class="uml-line"/>
+  <line x1="240" y1="170" x2="460" y2="170" class="uml-line"/>
+  <text x="350" y="65" text-anchor="middle" class="uml-text" font-weight="700" font-size="15">Book</text>
+  <text x="252" y="100" class="uml-text-mono">+ title: String</text>
+  <text x="252" y="118" class="uml-text-mono">+ ISBN: String</text>
+  <text x="252" y="136" class="uml-text-mono">- copyCount: int</text>
+  <text x="252" y="154" class="uml-text-mono"># publisher: String</text>
+  <text x="252" y="190" class="uml-text-mono">+ isAvailable(): boolean</text>
+  <text x="252" y="208" class="uml-text-mono">+ reserve(m: LibraryMember)</text>
+  <text x="252" y="226" class="uml-text-mono">+ addCopy(c: BookCopy)</text>
+  <text x="252" y="244" class="uml-text-mono">- updateStatus()</text>
+  <text x="30" y="65" class="uml-text-italic" font-size="12">Name</text>
+  <line x1="120" y1="62" x2="238" y2="60" class="uml-line"/>
+  <text x="30" y="128" class="uml-text-italic" font-size="12">Attributes (data)</text>
+  <line x1="150" y1="126" x2="248" y2="128" class="uml-line"/>
+  <text x="30" y="208" class="uml-text-italic" font-size="12">Operations (behaviour)</text>
+  <line x1="175" y1="206" x2="248" y2="208" class="uml-line"/>
+  <rect x="500" y="40" width="180" height="190" class="uml-box" fill="#faf7f2"/>
+  <text x="590" y="60" text-anchor="middle" class="uml-text" font-weight="600">Visibility</text>
+  <text x="512" y="86" class="uml-text-mono">+   public</text>
+  <text x="512" y="108" class="uml-text-mono">-    private</text>
+  <text x="512" y="130" class="uml-text-mono">#   protected</text>
+  <text x="512" y="152" class="uml-text-mono">~   package</text>
+  <text x="512" y="174" class="uml-text-mono">/    derived</text>
+  <text x="512" y="206" class="uml-text-italic" font-size="11">e.g. /age, computed</text>
+  <text x="512" y="220" class="uml-text-italic" font-size="11">from dateOfBirth</text>
+</svg></section>
+
+<!-- 6. VISIBILITY -->
+<section class="slide"><h2>Visibility markers</h2>
+<p class="lead">UML's five visibility markers map directly onto the access modifiers of mainstream object-oriented languages.</p>
+<table class="rel">
+  <thead><tr><th>Symbol</th><th>Meaning</th><th>Who can access it</th></tr></thead>
+  <tbody>
+    <tr><td><code>+</code></td><td>public</td><td>any client of the class</td></tr>
+    <tr><td><code>-</code></td><td>private</td><td>only members of the same class</td></tr>
+    <tr><td><code>#</code></td><td>protected</td><td>members of the class or any subclass</td></tr>
+    <tr><td><code>~</code></td><td>package</td><td>classes in the same package</td></tr>
+    <tr><td><code>/</code></td><td>derived</td><td>a value computed from other attributes, not stored on its own (e.g. <code>/age</code> from <code>dateOfBirth</code>)</td></tr>
+  </tbody>
+</table>
+<div class="key"><span class="tag">Analysis vs design</span><p>At <strong>analysis</strong> level, leave most attributes public and skip types and signatures, you are modelling the domain, not the code. Tighten visibility, add types and full signatures at <strong>design</strong> level.</p></div></section>
+
+<!-- 6b. VISIBILITY WORKED EXAMPLE -->
+<section class="slide"><h2>Visibility: one example of each marker</h2>
+<p class="lead">The marker sits before the member name and records a design decision: <em>who is allowed to touch this member</em>. One <code>BankAccount</code> class shows all five at once.</p>
+<svg viewBox="0 0 900 300" class="ref" role="img" aria-label="A BankAccount class showing public, private, protected, package and derived members, with a legend explaining each marker">
+  <rect x="24" y="26" width="300" height="252" class="uml-box"/>
+  <line x1="24" y1="56" x2="324" y2="56" class="uml-line"/>
+  <line x1="24" y1="170" x2="324" y2="170" class="uml-line"/>
+  <text x="174" y="47" text-anchor="middle" class="uml-text" font-weight="700" font-size="15">BankAccount</text>
+  <text x="38" y="78" class="uml-text-mono">- balance: Money</text>
+  <text x="38" y="100" class="uml-text-mono">- pin: String</text>
+  <text x="38" y="122" class="uml-text-mono">~ logger: AuditLogger</text>
+  <text x="38" y="144" class="uml-text-mono">/ availableBalance: Money</text>
+  <text x="38" y="192" class="uml-text-mono">+ deposit(amount: Money)</text>
+  <text x="38" y="214" class="uml-text-mono">+ withdraw(amount: Money)</text>
+  <text x="38" y="236" class="uml-text-mono">+ getBalance(): Money</text>
+  <text x="38" y="258" class="uml-text-mono"># accrueInterest()</text>
+  <text x="372" y="44" class="uml-text" font-weight="700">Why each marker</text>
+  <text x="372" y="74" class="uml-text-mono" font-weight="700" fill="#b85c38">+</text><text x="398" y="74" class="uml-text" font-weight="600">public</text><text x="470" y="74" class="lab">any other class's code may use it – <tspan font-style="italic">deposit(), getBalance()</tspan></text>
+  <text x="372" y="116" class="uml-text-mono" font-weight="700" fill="#b85c38">&minus;</text><text x="398" y="116" class="uml-text" font-weight="600">private</text><text x="470" y="116" class="lab">only code inside this class – <tspan font-style="italic">balance, pin</tspan></text>
+  <text x="372" y="158" class="uml-text-mono" font-weight="700" fill="#b85c38">#</text><text x="398" y="158" class="uml-text" font-weight="600">protected</text><text x="470" y="158" class="lab">this class and its subclasses – <tspan font-style="italic">accrueInterest()</tspan></text>
+  <text x="372" y="200" class="uml-text-mono" font-weight="700" fill="#b85c38">~</text><text x="398" y="200" class="uml-text" font-weight="600">package</text><text x="470" y="200" class="lab">classes in the same package – <tspan font-style="italic">logger</tspan></text>
+  <text x="372" y="242" class="uml-text-mono" font-weight="700" fill="#b85c38">/</text><text x="398" y="242" class="uml-text" font-weight="600">derived</text><text x="470" y="242" class="lab">computed, not stored – <tspan font-style="italic">availableBalance = balance &minus; holds</tspan></text>
+</svg>
+<div class="key"><span class="tag">How to choose</span><p>Default to <strong>private data, public operations</strong> (encapsulation): the outside world calls methods and never reaches in to a field. Use <strong>protected</strong> (<code>#</code>) for what subclasses must reuse, <strong>package</strong> (<code>~</code>) for collaborators in the same module, and <strong>derived</strong> (<code>/</code>) for any value you can compute from others instead of storing, which removes a chance for the data to fall out of step.</p></div></section>
+
+<!-- 6c. VISIBILITY CLARIFIED -->
+<section class="slide"><h2>Visibility: the two things people get wrong</h2>
+<p class="lead">Two clarifications make the markers click. Both are exactly how Java, C#, C++ and UML define visibility.</p>
+<div class="two">
+  <div class="box"><h3>1. It governs code, not people</h3><p style="margin:0;font-size:14.5px">Visibility says which <strong>code</strong> (which classes) may read or call a member, and the <em>compiler</em> enforces it. It is nothing to do with end-users or runtime permissions. A bank <em>customer</em> is a person, modelled as a separate <code>Customer</code> class, whose code may only call an account's <strong>public</strong> methods.</p></div>
+  <div class="box"><h3>2. The unit is the class, not the object</h3><p style="margin:0;font-size:14.5px"><code>private</code> means &ldquo;any code written <em>inside this class</em> may use it, on <strong>any</strong> object of the class&rdquo;, not only on <code>this</code> one. So one account <em>can</em> read another account's private balance, provided that code lives inside <code>BankAccount</code>.</p></div>
+</div>
+<div class="box" style="margin-top:14px"><h3>The tangible example</h3>
+<pre style="margin:6px 0 0;font-family:var(--mono);font-size:13px;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;overflow-x:auto">class BankAccount {
+  - balance: Money                          // private to the class
+
+  + transferTo(other: BankAccount, amt) {
+       this.balance  = this.balance  &minus; amt
+       other.balance = other.balance + amt   // LEGAL: 'other' is a BankAccount too
+  }
+}
+
+class StatementPrinter {                     // a different class
+  + print(a: BankAccount) {
+       a.getBalance()   // OK, getBalance() is public
+       a.balance        // COMPILER ERROR, balance is private to BankAccount
+  }
+}</pre></div>
+<div class="key"><span class="tag">The common question, answered</span><p>&ldquo;Can one object touch another object's private data?&rdquo; <strong>Yes, if they are the same class</strong> and the code sits inside that class (a transfer between two <code>BankAccount</code>s). <strong>No</strong> for any other class, which sees only the public operations. And <code>/</code> <strong>derived</strong> is a different axis altogether: it marks a value computed on demand, not a permission.</p></div></section>
+
+<!-- 7. ANALYSIS CLASS -->
+<section class="slide"><h2>Analysis classes vs design classes</h2>
+<p class="lead">An <strong>analysis class</strong> abstracts one or more classes (and sometimes subsystems) of the eventual design. It models the problem domain, not the solution.</p>
+<div class="two">
+  <div class="box"><h3>An analysis class</h3><ul><li>Focuses on <strong>functional requirements</strong>.</li><li>Defines <strong>responsibilities</strong>: cohesive subsets of behaviour (the use cases or services it provides to others).</li><li>Defines <strong>attributes</strong> at a domain level.</li><li>Expresses the <strong>relationships</strong> it takes part in.</li></ul></div>
+  <div class="box"><h3>A design class adds</h3><ul><li>Full method <strong>signatures</strong> and parameter / return <strong>types</strong>.</li><li>Tightened <strong>visibility</strong>.</li><li>Infrastructure classes (persistence, controllers, factories) and design patterns.</li><li>Navigability and implementation detail.</li></ul></div>
+</div>
+<div class="key steel"><span class="tag">In this course</span><p>Phase 3 expects an <strong>analysis-level</strong> class diagram drawn from your requirements. Reserve the design-level detail (signatures, patterns, infrastructure) for later.</p></div></section>
+
+<!-- 8. FINDING CLASSES: noun-verb -->
+<section class="slide"><h2>Finding the classes: data-driven noun-verb analysis</h2>
+<p class="lead">The standard recipe (Shlaer and Mellor, late 1980s): identify the data first, group it into classes, then attach behaviour. It keeps the model grounded in the requirements rather than the developer's imagination.</p>
+<ol class="pts">
+  <li>Read the requirements and <strong>underline every noun and noun phrase</strong>; collect them as candidate classes.</li>
+  <li><strong>Discard</strong> the inappropriate candidates (next slide), promoting some to attributes.</li>
+  <li>Identify every <strong>verb and verb phrase</strong>; these are candidate operations.</li>
+  <li><strong>Assign</strong> each operation to the class responsible for it.</li>
+</ol>
+<div class="key"><span class="tag">Two outputs</span><p>Nouns become <strong>classes and attributes</strong>; verbs become <strong>operations</strong>. The noun-verb pairings hint at the <strong>associations</strong> between classes.</p></div></section>
+
+<!-- 9. DISCARD + HEURISTICS -->
+<section class="slide"><h2>Which nouns to keep, which to discard</h2>
+<div class="two">
+  <div class="box"><h3>Discard a candidate noun if it is</h3><ul>
+    <li><strong>Redundant</strong>, names the same thing as another (member / borrower).</li>
+    <li><strong>Omnipotent</strong>, a vague "manager" or "system" that would do everything.</li>
+    <li><strong>Vague</strong>, "information", "data", "item".</li>
+    <li><strong>Meta-language</strong>, words about the requirements ("feature", "constraint").</li>
+    <li><strong>Outside the system scope</strong>.</li>
+    <li><strong>Really an attribute</strong>, "title", "ISBN" belong to Book.</li>
+  </ul></div>
+  <div class="box"><h3>Good classes tend to be (Booch; Shlaer &amp; Mellor)</h3><ul>
+    <li><strong>Tangible / real-world things</strong>: book, copy, course, room.</li>
+    <li><strong>Roles</strong>: library member, student, doctor, member of staff.</li>
+    <li><strong>Events</strong>: arrival, departure, request, payment.</li>
+    <li><strong>Interactions</strong>: meeting, consultation, treatment.</li>
+  </ul></div>
+</div></section>
+
+<!-- 10. LIBRARY NOUN ANALYSIS -->
+<section class="slide"><h2>Worked example: the Library, noun analysis</h2>
+<p class="lead">Adel's running example. Underline the nouns in the requirement text, then sift them.</p>
+<div class="box" style="font-size:14.5px; line-height:1.6">The <u>library</u> contains <u>books</u> and <u>journals</u>. It may have several <u>copies</u> of a given book. Some of the books are for short-term <u>loans</u> only. All other books may be borrowed by any <u>library member</u> for three weeks. Members of the library can normally borrow up to six items at a time, but <u>members of staff</u> may borrow up to 12 items at one time. Only members of staff may borrow journals. The system must keep track of when books and journals are borrowed and returned.</div>
+<div class="two">
+  <div class="box"><h3>Candidate classes (kept)</h3><p style="margin:0;font-size:14.5px"><code>Book</code>, <code>BookCopy</code>, <code>Journal</code>, <code>LibraryMember</code>, <code>StaffMember</code></p></div>
+  <div class="box"><h3>Discarded / demoted</h3><p style="margin:0;font-size:14.5px"><strong>Library</strong> (the system itself), <strong>item</strong> (vague), <strong>three weeks / six / 12</strong> (attributes or rules, not classes).</p></div>
+</div></section>
+
+<!-- 11. FIRST-CUT MODEL -->
+<section class="slide"><h2>First-cut analysis class model</h2>
+<p class="lead">The kept nouns become boxes. At this stage they are just named classes; the verb analysis then fills in operations, and the associations come next.</p>
+<svg viewBox="0 0 900 230" class="ref" role="img" aria-label="Five analysis classes: Book, BookCopy, Journal, LibraryMember, StaffMember">
+  <rect x="30" y="40" width="150" height="60" class="uml-box"/><text x="105" y="76" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <rect x="210" y="40" width="150" height="60" class="uml-box"/><text x="285" y="76" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <rect x="390" y="40" width="150" height="60" class="uml-box"/><text x="465" y="76" text-anchor="middle" class="uml-text" font-weight="700">Journal</text>
+  <rect x="150" y="140" width="170" height="60" class="uml-box"/><text x="235" y="176" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+  <rect x="360" y="140" width="170" height="60" class="uml-box"/><text x="445" y="176" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
+  <text x="690" y="110" class="uml-text-italic">Verbs (borrow, return, keep track)</text>
+  <text x="690" y="130" class="uml-text-italic">become the operations next.</text>
+</svg>
+<div class="key"><span class="tag">Verb analysis</span><p><strong>borrow</strong>, <strong>return</strong>, <strong>keep track of</strong> become operations such as <code>borrow()</code> / <code>return()</code> on the member classes and <code>recordLoan()</code> on the system. Assign each verb to the class responsible for it.</p></div></section>
+
+<!-- 12. RELATIONSHIPS OVERVIEW -->
+<section class="slide"><h2>Relationships between classes</h2>
+<p class="lead">Relationships are connections between modelling elements: they describe how objects work together and act as a sanity check on the model. Four kinds carry almost all the weight.</p>
+<table class="rel">
+  <thead><tr><th>Relationship</th><th>Meaning</th><th>Notation</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Association</strong></td><td>A persistent link: one class holds, uses or refers to another.</td><td>plain line, with multiplicity at each end</td></tr>
+    <tr><td><strong>Generalisation</strong></td><td>One class is a more specific kind of another and inherits it (<code>is-a</code>).</td><td>solid line, hollow triangle pointing at the parent</td></tr>
+    <tr><td><strong>Aggregation / composition</strong></td><td>Part-of: one class is built out of others (<code>part-of</code>).</td><td>diamond at the whole, hollow (aggregation) or filled (composition)</td></tr>
+    <tr><td><strong>Dependency</strong></td><td>A transient "uses" link: a change in one may affect the other.</td><td>dashed line with an open arrowhead</td></tr>
+  </tbody>
+</table>
+<div class="key"><span class="tag">Links vs associations</span><p>An <strong>association</strong> is a relationship between <em>classes</em>; a <strong>link</strong> is an instance of an association between two specific <em>objects</em>. <code>Adel:LibraryMember</code> linked to <code>copy42:BookCopy</code> is one link of the member-borrows-copy association.</p></div></section>
+
+<!-- 13. ASSOCIATIONS: direction -->
+<section class="slide"><h2>Associations: direction and naming</h2>
+<p class="lead">Name an association with a verb phrase and read it in a direction. Navigability (the arrowhead) says which way access and flow can travel.</p>
+<svg viewBox="0 0 900 250" class="ref" role="img" aria-label="Bidirectional association between Patient and PatientRecord, and unidirectional association from Book to BookCopy">
+  <rect x="40" y="40" width="150" height="50" class="uml-box"/><text x="115" y="70" text-anchor="middle" class="uml-text" font-weight="700">Patient</text>
+  <rect x="330" y="40" width="170" height="50" class="uml-box"/><text x="415" y="70" text-anchor="middle" class="uml-text" font-weight="700">PatientRecord</text>
+  <line x1="190" y1="65" x2="330" y2="65" class="uml-line"/>
+  <text x="225" y="58" class="uml-text-italic">has</text>
+  <text x="560" y="58" class="uml-text-italic">bidirectional</text>
+  <text x="560" y="76" class="lab">access flows both ways</text>
+  <rect x="40" y="150" width="150" height="50" class="uml-box"/><text x="115" y="180" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <rect x="330" y="150" width="170" height="50" class="uml-box"/><text x="415" y="180" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <line x1="190" y1="175" x2="328" y2="175" class="uml-line" marker-end="url(#arw)"/>
+  <text x="205" y="168" class="uml-text-italic">is a copy of</text>
+  <text x="200" y="195" class="uml-text-mono" font-size="11">1</text><text x="305" y="195" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="560" y="168" class="uml-text-italic">unidirectional</text>
+  <text x="560" y="186" class="lab">a Book reaches its copies,</text><text x="560" y="202" class="lab">not the other way</text>
+</svg>
+<div class="key"><span class="tag">Key</span><p>A plain association line is <strong>bidirectional</strong>. An <strong>arrowhead</strong> makes it unidirectional: the tail class can reach the head class, but not vice versa. Multiplicity sits at each end.</p></div></section>
+
+<!-- 13b. ASSOCIATIONS IN DETAIL -->
+<section class="slide"><h2>Associations in detail: roles, reflexive links, and instances</h2>
+<p class="lead">An association line can say more than &ldquo;these two are related&rdquo;. It can name the <strong>role</strong> each end plays, and a class can even be associated with <strong>itself</strong>.</p>
+<svg viewBox="0 0 900 300" class="ref" role="img" aria-label="Role names on a Company-Person association, and a reflexive manages association on Employee">
+  <!-- role names -->
+  <rect x="60" y="44" width="150" height="48" class="uml-box"/><text x="135" y="73" text-anchor="middle" class="uml-text" font-weight="700">Company</text>
+  <rect x="430" y="44" width="150" height="48" class="uml-box"/><text x="505" y="73" text-anchor="middle" class="uml-text" font-weight="700">Person</text>
+  <line x1="210" y1="68" x2="430" y2="68" class="uml-line"/>
+  <text x="320" y="60" text-anchor="middle" class="uml-text-italic">employs</text>
+  <text x="218" y="62" class="uml-text-mono" font-size="11">1</text><text x="218" y="86" class="lab" font-size="11">employer</text>
+  <text x="392" y="62" class="uml-text-mono" font-size="11">0..*</text><text x="372" y="86" class="lab" font-size="11">employee</text>
+  <text x="640" y="60" class="uml-text" font-weight="600" font-size="13">Role names</text>
+  <text x="640" y="78" class="lab">each end can be labelled with the</text><text x="640" y="93" class="lab">role that class plays in the link</text>
+  <!-- reflexive -->
+  <rect x="120" y="190" width="180" height="52" class="uml-box"/><text x="210" y="221" text-anchor="middle" class="uml-text" font-weight="700">Employee</text>
+  <polyline points="300,202 372,202 372,230 300,230" class="uml-line"/>
+  <text x="384" y="220" class="uml-text-italic">manages</text>
+  <text x="306" y="198" class="lab" font-size="11">manager 0..1</text>
+  <text x="306" y="246" class="lab" font-size="11">subordinate 0..*</text>
+  <text x="500" y="200" class="uml-text" font-weight="600" font-size="13">Reflexive (self) association</text>
+  <text x="500" y="218" class="lab">a class related to itself: one Employee</text><text x="500" y="233" class="lab">manages many, each managed by one</text>
+</svg>
+<div class="key"><span class="tag">Association vs link</span><p>An <strong>association</strong> connects <em>classes</em> – the type level. A <strong>link</strong> is one <em>instance</em> of it between two specific objects (Adel: &ldquo;links instantiate associations&rdquo;). The class diagram shows the associations; the <strong>object diagram</strong> (later) shows the links, e.g. <code>sara:Employee</code> manages <code>omar:Employee</code>.</p></div></section>
+
+<!-- 14. MULTIPLICITY -->
+<section class="slide"><h2>Multiplicity (cardinality)</h2>
+<p class="lead">Multiplicity on an association end answers: how many instances of this class can take part in the relationship at one time?</p>
+<table class="rel">
+  <thead><tr><th>Notation</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>1</code></td><td>exactly one</td></tr>
+    <tr><td><code>0..1</code></td><td>optional: zero or one</td></tr>
+    <tr><td><code>*</code> or <code>0..*</code></td><td>zero or more</td></tr>
+    <tr><td><code>1..*</code></td><td>one or more</td></tr>
+    <tr><td><code>m..n</code></td><td>at least m, at most n (e.g. <code>0..6</code>, <code>3..7</code>)</td></tr>
+    <tr><td><code>m</code></td><td>exactly m (e.g. <code>5</code>, a chessboard has <code>64</code> squares)</td></tr>
+  </tbody>
+</table>
+<div class="key"><span class="tag">Read it both ways</span><p>In the Library: a <code>LibraryMember</code> borrows <code>0..6</code> copies; a <code>BookCopy</code> is borrowed by <code>0..1</code> member at a time. Multiplicity is where business rules ("up to six items") enter the static model.</p></div></section>
+
+<!-- 15. GENERALISATION -->
+<section class="slide"><h2>Generalisation (inheritance)</h2>
+<p class="lead">When one class is a more specific kind of another, draw a <strong>generalisation</strong>: a solid line with a hollow triangle pointing at the parent. The child inherits the parent's attributes, operations and associations, and adds its own.</p>
+<svg viewBox="0 0 900 280" class="ref" role="img" aria-label="LibraryMember generalised by StaffMember and JournalBorrower">
+  <defs><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker></defs>
+  <rect x="350" y="30" width="200" height="70" class="uml-box"/><text x="450" y="54" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+  <line x1="350" y1="66" x2="550" y2="66" class="uml-line"/><text x="362" y="86" class="uml-text-mono">+ borrow()  + return()</text>
+  <rect x="120" y="200" width="200" height="60" class="uml-box"/><text x="220" y="224" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text><line x1="120" y1="236" x2="320" y2="236" class="uml-line"/><text x="132" y="253" class="uml-text-mono">+ borrowJournal()</text>
+  <rect x="580" y="200" width="200" height="60" class="uml-box"/><text x="680" y="224" text-anchor="middle" class="uml-text" font-weight="700">JournalBorrower</text><line x1="580" y1="236" x2="780" y2="236" class="uml-line"/><text x="592" y="253" class="uml-text-mono">+ borrowJournal()</text>
+  <polyline points="220,200 220,150 450,150 450,100" class="uml-line" marker-end="url(#gen)"/>
+  <polyline points="680,200 680,150 450,150" class="uml-line"/>
+  <text x="250" y="142" class="uml-text-italic" font-size="12">is a</text>
+</svg>
+<div class="key"><span class="tag">Key</span><p>The triangle always points at the <strong>general</strong> (parent) class. Use generalisation only for a genuine <code>is-a</code>: a StaffMember <em>is a</em> LibraryMember. If you mean "has a" or "is built from", that is an association or aggregation, not inheritance.</p></div></section>
+
+<!-- 16. AGGREGATION VS COMPOSITION -->
+<section class="slide"><h2>Aggregation and composition (part / whole)</h2>
+<p class="lead">Both say one class is built out of others. They differ in the <strong>lifetime</strong> of the part: the diamond sits at the <em>whole</em>.</p>
+<svg viewBox="0 0 900 250" class="ref" role="img" aria-label="Aggregation: Team contains Employees with a hollow diamond. Composition: House contains Rooms with a filled diamond.">
+  <rect x="60" y="40" width="140" height="50" class="uml-box"/><text x="130" y="70" text-anchor="middle" class="uml-text" font-weight="700">Team</text>
+  <rect x="300" y="40" width="150" height="50" class="uml-box"/><text x="375" y="70" text-anchor="middle" class="uml-text" font-weight="700">Employee</text>
+  <line x1="200" y1="65" x2="300" y2="65" class="uml-line"/>
+  <polygon points="200,65 216,57 232,65 216,73" fill="white" stroke="#0f1419" stroke-width="1.4"/>
+  <text x="205" y="55" class="uml-text-mono" font-size="11">1</text><text x="270" y="55" class="uml-text-mono" font-size="11">3..*</text>
+  <text x="500" y="58" class="uml-text" font-weight="600" font-size="13">Aggregation (hollow diamond)</text>
+  <text x="500" y="76" class="lab">weak part-of: an Employee outlives the Team</text>
+  <rect x="60" y="160" width="140" height="50" class="uml-box"/><text x="130" y="190" text-anchor="middle" class="uml-text" font-weight="700">House</text>
+  <rect x="300" y="160" width="150" height="50" class="uml-box"/><text x="375" y="190" text-anchor="middle" class="uml-text" font-weight="700">Room</text>
+  <line x1="200" y1="185" x2="300" y2="185" class="uml-line"/>
+  <polygon points="200,185 216,177 232,185 216,193" fill="#0f1419" stroke="#0f1419" stroke-width="1.4"/>
+  <text x="205" y="175" class="uml-text-mono" font-size="11">1</text><text x="270" y="175" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="500" y="178" class="uml-text" font-weight="600" font-size="13">Composition (filled diamond)</text>
+  <text x="500" y="196" class="lab">strong part-of: destroy the House and its Rooms go too</text>
+</svg>
+<div class="key"><span class="tag">Practitioner note</span><p>Prefer <strong>composition</strong> where it fits: aggregation is semantically weak and many tools and reviewers cannot tell it apart from a plain association. Composition has real lifetime bite.</p></div>
+<div class="key steel"><span class="tag">Adel's examples</span><p>A <strong>Course</strong> is part of a <strong>Programme</strong> (aggregation, and a course may sit in more than one programme). An <strong>Airplane</strong> is made up of <strong>Assemblies</strong>, each made up of <strong>Components</strong> – aggregation can <em>recurse</em>. A <strong>chessboard</strong> is composed of exactly <strong>64 Squares</strong> that cannot exist without it – composition, multiplicity <code>64</code> on the part end.</p></div></section>
+
+<!-- 17. ASSOCIATION CLASSES -->
+<section class="slide"><h2>Association classes</h2>
+<p class="lead">When an attribute belongs to the <em>relationship</em> rather than to either class, put it on an <strong>association class</strong>: a class box joined to the association line by a dashed link, sharing the association's name.</p>
+<svg viewBox="0 0 900 250" class="ref" role="img" aria-label="Student takes Course, with a Taking association class holding semester and mark">
+  <rect x="80" y="40" width="150" height="50" class="uml-box"/><text x="155" y="70" text-anchor="middle" class="uml-text" font-weight="700">Student</text>
+  <rect x="560" y="40" width="150" height="50" class="uml-box"/><text x="635" y="70" text-anchor="middle" class="uml-text" font-weight="700">Course</text>
+  <line x1="230" y1="65" x2="560" y2="65" class="uml-line"/>
+  <text x="240" y="58" class="uml-text-mono" font-size="11">1..*</text><text x="525" y="58" class="uml-text-mono" font-size="11">0..*</text>
+  <text x="380" y="58" class="uml-text-italic">taking</text>
+  <line x1="395" y1="65" x2="395" y2="150" class="uml-line-dashed"/>
+  <rect x="305" y="150" width="180" height="80" class="uml-box" fill="#faf7f2"/>
+  <text x="395" y="172" text-anchor="middle" class="uml-text" font-weight="700">Taking</text><line x1="305" y1="182" x2="485" y2="182" class="uml-line"/>
+  <text x="317" y="202" class="uml-text-mono">+ semester: Date</text>
+  <text x="317" y="220" class="uml-text-mono">+ mark: int</text>
+</svg>
+<div class="key"><span class="tag">Where it belongs</span><p><code>mark</code> is not a property of the Student (they have many marks) nor of the Course (it has many) but of the specific <em>Student-takes-Course</em> pairing. A <strong>ternary</strong> association class does the same for a three-way relationship (e.g. Doctor-Patient-Treatment).</p></div></section>
+
+<!-- 18. FULL LIBRARY DIAGRAM (reuse companion Fig 6) -->
+<section class="slide"><h2>Putting it together: the Library class diagram</h2>
+<p class="lead">One diagram with all four relationship kinds: <strong>generalisation</strong>, <strong>aggregation</strong>, an <strong>association</strong> with multiplicity, and an <strong>association class</strong>.</p>
+<svg viewBox="0 0 940 580" class="ref" role="img" aria-label="Library class diagram with LibraryMember, StaffMember, Book, BookCopy and a Loan association class">
+  <defs><marker id="gen-arrow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+  <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="160" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+  <line x1="60" y1="96" x2="260" y2="96" class="uml-line"/>
+  <text x="74" y="116" class="uml-text-mono">+ memberId: String</text>
+  <text x="74" y="134" class="uml-text-mono">+ name: String</text>
+  <line x1="60" y1="148" x2="260" y2="148" class="uml-line"/>
+  <text x="74" y="166" class="uml-text-mono">+ register()</text>
+  <rect x="60" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="160" y="344" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
+  <line x1="60" y1="356" x2="260" y2="356" class="uml-line"/>
+  <text x="74" y="376" class="uml-text-mono">+ department: String</text>
+  <text x="74" y="394" class="uml-text-mono">+ role: String</text>
+  <line x1="160" y1="320" x2="160" y2="170" class="uml-line" marker-end="url(#gen-arrow)"/>
+  <rect x="540" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="640" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <line x1="540" y1="96" x2="740" y2="96" class="uml-line"/>
+  <text x="554" y="116" class="uml-text-mono">+ ISBN: String</text>
+  <text x="554" y="134" class="uml-text-mono">+ title: String</text>
+  <line x1="540" y1="148" x2="740" y2="148" class="uml-line"/>
+  <text x="554" y="166" class="uml-text-mono">+ catalog()</text>
+  <rect x="540" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="640" y="344" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <line x1="540" y1="356" x2="740" y2="356" class="uml-line"/>
+  <text x="554" y="376" class="uml-text-mono">+ barcode: String</text>
+  <text x="554" y="394" class="uml-text-mono">+ status: LoanStatus</text>
+  <line x1="640" y1="200" x2="640" y2="320" class="uml-line"/>
+  <polygon points="640,170 654,185 640,200 626,185" fill="white" stroke="#2c3540" stroke-width="1.4"/>
+  <text x="650" y="220" class="uml-text-mono" font-size="13">1</text>
+  <text x="650" y="312" class="uml-text-mono" font-size="13">1..*</text>
+  <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
+  <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
+  <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
+  <text x="520" y="376" class="uml-text-mono" font-size="13">0..6</text>
+  <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
+  <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
+  <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
+  <text x="400" y="484" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
+  <line x1="310" y1="496" x2="490" y2="496" class="uml-line"/>
+  <text x="324" y="516" class="uml-text-mono">+ startDate: Date</text>
+  <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
+  <text x="324" y="552" class="uml-text-mono">+ extend()</text>
+</svg>
+<div class="key steel"><span class="tag">Read it</span><p>StaffMember <em>is a</em> LibraryMember (generalisation). A Book <em>has</em> 1..* BookCopies (aggregation). A LibraryMember <em>borrows</em> 0..6 BookCopies (association); the <strong>Loan</strong>'s dates live on the association, not on either class.</p></div></section>
+
+<!-- 18b. MHC-PMS SECOND EXAMPLE -->
+<section class="slide"><h2>A second domain: the MHC-PMS (patient records)</h2>
+<p class="lead">Adel's other running example, from Sommerville's mental-health-care patient management system. It shows a different shape: one <strong>central, attribute-rich class</strong>, <code>Consultation</code>, that anchors the whole model.</p>
+<svg viewBox="0 0 940 440" class="ref" role="img" aria-label="MHC-PMS class diagram: Patient and Doctor associated with a central Consultation class">
+  <!-- Patient -->
+  <rect x="30" y="44" width="210" height="104" class="uml-box"/>
+  <text x="135" y="66" text-anchor="middle" class="uml-text" font-weight="700">Patient</text>
+  <line x1="30" y1="78" x2="240" y2="78" class="uml-line"/>
+  <text x="42" y="98" class="uml-text-mono">+ name: String</text>
+  <text x="42" y="116" class="uml-text-mono">+ dateOfBirth: Date</text>
+  <text x="42" y="134" class="uml-text-mono">+ patientId: String</text>
+  <!-- Doctor -->
+  <rect x="700" y="44" width="210" height="86" class="uml-box"/>
+  <text x="805" y="66" text-anchor="middle" class="uml-text" font-weight="700">Doctor</text>
+  <line x1="700" y1="78" x2="910" y2="78" class="uml-line"/>
+  <text x="712" y="98" class="uml-text-mono">+ name: String</text>
+  <text x="712" y="116" class="uml-text-mono">+ staffId: String</text>
+  <!-- Consultation (central) -->
+  <rect x="320" y="150" width="300" height="270" class="uml-box" fill="#faf7f2"/>
+  <text x="470" y="172" text-anchor="middle" class="uml-text" font-weight="700">Consultation</text>
+  <line x1="320" y1="184" x2="620" y2="184" class="uml-line"/>
+  <text x="332" y="204" class="uml-text-mono">+ date: Date</text>
+  <text x="332" y="222" class="uml-text-mono">+ time: Time</text>
+  <text x="332" y="240" class="uml-text-mono">+ clinic: String</text>
+  <text x="332" y="258" class="uml-text-mono">+ reason: String</text>
+  <text x="332" y="276" class="uml-text-mono">+ medicationPrescribed: String</text>
+  <text x="332" y="294" class="uml-text-mono">+ treatmentPrescribed: String</text>
+  <text x="332" y="312" class="uml-text-mono">+ voiceNotes: String</text>
+  <line x1="320" y1="324" x2="620" y2="324" class="uml-line"/>
+  <text x="332" y="344" class="uml-text-mono">+ new()</text>
+  <text x="332" y="362" class="uml-text-mono">+ prescribe()</text>
+  <text x="332" y="380" class="uml-text-mono">+ recordNotes()</text>
+  <text x="332" y="398" class="uml-text-mono">+ transcribe()</text>
+  <!-- Patient attends Consultation -->
+  <line x1="135" y1="148" x2="320" y2="230" class="uml-line"/>
+  <text x="150" y="166" class="uml-text-mono" font-size="11">1</text>
+  <text x="290" y="222" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="195" y="180" class="uml-text-italic" font-size="12">attends</text>
+  <!-- Doctor conducts Consultation -->
+  <line x1="805" y1="130" x2="620" y2="230" class="uml-line"/>
+  <text x="775" y="150" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="628" y="222" class="uml-text-mono" font-size="11">0..*</text>
+  <text x="690" y="174" class="uml-text-italic" font-size="12">conducts</text>
+</svg>
+<div class="key steel"><span class="tag">What to notice</span><p>The most important class in a model is often not the actor but a central <em>event</em> or <em>interaction</em>. <code>Consultation</code>'s <strong>attributes</strong> are the data one consultation records; its <strong>operations</strong> are what a doctor does during one (<code>prescribe</code>, <code>recordNotes</code>). The two associations read straight from the sentence &ldquo;a doctor conducts a consultation that a patient attends&rdquo;.</p></div></section>
+
+<!-- 19. DEPENDENCY + STEREOTYPES -->
+<section class="slide"><h2>Dependency, data types and enumerations</h2>
+<p class="lead">Two more notations from richer diagrams. A <strong>dependency</strong> (dashed open arrow) is a transient "uses" link, weaker than an association. <strong>Stereotypes</strong> in guillemets label a class's kind.</p>
+<svg viewBox="0 0 900 230" class="ref" role="img" aria-label="Order depends on Product; ProductCategory is an enumeration; Money is a data type">
+  <rect x="60" y="80" width="150" height="60" class="uml-box"/><text x="135" y="106" text-anchor="middle" class="uml-text" font-weight="700">Order</text><line x1="60" y1="116" x2="210" y2="116" class="uml-line"/><text x="72" y="133" class="uml-text-mono">+ total: Money</text>
+  <rect x="380" y="80" width="160" height="60" class="uml-box"/><text x="460" y="106" text-anchor="middle" class="uml-text" font-weight="700">Product</text><line x1="380" y1="116" x2="540" y2="116" class="uml-line"/><text x="392" y="133" class="uml-text-mono">+ type: Category</text>
+  <line x1="210" y1="110" x2="378" y2="110" class="uml-line-dashed" marker-end="url(#arw)"/><text x="260" y="100" class="uml-text-italic">uses</text>
+  <text x="640" y="60" text-anchor="middle" class="uml-text-italic">&laquo;enumeration&raquo;</text>
+  <rect x="600" y="68" width="160" height="70" class="uml-box" fill="#faf7f2"/><text x="680" y="92" text-anchor="middle" class="uml-text" font-weight="700">Category</text><line x1="600" y1="102" x2="760" y2="102" class="uml-line"/><text x="612" y="120" class="uml-text-mono">Book  Music</text><text x="612" y="134" class="uml-text-mono">Video  Software</text>
+  <text x="135" y="190" text-anchor="middle" class="uml-text-italic">&laquo;dataType&raquo; Money</text>
+</svg>
+<div class="key"><span class="tag">Association vs dependency</span><p>If an Order <em>holds</em> Products over time, that is an <strong>association</strong> (solid line). If a method merely <em>takes a Product as an argument</em> or calls it once, that is a <strong>dependency</strong> (dashed). Dependency is the weakest of the relationships.</p></div></section>
+
+<!-- 20. GOOD ANALYSIS CLASS -->
+<section class="slide"><h2>What makes a good analysis class</h2>
+<p class="lead">A short checklist that reviews look for. Most weak class models fail on cohesion or coupling.</p>
+<ul class="pts">
+  <li><strong>Its name reflects its intent.</strong> <code>Prescription</code> tells you what it is; <code>Manager</code> or <code>Helper</code> tells you nothing.</li>
+  <li><strong>It is a crisp abstraction</strong> of one specific element of the problem domain, not several.</li>
+  <li><strong>It has a small, defined set of responsibilities</strong>, one reason to change.</li>
+  <li><strong>High cohesion:</strong> it holds only the attributes and operations that genuinely belong together; unrelated ones lower cohesion.</li>
+  <li><strong>Low coupling:</strong> it has only the associations it truly needs; accidental links raise coupling and spread change.</li>
+</ul>
+<div class="key"><span class="tag">Two failure modes</span><p>An <strong>omnipotent</strong> class (the "manager" that does everything) has low cohesion. A class wired to everything else has high coupling. Both make the model brittle.</p></div></section>
+
+<!-- 21. OBJECT DIAGRAMS -->
+<section class="slide"><h2>Object diagrams: a snapshot of instances</h2>
+<p class="lead">Where a class diagram shows the <em>types</em>, an <strong>object diagram</strong> shows specific <strong>instances</strong> and the <strong>links</strong> between them at one moment, a snapshot. Object names are underlined, in the form <code>name : Class</code>.</p>
+<svg viewBox="0 0 900 210" class="ref" role="img" aria-label="Object diagram: adel:LibraryMember linked to copy42:BookCopy">
+  <rect x="90" y="60" width="220" height="90" class="uml-box"/><text x="200" y="86" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">adel : LibraryMember</text><line x1="90" y1="98" x2="310" y2="98" class="uml-line"/><text x="104" y="120" class="uml-text-mono">memberId = "M-1007"</text><text x="104" y="138" class="uml-text-mono">name = "Adel"</text>
+  <rect x="560" y="60" width="220" height="90" class="uml-box"/><text x="670" y="86" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">copy42 : BookCopy</text><line x1="560" y1="98" x2="780" y2="98" class="uml-line"/><text x="574" y="120" class="uml-text-mono">barcode = "BC-42"</text><text x="574" y="138" class="uml-text-mono">status = onLoan</text>
+  <line x1="310" y1="105" x2="560" y2="105" class="uml-line"/><text x="380" y="98" class="uml-text-italic">borrows</text>
+</svg>
+<div class="key"><span class="tag">Why draw one</span><p>Object diagrams <strong>validate the class model</strong>: building a concrete snapshot of real data quickly exposes a missing class, a wrong multiplicity, or an attribute that has nowhere to live.</p></div></section>
+
+<!-- BACK TO BACK 1: description + use case -->
+<section class="slide"><h2>Back to back: one system, three views (1 of 4)</h2>
+<p class="lead">The three diagrams are not separate exercises. Take a single description and watch the <strong>same words</strong> drive the use case diagram, then the activity diagram, then the class diagram.</p>
+<div class="box" style="font-size:14.5px;line-height:1.6"><strong>The Library.</strong> A library holds <em>books</em> and <em>journals</em>, with several <em>copies</em> of each book. A <em>library member</em> may <em>borrow</em> a copy of a book for three weeks, up to six items; <em>staff</em> may borrow more, and may borrow journals. A <em>librarian</em> issues and <em>returns</em> copies and <em>renews</em> loans; the system <em>computes the return date</em> and <em>refuses a loan</em> when the member already holds too many. Anyone may <em>browse or search</em> the catalogue.</div>
+<h3 style="margin-top:14px">View 1 – the use case diagram: <em>who</em>, and <em>what</em></h3>
+<img class="refimg" src="fig3_usecase_library.svg" alt="Library use case diagram: BookBorrower, Librarian and Browser actors with Borrow, Return, Renew, Compute return date, Refuse loan and Browse use cases">
+<div class="key steel"><span class="tag">From the text</span><p>The <strong>roles</strong> (&ldquo;member&rdquo;, &ldquo;librarian&rdquo;, anyone browsing) become <strong>actors</strong>; the things they <em>do</em> (&ldquo;borrow&rdquo;, &ldquo;return&rdquo;, &ldquo;renew&rdquo;, &ldquo;browse&rdquo;) become <strong>use cases</strong>; &ldquo;compute the return date&rdquo;, always part of borrowing, is an <code>&lt;&lt;include&gt;&gt;</code>; &ldquo;refuse a loan when too many&rdquo;, a conditional, is an <code>&lt;&lt;extend&gt;&gt;</code>.</p></div></section>
+
+<!-- BACK TO BACK 2: activity -->
+<section class="slide"><h2>Back to back: one system, three views (2 of 4)</h2>
+<p class="lead">Pick one use case, <strong>Borrow copy of a book</strong>, and unpack <em>how it flows</em>. Each action is a verb the system or an actor performs; the swimlanes record who does each.</p>
+<img class="refimg" src="figD_borrow_return_activity.svg" alt="Activity diagram for borrowing and returning, with Member and Librarian swimlanes, a borrow/return decision, parallel Stamp book and Record borrowing actions, and a more-books loop">
+<div class="key"><span class="tag">From use case to flow</span><p>The use case's normal and alternative paths become the activity's <strong>actions, decisions and loops</strong>: &ldquo;locate copy&rdquo;, &ldquo;stamp book&rdquo;, &ldquo;record borrowing&rdquo;, the &ldquo;more?&rdquo; loop for several books. Hold onto these verbs – <code>locate</code>, <code>stamp</code>, <code>record</code>, <code>computeReturnDate</code> – they become <strong>operations</strong> on the classes next.</p></div></section>
+
+<!-- BACK TO BACK 3: class -->
+<section class="slide"><h2>Back to back: one system, three views (3 of 4)</h2>
+<p class="lead">Now the <strong>structure</strong> the behaviour ran on. The nouns from the description are classes; the data they hold are attributes; the use cases and activity actions are operations; the noun-verb pairings are the associations.</p>
+<svg viewBox="0 0 940 580" class="ref" role="img" aria-label="Library class diagram derived from the description: LibraryMember, StaffMember, Book, BookCopy and a Loan association class">
+  <defs><marker id="gen-arrow-bb" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+  <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="160" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+  <line x1="60" y1="96" x2="260" y2="96" class="uml-line"/>
+  <text x="74" y="116" class="uml-text-mono">+ memberId: String</text>
+  <text x="74" y="134" class="uml-text-mono">+ name: String</text>
+  <line x1="60" y1="148" x2="260" y2="148" class="uml-line"/>
+  <text x="74" y="166" class="uml-text-mono">+ borrow()  + return()</text>
+  <rect x="60" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="160" y="344" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
+  <line x1="60" y1="356" x2="260" y2="356" class="uml-line"/>
+  <text x="74" y="376" class="uml-text-mono">+ department: String</text>
+  <text x="74" y="394" class="uml-text-mono">+ borrowJournal()</text>
+  <line x1="160" y1="320" x2="160" y2="170" class="uml-line" marker-end="url(#gen-arrow-bb)"/>
+  <rect x="540" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="640" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <line x1="540" y1="96" x2="740" y2="96" class="uml-line"/>
+  <text x="554" y="116" class="uml-text-mono">+ ISBN: String</text>
+  <text x="554" y="134" class="uml-text-mono">+ title: String</text>
+  <line x1="540" y1="148" x2="740" y2="148" class="uml-line"/>
+  <text x="554" y="166" class="uml-text-mono">+ catalog()</text>
+  <rect x="540" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="640" y="344" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <line x1="540" y1="356" x2="740" y2="356" class="uml-line"/>
+  <text x="554" y="376" class="uml-text-mono">+ barcode: String</text>
+  <text x="554" y="394" class="uml-text-mono">+ status: LoanStatus</text>
+  <line x1="640" y1="200" x2="640" y2="320" class="uml-line"/>
+  <polygon points="640,170 654,185 640,200 626,185" fill="white" stroke="#2c3540" stroke-width="1.4"/>
+  <text x="650" y="220" class="uml-text-mono" font-size="13">1</text>
+  <text x="650" y="312" class="uml-text-mono" font-size="13">1..*</text>
+  <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
+  <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
+  <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
+  <text x="520" y="376" class="uml-text-mono" font-size="13">0..6</text>
+  <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
+  <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
+  <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
+  <text x="400" y="484" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
+  <line x1="310" y1="496" x2="490" y2="496" class="uml-line"/>
+  <text x="324" y="516" class="uml-text-mono">+ startDate: Date</text>
+  <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
+  <text x="324" y="552" class="uml-text-mono">+ computeReturnDate()</text>
+</svg>
+<div class="key steel"><span class="tag">From text to structure</span><p>The <strong>nouns</strong> become classes (Book, BookCopy, LibraryMember, StaffMember); the <strong>data</strong> become attributes (ISBN, title, barcode); the <strong>verbs</strong> become operations (borrow, return, computeReturnDate). &ldquo;Staff are members&rdquo; is generalisation; &ldquo;a book has copies&rdquo; is aggregation; &ldquo;a member borrows copies&rdquo; is the association whose dates live on the <code>Loan</code> association class; &ldquo;up to six&rdquo; is the multiplicity <code>0..6</code>.</p></div></section>
+
+<!-- BACK TO BACK 4: traceability -->
+<section class="slide"><h2>Back to back: one system, three views (4 of 4)</h2>
+<p class="lead">The traceability map. Every diagram element should be answerable to a phrase in the description – this table is how a reviewer, or you, checks that nothing was invented and nothing was dropped.</p>
+<table class="trace">
+  <thead><tr><th>Phrase in the description</th><th>Use case diagram</th><th>Activity diagram</th><th>Class diagram</th></tr></thead>
+  <tbody>
+    <tr><td>&ldquo;a library member&rdquo;, &ldquo;staff&rdquo;</td><td class="k">BookBorrower, Librarian (actors)</td><td class="k">Member, Librarian (swimlanes)</td><td class="k">LibraryMember, StaffMember (staff <em>is-a</em> member)</td></tr>
+    <tr><td>&ldquo;books&rdquo;, &ldquo;copies&rdquo;, &ldquo;journals&rdquo;</td><td class="k">&ndash; (subjects of the use cases)</td><td class="k">&ndash; (objects acted on)</td><td class="k">Book, BookCopy, Journal (Book has 1..* copies)</td></tr>
+    <tr><td>&ldquo;borrow a copy&rdquo;</td><td class="k">Borrow copy of a book</td><td class="k">the borrow branch + its actions</td><td class="k">borrow() operation; member&ndash;copy association</td></tr>
+    <tr><td>&ldquo;for three weeks&rdquo; / &ldquo;return date&rdquo;</td><td class="k">Compute return date (&lt;&lt;include&gt;&gt;)</td><td class="k">action inside the flow</td><td class="k">Loan.startDate, returnDate, computeReturnDate()</td></tr>
+    <tr><td>&ldquo;up to six items&rdquo;</td><td class="k">Refuse loan (&lt;&lt;extend&gt;&gt; [too many])</td><td class="k">a decision guard</td><td class="k">multiplicity 0..6 on the borrows association</td></tr>
+    <tr><td>&ldquo;browse or search&rdquo;</td><td class="k">Browse / search books (Browser actor)</td><td class="k">&ndash;</td><td class="k">a search() operation on the catalogue</td></tr>
+  </tbody>
+</table>
+<div class="key"><span class="tag">The discipline</span><p>Read each row as one idea traced across all three views. If a class, use case, or action has no row, ask why it exists; if a description phrase has no entry, ask what you missed. That round trip is what makes the models <em>trustworthy</em> rather than decorative, and it is exactly what an examiner checks.</p></div></section>
+
+<!-- 22. WHERE THEY EARN THEIR PLACE -->
+<section class="slide"><h2>Where class diagrams earn their place</h2>
+<div class="three">
+  <div class="box"><h3>Where they dominate</h3><ul><li>All object-oriented code of any real size (Java, C#, Python, TypeScript).</li><li>Domain modelling (Domain-Driven Design).</li><li>ORM mapping (Hibernate, Entity Framework, Django).</li><li>Design patterns, the Gang of Four communicate every pattern as a class diagram.</li></ul></div>
+  <div class="box"><h3>What they do not solve</h3><ul><li>Runtime behaviour, use sequence or state diagrams.</li><li>Data flow, use activity diagrams.</li><li>Concurrency and deployment topology.</li></ul><p style="margin:8px 0 0;font-size:13.5px">A class diagram tells you what exists; nothing about what happens.</p></div>
+  <div class="box"><h3>Tooling today</h3><ul><li>IDEs reverse-engineer them from code.</li><li>PlantUML and Mermaid render them from text in Git workflows.</li><li>Visual Paradigm, Lucidchart, Enterprise Architect do forward and reverse engineering.</li></ul></div>
+</div></section>
+
+<!-- 23. PITFALLS -->
+<section class="slide"><h2>Common pitfalls</h2>
+<ul class="pts">
+  <li><strong>Attributes drawn as classes.</strong> "Title", "ISBN", "status" are attributes of a class, not classes of their own.</li>
+  <li><strong>The omnipotent class.</strong> A "SystemManager" that does everything signals analysis stopped too early; split it by responsibility.</li>
+  <li><strong>Generalisation where association is meant.</strong> Use <code>is-a</code> only for genuine specialisation; "has-a" and "part-of" are association and aggregation.</li>
+  <li><strong>Missing multiplicity.</strong> An association end with no multiplicity hides a business rule; always state both ends.</li>
+  <li><strong>Aggregation everywhere.</strong> If lifetime is not tied, it is a plain association; if it is, prefer composition.</li>
+  <li><strong>Mixing analysis and design.</strong> Full method signatures, types and infrastructure classes belong to the design-level diagram, not the first cut.</li>
+</ul></section>
+
+<!-- 24. HOW TO CREATE + BRIDGE -->
+<section class="slide"><h2>How to build one, and what comes next</h2>
+<div class="two">
+  <div class="box"><h3>Recipe</h3><ol>
+    <li>From the requirements, the nouns and roles become <strong>candidate classes</strong>; discard the inappropriate ones.</li>
+    <li>Attach the data each holds as <strong>attributes</strong>; the verbs it owns as <strong>operations</strong>.</li>
+    <li>Draw the <strong>associations</strong> from the noun-verb pairings; add <strong>multiplicity</strong> at both ends.</li>
+    <li>Add <strong>generalisation</strong> for <code>is-a</code>, <strong>aggregation / composition</strong> for <code>part-of</code>, <strong>association classes</strong> for relationship attributes.</li>
+    <li>Check each class for cohesion and coupling; validate with an <strong>object diagram</strong>.</li>
+  </ol></div>
+  <div class="box"><h3>Bridge to sequence diagrams</h3><p style="font-size:14.5px">The class diagram tells you what exists; it says nothing about what <em>happens</em>. A call to <code>borrow()</code> on <code>LibraryMember</code> may touch <code>Book</code>, <code>BookCopy</code>, <code>Loan</code> and a persistence store in a specific order, with checks and error returns. That story, messages over time between a fixed cast of objects, is the <strong>sequence diagram</strong>, next.</p></div>
+</div>
+<p class="foot">Sources: A. Taweel, COMP433 Chapter 4 (UML) lecture notes (Library and MHC-PMS examples); Sommerville, <em>Software Engineering</em> 10th ed.; Booch et al., <em>Object-Oriented Analysis and Design</em>; Shlaer &amp; Mellor (noun-verb analysis). Companion: <code>COMP433_Ch4_UML_System_Modelling_Companion.html</code>.</p></section>
+
+  </div>
+  <div class="nav">
+    <button id="prev">&larr; Prev</button>
+    <button id="next">Next &rarr;</button>
+    <span class="title-mini" id="tmini"></span>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')], N=slides.length;
+let i=0;
+function titleOf(s){ const h=s.querySelector('h1,h2'); return h?h.textContent:''; }
+function show(){
+  slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  document.getElementById('prev').disabled=i===0;
+  document.getElementById('next').disabled=i===N-1;
+  document.getElementById('count').textContent=(i+1)+' / '+N;
+  document.getElementById('tmini').textContent=titleOf(slides[i]);
+  document.getElementById('slidewrap').scrollTop=0;
+}
+document.getElementById('prev').onclick=()=>{ if(i>0){i--;show();} };
+document.getElementById('next').onclick=()=>{ if(i<N-1){i++;show();} };
+window.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key==='PageDown'){ if(i<N-1){i++;show();} } else if(e.key==='ArrowLeft'||e.key==='PageUp'){ if(i>0){i--;show();} } });
+show();
+</script>
+</body></html>
