@@ -179,6 +179,41 @@
       border-bottom: 1px dotted #1565c0;
     }
     .lecture-intro a:hover { border-bottom-style: solid; }
+
+    /* Announcements: "What's New" card */
+    .course-alerts {
+      max-width: 440px; margin: 18px auto 4px;
+      background: linear-gradient(140deg, #f2f8ff 0%, #e3f0ff 100%);
+      border: 1px solid #bbdefb; border-radius: 10px;
+      padding: 14px 18px 16px; box-shadow: 0 4px 14px rgba(21,101,192,0.12);
+      position: relative;
+    }
+    .course-alerts::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+      background: linear-gradient(180deg, #1565c0 0%, #64b5f6 100%); border-radius: 10px 0 0 10px;
+    }
+    .course-alerts .alerts-head { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+    .course-alerts .alerts-icon {
+      flex-shrink: 0; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+      background: #1565c0; color: #fff; border-radius: 50%; font-size: 0.78rem;
+      box-shadow: 0 0 0 4px rgba(21,101,192,0.15); animation: alertsRing 2.6s ease-in-out infinite;
+    }
+    @keyframes alertsRing { 0%,100% { box-shadow: 0 0 0 4px rgba(21,101,192,0.15); } 50% { box-shadow: 0 0 0 8px rgba(21,101,192,0.05); } }
+    .course-alerts h4 { margin: 0; font-size: 0.82rem; font-weight: 800; color: #1565c0; text-transform: uppercase; letter-spacing: 1px; flex: 1; }
+    .course-alerts .new-pill {
+      display: inline-flex; align-items: center; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.8px;
+      color: #fff; background: #1565c0; padding: 2px 8px; border-radius: 10px; text-transform: uppercase;
+      animation: alertsPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes alertsPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .course-alerts ul { list-style: none; margin: 0; padding: 0; font-size: 0.9rem; color: #333; line-height: 1.5; }
+    .course-alerts li { padding: 2px 0; }
+    .course-alerts li .alert-date {
+      display: inline-block; font-size: 0.7rem; font-weight: 800; color: #fff; background: #1565c0;
+      padding: 2px 8px; border-radius: 10px; margin-right: 8px; vertical-align: 1px; white-space: nowrap;
+    }
+    .course-alerts li a { color: #0d47a1; font-weight: 700; text-decoration: none; border-bottom: 1px dotted #64b5f6; }
+    .course-alerts li a:hover { color: #08306b; border-bottom-color: #1565c0; }
   </style>
   <script src="/birzeit/gate.js"></script>
 </head>
@@ -239,6 +274,28 @@
           <div class="semester">Second Semester 2025/26</div>
           <div class="instructor">Hisham Ihshaish</div>
           <div class="dept">Department of Computer Science, Birzeit University</div>
+        </div>
+
+        <!-- Announcements -->
+        <aside class="course-alerts" role="status" aria-label="Latest updates">
+          <div class="alerts-head">
+            <span class="alerts-icon" aria-hidden="true"><i class="fas fa-bullhorn"></i></span>
+            <h4>What's New</h4>
+            <span class="new-pill" aria-hidden="true">New</span>
+          </div>
+          <ul>
+            <li class="latest"><span class="alert-date">8 Jun 2026</span><a href="/birzeit/comp338/COMP338_Quiz1.html" target="_blank" rel="noopener">Quiz&nbsp;#1 questions and answers</a> are now available, with full worked solutions and marking criteria.</li>
+          </ul>
+        </aside>
+
+        <h2 class="section-heading"><i class="fas fa-clipboard-check" style="margin-right: 8px;"></i>Quizzes &amp; Exams</h2>
+
+        <div class="companion-card">
+          <h3>Quiz #1: Problem formulation &amp; uninformed search</h3>
+          <p class="companion-desc">Quiz&nbsp;#1 (Section&nbsp;3), with every question reproduced as it appeared on the paper and full worked solutions plus marking criteria: the Map Colouring problem formulation, and DFS / Uniform-Cost Search on a weighted graph.</p>
+          <a class="companion-btn" href="/birzeit/comp338/COMP338_Quiz1.html" target="_blank" rel="noopener">
+            <i class="fas fa-clipboard-check"></i> Open quiz &amp; answers
+          </a>
         </div>
 
         <h2 class="section-heading"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Lecture Material</h2>
