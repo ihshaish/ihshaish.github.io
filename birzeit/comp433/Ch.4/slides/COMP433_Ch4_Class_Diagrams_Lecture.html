@@ -59,6 +59,12 @@
   .key .tag { font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7a3a23; font-weight:700; padding-top:3px; white-space:nowrap; }
   .key.steel .tag { color:#1f4459; }
   .key p { margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
+  details.walk { margin-top:14px; background:#fff; border:1px solid var(--rule); border-radius:10px; padding:0 16px; }
+  details.walk > summary { cursor:pointer; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--steel); font-weight:600; padding:13px 0; list-style:none; }
+  details.walk > summary::-webkit-details-marker { display:none; }
+  details.walk > summary::before { content:"\25B8"; color:var(--accent); margin-right:8px; }
+  details.walk[open] > summary::before { content:"\25BE"; }
+  details.walk ol { margin:0 0 14px; padding-left:20px; } details.walk li { margin:7px 0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
 </style></head>
 <body>
 <div class="stage">
@@ -141,7 +147,7 @@
   <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
   <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
   <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
-  <text x="520" y="376" class="uml-text-mono" font-size="13">0..6</text>
+  <text x="486" y="346" class="uml-text-mono" font-size="13">0..6</text>
   <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
   <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
   <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
@@ -327,17 +333,17 @@ class StatementPrinter {                     // a different class
 <table class="rel">
   <thead><tr><th>Candidate</th><th>Decision</th><th>Why, and the alternative you rejected</th></tr></thead>
   <tbody>
-    <tr><td><code>book</code></td><td>class</td><td>The <em>work</em> itself (ISBN, title). Why not merge it with its copies? One title has many physical copies, and you lend a copy, not the title , merging the two loses that distinction.</td></tr>
+    <tr><td><code>book</code></td><td>class</td><td>The <em>work</em> itself (ISBN, title). Why not merge it with its copies? One title has many physical copies, and you lend a copy, not the title – merging the two loses that distinction.</td></tr>
     <tr><td><code>copy</code></td><td>class</td><td>The <em>physical item</em> on the shelf (barcode, status). Keep only <code>Book</code> and you cannot say which of its three copies is on loan; <code>BookCopy</code> is the fix.</td></tr>
-    <tr><td><code>journal</code></td><td>class (debatable)</td><td>Kept separate because journals follow different loan rules (staff only). <strong>Alternative:</strong> let <code>Book</code> and <code>Journal</code> both specialise an abstract <code>LibraryItem</code> holding the shared loan behaviour , tidier if more item types arrive.</td></tr>
+    <tr><td><code>journal</code></td><td>class (debatable)</td><td>Kept separate because journals follow different loan rules (staff only). <strong>Alternative:</strong> let <code>Book</code> and <code>Journal</code> both specialise an abstract <code>LibraryItem</code> holding the shared loan behaviour – tidier if more item types arrive.</td></tr>
     <tr><td><code>item</code></td><td>reject, but&hellip;</td><td>Too vague to be a class itself, yet it is the <em>hint</em> for that <code>LibraryItem</code> superclass. A rejected noun can still shape the model.</td></tr>
-    <tr><td><code>loan</code> / borrowing</td><td>association class</td><td>It looks like a verb, but it carries its own data (start and return dates) belonging to the <em>member-copy pairing</em>, not to either alone , so it becomes the <code>Loan</code> association class.</td></tr>
-    <tr><td><code>member</code>, <code>staff</code></td><td>class + generalisation</td><td>Staff <em>is-a</em> member, so generalisation. <strong>Alternative:</strong> if one person can be both at once, model a <code>Role</code> rather than a subclass , a genuine design fork.</td></tr>
-    <tr><td><code>library</code></td><td>reject</td><td>The <em>system boundary</em>, not a domain object , unless the requirements track several libraries, when it becomes a class after all.</td></tr>
+    <tr><td><code>loan</code> / borrowing</td><td>association class</td><td>It looks like a verb, but it carries its own data (start and return dates) belonging to the <em>member-copy pairing</em>, not to either alone – so it becomes the <code>Loan</code> association class.</td></tr>
+    <tr><td><code>member</code>, <code>staff</code></td><td>class + generalisation</td><td>Staff <em>is-a</em> member, so generalisation. <strong>Alternative:</strong> if one person can be both at once, model a <code>Role</code> rather than a subclass – a genuine design fork.</td></tr>
+    <tr><td><code>library</code></td><td>reject</td><td>The <em>system boundary</em>, not a domain object – unless the requirements track several libraries, when it becomes a class after all.</td></tr>
     <tr><td>three weeks, six, 12</td><td>reject</td><td>Loan period and borrowing limits: <em>attributes and constraints</em> (multiplicities), not classes.</td></tr>
   </tbody>
 </table>
-<div class="key"><span class="tag">The teaching point</span><p>A good class list is <strong>defended, not asserted</strong>. Be ready to say why <code>BookCopy</code> earns its place and <code>library</code> does not, and to name the alternative you considered , the <code>LibraryItem</code> superclass, the <code>Role</code> class , and why you set it aside.</p></div></section>
+<div class="key"><span class="tag">The teaching point</span><p>A good class list is <strong>defended, not asserted</strong>. Be ready to say why <code>BookCopy</code> earns its place and <code>library</code> does not, and to name the alternative you considered – the <code>LibraryItem</code> superclass, the <code>Role</code> class – and why you set it aside.</p></div></section>
 
 <!-- 11. FIRST-CUT MODEL -->
 <section class="slide"><h2>First-cut analysis class model</h2>
@@ -385,7 +391,7 @@ class StatementPrinter {                     // a different class
   <text x="560" y="168" class="uml-text-italic">unidirectional</text>
   <text x="560" y="186" class="lab">a Book reaches its copies,</text><text x="560" y="202" class="lab">not the other way</text>
 </svg>
-<div class="key"><span class="tag">Key</span><p>A plain association line is <strong>bidirectional</strong>. An <strong>arrowhead</strong> makes it unidirectional: the tail class can reach the head class, but not vice versa. Multiplicity sits at each end.</p></div></section>
+<div class="key"><span class="tag">Reading direction</span><p>A plain association line is <strong>bidirectional</strong>. An <strong>arrowhead</strong> makes it unidirectional: the tail class can reach the head class, but not vice versa. Multiplicity sits at each end.</p></div></section>
 
 <!-- 13b. ASSOCIATIONS IN DETAIL -->
 <section class="slide"><h2>Associations in detail: roles, reflexive links, and instances</h2>
@@ -440,7 +446,7 @@ class StatementPrinter {                     // a different class
   <polyline points="680,200 680,150 450,150" class="uml-line"/>
   <text x="250" y="142" class="uml-text-italic" font-size="12">is a</text>
 </svg>
-<div class="key"><span class="tag">Key</span><p>The triangle always points at the <strong>general</strong> (parent) class. Use generalisation only for a genuine <code>is-a</code>: a StaffMember <em>is a</em> LibraryMember.</p></div>
+<div class="key"><span class="tag">Which way the triangle points</span><p>The triangle always points at the <strong>general</strong> (parent) class. Use generalisation only for a genuine <code>is-a</code>: a StaffMember <em>is a</em> LibraryMember.</p></div>
 <div class="key steel"><span class="tag">Example: right vs wrong</span><p><strong>Wrong:</strong> &ldquo;<code>Car</code> is-a <code>Engine</code>&rdquo;. A car is not a kind of engine; it <em>has</em> one, so that is an <strong>association</strong> (<code>Car</code> has <code>Engine</code>), not inheritance. <strong>Right:</strong> &ldquo;<code>ElectricCar</code> is-a <code>Car</code>&rdquo;. The test is <strong>substitutability</strong>: anywhere the code expects a <code>LibraryMember</code> you can hand it a <code>StaffMember</code> and nothing breaks. If the substitution would be absurd (an <code>Engine</code> where a <code>Car</code> is expected), it is not generalisation.</p></div></section>
 
 <!-- 16. AGGREGATION VS COMPOSITION -->
@@ -539,7 +545,8 @@ class StatementPrinter {                     // a different class
   <rect x="600" y="68" width="160" height="70" class="uml-box" fill="#faf7f2"/><text x="680" y="92" text-anchor="middle" class="uml-text" font-weight="700">Category</text><line x1="600" y1="102" x2="760" y2="102" class="uml-line"/><text x="612" y="120" class="uml-text-mono">Book  Music</text><text x="612" y="134" class="uml-text-mono">Video  Software</text>
   <text x="135" y="190" text-anchor="middle" class="uml-text-italic">&laquo;dataType&raquo; Money</text>
 </svg>
-<div class="key"><span class="tag">Association vs dependency</span><p>If an Order <em>holds</em> Products over time, that is an <strong>association</strong> (solid line). If a method merely <em>takes a Product as an argument</em> or calls it once, that is a <strong>dependency</strong> (dashed). Dependency is the weakest of the relationships.</p></div></section>
+<div class="key"><span class="tag">Association vs dependency</span><p>If an Order <em>holds</em> Products over time, that is an <strong>association</strong> (solid line). If a method merely <em>takes a Product as an argument</em> or calls it once, that is a <strong>dependency</strong> (dashed). Dependency is the weakest of the relationships.</p></div>
+<div class="key steel"><span class="tag">What &laquo;enumeration&raquo; and &laquo;dataType&raquo; mean</span><p>An <strong>enumeration</strong> is a type whose value must be one of a <em>fixed, named list</em>, exactly like an <code>enum</code> in code: a <code>Category</code> is one of <code>Book</code>, <code>Music</code>, <code>Video</code> or <code>Software</code>, and nothing else. A <strong>data type</strong> is a type with <em>no identity of its own</em>, defined purely by its value: two <code>Money</code> amounts of &pound;5 are interchangeable, whereas two <code>Order</code> objects are distinct even with identical fields. Both are written with a <strong>stereotype</strong> in guillemets, &laquo;like this&raquo;, to flag that the box is not an ordinary domain class.</p></div></section>
 
 <!-- 20. GOOD ANALYSIS CLASS -->
 <section class="slide"><h2>What makes a good analysis class</h2>
@@ -559,7 +566,7 @@ class StatementPrinter {                     // a different class
   + sendReminderEmail()    // messaging
   + generatePdfReport()    // reporting
   + connectToDatabase()    // persistence
-  + calculateInsurance()   // billing</pre><p style="margin:8px 0 0;font-size:13.5px">Four unrelated jobs in one class , <strong>four reasons to change</strong>. Touch the email server and you risk breaking billing.</p></div>
+  + calculateInsurance()   // billing</pre><p style="margin:8px 0 0;font-size:13.5px">Four unrelated jobs in one class – <strong>four reasons to change</strong>. Touch the email server and you risk breaking billing.</p></div>
   <div class="box" style="border-color:#9b9; background:#f4faf5;"><h3 style="color:#276">High cohesion (good)</h3><pre style="margin:0;font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--ink-soft);white-space:pre-wrap">Patient
   + name, dateOfBirth
   + register()
@@ -569,7 +576,7 @@ class StatementPrinter {                     // a different class
 NotificationService, ReportGenerator,
 PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:13.5px">One job: <strong>be a patient</strong>. Each other concern lives in its own class. One reason to change.</p></div>
 </div>
-<div class="key"><span class="tag">Two failure modes</span><p>The bad <code>Patient</code> above is an <strong>omnipotent</strong> class (low cohesion). The opposite failure is <strong>high coupling</strong>: a class wired to almost every other one, so any change ripples outward. Aim for the middle , each class doing one thing, linked only to what it truly needs.</p></div></section>
+<div class="key"><span class="tag">Two failure modes</span><p>The bad <code>Patient</code> above is an <strong>omnipotent</strong> class (low cohesion). The opposite failure is <strong>high coupling</strong>: a class wired to almost every other one, so any change ripples outward. Aim for the middle – each class doing one thing, linked only to what it truly needs.</p></div></section>
 
 <!-- 21. OBJECT DIAGRAMS -->
 <section class="slide"><h2>Object diagrams: a snapshot of instances</h2>
@@ -587,14 +594,30 @@ PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:1
 <div class="box" style="font-size:14.5px;line-height:1.6"><strong>The Library.</strong> A library holds <em>books</em> and <em>journals</em>, with several <em>copies</em> of each book. A <em>library member</em> may <em>borrow</em> a copy of a book for three weeks, up to six items; <em>staff</em> may borrow more, and may borrow journals. A <em>librarian</em> issues and <em>returns</em> copies and <em>renews</em> loans; the system <em>computes the return date</em> and <em>refuses a loan</em> when the member already holds too many. Anyone may <em>browse or search</em> the catalogue.</div>
 <h3 style="margin-top:14px">View 1 – the use case diagram: <em>who</em>, and <em>what</em></h3>
 <img class="refimg" src="fig3_usecase_library.svg" alt="Library use case diagram: BookBorrower, Librarian and Browser actors with Borrow, Return, Renew, Compute return date, Refuse loan and Browse use cases">
-<div class="key steel"><span class="tag">From the text</span><p>The <strong>roles</strong> (&ldquo;member&rdquo;, &ldquo;librarian&rdquo;, anyone browsing) become <strong>actors</strong>; the things they <em>do</em> (&ldquo;borrow&rdquo;, &ldquo;return&rdquo;, &ldquo;renew&rdquo;, &ldquo;browse&rdquo;) become <strong>use cases</strong>; &ldquo;compute the return date&rdquo;, always part of borrowing, is an <code>&lt;&lt;include&gt;&gt;</code>; &ldquo;refuse a loan when too many&rdquo;, a conditional, is an <code>&lt;&lt;extend&gt;&gt;</code>.</p></div></section>
+<div class="key steel"><span class="tag">From the text</span><p>The <strong>roles</strong> (&ldquo;member&rdquo;, &ldquo;librarian&rdquo;, anyone browsing) become <strong>actors</strong>; the things they <em>do</em> (&ldquo;borrow&rdquo;, &ldquo;return&rdquo;, &ldquo;renew&rdquo;, &ldquo;browse&rdquo;) become <strong>use cases</strong>; &ldquo;compute the return date&rdquo;, always part of borrowing, is an <code>&lt;&lt;include&gt;&gt;</code>; &ldquo;refuse a loan when too many&rdquo;, a conditional, is an <code>&lt;&lt;extend&gt;&gt;</code>.</p></div>
+<details class="walk"><summary>Walk through the use case diagram</summary>
+<ol>
+  <li>Three <strong>actors</strong> sit outside the system boundary: <em>BookBorrower</em> (a member), <em>Librarian</em> (staff), and <em>Browser</em> (a non-member).</li>
+  <li>BookBorrower takes part in <em>Borrow</em>, <em>Return</em> and <em>Renew</em>; the Librarian also joins <em>Borrow</em> and <em>Return</em>, since staff hand over and take back the copy.</li>
+  <li>A Browser reaches only <em>Browse / search books</em> – no membership required.</li>
+  <li><em>Borrow</em> and <em>Renew</em> each <code>&lt;&lt;include&gt;&gt;</code> <em>Compute return date</em>: that step always happens as part of them, so it is factored out once.</li>
+  <li><em>Refuse loan</em> <code>&lt;&lt;extend&gt;&gt;</code>s <em>Borrow</em> at the guard <code>[too many books]</code>: it fires only in that case, so it is an optional extension, never part of the normal path.</li>
+</ol></details></section>
 
 <!-- BACK TO BACK 2: activity -->
 <section class="slide"><h2>Back to back: one system, three views (2 of 4)</h2>
 <p class="lead">Pick one use case, <strong>Borrow copy of a book</strong>, and unpack <em>how it flows</em>. Each action is a verb the system or an actor performs; the swimlanes record who does each.</p>
 <img class="refimg" src="figD_borrow_return_activity.svg" alt="Activity diagram for borrowing and returning, with Member and Librarian swimlanes, a borrow/return decision, parallel Stamp book and Record borrowing actions, and a more-books loop">
 <div class="key"><span class="tag">From use case to flow</span><p>The use case's normal and alternative paths become the activity's <strong>actions, decisions and loops</strong>: &ldquo;locate copy&rdquo;, &ldquo;stamp book&rdquo;, &ldquo;record borrowing&rdquo;, the &ldquo;more?&rdquo; loop for several books. Hold onto these verbs – <code>locate</code>, <code>stamp</code>, <code>record</code>, <code>computeReturnDate</code> – they become <strong>operations</strong> on the classes next.</p></div>
-<div class="key steel"><span class="tag">How to read it</span><p>The first diamond is a <strong>decision</strong> with <em>named, domain</em> guards <code>[borrow]</code> and <code>[return]</code> , not just yes/no. The two parallel bars are a <strong>fork then join</strong>: stamping the book and recording the loan happen <em>together</em>, and the join waits for both. The <strong>plain (unlabelled) diamond</strong> lower down is a <strong>merge</strong>, not a decision , a merge carries no guard; it simply re-joins the borrow and return branches so the decision is properly <em>closed</em>. The last diamond loops on <code>[another book]</code> or exits on <code>[no]</code>. Rule of thumb: a diamond with guards is a decision and must be matched by a merge; a diamond with none is that merge.</p></div></section>
+<div class="key steel"><span class="tag">How to read it</span><p>The first diamond is a <strong>decision</strong> with <em>named, domain</em> guards <code>[borrow]</code> and <code>[return]</code> – not just yes/no. The two parallel bars are a <strong>fork then join</strong>: stamping the book and recording the loan happen <em>together</em>, and the join waits for both. The <strong>plain (unlabelled) diamond</strong> lower down is a <strong>merge</strong>, not a decision – a merge carries no guard; it simply re-joins the borrow and return branches so the decision is properly <em>closed</em>. The last diamond loops on <code>[another book]</code> or exits on <code>[no]</code>. Rule of thumb: a diamond with guards is a decision and must be matched by a merge; a diamond with none is that merge.</p></div>
+<details class="walk"><summary>Walk through the activity flow</summary>
+<ol>
+  <li>Flow starts at the filled dot in the <strong>Member</strong> lane and reaches the first <strong>decision</strong>: <em>borrow or return?</em></li>
+  <li><strong>[borrow]</strong> crosses into the <strong>Librarian</strong> lane to <em>Locate copy</em>; then a <strong>fork</strong> (the bar) runs two actions at once – <em>Stamp book</em> and <em>Record borrowing</em> – and a <strong>join</strong> (the second bar) waits for both to finish.</li>
+  <li><strong>[return]</strong> goes straight to <em>Record book return</em>.</li>
+  <li>The two branches meet at the plain <strong>merge</strong> diamond (no guard), which closes the decision, and flow reaches the second decision <em>more?</em></li>
+  <li><strong>[another book]</strong> loops back to the first decision; <strong>[no]</strong> reaches the final node (the bullseye). Every path ends, and every decision is matched by a merge.</li>
+</ol></details></section>
 
 <!-- BACK TO BACK 3: class -->
 <section class="slide"><h2>Back to back: one system, three views (3 of 4)</h2>
@@ -633,7 +656,7 @@ PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:1
   <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
   <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
   <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
-  <text x="520" y="376" class="uml-text-mono" font-size="13">0..6</text>
+  <text x="486" y="346" class="uml-text-mono" font-size="13">0..6</text>
   <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
   <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
   <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
@@ -643,7 +666,16 @@ PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:1
   <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
   <text x="324" y="552" class="uml-text-mono">+ computeReturnDate()</text>
 </svg>
-<div class="key steel"><span class="tag">From text to structure</span><p>The <strong>nouns</strong> become classes (Book, BookCopy, LibraryMember, StaffMember); the <strong>data</strong> become attributes (ISBN, title, barcode); the <strong>verbs</strong> become operations (borrow, return, computeReturnDate). &ldquo;Staff are members&rdquo; is generalisation; &ldquo;a book has copies&rdquo; is aggregation; &ldquo;a member borrows copies&rdquo; is the association whose dates live on the <code>Loan</code> association class; &ldquo;up to six&rdquo; is the multiplicity <code>0..6</code>.</p></div></section>
+<div class="key steel"><span class="tag">From text to structure</span><p>The <strong>nouns</strong> become classes (Book, BookCopy, LibraryMember, StaffMember); the <strong>data</strong> become attributes (ISBN, title, barcode); the <strong>verbs</strong> become operations (borrow, return, computeReturnDate). &ldquo;Staff are members&rdquo; is generalisation; &ldquo;a book has copies&rdquo; is aggregation; &ldquo;a member borrows copies&rdquo; is the association whose dates live on the <code>Loan</code> association class; &ldquo;up to six&rdquo; is the multiplicity <code>0..6</code>.</p></div>
+<details class="walk"><summary>Walk through the class diagram</summary>
+<ol>
+  <li><strong>LibraryMember</strong> holds <code>memberId</code> and <code>name</code>, and offers <code>register()</code>.</li>
+  <li><strong>StaffMember</strong>, at the hollow triangle, <em>is a</em> LibraryMember: it inherits everything above and adds <code>department</code> and <code>role</code>.</li>
+  <li><strong>Book</strong> holds <code>ISBN</code> and <code>title</code>. The diamond on the Book end means a Book is an aggregate of <strong>1..* BookCopy</strong> – one title, many physical copies.</li>
+  <li><strong>BookCopy</strong> holds <code>barcode</code> and <code>status</code>.</li>
+  <li>The line from LibraryMember to BookCopy is the <em>borrows / returns</em> <strong>association</strong>: a member borrows <code>0..6</code> copies; a copy is out to <code>0..1</code> member at a time.</li>
+  <li>The dashed box <strong>Loan</strong> is an <strong>association class</strong> on that line: <code>startDate</code> and <code>returnDate</code> describe the <em>borrowing</em>, so they belong to neither the member nor the copy alone.</li>
+</ol></details></section>
 
 <!-- BACK TO BACK 4: traceability -->
 <section class="slide"><h2>Back to back: one system, three views (4 of 4)</h2>
