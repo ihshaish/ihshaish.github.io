@@ -35,15 +35,15 @@
   table.rel td { padding:11px 14px; border-top:1px solid var(--rule); font-size:14.5px; color:var(--ink-soft); vertical-align:top; }
   table.desc td:first-child { font-family:var(--mono); font-size:12px; color:var(--steel); white-space:nowrap; width:150px; background:var(--paper); }
   code { font-family:var(--mono); font-size:13px; background:#ece3d4; padding:1px 6px; border-radius:4px; }
-  svg.ref { width:100%; height:auto; max-height:62vh; display:block; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }
-  svg.ref .t { font-family:var(--sans); font-size:13px; fill:var(--ink); }
-  svg.ref .lab { font-family:var(--sans); font-size:12px; fill:var(--ink-mute); }
+  svg.ref { width:100%; height:auto; max-height:70vh; display:block; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }
+  svg.ref .t { font-family:var(--sans); font-size:15px; fill:var(--ink); }
+  svg.ref .lab { font-family:var(--sans); font-size:13.5px; fill:var(--ink-mute); }
   svg.ref .uml-box { fill:#fff; stroke:var(--ink); stroke-width:1.4; }
   svg.ref .uml-line { fill:none; stroke:var(--ink); stroke-width:1.4; }
   svg.ref .uml-line-dashed { fill:none; stroke:var(--ink); stroke-width:1.3; stroke-dasharray:5 4; }
-  svg.ref .uml-text { font-family:var(--sans); font-size:13px; fill:var(--ink); }
-  svg.ref .uml-text-mono { font-family:var(--mono); font-size:12px; fill:var(--ink); }
-  svg.ref .uml-text-italic { font-family:var(--sans); font-style:italic; font-size:13px; fill:var(--ink-mute); }
+  svg.ref .uml-text { font-family:var(--sans); font-size:15px; fill:var(--ink); }
+  svg.ref .uml-text-mono { font-family:var(--mono); font-size:13.5px; fill:var(--ink); }
+  svg.ref .uml-text-italic { font-family:var(--sans); font-style:italic; font-size:14.5px; fill:var(--ink-mute); }
   img.refimg { width:100%; height:auto; max-height:64vh; display:block; margin:8px auto; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }
   .trace { border-collapse:collapse; width:100%; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:10px; overflow:hidden; font-size:13.5px; }
   .trace th { background:var(--paper-warm); text-align:left; padding:9px 12px; font-family:var(--mono); font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; }
@@ -211,7 +211,8 @@
   <text x="372" y="200" class="uml-text-mono" font-weight="700" fill="#b85c38">~</text><text x="398" y="200" class="uml-text" font-weight="600">package</text><text x="470" y="200" class="lab">classes in the same package – <tspan font-style="italic">logger</tspan></text>
   <text x="372" y="242" class="uml-text-mono" font-weight="700" fill="#b85c38">/</text><text x="398" y="242" class="uml-text" font-weight="600">derived</text><text x="470" y="242" class="lab">computed, not stored – <tspan font-style="italic">availableBalance = balance &minus; holds</tspan></text>
 </svg>
-<div class="key"><span class="tag">How to choose</span><p>Default to <strong>private data, public operations</strong> (encapsulation): the outside world calls methods and never reaches in to a field. Use <strong>protected</strong> (<code>#</code>) for what subclasses must reuse, <strong>package</strong> (<code>~</code>) for collaborators in the same module, and <strong>derived</strong> (<code>/</code>) for any value you can compute from others instead of storing, which removes a chance for the data to fall out of step.</p></div></section>
+<div class="key"><span class="tag">How to choose</span><p>Default to <strong>private data, public operations</strong> (encapsulation): the outside world calls methods and never reaches in to a field. Use <strong>protected</strong> (<code>#</code>) for what subclasses must reuse, <strong>package</strong> (<code>~</code>) for collaborators in the same module, and <strong>derived</strong> (<code>/</code>) for any value you can compute from others instead of storing, which removes a chance for the data to fall out of step.</p></div>
+<div class="key steel"><span class="tag">Real-life analogy</span><p>Think of a house. <strong>public</strong> is the <em>doorbell</em>, anyone may ring it. <strong>private</strong> is your <em>diary</em>, only you read it. <strong>protected</strong> is a <em>spare key the family shares</em> (the subclasses). <strong>package</strong> is a <em>key the other flats in your building hold</em> (classes in the same module). <strong>derived</strong> is your <em>age</em>, nobody stores it, you work it out from the birth date on demand.</p></div></section>
 
 <!-- 6c. VISIBILITY CLARIFIED -->
 <section class="slide"><h2>Visibility: the two things people get wrong</h2>
@@ -285,6 +286,24 @@ class StatementPrinter {                     // a different class
   <div class="box"><h3>Candidate classes (kept)</h3><p style="margin:0;font-size:14.5px"><code>Book</code>, <code>BookCopy</code>, <code>Journal</code>, <code>LibraryMember</code>, <code>StaffMember</code></p></div>
   <div class="box"><h3>Discarded / demoted</h3><p style="margin:0;font-size:14.5px"><strong>Library</strong> (the system itself), <strong>item</strong> (vague), <strong>three weeks / six / 12</strong> (attributes or rules, not classes).</p></div>
 </div></section>
+
+<!-- 10b. CLASS-SELECTION DISCUSSION -->
+<section class="slide"><h2>Which nouns become classes, and the judgement calls</h2>
+<p class="lead">Noun-verb analysis gives candidates, not answers. For each one you argue <em>keep</em>, <em>reject</em>, or <em>it depends</em>, and the reasoning matters more than the verdict. Reasonable modellers differ on the rows marked &ldquo;debatable&rdquo;.</p>
+<table class="rel">
+  <thead><tr><th>Candidate</th><th>Decision</th><th>Why, and the alternative you rejected</th></tr></thead>
+  <tbody>
+    <tr><td><code>book</code></td><td>class</td><td>The <em>work</em> itself (ISBN, title). Why not merge it with its copies? One title has many physical copies, and you lend a copy, not the title , merging the two loses that distinction.</td></tr>
+    <tr><td><code>copy</code></td><td>class</td><td>The <em>physical item</em> on the shelf (barcode, status). Keep only <code>Book</code> and you cannot say which of its three copies is on loan; <code>BookCopy</code> is the fix.</td></tr>
+    <tr><td><code>journal</code></td><td>class (debatable)</td><td>Kept separate because journals follow different loan rules (staff only). <strong>Alternative:</strong> let <code>Book</code> and <code>Journal</code> both specialise an abstract <code>LibraryItem</code> holding the shared loan behaviour , tidier if more item types arrive.</td></tr>
+    <tr><td><code>item</code></td><td>reject, but&hellip;</td><td>Too vague to be a class itself, yet it is the <em>hint</em> for that <code>LibraryItem</code> superclass. A rejected noun can still shape the model.</td></tr>
+    <tr><td><code>loan</code> / borrowing</td><td>association class</td><td>It looks like a verb, but it carries its own data (start and return dates) belonging to the <em>member-copy pairing</em>, not to either alone , so it becomes the <code>Loan</code> association class.</td></tr>
+    <tr><td><code>member</code>, <code>staff</code></td><td>class + generalisation</td><td>Staff <em>is-a</em> member, so generalisation. <strong>Alternative:</strong> if one person can be both at once, model a <code>Role</code> rather than a subclass , a genuine design fork.</td></tr>
+    <tr><td><code>library</code></td><td>reject</td><td>The <em>system boundary</em>, not a domain object , unless the requirements track several libraries, when it becomes a class after all.</td></tr>
+    <tr><td>three weeks, six, 12</td><td>reject</td><td>Loan period and borrowing limits: <em>attributes and constraints</em> (multiplicities), not classes.</td></tr>
+  </tbody>
+</table>
+<div class="key"><span class="tag">The teaching point</span><p>A good class list is <strong>defended, not asserted</strong>. Be ready to say why <code>BookCopy</code> earns its place and <code>library</code> does not, and to name the alternative you considered , the <code>LibraryItem</code> superclass, the <code>Role</code> class , and why you set it aside.</p></div></section>
 
 <!-- 11. FIRST-CUT MODEL -->
 <section class="slide"><h2>First-cut analysis class model</h2>
@@ -387,7 +406,8 @@ class StatementPrinter {                     // a different class
   <polyline points="680,200 680,150 450,150" class="uml-line"/>
   <text x="250" y="142" class="uml-text-italic" font-size="12">is a</text>
 </svg>
-<div class="key"><span class="tag">Key</span><p>The triangle always points at the <strong>general</strong> (parent) class. Use generalisation only for a genuine <code>is-a</code>: a StaffMember <em>is a</em> LibraryMember. If you mean "has a" or "is built from", that is an association or aggregation, not inheritance.</p></div></section>
+<div class="key"><span class="tag">Key</span><p>The triangle always points at the <strong>general</strong> (parent) class. Use generalisation only for a genuine <code>is-a</code>: a StaffMember <em>is a</em> LibraryMember.</p></div>
+<div class="key steel"><span class="tag">Example: right vs wrong</span><p><strong>Wrong:</strong> &ldquo;<code>Car</code> is-a <code>Engine</code>&rdquo;. A car is not a kind of engine; it <em>has</em> one, so that is an <strong>association</strong> (<code>Car</code> has <code>Engine</code>), not inheritance. <strong>Right:</strong> &ldquo;<code>ElectricCar</code> is-a <code>Car</code>&rdquo;. The test is <strong>substitutability</strong>: anywhere the code expects a <code>LibraryMember</code> you can hand it a <code>StaffMember</code> and nothing breaks. If the substitution would be absurd (an <code>Engine</code> where a <code>Car</code> is expected), it is not generalisation.</p></div></section>
 
 <!-- 16. AGGREGATION VS COMPOSITION -->
 <section class="slide"><h2>Aggregation and composition (part / whole)</h2>
@@ -546,7 +566,25 @@ class StatementPrinter {                     // a different class
   <li><strong>High cohesion:</strong> it holds only the attributes and operations that genuinely belong together; unrelated ones lower cohesion.</li>
   <li><strong>Low coupling:</strong> it has only the associations it truly needs; accidental links raise coupling and spread change.</li>
 </ul>
-<div class="key"><span class="tag">Two failure modes</span><p>An <strong>omnipotent</strong> class (the "manager" that does everything) has low cohesion. A class wired to everything else has high coupling. Both make the model brittle.</p></div></section>
+<h3 style="margin-top:8px">Cohesion, shown not told</h3>
+<div class="two">
+  <div class="box" style="border-color:#d99; background:#fdf6f4;"><h3 style="color:#a23">Low cohesion (bad)</h3><pre style="margin:0;font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--ink-soft);white-space:pre-wrap">Patient
+  + name, dateOfBirth
+  + register()
+  + sendReminderEmail()    // messaging
+  + generatePdfReport()    // reporting
+  + connectToDatabase()    // persistence
+  + calculateInsurance()   // billing</pre><p style="margin:8px 0 0;font-size:13.5px">Four unrelated jobs in one class , <strong>four reasons to change</strong>. Touch the email server and you risk breaking billing.</p></div>
+  <div class="box" style="border-color:#9b9; background:#f4faf5;"><h3 style="color:#276">High cohesion (good)</h3><pre style="margin:0;font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--ink-soft);white-space:pre-wrap">Patient
+  + name, dateOfBirth
+  + register()
+  + updateContact()
+
+// the rest moved out, to:
+NotificationService, ReportGenerator,
+PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:13.5px">One job: <strong>be a patient</strong>. Each other concern lives in its own class. One reason to change.</p></div>
+</div>
+<div class="key"><span class="tag">Two failure modes</span><p>The bad <code>Patient</code> above is an <strong>omnipotent</strong> class (low cohesion). The opposite failure is <strong>high coupling</strong>: a class wired to almost every other one, so any change ripples outward. Aim for the middle , each class doing one thing, linked only to what it truly needs.</p></div></section>
 
 <!-- 21. OBJECT DIAGRAMS -->
 <section class="slide"><h2>Object diagrams: a snapshot of instances</h2>
@@ -570,7 +608,8 @@ class StatementPrinter {                     // a different class
 <section class="slide"><h2>Back to back: one system, three views (2 of 4)</h2>
 <p class="lead">Pick one use case, <strong>Borrow copy of a book</strong>, and unpack <em>how it flows</em>. Each action is a verb the system or an actor performs; the swimlanes record who does each.</p>
 <img class="refimg" src="figD_borrow_return_activity.svg" alt="Activity diagram for borrowing and returning, with Member and Librarian swimlanes, a borrow/return decision, parallel Stamp book and Record borrowing actions, and a more-books loop">
-<div class="key"><span class="tag">From use case to flow</span><p>The use case's normal and alternative paths become the activity's <strong>actions, decisions and loops</strong>: &ldquo;locate copy&rdquo;, &ldquo;stamp book&rdquo;, &ldquo;record borrowing&rdquo;, the &ldquo;more?&rdquo; loop for several books. Hold onto these verbs – <code>locate</code>, <code>stamp</code>, <code>record</code>, <code>computeReturnDate</code> – they become <strong>operations</strong> on the classes next.</p></div></section>
+<div class="key"><span class="tag">From use case to flow</span><p>The use case's normal and alternative paths become the activity's <strong>actions, decisions and loops</strong>: &ldquo;locate copy&rdquo;, &ldquo;stamp book&rdquo;, &ldquo;record borrowing&rdquo;, the &ldquo;more?&rdquo; loop for several books. Hold onto these verbs – <code>locate</code>, <code>stamp</code>, <code>record</code>, <code>computeReturnDate</code> – they become <strong>operations</strong> on the classes next.</p></div>
+<div class="key steel"><span class="tag">How to read it</span><p>The first diamond is a <strong>decision</strong> with <em>named, domain</em> guards <code>[borrow]</code> and <code>[return]</code> , not just yes/no. The two parallel bars are a <strong>fork then join</strong>: stamping the book and recording the loan happen <em>together</em>, and the join waits for both. The <strong>plain (unlabelled) diamond</strong> lower down is a <strong>merge</strong>, not a decision , a merge carries no guard; it simply re-joins the borrow and return branches so the decision is properly <em>closed</em>. The last diamond loops on <code>[another book]</code> or exits on <code>[no]</code>. Rule of thumb: a diamond with guards is a decision and must be matched by a merge; a diamond with none is that merge.</p></div></section>
 
 <!-- BACK TO BACK 3: class -->
 <section class="slide"><h2>Back to back: one system, three views (3 of 4)</h2>
