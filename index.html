@@ -3844,120 +3844,163 @@ Russell Sharp, my MSc Data Science Student, presented his thesis work titled &ld
       </div>
 
       <style>
-        .poster-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 16px; padding: 16px 0 20px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
-        .poster-track::-webkit-scrollbar { height: 6px; }
-        .poster-track::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-        .poster-card { scroll-snap-align: start; flex: 0 0 300px; border-radius: 10px; overflow: hidden; background: #111; position: relative; box-shadow: 0 4px 16px rgba(0,0,0,0.15); transition: transform 0.2s; }
-        @media (max-width: 576px) {
-          .poster-card { flex: 0 0 260px; }
-          .poster-card img { height: 280px; }
-          .poster-caption { font-size: 0.78rem; padding: 30px 12px 12px; }
-        }
-        .poster-card:hover { transform: translateY(-4px); }
-        .poster-card img { width: 100%; height: 340px; object-fit: cover; display: block; }
-        .poster-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 40px 16px 14px; color: #fff; font-size: 0.82rem; line-height: 1.4; font-style: italic; }
-        .swipe-hint { text-align: center; color: #aaa; font-size: 0.78rem; margin-top: 4px; }
+        .rg-grid { columns: 4 250px; column-gap: 14px; margin-top: 18px; }
+        .rg-item { break-inside: avoid; margin: 0 0 14px; position: relative; border-radius: 12px; overflow: hidden; background:#111; box-shadow:0 6px 20px rgba(0,0,0,.18); cursor: zoom-in; }
+        .rg-item img, .rg-item video { width:100%; display:block; }
+        .rg-item img { transition: transform .5s ease; }
+        .rg-item:hover img { transform: scale(1.06); }
+        .rg-cap { position:absolute; left:0; right:0; bottom:0; padding:34px 14px 12px; color:#fff; font-size:.8rem; line-height:1.42; font-style:italic; background:linear-gradient(transparent, rgba(0,0,0,.85)); opacity:0; transition:opacity .25s; pointer-events:none; }
+        .rg-item:hover .rg-cap { opacity:1; }
+        .rg-video { cursor:auto; }
+        .rg-cap-static { opacity:1; position:static; background:#141414; padding:11px 14px; pointer-events:auto; }
+        @media (hover:none){ .rg-cap{ opacity:1; } }
+        .rg-hint { text-align:center; color:#aaa; font-size:.78rem; margin-top:6px; }
+        .rg-lb { display:none; position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.93); align-items:center; justify-content:center; }
+        .rg-lb.open { display:flex; }
+        .rg-lb img { max-width:92vw; max-height:82vh; border-radius:6px; box-shadow:0 12px 48px rgba(0,0,0,.6); }
+        .rg-lb-cap { position:absolute; bottom:22px; left:0; right:0; text-align:center; color:#eee; font-style:italic; font-size:.9rem; padding:0 24px; }
+        .rg-close,.rg-prev,.rg-next { position:absolute; color:#fff; cursor:pointer; user-select:none; opacity:.75; line-height:1; }
+        .rg-close { top:16px; right:26px; font-size:2.4rem; }
+        .rg-prev,.rg-next { top:50%; transform:translateY(-50%); font-size:2.4rem; padding:14px; }
+        .rg-prev { left:14px; } .rg-next { right:14px; }
+        .rg-close:hover,.rg-prev:hover,.rg-next:hover { opacity:1; }
       </style>
 
-      <div class="poster-track">
-
-        <div class="poster-card">
+      <div class="rg-grid" id="rg-grid">
+        <figure class="rg-item rg-video">
+          <video controls preload="metadata" playsinline>
+            <source src="/pics/Atef%20teaching%20me%20English%2C%20sharks%20and%20fishes%20become%20%27shart%20and%20fis%27.MOV" type="video/quicktime">
+            <source src="/pics/Atef%20teaching%20me%20English%2C%20sharks%20and%20fishes%20become%20%27shart%20and%20fis%27.MOV" type="video/mp4">
+            <span style="color:#bbb;display:block;padding:14px;font-size:.8rem;">Can't play inline in this browser - <a href="/pics/Atef%20teaching%20me%20English%2C%20sharks%20and%20fishes%20become%20%27shart%20and%20fis%27.MOV" style="color:#9cf;">open the clip</a> (it's a HEVC .MOV, happiest in Safari).</span>
+          </video>
+          <figcaption class="rg-cap rg-cap-static">Atef teaching me English. "Sharks and fishes" compiled as "shart and fis". Shipped it. <span style="opacity:.7">(plays in Safari)</span></figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/web-tesla.jpg" data-cap="Me &amp; Nikola Tesla, Sarajevo. He gave the world AC; I gave it a selfie.">
+          <img src="/pics/web-tesla.jpg" alt="With a Tesla statue in Sarajevo" loading="lazy">
+          <figcaption class="rg-cap">Me &amp; Nikola Tesla, Sarajevo. He gave the world AC; I gave it a selfie.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/web-found-my-clone.jpg" data-cap="Found my clone. git threw a merge conflict: two of you.">
+          <img src="/pics/web-found-my-clone.jpg" alt="A lookalike" loading="lazy">
+          <figcaption class="rg-cap">Found my clone. git threw a merge conflict: two of you.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/web-home-2026.jpg" data-cap="Looks like we are home, 2026. Status: deployed to production.">
+          <img src="/pics/web-home-2026.jpg" alt="Home, 2026" loading="lazy">
+          <figcaption class="rg-cap">Looks like we are home, 2026. Status: deployed to production.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/atef-leen-bahrain.jpg" data-cap="Caught Atef &amp; Leen in Bahrain, 2025. Two processes I am proud to have spawned.">
+          <img src="/pics/atef-leen-bahrain.jpg" alt="Atef and Leen in Bahrain" loading="lazy">
+          <figcaption class="rg-cap">Caught Atef &amp; Leen in Bahrain, 2025. Two processes I am proud to have spawned.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/leen-el-hajaleh.jpg" data-cap="Leen teaching her uncle the 'El Hajaleh'. Knowledge transfer, junior to senior.">
+          <img src="/pics/leen-el-hajaleh.jpg" alt="Leen teaching a dance" loading="lazy">
+          <figcaption class="rg-cap">Leen teaching her uncle the 'El Hajaleh'. Knowledge transfer, junior to senior.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/Somewhere%20exploring%20mountains%20in%20England.jpg" data-cap="Somewhere in England. The GPS said 'recalculating'. I said 'sure'.">
           <img src="/pics/Somewhere%20exploring%20mountains%20in%20England.jpg" alt="Mountains in England" loading="lazy">
-          <div class="poster-caption">Somewhere in England. Pretending to know where.</div>
-        </div>
-
-        <div class="poster-card">
-          <img src="/pics/How%20it%20felt%20landing%20after%2012%20hour%20flight%20to%20Buenos%20Aires.jpg" alt="Buenos Aires" loading="lazy">
-          <div class="poster-caption">12 hours to Buenos Aires. This is the face of victory.</div>
-        </div>
-
-        <div class="poster-card">
-          <img src="/pics/The%20Holland%20Goodbye%20from%20Colleagues.jpg" alt="Dutch farewell" loading="lazy">
-          <div class="poster-caption">The Dutch goodbye. They called me "a fine node in the VORtech network." Still unsure if that was a compliment.</div>
-        </div>
-
-        <!-- Hidden (pictures featuring Hisham, kept on disk):
-        <div class="poster-card">
-          <img src="/pics/Postdoct%20time%20-%20cloudy%20Delft%2C%20Holland_2014.jpg" alt="Delft, Holland" loading="lazy">
-          <div class="poster-caption">Postdoc era. Cloudy Delft, cloudier code. Holland, 2014.</div>
-        </div>
-        -->
-
-        <!-- Hidden (pictures featuring Hisham, kept on disk):
-        <div class="poster-card">
-          <img src="/pics/The%20Louvre%20--%20sometime%20when%20I%20was%20a%20young%20tourist.jpg" alt="The Louvre" loading="lazy">
-          <div class="poster-caption">The Louvre. When I was a young tourist. The Mona Lisa was unimpressed.</div>
-        </div>
-        -->
-
-        <!-- Hidden (pictures featuring Hisham, kept on disk):
-        <div class="poster-card">
-          <img src="/pics/Caceres%2C%20Spain%20-%202012_with%20Matteo%20Gasparetti.jpg" alt="Caceres, Spain" loading="lazy">
-          <div class="poster-caption">Caceres, 2012. With Matteo. Still arguing about whose paella was better.</div>
-        </div>
-        -->
-
-        <div class="poster-card">
-          <img src="/pics/On%20the%20road%20in%20Cuba.jpg" alt="Cuba" loading="lazy">
-          <div class="poster-caption">On the road in Cuba. "Esta revolucion es invencible." The billboard was louder than the engine.</div>
-        </div>
-
-        <!-- Hidden (pictures featuring Hisham, kept on disk):
-        <div class="poster-card">
-          <img src="/pics/I%20offered%20uncle%20Joe%20a%20lolipop%20in%20Germany.jpg" alt="Uncle Joe in Germany" loading="lazy">
-          <div class="poster-caption">Offered uncle Joe a lollipop in Germany. He declined. Rude.</div>
-        </div>
-        -->
-
-        <!-- Hidden (pictures featuring Hisham, kept on disk):
-        <div class="poster-card">
-          <img src="/pics/30441265_2148964178668883_4291658431720325120_n.jpg" alt="Protest in Bristol" loading="lazy">
-          <div class="poster-caption">The half-time protester, full-time when needed. Bristol.</div>
-        </div>
-        -->
-
-        <!-- Hidden (pictures featuring Hisham, kept on disk):
-        <div class="poster-card">
-          <img src="/pics/If%20not%20around%20at%20University%2C%20I%20am%20by%20the%20mountains_Cheddar%20Gorge%2C%20Bristol.jpg" alt="Cheddar Gorge" loading="lazy">
-          <div class="poster-caption">If not at university, I am somewhere up a gorge. Cheddar, Bristol.</div>
-        </div>
-        -->
-
-        <div class="poster-card">
-          <img src="/pics/China%2C%202025.jpg" alt="China 2025" loading="lazy">
-          <div class="poster-caption">China, 2025. Guest lecturing, or just eating. Mostly eating.</div>
-        </div>
-
-        <div class="poster-card">
-          <img src="/pics/Some%20Random%20beautiful%20scene%20any%20palestinian%20can%20feel%20proud%20of.jpg" alt="Palestine" loading="lazy">
-          <div class="poster-caption">Some scenes need no caption. Palestine.</div>
-        </div>
-
-        <!-- Hidden (pictures featuring Hisham, kept on disk):
-        <div class="poster-card">
-          <img src="/pics/I%20got%20my%20Miko%20Peled%27s%20book%20signed%20by%20Miko.jpg" alt="Miko Peled book signing" loading="lazy">
-          <div class="poster-caption">Got Miko Peled to sign my copy. He got me to read it.</div>
-        </div>
-        -->
-
-        <div class="poster-card">
-          <img src="/pics/Celebrating%20alumni%20in%20Bristol.jpg" alt="Alumni celebration in Bristol" loading="lazy" style="object-position: left center;">
-          <div class="poster-caption">Celebrating alumni in Bristol. The QR code on the projector was not the surprise.</div>
-        </div>
-
-        <div class="poster-card">
-          <img src="/pics/A%20corner%20in%20my%20place%20in%20Bristol.jpg" alt="Bristol home" loading="lazy">
-          <div class="poster-caption">A random corner. Bristol.</div>
-        </div>
-
-        <div class="poster-card">
-          <img src="/pics/My%20hotel%20view%20in%20Hong%20Kong%20-%202028.JPG" alt="Hong Kong" loading="lazy">
-          <div class="poster-caption">My hotel view in Hong Kong. The year is disputed.</div>
-        </div>
-
+          <figcaption class="rg-cap">Somewhere in England. The GPS said 'recalculating'. I said 'sure'.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/bristol-cows-sheep.jpg" data-cap="Hunting cows &amp; sheep above Bristol. Found both. Pipeline complete.">
+          <img src="/pics/bristol-cows-sheep.jpg" alt="Hills above Bristol" loading="lazy">
+          <figcaption class="rg-cap">Hunting cows &amp; sheep above Bristol. Found both. Pipeline complete.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/On%20the%20road%20in%20Cuba.jpg" data-cap="On the road in Cuba. 'Esta revolucion es invencible' - louder than the engine, lower latency too.">
+          <img src="/pics/On%20the%20road%20in%20Cuba.jpg" alt="Roadside in Cuba" loading="lazy">
+          <figcaption class="rg-cap">On the road in Cuba. 'Esta revolucion es invencible' - louder than the engine, lower latency too.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/web-havana.jpg" data-cap="Waiting on a taxi in La Habana. Fully async. The callback never fired.">
+          <img src="/pics/web-havana.jpg" alt="Waiting for a taxi in Havana" loading="lazy">
+          <figcaption class="rg-cap">Waiting on a taxi in La Habana. Fully async. The callback never fired.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/How%20it%20felt%20landing%20after%2012%20hour%20flight%20to%20Buenos%20Aires.jpg" data-cap="12 hours to Buenos Aires. This is the face that just survived a 12-hour build.">
+          <img src="/pics/How%20it%20felt%20landing%20after%2012%20hour%20flight%20to%20Buenos%20Aires.jpg" alt="After a long flight to Buenos Aires" loading="lazy">
+          <figcaption class="rg-cap">12 hours to Buenos Aires. This is the face that just survived a 12-hour build.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/web-china-2025.jpg" data-cap="China, 2025. Officially guest-lecturing. Mostly committing... to lunch.">
+          <img src="/pics/web-china-2025.jpg" alt="China, 2025" loading="lazy">
+          <figcaption class="rg-cap">China, 2025. Officially guest-lecturing. Mostly committing... to lunch.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/web-hongkong.jpg" data-cap="Hotel view, Hong Kong. The EXIF says 2028 - clearly a clock-sync bug.">
+          <img src="/pics/web-hongkong.jpg" alt="Hong Kong hotel view" loading="lazy">
+          <figcaption class="rg-cap">Hotel view, Hong Kong. The EXIF says 2028 - clearly a clock-sync bug.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/munich.jpg" data-cap="Escaped to Munich. Or Munchen, if we are being strict about encoding.">
+          <img src="/pics/munich.jpg" alt="Munich" loading="lazy">
+          <figcaption class="rg-cap">Escaped to Munich. Or Munchen, if we are being strict about encoding.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/hamburg.jpg" data-cap="Hamburg, where even the cafes ship as postcards.">
+          <img src="/pics/hamburg.jpg" alt="Hamburg" loading="lazy">
+          <figcaption class="rg-cap">Hamburg, where even the cafes ship as postcards.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/montenegro.jpg" data-cap="Montenegro. Or, as every sign insisted, 'under construction'.">
+          <img src="/pics/montenegro.jpg" alt="Montenegro" loading="lazy">
+          <figcaption class="rg-cap">Montenegro. Or, as every sign insisted, 'under construction'.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/belgrade-robot.jpg" data-cap="A communist-era robot, Belgrade museum. The original edge device.">
+          <img src="/pics/belgrade-robot.jpg" alt="Robot in a Belgrade museum" loading="lazy">
+          <figcaption class="rg-cap">A communist-era robot, Belgrade museum. The original edge device.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/belgrade-nato.jpg" data-cap="One of the NATO bombardment sites, Belgrade. Left as-is, on purpose.">
+          <img src="/pics/belgrade-nato.jpg" alt="NATO bombardment site, Belgrade" loading="lazy">
+          <figcaption class="rg-cap">One of the NATO bombardment sites, Belgrade. Left as-is, on purpose.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/sarajevo-museum.jpg" data-cap="The genocide museum, Sarajevo. Some history does not let you skip.">
+          <img src="/pics/sarajevo-museum.jpg" alt="Museum in Sarajevo" loading="lazy">
+          <figcaption class="rg-cap">The genocide museum, Sarajevo. Some history does not let you skip.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/This%20is%20how%20you%20get%20your%20coffee%20in%20Sarajevo%202022%20-%20escaping%20Covid.jpg" data-cap="How Sarajevo serves coffee, 2022. Single-threaded, no rush, zero packet loss.">
+          <img src="/pics/This%20is%20how%20you%20get%20your%20coffee%20in%20Sarajevo%202022%20-%20escaping%20Covid.jpg" alt="Coffee in Sarajevo" loading="lazy">
+          <figcaption class="rg-cap">How Sarajevo serves coffee, 2022. Single-threaded, no rush, zero packet loss.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/balkan-backpacking.jpg" data-cap="Before the Balkans, fully backpacked. All dependencies installed.">
+          <img src="/pics/balkan-backpacking.jpg" alt="Before backpacking the Balkans" loading="lazy">
+          <figcaption class="rg-cap">Before the Balkans, fully backpacked. All dependencies installed.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/web-tuscany-wedding.jpg" data-cap="Crashed a German wedding in Tuscany. Camera-shy, so: read-only mode, back turned.">
+          <img src="/pics/web-tuscany-wedding.jpg" alt="A wedding in Tuscany" loading="lazy">
+          <figcaption class="rg-cap">Crashed a German wedding in Tuscany. Camera-shy, so: read-only mode, back turned.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/The%20Holland%20Goodbye%20from%20Colleagues.jpg" data-cap="The Dutch farewell. Logged as 'a fine node in the VORtech network'. Still parsing the compliment.">
+          <img src="/pics/The%20Holland%20Goodbye%20from%20Colleagues.jpg" alt="Farewell from Dutch colleagues" loading="lazy">
+          <figcaption class="rg-cap">The Dutch farewell. Logged as 'a fine node in the VORtech network'. Still parsing the compliment.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/Celebrating%20alumni%20in%20Bristol.jpg" data-cap="Alumni night, Bristol. The QR code on the projector was not the surprise.">
+          <img src="/pics/Celebrating%20alumni%20in%20Bristol.jpg" alt="Alumni celebration in Bristol" loading="lazy">
+          <figcaption class="rg-cap">Alumni night, Bristol. The QR code on the projector was not the surprise.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/A%20corner%20in%20my%20place%20in%20Bristol.jpg" data-cap="A random corner. Bristol. That is a cap on the books, not a bug.">
+          <img src="/pics/A%20corner%20in%20my%20place%20in%20Bristol.jpg" alt="A corner of home in Bristol" loading="lazy">
+          <figcaption class="rg-cap">A random corner. Bristol. That is a cap on the books, not a bug.</figcaption>
+        </figure>
+        <figure class="rg-item" data-full="/pics/Some%20Random%20beautiful%20scene%20any%20palestinian%20can%20feel%20proud%20of.jpg" data-cap="Some scenes compile without a single comment. Palestine.">
+          <img src="/pics/Some%20Random%20beautiful%20scene%20any%20palestinian%20can%20feel%20proud%20of.jpg" alt="A scene in Palestine" loading="lazy">
+          <figcaption class="rg-cap">Some scenes compile without a single comment. Palestine.</figcaption>
+        </figure>
       </div>
+      <p class="rg-hint"><i class="fas fa-search-plus" style="margin-right:5px;"></i>Tap or click any photo to enlarge</p>
 
-      <p class="swipe-hint"><i class="fas fa-arrows-alt-h" style="margin-right: 4px;"></i>Swipe to explore</p>
+      <div class="rg-lb" id="rg-lb" aria-hidden="true">
+        <span class="rg-close" id="rg-close">&times;</span>
+        <span class="rg-prev" id="rg-prev">&#10094;</span>
+        <img id="rg-lb-img" src="" alt="">
+        <div class="rg-lb-cap" id="rg-lb-cap"></div>
+        <span class="rg-next" id="rg-next">&#10095;</span>
+      </div>
+      <script>
+      (function(){
+        var grid=document.getElementById('rg-grid'); if(!grid) return;
+        var items=[].slice.call(grid.querySelectorAll('[data-full]'));
+        var lb=document.getElementById('rg-lb'), im=document.getElementById('rg-lb-img'), cp=document.getElementById('rg-lb-cap'), i=0;
+        function show(n){ i=(n+items.length)%items.length; im.src=items[i].getAttribute('data-full'); cp.textContent=items[i].getAttribute('data-cap')||''; }
+        function open(n){ show(n); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+        function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); im.src=''; }
+        items.forEach(function(el,n){ el.addEventListener('click', function(){ open(n); }); });
+        document.getElementById('rg-close').addEventListener('click', close);
+        document.getElementById('rg-prev').addEventListener('click', function(e){ e.stopPropagation(); show(i-1); });
+        document.getElementById('rg-next').addEventListener('click', function(e){ e.stopPropagation(); show(i+1); });
+        lb.addEventListener('click', function(e){ if(e.target===lb) close(); });
+        document.addEventListener('keydown', function(e){ if(!lb.classList.contains('open')) return; if(e.key==='Escape') close(); else if(e.key==='ArrowLeft') show(i-1); else if(e.key==='ArrowRight') show(i+1); });
+      })();
+      </script>
 
     </div>
 
