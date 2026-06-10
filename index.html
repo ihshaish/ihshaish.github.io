@@ -3844,17 +3844,23 @@ Russell Sharp, my MSc Data Science Student, presented his thesis work titled &ld
       </div>
 
       <style>
-        .rg-grid { columns: 4 250px; column-gap: 14px; margin-top: 18px; }
-        .rg-item { break-inside: avoid; margin: 0 0 14px; position: relative; border-radius: 12px; overflow: hidden; background:#111; box-shadow:0 6px 20px rgba(0,0,0,.18); cursor: zoom-in; }
-        .rg-item img, .rg-item video { width:100%; display:block; }
+        .rg-wrap { position: relative; margin-top: 18px; }
+        .rg-track { display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; padding:4px 2px 16px; scrollbar-width:none; }
+        .rg-track::-webkit-scrollbar { display:none; }
+        .rg-item { scroll-snap-align:start; flex:0 0 300px; position:relative; border-radius:12px; overflow:hidden; background:#111; box-shadow:0 6px 20px rgba(0,0,0,.18); cursor:zoom-in; }
+        .rg-item img, .rg-item video { width:100%; height:340px; object-fit:cover; display:block; }
         .rg-item img { transition: transform .5s ease; }
         .rg-item:hover img { transform: scale(1.06); }
         .rg-cap { position:absolute; left:0; right:0; bottom:0; padding:34px 14px 12px; color:#fff; font-size:.8rem; line-height:1.42; font-style:italic; background:linear-gradient(transparent, rgba(0,0,0,.85)); opacity:0; transition:opacity .25s; pointer-events:none; }
         .rg-item:hover .rg-cap { opacity:1; }
-        .rg-video { cursor:auto; }
+        .rg-video { cursor:auto; } .rg-video video { object-fit:contain; background:#000; }
         .rg-cap-static { opacity:1; position:static; background:#141414; padding:11px 14px; pointer-events:auto; }
         @media (hover:none){ .rg-cap{ opacity:1; } }
-        .rg-hint { text-align:center; color:#aaa; font-size:.78rem; margin-top:6px; }
+        .rg-nav { position:absolute; top:calc(50% - 16px); transform:translateY(-50%); width:44px; height:44px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; border:none; cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; z-index:6; opacity:.9; transition:background .2s; }
+        .rg-nav:hover { opacity:1; background:rgba(0,0,0,.78); }
+        .rg-prev-btn { left:-8px; } .rg-next-btn { right:-8px; }
+        @media (max-width:576px){ .rg-item{ flex:0 0 250px; } .rg-item img,.rg-item video{ height:280px; } .rg-nav{ width:38px;height:38px; } }
+        .rg-hint { text-align:center; color:#aaa; font-size:.78rem; margin-top:2px; }
         .rg-lb { display:none; position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.93); align-items:center; justify-content:center; }
         .rg-lb.open { display:flex; }
         .rg-lb img { max-width:92vw; max-height:82vh; border-radius:6px; box-shadow:0 12px 48px rgba(0,0,0,.6); }
@@ -3866,7 +3872,9 @@ Russell Sharp, my MSc Data Science Student, presented his thesis work titled &ld
         .rg-close:hover,.rg-prev:hover,.rg-next:hover { opacity:1; }
       </style>
 
-      <div class="rg-grid" id="rg-grid">
+      <div class="rg-wrap">
+        <button class="rg-nav rg-prev-btn" id="rg-pv" aria-label="Previous">&#10094;</button>
+        <div class="rg-track" id="rg-grid">
         <figure class="rg-item rg-video">
           <video controls preload="metadata" playsinline>
             <source src="/pics/Atef%20teaching%20me%20English%2C%20sharks%20and%20fishes%20become%20%27shart%20and%20fis%27.MOV" type="video/quicktime">
@@ -3975,8 +3983,11 @@ Russell Sharp, my MSc Data Science Student, presented his thesis work titled &ld
           <img src="/pics/Some%20Random%20beautiful%20scene%20any%20palestinian%20can%20feel%20proud%20of.jpg" alt="A scene in Palestine" loading="lazy">
           <figcaption class="rg-cap">Some scenes need no caption. Palestine.</figcaption>
         </figure>
+      
+        </div>
+        <button class="rg-nav rg-next-btn" id="rg-nx" aria-label="Next">&#10095;</button>
       </div>
-      <p class="rg-hint"><i class="fas fa-search-plus" style="margin-right:5px;"></i>Tap or click any photo to enlarge</p>
+      <p class="rg-hint"><i class="fas fa-arrows-alt-h" style="margin-right:5px;"></i>Slide for more &middot; click any photo to enlarge</p>
 
       <div class="rg-lb" id="rg-lb" aria-hidden="true">
         <span class="rg-close" id="rg-close">&times;</span>
@@ -3987,8 +3998,8 @@ Russell Sharp, my MSc Data Science Student, presented his thesis work titled &ld
       </div>
       <script>
       (function(){
-        var grid=document.getElementById('rg-grid'); if(!grid) return;
-        var items=[].slice.call(grid.querySelectorAll('[data-full]'));
+        var track=document.getElementById('rg-grid'); if(!track) return;
+        var items=[].slice.call(track.querySelectorAll('[data-full]'));
         var lb=document.getElementById('rg-lb'), im=document.getElementById('rg-lb-img'), cp=document.getElementById('rg-lb-cap'), i=0;
         function show(n){ i=(n+items.length)%items.length; im.src=items[i].getAttribute('data-full'); cp.textContent=items[i].getAttribute('data-cap')||''; }
         function open(n){ show(n); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
@@ -3999,6 +4010,9 @@ Russell Sharp, my MSc Data Science Student, presented his thesis work titled &ld
         document.getElementById('rg-next').addEventListener('click', function(e){ e.stopPropagation(); show(i+1); });
         lb.addEventListener('click', function(e){ if(e.target===lb) close(); });
         document.addEventListener('keydown', function(e){ if(!lb.classList.contains('open')) return; if(e.key==='Escape') close(); else if(e.key==='ArrowLeft') show(i-1); else if(e.key==='ArrowRight') show(i+1); });
+        function page(dir){ track.scrollBy({ left: dir*Math.max(track.clientWidth*0.9, 280), behavior:'smooth' }); }
+        document.getElementById('rg-nx').addEventListener('click', function(){ page(1); });
+        document.getElementById('rg-pv').addEventListener('click', function(){ page(-1); });
       })();
       </script>
 
