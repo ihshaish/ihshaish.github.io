@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMP433 Ch.4 - UML: Sequence Diagrams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0f1419; --ink-soft:#2c3540; --ink-mute:#5a6473; --paper:#faf7f2; --paper-warm:#f3ede2; --accent:#b85c38; --steel:#2c5f7c; --rule:#d8cfc0;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter Tight',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; }
+  body { font-family:var(--sans); color:var(--ink); background:#f3efe9; }
+  .stage { height:100vh; display:flex; flex-direction:column; }
+  .slidewrap { flex:1; overflow:auto; padding:44px 56px 24px; }
+  .slide { display:none; max-width:1080px; margin:0 auto; }
+  .slide.active { display:block; animation:fade .3s ease; }
+  @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .kicker { font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:18px; }
+  h1.title { font-family:var(--serif); font-weight:500; font-size:clamp(34px,5vw,58px); letter-spacing:-.025em; line-height:1.05; margin:0 0 18px; }
+  .subtitle { font-family:var(--serif); font-size:21px; color:var(--ink-soft); max-width:820px; }
+  .hint { color:var(--ink-mute); font-size:14px; margin-top:28px; }
+  .center { min-height:64vh; display:flex; flex-direction:column; justify-content:center; }
+  h2 { font-family:var(--serif); font-weight:600; font-size:clamp(25px,3.2vw,36px); letter-spacing:-.02em; margin:0 0 14px; }
+  h3 { font-family:var(--serif); font-size:17px; margin:0 0 8px; }
+  .lead { font-size:17px; color:var(--ink-soft); max-width:920px; line-height:1.55; }
+  .foot { font-size:14px; color:var(--ink-mute); margin-top:16px; max-width:920px; }
+  ul,ol { color:var(--ink-soft); line-height:1.5; } .pts li { margin:7px 0; font-size:15.5px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:14px; }
+  .three { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:14px; }
+  @media (max-width:760px) { .two,.three { grid-template-columns:1fr; } }
+  .box { background:#fff; border:1px solid var(--rule); border-radius:12px; padding:16px 18px; }
+  .box ul,.box ol { margin:6px 0 0; padding-left:18px; font-size:14.5px; } .box li { margin:4px 0; }
+  .box h3 { margin-bottom:6px; }
+  table.rel { border-collapse:collapse; width:100%; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:10px; overflow:hidden; }
+  table.rel th { background:var(--paper-warm); text-align:left; padding:10px 14px; font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+  table.rel td { padding:11px 14px; border-top:1px solid var(--rule); font-size:14.5px; color:var(--ink-soft); vertical-align:top; }
+  table.desc td:first-child { font-family:var(--mono); font-size:12px; color:var(--steel); white-space:nowrap; width:150px; background:var(--paper); }
+  code { font-family:var(--mono); font-size:13px; background:#ece3d4; padding:1px 6px; border-radius:4px; }
+  svg.ref { width:100%; height:auto; max-height:70vh; display:block; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }
+  svg.ref .t { font-family:var(--sans); font-size:15px; fill:var(--ink); }
+  svg.ref .lab { font-family:var(--sans); font-size:13.5px; fill:var(--ink-mute); }
+  svg.ref .uml-box { fill:#fff; stroke:var(--ink); stroke-width:1.4; }
+  svg.ref .uml-line { fill:none; stroke:var(--ink); stroke-width:1.4; }
+  svg.ref .uml-line-dashed { fill:none; stroke:var(--ink); stroke-width:1.3; stroke-dasharray:5 4; }
+  svg.ref .uml-text { font-family:var(--sans); font-size:15px; fill:var(--ink); }
+  svg.ref .uml-text-mono { font-family:var(--mono); font-size:13.5px; fill:var(--ink); }
+  svg.ref .uml-text-italic { font-family:var(--sans); font-style:italic; font-size:14.5px; fill:var(--ink-mute); }
+  img.refimg { width:100%; height:auto; max-height:64vh; display:block; margin:8px auto; background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px; }
+  .trace { border-collapse:collapse; width:100%; margin-top:8px; background:#fff; border:1px solid var(--rule); border-radius:10px; overflow:hidden; font-size:13.5px; }
+  .trace th { background:var(--paper-warm); text-align:left; padding:9px 12px; font-family:var(--mono); font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; }
+  .trace td { padding:9px 12px; border-top:1px solid var(--rule); color:var(--ink-soft); vertical-align:top; }
+  .trace td.k { font-family:var(--mono); font-size:12px; color:var(--steel); }
+  .nav { flex-shrink:0; display:flex; align-items:center; gap:14px; padding:12px 24px; background:#fff; border-top:1px solid var(--rule); }
+  .nav button { background:var(--steel); color:#fff; border:none; padding:10px 18px; border-radius:7px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; cursor:pointer; }
+  .nav button:disabled { opacity:.4; cursor:default; }
+  .nav .count { font-family:var(--mono); font-size:13px; color:var(--ink-mute); margin-left:auto; }
+  .nav .title-mini { font-family:var(--serif); font-size:14px; color:var(--ink-soft); }
+  .key { display:flex; gap:12px; align-items:flex-start; background:#fbf0e9; border:1px solid #e6b89c; border-left:4px solid var(--accent); border-radius:8px; padding:13px 16px; margin-top:18px; }
+  .key.steel { background:#eaf2f7; border-color:#a9cbdd; border-left-color:var(--steel); }
+  .key .tag { font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7a3a23; font-weight:700; padding-top:3px; white-space:nowrap; }
+  .key.steel .tag { color:#1f4459; }
+  .key p { margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
+  details.walk { margin-top:14px; background:#fff; border:1px solid var(--rule); border-radius:10px; padding:0 16px; }
+  details.walk > summary { cursor:pointer; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--steel); font-weight:600; padding:13px 0; list-style:none; }
+  details.walk > summary::-webkit-details-marker { display:none; }
+  details.walk > summary::before { content:"\25B8"; color:var(--accent); margin-right:8px; }
+  details.walk[open] > summary::before { content:"\25BE"; }
+  details.walk ol { margin:0 0 14px; padding-left:20px; } details.walk li { margin:7px 0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
+  /* Print / save-as-PDF: lay every slide out in one go, one slide per page. */
+  @media print {
+    @page { size: A4 landscape; margin: 11mm; }
+    body { background:#fff; }
+    .nav { display:none !important; }
+    .stage { height:auto !important; }
+    .slidewrap { height:auto !important; overflow:visible !important; padding:0 !important; }
+    .slide { display:block !important; max-width:100% !important; margin:0 !important; padding:6px 4px 14px !important; break-after:page; page-break-after:always; }
+    .slide:last-child { break-after:auto; page-break-after:auto; }
+    .center { min-height:0 !important; }
+    h1.title { font-size:40px; }
+    svg.ref, img.refimg { max-height:none !important; break-inside:avoid; }
+    .two, .three { break-inside:avoid; }
+    details.walk { break-inside:avoid; }
+    details.walk > summary::before { content:"" !important; }
+    details.walk:not([open]) > *:not(summary) { display:block !important; }
+  }
+</style></head>
+<body>
+<div class="stage">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker>
+    <marker id="seqA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker>
+    <marker id="seqO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker>
+  </defs></svg>
+  <div class="slidewrap" id="slidewrap">
+<!-- 1. TITLE -->
+<section class="slide"><div class="center">
+  <div class="kicker">COMP433 &middot; Software Engineering &middot; Chapter 4</div>
+  <h1 class="title">UML: Sequence Diagrams</h1>
+  <p class="subtitle">From the static structure to the system in motion: who sends which message to whom, and in what order, for one scenario of one use case.</p>
+  <p class="hint">Move with the arrow keys or the buttons below.</p>
+</div></section>
+
+<!-- 2. WHERE WE ARE -->
+<section class="slide"><h2>Where we are: from structure to interaction</h2>
+<p class="lead">The class diagram told us <em>what exists</em>: the cast of objects, their data and operations. A <strong>sequence diagram</strong> shows <em>what happens</em>: those objects exchanging messages, in time order, to carry out one scenario.</p>
+<svg viewBox="0 0 980 150" class="ref" role="img" aria-label="From use case to activity to class to sequence">
+  <rect x="14" y="48" width="150" height="56" rx="10" class="uml-box"/><text x="89" y="73" text-anchor="middle" class="t" font-weight="600">Use case</text><text x="89" y="91" text-anchor="middle" class="lab">who + what</text>
+  <line x1="164" y1="76" x2="196" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="198" y="48" width="150" height="56" rx="10" class="uml-box"/><text x="273" y="73" text-anchor="middle" class="t" font-weight="600">Activity</text><text x="273" y="91" text-anchor="middle" class="lab">the flow of one task</text>
+  <line x1="348" y1="76" x2="380" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="382" y="48" width="150" height="56" rx="10" class="uml-box"/><text x="457" y="73" text-anchor="middle" class="t" font-weight="600">Class</text><text x="457" y="91" text-anchor="middle" class="lab">what exists</text>
+  <line x1="532" y1="76" x2="564" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="566" y="44" width="160" height="64" rx="10" class="uml-box" fill="#fbf0e9" stroke="#b85c38"/><text x="646" y="73" text-anchor="middle" class="t" font-weight="700">Sequence</text><text x="646" y="91" text-anchor="middle" class="lab">what happens, over time</text>
+  <line x1="726" y1="76" x2="758" y2="76" stroke="#0f1419" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="760" y="48" width="160" height="56" rx="10" class="uml-box"/><text x="840" y="73" text-anchor="middle" class="t" font-weight="600">State machine</text><text x="840" y="91" text-anchor="middle" class="lab">one object's life</text>
+</svg>
+<div class="key steel"><span class="tag">The pairing</span><p>Class and sequence are two views of the same objects. The class diagram is the system <em>at rest</em>; the sequence diagram is the same cast <em>in motion</em> for a single run. The lifelines you draw here are instances of the classes you drew there, and the messages are their operations.</p></div></section>
+
+<!-- 3. THE VIEW (alt example) -->
+<section class="slide"><h2>A sequence diagram at a glance</h2>
+<p class="lead">Before the details, a complete sequence diagram for one scenario: a doctor viewing a patient record, where access depends on authorisation. Do not decode every mark yet, the rest of the deck explains each labelled part.</p>
+<svg viewBox="0 0 1000 580" class="ref" role="img" aria-label="Sequence diagram: View patient information, with an alt fragment for authorised versus not-authorised">
+  <rect x="50" y="40" width="120" height="36" class="uml-box" fill="white"/><text x="110" y="62" text-anchor="middle" class="uml-text" font-weight="600">: Doctor</text>
+  <rect x="290" y="40" width="120" height="36" class="uml-box" fill="white"/><text x="350" y="62" text-anchor="middle" class="uml-text" font-weight="600">: UI</text>
+  <rect x="530" y="40" width="120" height="36" class="uml-box" fill="white"/><text x="590" y="62" text-anchor="middle" class="uml-text" font-weight="600">: AuthService</text>
+  <rect x="770" y="40" width="180" height="36" class="uml-box" fill="white"/><text x="860" y="62" text-anchor="middle" class="uml-text" font-weight="600">D: PatientRec</text>
+  <line x1="110" y1="76" x2="110" y2="560" class="uml-line-dashed"/>
+  <line x1="350" y1="76" x2="350" y2="560" class="uml-line-dashed"/>
+  <line x1="590" y1="76" x2="590" y2="560" class="uml-line-dashed"/>
+  <line x1="860" y1="76" x2="860" y2="560" class="uml-line-dashed"/>
+  <rect x="105" y="110" width="10" height="370" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <rect x="345" y="120" width="10" height="360" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <rect x="585" y="160" width="10" height="280" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <rect x="855" y="280" width="10" height="50" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <line x1="115" y1="120" x2="345" y2="120" class="uml-line" marker-end="url(#seqA)"/>
+  <text x="230" y="113" text-anchor="middle" class="uml-text" font-size="13">1: requestView(patientId)</text>
+  <line x1="355" y1="160" x2="585" y2="160" class="uml-line" marker-end="url(#seqA)"/>
+  <text x="470" y="153" text-anchor="middle" class="uml-text" font-size="13">2: authenticate(token)</text>
+  <rect x="60" y="190" width="900" height="320" fill="none" stroke="#2c5f7c" stroke-width="1.4"/>
+  <rect x="60" y="190" width="64" height="24" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.4"/>
+  <text x="92" y="206" text-anchor="middle" class="uml-text-mono" font-size="12" font-weight="600">alt</text>
+  <text x="140" y="208" class="uml-text-mono" font-size="13">[authorised]</text>
+  <line x1="585" y1="240" x2="355" y2="240" class="uml-line-dashed" marker-end="url(#seqO)"/>
+  <text x="470" y="232" text-anchor="middle" class="uml-text" font-size="13">3: return authorised = true</text>
+  <line x1="355" y1="280" x2="855" y2="280" class="uml-line" marker-end="url(#seqA)"/>
+  <text x="600" y="272" text-anchor="middle" class="uml-text" font-size="13">4: fetchRecord(patientId)</text>
+  <line x1="855" y1="320" x2="355" y2="320" class="uml-line-dashed" marker-end="url(#seqO)"/>
+  <text x="600" y="312" text-anchor="middle" class="uml-text" font-size="13">5: return record</text>
+  <line x1="345" y1="360" x2="115" y2="360" class="uml-line-dashed" marker-end="url(#seqO)"/>
+  <text x="230" y="352" text-anchor="middle" class="uml-text" font-size="13">6: display(record)</text>
+  <line x1="60" y1="390" x2="960" y2="390" stroke="#2c5f7c" stroke-dasharray="6,4" stroke-width="1.4"/>
+  <text x="140" y="408" class="uml-text-mono" font-size="13">[else]</text>
+  <line x1="585" y1="430" x2="355" y2="430" class="uml-line-dashed" marker-end="url(#seqO)"/>
+  <text x="470" y="422" text-anchor="middle" class="uml-text" font-size="13">3': return authorised = false</text>
+  <line x1="345" y1="475" x2="115" y2="475" class="uml-line-dashed" marker-end="url(#seqO)"/>
+  <text x="230" y="467" text-anchor="middle" class="uml-text" font-size="13">4': showError("not authorised")</text>
+</svg>
+<div class="key steel"><span class="tag">What you are looking at</span><p>Four <strong>participants</strong> across the top, each with a dashed <strong>lifeline</strong> and a grey <strong>activation bar</strong> when busy; <strong>messages</strong> as arrows (solid = a call, dashed = a return); time running <strong>top to bottom</strong>; and an <strong>alt fragment</strong> splitting the flow on a guard, <code>[authorised]</code> versus <code>[else]</code>. Each part gets its own slide next.</p></div></section>
+
+<!-- 4. WHAT IT IS -->
+<section class="slide"><h2>What a sequence diagram is, and when to draw it</h2>
+<p class="lead">A sequence diagram models the <strong>interactions between the actors and objects</strong> of a system as a <strong>time-oriented</strong> view: it shows the order of messages exchanged during <em>one particular use case, or one instance of it</em>. Participants are listed across the top with a dashed line dropping from each; interactions are annotated arrows; the diagram is read <strong>left to right and top to bottom</strong>.</p>
+<div class="two">
+  <div class="box"><h3>What it captures</h3><ul><li>The <strong>order</strong> of messages for one scenario.</li><li>Which participant <strong>sends</strong> and which <strong>receives</strong> each message, and the arguments.</li><li>When each participant is <strong>active</strong> (the activation bars).</li><li>Conditions and repetition, via fragments.</li></ul></div>
+  <div class="box"><h3>What it does not capture</h3><ul><li>The system's <strong>structure</strong> (use a class diagram).</li><li>Every possible scenario at once, one diagram is one story.</li><li>An object's full <strong>lifecycle</strong> across all interactions (use a state machine).</li></ul></div>
+</div>
+<div class="key"><span class="tag">When to draw one</span><p>Draw a sequence diagram for a scenario whose <strong>call order is not obvious</strong>, or where the <strong>collaboration between several objects</strong> needs pinning down: a checkout, an authorisation, a booking. It is how you catch a forgotten return, a missing error path, or a message sent to an object that has no such operation, before any code exists.</p></div></section>
+
+<!-- 5. THE LINK -->
+<section class="slide"><h2>Where the participants and messages come from</h2>
+<p class="lead">A sequence diagram does not invent anything. It <em>realises</em> one scenario of a use case, using the classes from the class diagram, calling their operations.</p>
+<table class="rel">
+  <thead><tr><th>In the sequence diagram</th><th>Comes from</th></tr></thead>
+  <tbody>
+    <tr><td>The <strong>scenario</strong> being drawn</td><td>one path through a <strong>use case</strong> (its normal flow, or one alternative)</td></tr>
+    <tr><td>The <strong>participants</strong> (lifelines)</td><td><strong>actors</strong> and <strong>objects</strong> , the objects are instances of <strong>classes</strong> from the class diagram</td></tr>
+    <tr><td>The <strong>messages</strong></td><td>the <strong>operations</strong> declared on those classes</td></tr>
+    <tr><td>The <strong>fragments</strong> (alt, loop)</td><td>the <strong>decisions and loops</strong> of the activity diagram for that use case</td></tr>
+  </tbody>
+</table>
+<div class="key steel"><span class="tag">Consistency check</span><p>If a lifeline receives a message <code>fetchRecord()</code>, the class it instantiates <em>must declare</em> <code>fetchRecord()</code>. The sequence diagram is therefore a powerful check on the class diagram: a message with no matching operation means the class model is incomplete.</p></div></section>
+
+<!-- 6. NOTATION: lifelines, activations, messages -->
+<section class="slide"><h2>Notation: lifelines, activations, messages</h2>
+<svg viewBox="0 0 980 340" class="ref" role="img" aria-label="Notation legend: two lifelines with activation bars and the four message types">
+  <rect x="60" y="30" width="130" height="34" class="uml-box"/><text x="125" y="52" text-anchor="middle" class="uml-text" font-weight="600">: Caller</text>
+  <rect x="560" y="30" width="130" height="34" class="uml-box"/><text x="625" y="52" text-anchor="middle" class="uml-text" font-weight="600">: Receiver</text>
+  <line x1="125" y1="64" x2="125" y2="320" class="uml-line-dashed"/>
+  <line x1="625" y1="64" x2="625" y2="320" class="uml-line-dashed"/>
+  <rect x="120" y="96" width="10" height="200" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <rect x="620" y="110" width="10" height="120" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <line x1="130" y1="110" x2="620" y2="110" class="uml-line" marker-end="url(#seqA)"/>
+  <text x="375" y="103" text-anchor="middle" class="uml-text" font-size="13">1: doRequest() &ndash; synchronous call (solid, filled head)</text>
+  <path d="M 630 150 H 700 V 175 H 630" class="uml-line" fill="none" marker-end="url(#seqA)"/>
+  <text x="712" y="166" class="uml-text" font-size="13">2: validate() , self-message</text>
+  <line x1="620" y1="210" x2="130" y2="210" class="uml-line-dashed" marker-end="url(#seqO)"/>
+  <text x="375" y="203" text-anchor="middle" class="uml-text" font-size="13">return result , reply (dashed, open head)</text>
+  <line x1="130" y1="270" x2="620" y2="270" class="uml-line" marker-end="url(#seqO)"/>
+  <text x="375" y="263" text-anchor="middle" class="uml-text" font-size="13">3: notify() , asynchronous (solid, open head)</text>
+  <text x="125" y="318" text-anchor="middle" class="uml-text-italic" font-size="12">activation bar = busy</text>
+</svg>
+<div class="two">
+  <div class="box"><h3>Lifeline &amp; activation</h3><p style="margin:0;font-size:14.5px">The box names the participant (<code>: Class</code> for an anonymous object, <code>name : Class</code> for a named one). The dashed <strong>lifeline</strong> drops from it; the thin <strong>activation bar</strong> marks the stretch of time it is busy handling a message.</p></div>
+  <div class="box"><h3>Message kinds</h3><p style="margin:0;font-size:14.5px"><strong>Synchronous</strong> (filled head): the caller waits for the reply. <strong>Reply / return</strong> (dashed, open head): the answer coming back. <strong>Asynchronous</strong> (open head, solid line): fire and continue, no waiting. A message back to the same lifeline is a <strong>self-message</strong>.</p></div>
+</div></section>
+
+<!-- 7. INSTANCE vs GENERIC -->
+<section class="slide"><h2>One scenario, or all of them</h2>
+<p class="lead">Adel draws the distinction clearly. A plain sequence diagram is an <strong>instance</strong>: one possible run, with no branching, the &ldquo;happy path&rdquo;. But a use case has many scenarios, so we often need to show <em>conditional</em> behaviour and <em>iteration</em> too.</p>
+<div class="two">
+  <div class="box"><h3>Instance diagram</h3><p style="margin:0;font-size:14.5px">One concrete sequence of messages, start to finish, no choices. Quick to draw, easy to read, ideal for explaining the normal flow (like the ATM deposit on the next slide).</p></div>
+  <div class="box"><h3>Generic diagram</h3><p style="margin:0;font-size:14.5px">Shows the family of runs that can occur, using <strong>combined fragments</strong> (alt, opt, loop) to fold the alternatives and repetitions into one picture, like the authorisation <code>alt</code> in the opening diagram.</p></div>
+</div>
+<div class="key"><span class="tag">Rule of thumb</span><p>Draw the <strong>instance</strong> first to nail the normal flow, then promote it to a <strong>generic</strong> diagram only where real branching or looping matters. Do not cram every error path into one diagram, that is what fragments, or separate diagrams, are for.</p></div></section>
+
+<!-- 8. FRAGMENTS -->
+<section class="slide"><h2>Combined fragments (UML 2.0)</h2>
+<p class="lead">A <strong>combined fragment</strong> is a boxed region of the diagram with an operator label in the top-left corner. It is how a generic diagram expresses choice and repetition.</p>
+<table class="rel">
+  <thead><tr><th>Operator</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>opt</code></td><td><strong>Optional.</strong> The fragment runs only if its guard is true. Equivalent to an <code>alt</code> with a single branch.</td></tr>
+    <tr><td><code>alt</code></td><td><strong>Alternatives.</strong> Two or more branches separated by dashed lines, each with a guard; exactly one runs per pass.</td></tr>
+    <tr><td><code>loop</code></td><td><strong>Loop.</strong> The fragment may run zero or more times; the guard is the iteration condition. <code>loop(n)</code> for exactly n times.</td></tr>
+    <tr><td><code>par</code></td><td><strong>Parallel.</strong> Two or more branches run concurrently; the order between them is unspecified.</td></tr>
+    <tr><td><code>ref</code></td><td><strong>Reference.</strong> Stands for another sequence diagram, so a shared sub-interaction is not redrawn each time.</td></tr>
+  </tbody>
+</table>
+<div class="key steel"><span class="tag">See it in the opening diagram</span><p>The &ldquo;at a glance&rdquo; diagram uses an <code>alt</code>: the guard <code>[authorised]</code> runs the fetch-and-display branch, and <code>[else]</code> runs the error branch. Exactly one of the two executes. An <code>opt</code> would be the same box with a single guarded branch and no <code>[else]</code>.</p></div></section>
+
+<!-- 9. WORKED: ATM Deposit Cash -->
+<section class="slide"><h2>Worked example: the &ldquo;Deposit Cash&rdquo; use case</h2>
+<p class="lead">Adel's self-service-machine example, the normal scenario. Three internal objects do the work: the <strong>front</strong> (the customer interface), the <strong>register</strong> (where money is counted and the cash reserve kept), and the <strong>dispenser</strong> (which delivers the receipt).</p>
+<svg viewBox="0 0 1000 470" class="ref" role="img" aria-label="Sequence diagram for the Deposit Cash use case: Customer, Front, Register and Dispenser">
+  <rect x="60" y="34" width="120" height="34" class="uml-box"/><text x="120" y="56" text-anchor="middle" class="uml-text" font-weight="600">: Customer</text>
+  <rect x="300" y="34" width="120" height="34" class="uml-box"/><text x="360" y="56" text-anchor="middle" class="uml-text" font-weight="600">: Front</text>
+  <rect x="540" y="34" width="120" height="34" class="uml-box"/><text x="600" y="56" text-anchor="middle" class="uml-text" font-weight="600">: Register</text>
+  <rect x="800" y="34" width="130" height="34" class="uml-box"/><text x="865" y="56" text-anchor="middle" class="uml-text" font-weight="600">: Dispenser</text>
+  <line x1="120" y1="68" x2="120" y2="450" class="uml-line-dashed"/>
+  <line x1="360" y1="68" x2="360" y2="450" class="uml-line-dashed"/>
+  <line x1="600" y1="68" x2="600" y2="450" class="uml-line-dashed"/>
+  <line x1="865" y1="68" x2="865" y2="450" class="uml-line-dashed"/>
+  <rect x="355" y="100" width="10" height="320" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <rect x="595" y="190" width="10" height="170" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <rect x="860" y="330" width="10" height="50" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <line x1="120" y1="100" x2="355" y2="100" class="uml-line" marker-end="url(#seqA)"/><text x="237" y="93" text-anchor="middle" class="uml-text" font-size="13">1: insertMoney(amount)</text>
+  <line x1="120" y1="145" x2="355" y2="145" class="uml-line" marker-end="url(#seqA)"/><text x="237" y="138" text-anchor="middle" class="uml-text" font-size="13">2: makeSelection(account, amount)</text>
+  <line x1="365" y1="190" x2="595" y2="190" class="uml-line" marker-end="url(#seqA)"/><text x="480" y="183" text-anchor="middle" class="uml-text" font-size="13">3: sendMoney(amount)</text>
+  <path d="M 605 222 H 670 V 244 H 605" class="uml-line" fill="none" marker-end="url(#seqA)"/><text x="682" y="236" class="uml-text" font-size="13">4: checkAmount()</text>
+  <path d="M 605 270 H 670 V 292 H 605" class="uml-line" fill="none" marker-end="url(#seqA)"/><text x="682" y="284" class="uml-text" font-size="13">5: updateReserve()</text>
+  <line x1="595" y1="330" x2="865" y2="330" class="uml-line" marker-end="url(#seqA)"/><text x="730" y="323" text-anchor="middle" class="uml-text" font-size="13">6: deliverReceipt()</text>
+  <line x1="860" y1="380" x2="365" y2="380" class="uml-line-dashed" marker-end="url(#seqO)"/><text x="610" y="373" text-anchor="middle" class="uml-text" font-size="13">7: return receipt delivered</text>
+  <line x1="355" y1="415" x2="120" y2="415" class="uml-line-dashed" marker-end="url(#seqO)"/><text x="237" y="408" text-anchor="middle" class="uml-text" font-size="13">8: showConfirmation()</text>
+</svg>
+<details class="walk"><summary>Walk through the deposit flow</summary>
+<ol>
+  <li>The Customer <strong>inserts money</strong> into the Front, then <strong>makes a selection</strong> (which account, what amount).</li>
+  <li>The Front <strong>sends the money</strong> to the Register (a synchronous call, so the Front waits).</li>
+  <li>The Register does two <strong>self-messages</strong>: it <em>checks the amount</em> in the collector and <em>updates its cash reserve</em>.</li>
+  <li>The Register tells the Dispenser to <strong>deliver the receipt</strong>; the Dispenser returns confirmation (dashed reply).</li>
+  <li>The Front <strong>shows confirmation</strong> to the Customer. This is the <em>normal</em> scenario only, error and alternative flows would be added as separate diagrams or <code>alt</code> fragments.</li>
+</ol></details></section>
+
+<!-- 10. BACK TO BACK: Library Borrow sequence -->
+<section class="slide"><h2>Back to back: the Library &ldquo;Borrow a copy&rdquo; scenario</h2>
+<p class="lead">The same Library we modelled with a use case, an activity diagram and a class diagram, now in motion for one scenario. The lifelines are objects of the classes <code>LibraryMember</code>, <code>BookCopy</code> and <code>Loan</code>; the messages are their operations; the <code>alt</code> is the activity's &ldquo;limit reached?&rdquo; decision.</p>
+<svg viewBox="0 0 1000 540" class="ref" role="img" aria-label="Sequence diagram for borrowing a copy, with an alt on the loan limit and a create message to a Loan object">
+  <rect x="40" y="34" width="120" height="34" class="uml-box"/><text x="100" y="56" text-anchor="middle" class="uml-text" font-weight="600">: Librarian</text>
+  <rect x="260" y="34" width="150" height="34" class="uml-box"/><text x="335" y="56" text-anchor="middle" class="uml-text" font-weight="600">m : LibraryMember</text>
+  <rect x="540" y="34" width="130" height="34" class="uml-box"/><text x="605" y="56" text-anchor="middle" class="uml-text" font-weight="600">c : BookCopy</text>
+  <line x1="100" y1="68" x2="100" y2="520" class="uml-line-dashed"/>
+  <line x1="335" y1="68" x2="335" y2="520" class="uml-line-dashed"/>
+  <line x1="605" y1="68" x2="605" y2="520" class="uml-line-dashed"/>
+  <rect x="330" y="100" width="10" height="380" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <line x1="100" y1="100" x2="330" y2="100" class="uml-line" marker-end="url(#seqA)"/><text x="215" y="93" text-anchor="middle" class="uml-text" font-size="13">1: borrow(c)</text>
+  <path d="M 340 130 H 405 V 152 H 340" class="uml-line" fill="none" marker-end="url(#seqA)"/><text x="417" y="144" class="uml-text" font-size="13">2: checkAllowance()</text>
+  <rect x="60" y="180" width="900" height="250" fill="none" stroke="#2c5f7c" stroke-width="1.4"/>
+  <rect x="60" y="180" width="64" height="24" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.4"/><text x="92" y="196" text-anchor="middle" class="uml-text-mono" font-size="12" font-weight="600">alt</text>
+  <text x="140" y="198" class="uml-text-mono" font-size="13">[within limit]</text>
+  <rect x="600" y="232" width="10" height="120" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <line x1="340" y1="232" x2="600" y2="232" class="uml-line" marker-end="url(#seqA)"/><text x="470" y="225" text-anchor="middle" class="uml-text" font-size="13">3: issue()</text>
+  <line x1="600" y1="272" x2="340" y2="272" class="uml-line-dashed" marker-end="url(#seqO)"/><text x="470" y="265" text-anchor="middle" class="uml-text" font-size="13">4: return onLoan</text>
+  <rect x="800" y="300" width="120" height="32" class="uml-box" fill="white"/><text x="860" y="320" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">: Loan</text>
+  <line x1="340" y1="316" x2="800" y2="316" class="uml-line-dashed" marker-end="url(#seqO)"/><text x="560" y="308" text-anchor="middle" class="uml-text-mono" font-size="12">&laquo;create&raquo; new Loan(m, c)</text>
+  <line x1="860" y1="332" x2="860" y2="410" class="uml-line-dashed"/>
+  <line x1="330" y1="356" x2="100" y2="356" class="uml-line-dashed" marker-end="url(#seqO)"/><text x="215" y="349" text-anchor="middle" class="uml-text" font-size="13">5: return loan recorded</text>
+  <line x1="60" y1="384" x2="960" y2="384" stroke="#2c5f7c" stroke-dasharray="6,4" stroke-width="1.4"/>
+  <text x="140" y="402" class="uml-text-mono" font-size="13">[limit reached]</text>
+  <line x1="330" y1="425" x2="100" y2="425" class="uml-line-dashed" marker-end="url(#seqO)"/><text x="215" y="418" text-anchor="middle" class="uml-text" font-size="13">5': return loan refused</text>
+</svg>
+<details class="walk"><summary>Walk through the borrow scenario</summary>
+<ol>
+  <li>The <strong>Librarian</strong> calls <code>borrow(c)</code> on the member object <code>m</code> (the <code>borrow()</code> operation from the class diagram).</li>
+  <li><code>m</code> runs a <strong>self-message</strong> <code>checkAllowance()</code> to see whether the member is under the six-item limit.</li>
+  <li><strong>alt [within limit]:</strong> <code>m</code> calls <code>issue()</code> on the copy <code>c</code>, which sets its status and returns <code>onLoan</code>; <code>m</code> then <strong>creates</strong> a new <code>Loan</code> object (the <code>&laquo;create&raquo;</code> message, whose lifeline begins where it is created); finally <code>m</code> returns &ldquo;loan recorded&rdquo; to the Librarian.</li>
+  <li><strong>alt [limit reached]:</strong> <code>m</code> returns &ldquo;loan refused&rdquo; and nothing is issued or created.</li>
+  <li>Every message targets an operation that exists on that class, and the <code>Loan</code> object's dates are set at creation, exactly the association class from the class diagram.</li>
+</ol></details></section>
+
+<!-- 11. HOW TO BUILD -->
+<section class="slide"><h2>How to build a sequence diagram</h2>
+<div class="two">
+  <div class="box"><h3>Recipe</h3><ol>
+    <li>Pick <strong>one scenario</strong> of one use case (start with the normal flow).</li>
+    <li>Place the <strong>participants</strong> across the top: the actor that starts it, then the objects it collaborates with (instances of your classes).</li>
+    <li>Drop a <strong>lifeline</strong> from each.</li>
+    <li>Add <strong>messages</strong> in time order, top to bottom; name each with the <strong>operation</strong> it calls and its arguments.</li>
+    <li>Draw <strong>activation bars</strong> for the stretch each participant is busy, and the <strong>returns</strong> (dashed) where a caller gets its answer.</li>
+    <li>Wrap conditional or repeating parts in <strong>fragments</strong> (<code>alt</code>, <code>opt</code>, <code>loop</code>).</li>
+  </ol></div>
+  <div class="box"><h3>Sanity checks</h3><ul>
+    <li>Every received message is an <strong>operation that exists</strong> on the receiver's class.</li>
+    <li>Every synchronous call has a matching <strong>return</strong>.</li>
+    <li>Time only goes <strong>down</strong>: no arrow points back up the page.</li>
+    <li>One diagram is <strong>one scenario</strong>; branch with fragments, not by tangling two stories together.</li>
+  </ul></div>
+</div></section>
+
+<!-- 12. PITFALLS -->
+<section class="slide"><h2>Common pitfalls</h2>
+<ul class="pts">
+  <li><strong>All scenarios in one instance diagram.</strong> An instance shows one run; use <code>alt</code> / <code>opt</code> / <code>loop</code> (a generic diagram) or separate diagrams for the rest.</li>
+  <li><strong>Forgotten returns.</strong> A synchronous call that never returns hides where control resumes; draw the dashed reply.</li>
+  <li><strong>Messages with no home.</strong> Sending <code>fetchRecord()</code> to a lifeline whose class has no such operation, fix the class diagram or the message.</li>
+  <li><strong>Time running upward.</strong> Messages must descend; an arrow back up the page is a modelling error, loops belong in a <code>loop</code> fragment.</li>
+  <li><strong>Missing or wrong activations.</strong> The bar should cover exactly the time the participant is processing, no more.</li>
+  <li><strong>Using a sequence diagram for structure.</strong> It shows one interaction over time, not what exists; that is the class diagram's job.</li>
+</ul></section>
+
+<!-- 13. WHERE THEY EARN -->
+<section class="slide"><h2>Where sequence diagrams earn their place</h2>
+<div class="three">
+  <div class="box"><h3>Where they dominate</h3><ul><li>Designing the <strong>collaboration</strong> between objects or services for a tricky scenario.</li><li><strong>API and protocol</strong> design: request / response / callback order.</li><li><strong>Distributed systems</strong>: who calls whom, sync vs async, timeouts.</li><li>Explaining a flow in <strong>code review</strong> or onboarding.</li></ul></div>
+  <div class="box"><h3>What they do not solve</h3><ul><li>The static structure (class diagram).</li><li>A single object's full lifecycle (state machine).</li><li>The branching of one task at the work level (activity diagram).</li></ul></div>
+  <div class="box"><h3>Tooling today</h3><ul><li>PlantUML and Mermaid render them from text in Git.</li><li>IDEs and profilers generate call-sequence traces from running code.</li><li>Visual Paradigm, Enterprise Architect, Lucidchart for full modelling.</li></ul></div>
+</div></section>
+
+<!-- 14. RECAP -->
+<section class="slide"><h2>Recap, and where this sits</h2>
+<div class="two">
+  <div class="box"><h3>Hold on to</h3><ul>
+    <li>A sequence diagram is <strong>one scenario, in time order</strong>: participants across the top, time down, messages as arrows.</li>
+    <li><strong>Solid</strong> arrow = call, <strong>dashed</strong> = return, <strong>open head</strong> = asynchronous; activation bars show busy time.</li>
+    <li><strong>Fragments</strong> (alt, opt, loop, par, ref) turn an instance into a generic diagram.</li>
+    <li>Lifelines are <strong>objects of your classes</strong>; messages are their <strong>operations</strong> , a live check on the class diagram.</li>
+  </ul></div>
+  <div class="box"><h3>The four views together</h3><p style="font-size:14.5px">Use case (who and what) , activity (how one task flows) , class (what exists) , <strong>sequence</strong> (what happens between objects, over time). Each answers a different question about the same system; together they are the working core of UML for analysis and design.</p></div>
+</div>
+<p class="foot">Sources: A. Taweel, COMP433 Chapter 4 (UML) lecture notes (ATM &ldquo;Deposit Cash&rdquo; and MHC-PMS examples); Sommerville, <em>Software Engineering</em> 10th ed.; UML 2.x specification (combined fragments). Companion: <code>COMP433_Ch4_UML_System_Modelling_Companion.html</code>, section 11.</p></section>
+</div>
+  <div class="nav">
+    <button id="prev">&larr; Prev</button>
+    <button id="next">Next &rarr;</button>
+    <span class="title-mini" id="tmini"></span>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')], N=slides.length;
+let i=0;
+function titleOf(s){ const h=s.querySelector('h1,h2'); return h?h.textContent:''; }
+function show(){
+  slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  document.getElementById('prev').disabled=i===0;
+  document.getElementById('next').disabled=i===N-1;
+  document.getElementById('count').textContent=(i+1)+' / '+N;
+  document.getElementById('tmini').textContent=titleOf(slides[i]);
+  document.getElementById('slidewrap').scrollTop=0;
+}
+document.getElementById('prev').onclick=()=>{ if(i>0){i--;show();} };
+document.getElementById('next').onclick=()=>{ if(i<N-1){i++;show();} };
+window.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key==='PageDown'){ if(i<N-1){i++;show();} } else if(e.key==='ArrowLeft'||e.key==='PageUp'){ if(i>0){i--;show();} } });
+show();
+</script>
+</body></html>
