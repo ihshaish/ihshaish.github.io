@@ -65,6 +65,23 @@
   details.walk > summary::before { content:"\25B8"; color:var(--accent); margin-right:8px; }
   details.walk[open] > summary::before { content:"\25BE"; }
   details.walk ol { margin:0 0 14px; padding-left:20px; } details.walk li { margin:7px 0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
+  /* Print / save-as-PDF: lay every slide out in one go, one slide per page. */
+  @media print {
+    @page { size: A4 landscape; margin: 11mm; }
+    body { background:#fff; }
+    .nav { display:none !important; }
+    .stage { height:auto !important; }
+    .slidewrap { height:auto !important; overflow:visible !important; padding:0 !important; }
+    .slide { display:block !important; max-width:100% !important; margin:0 !important; padding:6px 4px 14px !important; break-after:page; page-break-after:always; }
+    .slide:last-child { break-after:auto; page-break-after:auto; }
+    .center { min-height:0 !important; }
+    h1.title { font-size:40px; }
+    svg.ref, img.refimg { max-height:none !important; break-inside:avoid; }
+    .two, .three { break-inside:avoid; }
+    details.walk { break-inside:avoid; }
+    details.walk > summary::before { content:"" !important; }
+    details.walk:not([open]) > *:not(summary) { display:block !important; }
+  }
 </style></head>
 <body>
 <div class="stage">
