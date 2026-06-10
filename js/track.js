@@ -1,9 +1,11 @@
 /* Photo-section tracking, wired into the existing Birzeit visitor system.
  * Reuses the gate's stored Birzeit ID (localStorage 'birzeit_visitor_id') and the
  * same Apps Script endpoint, so photo activity lands in your existing Sheet
- * (a separate 'photos' tab). Fires only on the homepage photo wall:
+ * (a separate 'photos' tab). Events fired on the homepage photo wall:
  *   - 'pictures_view'  when the photo section scrolls into view
- *   - 'photo_enlarge'  (with the caption) when a photo is opened in the lightbox
+ *   - 'photo_enlarge'  (with the caption) each time a photo is shown in the
+ *                      lightbox, i.e. on open AND on every prev/next slide
+ *   - 'video_play'     when the clip is played
  * If a visitor never passed a gate, id is 'anon'.
  */
 (function () {
@@ -38,6 +40,7 @@
     else document.addEventListener('DOMContentLoaded', fn);
   }
   ready(function () {
+    // photo section scrolled into view
     var sec = document.getElementById('personal') || document.querySelector('.rg-track');
     if (sec && 'IntersectionObserver' in window) {
       var seen = false;
@@ -48,14 +51,22 @@
       }, { threshold: 0.25 });
       io.observe(sec);
     }
-    var lb = document.getElementById('rg-lb'), cap = document.getElementById('rg-lb-cap');
-    if (lb && 'MutationObserver' in window) {
-      var was = false;
+
+    // every photo shown in the lightbox: open + each prev/next slide
+    var im = document.getElementById('rg-lb-img'), cap = document.getElementById('rg-lb-cap');
+    if (im && 'MutationObserver' in window) {
       new MutationObserver(function () {
-        var open = lb.classList.contains('open');
-        if (open && !was) send('photo_enlarge', (cap && cap.textContent) || '');
-        was = open;
-      }).observe(lb, { attributes: true, attributeFilter: ['class'] });
+        if (im.getAttribute('src')) send('photo_enlarge', (cap && cap.textContent) || '');
+      }).observe(im, { attributes: true, attributeFilter: ['src'] });
+    }
+
+    // video played
+    var v = document.querySelector('.rg-video video');
+    if (v) {
+      var fired = false;
+      v.addEventListener('play', function () {
+        if (!fired) { fired = true; send('video_play', 'Atef teaching me English (video)'); }
+      });
     }
   });
 })();
