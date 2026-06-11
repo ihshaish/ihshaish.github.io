@@ -67,20 +67,20 @@
   details.walk ol { margin:0 0 14px; padding-left:20px; } details.walk li { margin:7px 0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
   /* Print / save-as-PDF: lay every slide out in one go, one slide per page. */
   @media print {
-    @page { size: A4 landscape; margin: 11mm; }
-    body { background:#fff; }
+    @page { size: A4 landscape; margin: 9mm; }
+    html, body { height:auto !important; background:#fff; }
+    .stage, .slidewrap { height:auto !important; overflow:visible !important; display:block !important; padding:0 !important; }
     .nav { display:none !important; }
-    .stage { height:auto !important; }
-    .slidewrap { height:auto !important; overflow:visible !important; padding:0 !important; }
-    .slide { display:block !important; max-width:100% !important; margin:0 !important; padding:6px 4px 14px !important; break-after:page; page-break-after:always; }
-    .slide:last-child { break-after:auto; page-break-after:auto; }
+    .slide { display:block !important; max-width:100% !important; margin:0 !important; padding:2px 8px !important; break-before:page; }
+    .slide:first-of-type { break-before:auto; }
     .center { min-height:0 !important; }
-    h1.title { font-size:40px; }
-    svg.ref, img.refimg { max-height:none !important; break-inside:avoid; }
-    .two, .three { break-inside:avoid; }
-    details.walk { break-inside:avoid; }
-    details.walk > summary::before { content:"" !important; }
-    details.walk:not([open]) > *:not(summary) { display:block !important; }
+    h1.title { font-size:42px; }
+    svg.ref { max-height:55vh !important; }
+    img.refimg { max-height:44vh !important; }
+    pre { font-size:11px !important; line-height:1.38 !important; }
+    .lead { margin:0 0 8px !important; }
+    .key, .two, .three, table, .box, svg.ref, img.refimg { break-inside:avoid; }
+    details.walk { display:none !important; }
   }
 </style></head>
 <body>
@@ -96,6 +96,32 @@
   <h1 class="title">UML: Class Diagrams</h1>
   <p class="subtitle">From the behaviour we have already modelled to the system's static structure: the classes, what they hold, and how they connect, read straight out of the requirements.</p>
   <p class="hint">Move with the arrow keys or the buttons below.</p>
+</div></section>
+
+<!-- 1b. AGENDA -->
+<section class="slide"><h2>Agenda</h2>
+<div class="two">
+  <div class="box"><h3>Orientation</h3><ol style="margin:0;padding-left:18px;font-size:14.5px">
+    <li>Where class diagrams sit among the UML views</li>
+    <li>A complete class diagram <em>at a glance</em></li>
+    <li>What they capture; three design approaches</li>
+    <li>Reading a class out of the use case and activity</li>
+  </ol></div>
+  <div class="box"><h3>Notation</h3><ol start="5" style="margin:0;padding-left:18px;font-size:14.5px">
+    <li>Anatomy of a class box</li>
+    <li>The visibility markers, and how they really work</li>
+    <li>Analysis classes vs design classes</li>
+  </ol></div>
+  <div class="box"><h3>Building and connecting</h3><ol start="8" style="margin:0;padding-left:18px;font-size:14.5px">
+    <li>Finding classes: noun-verb analysis and judgement calls</li>
+    <li>Relationships: association, multiplicity, generalisation, aggregation, association classes</li>
+    <li>Dependency, data types and enumerations</li>
+  </ol></div>
+  <div class="box"><h3>Putting it to work</h3><ol start="11" style="margin:0;padding-left:18px;font-size:14.5px">
+    <li>Good analysis classes; object diagrams</li>
+    <li><strong>Back to back</strong>: one system as use case, activity and class</li>
+    <li>Pitfalls, and how to build one</li>
+  </ol></div>
 </div></section>
 
 <!-- 2. WHERE THIS FITS -->
@@ -268,15 +294,14 @@
   <text x="372" y="200" class="uml-text-mono" font-weight="700" fill="#b85c38">~</text><text x="398" y="200" class="uml-text" font-weight="600">package</text><text x="470" y="200" class="lab">classes in the same package – <tspan font-style="italic">logger</tspan></text>
   <text x="372" y="242" class="uml-text-mono" font-weight="700" fill="#b85c38">/</text><text x="398" y="242" class="uml-text" font-weight="600">derived</text><text x="470" y="242" class="lab">computed, not stored – <tspan font-style="italic">availableBalance = balance &minus; holds</tspan></text>
 </svg>
-<div class="key"><span class="tag">How to choose</span><p>Default to <strong>private data, public operations</strong> (encapsulation): the outside world calls methods and never reaches in to a field. Use <strong>protected</strong> (<code>#</code>) for what subclasses must reuse, <strong>package</strong> (<code>~</code>) for collaborators in the same module, and <strong>derived</strong> (<code>/</code>) for any value you can compute from others instead of storing, which removes a chance for the data to fall out of step. At <strong>analysis</strong> level keep it light (mostly public, no types); tighten visibility and add full signatures at <strong>design</strong> level.</p></div>
-<div class="key steel"><span class="tag">Real-life analogy</span><p>Think of a house. <strong>public</strong> is the <em>doorbell</em>, anyone may ring it. <strong>private</strong> is your <em>diary</em>, only you read it. <strong>protected</strong> is a <em>spare key the family shares</em> (the subclasses). <strong>package</strong> is a <em>key the other flats in your building hold</em> (classes in the same module). <strong>derived</strong> is your <em>age</em>, nobody stores it, you work it out from the birth date on demand.</p></div></section>
+<div class="key steel"><span class="tag">How to choose, and a real-life analogy</span><p>Default to <strong>private data, public operations</strong>: the outside calls methods, never reaches into a field. Think of a house, <strong>public</strong> is the <em>doorbell</em> anyone may ring; <strong>private</strong> your <em>diary</em>; <strong>protected</strong> a <em>spare key the family (subclasses) share</em>; <strong>package</strong> a <em>key the other flats in the building hold</em>; <strong>derived</strong> your <em>age</em>, computed from the birth date, not stored. Keep it light at analysis level; tighten at design level.</p></div></section>
 
 <!-- 6c. VISIBILITY CLARIFIED -->
 <section class="slide"><h2>How visibility actually works</h2>
 <p class="lead">Two clarifications make the markers click. Both are exactly how Java, C#, C++ and UML define visibility.</p>
 <div class="two">
-  <div class="box"><h3>1. It governs code, not people</h3><p style="margin:0;font-size:14.5px">Visibility says which <strong>code</strong> (which classes) may read or call a member, and the <em>compiler</em> enforces it. It is nothing to do with end-users or runtime permissions. A bank <em>customer</em> is a person, modelled as a separate <code>Customer</code> class, whose code may only call an account's <strong>public</strong> methods.</p></div>
-  <div class="box"><h3>2. The unit is the class, not the object</h3><p style="margin:0;font-size:14.5px"><code>private</code> means &ldquo;any code written <em>inside this class</em> may use it, on <strong>any</strong> object of the class&rdquo;, not only on <code>this</code> one. So one account <em>can</em> read another account's private balance, provided that code lives inside <code>BankAccount</code>.</p></div>
+  <div class="box"><h3>1. It governs code, not people</h3><p style="margin:0;font-size:14.5px">Visibility says which <strong>code</strong> (which classes) may use a member; the <em>compiler</em> enforces it. Not about end-users: a <code>Customer</code> is a separate class, limited to an account's <strong>public</strong> methods.</p></div>
+  <div class="box"><h3>2. The unit is the class, not the object</h3><p style="margin:0;font-size:14.5px"><code>private</code> means &ldquo;any code <em>inside this class</em>, on <strong>any</strong> object of it&rdquo;, not just <code>this</code>. So one account can read another's private balance, if that code lives in <code>BankAccount</code>.</p></div>
 </div>
 <div class="box" style="margin-top:14px"><h3>The tangible example</h3>
 <pre style="margin:6px 0 0;font-family:var(--mono);font-size:13px;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;overflow-x:auto">class BankAccount {
@@ -294,7 +319,7 @@ class StatementPrinter {                     // a different class
        a.balance        // COMPILER ERROR, balance is private to BankAccount
   }
 }</pre></div>
-<div class="key"><span class="tag">The common question, answered</span><p>&ldquo;Can one object touch another object's private data?&rdquo; <strong>Yes, if they are the same class</strong> and the code sits inside that class (a transfer between two <code>BankAccount</code>s). <strong>No</strong> for any other class, which sees only the public operations. And <code>/</code> <strong>derived</strong> is a different axis altogether: it marks a value computed on demand, not a permission.</p></div></section>
+<div class="key"><span class="tag">The answer</span><p>&ldquo;Can one object touch another's private data?&rdquo; <strong>Yes if they are the same class</strong> (the transfer between two <code>BankAccount</code>s); <strong>no</strong> for any other class, which sees only the public methods.</p></div></section>
 
 <!-- 7. ANALYSIS CLASS -->
 <section class="slide"><h2>Analysis classes vs design classes</h2>
@@ -575,7 +600,11 @@ class StatementPrinter {                     // a different class
   <li><strong>High cohesion:</strong> it holds only the attributes and operations that genuinely belong together; unrelated ones lower cohesion.</li>
   <li><strong>Low coupling:</strong> it has only the associations it truly needs; accidental links raise coupling and spread change.</li>
 </ul>
-<h3 style="margin-top:8px">Cohesion: high versus low</h3>
+<div class="key"><span class="tag">The two failure modes</span><p>Most weak models fail one of two ways: an <strong>omnipotent</strong> class (the &ldquo;manager&rdquo; that does everything) has <strong>low cohesion</strong>; a class wired to almost every other one has <strong>high coupling</strong> and spreads change. The next slide shows the cohesion failure concretely.</p></div></section>
+
+<!-- 20b. COHESION EXAMPLE -->
+<section class="slide"><h2>Cohesion: high versus low</h2>
+<p class="lead">Shown, not told. The class on the left does four unrelated jobs; the one on the right does one, with the rest moved to their own classes.</p>
 <div class="two">
   <div class="box" style="border-color:#d99; background:#fdf6f4;"><h3 style="color:#a23">Low cohesion (bad)</h3><pre style="margin:0;font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--ink-soft);white-space:pre-wrap">Patient
   + name, dateOfBirth
@@ -593,7 +622,7 @@ class StatementPrinter {                     // a different class
 NotificationService, ReportGenerator,
 PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:13.5px">One job: <strong>be a patient</strong>. Each other concern lives in its own class. One reason to change.</p></div>
 </div>
-<div class="key"><span class="tag">Two failure modes</span><p>The bad <code>Patient</code> above is an <strong>omnipotent</strong> class (low cohesion). The opposite failure is <strong>high coupling</strong>: a class wired to almost every other one, so any change ripples outward. Aim for the middle – each class doing one thing, linked only to what it truly needs.</p></div></section>
+<div class="key"><span class="tag">The test</span><p>Count the <strong>reasons to change</strong>. The left <code>Patient</code> changes whenever email, reporting, persistence <em>or</em> billing changes, four reasons. The right one changes only when what it means to <em>be a patient</em> changes. Fewer reasons to change is higher cohesion.</p></div></section>
 
 <!-- 21. OBJECT DIAGRAMS -->
 <section class="slide"><h2>Object diagrams: a snapshot of instances</h2>
@@ -608,7 +637,7 @@ PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:1
 <!-- BACK TO BACK 1: description + use case -->
 <section class="slide"><h2>Back to back: one system, three views (1 of 4)</h2>
 <p class="lead">The three diagrams are not separate exercises. Take a single description and watch the <strong>same words</strong> drive the use case diagram, then the activity diagram, then the class diagram.</p>
-<div class="box" style="font-size:14.5px;line-height:1.6"><strong>The Library.</strong> A library holds <em>books</em> and <em>journals</em>, with several <em>copies</em> of each book. A <em>library member</em> may <em>borrow</em> a copy of a book for three weeks, up to six items; <em>staff</em> may borrow more, and may borrow journals. A <em>librarian</em> issues and <em>returns</em> copies and <em>renews</em> loans; the system <em>computes the return date</em> and <em>refuses a loan</em> when the member already holds too many. Anyone may <em>browse or search</em> the catalogue.</div>
+<div class="box" style="font-size:14.5px;line-height:1.55"><strong>The Library.</strong> A library holds <em>books</em> and <em>journals</em>, with several <em>copies</em> of each book. A <em>library member</em> may <em>borrow</em> a copy for three weeks, up to six items; <em>staff</em> may borrow more, and journals. A <em>librarian</em> <em>issues</em>, <em>returns</em> and <em>renews</em> loans; the system <em>computes the return date</em> and <em>refuses</em> a loan past the limit. Anyone may <em>browse</em> the catalogue.</div>
 <h3 style="margin-top:14px">View 1 – the use case diagram: <em>who</em>, and <em>what</em></h3>
 <img class="refimg" src="fig3_usecase_library.svg" alt="Library use case diagram: BookBorrower, Librarian and Browser actors with Borrow, Return, Renew, Compute return date, Refuse loan and Browse use cases">
 <div class="key steel"><span class="tag">From the text</span><p>The <strong>roles</strong> (&ldquo;member&rdquo;, &ldquo;librarian&rdquo;, anyone browsing) become <strong>actors</strong>; the things they <em>do</em> (&ldquo;borrow&rdquo;, &ldquo;return&rdquo;, &ldquo;renew&rdquo;, &ldquo;browse&rdquo;) become <strong>use cases</strong>; &ldquo;compute the return date&rdquo;, always part of borrowing, is an <code>&lt;&lt;include&gt;&gt;</code>; &ldquo;refuse a loan when too many&rdquo;, a conditional, is an <code>&lt;&lt;extend&gt;&gt;</code>.</p></div>
@@ -625,8 +654,7 @@ PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:1
 <section class="slide"><h2>Back to back: one system, three views (2 of 4)</h2>
 <p class="lead">Pick one use case, <strong>Borrow copy of a book</strong>, and unpack <em>how it flows</em>. Each action is a verb the system or an actor performs; the swimlanes record who does each.</p>
 <img class="refimg" src="figD_borrow_return_activity.svg" alt="Activity diagram for borrowing and returning, with Member and Librarian swimlanes, a borrow/return decision, parallel Stamp book and Record borrowing actions, and a more-books loop">
-<div class="key"><span class="tag">From use case to flow</span><p>The use case's normal and alternative paths become the activity's <strong>actions, decisions and loops</strong>: &ldquo;locate copy&rdquo;, &ldquo;stamp book&rdquo;, &ldquo;record borrowing&rdquo;, the &ldquo;more?&rdquo; loop for several books. Hold onto these verbs – <code>locate</code>, <code>stamp</code>, <code>record</code>, <code>computeReturnDate</code> – they become <strong>operations</strong> on the classes next.</p></div>
-<div class="key steel"><span class="tag">How to read it</span><p>The first diamond is a <strong>decision</strong> with <em>named, domain</em> guards <code>[borrow]</code> and <code>[return]</code> – not just yes/no. The two parallel bars are a <strong>fork then join</strong>: stamping the book and recording the loan happen <em>together</em>, and the join waits for both. The <strong>plain (unlabelled) diamond</strong> lower down is a <strong>merge</strong>, not a decision – a merge carries no guard; it simply re-joins the borrow and return branches so the decision is properly <em>closed</em>. The last diamond loops on <code>[another book]</code> or exits on <code>[no]</code>. Rule of thumb: a diamond with guards is a decision and must be matched by a merge; a diamond with none is that merge.</p></div>
+<div class="key steel"><span class="tag">From use case to flow, and how to read it</span><p>The use case's paths become the activity's <strong>actions, decisions and loops</strong> (locate, stamp, record, the &ldquo;more?&rdquo; loop), and those verbs become <strong>operations</strong> next. Reading it: the diamonds use <em>named</em> guards (<code>[borrow]</code> / <code>[return]</code>, not yes/no); the parallel bars are a <strong>fork then join</strong> (stamp and record happen together, the join waits); and the plain unlabelled diamond is a <strong>merge</strong> re-joining the branches, so the decision is closed.</p></div>
 <details class="walk"><summary>Walk through the activity flow</summary>
 <ol>
   <li>Flow starts at the filled dot in the <strong>Member</strong> lane and reaches the first <strong>decision</strong>: <em>borrow or return?</em></li>
@@ -741,7 +769,7 @@ PatientRepository, InsuranceCalculator</pre><p style="margin:8px 0 0;font-size:1
   </ol></div>
   <div class="box"><h3>Bridge to sequence diagrams</h3><p style="font-size:14.5px">The class diagram tells you what exists; it says nothing about what <em>happens</em>. A call to <code>borrow()</code> on <code>LibraryMember</code> may touch <code>Book</code>, <code>BookCopy</code>, <code>Loan</code> and a persistence store in a specific order, with checks and error returns. That story, messages over time between a fixed cast of objects, is the <strong>sequence diagram</strong>, next.</p></div>
 </div>
-<p class="foot">Sources: A. Taweel, COMP433 Chapter 4 (UML) lecture notes (Library and MHC-PMS examples); Sommerville, <em>Software Engineering</em> 10th ed.; Booch et al., <em>Object-Oriented Analysis and Design</em>; Shlaer &amp; Mellor (noun-verb analysis). Companion: <code>COMP433_Ch4_UML_System_Modelling_Companion.html</code>.</p></section>
+<p class="foot">Sources: A. Taweel, COMP433 Ch.4 lecture notes; Sommerville, <em>Software Engineering</em> 10th ed.; Booch et al.; Shlaer &amp; Mellor. Companion: <code>COMP433_Ch4_UML_System_Modelling_Companion.html</code>.</p></section>
 
   </div>
   <div class="nav">
