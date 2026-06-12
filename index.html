@@ -3999,58 +3999,6 @@ Russell Sharp, my MSc Data Science Student, presented his thesis work titled &ld
       })();
       </script>
 
-      <script>
-      /* Pictures engagement tracking.
-         Reuses the Birzeit visitor id set by the course gate (localStorage).
-         No id, or an id not in any roster, is logged server-side as "Unidentified".
-         Fire-and-forget: never blocks or breaks the page. */
-      (function(){
-        var ENDPOINT='https://script.google.com/macros/s/AKfycbxoJo0jG7fu2ccTBQj_FmdCxaEm9zdi7je1LvF9XB1C_ndWrHbaH5MCcCEqY8ZrRuHKYA/exec';
-        var grid=document.getElementById('rg-grid'); if(!grid) return;
-        var id=''; try{ id=localStorage.getItem('birzeit_visitor_id')||''; }catch(e){}
-        function send(ev,pic){
-          try{
-            fetch(ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,
-              headers:{'Content-Type':'text/plain;charset=utf-8'},
-              body:JSON.stringify({type:'picture',id:id,event:ev,picture:pic||'',
-                page:location.pathname,ts:new Date().toISOString(),
-                ua:navigator.userAgent,ref:document.referrer||''})});
-          }catch(e){}
-        }
-        function capOf(el){ return el.getAttribute('data-cap') || (el.getAttribute('data-full')||'').split('/').pop() || ''; }
-        // 1) Section viewed (once per page load)
-        var seen=false; function fireView(){ if(seen) return; seen=true; send('gallery_view',''); }
-        if('IntersectionObserver' in window){
-          var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ fireView(); io.disconnect(); } }); },{threshold:0.3});
-          io.observe(grid);
-        } else { fireView(); }
-        // 2) Enlarge a specific photo
-        [].slice.call(grid.querySelectorAll('[data-full]')).forEach(function(el){
-          el.addEventListener('click', function(){ send('enlarge', capOf(el)); });
-        });
-        // 3) Slider arrows + lightbox navigation
-        var viaArrow=false;
-        var arrow=function(elid,ev){ var n=document.getElementById(elid); if(n) n.addEventListener('click', function(){ viaArrow=true; send(ev,''); }); };
-        arrow('rg-nx','slide_next'); arrow('rg-pv','slide_prev');
-        var bind=function(elid,ev){ var n=document.getElementById(elid); if(n) n.addEventListener('click', function(){ send(ev,''); }); };
-        bind('rg-next','lightbox_next'); bind('rg-prev','lightbox_prev');
-        // 3b) Direct swipe / trackpad / scroll of the slider strip (debounced, de-duped vs arrows, capped per load)
-        var sx=grid.scrollLeft||0, st=null, scrolls=0;
-        grid.addEventListener('scroll', function(){
-          if(st) clearTimeout(st);
-          st=setTimeout(function(){
-            if(viaArrow){ viaArrow=false; sx=grid.scrollLeft; return; } // already counted as an arrow click
-            if(scrolls>=12) return;                                    // don't flood the log
-            if(Math.abs(grid.scrollLeft - sx) < 60) return;            // ignore tiny jitter
-            sx=grid.scrollLeft; scrolls++; send('slide_scroll','');
-          }, 450);
-        }, {passive:true});
-        // 4) Video play (first play per page load)
-        var vid=grid.querySelector('video');
-        if(vid){ var vp=false; vid.addEventListener('play', function(){ if(vp) return; vp=true; send('video_play','Atef teaching English (clip)'); }); }
-      })();
-      </script>
-
     </div>
 
     </div>

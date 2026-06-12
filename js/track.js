@@ -68,5 +68,24 @@
         if (!fired) { fired = true; send('video_play', 'Atef teaching me English (video)'); }
       });
     }
+
+    // slider strip: arrow buttons + direct swipe / trackpad / scroll of the row
+    var strip = document.querySelector('.rg-track');
+    var nx = document.getElementById('rg-nx'), pv = document.getElementById('rg-pv');
+    var viaArrow = false;
+    if (nx) nx.addEventListener('click', function () { viaArrow = true; send('slide_next'); });
+    if (pv) pv.addEventListener('click', function () { viaArrow = true; send('slide_prev'); });
+    if (strip) {
+      var sx = strip.scrollLeft || 0, st = null, scrolls = 0;
+      strip.addEventListener('scroll', function () {
+        if (st) clearTimeout(st);
+        st = setTimeout(function () {
+          if (viaArrow) { viaArrow = false; sx = strip.scrollLeft; return; } // already counted as an arrow click
+          if (scrolls >= 12) return;                                          // don't flood the log
+          if (Math.abs(strip.scrollLeft - sx) < 60) return;                   // ignore tiny jitter
+          sx = strip.scrollLeft; scrolls++; send('slide_scroll');
+        }, 450);
+      }, { passive: true });
+    }
   });
 })();
