@@ -12,6 +12,10 @@ birzeit/**/Answer*Key*.pdf
 birzeit/**/*exam papers/
 birzeit/comp233/Exams/first exam papers/
 
+# Student project submissions used as references (never publish)
+birzeit/**/Sample phase*.pdf
+birzeit/**/sample phase*.pdf
+
 # Private folders and exam drafts (never publish)
 birzeit/**/_Private/
 birzeit/**/_private/
