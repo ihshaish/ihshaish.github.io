@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP338, Games &amp; Adversarial Search: An Interactive Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comp338-companion.css">
+<style>
+/* ============== Games-specific widget styles (the shared chrome lives in comp338-companion.css) ============== */
+.slides-block { background: var(--paper-warm); border: 1px solid var(--rule); border-radius: 4px; padding: 24px 28px; margin-bottom: 56px; }
+.slides-block h4 { font-family: var(--sans); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.slides-block .sb-note { font-family: var(--serif); font-style: italic; color: var(--grey); font-size: 15px; margin-bottom: 18px; }
+.slides-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.slide-card { display: block; text-decoration: none; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-left: 3px solid var(--gold); border-radius: 3px; padding: 12px 14px; transition: border-color .15s, transform .1s, box-shadow .15s; }
+.slide-card:hover { border-left-color: var(--accent); box-shadow: 0 3px 12px rgba(26,35,50,.08); transform: translateY(-1px); }
+.slide-card .ch { font-family: var(--sans); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.slide-card .ti { font-family: var(--serif); font-size: 18px; line-height: 1.15; margin-top: 3px; color: var(--ink); }
+.slide-card .pdf { font-family: var(--sans); font-size: 11px; color: var(--grey); margin-top: 6px; }
+.slide-card.current { border-left-color: var(--accent); background: var(--paper-soft); }
+.slide-card.current .ch { color: var(--accent); }
+
+/* tree visualiser */
+.tree-wrap { background: var(--paper-soft); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 8px 4px; margin: 18px 0 0; overflow-x: auto; }
+.tree-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.t-edge { stroke: #9aa0a6; stroke-width: 1.4; fill: none; }
+.t-edge.on-pv { stroke: var(--accent); stroke-width: 3; }
+.t-edge.pruned { stroke: #d9b3b3; stroke-width: 1; stroke-dasharray: 3 3; }
+.t-node { stroke: #1f5e5e; stroke-width: 1.2; }
+.t-node.max { fill: #38b59a; }
+.t-node.min { fill: #38b59a; }
+.t-node.current { stroke: var(--accent); stroke-width: 3; }
+.t-node.pruned { fill: #efe2e2; stroke: #d9b3b3; }
+.t-node.settled { fill: #2d8f78; }
+.t-val { font-family: var(--mono); font-weight: 600; font-size: 15px; fill: var(--ink); }
+.t-val.fresh { fill: var(--accent); }
+.t-ab { font-family: var(--mono); font-size: 11px; fill: var(--teal); }
+.t-rowlab { font-family: var(--sans); font-weight: 700; font-size: 13px; fill: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
+.t-leaf-val { font-family: var(--mono); font-weight: 600; font-size: 14px; fill: var(--ink); }
+.t-cut { font-family: var(--sans); font-weight: 700; font-size: 13px; fill: var(--accent); }
+/* paper halo keeps labels legible over triangles and edges */
+.t-val, .t-ab, .t-leaf-val, .t-cut { paint-order: stroke; stroke: var(--paper-soft); stroke-width: 4px; stroke-linejoin: round; }
+.tree-legend { font-size: 13px; color: var(--grey); margin-top: 8px; }
+.tree-legend b { color: var(--ink); }
+.t-meta { display:flex; gap: 22px; flex-wrap: wrap; align-items:center; margin-top:10px; font-family: var(--sans); font-size: 13px; }
+.t-meta .chip { background: var(--paper-warm); border: 1px solid var(--rule); border-radius: 3px; padding: 3px 10px; }
+.t-meta .chip b { font-family: var(--mono); color: var(--accent); }
+
+/* tic-tac-toe boards */
+.ttt-stage { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; margin-top: 18px; }
+.ttt-board { display: grid; grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 64px); gap: 4px; background: var(--rule); padding: 4px; border-radius: 4px; }
+.ttt-cell { background: var(--paper); border: none; font-family: var(--serif); font-size: 40px; font-weight: 600; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink); transition: background .12s; }
+.ttt-cell:hover:not(:disabled) { background: var(--paper-warm); }
+.ttt-cell:disabled { cursor: default; }
+.ttt-cell.x { color: var(--accent); }
+.ttt-cell.o { color: var(--teal); }
+.ttt-cell.win { background: var(--success-bg); }
+.ttt-side { flex: 1; min-width: 240px; }
+.ttt-status { font-family: var(--serif); font-size: 20px; margin-bottom: 12px; min-height: 28px; }
+.ttt-status.win { color: var(--success); } .ttt-status.lose { color: var(--error); } .ttt-status.draw { color: var(--gold); }
+.eval-line { display:flex; justify-content:space-between; font-family: var(--mono); font-size: 13px; padding: 3px 0; border-bottom: 1px dotted var(--grey-soft); }
+.eval-total { font-family: var(--mono); font-size: 18px; font-weight: 600; margin-top: 10px; }
+.eval-total b { color: var(--accent); }
+.reveal-btn { cursor: pointer; }
+.spoiler { filter: blur(5px); transition: filter .2s; cursor: pointer; }
+.spoiler.shown { filter: none; cursor: default; }
+.exq { font-family: var(--mono); font-size: 13px; }
+
+/* ---- components not in the shared stylesheet (kept self-contained here) ---- */
+.mono { font-family: var(--mono); font-size: 0.92em; }
+.callout.gold { background: #f6edd8; border-left-color: var(--gold); }
+.pseudo-line { display: block; font-family: var(--mono); font-size: 13.5px; line-height: 1.75; white-space: pre-wrap; }
+.pseudo-line .cmt, .cmt { color: var(--grey); font-style: italic; }
+.feature-list { list-style: none; margin: 0 0 18px; padding: 0; }
+.feature-list li { position: relative; padding: 7px 0 7px 22px; border-bottom: 1px dotted var(--grey-soft); }
+.feature-list li:last-child { border-bottom: none; }
+.feature-list li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
+.def-table { border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; margin: 8px 0 18px; }
+.def-row { display: grid; grid-template-columns: 210px 1fr; border-bottom: 1px solid var(--rule); }
+.def-row:last-child { border-bottom: none; }
+.def-term { background: var(--paper-warm); padding: 10px 14px; font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.def-body { padding: 10px 14px; font-size: 14.5px; }
+.prop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(178px, 1fr)); gap: 14px; margin: 8px 0 18px; }
+.prop-card { background: var(--paper-soft); border: 1px solid var(--rule); border-top: 3px solid var(--teal); border-radius: 4px; padding: 14px 16px; }
+.prop-name { font-family: var(--sans); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); font-weight: 600; }
+.prop-val { font-family: var(--serif); font-size: 26px; line-height: 1.1; margin: 4px 0 6px; color: var(--ink); }
+.prop-val.yes { color: var(--green); }
+.prop-val.mono { font-family: var(--mono); font-size: 19px; }
+.prop-note { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+.cmp-table { width: 100%; border-collapse: collapse; margin: 8px 0 18px; font-size: 14px; }
+.cmp-table th, .cmp-table td { border: 1px solid var(--rule); padding: 9px 12px; text-align: left; vertical-align: top; }
+.cmp-table thead th { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; }
+.cmp-table td:first-child, .cmp-table tbody th:first-child { background: var(--paper-warm); width: 130px; }
+.gloss-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.gloss-item { border-left: 3px solid var(--gold); padding: 3px 0 3px 14px; }
+.gloss-en { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.gloss-en .ar { font-size: 14px; margin-left: 8px; }
+.gloss-def { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; }
+@media (max-width: 640px) { .def-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-left">
+      <div class="eyebrow">COMP338 &middot; Artificial Intelligence &middot; Birzeit University</div>
+      <h1>Games and <em>adversarial</em> search</h1>
+    </div>
+    <div class="masthead-right">
+      <div class="vol">Interactive companion &middot; Chapter 5</div>
+      <div>Russell &amp; Norvig &middot; AIMA (3rd ed.) &middot; Jarrar Ch.5</div>
+    </div>
+  </div>
+</header>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="nav-link" href="#sec-slides">Slides</a>
+    <a class="nav-link active" href="#sec-why">I. Why games</a>
+    <a class="nav-link" href="#sec-tree">II. Game tree</a>
+    <a class="nav-link" href="#sec-minimax">III. Minimax</a>
+    <a class="nav-link" href="#sec-props">IV. Properties</a>
+    <a class="nav-link" href="#sec-ab">V. Alpha&ndash;beta</a>
+    <a class="nav-link" href="#sec-order">VI. Ordering</a>
+    <a class="nav-link" href="#sec-eval">VII. Evaluation</a>
+    <a class="nav-link" href="#sec-play">VIII. Play</a>
+    <a class="nav-link" href="#sec-cases">IX. Case studies</a>
+    <a class="nav-link" href="#sec-exercise">X. Exercise</a>
+    <a class="nav-link" href="#sec-compare">XI. Cheat sheet</a>
+    <a class="nav-link" href="#sec-glossary">Glossary</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================================================ SLIDES ============================================================ -->
+<section class="section" id="sec-slides" style="margin-bottom:40px;">
+  <div class="slides-block">
+    <h4>Lecture slides &middot; Mustafa Jarrar (Birzeit)</h4>
+    <p class="sb-note">This companion follows the course's structure. The original lecture-note decks for Chapters 1&ndash;5 are linked below; this page expands Chapter&nbsp;5 with worked, interactive versions of every idea.</p>
+    <div class="slides-grid">
+      <a class="slide-card" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch1.Introduction.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 1</div><div class="ti">Introduction to AI</div><div class="pdf">PDF &middot; lecture notes</div></a>
+      <a class="slide-card" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch2.IntelligentAgents.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 2</div><div class="ti">Intelligent Agents</div><div class="pdf">PDF &middot; lecture notes</div></a>
+      <a class="slide-card" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch3.UninformedSearch.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 3</div><div class="ti">Uninformed &amp; Informed Search</div><div class="pdf">PDF &middot; see also the <a href="comp338-search-companion.html" style="color:var(--accent)">Search companion</a></div></a>
+      <a class="slide-card" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch4.LocalSearch.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 4</div><div class="ti">Local Search</div><div class="pdf">PDF &middot; lecture notes</div></a>
+      <a class="slide-card current" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch5.Games.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 5 &middot; you are here</div><div class="ti">Games &amp; Adversarial Search</div><div class="pdf">PDF &middot; expanded below</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ I. WHY GAMES ============================================================ -->
+<section class="section" id="sec-why">
+  <div class="section-header">
+    <div><div class="num">Section I</div><h2>Why games?</h2></div>
+    <div class="sublabel">search, but the world fights back</div>
+  </div>
+  <p class="lede">Every search problem so far had one mover: <em>you</em>. You chose every action, and the world sat still between your moves. A <em>game</em> breaks that assumption. Between your moves, an <em>opponent</em> moves, and the opponent wants exactly what you do not. Planning now means planning <em>against</em> a mind that is planning against you.</p>
+
+  <div class="subsection">
+    <h4>The setting we study</h4>
+    <p>Chapter 5 concentrates on the cleanest, most-studied class of games, the one chess, checkers, and tic-tac-toe all belong to. A game in this class is:</p>
+    <ul class="feature-list">
+      <li><strong>Two-player.</strong> Exactly two agents move. We name them <span class="term">MAX<span class="term-tooltip">The player we are deciding for; MAX tries to maximise the final utility.<span class="ar">اللاعب الأعظم</span></span></span> (the player we are deciding for) and <span class="term">MIN<span class="term-tooltip">The opponent; MIN tries to minimise MAX's utility.<span class="ar">اللاعب الأصغر</span></span></span> (the opponent).</li>
+      <li><strong>Turn-taking.</strong> MAX moves, then MIN, then MAX, alternating.</li>
+      <li><strong>Deterministic.</strong> A move has one fixed outcome. No dice, no shuffled deck.</li>
+      <li><strong>Perfect information.</strong> Both players see the whole board at all times. Nothing is hidden.</li>
+      <li><strong>Zero-sum.</strong> One player's gain is exactly the other's loss. Whatever is good for MAX by some amount is bad for MIN by the same amount. There is no outcome that is good for both.</li>
+    </ul>
+    <div class="callout"><span class="marker">Why this class first</span>Cards (hidden hands) and backgammon (dice) break <em>perfect information</em> and <em>determinism</em>. They need extra machinery (chance nodes, beliefs). The deterministic, perfect-information case already contains the two ideas that matter most (<strong>minimax</strong> and <strong>alpha&ndash;beta pruning</strong>), so we master it first. The motivating slide opens with cards, checkers, tic-tac-toe and chess precisely to ask <em>which of these can we plan ahead in</em>; the answer for the deterministic ones is: all of them, in principle.</p></div>
+  </div>
+
+  <div class="subsection">
+    <h4>Games as a search problem, and why they are hard</h4>
+    <p>Playing a game <em>is</em> a search: from the current position, look ahead through the moves available to you, the replies available to the opponent, your replies to those, and so on, until you can tell winning lines from losing ones. The search space is a <span class="term">game tree<span class="term-tooltip">A tree whose root is the current position, whose edges are legal moves, and whose levels alternate between the two players.<span class="ar">شجرة اللعبة</span></span></span>.</p>
+    <p>The catch is size. Chess has an average <span class="term">branching factor<span class="term-tooltip">The average number of legal moves available at a position; the average number of children of a node.<span class="ar">معامل التفرّع</span></span></span> of about <strong>b &asymp; 35</strong>, and a game runs to roughly <strong>m &asymp; 100</strong> ply. A full game tree therefore holds about <span class="mono">35<sup>100</sup> &asymp; 10<sup>154</sup></span> nodes, more than the number of atoms in the observable universe. We can never build it. So the real problem is not "search the tree" but:</p>
+    <div class="callout gold"><span class="marker">The two real problems</span><strong>(1)</strong> Given the part of the tree we <em>can</em> afford to look at, what is the best move, assuming the opponent plays as well as possible? That is <strong>minimax</strong>. <strong>(2)</strong> How do we avoid wasting time on parts of the tree that cannot change the answer (<strong>alpha&ndash;beta pruning</strong>), and how do we stop early and still judge a position well (<strong>evaluation functions</strong>)?</div>
+  </div>
+</section>
+
+<!-- ============================================================ II. THE GAME TREE ============================================================ -->
+<section class="section" id="sec-tree">
+  <div class="section-header">
+    <div><div class="num">Section II</div><h2>The game tree</h2></div>
+    <div class="sublabel">states, plies, and who wins at the leaves</div>
+  </div>
+  <p class="lede">A game tree turns "what could happen" into a picture. The root is where we are now. Each downward step is one legal move by whoever is to play. Levels <em>alternate</em> owners: MAX chooses at one level, MIN at the next. At the bottom, the game is over and we can say, plainly, who won.</p>
+
+  <div class="subsection">
+    <h4>Six parts, like any search problem</h4>
+    <p>A game is defined by the same kind of schema we used for ordinary search, with two twists: a function that says <em>whose turn</em> it is, and a <em>utility</em> on terminal states instead of a goal test.</p>
+    <div class="def-table">
+      <div class="def-row"><div class="def-term">Initial state <span class="mono">S&#8320;</span></div><div class="def-body">The starting position (e.g. the empty tic-tac-toe board).</div></div>
+      <div class="def-row"><div class="def-term">PLAYER(s)</div><div class="def-body">Whose turn it is to move in state <span class="mono">s</span>: MAX or MIN.</div></div>
+      <div class="def-row"><div class="def-term">ACTIONS(s)</div><div class="def-body">The set of legal moves in <span class="mono">s</span>.</div></div>
+      <div class="def-row"><div class="def-term">RESULT(s, a)</div><div class="def-body">The state reached by playing move <span class="mono">a</span> in <span class="mono">s</span> (the <em>transition model</em>).</div></div>
+      <div class="def-row"><div class="def-term">TERMINAL&#8209;TEST(s)</div><div class="def-body">True when the game is over (win, loss, or draw).</div></div>
+      <div class="def-row"><div class="def-term">UTILITY(s, p)</div><div class="def-body">A number giving the outcome for player <span class="mono">p</span> at a terminal state <span class="mono">s</span>. For tic-tac-toe: <span class="mono">+1</span> win, <span class="mono">0</span> draw, <span class="mono">&minus;1</span> loss, read from MAX's point of view.</div></div>
+    </div>
+    <div class="callout"><span class="marker">Ply, not "move"</span>One step by one player is a <span class="term">ply<span class="term-tooltip">A single move by a single player. A "move" in everyday speech (white then black) is two plies.<span class="ar">نِصف نقلة</span></span></span>. Each level of the tree is one ply, so the levels alternate MAX, MIN, MAX, MIN&hellip; The tic-tac-toe tree in the lecture notes shows MAX(X) choosing among 9 first moves, MIN(O) replying, and so on, down to TERMINAL boards labelled &minus;1, 0, +1.</div>
+  </div>
+
+  <div class="subsection">
+    <h4>Zero-sum, drawn as one number</h4>
+    <p>Because the game is zero-sum, we do not need two utilities. One number suffices, read from MAX's perspective: <strong>high is good for MAX, low is good for MIN</strong>. MAX climbs, MIN drags down. Every value in every tree below is "goodness for MAX". This single convention is what makes the next algorithm so short.</p>
+  </div>
+</section>
+
+<!-- ============================================================ III. MINIMAX ============================================================ -->
+<section class="section" id="sec-minimax">
+  <div class="section-header">
+    <div><div class="num">Section III</div><h2>Minimax</h2></div>
+    <div class="sublabel">assume the opponent is perfect, then play your best</div>
+  </div>
+  <p class="lede">Minimax answers one question: <em>if the opponent always replies as well as they possibly can, what is the best I can guarantee?</em> It computes a value for every node by reading the tree from the leaves upward (<strong>MAX nodes take the maximum of their children, MIN nodes take the minimum</strong>), and then MAX plays toward the child that produced the root value.</p>
+
+  <div class="subsection">
+    <h4>The rule, in one line each</h4>
+    <div class="pseudo"><span class="pseudo-line"><span class="kw">MINIMAX</span>(s) =</span>
+<span class="pseudo-line">&nbsp;&nbsp;UTILITY(s) <span class="cmt">// if s is terminal</span></span>
+<span class="pseudo-line">&nbsp;&nbsp;max over a of MINIMAX(RESULT(s,a)) <span class="cmt">// if PLAYER(s) = MAX</span></span>
+<span class="pseudo-line">&nbsp;&nbsp;min over a of MINIMAX(RESULT(s,a)) <span class="cmt">// if PLAYER(s) = MIN</span></span></div>
+    <p>Read it as a recipe with four steps, exactly as the notes phrase it for the MAX player: <strong>(1)</strong> generate the tree as deep as time permits; <strong>(2)</strong> apply the utility / evaluation function to the leaves; <strong>(3)</strong> back the values up, minimum at MIN nodes and maximum at MAX nodes; <strong>(4)</strong> at the root, MAX chooses the move that led to the highest backed-up value.</p>
+  </div>
+
+  <div class="subsection">
+    <h4>Watch it back values up</h4>
+    <p>Below is the canonical three-level tree (root MAX, then MIN, then the leaves), the same shape the lecture uses for its worked examples. Step through it: leaves are read left to right, each MIN node settles on the smallest of its children, and the root MAX takes the largest of the MIN values. The thick red line is the <span class="term">principal variation<span class="term-tooltip">The line of best play for both sides: MAX's best move and MIN's best replies. Its value is the minimax value of the root.<span class="ar">المسار الرئيسي</span></span></span>: best play for both sides.</p>
+    <div class="callout"><span class="marker">How to read this diagram</span>Up-triangles <b>&#9650;</b> are MAX nodes, down-triangles <b>&#9660;</b> are MIN nodes (the left margin labels each row). The number that appears <b>above</b> a node is the value backed up to it; the numbers under the bottom row are the given leaf utilities. Press <em>Step</em> to fill them in one node at a time.</div>
+    <div class="tree-wrap"><div data-tree="mm"></div></div>
+    <div class="controls">
+      <button class="step-btn" data-tree-ctl="mm" data-action="reset">Reset</button>
+      <button class="step-btn primary" data-tree-ctl="mm" data-action="step">Step</button>
+      <button class="step-btn" data-tree-ctl="mm" data-action="play">Play all</button>
+    </div>
+    <div class="feedback info" data-tree-fb="mm"></div>
+    <div class="callout"><span class="marker">Why MIN helps MAX decide</span>MAX does not get to pick the leaf it likes best. Whatever child MAX moves to, MIN will then steer toward the worst leaf <em>for MAX</em> in that subtree. So the honest value of a MAX move is the <em>minimum</em> its subtree can be forced to. MAX then picks the move whose forced-worst is the least bad. That double "best of the worst" is the whole idea, and it is why the algorithm is called mini&#8209;max.</div>
+  </div>
+</section>
+
+<!-- ============================================================ IV. PROPERTIES ============================================================ -->
+<section class="section" id="sec-props">
+  <div class="section-header">
+    <div><div class="num">Section IV</div><h2>Properties of minimax</h2></div>
+    <div class="sublabel">correct, optimal, and far too slow</div>
+  </div>
+  <p class="lede">Minimax is a depth-first walk of the game tree, so its costs are the depth-first costs, with a catch that makes the time unaffordable for any interesting game.</p>
+  <div class="subsection">
+    <div class="prop-grid">
+      <div class="prop-card"><div class="prop-name">Complete?</div><div class="prop-val yes">Yes</div><div class="prop-note">if the tree is finite. It will always return a value.</div></div>
+      <div class="prop-card"><div class="prop-name">Optimal?</div><div class="prop-val yes">Yes</div><div class="prop-note">against an opponent who also plays optimally. If MIN blunders, MAX does at least as well as minimax promised.</div></div>
+      <div class="prop-card"><div class="prop-name">Time</div><div class="prop-val mono">O(b<sup>m</sup>)</div><div class="prop-note">it visits every node: <span class="mono">b</span> moves at each of <span class="mono">m</span> levels.</div></div>
+      <div class="prop-card"><div class="prop-name">Space</div><div class="prop-val mono">O(b&middot;m)</div><div class="prop-note">depth-first: only the current path plus siblings are held.</div></div>
+    </div>
+    <div class="callout warn"><span class="marker">The wall</span>For chess, <span class="mono">b &asymp; 35</span> and <span class="mono">m &asymp; 100</span>, so <span class="mono">b<sup>m</sup></span> is astronomically large, so an exact minimax is <strong>completely infeasible</strong>. Two escapes follow: prune the tree without changing the answer (<a href="#sec-ab">alpha&ndash;beta</a>), and stop early using a heuristic instead of reaching real terminals (<a href="#sec-eval">evaluation functions</a>). Real engines use both at once.</div>
+  </div>
+</section>
+
+<!-- ============================================================ V. ALPHA-BETA ============================================================ -->
+<section class="section" id="sec-ab">
+  <div class="section-header">
+    <div><div class="num">Section V</div><h2>Alpha&ndash;beta pruning</h2></div>
+    <div class="sublabel">the same answer, a fraction of the work</div>
+  </div>
+  <p class="lede">Minimax visits every leaf. Most of them cannot possibly change the root's value. <em>Alpha&ndash;beta pruning</em> proves, mid-search, that a whole branch is irrelevant and skips it, and it does so <strong>without changing the final result at all</strong>. It returns exactly what minimax would; it just refuses to waste time.</p>
+
+  <div class="subsection">
+    <h4>Two numbers carried down the path</h4>
+    <p>As the search descends, it keeps two bounds, valid for the <em>current path</em> from the root:</p>
+    <div class="def-table">
+      <div class="def-row"><div class="def-term">&alpha; (alpha)</div><div class="def-body">the best (highest) value MAX is already guaranteed somewhere along this path. Start it at <span class="mono">&minus;&infin;</span>. It can only rise.</div></div>
+      <div class="def-row"><div class="def-term">&beta; (beta)</div><div class="def-body">the best (lowest) value MIN is already guaranteed along this path. Start it at <span class="mono">+&infin;</span>. It can only fall.</div></div>
+    </div>
+    <p>The window <span class="mono">[&alpha;, &beta;]</span> is the range of outcomes still "in play". The cut rules are mirror images:</p>
+    <ul class="feature-list">
+      <li><strong>&beta;-cut (at a MAX node).</strong> &alpha; is raised by each child. If a child makes the node's value <span class="mono">&ge; &beta;</span>, stop: the MIN parent above already has a reply at least this good for itself and will never let MAX come here. <em>"If the current max value is greater than the successor's min value, don't explore that subtree any more."</em></li>
+      <li><strong>&alpha;-cut (at a MIN node).</strong> &beta; is lowered by each child. If a child makes the node's value <span class="mono">&le; &alpha;</span>, stop: the MAX parent above already has a move at least this good and will never come here. <em>"If the current minimum is less than the successor's max value, don't look down that subtree any more."</em></li>
+    </ul>
+  </div>
+
+  <div class="subsection">
+    <h4>The same tree, now pruned</h4>
+    <p>This is the very tree from Section III, searched depth-first left to right with alpha&ndash;beta switched on. Watch the window <span class="mono">[&alpha;, &beta;]</span> at each node, and watch whole branches turn to dashed grey the instant they are proven irrelevant. The backed-up root value is identical to plain minimax; count how many leaves were never read.</p>
+    <div class="tree-wrap"><div data-tree="ab"></div></div>
+    <div class="controls">
+      <button class="step-btn" data-tree-ctl="ab" data-action="reset">Reset</button>
+      <button class="step-btn primary" data-tree-ctl="ab" data-action="step">Step</button>
+      <button class="step-btn" data-tree-ctl="ab" data-action="play">Play all</button>
+    </div>
+    <div class="t-meta">
+      <span class="chip">leaves read: <b data-tree-stat="ab-seen">0</b> / <span data-tree-stat="ab-total">0</span></span>
+      <span class="chip">branches pruned: <b data-tree-stat="ab-pruned">0</b></span>
+    </div>
+    <div class="tree-legend">On the diagram: each node's value sits <b>above</b> it, its <b>[&alpha;, &beta;]</b> window sits <b>below</b> it, and <span style="color:var(--accent)">&#9986;</span> marks a cut (the rest of that branch is skipped, shown dashed).</div>
+    <div class="feedback info" data-tree-fb="ab"></div>
+    <div class="callout"><span class="marker">Pruning is bookkeeping, not luck</span>Notice the cut at the second MIN node: as soon as one of its children comes back <span class="mono">&le; &alpha;</span> (MAX already has something at least that good on the left), the rest of that MIN node's children are skipped. MIN "knows MAX won't come here, and abandons it." The remaining leaves are never evaluated, yet the root value is exactly what full minimax computed.</div>
+    <div class="callout gold"><span class="marker">Where is the &beta;-cut?</span>This three-level tree can only trigger <strong>&alpha;-cuts</strong> (cuts at MIN nodes), because its only MAX node is the root. The mirror case, a <strong>&beta;-cut</strong> at a MAX node, needs a deeper tree: open the <a href="#sec-exercise">exercise tree</a> and switch it to <em>alpha&ndash;beta</em> mode, whose four levels trigger both kinds of cut.</div>
+  </div>
+</section>
+
+<!-- ============================================================ VI. ORDERING ============================================================ -->
+<section class="section" id="sec-order">
+  <div class="section-header">
+    <div><div class="num">Section VI</div><h2>Move ordering and efficiency</h2></div>
+    <div class="sublabel">good guesses double how deep you can see</div>
+  </div>
+  <p class="lede">Alpha&ndash;beta prunes more when good moves are tried first, because a strong early value tightens the window sooner. The order in which children are examined does not change the answer, but it changes how much work the answer costs, dramatically.</p>
+  <div class="subsection">
+    <h4>From b<sup>m</sup> toward b<sup>m/2</sup></h4>
+    <p>With <em>perfect</em> ordering (best move first at every node), alpha&ndash;beta examines only <span class="mono">O(b<sup>m/2</sup>)</span> nodes instead of <span class="mono">O(b<sup>m</sup>)</span>. The exponent halves. In plain terms:</p>
+    <div class="callout gold"><span class="marker">The headline</span>Perfect move ordering lets alpha&ndash;beta search to <strong>twice the depth</strong> of plain minimax in the same time. For chess, that is the difference between looking a few ply ahead and looking far enough to play seriously. Even <em>rough</em> ordering (try captures first, try last iteration's best move first) captures most of the benefit.</div>
+    <p>Try it: the same tree, with its three top branches reordered. Best-first ordering prunes hardest; worst-first prunes least. The leaves-read counter tells the story.</p>
+    <div class="tree-wrap"><div data-tree="ord"></div></div>
+    <div class="controls">
+      <button class="step-btn" data-tree-ctl="ord" data-action="reset">Reset</button>
+      <button class="step-btn primary" data-tree-ctl="ord" data-action="step">Step</button>
+      <button class="step-btn" data-tree-ctl="ord" data-action="play">Play all</button>
+      <label class="toggle">Order:
+        <select data-ord-select style="font-family:var(--sans);margin-left:6px;">
+          <option value="best">best-first</option>
+          <option value="orig">as drawn</option>
+          <option value="worst">worst-first</option>
+        </select>
+      </label>
+    </div>
+    <div class="t-meta"><span class="chip">leaves read: <b data-tree-stat="ord-seen">0</b> / <span data-tree-stat="ord-total">0</span></span><span class="chip">root value: <b data-tree-stat="ord-root">&ndash;</b></span></div>
+    <div class="feedback info" data-tree-fb="ord"></div>
+  </div>
+</section>
+
+<!-- ============================================================ VII. EVALUATION ============================================================ -->
+<section class="section" id="sec-eval">
+  <div class="section-header">
+    <div><div class="num">Section VII</div><h2>Imperfect real-time decisions</h2></div>
+    <div class="sublabel">stop early, and judge the position</div>
+  </div>
+  <p class="lede">We cannot reach real terminal states in chess, so we cheat honestly: search to a fixed depth, then <em>estimate</em> how good each cut-off position is with an <span class="term">evaluation function<span class="term-tooltip">A heuristic that estimates the expected utility of a non-terminal position without searching further.<span class="ar">دالة التقييم</span></span></span>. Two changes to minimax make this work.</p>
+  <div class="subsection">
+    <h4>Cut-off test replaces terminal test</h4>
+    <p>Instead of "is the game over?", we ask "have we searched deep enough?". When yes, the node is treated as a leaf and handed to the evaluation function. The nodes at the cut-off depth <em>become</em> the new leaves; their estimated values are backed up by minimax exactly as before.</p>
+    <div class="callout"><span class="marker">The perfect-evaluator thought experiment</span>If you had a <em>perfect</em> evaluation function (one that returned the true minimax value of any position), you would never need to search more than <strong>one level deep</strong>: just evaluate each immediate move and pick the best. You cannot build such a function (if you could, the game would be solved), but it shows what the evaluator is approximating, and why a better evaluator is worth more than a little extra depth.</div>
+  </div>
+  <div class="subsection">
+    <h4>What an evaluation function looks like</h4>
+    <p>It is intensely game-specific and encodes human knowledge. The crudest ("stupid") one returns <span class="mono">+1 / 0 / &minus;1</span> for win/draw/loss, useless until the very end because it is flat everywhere else. Useful evaluators score many <em>features</em> and combine them, almost always as a <strong>weighted linear sum</strong>:</p>
+    <div class="pseudo"><span class="pseudo-line">EVAL(s) = w&#8321;&middot;f&#8321;(s) + w&#8322;&middot;f&#8322;(s) + &hellip; + w&#8344;&middot;f&#8344;(s)</span></div>
+    <p>For chess, the classic features are material and structure: <span class="mono">f&#8321; =</span> (my pieces &minus; your pieces), <span class="mono">f&#8322; = +1</span> if I have a queen and you do not, a rook-advantage term, and so on. The quality of the evaluator rests on three things: <strong>which features</strong> you measure, <strong>how each is scored</strong>, and <strong>how they are weighted</strong>. And note: the <em>absolute</em> value does not matter, only the <em>relative</em> ordering of positions, because minimax only ever compares siblings.</p>
+  </div>
+  <div class="subsection">
+    <h4>Try a real one: tic-tac-toe</h4>
+    <p>A simple, genuinely-used tic-tac-toe evaluator counts the lines (rows, columns, diagonals) still <em>open</em> to each player (a line is open for X if it contains no O, and vice-versa):</p>
+    <div class="pseudo"><span class="pseudo-line">E(s) = (open lines for X) &minus; (open lines for O)</span>
+<span class="pseudo-line cmt">    = (r&#8339; + c&#8339; + d&#8339;) &minus; (r&#9675; + c&#9675; + d&#9675;)</span></div>
+    <p>Click the cells to cycle <span style="color:var(--accent);font-weight:700">empty, then X, then O</span>, and watch the value update. This is the number minimax would back up from this position at depth 0. A position where X threatens many lines and blocks O's scores high (good for X = MAX).</p>
+    <div class="ttt-stage">
+      <div class="ttt-board" data-eval-board></div>
+      <div class="ttt-side">
+        <div class="eval-line"><span>open lines for X &nbsp;(r&#8339;+c&#8339;+d&#8339;)</span><span data-eval="x">0</span></div>
+        <div class="eval-line"><span>open lines for O &nbsp;(r&#9675;+c&#9675;+d&#9675;)</span><span data-eval="o">0</span></div>
+        <div class="eval-total">E(s) = <b data-eval="total">0</b></div>
+        <div class="feedback info" data-eval="msg" style="margin-top:14px"></div>
+        <div class="controls" style="margin-top:12px"><button class="step-btn" data-eval-clear>Clear board</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ VIII. PLAY ============================================================ -->
+<section class="section" id="sec-play">
+  <div class="section-header">
+    <div><div class="num">Section VIII</div><h2>Play against minimax</h2></div>
+    <div class="sublabel">the algorithm, made tangible</div>
+  </div>
+  <p class="lede">Tic-tac-toe is small enough to search <em>completely</em>: no cut-off, no evaluation heuristic, just real minimax to true terminal states. So this opponent plays the exact minimax move every time. The theorem says optimal play forces at worst a draw: <strong>you cannot win.</strong> The best you can do is draw. Try.</p>
+  <div class="subsection">
+    <div class="ttt-stage">
+      <div>
+        <div class="ttt-board" data-play-board></div>
+        <div class="controls" style="margin-top:12px">
+          <button class="step-btn primary" data-play-ctl="new">New game</button>
+          <label class="toggle"><input type="checkbox" data-play-show> Show O's reasoning</label>
+        </div>
+      </div>
+      <div class="ttt-side">
+        <div class="ttt-status" data-play-status>You are X. Click any square to move.</div>
+        <div class="callout" style="margin-top:8px"><span class="marker">What O is doing</span>For each of its legal replies, O runs minimax to the end of the game and reads back &minus;1 / 0 / +1 from <em>its own</em> perspective, assuming you (X) play perfectly against it. It then plays the move with the highest value, breaking ties toward a quicker win or a longer-delayed loss. Tick "show O's reasoning" to see the minimax score it assigned to every square.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ IX. CASE STUDIES ============================================================ -->
+<section class="section" id="sec-cases">
+  <div class="section-header">
+    <div><div class="num">Section IX</div><h2>Case studies and state of the art</h2></div>
+    <div class="sublabel">where these ideas actually run</div>
+  </div>
+  <div class="subsection">
+    <h4>Checkers, with a real evaluation function</h4>
+    <p>The lecture's checkers study uses exactly the weighted-feature shape from Section VII, weighting kings far above single pieces:</p>
+    <div class="pseudo"><span class="pseudo-line">E(s) = (5&middot;x&#8321; + x&#8322;) &minus; (5&middot;r&#8321; + r&#8322;)</span>
+<span class="pseudo-line cmt">  x&#8321;,x&#8322; = black king / single advantage;  r&#8321;,r&#8322; = red king / single advantage</span></div>
+    <p>From a given position, minimax (or alpha&ndash;beta) is run over black's moves and red's replies, the leaves are scored by <span class="mono">E(s)</span>, and the values back up to choose black's move, the same procedure you stepped through above, now with a heuristic at the leaves and a king worth five.</p>
+  </div>
+  <div class="subsection">
+    <h4>The milestones these two ideas built</h4>
+    <div class="callout"><span class="marker">Beyond the syllabus</span>Minimax + alpha&ndash;beta + a strong evaluation function is the recipe behind the headline game-playing programs. <strong>Chinook</strong> (checkers) became world champion and the game was later solved outright. <strong>Deep Blue</strong> beat world chess champion Garry Kasparov in 1997 using alpha&ndash;beta to a great depth with a hand-tuned evaluation and special-purpose hardware. Games with huge branching factors (Go) ultimately needed a different search (Monte-Carlo tree search with learned evaluations, as in <strong>AlphaGo</strong>, 2016), but the framing is the same: search the game tree, evaluate where you must stop, and assume a strong opponent. That last idea is the durable lesson of this chapter.</div>
+  </div>
+</section>
+
+<!-- ============================================================ X. EXERCISE ============================================================ -->
+<section class="section" id="sec-exercise">
+  <div class="section-header">
+    <div><div class="num">Section X</div><h2>Culminating exercise</h2></div>
+    <div class="sublabel">Jarrar's tree, end to end</div>
+  </div>
+  <p class="lede">This is the exercise tree from the lecture notes. Four levels (<span class="mono">max, min, max, min</span> from the top), with the leaf utilities given. Work it on paper first: back the values up, then decide which branches alpha&ndash;beta would cut under left-to-right search. Then step the widget and check yourself.</p>
+  <div class="subsection">
+    <h4>The tree</h4>
+    <p class="exq">Leaves, left to right: E=10, F=11, H=9, I=12, L=14, M=15, O=13, P=14, T=15, V=2, W=4, X=1, Z1=3, Z2=22, Z4=24, Z5=25. Root A is a MAX node.</p>
+    <div class="tree-wrap"><div data-tree="ex"></div></div>
+    <div class="controls">
+      <button class="step-btn" data-tree-ctl="ex" data-action="reset">Reset</button>
+      <button class="step-btn primary" data-tree-ctl="ex" data-action="step">Step</button>
+      <button class="step-btn" data-tree-ctl="ex" data-action="play">Play all</button>
+      <label class="toggle">Mode:
+        <select data-ex-mode style="font-family:var(--sans);margin-left:6px;">
+          <option value="mm">minimax</option>
+          <option value="ab">alpha&ndash;beta</option>
+        </select>
+      </label>
+    </div>
+    <div class="t-meta"><span class="chip">root value: <b data-tree-stat="ex-root">&ndash;</b></span><span class="chip">leaves read: <b data-tree-stat="ex-seen">0</b> / <span data-tree-stat="ex-total">0</span></span></div>
+    <div class="feedback info" data-tree-fb="ex"></div>
+    <div class="callout"><span class="marker">Self-check (click to reveal)</span><span class="spoiler" data-spoiler>The root value is <strong>10</strong>. Under minimax the left half resolves to 10 (B = min(C=10, J=14) = 10) and the right half to 4 (Q = min(R=4, Y=&hellip;) = 4), so A = max(10, 4) = 10. Under left-to-right alpha&ndash;beta several branches cut once &alpha; reaches 10 on the left: subtrees that cannot beat 10 are abandoned (for example, once Q is bounded at or below 10 from MAX's view it stops mattering, and inner MIN nodes that drop to or below the running &alpha; are cut). Reveal the exact cuts by stepping the widget in alpha&ndash;beta mode.</span></div>
+  </div>
+</section>
+
+<!-- ============================================================ XI. CHEAT SHEET ============================================================ -->
+<section class="section" id="sec-compare">
+  <div class="section-header">
+    <div><div class="num">Section XI</div><h2>Cheat sheet</h2></div>
+    <div class="sublabel">everything on one screen</div>
+  </div>
+  <div class="subsection">
+    <table class="cmp-table">
+      <thead><tr><th>&nbsp;</th><th>Minimax</th><th>Alpha&ndash;Beta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Returns</strong></td><td>exact minimax value</td><td><em>same</em> exact value</td></tr>
+        <tr><td><strong>Idea</strong></td><td>MAX maximises, MIN minimises; back up from leaves</td><td>skip branches that cannot change the result</td></tr>
+        <tr><td><strong>Carries</strong></td><td>just node values</td><td>also &alpha; (best for MAX) and &beta; (best for MIN) along the path</td></tr>
+        <tr><td><strong>Cut rule</strong></td><td>&ndash;</td><td>at MAX: stop if value &ge; &beta;; at MIN: stop if value &le; &alpha;</td></tr>
+        <tr><td><strong>Time</strong></td><td><span class="mono">O(b<sup>m</sup>)</span></td><td><span class="mono">O(b<sup>m</sup>)</span> worst, <span class="mono">O(b<sup>m/2</sup>)</span> with perfect ordering</td></tr>
+        <tr><td><strong>Space</strong></td><td><span class="mono">O(b&middot;m)</span></td><td><span class="mono">O(b&middot;m)</span></td></tr>
+        <tr><td><strong>Complete / Optimal</strong></td><td>yes / yes (vs optimal MIN)</td><td>yes / yes (identical to minimax)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout gold"><span class="marker">When the tree is too big (always, for real games)</span>Add a <strong>cut-off test</strong> (search to depth <span class="mono">d</span>) and an <strong>evaluation function</strong> at the cut-off leaves. Initialise <span class="mono">&alpha; = &minus;&infin;, &beta; = +&infin;</span>; at a MAX node raise &alpha;, cut when value <span class="mono">&ge; &beta;</span>; at a MIN node lower &beta;, cut when value <span class="mono">&le; &alpha;</span>. Order moves best-first to prune hardest. That five-part combination is a working game engine.</div>
+  </div>
+</section>
+
+<!-- ============================================================ GLOSSARY ============================================================ -->
+<section class="section" id="sec-glossary">
+  <div class="section-header">
+    <div><div class="num">Reference</div><h2>Glossary</h2></div>
+    <div class="sublabel">terms, with Arabic</div>
+  </div>
+  <div class="subsection">
+    <div class="gloss-grid">
+      <div class="gloss-item"><div class="gloss-en">Adversarial search <span class="ar">البحث التنافسي</span></div><div class="gloss-def">Search in an environment where another agent's goals oppose yours, so the value of a state depends on the opponent's best reply.</div></div>
+      <div class="gloss-item"><div class="gloss-en">MAX / MIN <span class="ar">الأعظم / الأصغر</span></div><div class="gloss-def">The two players. MAX maximises the (single, zero-sum) utility; MIN minimises it.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Game tree <span class="ar">شجرة اللعبة</span></div><div class="gloss-def">Tree rooted at the current position; edges are legal moves; levels alternate between MAX and MIN.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Ply <span class="ar">نِصف نقلة</span></div><div class="gloss-def">One move by one player; one level of the game tree.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Utility / payoff <span class="ar">المنفعة</span></div><div class="gloss-def">The numeric outcome at a terminal state, read from MAX's perspective (e.g. +1 / 0 / &minus;1).</div></div>
+      <div class="gloss-item"><div class="gloss-en">Zero-sum <span class="ar">محصّلته صفر</span></div><div class="gloss-def">One player's gain equals the other's loss; one number describes the outcome for both.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Minimax value <span class="ar">قيمة المينيماكس</span></div><div class="gloss-def">The utility MAX can guarantee against an optimal MIN; the value backed up to the root.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Principal variation <span class="ar">المسار الرئيسي</span></div><div class="gloss-def">The line of best play for both sides; the path of moves that realises the minimax value.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Alpha (&alpha;) <span class="ar">ألفا</span></div><div class="gloss-def">Best value found so far for MAX along the current path; lower bound on the result. Starts at &minus;&infin;.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Beta (&beta;) <span class="ar">بيتا</span></div><div class="gloss-def">Best value found so far for MIN along the current path; upper bound on the result. Starts at +&infin;.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Pruning / cut-off <span class="ar">التقليم</span></div><div class="gloss-def">Skipping a branch proven unable to affect the root value (alpha&ndash;beta); or stopping the search at a depth limit (cut-off test).</div></div>
+      <div class="gloss-item"><div class="gloss-en">Evaluation function <span class="ar">دالة التقييم</span></div><div class="gloss-def">Heuristic estimate of a non-terminal position's value, usually a weighted sum of game features. Only relative values matter.</div></div>
+      <div class="gloss-item"><div class="gloss-en">Branching factor (b) <span class="ar">معامل التفرّع</span></div><div class="gloss-def">Average number of legal moves per position (chess &asymp; 35).</div></div>
+      <div class="gloss-item"><div class="gloss-en">Move ordering <span class="ar">ترتيب النقلات</span></div><div class="gloss-def">The order children are examined; trying strong moves first lets alpha&ndash;beta prune more, toward O(b<sup>m/2</sup>).</div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>COMP338 &middot; Artificial Intelligence<br>Birzeit University &middot; Second Semester 2025/2026</div>
+    <div class="refs">
+      <strong>References</strong>
+      Russell, S. &amp; Norvig, P. <em>Artificial Intelligence: A Modern Approach</em>, 3rd ed., Pearson, 2010 (Ch. 5, Adversarial Search) &middot; Jarrar, M. <em>Lecture Notes on Games and Adversarial Search Problems</em> (Ch. 5), Birzeit University &middot; Knuth, D. &amp; Moore, R. "An analysis of alpha-beta pruning." <em>Artificial Intelligence</em> 6, 1975.
+    </div>
+  </div>
+</footer>
+
+<script src="comp338-games-companion.js"></script>
+</body>
+</html>

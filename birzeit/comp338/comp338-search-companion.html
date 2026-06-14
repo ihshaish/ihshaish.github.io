@@ -1193,6 +1193,18 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
   font-size: 14.5px;
   line-height: 1.6;
 }
+/* ---- Lecture-slides block (chapter links) ---- */
+.slides-block { background: var(--paper-warm); border: 1px solid var(--rule); border-radius: 4px; padding: 24px 28px; margin: 0 0 48px; }
+.slides-block h4 { font-family: var(--sans); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.slides-block .sb-note { font-family: var(--serif); font-style: italic; color: var(--grey); font-size: 15px; margin-bottom: 18px; }
+.slides-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.slide-card { display: block; text-decoration: none; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-left: 3px solid var(--gold); border-radius: 3px; padding: 12px 14px; transition: border-color .15s, transform .1s, box-shadow .15s; }
+.slide-card:hover { border-left-color: var(--accent); box-shadow: 0 3px 12px rgba(26,35,50,.08); transform: translateY(-1px); }
+.slide-card .ch { font-family: var(--sans); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.slide-card .ti { font-family: var(--serif); font-size: 18px; line-height: 1.15; margin-top: 3px; color: var(--ink); }
+.slide-card .pdf { font-family: var(--sans); font-size: 11px; color: var(--grey); margin-top: 6px; }
+.slide-card.current { border-left-color: var(--accent); background: var(--paper-soft); }
+.slide-card.current .ch { color: var(--accent); }
 </style>
   <script src="/birzeit/gate.js"></script>
 </head>
@@ -1229,6 +1241,18 @@ ul.tight li, ol.tight li { margin-bottom: 6px; font-size: 14.5px; }
 </nav>
 
 <main>
+
+<div class="slides-block">
+  <h4>Lecture slides &middot; Mustafa Jarrar (Birzeit)</h4>
+  <p class="sb-note">This companion follows the course's structure. The original lecture-note decks for Chapters 1&ndash;5 are linked below; Chapters 3 and 4 are expanded interactively on this page, and Chapter 5 in the <a href="comp338-games-companion.html" style="color:var(--accent)">Games &amp; Adversarial Search companion</a>.</p>
+  <div class="slides-grid">
+    <a class="slide-card" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch1.Introduction.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 1</div><div class="ti">Introduction to AI</div><div class="pdf">PDF &middot; lecture notes</div></a>
+    <a class="slide-card" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch2.IntelligentAgents.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 2</div><div class="ti">Intelligent Agents</div><div class="pdf">PDF &middot; lecture notes</div></a>
+    <a class="slide-card current" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch3.UninformedSearch.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 3 &middot; expanded here</div><div class="ti">Uninformed &amp; Informed Search</div><div class="pdf">PDF &middot; lecture notes</div></a>
+    <a class="slide-card current" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch4.LocalSearch.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 4 &middot; expanded here</div><div class="ti">Local Search</div><div class="pdf">PDF &middot; lecture notes</div></a>
+    <a class="slide-card" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch5.Games.pdf" target="_blank" rel="noopener"><div class="ch">Chapter 5</div><div class="ti">Games &amp; Adversarial Search</div><div class="pdf">PDF &middot; <a href="comp338-games-companion.html" style="color:var(--accent)">companion</a></div></a>
+  </div>
+</div>
 
 <!-- ============================================================
      SECTION I: THE PROBLEM-SOLVING AGENT
