@@ -214,6 +214,26 @@
     }
     .course-alerts li a { color: #0d47a1; font-weight: 700; text-decoration: none; border-bottom: 1px dotted #64b5f6; }
     .course-alerts li a:hover { color: #08306b; border-bottom-color: #1565c0; }
+
+    /* Jarrar-style lecture list (Part blocks) */
+    .part-credit { font-size: 0.92rem; color: #555; margin: 0 0 18px; line-height: 1.55; padding: 12px 16px; background: #fff8e7; border-left: 3px solid #b8893d; border-radius: 0 6px 6px 0; }
+    .part-credit a { color: #1565c0; font-weight: 600; text-decoration: none; border-bottom: 1px dotted #1565c0; }
+    .part-credit a:hover { border-bottom-style: solid; }
+    .jl-list { border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+    .jl-row { display: flex; align-items: center; gap: 14px; padding: 13px 18px; background: #fff; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+    .jl-row:last-child { border-bottom: none; }
+    .jl-row:hover { background: #fafbfc; }
+    .jl-n { font-family: 'Roboto Mono', monospace; font-weight: 700; color: #1565c0; font-size: 0.85rem; width: 20px; flex-shrink: 0; }
+    .jl-topic { flex: 1; min-width: 220px; font-weight: 600; color: #333; font-size: 1rem; }
+    .jl-topic small { display: block; font-weight: 400; color: #888; font-size: 0.8rem; margin-top: 2px; }
+    .jl-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .jl-slides, .jl-comp { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; text-decoration: none; padding: 6px 13px; border-radius: 6px; white-space: nowrap; }
+    .jl-slides { background: #fff; border: 1px solid #e0e0e0; color: #333; }
+    .jl-slides:hover { border-color: #1565c0; color: #1565c0; }
+    .jl-slides i { color: #c62828; }
+    .jl-comp { background: #e0f2f1; border: 1px solid #b2dfdb; color: #00695c; }
+    .jl-comp:hover { background: #b2dfdb; color: #004d40; }
+    .jl-comp i { color: #00897b; }
   </style>
   <script src="/birzeit/gate.js"></script>
 </head>
@@ -284,7 +304,8 @@
             <span class="new-pill" aria-hidden="true">New</span>
           </div>
           <ul>
-            <li class="latest"><span class="alert-date">8 Jun 2026</span><a href="/birzeit/comp338/COMP338_Quiz1.html" target="_blank" rel="noopener">Quiz&nbsp;#1 questions and answers</a> are now available, with full worked solutions and marking criteria.</li>
+            <li class="latest"><span class="alert-date">10 Jun 2026</span><a href="/birzeit/comp338/comp338-games-companion.html" target="_blank" rel="noopener">Games &amp; Adversarial Search companion</a> (Chapter&nbsp;5) is now available: an interactive minimax / alpha&ndash;beta visualiser, an evaluation-function calculator, and a play-against-minimax board.</li>
+            <li class="prev"><span class="alert-date">8 Jun 2026</span><a href="/birzeit/comp338/COMP338_Quiz1.html" target="_blank" rel="noopener">Quiz&nbsp;#1 questions and answers</a> are now available, with full worked solutions and marking criteria.</li>
           </ul>
         </aside>
 
@@ -298,27 +319,58 @@
           </a>
         </div>
 
-        <h2 class="section-heading"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Lecture Material</h2>
+        <h2 class="section-heading"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Part I: Problem Solving by Search</h2>
 
-        <p class="lecture-intro">A few selected lecture notes are provided here to support the concepts covered in class. For the full list of lecture notes, please visit <a href="https://www.jarrar.info/courses/AI/" target="_blank" rel="noopener">Jarrar's AI course page</a>.</p>
+        <p class="part-credit">Lecture material by <strong>Prof. Mustafa Jarrar</strong> (Birzeit University). Open each lecture's slides below; the chapters marked <em>companion</em> are expanded into interactive, worked walkthroughs on this site. Full course: <a href="https://www.jarrar.info/courses/AI/" target="_blank" rel="noopener">jarrar.info/courses/AI</a>.</p>
 
-        <!-- Chapter 3: Informed Search -->
-        <div class="lecture-block">
-          <h3>Chapter 3: Informed Search</h3>
-          <div class="lecture-files">
-            <a class="pdf-link" href="/birzeit/comp338/slides/Ch3_InformedSearch_Intro.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Part 1: Introduction</a>
-            <a class="pdf-link" href="/birzeit/comp338/slides/Ch3.%20Informed_Search_A*_and_variants.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Part 2: A* and variants</a>
+        <div class="jl-list">
+          <div class="jl-row">
+            <span class="jl-n">1</span>
+            <span class="jl-topic">Introduction to Artificial Intelligence</span>
+            <span class="jl-links">
+              <a class="jl-slides" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch1.Introduction.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+            </span>
           </div>
-          <p class="lecture-note">For full details and worked exercises (Romania map, coordinate exercise, 8-puzzle heuristics, pruning maze, A* complexity in depth, RBFS and SMA*), see the <a href="/birzeit/comp338/comp338-search-companion.html#sec-informed" target="_blank">Search Companion, Parts Eight and Nine</a>.</p>
-        </div>
-
-        <!-- Chapter 4: Local Search -->
-        <div class="lecture-block">
-          <h3>Chapter 4: Local Search</h3>
-          <div class="lecture-files">
-            <a class="pdf-link" href="/birzeit/comp338/slides/Ch.4_Local_Search.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Local Search slides</a>
+          <div class="jl-row">
+            <span class="jl-n">2</span>
+            <span class="jl-topic">Intelligent Agents</span>
+            <span class="jl-links">
+              <a class="jl-slides" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch2.IntelligentAgents.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+            </span>
           </div>
-          <p class="lecture-note">For the full treatment with worked examples (8-queens annotated board for hill climbing, simulated annealing with numeric acceptance-probability walkthrough, a five-card genetic algorithm worked example on 8-queens, stopping-criteria summary), see the <a href="/birzeit/comp338/comp338-search-companion.html#sec-local" target="_blank">Search Companion, Part Ten</a>.</p>
+          <div class="jl-row">
+            <span class="jl-n">3</span>
+            <span class="jl-topic">Uninformed Search Algorithms</span>
+            <span class="jl-links">
+              <a class="jl-slides" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch3.UninformedSearch.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+              <a class="jl-comp" href="/birzeit/comp338/comp338-search-companion.html#sec-uninformed" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Companion</a>
+            </span>
+          </div>
+          <div class="jl-row">
+            <span class="jl-n">4</span>
+            <span class="jl-topic">Informed Heuristic Search Algorithms</span>
+            <span class="jl-links">
+              <a class="jl-slides" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch3.InformedSearch.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+              <a class="jl-comp" href="/birzeit/comp338/comp338-search-companion.html#sec-informed" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Companion</a>
+            </span>
+          </div>
+          <div class="jl-row">
+            <span class="jl-n">5</span>
+            <span class="jl-topic">Local Search Algorithms</span>
+            <span class="jl-links">
+              <a class="jl-slides" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch4.LocalSearch.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+              <a class="jl-comp" href="/birzeit/comp338/comp338-search-companion.html#sec-local" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Companion</a>
+            </span>
+          </div>
+          <div class="jl-row">
+            <span class="jl-n">6</span>
+            <span class="jl-topic">Games and Adversarial Search</span>
+            <span class="jl-links">
+              <a class="jl-slides" href="https://www.jarrar.info/courses/AI/Jarrar.LectureNotes.Ch5.Games.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+              <a class="jl-comp" href="/birzeit/comp338/comp338-games-lecture.html" target="_blank" rel="noopener"><i class="fas fa-chalkboard"></i> Lecture deck</a>
+              <a class="jl-comp" href="/birzeit/comp338/comp338-games-companion.html" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Companion</a>
+            </span>
+          </div>
         </div>
 
         <h2 class="section-heading"><i class="fas fa-atlas" style="margin-right: 8px; color: #00897b;"></i>Study Companions</h2>
@@ -327,6 +379,14 @@
           <h3>Problem Formulation and Search Algorithms</h3>
           <p class="companion-desc">An interactive walkthrough of how AI problems are formulated as search: states, actions, goal tests, and path costs, followed by uninformed and informed search algorithms with worked examples. Covers chapters 2 to 4 of the course (problem-solving agents, uninformed search, informed search, local search) plus memory-bounded heuristic search.</p>
           <a class="companion-btn" href="/birzeit/comp338/comp338-search-companion.html" target="_blank" rel="noopener">
+            <i class="fas fa-atlas"></i> Open companion
+          </a>
+        </div>
+
+        <div class="companion-card">
+          <h3>Games and Adversarial Search</h3>
+          <p class="companion-desc">An interactive walkthrough of Chapter&nbsp;5: game trees, minimax, and alpha&ndash;beta pruning, with a step-through tree visualiser (minimax and alpha&ndash;beta on the same tree, with live &alpha;/&beta; windows and pruning), a move-ordering efficiency demo, an evaluation-function calculator, and a tic-tac-toe board you can play against an unbeatable minimax opponent. Includes Jarrar's exercise tree.</p>
+          <a class="companion-btn" href="/birzeit/comp338/comp338-games-companion.html" target="_blank" rel="noopener">
             <i class="fas fa-atlas"></i> Open companion
           </a>
         </div>

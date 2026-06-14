@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP338 · Games & Adversarial Search · Lecture Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a2332; --ink-soft:#2d3a4f; --paper:#faf6ee; --paper-warm:#f4ecd8; --paper-soft:#f8f2e2;
+  --rule:#c9bfa8; --accent:#8b1e1e; --accent-soft:#b54848; --gold:#b8893d; --teal:#2d6a6a;
+  --green:#4a7c3a; --grey:#7a7466; --grey-soft:#d4cdb8; --stage:#10151f;
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter Tight',system-ui,sans-serif; --mono:'JetBrains Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--stage);color:var(--ink);overflow:hidden}
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
+.slide{
+  position:absolute;width:min(94vw,1200px);height:min(calc(94vw*0.5625),calc(100vh - 96px));
+  background:var(--paper);border-radius:6px;box-shadow:0 18px 60px rgba(0,0,0,.45);
+  padding:54px 64px 64px;display:none;flex-direction:column;overflow:hidden;
+}
+.slide.active{display:flex}
+.kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:10px}
+.slide h1{font-family:var(--serif);font-weight:600;font-size:64px;line-height:1.02;color:var(--ink);letter-spacing:-.01em}
+.slide h1 em{font-style:italic;color:var(--accent)}
+.slide h2{font-family:var(--serif);font-weight:600;font-size:44px;line-height:1.05;color:var(--ink);margin-bottom:18px}
+.slide h2 em{font-style:italic;color:var(--accent)}
+.lead{font-family:var(--serif);font-size:27px;line-height:1.42;color:var(--ink-soft);max-width:60ch}
+.lead em{color:var(--accent);font-style:italic}
+.body{font-size:21px;line-height:1.5;color:var(--ink-soft);flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.cols{display:flex;gap:40px;align-items:flex-start;flex:1;min-height:0}
+.cols .col{flex:1;min-width:0}
+ul.points{list-style:none;display:flex;flex-direction:column;gap:14px}
+ul.points li{position:relative;padding-left:30px;font-size:22px;line-height:1.4;color:var(--ink-soft)}
+ul.points li::before{content:'';position:absolute;left:0;top:13px;width:11px;height:11px;background:var(--accent);transform:rotate(45deg)}
+ul.points li b,ul.points li strong{color:var(--ink);font-weight:700}
+.mono{font-family:var(--mono)}
+.chip{display:inline-block;background:var(--paper-warm);border:1px solid var(--rule);border-radius:4px;padding:2px 10px;font-family:var(--mono);font-size:.85em}
+.note{background:var(--paper-warm);border-left:4px solid var(--gold);border-radius:0 6px 6px 0;padding:16px 20px;font-size:19px;line-height:1.45;color:var(--ink-soft);margin-top:8px}
+.note b{color:var(--accent)}
+.formula{font-family:var(--mono);font-size:22px;background:var(--paper-soft);border:1px solid var(--rule);border-radius:6px;padding:14px 18px;color:var(--ink);display:inline-block}
+.frag{opacity:1}
+.frag.on{opacity:1}
+.credit{font-family:var(--serif);font-style:italic;color:var(--grey);font-size:18px}
+.big-num{font-family:var(--serif);font-size:40px;color:var(--accent);font-weight:600}
+/* def grid */
+.defs{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:19px}
+.defs .k{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--accent);white-space:nowrap;padding-top:3px}
+.defs .v{color:var(--ink-soft);line-height:1.35}
+/* property cards */
+.props{display:flex;gap:18px;flex-wrap:wrap}
+.pcard{flex:1;min-width:150px;background:var(--paper-soft);border:1px solid var(--rule);border-top:3px solid var(--teal);border-radius:5px;padding:16px 18px}
+.pcard .pn{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);font-weight:600}
+.pcard .pv{font-family:var(--serif);font-size:30px;color:var(--ink);margin:4px 0 4px}
+.pcard .pv.yes{color:var(--green)} .pcard .pv.mono{font-family:var(--mono);font-size:23px}
+.pcard .pd{font-size:15px;color:var(--ink-soft);line-height:1.35}
+/* tree */
+.tree-host{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.tree-host svg{max-width:100%;max-height:100%}
+.t-cap{font-size:18px;line-height:1.4;color:var(--ink-soft);min-height:48px;margin-top:6px}
+.t-cap b{color:var(--accent)}
+.t-meta{display:flex;gap:18px;font-size:15px;font-family:var(--sans);margin-top:4px}
+.t-meta .m{background:var(--paper-warm);border:1px solid var(--rule);border-radius:4px;padding:2px 10px}
+.t-meta .m b{font-family:var(--mono);color:var(--accent)}
+.t-edge{stroke:#9aa0a6;stroke-width:1.6;fill:none}
+.t-edge.on-pv{stroke:var(--accent);stroke-width:3.4}
+.t-edge.pruned{stroke:#d9b3b3;stroke-width:1;stroke-dasharray:4 3}
+.t-node{stroke:#1f5e5e;stroke-width:1.3;fill:#38b59a}
+.t-node.current{stroke:var(--accent);stroke-width:3.4}
+.t-node.pruned{fill:#efe2e2;stroke:#d9b3b3}
+.t-node.settled{fill:#2d8f78}
+.t-val{font-family:var(--mono);font-weight:600;font-size:18px;fill:var(--ink)}
+.t-val.fresh{fill:var(--accent)}
+.t-ab{font-family:var(--mono);font-size:13px;fill:var(--teal)}
+.t-rowlab{font-family:var(--sans);font-weight:700;font-size:15px;fill:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
+.t-leaf-val{font-family:var(--mono);font-weight:600;font-size:17px;fill:var(--ink)}
+.t-cut{font-family:var(--sans);font-weight:700;font-size:14px;fill:var(--accent)}
+/* paper halo so labels stay legible over triangles and edges */
+.t-val,.t-ab,.t-leaf-val,.t-cut{paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round}
+.t-legend{font-size:15px;color:var(--grey);margin-top:2px}
+.t-legend b{color:var(--ink)} .t-legend .up{color:#2d8f78} .t-legend .dn{color:#2d8f78}
+/* ordering bars */
+.obars{display:flex;flex-direction:column;gap:16px;font-size:19px}
+.obar{display:flex;align-items:center;gap:14px}
+.obar .lab{width:120px;font-weight:600;color:var(--ink)}
+.obar .track{flex:1;height:30px;background:var(--paper-soft);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.obar .fill{height:100%;background:var(--accent-soft);width:0;transition:width .6s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-family:var(--mono);font-size:14px}
+.obar.best .fill{background:var(--green)} .obar.worst .fill{background:var(--accent)}
+/* nav */
+.deck-nav{position:fixed;left:0;right:0;bottom:0;height:46px;display:flex;align-items:center;gap:14px;padding:0 20px;background:rgba(16,21,31,.78);backdrop-filter:blur(6px);z-index:50}
+.deck-nav button{font-family:var(--sans);font-size:14px;font-weight:600;color:#e8e2d2;background:transparent;border:1px solid #3a4254;border-radius:5px;padding:5px 14px;cursor:pointer}
+.deck-nav button:hover{border-color:#8b1e1e;color:#fff}
+.deck-nav .count{color:#a9a594;font-family:var(--mono);font-size:13px}
+.deck-nav .title{color:#cfc8b6;font-size:13px;flex:1;text-align:center;font-family:var(--serif);font-style:italic}
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:60;transition:width .25s ease}
+.hint{position:fixed;right:16px;bottom:54px;color:#6b6757;font-size:12px;z-index:50}
+@media (max-width:760px){ .slide{padding:30px 26px 50px} .slide h1{font-size:40px} .slide h2{font-size:30px} .lead{font-size:21px} ul.points li{font-size:18px} }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="stage" id="stage">
+
+<!-- 1 TITLE -->
+<section class="slide">
+  <div class="body" style="justify-content:center">
+    <div class="kicker">COMP338 · Artificial Intelligence · Chapter 5</div>
+    <h1>Games and <em>adversarial</em> search</h1>
+    <p class="lead" style="margin-top:20px">Planning when the world fights back: minimax, alpha&ndash;beta pruning, and evaluation functions.</p>
+    <p class="credit" style="margin-top:28px">Based on lecture material by Prof. Mustafa Jarrar (Birzeit University) and Russell &amp; Norvig, <em>AIMA</em> 3rd ed., Ch. 5.</p>
+  </div>
+</section>
+
+<!-- 2 WHY / WHAT KIND -->
+<section class="slide">
+  <div class="kicker">The setting</div>
+  <h2>Search, but an opponent moves too</h2>
+  <div class="body">
+    <p class="lead" style="margin-bottom:22px">In ordinary search you make every move and the world stays still. In a <em>game</em>, an opponent moves between your moves, and wants the opposite of what you want.</p>
+    <ul class="points">
+      <li class="frag"><b>Two players</b>, called <b>MAX</b> (us) and <b>MIN</b> (the opponent), <b>taking turns</b>.</li>
+      <li class="frag"><b>Deterministic</b> and <b>perfect information</b>: no dice, nothing hidden. (Chess, checkers, tic-tac-toe.)</li>
+      <li class="frag"><b>Zero-sum</b>: one player's gain is the other's loss, so a <em>single</em> number describes the outcome, read from MAX's view.</li>
+    </ul>
+    <div class="note frag">We start here because this clean case already contains the two big ideas: <b>minimax</b> and <b>alpha&ndash;beta pruning</b>. Cards and backgammon (hidden info, chance) need extra machinery.</div>
+  </div>
+</section>
+
+<!-- 3 GAMES AS SEARCH / WHY HARD -->
+<section class="slide">
+  <div class="kicker">Why it is hard</div>
+  <h2>The tree is astronomically large</h2>
+  <div class="body">
+    <div class="cols">
+      <div class="col">
+        <ul class="points">
+          <li>Playing a game <b>is</b> a search: my moves, your replies, my replies&hellip;</li>
+          <li class="frag">Chess: branching factor <span class="chip">b &asymp; 35</span>, depth <span class="chip">m &asymp; 100</span> ply.</li>
+          <li class="frag">Full tree &asymp; <span class="chip">35<sup>100</sup> &asymp; 10<sup>154</sup></span> nodes. We can never build it.</li>
+        </ul>
+      </div>
+      <div class="col frag">
+        <div class="note" style="border-left-color:var(--accent)">So the real questions are:
+          <ul class="points" style="margin-top:12px">
+            <li><b>Best move</b> against a perfect opponent? That is <b>minimax</b>.</li>
+            <li>Skip work that cannot matter? That is <b>alpha&ndash;beta</b>.</li>
+            <li>Stop early but still judge well? That is an <b>evaluation function</b>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 GAME TREE -->
+<section class="slide">
+  <div class="kicker">Representation</div>
+  <h2>The game tree</h2>
+  <div class="body">
+    <div class="cols">
+      <div class="col">
+        <svg viewBox="0 0 440 232" style="width:100%;max-width:440px;height:auto" role="img" aria-label="A small game tree: MAX root, MIN level, terminal leaves with utilities">
+          <text class="t-rowlab" x="6" y="34">MAX</text>
+          <text class="t-rowlab" x="6" y="122">MIN</text>
+          <text class="t-rowlab" x="6" y="200">leaves</text>
+          <g class="t-edge">
+            <line x1="240" y1="43" x2="120" y2="105"/><line x1="240" y1="43" x2="240" y2="105"/><line x1="240" y1="43" x2="360" y2="105"/>
+            <line x1="120" y1="131" x2="85" y2="187"/><line x1="120" y1="131" x2="155" y2="187"/>
+            <line x1="240" y1="131" x2="210" y2="187"/><line x1="240" y1="131" x2="270" y2="187"/>
+            <line x1="360" y1="131" x2="325" y2="187"/><line x1="360" y1="131" x2="395" y2="187"/>
+          </g>
+          <polygon class="t-node max" points="224,43 256,43 240,17"/>
+          <polygon class="t-node min" points="104,105 136,105 120,131"/>
+          <polygon class="t-node min" points="224,105 256,105 240,131"/>
+          <polygon class="t-node min" points="344,105 376,105 360,131"/>
+          <polygon class="t-node max" points="74,205 96,205 85,187"/>
+          <polygon class="t-node max" points="144,205 166,205 155,187"/>
+          <polygon class="t-node max" points="199,205 221,205 210,187"/>
+          <polygon class="t-node max" points="259,205 281,205 270,187"/>
+          <polygon class="t-node max" points="314,205 336,205 325,187"/>
+          <polygon class="t-node max" points="384,205 406,205 395,187"/>
+          <g class="t-leaf-val" text-anchor="middle">
+            <text x="85" y="224">+1</text><text x="155" y="224">0</text>
+            <text x="210" y="224">&minus;1</text><text x="270" y="224">+1</text>
+            <text x="325" y="224">0</text><text x="395" y="224">&minus;1</text>
+          </g>
+        </svg>
+        <p style="font-size:16px;color:var(--grey);line-height:1.4;margin-top:6px">MAX chooses at <b>&#9650;</b> levels, MIN at <b>&#9660;</b>; one move is a <b>ply</b>. Leaves are terminal, scored by <b>UTILITY</b> from MAX's view (here <span class="mono">+1 / 0 / &minus;1</span>).</p>
+      </div>
+      <div class="col">
+        <div class="defs">
+          <div class="k">PLAYER(s)</div><div class="v">whose turn it is</div>
+          <div class="k">ACTIONS(s)</div><div class="v">legal moves</div>
+          <div class="k">RESULT(s,a)</div><div class="v">the next state</div>
+          <div class="k">TERMINAL?(s)</div><div class="v">is the game over?</div>
+          <div class="k">UTILITY(s)</div><div class="v">outcome at a terminal state</div>
+        </div>
+        <div class="note frag" style="margin-top:18px">Zero-sum lets us use <b>one</b> number: high is good for MAX, low is good for MIN. MAX climbs, MIN drags down.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 MINIMAX IDEA -->
+<section class="slide">
+  <div class="kicker">The core algorithm</div>
+  <h2>Minimax: assume a <em>perfect</em> opponent</h2>
+  <div class="body">
+    <p class="lead" style="margin-bottom:20px">Whatever move MAX makes, MIN will then steer to the worst leaf <em>for MAX</em>. So MAX should pick the move whose forced-worst outcome is the least bad.</p>
+    <div class="formula frag">MINIMAX(s) =<br>&nbsp;&nbsp;UTILITY(s)&nbsp;&nbsp;<span style="color:var(--grey)">if s is terminal</span><br>&nbsp;&nbsp;max&#8202;<sub>a</sub> MINIMAX(RESULT(s,a))&nbsp;&nbsp;<span style="color:var(--grey)">if MAX to move</span><br>&nbsp;&nbsp;min&#8202;<sub>a</sub> MINIMAX(RESULT(s,a))&nbsp;&nbsp;<span style="color:var(--grey)">if MIN to move</span></div>
+    <div class="note frag">Read it as a recipe: <b>(1)</b> build the tree, <b>(2)</b> evaluate the leaves, <b>(3)</b> back up (<b>min</b> at MIN nodes, <b>max</b> at MAX nodes), <b>(4)</b> at the root, MAX takes the move with the highest backed-up value.</div>
+  </div>
+</section>
+
+<!-- 6 MINIMAX ANIMATED -->
+<section class="slide" data-tree="mm">
+  <div class="kicker">Worked example · press Step to advance</div>
+  <h2>Backing values up the tree</h2>
+  <div class="body" style="justify-content:flex-start">
+    <div class="tree-host" id="host-mm"></div>
+    <div class="t-cap" id="cap-mm"></div>
+    <div class="t-legend"><span class="up">&#9650;</span> <b>MAX</b> keeps the largest child &nbsp;·&nbsp; <span class="dn">&#9660;</span> <b>MIN</b> keeps the smallest &nbsp;·&nbsp; each node's backed-up value sits <b>above</b> it.</div>
+  </div>
+</section>
+
+<!-- 7 MINIMAX PROPERTIES -->
+<section class="slide">
+  <div class="kicker">Cost</div>
+  <h2>Correct and optimal, but too slow</h2>
+  <div class="body">
+    <div class="props">
+      <div class="pcard"><div class="pn">Complete</div><div class="pv yes">Yes</div><div class="pd">if the tree is finite</div></div>
+      <div class="pcard"><div class="pn">Optimal</div><div class="pv yes">Yes</div><div class="pd">vs an optimal opponent</div></div>
+      <div class="pcard"><div class="pn">Time</div><div class="pv mono">b<sup>m</sup></div><div class="pd">visits every node</div></div>
+      <div class="pcard"><div class="pn">Space</div><div class="pv mono">b&middot;m</div><div class="pd">depth-first</div></div>
+    </div>
+    <div class="note frag" style="margin-top:24px">For chess, <span class="mono">b<sup>m</sup> &asymp; 35<sup>100</sup></span>: exact minimax is <b>completely infeasible</b>. Two escapes follow: <b>prune</b> the tree (alpha&ndash;beta) and <b>stop early</b> with an evaluation function.</div>
+  </div>
+</section>
+
+<!-- 8 ALPHA-BETA IDEA -->
+<section class="slide">
+  <div class="kicker">Pruning</div>
+  <h2>Alpha&ndash;beta: same answer, far less work</h2>
+  <div class="body">
+    <p class="lead" style="margin-bottom:18px">Most leaves cannot change the root value. Alpha&ndash;beta proves a branch is irrelevant mid-search and skips it, returning <em>exactly</em> what minimax would.</p>
+    <div class="cols">
+      <div class="col">
+        <div class="defs" style="font-size:20px">
+          <div class="k">&alpha;</div><div class="v">best value MAX can already guarantee on this path (starts &minus;&infin;, only rises)</div>
+          <div class="k">&beta;</div><div class="v">best value MIN can already guarantee on this path (starts +&infin;, only falls)</div>
+        </div>
+      </div>
+      <div class="col frag">
+        <ul class="points" style="font-size:20px">
+          <li>At a <b>MAX</b> node: if value <span class="mono">&ge; &beta;</span>, <b>stop</b> (&beta;-cut). MIN above will never allow it.</li>
+          <li>At a <b>MIN</b> node: if value <span class="mono">&le; &alpha;</span>, <b>stop</b> (&alpha;-cut). MAX above already has better.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 ALPHA-BETA ANIMATED -->
+<section class="slide" data-tree="ab">
+  <div class="kicker">Same tree, now pruned · press Step to advance</div>
+  <h2>Watch the window, watch the cuts</h2>
+  <div class="body" style="justify-content:flex-start">
+    <div class="tree-host" id="host-ab"></div>
+    <div class="t-cap" id="cap-ab"></div>
+    <div class="t-legend">value sits <b>above</b> each node &nbsp;·&nbsp; the <b>[&alpha;, &beta;]</b> window sits <b>below</b> it &nbsp;·&nbsp; <span style="color:var(--accent)">&#9986; cut</span> = the rest of that branch is skipped.</div>
+    <div class="t-meta"><span class="m">leaves read: <b id="ab-seen">0</b> / <span id="ab-total">8</span></span><span class="m">leaves pruned: <b id="ab-pruned">0</b></span><span class="m">root: <b id="ab-root">&ndash;</b></span></div>
+  </div>
+</section>
+
+<!-- 10 ORDERING -->
+<section class="slide">
+  <div class="kicker">Efficiency</div>
+  <h2>Move ordering doubles your depth</h2>
+  <div class="body">
+    <p class="lead" style="margin-bottom:8px">Ordering does not change the answer, only the cost. Trying strong moves first tightens the window sooner, so more branches cut. <span style="font-size:15px;color:var(--grey)">(leaf counts below: one sample tree)</span></p>
+    <div class="obars" style="margin:18px 0">
+      <div class="obar best"><span class="lab">best-first</span><div class="track"><div class="fill" data-w="56%">5 / 9 leaves</div></div></div>
+      <div class="obar"><span class="lab">as drawn</span><div class="track"><div class="fill" data-w="78%">7 / 9 leaves</div></div></div>
+      <div class="obar worst"><span class="lab">worst-first</span><div class="track"><div class="fill" data-w="100%">9 / 9 leaves</div></div></div>
+    </div>
+    <div class="note frag">Perfect ordering takes alpha&ndash;beta from <span class="mono">O(b<sup>m</sup>)</span> to <span class="mono">O(b<sup>m/2</sup>)</span>: the exponent halves, so in the same time you can search <b>twice as deep</b>.</div>
+  </div>
+</section>
+
+<!-- 11 IMPERFECT DECISIONS -->
+<section class="slide">
+  <div class="kicker">Real time</div>
+  <h2>Stop early, then judge the position</h2>
+  <div class="body">
+    <ul class="points">
+      <li>We cannot reach true terminals in chess, so replace the <b>terminal test</b> with a <b>cut-off test</b> (search to depth <span class="mono">d</span>).</li>
+      <li class="frag">Nodes at the cut-off depth <b>become the new leaves</b>; an <b>evaluation function</b> estimates their value, and minimax backs those up as usual.</li>
+    </ul>
+    <div class="note frag" style="margin-top:18px">Thought experiment: a <b>perfect</b> evaluation function would let you search just <b>one level deep</b>. You cannot build one (that would solve the game), but it shows the evaluator is approximating the true minimax value.</div>
+  </div>
+</section>
+
+<!-- 12 EVALUATION FUNCTIONS -->
+<section class="slide">
+  <div class="kicker">Heuristics</div>
+  <h2>Evaluation functions</h2>
+  <div class="body">
+    <div class="cols">
+      <div class="col">
+        <ul class="points">
+          <li>Game-specific; encode human knowledge.</li>
+          <li>Usually a <b>weighted linear sum</b> of features:</li>
+        </ul>
+        <div class="formula" style="margin:14px 0">EVAL(s) = w&#8321;f&#8321;(s) + w&#8322;f&#8322;(s) + &hellip; + w&#8345;f&#8345;(s)</div>
+        <ul class="points">
+          <li class="frag">Chess: material (my pieces &minus; yours), queen/rook advantage, &hellip;</li>
+          <li class="frag">Only the <b>relative</b> order matters, not the absolute value.</li>
+        </ul>
+      </div>
+      <div class="col frag">
+        <div class="note" style="border-left-color:var(--teal)">Tic-tac-toe, a real one:
+          <div class="formula" style="font-size:18px;margin:12px 0;background:#fff">E(s) = (open lines for X)<br>&nbsp;&nbsp;&nbsp;&nbsp;&minus; (open lines for O)</div>
+          A line is open for X if it holds no O. The position favouring X scores positive (good for MAX).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 CASE STUDIES -->
+<section class="slide">
+  <div class="kicker">In practice</div>
+  <h2>Where these ideas run</h2>
+  <div class="body">
+    <ul class="points">
+      <li><b>Checkers</b>: <span class="mono">E(s) = (5x&#8321;+x&#8322;) &minus; (5r&#8321;+r&#8322;)</span>, a king worth five singles; minimax/alpha&ndash;beta over the moves.</li>
+      <li class="frag"><b>Chinook</b> became checkers world champion; the game was later <em>solved</em>.</li>
+      <li class="frag"><b>Deep Blue</b> beat Kasparov (1997): alpha&ndash;beta to great depth + a hand-tuned evaluation + special hardware.</li>
+      <li class="frag"><b>AlphaGo</b> (2016): Go's huge branching needed a different search (Monte-Carlo tree search + learned evaluation), but the framing is the same.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 14 SUMMARY -->
+<section class="slide">
+  <div class="kicker">Takeaways</div>
+  <h2>A working game engine, in five parts</h2>
+  <div class="body">
+    <ul class="points">
+      <li><b>Minimax</b>: MAX maximises, MIN minimises; back up from the leaves.</li>
+      <li class="frag"><b>Alpha&ndash;beta</b>: carry &alpha;, &beta; down the path; cut branches that cannot matter. Same answer, less work.</li>
+      <li class="frag"><b>Cut-off + evaluation</b>: stop at depth d and estimate the value there.</li>
+      <li class="frag"><b>Move ordering</b>: best-first prunes hardest, toward <span class="mono">b<sup>m/2</sup></span>.</li>
+    </ul>
+    <div class="note frag" style="margin-top:18px">The durable lesson: <b>search the tree, evaluate where you must stop, and assume a strong opponent.</b></div>
+    <p class="credit frag" style="margin-top:22px">Practice the full interactive walkthrough and Jarrar's exercise tree in the <a href="comp338-games-companion.html" style="color:var(--accent)">Games companion</a>.</p>
+  </div>
+</section>
+
+</div><!-- /stage -->
+
+<div class="hint">Arrow keys or Space to move · F for fullscreen · N to narrate</div>
+<div class="deck-nav">
+  <button id="prev">Prev</button>
+  <button id="next">Next</button>
+  <span class="title" id="navtitle"></span>
+  <span class="count" id="count"></span>
+  <button id="narrate">Narrate: off</button>
+  <button id="full">Fullscreen</button>
+</div>
+
+<script>
+'use strict';
+/* ---------- tree engine (minimax + alpha-beta, step events) ---------- */
+const L=v=>({leaf:v}), N=(r,ch)=>({role:r,ch});
+// 4-level worked tree (root MAX -> 2 MIN -> each 2 MAX -> each 2 leaves).
+// Minimax value = 5. Left-to-right alpha-beta exhibits BOTH a β-cut (at a MAX
+// node) and an α-cut (at a MIN node); reads 5 of 8 leaves, prunes 3.
+const GAME=()=>N('max',[
+  N('min',[ N('max',[L(3),L(5)]), N('max',[L(8),L(1)]) ]),
+  N('min',[ N('max',[L(2),L(4)]), N('max',[L(7),L(9)]) ]),
+]);
+function buildLayout(spec){const nodes={};let li=0,md=0;(function rec(s,id,d){md=Math.max(md,d);const leaf=s.leaf!==undefined;const o={id,depth:d,role:leaf?'leaf':s.role,isLeaf:leaf,children:[]};nodes[id]=o;if(leaf){o.leafVal=s.leaf;o.x=li++;}else{s.ch.forEach((c,i)=>{const cid=id+'.'+i;o.children.push(cid);rec(c,cid,d+1);});o.x=o.children.reduce((a,cid)=>a+nodes[cid].x,0)/o.children.length;}})(spec,'r',0);return{nodes,leafCount:li,maxDepth:md};}
+function genMinimax(spec){const ev=[];(function rec(s,id){ev.push({t:'enter',id});if(s.leaf!==undefined){ev.push({t:'leaf',id,v:s.leaf});return s.leaf;}let best=s.role==='max'?-Infinity:Infinity;const cvals=[];for(let i=0;i<s.ch.length;i++){const v=rec(s.ch[i],id+'.'+i);cvals.push(v);best=s.role==='max'?Math.max(best,v):Math.min(best,v);ev.push({t:'partial',id,v:best});}ev.push({t:'set',id,v:best,vals:cvals,role:s.role});return best;})(spec,'r');return ev;}
+function genAB(spec){const ev=[];(function rec(s,id,a,b){ev.push({t:'enter',id,a,b});if(s.leaf!==undefined){ev.push({t:'leaf',id,v:s.leaf});return s.leaf;}if(s.role==='max'){let v=-Infinity;const cvals=[];for(let i=0;i<s.ch.length;i++){const cv=rec(s.ch[i],id+'.'+i,a,b);cvals.push(cv);v=Math.max(v,cv);ev.push({t:'partial',id,v});if(v>=b){for(let j=i+1;j<s.ch.length;j++)ev.push({t:'prune',id:id+'.'+j});ev.push({t:'cut',id,who:'β',v,lim:b});break;}a=Math.max(a,v);ev.push({t:'ab',id,a,b});}ev.push({t:'set',id,v,vals:cvals,role:'max'});return v;}else{let v=Infinity;const cvals=[];for(let i=0;i<s.ch.length;i++){const cv=rec(s.ch[i],id+'.'+i,a,b);cvals.push(cv);v=Math.min(v,cv);ev.push({t:'partial',id,v});if(v<=a){for(let j=i+1;j<s.ch.length;j++)ev.push({t:'prune',id:id+'.'+j});ev.push({t:'cut',id,who:'α',v,lim:a});break;}b=Math.min(b,v);ev.push({t:'ab',id,a,b});}ev.push({t:'set',id,v,vals:cvals,role:'min'});return v;}})(spec,'r',-Infinity,Infinity);return ev;}
+function pv(spec){const set=new Set();function val(s){if(s.leaf!==undefined)return s.leaf;const vs=s.ch.map(val);return s.role==='max'?Math.max(...vs):Math.min(...vs);}(function rec(s,id){if(s.leaf!==undefined)return;const vs=s.ch.map(val);const t=s.role==='max'?Math.max(...vs):Math.min(...vs);const i=vs.findIndex(v=>v===t);set.add(id+'>'+id+'.'+i);rec(s.ch[i],id+'.'+i);})(spec,'r');return set;}
+const fmt=v=>v===Infinity?'+∞':v===-Infinity?'−∞':v;
+function isPruned(set,id){for(const p of set)if(id===p||id.startsWith(p+'.'))return true;return false;}
+function render(spec,layout,st,mode){const{nodes,leafCount,maxDepth}=layout;const gapX=94,mL=104,mT=46,gapY=Math.max(100,(372-mT)/Math.max(1,maxDepth));const W=mL+(leafCount-1)*gapX+54,H=mT+maxDepth*gapY+54;const px=x=>mL+x*gapX,py=d=>mT+d*gapY,tw=18,th=15;let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMidYMid meet">`;const root=spec.role||'max';
+ for(let d=0;d<=maxDepth;d++){let lab=d===maxDepth?'leaves':((d%2===0)===(root==='max')?'MAX':'MIN');s+=`<text class="t-rowlab" x="8" y="${py(d)+5}">${lab}</text>`;}
+ for(const id in nodes){const n=nodes[id];for(const cid of n.children){const c=nodes[cid];let cl='t-edge';if(st.pruned.has(cid))cl+=' pruned';else if(st.pv&&st.pv.has(id+'>'+cid))cl+=' on-pv';s+=`<line class="${cl}" x1="${px(n.x)}" y1="${py(n.depth)+th}" x2="${px(c.x)}" y2="${py(c.depth)-th}"/>`;}}
+ for(const id in nodes){const n=nodes[id],cx=px(n.x),cy=py(n.depth),pr=isPruned(st.pruned,id);let cl='t-node';if(pr)cl+=' pruned';else if(st.current===id)cl+=' current';else if(st.values[id]!==undefined&&!n.isLeaf)cl+=' settled';const pts=n.role==='min'?`${cx-tw},${cy-th} ${cx+tw},${cy-th} ${cx},${cy+th}`:`${cx-tw},${cy+th} ${cx+tw},${cy+th} ${cx},${cy-th}`;s+=`<polygon class="${cl}" points="${pts}"/>`;
+  if(n.isLeaf){s+=`<text class="t-leaf-val" x="${cx}" y="${cy+th+19}" text-anchor="middle">${pr?'':(st.values[id]!==undefined?n.leafVal:'')}</text>`;}
+  else{const v=st.values[id];if(v!==undefined&&!pr){const fr=st.current===id?' fresh':'';s+=`<text class="t-val${fr}" x="${cx}" y="${cy-th-9}" text-anchor="middle">${fmt(v)}</text>`;}
+   if(mode==='ab'&&st.ab[id]&&!pr)s+=`<text class="t-ab" x="${cx}" y="${cy+th+17}" text-anchor="middle">[${fmt(st.ab[id].a)}, ${fmt(st.ab[id].b)}]</text>`;}
+  if(st.cut[id])s+=`<text class="t-cut" x="${cx+tw+7}" y="${cy+5}" text-anchor="start">✂ ${st.cut[id]}-cut</text>`;}
+ return s+'</svg>';}
+function stateAt(events,k,pvset){const st={values:{},current:null,ab:{},pruned:new Set(),cut:{},pv:null};let rootSet=false;for(let i=0;i<k;i++){const e=events[i];if(e.t==='enter'){st.current=e.id;if(e.a!==undefined)st.ab[e.id]={a:e.a,b:e.b};}else if(e.t==='leaf'){st.values[e.id]=e.v;st.current=e.id;}else if(e.t==='partial'){st.values[e.id]=e.v;st.current=e.id;}else if(e.t==='ab'){st.ab[e.id]={a:e.a,b:e.b};}else if(e.t==='prune'){st.pruned.add(e.id);}else if(e.t==='cut'){st.cut[e.id]=e.who;st.current=e.id;}else if(e.t==='set'){st.values[e.id]=e.v;st.current=e.id;if(e.id==='r')rootSet=true;}}if(rootSet)st.pv=pvset;return st;}
+function caption(e,layout,mode){if(!e)return 'Press Step to begin: the search explores depth-first, left to right.';const role=e.id&&layout.nodes[e.id]?layout.nodes[e.id].role:'';
+ switch(e.t){case 'enter':return mode==='ab'&&e.a!==undefined?`Enter a ${role.toUpperCase()} node with window <b>[${fmt(e.a)}, ${fmt(e.b)}]</b>.`:'Descend to the next node (depth-first, left to right).';
+  case 'leaf':return `Leaf evaluated: utility <b>${e.v}</b>.`;
+  case 'partial':return `Running ${role.toUpperCase()} value: <b>${fmt(e.v)}</b> (${role==='max'?'largest':'smallest'} child so far).`;
+  case 'ab':return `Window tightened to <b>[${fmt(e.a)}, ${fmt(e.b)}]</b>; it travels down to the children.`;
+  case 'prune':return `Branch <b>pruned</b>: these leaves cannot change the parent, so they are skipped.`;
+  case 'cut':return `<b>${e.who}-cut.</b> Value ${fmt(e.v)} crosses the bound ${fmt(e.lim)}; the parent will never choose this, so stop.`;
+  case 'set':{const r=e.role||role,op=r==='max'?'max':'min',list=(e.vals||[]).map(fmt).join(', ');
+   if(e.id==='r')return mode==='ab'?`<b>Root = ${op}(${list}) = ${fmt(e.v)}</b>: exactly the minimax value, but several leaves were never read.`:`<b>Root: ${op}(${list}) = ${fmt(e.v)}.</b> So MAX plays the move toward the highlighted child (the red line).`;
+   return `${r.toUpperCase()} node compares its children and keeps the ${r==='max'?'largest':'smallest'}: <b>${op}(${list}) = ${fmt(e.v)}</b>, now backed up to its parent.`;}}
+ return '';}
+
+/* one controller per tree slide: steps stop only on meaningful events (leaf / settle / cut) */
+function makeTree(mode,hostId,capId,spec){const layout=buildLayout(spec);const events=mode==='mm'?genMinimax(spec):genAB(spec);const PV=pv(spec);const host=document.getElementById(hostId),cap=document.getElementById(capId);
+ const stops=[];events.forEach((e,i)=>{if(e.t==='leaf'||e.t==='set'||e.t==='cut')stops.push(i);});
+ return{steps:stops.length,draw(k){const upto=k>0?stops[k-1]+1:0;const st=stateAt(events,upto,PV);host.innerHTML=render(spec,layout,st,mode);if(cap)cap.innerHTML=caption(k>0?events[stops[k-1]]:null,layout,mode);
+   if(mode==='ab'){const ap=events.slice(0,upto);const seen=ap.filter(e=>e.t==='leaf').length;const pr=ap.filter(e=>e.t==='prune').reduce((a,e)=>a+Object.values(layout.nodes).filter(n=>n.isLeaf&&(n.id===e.id||n.id.startsWith(e.id+'.'))).length,0);const rt=ap.slice().reverse().find(e=>e.t==='set'&&e.id==='r');const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};set('ab-seen',seen);set('ab-total',layout.leafCount);set('ab-pruned',pr);set('ab-root',rt?fmt(rt.v):'–');}}};}
+
+/* ---------- deck navigation with in-slide steps ---------- */
+const slides=Array.from(document.querySelectorAll('.slide'));
+const titles=['Title','The setting','Why it is hard','Game tree','Minimax idea','Minimax worked','Properties','Alpha-beta idea','Alpha-beta worked','Move ordering','Imperfect decisions','Evaluation functions','Case studies','Summary'];
+const trees={};
+const ctrl=slides.map(sl=>{
+  const tree=sl.getAttribute('data-tree');
+  if(tree){const c=makeTree(tree,'host-'+tree,'cap-'+tree,GAME());trees[tree]=c;return{max:c.steps,kind:'tree',c};}
+  const frags=Array.from(sl.querySelectorAll('.frag'));
+  return{max:0,kind:'frag',frags};
+});
+let si=0,step=0,narrateOn=false;
+/* ---------- optional voice narration (Web Speech API, en-GB), off by default ---------- */
+function speakClean(t){return t
+  .replace(/α/g,'alpha').replace(/β/g,'beta').replace(/∞/g,'infinity')
+  .replace(/≥/g,' at least ').replace(/≤/g,' at most ')
+  .replace(/\[/g,'').replace(/\]/g,'').replace(/−/g,'minus ').replace(/\+/g,'plus ')
+  .replace(/=/g,' equals ').replace(/\(/g,' of ').replace(/\)/g,'')
+  .replace(/\s+/g,' ').trim();}
+function speak(t){if(!('speechSynthesis' in window)||!t)return;try{speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(speakClean(t));u.lang='en-GB';u.rate=0.98;
+  const vs=speechSynthesis.getVoices();const gb=vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/United Kingdom|British|Daniel|Kate|Serena|Sonia|Arthur/i.test(v.name));if(gb)u.voice=gb;
+  speechSynthesis.speak(u);}catch(_){}}
+function setNarrate(on){narrateOn=on;const b=document.getElementById('narrate');if(b)b.textContent='Narrate: '+(on?'on':'off');
+  if(!on){if('speechSynthesis' in window)speechSynthesis.cancel();return;}
+  const cc=ctrl[si];if(cc.kind==='tree'){const cap=slides[si].querySelector('.t-cap');if(cap&&cap.textContent.trim())speak(cap.textContent.trim());}}
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}
+function paint(){
+  slides.forEach((s,i)=>s.classList.toggle('active',i===si));
+  const cc=ctrl[si];
+  if(cc.kind==='tree'){cc.c.draw(step);}
+  else{cc.frags.forEach((f,i)=>f.classList.toggle('on',i<step));
+    // animate ordering bars when revealed
+    slides[si].querySelectorAll('.fill').forEach(f=>{f.style.width=f.dataset.w||'100%';});}
+  document.getElementById('count').textContent=(si+1)+' / '+slides.length;
+  document.getElementById('navtitle').textContent=titles[si]||'';
+  document.getElementById('progress').style.width=(100*(si)/(slides.length-1))+'%';
+  if(narrateOn&&cc.kind==='tree'){const cap=slides[si].querySelector('.t-cap');const txt=cap?cap.textContent.trim():'';if(txt)speak(txt);}
+}
+function next(){const m=ctrl[si].max;if(step<m){step++;paint();}else if(si<slides.length-1){si++;step=0;paint();}}
+function prev(){if(step>0){step--;paint();}else if(si>0){si--;step=ctrl[si].max;paint();}}
+function go(n){si=Math.max(0,Math.min(slides.length-1,n));step=ctrl[si].max;paint();}
+document.getElementById('next').onclick=next;
+document.getElementById('prev').onclick=prev;
+document.getElementById('full').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();};
+document.getElementById('narrate').onclick=()=>setNarrate(!narrateOn);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+  else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(slides.length-1);}
+  else if(e.key==='f'||e.key==='F'){document.getElementById('full').click();}
+  else if(e.key==='n'||e.key==='N'){setNarrate(!narrateOn);}
+});
+paint();
+</script>
+</body>
+</html>
