@@ -363,13 +363,12 @@ ul.points li b,ul.points li strong{color:var(--ink);font-weight:700}
 
 </div><!-- /stage -->
 
-<div class="hint">Arrow keys or Space to move · F for fullscreen · N to narrate</div>
+<div class="hint">Arrow keys or Space to move · F for fullscreen</div>
 <div class="deck-nav">
   <button id="prev">Prev</button>
   <button id="next">Next</button>
   <span class="title" id="navtitle"></span>
   <span class="count" id="count"></span>
-  <button id="narrate">Narrate: off</button>
   <button id="full">Fullscreen</button>
 </div>
 
@@ -428,22 +427,7 @@ const ctrl=slides.map(sl=>{
   const frags=Array.from(sl.querySelectorAll('.frag'));
   return{max:0,kind:'frag',frags};
 });
-let si=0,step=0,narrateOn=false;
-/* ---------- optional voice narration (Web Speech API, en-GB), off by default ---------- */
-function speakClean(t){return t
-  .replace(/α/g,'alpha').replace(/β/g,'beta').replace(/∞/g,'infinity')
-  .replace(/≥/g,' at least ').replace(/≤/g,' at most ')
-  .replace(/\[/g,'').replace(/\]/g,'').replace(/−/g,'minus ').replace(/\+/g,'plus ')
-  .replace(/=/g,' equals ').replace(/\(/g,' of ').replace(/\)/g,'')
-  .replace(/\s+/g,' ').trim();}
-function speak(t){if(!('speechSynthesis' in window)||!t)return;try{speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(speakClean(t));u.lang='en-GB';u.rate=0.98;
-  const vs=speechSynthesis.getVoices();const gb=vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/United Kingdom|British|Daniel|Kate|Serena|Sonia|Arthur/i.test(v.name));if(gb)u.voice=gb;
-  speechSynthesis.speak(u);}catch(_){}}
-function setNarrate(on){narrateOn=on;const b=document.getElementById('narrate');if(b)b.textContent='Narrate: '+(on?'on':'off');
-  if(!on){if('speechSynthesis' in window)speechSynthesis.cancel();return;}
-  const cc=ctrl[si];if(cc.kind==='tree'){const cap=slides[si].querySelector('.t-cap');if(cap&&cap.textContent.trim())speak(cap.textContent.trim());}}
-if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}
+let si=0,step=0;
 function paint(){
   slides.forEach((s,i)=>s.classList.toggle('active',i===si));
   const cc=ctrl[si];
@@ -454,7 +438,6 @@ function paint(){
   document.getElementById('count').textContent=(si+1)+' / '+slides.length;
   document.getElementById('navtitle').textContent=titles[si]||'';
   document.getElementById('progress').style.width=(100*(si)/(slides.length-1))+'%';
-  if(narrateOn&&cc.kind==='tree'){const cap=slides[si].querySelector('.t-cap');const txt=cap?cap.textContent.trim():'';if(txt)speak(txt);}
 }
 function next(){const m=ctrl[si].max;if(step<m){step++;paint();}else if(si<slides.length-1){si++;step=0;paint();}}
 function prev(){if(step>0){step--;paint();}else if(si>0){si--;step=ctrl[si].max;paint();}}
@@ -462,13 +445,11 @@ function go(n){si=Math.max(0,Math.min(slides.length-1,n));step=ctrl[si].max;pain
 document.getElementById('next').onclick=next;
 document.getElementById('prev').onclick=prev;
 document.getElementById('full').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();};
-document.getElementById('narrate').onclick=()=>setNarrate(!narrateOn);
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
   else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
   else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(slides.length-1);}
   else if(e.key==='f'||e.key==='F'){document.getElementById('full').click();}
-  else if(e.key==='n'||e.key==='N'){setNarrate(!narrateOn);}
 });
 paint();
 </script>
