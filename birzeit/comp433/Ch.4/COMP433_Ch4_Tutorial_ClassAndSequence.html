@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMP433 Tutorial: Class &amp; Sequence Diagrams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1419;
+    --ink-soft: #2c3540;
+    --ink-mute: #5a6473;
+    --paper: #faf7f2;
+    --paper-warm: #f3ede2;
+    --paper-deep: #ebe2d1;
+    --accent: #b85c38;
+    --accent-deep: #7a3a23;
+    --steel: #2c5f7c;
+    --steel-soft: #d6e0e8;
+    --steel-deep: #1a3d52;
+    --moss: #4a6b3a;
+    --moss-soft: #e0e8d8;
+    --gold: #c9a961;
+    --rule: #d8cfc0;
+    --rule-soft: #ebe2d1;
+    --shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px rgba(15,20,25,0.06);
+    --shadow-lg: 0 4px 12px rgba(15,20,25,0.08), 0 24px 48px rgba(15,20,25,0.10);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter Tight', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
+      radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
+    min-height: 100vh;
+    /* Use only common ligatures and kerning. Disable stylistic alternates from
+       Fraunces (ss01..ss05) that render letter pairs like "ss" oddly in titles. */
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures no-discretionary-ligatures no-historical-ligatures;
+  }
+  h1, h2, h3, h4, h5, h6, em, .hero h1 em, h2.section-title em {
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures no-discretionary-ligatures no-historical-ligatures;
+  }
+
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,0.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 0; }
+  .topbar-inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { font-family: var(--serif); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 5px; background: linear-gradient(135deg, var(--steel) 0%, var(--accent) 100%); display: inline-block; box-shadow: 0 2px 6px rgba(184,92,56,0.25); }
+  .nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .nav a { color: var(--ink-soft); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 999px; transition: all 0.15s; }
+  .nav a:hover { background: var(--paper-warm); color: var(--ink); }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 80px 32px 60px; position: relative; }
+  .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+  .hero-eyebrow::before { content: ''; flex-shrink: 0; width: 32px; height: 1px; background: var(--accent); }
+  .hero-eyebrow::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: var(--accent); }
+  .hero h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(38px, 6.2vw, 72px); line-height: 1.02; letter-spacing: -0.03em; margin-bottom: 28px; font-variation-settings: "opsz" 144; max-width: 1100px; }
+  .hero h1 em { font-style: italic; color: var(--accent); font-variation-settings: "opsz" 144, "wght" 400; }
+  .hero-lede { font-size: 20px; max-width: 760px; color: var(--ink-soft); line-height: 1.55; font-family: var(--serif); font-weight: 400; }
+  .hero-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--rule); }
+  .hero-meta-item { font-size: 13px; }
+  .hero-meta-item span:first-child { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
+  .hero-meta-item span:last-child { font-weight: 600; color: var(--ink); }
+
+  .toc { max-width: 1240px; margin: 0 auto; padding: 36px 32px 24px; }
+  .toc-card { background: white; border: 1px solid var(--rule); border-radius: 12px; padding: 32px 36px; box-shadow: var(--shadow); }
+  .toc-card h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); font-weight: 600; margin-bottom: 20px; }
+  .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 4px 28px; list-style: none; }
+  .toc-list li { padding: 8px 0; border-bottom: 1px dashed var(--rule); display: flex; align-items: baseline; gap: 14px; }
+  .toc-list a { color: var(--ink); text-decoration: none; font-size: 14px; flex: 1; transition: color 0.15s; }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-list .toc-num { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--accent); min-width: 28px; }
+
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  section.block { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .section-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+  .section-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--steel); }
+  .section-eyebrow .num { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--accent); margin-left: -6px; }
+  h2.section-title { font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 4.6vw, 52px); letter-spacing: -0.025em; line-height: 1.04; margin-bottom: 20px; font-variation-settings: "opsz" 144; max-width: 900px; }
+  h2.section-title em { font-style: italic; color: var(--accent); }
+  .section-intro { font-size: 18px; max-width: 760px; color: var(--ink-soft); margin-bottom: 48px; line-height: 1.6; font-family: var(--serif); font-weight: 400; }
+  h3.subhead { font-family: var(--serif); font-weight: 600; font-size: 24px; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 14px; }
+  h3.subhead-small { font-family: var(--serif); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; margin-top: 32px; margin-bottom: 10px; }
+  p.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 14px; max-width: 820px; }
+  p.body strong { color: var(--ink); }
+  p.note { font-size: 13px; color: var(--ink-mute); font-style: italic; margin-top: 12px; max-width: 820px; }
+  ul.body, ol.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin: 12px 0 18px 24px; max-width: 820px; }
+  ul.body li, ol.body li { margin-bottom: 8px; }
+  ul.body li strong, ol.body li strong { color: var(--ink); }
+  a.inline { color: var(--accent-deep); border-bottom: 1px dotted; text-decoration: none; }
+  a.inline:hover { border-bottom-style: solid; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 24px; max-width: 1140px; }
+  .cog-card { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 22px; transition: transform 0.2s, box-shadow 0.2s; }
+  .cog-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cog-card .icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 12px; background: var(--paper-warm); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 18px; color: var(--accent); }
+  .cog-card h4 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .cog-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+
+  .quotebox { background: var(--paper-warm); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 22px 28px; margin: 28px 0; max-width: 880px; }
+  .quotebox p { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .quotebox .source { display: block; margin-top: 10px; font-style: normal; font-size: 13px; font-family: var(--sans); color: var(--ink-mute); }
+
+  .table-card { background: white; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin: 24px 0; max-width: 1140px; }
+  table.body-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.body-table thead th { background: var(--paper-warm); padding: 12px 16px; text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  table.body-table tbody td { padding: 12px 16px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  table.body-table tbody tr:last-child td { border-bottom: none; }
+  table.body-table tbody td:first-child { font-weight: 600; color: var(--ink); }
+
+  .figure { background: white; border: 1px solid var(--rule); border-radius: 12px; box-shadow: var(--shadow); padding: 28px; margin: 28px 0; max-width: 1140px; }
+  .figure-caption { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; font-weight: 600; }
+  .figure-title { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-bottom: 14px; color: var(--ink); letter-spacing: -0.01em; }
+  .figure svg { width: 100%; height: auto; display: block; margin: 0 auto; }
+  .figure-note { font-size: 12.5px; color: var(--ink-mute); font-style: italic; margin-top: 14px; line-height: 1.5; }
+
+  .struct-spec { background: white; border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); margin: 22px 0; max-width: 1140px; overflow: hidden; }
+  .struct-spec table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .struct-spec th { background: var(--ink); color: var(--paper); padding: 12px 18px; text-align: left; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
+  .struct-spec td { padding: 12px 18px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  .struct-spec td:first-child { font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--ink); white-space: nowrap; background: var(--paper-warm); width: 170px; }
+  .struct-spec tr:last-child td { border-bottom: none; }
+
+  .practice-callout { background: var(--steel-soft); border: 1px solid var(--steel); border-radius: 10px; padding: 22px 26px; margin: 24px 0; max-width: 1000px; }
+  .practice-callout .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 8px; font-weight: 600; }
+  .practice-callout p { color: var(--steel-deep); font-size: 14.5px; line-height: 1.6; margin: 0 0 8px; }
+  .practice-callout p:last-child { margin-bottom: 0; }
+
+  /* Larger context box, per-diagram "where does this earn its place" */
+  .context-card { background: white; border: 1px solid var(--rule); border-left: 4px solid var(--steel); border-radius: 10px; padding: 26px 30px; margin: 28px 0; max-width: 1140px; box-shadow: var(--shadow); }
+  .context-card .ctx-eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 6px; font-weight: 600; }
+  .context-card h4.ctx-title { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 18px; }
+  .context-card .ctx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px 28px; }
+  .context-card .ctx-block h5 { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; font-weight: 600; }
+  .context-card .ctx-block p, .context-card .ctx-block li { font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 6px; }
+  .context-card .ctx-block ul { margin: 4px 0 0 18px; }
+  .context-card .ctx-foot { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--rule); font-size: 13px; color: var(--ink-mute); line-height: 1.55; font-style: italic; }
+  .context-card .ctx-foot strong { color: var(--ink); font-style: normal; }
+
+  /* Project-link inline note */
+  .project-note { background: linear-gradient(180deg, rgba(201,169,97,0.10) 0%, rgba(201,169,97,0.04) 100%); border-left: 3px solid var(--gold); padding: 14px 18px; border-radius: 0 6px 6px 0; margin: 22px 0; max-width: 1080px; font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+  .project-note strong { color: #806113; }
+
+  .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 24px; max-width: 1140px; }
+  .pitfall { background: white; border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 0 8px 8px 0; box-shadow: var(--shadow); }
+  .pitfall h5 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+  .pitfall p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+
+  .ref-list { max-width: 980px; margin-top: 32px; }
+  .ref-list .ref { padding: 14px 0; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; }
+  .ref-list .ref:last-child { border-bottom: none; }
+  .ref-list .ref strong { color: var(--ink); }
+  .ref-list .ref em { font-style: italic; }
+
+  /* Interactives */
+  .interactive { background: white; border: 2px solid var(--steel); border-radius: 14px; padding: 26px 30px; margin: 28px 0; max-width: 1140px; box-shadow: var(--shadow-lg); }
+  .interactive h4 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.015em; color: var(--steel-deep); }
+  .interactive .sub { font-size: 14px; color: var(--ink-mute); margin-bottom: 20px; }
+  .interactive .controls { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
+  .interactive button { background: var(--steel); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+  .interactive button:hover { background: var(--steel-deep); }
+  .interactive button.secondary { background: var(--paper-deep); color: var(--ink); }
+  .interactive button.secondary:hover { background: var(--rule); }
+  .interactive button:disabled { background: var(--rule); color: var(--ink-mute); cursor: not-allowed; }
+  .interactive .step-info { padding: 12px 16px; background: var(--paper-warm); border-radius: 6px; font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .interactive .step-info b { color: var(--accent-deep); }
+
+  footer { background: var(--paper-deep); padding: 60px 32px; margin-top: 60px; border-top: 1px solid var(--rule); }
+  footer .inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  footer .inner a { color: var(--steel-deep); text-decoration: none; border-bottom: 1px dotted; }
+
+  /* SVG styling shared */
+  svg .uml-text { font-family: var(--sans); font-size: 14px; fill: var(--ink); }
+  svg .uml-text-mono { font-family: var(--mono); font-size: 13px; fill: var(--ink); }
+  svg .uml-text-italic { font-family: var(--serif); font-style: italic; font-size: 14px; fill: var(--ink); }
+  svg .uml-text-stereo { font-family: var(--mono); font-size: 10px; fill: var(--steel-deep); }
+  svg .uml-text-mute { font-family: var(--sans); font-style: italic; font-size: 12px; fill: #8b94a3; }
+  svg .uml-line { stroke: var(--ink); stroke-width: 1.4; fill: none; }
+  svg .uml-line-dashed { stroke: var(--ink); stroke-width: 1.2; fill: none; stroke-dasharray: 4,3; }
+  svg .uml-line-blue { stroke: #4a8bb8; stroke-width: 1.4; fill: none; }
+  svg .uml-line-blue-dashed { stroke: #4a8bb8; stroke-width: 1.2; fill: none; stroke-dasharray: 4,3; }
+  svg .uml-box { stroke: var(--ink); stroke-width: 1.4; fill: white; }
+  svg .uml-box-blue { stroke: #4a8bb8; stroke-width: 1.4; fill: #eaf3f9; }
+  svg .uml-fill-accent { fill: var(--accent); }
+  svg .uml-fill-steel { fill: var(--steel); }
+  svg .uml-fill-warm { fill: var(--paper-warm); }
+  svg .uml-fill-deep { fill: var(--paper-deep); }
+  svg .actor-blue { stroke: #2c6e9a; stroke-width: 1.4; fill: #eaf3f9; }
+
+  /* Inline concept tooltip: dotted underline term that reveals a small panel on hover/focus.
+     Default tooltip floats to the right of the term; .tip-right-anchor forces a left-edge anchor
+     for terms near the left page edge so the panel always stays inside the viewport. */
+  .term { border-bottom: 1.5px dotted var(--steel); cursor: help; position: relative; color: var(--ink); padding-bottom: 1px; }
+  .term:hover, .term:focus { background: rgba(74,139,184,0.10); border-bottom-color: var(--accent); outline: none; }
+  .term .tip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    z-index: 50;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    max-width: 80vw;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 14px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 400;
+    font-style: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    pointer-events: none;
+    transition: opacity 0.15s, visibility 0.15s;
+    text-align: left;
+    white-space: normal;
+  }
+  .term .tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .term:hover .tip, .term:focus .tip { visibility: visible; opacity: 1; }
+  /* Force left-edge anchor (tip extends to the right); use for terms near the left of the page */
+  .term.tip-right .tip { left: 0; transform: translateX(0); }
+  .term.tip-right .tip::after { left: 20px; transform: translateX(0); }
+  /* Force right-edge anchor (tip extends to the left); for terms near the right of the page */
+  .term.tip-left .tip { left: auto; right: 0; transform: translateX(0); }
+  .term.tip-left .tip::after { left: auto; right: 20px; transform: translateX(0); }
+
+  /* Diagram hot-spots: invisible <rect>/<circle> overlays on SVG glyphs make them hoverable.
+     Used to attach concept tooltips to use cases, actors, arrows, etc. The fixed-position
+     tooltip panel below the SVG is driven by JS; this just styles its appearance. */
+  svg .hotspot { fill: transparent; stroke: transparent; cursor: help; pointer-events: all; }
+  svg .hotspot:hover { fill: rgba(74,139,184,0.10); stroke: #4a8bb8; stroke-width: 1; stroke-dasharray: 3,2; }
+  .diagram-tooltip {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--paper-warm);
+    border-left: 3px solid var(--steel);
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    min-height: 44px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .diagram-tooltip strong { color: var(--ink); font-weight: 600; }
+  .diagram-tooltip.is-active { background: #eaf3f9; border-left-color: #2c6e9a; }
+  .diagram-tooltip .placeholder { color: var(--ink-mute); font-style: italic; }
+  /* below-figure panels replaced by a floating tooltip */
+  .diagram-tooltip { display: none; }
+  .hotspot-tip {
+    position: fixed; z-index: 1000; max-width: 340px;
+    padding: 12px 15px; background: var(--ink); color: var(--paper);
+    border-radius: 6px; font-size: 13px; line-height: 1.5; text-align: left;
+    box-shadow: 0 6px 24px rgba(15,20,25,0.28);
+    pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 0.12s;
+  }
+  .hotspot-tip.is-visible { opacity: 1; visibility: visible; }
+  .hotspot-tip strong { color: #fff; font-weight: 600; }
+  .hotspot-tip code { background: rgba(255,255,255,0.16); padding: 1px 4px; border-radius: 3px; font-family: var(--mono); font-size: 12px; }
+  .builder-embed { width: 100%; height: 90vh; min-height: 680px; border: 1px solid var(--rule); border-radius: 12px; background: #fff; margin: 12px 0 6px; }
+  .embed-cap { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-top: 26px; }
+  .embed-note { font-size: 13.5px; color: var(--ink-mute); margin: 4px 0 0; max-width: 820px; }
+
+    /* ported deck-figure helpers (Figs 5a,6a-6g,7a-7c): deck used .ref-scoped + .lab/.t/.seqmsg */
+    .figure svg .t { font-family: var(--sans); font-size: 15px; fill: var(--ink); }
+    .figure svg .lab { font-family: var(--sans); font-size: 13px; fill: #5a6473; }
+    .figure svg .seqmsg { opacity: 1; }  /* static figures: reveal all messages */
+    .figure svg.objfig{width:100%;height:auto;}
+</style>
+<style>.tut-wrap{max-width:1080px;margin:0 auto;padding:40px 48px 80px;font-family:var(--sans);color:var(--ink);}.tut-wrap h1{font-family:var(--serif);font-weight:600;font-size:34px;letter-spacing:-.02em;margin:0 0 6px;}.tut-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#b85c38;font-weight:600;}.tut-wrap h2{font-family:var(--serif);font-weight:600;font-size:24px;margin:34px 0 10px;border-top:2px solid var(--ink);padding-top:14px;}.tasklist{counter-reset:tk;list-style:none;padding-left:0;}.tasklist li{position:relative;padding:8px 0 8px 44px;border-bottom:1px solid var(--rule);font-size:15.5px;color:var(--ink-soft);}.tasklist li::before{counter-increment:tk;content:counter(tk);position:absolute;left:0;top:8px;width:28px;height:28px;border-radius:50%;background:#2c5f7c;color:#fff;font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center;}details.reveal{border:1px solid #a9cbdd;border-left:4px solid #2c5f7c;border-radius:8px;background:#f6fafc;margin:14px 0;}details.reveal>summary{cursor:pointer;padding:12px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#1f4459;}.reveal-body{padding:6px 18px 16px;}.assume{background:#fbf0e9;border:1px solid #e6b89c;border-left:4px solid #b85c38;border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14.5px;}.assume .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7a3a23;font-weight:700;}.problem{background:#fff;border:1px solid var(--rule);border-radius:12px;padding:18px 22px;font-size:15.5px;line-height:1.6;color:var(--ink-soft);}.paper{background:#eaf2f7;border:1px solid #a9cbdd;border-radius:10px;padding:14px 18px;font-size:14.5px;color:#1f4459;margin:14px 0;}</style>
+</head><body><div class="tut-wrap">
+<div class="tut-eyebrow">COMP433 &middot; Software Engineering &middot; Chapter 4 &middot; Tutorial</div>
+<h1>From requirements to a class and sequence diagram</h1>
+<div class="paper"><strong>Tutorial worksheet.</strong> Work the tasks below <strong>on paper</strong>, in the notation taught in this course (Adel / Sommerville). The use case and activity diagrams are given; you produce the class diagram and the sequence diagram. Solutions will be released after the session.</div>
+<h2>1. The problem</h2>
+<div class="problem">A university needs a system for <strong>course registration</strong>. A <strong>student</strong> may register for several course <strong>offerings</strong> in a semester, up to a credit limit. A <strong>course</strong> (for example COMP433) is given as one or more <strong>offerings</strong> (sections) per semester; each offering is taught by one <strong>instructor</strong>, has a time and room, and a maximum <strong>capacity</strong>. A student may register for an offering only if they have passed the course's <strong>prerequisites</strong> and the offering is not full. The system records each <strong>registration</strong> with a date and a status; at the end of the semester the instructor records a <strong>grade</strong> for each registration. A student may <strong>drop</strong> an offering before the deadline. A <strong>registrar</strong> manages the offerings.</div>
+<h2>2. Given to you</h2>
+<p class="body">Start from these behavioural models; your work begins at the structure.</p>
+
+  <div class="figure"><div class="figure-caption">Given 1</div><div class="figure-title">Use case diagram for the Course Registration System.</div><svg viewBox="0 0 1000 560" class="objfig" role="img" aria-label="Use case diagram for course registration"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="darw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#0f1419" stroke-width="1.3"/></marker><marker id="gtri" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16" orient="auto"><path d="M 0 0 L 16 8 L 0 16 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="sA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker><marker id="sO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker></defs><rect x="300" y="40" width="400" height="490" class="uml-box" fill="none"/><text x="500" y="66" text-anchor="middle" class="uml-text" font-weight="700">Course Registration System</text><circle cx="90" cy="150" r="11" class="uml-line" fill="white"/><line x1="90" y1="161" x2="90" y2="190" class="uml-line"/><line x1="74" y1="172" x2="106" y2="172" class="uml-line"/><line x1="90" y1="190" x2="77" y2="212" class="uml-line"/><line x1="90" y1="190" x2="103" y2="212" class="uml-line"/><text x="90" y="230" text-anchor="middle" class="uml-text" font-weight="600">Student</text><circle cx="90" cy="380" r="11" class="uml-line" fill="white"/><line x1="90" y1="391" x2="90" y2="420" class="uml-line"/><line x1="74" y1="402" x2="106" y2="402" class="uml-line"/><line x1="90" y1="420" x2="77" y2="442" class="uml-line"/><line x1="90" y1="420" x2="103" y2="442" class="uml-line"/><text x="90" y="460" text-anchor="middle" class="uml-text" font-weight="600">Registrar</text><circle cx="910" cy="200" r="11" class="uml-line" fill="white"/><line x1="910" y1="211" x2="910" y2="240" class="uml-line"/><line x1="894" y1="222" x2="926" y2="222" class="uml-line"/><line x1="910" y1="240" x2="897" y2="262" class="uml-line"/><line x1="910" y1="240" x2="923" y2="262" class="uml-line"/><text x="910" y="280" text-anchor="middle" class="uml-text" font-weight="600">Instructor</text><ellipse cx="500" cy="120" rx="90" ry="30" class="uml-box"/><text x="500" y="107" text-anchor="middle" class="uml-text" font-size="13">Register for</text><text x="500" y="125" text-anchor="middle" class="uml-text" font-size="13">offering</text><ellipse cx="420" cy="235" rx="78" ry="30" class="uml-box"/><text x="420" y="222" text-anchor="middle" class="uml-text" font-size="13">Check</text><text x="420" y="240" text-anchor="middle" class="uml-text" font-size="13">prerequisites</text><ellipse cx="610" cy="235" rx="78" ry="30" class="uml-box"/><text x="610" y="222" text-anchor="middle" class="uml-text" font-size="13">Refuse</text><text x="610" y="240" text-anchor="middle" class="uml-text" font-size="13">registration</text><ellipse cx="430" cy="400" rx="82" ry="30" class="uml-box"/><text x="430" y="396" text-anchor="middle" class="uml-text" font-size="13">Drop offering</text><ellipse cx="430" cy="470" rx="82" ry="30" class="uml-box"/><text x="430" y="466" text-anchor="middle" class="uml-text" font-size="13">View schedule</text><ellipse cx="620" cy="400" rx="82" ry="30" class="uml-box"/><text x="620" y="396" text-anchor="middle" class="uml-text" font-size="13">Record grade</text><ellipse cx="620" cy="470" rx="86" ry="30" class="uml-box"/><text x="620" y="466" text-anchor="middle" class="uml-text" font-size="13">Manage offerings</text><line x1="106" y1="150" x2="410" y2="122" class="uml-line"/><line x1="106" y1="168" x2="363" y2="383" class="uml-line"/><line x1="106" y1="182" x2="369" y2="450" class="uml-line"/><line x1="106" y1="380" x2="535" y2="465" class="uml-line"/><line x1="894" y1="210" x2="687" y2="383" class="uml-line"/><line x1="449" y1="145" x2="465" y2="210" class="uml-line-dashed" marker-end="url(#darw)"/><text x="451" y="178" text-anchor="end" class="uml-text-mono" font-size="11">&laquo;include&raquo;</text><line x1="556" y1="213" x2="562" y2="142" class="uml-line-dashed" marker-end="url(#darw)"/><text x="567" y="178" class="uml-text-mono" font-size="11">&laquo;extend&raquo;</text></svg><div class="figure-note">Three actors. <code>Register for offering</code> <code>&laquo;include&raquo;</code>s <code>Check prerequisites</code> (always part of registering); <code>Refuse registration</code> <code>&laquo;extend&raquo;</code>s <code>Register for offering</code> (only when a prerequisite is unmet or the offering is full).</div></div>
+
+
+  <div class="figure"><div class="figure-caption">Given 2</div><div class="figure-title">Activity diagram for &ldquo;Register for offering&rdquo;.</div><svg viewBox="0 0 620 510" class="objfig" role="img" aria-label="Activity diagram for registering for an offering"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="darw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#0f1419" stroke-width="1.3"/></marker><marker id="gtri" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16" orient="auto"><path d="M 0 0 L 16 8 L 0 16 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="sA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker><marker id="sO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker></defs><circle cx="200" cy="38" r="9" fill="#0f1419"/><line x1="200" y1="47" x2="200" y2="70" class="uml-line" marker-end="url(#arw)"/><rect x="110" y="70" width="180" height="44" rx="22" class="uml-box"/><text x="200" y="97" text-anchor="middle" class="uml-text" font-size="13">Select offering</text><line x1="200" y1="114" x2="200" y2="136" class="uml-line" marker-end="url(#arw)"/><polygon points="200,136 254,166 200,196 146,166" class="uml-box"/><text x="200" y="164" text-anchor="middle" class="uml-text" font-size="12">prerequisites</text><text x="200" y="179" text-anchor="middle" class="uml-text" font-size="12">met?</text><line x1="200" y1="196" x2="200" y2="220" class="uml-line" marker-end="url(#arw)"/><text x="210" y="214" class="uml-text-mono" font-size="11">[yes]</text><polygon points="200,220 254,250 200,280 146,250" class="uml-box"/><text x="200" y="248" text-anchor="middle" class="uml-text" font-size="12">space</text><text x="200" y="263" text-anchor="middle" class="uml-text" font-size="12">available?</text><line x1="200" y1="280" x2="200" y2="304" class="uml-line" marker-end="url(#arw)"/><text x="210" y="298" class="uml-text-mono" font-size="11">[yes]</text><rect x="110" y="304" width="180" height="44" rx="22" class="uml-box"/><text x="200" y="331" text-anchor="middle" class="uml-text" font-size="13">Create registration</text><line x1="200" y1="348" x2="200" y2="370" class="uml-line" marker-end="url(#arw)"/><rect x="110" y="370" width="180" height="44" rx="22" class="uml-box"/><text x="200" y="397" text-anchor="middle" class="uml-text" font-size="13">Confirm to student</text><line x1="200" y1="414" x2="200" y2="438" class="uml-line" marker-end="url(#arw)"/><circle cx="200" cy="450" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="200" cy="450" r="5" fill="#0f1419"/><rect x="380" y="144" width="170" height="44" rx="22" class="uml-box"/><text x="465" y="163" text-anchor="middle" class="uml-text" font-size="12.5">Refuse:</text><text x="465" y="179" text-anchor="middle" class="uml-text" font-size="12.5">prerequisites unmet</text><rect x="380" y="228" width="170" height="44" rx="22" class="uml-box"/><text x="465" y="247" text-anchor="middle" class="uml-text" font-size="12.5">Refuse:</text><text x="465" y="263" text-anchor="middle" class="uml-text" font-size="12.5">offering full</text><line x1="254" y1="166" x2="380" y2="166" class="uml-line" marker-end="url(#arw)"/><text x="325" y="158" text-anchor="middle" class="uml-text-mono" font-size="11">[no]</text><line x1="254" y1="250" x2="380" y2="250" class="uml-line" marker-end="url(#arw)"/><text x="325" y="242" text-anchor="middle" class="uml-text-mono" font-size="11">[no]</text><line x1="550" y1="166" x2="590" y2="166" class="uml-line"/><line x1="550" y1="250" x2="590" y2="250" class="uml-line"/><line x1="590" y1="166" x2="590" y2="438" class="uml-line" marker-end="url(#arw)"/><circle cx="590" cy="450" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="590" cy="450" r="5" fill="#0f1419"/></svg><div class="figure-note">Two decisions, each with a guarded refuse branch; the happy path creates the registration and confirms. The decisions reappear as an <code>alt</code> in the sequence diagram.</div></div>
+
+<h2>3. Your tasks</h2>
+<ol class="tasklist"><li><strong>Noun-verb analysis:</strong> list candidate classes, then decide keep / reject / debatable with a one-line reason for each.</li><li><strong>Classes:</strong> draw the classes with their attributes and key operations.</li><li><strong>Associations:</strong> add associations with <strong>multiplicity at each end</strong>, plus any generalisation, aggregation/composition, and the association class. This is your class diagram.</li><li><strong>Sequence diagram</strong> for <em>Register for offering</em>: the normal (happy) path as an instance, then show where an <code>alt</code> handles &ldquo;prerequisite not met / offering full&rdquo;. Remember: actors get no activation bar.</li></ol>
+</div></body></html>
