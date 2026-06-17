@@ -282,6 +282,12 @@
   .builder-embed { width: 100%; height: 90vh; min-height: 680px; border: 1px solid var(--rule); border-radius: 12px; background: #fff; margin: 12px 0 6px; }
   .embed-cap { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-top: 26px; }
   .embed-note { font-size: 13.5px; color: var(--ink-mute); margin: 4px 0 0; max-width: 820px; }
+
+    /* ported deck-figure helpers (Figs 5a,6a-6g,7a-7c): deck used .ref-scoped + .lab/.t/.seqmsg */
+    .figure svg .t { font-family: var(--sans); font-size: 15px; fill: var(--ink); }
+    .figure svg .lab { font-family: var(--sans); font-size: 13px; fill: #5a6473; }
+    .figure svg .seqmsg { opacity: 1; }  /* static figures: reveal all messages */
+    .figure svg.objfig{width:100%;height:auto;}
 </style>
 </head>
 <body>
@@ -302,6 +308,7 @@
       <a href="#ucdesc">8. UC descriptions</a>
       <a href="#activity">9. Activity</a>
       <a href="#class">10. Class</a>
+      <a href="#object">10b. Object</a>
       <a href="#sequence">11. Sequence</a>
       <a href="#state">12. State machine</a>
       <a href="#archi">13. Component &amp; deployment</a>
@@ -359,6 +366,7 @@
       <li><span class="toc-num">9.</span><a href="#activity">Activity diagrams</a></li>
       <li><span class="toc-num">9b.</span><a href="#casestudy">Case study: requirements to use case and activity</a></li>
       <li><span class="toc-num">10.</span><a href="#class">Class diagrams</a></li>
+      <li><span class="toc-num">10b.</span><a href="#object">Object diagrams</a></li>
       <li><span class="toc-num">11.</span><a href="#sequence">Sequence diagrams (with step-through)</a></li>
       <li><span class="toc-num">12.</span><a href="#state">State machine diagrams (with simulator)</a></li>
       <li><span class="toc-num">13.</span><a href="#archi">Component and deployment diagrams</a></li>
@@ -1301,6 +1309,17 @@
     <div class="section-eyebrow"><span class="num">9.</span>Activity diagrams</div>
     <h2 class="section-title">Activity diagrams: <em>flow, decisions, parallelism</em>.</h2>
     <p class="section-intro">An activity diagram captures the workflow of a use case or a business process. It is the right diagram when the team needs to talk about the order of work, the decisions that branch the flow, and the activities that can run in parallel.</p>
+    <div class="table-card" data-ch4-improved="1">
+      <table class="body-table">
+        <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead>
+        <tbody>
+          <tr><td><strong>What</strong></td><td>A workflow as a flow of <strong>actions</strong>: their order, the decisions that branch them, the work that runs in parallel, and which actor owns each step. It models behaviour and the coordination between activities, and a well-formed one never gets stuck: every path reaches a final node.</td></tr>
+          <tr><td><strong>How</strong></td><td>Unpack a use case description (or a whole business process): steps become <em>actions</em>, choices become a <em>decision</em> closed by a <em>merge</em>, simultaneous work becomes a <em>fork</em> closed by a <em>join</em>, and actions are dropped into <em>swimlanes</em> by actor. Guards in [brackets] on a decision must be mutually exclusive and exhaustive.</td></tr>
+          <tr><td><strong>When</strong></td><td>When a use case has real branching, parallel work, or hand-offs between actors, and as an elicitation tool to see how several use cases combine into one process. Over-engineering for a single linear path of three or four steps.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
 
     <div class="practice-callout">
       <div class="tag">In this section</div>
@@ -1662,6 +1681,56 @@
     <div class="section-eyebrow"><span class="num">10.</span>Class diagrams</div>
     <h2 class="section-title">Class diagrams: <em>the system's static structure</em>.</h2>
     <p class="section-intro">A class diagram shows the classes in a system and the associations between them. It is the longest-lived diagram on most projects, because the static structure changes more slowly than any particular flow through it.</p>
+    <p class="body"><strong>Classes, not instances.</strong> A class diagram shows the <em>types</em> in the system, <code>Book</code>, <code>LibraryMember</code>, the kinds of thing that can exist, not the particular copy on the shelf or the member at the desk. To show specific instances at one moment (this member, that copy, with concrete values) you draw an <em>object diagram</em>, the section immediately after this one.</p>
+    <div class="table-card" data-ch4-improved="1">
+      <table class="body-table">
+        <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead>
+        <tbody>
+          <tr><td><strong>What</strong></td><td>The <strong>classes</strong> the system knows about, their <strong>attributes</strong> (data) and <strong>operations</strong> (behaviour), and the <strong>associations</strong>, with multiplicity, that connect them. In early analysis a class is a real-world thing: a patient, a prescription, a book.</td></tr>
+          <tr><td><strong>How</strong></td><td>Mostly <strong>bottom-up from the requirements</strong> by noun-verb analysis: nouns and roles become classes and attributes, verbs become operations, and the noun-verb pairings become associations. Then add multiplicity, generalisation for <em>is-a</em>, aggregation or composition for <em>part-of</em>, and association classes for attributes that belong to a relationship.</td></tr>
+          <tr><td><strong>When</strong></td><td>Whenever an object-oriented model is built; it is the central structural deliverable and the one teams design against. Not for the order operations run in (sequence or activity), an object's lifecycle (state machine), concurrency, or deployment.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Where the classes come from: three design approaches</h3>
+    <p class="body">Before any class is drawn you decide how to decompose the system. Adel's notes name three classic strategies; analysis-level work usually blends them, but it helps to know which one you are leaning on.</p>
+    <ul class="body">
+      <li><strong>Top-down.</strong> Begin with the whole system, split it into subsystems, then into classes. Strong when the high-level architecture is already understood; the risk is inventing classes the requirements never asked for.</li>
+      <li><strong>Bottom-up.</strong> Begin with concrete domain things (a book, a copy, a member) and compose upward. This is exactly what noun-verb analysis does, and it keeps the model anchored to the requirements text.</li>
+      <li><strong>Middle-out.</strong> Begin with the few central concepts you are sure of, then work outward in both directions. Common when one or two entities (Patient, Loan) clearly anchor the domain.</li>
+    </ul>
+    <p class="body">In analysis we work mostly bottom-up from the requirements, using the noun-verb method below, and sanity-check it against a top-down view of the whole. The goal is classes justified by the text, not by the developer's imagination.</p>
+    <h3 class="subhead">Reading a class out of the other diagrams</h3>
+    <p class="body">A class box has three compartments, and each maps to something the behavioural views already produced. This is the bridge from behaviour to structure: the name compartment comes from an actor or entity, the attributes from the data the use cases touch, and the operations from the use cases that object performs. Every part of a class should be answerable to an earlier model.</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 5a</div>
+      <div class="figure-title">Each compartment traces back to a behavioural model (actor/entity, the data a use case stores, the use cases it provides).</div>
+      <svg viewBox="0 0 940 280" role="img" aria-label="A class box's three compartments map to actor/entity, the data a use case stores, and the use cases/operations it provides"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <rect x="360" y="30" width="230" height="210" class="uml-box"/>
+  <line x1="360" y1="74" x2="590" y2="74" class="uml-line"/>
+  <line x1="360" y1="160" x2="590" y2="160" class="uml-line"/>
+  <text x="475" y="58" text-anchor="middle" class="uml-text" font-weight="700" font-size="15">Patient</text>
+  <text x="372" y="96" class="uml-text-mono">+ name: String</text>
+  <text x="372" y="116" class="uml-text-mono">+ dateOfBirth: Date</text>
+  <text x="372" y="136" class="uml-text-mono">- record: PatientRecord</text>
+  <text x="372" y="186" class="uml-text-mono">+ register()</text>
+  <text x="372" y="206" class="uml-text-mono">+ viewRecord()</text>
+  <text x="372" y="226" class="uml-text-mono">+ bookAppointment()</text>
+  <text x="120" y="56" class="t" font-weight="600">An actor or entity</text>
+  <text x="120" y="74" class="lab">a person, role or thing the</text><text x="120" y="90" class="lab">use case diagram identified</text>
+  <line x1="250" y1="55" x2="358" y2="52" stroke="#0f1419" stroke-width="1.2" marker-end="url(#arw)"/>
+  <text x="120" y="124" class="t" font-weight="600">The data it must store</text>
+  <text x="120" y="142" class="lab">becomes the attributes</text>
+  <line x1="250" y1="125" x2="358" y2="120" stroke="#0f1419" stroke-width="1.2" marker-end="url(#arw)"/>
+  <text x="640" y="180" class="t" font-weight="600">The use cases / services</text>
+  <text x="640" y="198" class="lab">it provides become the</text><text x="640" y="214" class="lab">operations (methods)</text>
+  <line x1="592" y1="195" x2="635" y2="195" stroke="#0f1419" stroke-width="1.2" marker-end="url(#arw)"/>
+</svg>
+      <div class="figure-note">The class box is not invented from scratch: its three compartments map onto work you have already done. That traceability is what keeps the structural model honest.</div>
+    </div>
+
 
     <h3 class="subhead">Anatomy of a class box</h3>
 
@@ -1842,6 +1911,77 @@
       <li><strong>Interactions</strong> (meeting, consultation, treatment).</li>
     </ul>
 
+    <h3 class="subhead">Analysis classes vs design classes</h3>
+    <p class="body">An <strong>analysis class</strong> abstracts one or more classes of the eventual design; it models the problem domain, not the solution. It focuses on functional requirements, defines responsibilities (cohesive subsets of behaviour), names attributes at a domain level, and shows the relationships it takes part in. A <strong>design class</strong> adds full method signatures and types, tightened visibility, infrastructure classes (persistence, controllers, factories), design patterns, and navigability. In this course, Phase 3 expects an analysis-level class diagram drawn from your requirements; reserve the design-level detail for later.</p>
+    <h3 class="subhead">Worked example: the Library, noun analysis</h3>
+    <p class="body">Adel's running example. Underline the nouns in the requirement, then sift them.</p>
+    <div class="struct-spec"><p style="font-style:italic;margin:0;">The library contains <strong>books</strong> and <strong>journals</strong>. It may have several <strong>copies</strong> of a given book. Some of the books are for short-term loans only. All other books may be borrowed by any library <strong>member</strong> for three weeks. Members of the library can normally borrow up to six items at a time, but <strong>members of staff</strong> may borrow up to 12 items at one time. Only members of staff may borrow journals. The system must keep track of when books and journals are borrowed and returned.</p></div>
+    <p class="body"><strong>Candidate classes kept:</strong> Book, BookCopy, Journal, LibraryMember, StaffMember. <strong>Discarded or demoted:</strong> Library (the system itself), item (vague), three weeks / six / 12 (loan period and limits: attributes and multiplicities, not classes).</p>
+    <p class="body">Noun-verb analysis gives candidates, not answers. For each one you argue keep, reject, or it depends, and the reasoning matters more than the verdict:</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Candidate</th><th>Decision</th><th>Why, and the alternative rejected</th></tr></thead>
+      <tbody>
+        <tr><td>book</td><td>class</td><td>The work itself (ISBN, title). Not merged with its copies because one title has many physical copies and you lend a copy, not the title.</td></tr>
+        <tr><td>copy</td><td>class</td><td>The physical item (barcode, status). Keep only Book and you cannot say which of three copies is on loan; BookCopy is the fix.</td></tr>
+        <tr><td>journal</td><td>class (debatable)</td><td>Kept separate because journals follow staff-only loan rules. Alternative: Book and Journal both specialise an abstract LibraryItem, tidier if more item types arrive.</td></tr>
+        <tr><td>item</td><td>reject, but&hellip;</td><td>Too vague to be a class, yet it is the hint for that LibraryItem superclass. A rejected noun can still shape the model.</td></tr>
+        <tr><td>loan / borrowing</td><td>association class</td><td>Looks like a verb, but it carries its own data (start and return dates) belonging to the member-copy pairing, not to either alone: the Loan association class.</td></tr>
+        <tr><td>member, staff</td><td>class + generalisation</td><td>Staff is-a member, so generalisation. Alternative: if one person can be both at once, model a Role rather than a subclass.</td></tr>
+        <tr><td>library</td><td>reject</td><td>The system boundary, not a domain object, unless the requirements track several libraries.</td></tr>
+        <tr><td>three weeks, six, 12</td><td>reject</td><td>Loan period and borrowing limits: attributes and constraints (multiplicities), not classes.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body">The teaching point: a good class list is <strong>defended, not asserted</strong>. Be ready to say why BookCopy earns its place and library does not, to name the alternative you considered (the LibraryItem superclass, the Role class), and why you set it aside.</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 6a</div>
+      <div class="figure-title">First-cut analysis class model, derived from the Library description.</div>
+      <svg viewBox="0 0 940 580" role="img" aria-label="Library class diagram derived from the description: LibraryMember, StaffMember, Book, BookCopy and a Loan association class"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <defs><marker id="gen-arrow-bb" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+  <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="160" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+  <line x1="60" y1="96" x2="260" y2="96" class="uml-line"/>
+  <text x="74" y="116" class="uml-text-mono">+ memberId: String</text>
+  <text x="74" y="134" class="uml-text-mono">+ name: String</text>
+  <line x1="60" y1="148" x2="260" y2="148" class="uml-line"/>
+  <text x="74" y="166" class="uml-text-mono">+ borrow()  + return()</text>
+  <rect x="60" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="160" y="344" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
+  <line x1="60" y1="356" x2="260" y2="356" class="uml-line"/>
+  <text x="74" y="376" class="uml-text-mono">+ department: String</text>
+  <text x="74" y="394" class="uml-text-mono">+ borrowJournal()</text>
+  <line x1="160" y1="320" x2="160" y2="170" class="uml-line" marker-end="url(#gen-arrow-bb)"/>
+  <rect x="540" y="60" width="200" height="110" class="uml-box" fill="white"/>
+  <text x="640" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <line x1="540" y1="96" x2="740" y2="96" class="uml-line"/>
+  <text x="554" y="116" class="uml-text-mono">+ ISBN: String</text>
+  <text x="554" y="134" class="uml-text-mono">+ title: String</text>
+  <line x1="540" y1="148" x2="740" y2="148" class="uml-line"/>
+  <text x="554" y="166" class="uml-text-mono">+ catalog()</text>
+  <rect x="540" y="320" width="200" height="100" class="uml-box" fill="white"/>
+  <text x="640" y="344" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <line x1="540" y1="356" x2="740" y2="356" class="uml-line"/>
+  <text x="554" y="376" class="uml-text-mono">+ barcode: String</text>
+  <text x="554" y="394" class="uml-text-mono">+ status: LoanStatus</text>
+  <line x1="640" y1="200" x2="640" y2="320" class="uml-line"/>
+  <polygon points="640,170 654,185 640,200 626,185" fill="white" stroke="#2c3540" stroke-width="1.4"/>
+  <text x="650" y="220" class="uml-text-mono" font-size="13">1</text>
+  <text x="650" y="312" class="uml-text-mono" font-size="13">1..*</text>
+  <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
+  <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
+  <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
+  <text x="486" y="346" class="uml-text-mono" font-size="13">0..6</text>
+  <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
+  <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
+  <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
+  <text x="400" y="484" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
+  <line x1="310" y1="496" x2="490" y2="496" class="uml-line"/>
+  <text x="324" y="516" class="uml-text-mono">+ startDate: Date</text>
+  <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
+  <text x="324" y="552" class="uml-text-mono">+ computeReturnDate()</text>
+</svg>
+      <div class="figure-note">The kept nouns become boxes; the verb analysis then fills in operations (borrow(), return(), recordLoan()), and the associations come next. Staff is-a member is generalisation; a book has copies is aggregation; a member borrows copies is the association whose dates live on the Loan association class; up to six is the multiplicity 0..6.</div>
+    </div>
     <h3 class="subhead">What makes a good analysis class</h3>
     <p class="body">Five criteria, drawn from Cooper, Larman, and the broader OO design literature, that practitioner reviews look for:</p>
 
@@ -1853,6 +1993,147 @@
       <li><strong>Low coupling.</strong> Few necessary associations with other classes; nothing accidental.</li>
     </ul>
 
+    <h3 class="subhead">Associations: direction, roles, and reflexive links</h3>
+    <p class="body">Name an association with a verb phrase and read it in a direction. A plain line is <strong>bidirectional</strong>; an arrowhead makes it <strong>unidirectional</strong> (the tail class can reach the head class, but not the reverse). An association connects classes (the type level); a <em>link</em> is one instance of it between two specific objects (Adel: links instantiate associations).</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 6b</div>
+      <div class="figure-title">Bidirectional vs unidirectional association.</div>
+      <svg viewBox="0 0 900 250" role="img" aria-label="Bidirectional association between Patient and PatientRecord, and unidirectional association from Book to BookCopy"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <rect x="40" y="40" width="150" height="50" class="uml-box"/><text x="115" y="70" text-anchor="middle" class="uml-text" font-weight="700">Patient</text>
+  <rect x="330" y="40" width="170" height="50" class="uml-box"/><text x="415" y="70" text-anchor="middle" class="uml-text" font-weight="700">PatientRecord</text>
+  <line x1="190" y1="65" x2="330" y2="65" class="uml-line"/>
+  <text x="225" y="58" class="uml-text-italic">has</text>
+  <text x="560" y="58" class="uml-text-italic">bidirectional</text>
+  <text x="560" y="76" class="lab">access flows both ways</text>
+  <rect x="40" y="150" width="150" height="50" class="uml-box"/><text x="115" y="180" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <rect x="330" y="150" width="170" height="50" class="uml-box"/><text x="415" y="180" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <line x1="190" y1="175" x2="328" y2="175" class="uml-line" marker-end="url(#arw)"/>
+  <text x="205" y="168" class="uml-text-italic">is a copy of</text>
+  <text x="200" y="195" class="uml-text-mono" font-size="11">1</text><text x="305" y="195" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="560" y="168" class="uml-text-italic">unidirectional</text>
+  <text x="560" y="186" class="lab">a Book reaches its copies,</text><text x="560" y="202" class="lab">not the other way</text>
+</svg>
+      <div class="figure-note">A Patient and PatientRecord know each other (bidirectional); a Book points to its BookCopy but not the reverse (unidirectional). The arrowhead is navigability: which way access can travel.</div>
+    </div>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 6c</div>
+      <div class="figure-title">Role names, and a reflexive association.</div>
+      <svg viewBox="0 0 900 300" role="img" aria-label="Role names on a Company-Person association, and a reflexive manages association on Employee"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <!-- role names -->
+  <rect x="60" y="44" width="150" height="48" class="uml-box"/><text x="135" y="73" text-anchor="middle" class="uml-text" font-weight="700">Company</text>
+  <rect x="430" y="44" width="150" height="48" class="uml-box"/><text x="505" y="73" text-anchor="middle" class="uml-text" font-weight="700">Person</text>
+  <line x1="210" y1="68" x2="430" y2="68" class="uml-line"/>
+  <text x="320" y="60" text-anchor="middle" class="uml-text-italic">employs</text>
+  <text x="218" y="62" class="uml-text-mono" font-size="11">1</text><text x="218" y="86" class="lab" font-size="11">employer</text>
+  <text x="392" y="62" class="uml-text-mono" font-size="11">0..*</text><text x="372" y="86" class="lab" font-size="11">employee</text>
+  <text x="640" y="60" class="uml-text" font-weight="600" font-size="13">Role names</text>
+  <text x="640" y="78" class="lab">each end can be labelled with the</text><text x="640" y="93" class="lab">role that class plays in the link</text>
+  <!-- reflexive -->
+  <rect x="120" y="190" width="180" height="52" class="uml-box"/><text x="210" y="221" text-anchor="middle" class="uml-text" font-weight="700">Employee</text>
+  <polyline points="300,202 372,202 372,230 300,230" class="uml-line"/>
+  <text x="384" y="220" class="uml-text-italic">manages</text>
+  <text x="306" y="198" class="lab" font-size="11">manager 0..1</text>
+  <text x="306" y="246" class="lab" font-size="11">subordinate 0..*</text>
+  <text x="500" y="200" class="uml-text" font-weight="600" font-size="13">Reflexive (self) association</text>
+  <text x="500" y="218" class="lab">a class related to itself: one Employee</text><text x="500" y="233" class="lab">manages many, each managed by one</text>
+</svg>
+      <div class="figure-note">An association end can name the role each class plays, and a class can associate with itself: an Employee manages other Employees. Reflexive associations are how hierarchies (manager/report, folder/subfolder) are modelled.</div>
+    </div>
+    <h3 class="subhead">Generalisation: the substitutability test</h3>
+    <p class="body">Draw generalisation only for a genuine <em>is-a</em>. The test is <strong>substitutability</strong>: anywhere the code expects a LibraryMember you can hand it a StaffMember and nothing breaks. <strong>Wrong:</strong> "Car is-a Engine", a car is not a kind of engine, it <em>has</em> one, so that is an association (Car has Engine). <strong>Right:</strong> "ElectricCar is-a Car". If the substitution would be absurd (an Engine where a Car is expected), it is not generalisation.</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 6d</div>
+      <div class="figure-title">Aggregation (hollow diamond) vs composition (filled diamond).</div>
+      <svg viewBox="0 0 900 250" role="img" aria-label="Aggregation: Team contains Employees with a hollow diamond. Composition: House contains Rooms with a filled diamond."><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <rect x="60" y="40" width="140" height="50" class="uml-box"/><text x="130" y="70" text-anchor="middle" class="uml-text" font-weight="700">Team</text>
+  <rect x="300" y="40" width="150" height="50" class="uml-box"/><text x="375" y="70" text-anchor="middle" class="uml-text" font-weight="700">Employee</text>
+  <line x1="200" y1="65" x2="300" y2="65" class="uml-line"/>
+  <polygon points="200,65 216,57 232,65 216,73" fill="white" stroke="#0f1419" stroke-width="1.4"/>
+  <text x="205" y="55" class="uml-text-mono" font-size="11">1</text><text x="270" y="55" class="uml-text-mono" font-size="11">3..*</text>
+  <text x="500" y="58" class="uml-text" font-weight="600" font-size="13">Aggregation (hollow diamond)</text>
+  <text x="500" y="76" class="lab">weak part-of: an Employee outlives the Team</text>
+  <rect x="60" y="160" width="140" height="50" class="uml-box"/><text x="130" y="190" text-anchor="middle" class="uml-text" font-weight="700">House</text>
+  <rect x="300" y="160" width="150" height="50" class="uml-box"/><text x="375" y="190" text-anchor="middle" class="uml-text" font-weight="700">Room</text>
+  <line x1="200" y1="185" x2="300" y2="185" class="uml-line"/>
+  <polygon points="200,185 216,177 232,185 216,193" fill="#0f1419" stroke="#0f1419" stroke-width="1.4"/>
+  <text x="205" y="175" class="uml-text-mono" font-size="11">1</text><text x="270" y="175" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="500" y="178" class="uml-text" font-weight="600" font-size="13">Composition (filled diamond)</text>
+  <text x="500" y="196" class="lab">strong part-of: destroy the House and its Rooms go too</text>
+</svg>
+      <div class="figure-note">Both say part-of; they differ in the lifetime of the part, and the diamond always sits at the whole. A Team aggregates Employees (they outlive the team); a House is composed of Rooms (destroy the house and the rooms go too). Prefer composition where it fits: aggregation is semantically weak. Adel's examples: a Course is part of a Programme (and may sit in more than one); an Airplane is made of Assemblies made of Components, so aggregation can recurse; a chessboard is composed of exactly 64 Squares.</div>
+    </div>
+    <h3 class="subhead">A second domain: the MHC-PMS</h3>
+    <p class="body">Adel's other running example, from Sommerville's mental-health-care patient management system. It shows a different shape: one central, attribute-rich class, <code>Consultation</code>, that anchors the whole model.</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 6e</div>
+      <div class="figure-title">MHC-PMS: a central Consultation class between Patient and Doctor.</div>
+      <svg viewBox="0 0 940 440" role="img" aria-label="MHC-PMS class diagram: Patient and Doctor associated with a central Consultation class"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <!-- Patient -->
+  <rect x="30" y="44" width="210" height="104" class="uml-box"/>
+  <text x="135" y="66" text-anchor="middle" class="uml-text" font-weight="700">Patient</text>
+  <line x1="30" y1="78" x2="240" y2="78" class="uml-line"/>
+  <text x="42" y="98" class="uml-text-mono">+ name: String</text>
+  <text x="42" y="116" class="uml-text-mono">+ dateOfBirth: Date</text>
+  <text x="42" y="134" class="uml-text-mono">+ patientId: String</text>
+  <!-- Doctor -->
+  <rect x="700" y="44" width="210" height="86" class="uml-box"/>
+  <text x="805" y="66" text-anchor="middle" class="uml-text" font-weight="700">Doctor</text>
+  <line x1="700" y1="78" x2="910" y2="78" class="uml-line"/>
+  <text x="712" y="98" class="uml-text-mono">+ name: String</text>
+  <text x="712" y="116" class="uml-text-mono">+ staffId: String</text>
+  <!-- Consultation (central) -->
+  <rect x="320" y="150" width="300" height="270" class="uml-box" fill="#faf7f2"/>
+  <text x="470" y="172" text-anchor="middle" class="uml-text" font-weight="700">Consultation</text>
+  <line x1="320" y1="184" x2="620" y2="184" class="uml-line"/>
+  <text x="332" y="204" class="uml-text-mono">+ date: Date</text>
+  <text x="332" y="222" class="uml-text-mono">+ time: Time</text>
+  <text x="332" y="240" class="uml-text-mono">+ clinic: String</text>
+  <text x="332" y="258" class="uml-text-mono">+ reason: String</text>
+  <text x="332" y="276" class="uml-text-mono">+ medicationPrescribed: String</text>
+  <text x="332" y="294" class="uml-text-mono">+ treatmentPrescribed: String</text>
+  <text x="332" y="312" class="uml-text-mono">+ voiceNotes: String</text>
+  <line x1="320" y1="324" x2="620" y2="324" class="uml-line"/>
+  <text x="332" y="344" class="uml-text-mono">+ new()</text>
+  <text x="332" y="362" class="uml-text-mono">+ prescribe()</text>
+  <text x="332" y="380" class="uml-text-mono">+ recordNotes()</text>
+  <text x="332" y="398" class="uml-text-mono">+ transcribe()</text>
+  <!-- Patient attends Consultation -->
+  <line x1="135" y1="148" x2="320" y2="230" class="uml-line"/>
+  <text x="150" y="166" class="uml-text-mono" font-size="11">1</text>
+  <text x="290" y="222" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="195" y="180" class="uml-text-italic" font-size="12">attends</text>
+  <!-- Doctor conducts Consultation -->
+  <line x1="805" y1="130" x2="620" y2="230" class="uml-line"/>
+  <text x="775" y="150" class="uml-text-mono" font-size="11">1..*</text>
+  <text x="628" y="222" class="uml-text-mono" font-size="11">0..*</text>
+  <text x="690" y="174" class="uml-text-italic" font-size="12">conducts</text>
+</svg>
+      <div class="figure-note">The most important class in a model is often not an actor but a central event or interaction. Consultation's attributes are the data one consultation records; its operations are what a doctor does during one (prescribe, recordNotes). The two associations read straight from the sentence "a doctor conducts a consultation that a patient attends".</div>
+    </div>
+    <h3 class="subhead">Dependency, data types, and enumerations</h3>
+    <p class="body">A <strong>dependency</strong> (dashed line, open arrowhead) is a transient "uses" link, the weakest relationship: if an Order merely takes a Product as a method argument, that is a dependency, whereas an Order that <em>holds</em> Products over time is an association. Two stereotypes in guillemets flag boxes that are not ordinary domain classes: an <code>&laquo;enumeration&raquo;</code> is a type whose value must be one of a fixed, named list (a Category is Book, Music, Video or Software and nothing else); a <code>&laquo;dataType&raquo;</code> is a type with no identity of its own, defined purely by its value (two Money amounts of the same value are interchangeable, whereas two Order objects are distinct even with identical fields).</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 6f</div>
+      <div class="figure-title">Dependency, an enumeration, and a data type.</div>
+      <svg viewBox="0 0 900 230" role="img" aria-label="Order depends on Product; ProductCategory is an enumeration; Money is a data type"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <rect x="60" y="80" width="150" height="60" class="uml-box"/><text x="135" y="106" text-anchor="middle" class="uml-text" font-weight="700">Order</text><line x1="60" y1="116" x2="210" y2="116" class="uml-line"/><text x="72" y="133" class="uml-text-mono">+ total: Money</text>
+  <rect x="380" y="80" width="160" height="60" class="uml-box"/><text x="460" y="106" text-anchor="middle" class="uml-text" font-weight="700">Product</text><line x1="380" y1="116" x2="540" y2="116" class="uml-line"/><text x="392" y="133" class="uml-text-mono">+ type: Category</text>
+  <line x1="210" y1="110" x2="378" y2="110" class="uml-line-dashed" marker-end="url(#arw)"/><text x="260" y="100" class="uml-text-italic">uses</text>
+  <text x="640" y="60" text-anchor="middle" class="uml-text-italic">&laquo;enumeration&raquo;</text>
+  <rect x="600" y="68" width="160" height="70" class="uml-box" fill="#faf7f2"/><text x="680" y="92" text-anchor="middle" class="uml-text" font-weight="700">Category</text><line x1="600" y1="102" x2="760" y2="102" class="uml-line"/><text x="612" y="120" class="uml-text-mono">Book  Music</text><text x="612" y="134" class="uml-text-mono">Video  Software</text>
+  <text x="135" y="190" text-anchor="middle" class="uml-text-italic">&laquo;dataType&raquo; Money</text>
+</svg>
+      <div class="figure-note">Order depends on Product (dashed, uses once); ProductCategory is an enumeration (a fixed value list); Money is a data type (value, not identity). Dependency is the weakest of the relationships.</div>
+    </div>
+    <h3 class="subhead">Cohesion: high versus low</h3>
+    <p class="body">Most weak class models fail on cohesion or coupling. The test is simple: <strong>count the reasons to change</strong>. A low-cohesion <code>Patient</code> that also sends reminder emails, generates PDF reports, connects to the database and calculates insurance has four reasons to change; touch the email server and you risk breaking billing. A high-cohesion <code>Patient</code> does one job (be a patient) and moves the rest to a NotificationService, a ReportGenerator, a PatientRepository and an InsuranceCalculator, so it changes only when what it means to be a patient changes. Fewer reasons to change is higher cohesion.</p>
+
+    </div>
     <div class="context-card">
       <div class="ctx-eyebrow">Context</div>
       <h4 class="ctx-title">Where class diagrams earn their place</h4>
@@ -1896,19 +2177,99 @@
 </section>
 
 <!-- ===================================================================== -->
+
+<!-- ===================================================================== -->
+<section class="block" id="object">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">10b.</span>Object diagrams</div>
+    <h2 class="section-title">Object diagrams: <em>a snapshot of the running system</em>.</h2>
+    <p class="section-intro">A class diagram shows the <em>types</em>; an object diagram shows specific <strong>instances</strong> of those types and the links between them at a single moment. Adel introduces it immediately after the class diagram, because the quickest way to test a class model is to populate it with real objects and see whether everything fits.</p>
+
+    <div class="table-card"><table class="body-table"><thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead><tbody><tr><td><strong>What</strong></td><td>A <strong>snapshot</strong>: specific <strong>objects</strong> (instances of your classes) and the <strong>links</strong> (instances of associations) between them at one moment, with each attribute set to a concrete <em>value</em>.</td></tr><tr><td><strong>How</strong></td><td>Take a class diagram and instantiate it: draw a box per object with an <strong>underlined</strong> <code>name : Class</code> header and an <code>attribute = value</code> line for each attribute; join objects that are linked. Show no operations and no attribute types.</td></tr><tr><td><strong>When</strong></td><td>During analysis and design, to <strong>validate the class model</strong> against real data: a concrete snapshot quickly exposes a missing class, a wrong multiplicity, or an attribute with nowhere to live.</td></tr></tbody></table></div>
+    <h3 class="subhead">What an object diagram is</h3>
+    <p class="body">Objects are instances of classes. An object diagram captures objects and the relationships between them, that is, <strong>instances of classes and the links (instances of associations)</strong> between them. It is built during analysis and design to illustrate data and object structures, to specify <strong>snapshots</strong> of the system at a point in time, and above all to <strong>validate the class model</strong>, asking whether the classes are sufficient to hold the data and support the methods the system needs. Analysts, designers and implementers all draw them.</p>
+    <h3 class="subhead">Notation: the object icon</h3>
+    <p class="body">An object box has a <strong>name compartment</strong> and an optional <strong>attribute compartment</strong>. The name is written <code>objectName : ClassName</code> and is <strong>underlined</strong> (this is what distinguishes an object from a class); each attribute is shown as <code>attribute = value</code>. Crucially, <strong>operations and attribute types are not shown</strong> on an object diagram: it is about concrete data at one instant, not behaviour.</p>
+
+    <div class="figure"><div class="figure-caption">Figure 6h</div><div class="figure-title">The object icon: an underlined name and concrete attribute values.</div><svg viewBox="0 0 920 230" class="objfig" role="img" aria-label="Object icon: underlined name colon Class, attribute equals value, no operations or types"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gtri" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="darw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#0f1419" stroke-width="1.3"/></marker></defs><rect x="320" y="60" width="300" height="96" class="uml-box"/><text x="470" y="88" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">DSRsUMLBook : Book</text><line x1="320" y1="104" x2="620" y2="104" class="uml-line"/><text x="334" y="132" class="uml-text-mono" font-size="13">title = "Using UML"</text><text x="300" y="80" text-anchor="end" class="uml-text-italic" font-size="12">name compartment</text><text x="300" y="132" text-anchor="end" class="uml-text-italic" font-size="12">attribute = value</text><text x="640" y="80" class="uml-text-italic" font-size="12">object name : Class name (underlined)</text><text x="320" y="190" class="uml-text-italic" font-size="12.5" fill="#b85c38">Operations and attribute types are NOT shown on object diagrams.</text></svg><div class="figure-note">An object names its class and pins each attribute to a value. Compare with a class box, which shows attribute <em>types</em> and an operations compartment; an object box shows neither.</div></div>
+    <h3 class="subhead">Worked example: a class model and its snapshot (SmartSoft)</h3>
+    <p class="body">Adel's running example pairs a class diagram with one object diagram that instantiates it. First the <strong>class</strong> model: a Company is composed of Departments and Offices; a Department is <em>located at</em> an Office and can contain sub-departments (a reflexive composition); a Person <em>works at</em> a Department and one Person <em>manages</em> it (a subset of works-at); a Headquarter is a kind of Office; and a Person depends on ContactInformation.</p>
+
+    <div class="figure"><div class="figure-caption">Figure 6i</div><div class="figure-title">Detailed class diagram: Company, Department, Office, Person (after Adel).</div><svg viewBox="0 0 1040 600" class="objfig" role="img" aria-label="Detailed class diagram: Company, Department, Office, Person, ContactInformation, Headquarter"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gtri" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="darw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#0f1419" stroke-width="1.3"/></marker></defs><rect x="430" y="24" width="180" height="50" class="uml-box"/><text x="520" y="41" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">Company</text><line x1="430" y1="48" x2="610" y2="48" class="uml-line"/><text x="440" y="66" class="uml-text-mono" font-size="12">name: String</text><rect x="120" y="210" width="200" height="50" class="uml-box"/><text x="220" y="227" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">Department</text><line x1="120" y1="234" x2="320" y2="234" class="uml-line"/><text x="130" y="252" class="uml-text-mono" font-size="12">name: String</text><rect x="720" y="200" width="210" height="68" class="uml-box"/><text x="825" y="217" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">Office</text><line x1="720" y1="224" x2="930" y2="224" class="uml-line"/><text x="730" y="242" class="uml-text-mono" font-size="12">address: String</text><text x="730" y="260" class="uml-text-mono" font-size="12">phone: Integer</text><rect x="760" y="330" width="170" height="50" class="uml-box"/><text x="845" y="347" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">Headquarter</text><line x1="760" y1="354" x2="930" y2="354" class="uml-line"/><text x="770" y="372" class="uml-text-mono" font-size="12">CEO: String</text><rect x="110" y="380" width="240" height="148" class="uml-box"/><text x="230" y="397" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">Person</text><line x1="110" y1="404" x2="350" y2="404" class="uml-line"/><text x="120" y="422" class="uml-text-mono" font-size="12">name: String</text><text x="120" y="440" class="uml-text-mono" font-size="12">employeeID: Integer</text><text x="120" y="458" class="uml-text-mono" font-size="12">contactInfo: ContactInformation</text><line x1="110" y1="466" x2="350" y2="466" class="uml-line"/><text x="120" y="484" class="uml-text-mono" font-size="12">processOrder()</text><text x="120" y="502" class="uml-text-mono" font-size="12">confirmOrder()</text><text x="120" y="520" class="uml-text-mono" font-size="12">answerQuery()</text><rect x="640" y="452" width="250" height="68" class="uml-box"/><text x="765" y="469" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">ContactInformation</text><line x1="640" y1="476" x2="890" y2="476" class="uml-line"/><text x="650" y="494" class="uml-text-mono" font-size="12">address: String</text><text x="650" y="512" class="uml-text-mono" font-size="12">telNo: Integer</text><polygon points="520,90 534,102 520,114 506,102" fill="#0f1419"/><line x1="510" y1="110" x2="300" y2="210" class="uml-line"/><text x="300" y="206" class="uml-text-mono" font-size="11">1..*</text><line x1="530" y1="110" x2="770" y2="200" class="uml-line"/><text x="752" y="196" class="uml-text-mono" font-size="11">1..*</text><text x="500" y="128" class="uml-text-mono" font-size="11">1</text><line x1="320" y1="243" x2="720" y2="243" class="uml-line"/><text x="520" y="236" text-anchor="middle" class="uml-text-italic" font-size="12">located at</text><text x="330" y="258" class="uml-text-mono" font-size="11">*</text><text x="700" y="258" class="uml-text-mono" font-size="11">*</text><polyline points="120,224 70,224 70,262 120,262" class="uml-line" fill="none"/><polygon points="120,224 110,219 110,229" fill="#0f1419"/><text x="64" y="216" text-anchor="end" class="uml-text-italic" font-size="11">(subset)</text><text x="96" y="220" class="uml-text-mono" font-size="10">0..1</text><text x="96" y="276" class="uml-text-mono" font-size="10">*</text><line x1="215" y1="380" x2="215" y2="280" class="uml-line"/><text x="150" y="330" class="uml-text-italic" font-size="12">works at</text><text x="200" y="376" class="uml-text-mono" font-size="11">1..*</text><text x="200" y="292" class="uml-text-mono" font-size="11">*</text><line x1="270" y1="380" x2="270" y2="280" class="uml-line-dashed" marker-end="url(#arw)"/><text x="278" y="334" class="uml-text-italic" font-size="12">manages</text><text x="276" y="292" class="uml-text-mono" font-size="11">1</text><line x1="845" y1="330" x2="845" y2="286" class="uml-line" marker-end="url(#gtri)"/><line x1="350" y1="500" x2="640" y2="490" class="uml-line-dashed" marker-end="url(#arw)"/></svg><div class="figure-note">Composition (filled diamonds at Company and at Department), an association with multiplicity (<em>located at</em>, * to *), a reflexive composition on Department, a <em>manages</em> association drawn as a subset of <em>works at</em>, a generalisation (Headquarter is an Office), and a dependency (Person uses ContactInformation).</div></div>
+    <p class="body">Now one <strong>snapshot</strong> of that model: the company "Smart Software", with its actual departments, office, an employee, and his contact record. Every box is an instance of a class above; every value is concrete; no operations appear.</p>
+
+    <div class="figure"><div class="figure-caption">Figure 6j</div><div class="figure-title">Object diagram: a snapshot of SmartSoft instantiating the class model above.</div><svg viewBox="0 0 1040 600" class="objfig" role="img" aria-label="Object diagram snapshot of SmartSoft: company, departments, office, person, contact information"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gtri" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="darw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#0f1419" stroke-width="1.3"/></marker></defs><rect x="415" y="24" width="220" height="50" class="uml-box"/><text x="525" y="41" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">SmartSoft : Company</text><line x1="415" y1="48" x2="635" y2="48" class="uml-line"/><text x="425" y="66" class="uml-text-mono" font-size="12">name = "Smart Software"</text><rect x="410" y="250" width="170" height="50" class="uml-box"/><text x="495" y="267" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">d1 : Department</text><line x1="410" y1="274" x2="580" y2="274" class="uml-line"/><text x="420" y="292" class="uml-text-mono" font-size="12">name = "R&D"</text><rect x="90" y="250" width="160" height="50" class="uml-box"/><text x="170" y="267" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">d2 : Department</text><line x1="90" y1="274" x2="250" y2="274" class="uml-line"/><text x="100" y="292" class="uml-text-mono" font-size="12">name = "Sales"</text><rect x="40" y="405" width="160" height="50" class="uml-box"/><text x="120" y="422" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">nsales : Department</text><line x1="40" y1="429" x2="200" y2="429" class="uml-line"/><text x="50" y="447" class="uml-text-mono" font-size="12">name = "North Sales"</text><rect x="215" y="405" width="160" height="50" class="uml-box"/><text x="295" y="422" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">ssales : Department</text><line x1="215" y1="429" x2="375" y2="429" class="uml-line"/><text x="225" y="447" class="uml-text-mono" font-size="12">name = "South Sales"</text><rect x="730" y="235" width="240" height="68" class="uml-box"/><text x="850" y="252" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">BZUBranch : Office</text><line x1="730" y1="259" x2="970" y2="259" class="uml-line"/><text x="740" y="277" class="uml-text-mono" font-size="12">address = "Birzeit"</text><text x="740" y="295" class="uml-text-mono" font-size="12">phone = "0097059..."</text><rect x="760" y="360" width="180" height="50" class="uml-box"/><text x="850" y="377" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">Headquarter</text><line x1="760" y1="384" x2="940" y2="384" class="uml-line"/><text x="770" y="402" class="uml-text-mono" font-size="12">CEO = "Dr Munir"</text><rect x="430" y="380" width="190" height="68" class="uml-box"/><text x="525" y="397" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">p1 : Person</text><line x1="430" y1="404" x2="620" y2="404" class="uml-line"/><text x="440" y="422" class="uml-text-mono" font-size="12">name = "Sameer"</text><text x="440" y="440" class="uml-text-mono" font-size="12">employeeID = 1233</text><rect x="640" y="475" width="300" height="68" class="uml-box"/><text x="790" y="492" text-anchor="middle" class="uml-text" font-weight="700" font-size="13" text-decoration="underline">ContactInformation</text><line x1="640" y1="499" x2="940" y2="499" class="uml-line"/><text x="650" y="517" class="uml-text-mono" font-size="12">address = "1 Marj St, Birzeit"</text><text x="650" y="535" class="uml-text-mono" font-size="12">telNo = "0097259..."</text><polygon points="525,80 539,92 525,104 511,92" fill="#0f1419"/><line x1="518" y1="100" x2="495" y2="250" class="uml-line"/><line x1="512" y1="100" x2="170" y2="250" class="uml-line"/><line x1="535" y1="98" x2="820" y2="235" class="uml-line"/><polygon points="170,306 182,316 170,326 158,316" fill="#0f1419"/><line x1="164" y1="324" x2="120" y2="405" class="uml-line"/><line x1="176" y1="324" x2="295" y2="405" class="uml-line"/><line x1="580" y1="278" x2="730" y2="265" class="uml-line"/><text x="655" y="262" text-anchor="middle" class="uml-text-italic" font-size="12">located at</text><line x1="500" y1="380" x2="495" y2="306" class="uml-line"/><text x="438" y="348" class="uml-text-italic" font-size="12">works at</text><line x1="530" y1="380" x2="530" y2="306" class="uml-line-dashed" marker-end="url(#arw)"/><text x="540" y="348" class="uml-text-italic" font-size="12">manages</text><line x1="850" y1="360" x2="850" y2="305" class="uml-line" marker-end="url(#gtri)"/><line x1="620" y1="425" x2="660" y2="492" class="uml-line-dashed" marker-end="url(#arw)"/></svg><div class="figure-note"><code>SmartSoft : Company</code> is composed of <code>d1 : Department</code> (R&amp;D) and <code>d2 : Department</code> (Sales, itself composed of North and South Sales), and of <code>BZUBranch : Office</code>. <code>d1</code> is located at the branch; <code>p1 : Person</code> (Sameer) works at and manages it; the branch is a Headquarter; and <code>p1</code> uses a ContactInformation record. Building this snapshot is how you check the class model holds together: each value has a home, each link has a matching association.</div></div>
+    <h3 class="subhead">A second snapshot: the Library</h3>
+    <p class="body">The same idea against the Library class diagram from the previous section: one member, one copy, one borrowing link.</p>
+
+    <div class="figure"><div class="figure-caption">Figure 6k</div><div class="figure-title">Object diagram: one library member borrowing one copy.</div><svg viewBox="0 0 900 210" class="objfig" role="img" aria-label="Object diagram: adel:LibraryMember linked to copy42:BookCopy"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <rect x="90" y="60" width="220" height="90" class="uml-box"/><text x="200" y="86" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">adel : LibraryMember</text><line x1="90" y1="98" x2="310" y2="98" class="uml-line"/><text x="104" y="120" class="uml-text-mono">memberId = "M-1007"</text><text x="104" y="138" class="uml-text-mono">name = "Adel"</text>
+  <rect x="560" y="60" width="220" height="90" class="uml-box"/><text x="670" y="86" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">copy42 : BookCopy</text><line x1="560" y1="98" x2="780" y2="98" class="uml-line"/><text x="574" y="120" class="uml-text-mono">barcode = "BC-42"</text><text x="574" y="138" class="uml-text-mono">status = onLoan</text>
+  <line x1="310" y1="105" x2="560" y2="105" class="uml-line"/><text x="380" y="98" class="uml-text-italic">borrows</text>
+</svg><div class="figure-note"><code>adel : LibraryMember</code> is linked to <code>copy42 : BookCopy</code>, one link of the member-borrows-copy association. A snapshot like this validates the class model: building it with real data exposes a missing class, a wrong multiplicity, or an attribute that has nowhere to live.</div></div>
+    <div class="practice-callout"><div class="tag">Why it matters</div><p>An object diagram is the cheapest test of a class diagram. If you cannot draw a plausible snapshot, the class model is wrong somewhere: an attribute with no box to sit in, a link the associations do not allow, or a multiplicity the data violates. Draw one whenever a class model feels abstract or a multiplicity is in doubt.</p></div>
+    <div class="practice-callout"><div class="tag">Bridge to the next diagram</div><p>A class diagram and its object snapshot are both <em>static</em>: a structure and one frozen instant of it. The next diagram, the sequence diagram, sets those same objects in motion, showing the messages they exchange over time.</p></div>
+  </div>
+</section>
+
 <section class="block" id="sequence">
   <div class="container">
     <div class="section-eyebrow"><span class="num">11.</span>Sequence diagrams</div>
     <h2 class="section-title">Sequence diagrams: <em>the order of messages</em>.</h2>
     <p class="section-intro">A sequence diagram shows one specific interaction: who sends what message to whom, in what order. Time runs top to bottom; participants are arranged left to right. Unlike a class diagram, which captures the system at rest, a sequence diagram captures the system in motion.</p>
+    <p class="body"><strong>Instances, and one scenario at a time.</strong> The lifelines are <em>instances</em> (objects), written <code>: Class</code> (anonymous) or <code>name : Class</code>, never bare classes, because a sequence diagram shows real objects exchanging messages on one run. And one diagram tells <em>one</em> story: a single scenario of a single use case. Draw the <strong>normal (happy) path</strong> first as an instance diagram; fold the alternatives and errors in with combined fragments (<code>alt</code>, <code>opt</code>, <code>loop</code>), or draw them as separate diagrams (the generic diagram). Do not try to cram every path into one picture.</p>
+    <div class="table-card" data-ch4-improved="1">
+      <table class="body-table">
+        <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead>
+        <tbody>
+          <tr><td><strong>What</strong></td><td>The interaction for <strong>one scenario</strong> of one use case: which participant sends which message to whom, in what order, with arguments, and when each participant is active (the activation bars). Time runs top to bottom; participants sit left to right.</td></tr>
+          <tr><td><strong>How</strong></td><td>Pick one scenario; place the initiating actor and then the collaborating <strong>objects</strong> (instances of your classes) across the top; drop a dashed <strong>lifeline</strong> from each; add <strong>messages</strong> in time order, naming the operation each calls; draw <strong>activation bars</strong> and dashed <strong>returns</strong>; wrap any choice or repetition in a <strong>fragment</strong> (alt, opt, loop).</td></tr>
+          <tr><td><strong>When</strong></td><td>For a scenario whose call order is not obvious, or a collaboration that needs pinning down: a checkout, an authorisation, a booking. Not for static structure (class diagram), an object's whole lifecycle (state machine), or every scenario at once (one diagram is one story).</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    <h3 class="subhead">Notation</h3>
-    <ul class="body">
-      <li><strong>Lifelines</strong>: vertical dashed lines representing participants. Drawn from a participant box at the top.</li>
-      <li><strong>Activations</strong>: thin rectangles on a lifeline showing when a participant is active (processing).</li>
-      <li><strong>Messages</strong>: horizontal arrows between lifelines. Solid arrow = synchronous call. Dashed arrow with open arrowhead = return. Open arrowhead (no shaft) = asynchronous message.</li>
-      <li><strong>Fragments</strong> (UML 2.0): boxed regions with an operator label (alt, opt, loop, par, ref) that contain conditional or repeating behaviour.</li>
-    </ul>
+    <h3 class="subhead">Where the participants and messages come from</h3>
+    <p class="body">A sequence diagram invents nothing. It realises one scenario of a use case, using the classes from the class diagram and calling their operations:</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>In the sequence diagram</th><th>Comes from</th></tr></thead>
+      <tbody>
+        <tr><td>The scenario being drawn</td><td>one path through a use case (its normal flow, or one alternative)</td></tr>
+        <tr><td>The participants (lifelines)</td><td>actors and objects; the objects are instances of classes from the class diagram</td></tr>
+        <tr><td>The messages</td><td>the operations declared on those classes</td></tr>
+        <tr><td>The fragments (alt, loop)</td><td>the decisions and loops of the activity diagram for that use case</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body"><strong>Consistency check.</strong> If a lifeline receives a message <code>fetchRecord()</code>, the class it instantiates must declare <code>fetchRecord()</code>. The sequence diagram is therefore a live check on the class diagram: a message with no matching operation means the class model is incomplete.</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 7a</div>
+      <div class="figure-title">Notation legend: lifelines and activation bars, and the message kinds.</div>
+      <svg viewBox="0 0 980 340" role="img" aria-label="Notation legend: two lifelines with activation bars and the four message types"><defs><marker id="seqA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker><marker id="seqO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
+  <rect x="60" y="30" width="130" height="34" class="uml-box"/><text x="125" y="52" text-anchor="middle" class="uml-text" font-weight="600">: Caller</text>
+  <rect x="560" y="30" width="130" height="34" class="uml-box"/><text x="625" y="52" text-anchor="middle" class="uml-text" font-weight="600">: Receiver</text>
+  <line x1="125" y1="64" x2="125" y2="320" class="uml-line-dashed"/>
+  <line x1="625" y1="64" x2="625" y2="320" class="uml-line-dashed"/>
+  <rect x="120" y="96" width="10" height="200" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <rect x="620" y="110" width="10" height="120" fill="#d6e0e8" stroke="#2c5f7c"/>
+  <line x1="130" y1="110" x2="620" y2="110" class="uml-line" marker-end="url(#seqA)"/>
+  <text x="375" y="103" text-anchor="middle" class="uml-text" font-size="13">1: doRequest() &ndash; synchronous call (solid, filled head)</text>
+  <path d="M 630 150 H 700 V 175 H 630" class="uml-line" fill="none" marker-end="url(#seqA)"/>
+  <text x="712" y="166" class="uml-text" font-size="13">2: validate() , self-message</text>
+  <line x1="620" y1="210" x2="130" y2="210" class="uml-line-dashed" marker-end="url(#seqO)"/>
+  <text x="375" y="203" text-anchor="middle" class="uml-text" font-size="13">return result , reply (dashed, open head)</text>
+  <line x1="130" y1="270" x2="620" y2="270" class="uml-line" marker-end="url(#seqO)"/>
+  <text x="375" y="263" text-anchor="middle" class="uml-text" font-size="13">3: notify() , asynchronous (solid, open head)</text>
+  <text x="125" y="318" text-anchor="middle" class="uml-text-italic" font-size="12">activation bar = busy</text>
+</svg>
+      <div class="figure-note">The box names the participant (<code>: Class</code> for an anonymous object, <code>name : Class</code> for a named one); the dashed lifeline drops from it; the thin activation bar marks the time it is busy. Message kinds: synchronous (filled head, the caller waits), reply/return (dashed, open head), and asynchronous (open head, solid line, fire and continue). A message back to the same lifeline is a self-message. <strong>Actors do not get an activation bar:</strong> an external participant (the Customer in the Deposit Cash example, the Librarian in the next one) sits outside the system, so we do not model its internal execution, it only sends and receives messages. Only the system <em>objects</em> that execute a message are barred.</div>
+    </div>
+    <h3 class="subhead">One scenario, or all of them: instance vs generic</h3>
+    <p class="body">Adel draws the distinction clearly. An <strong>instance</strong> diagram is one concrete run, no branching, the happy path: quick to draw, ideal for explaining the normal flow. A <strong>generic</strong> diagram shows the family of runs using combined fragments (alt, opt, loop) to fold the alternatives and repetitions into one picture. Rule of thumb: draw the instance first to nail the normal flow, then promote it to a generic diagram only where real branching or looping matters. Do not cram every error path into one diagram; that is what fragments, or separate diagrams, are for.</p>
+
+
+    <h3 class="subhead">A generic diagram with an <code>alt</code> fragment</h3>
+    <p class="body">Figure 7 promotes an instance to a generic diagram: the authorisation decision is folded into one picture with an <code>alt</code> fragment, exactly the notation the legend above introduces. Solid arrows are synchronous calls, dashed open-headed arrows are returns, and the guard after each branch label decides which one fires.</p>
 
     <div class="figure">
       <div class="figure-caption">Figure 7</div>
@@ -2001,7 +2362,40 @@
         </tbody>
       </table>
     </div>
+    <div class="figure"><div class="figure-caption">Figure 7d</div><div class="figure-title">The five combined fragments, with a one-line example of each.</div><svg viewBox="0 0 1000 560" class="objfig" role="img" aria-label="Combined fragments alt opt loop par ref with examples"><defs><marker id="sA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker><marker id="sO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker></defs><text x="20" y="50" class="uml-text" font-weight="700" font-size="13">alt</text><rect x="35" y="60" width="90" height="34" class="uml-box"/><text x="80" y="82" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">a : A</text><rect x="205" y="60" width="90" height="34" class="uml-box"/><text x="250" y="82" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">b : B</text><line x1="80" y1="94" x2="80" y2="210" class="uml-line-dashed"/><line x1="250" y1="94" x2="250" y2="210" class="uml-line-dashed"/><rect x="40" y="108" width="260" height="90" fill="none" stroke="#2c5f7c" stroke-width="1.3"/><path d="M40 108 h54 v16 l-10 8 H40 Z" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.3"/><text x="56" y="125" class="uml-text-mono" font-size="11" font-weight="600">alt</text><text x="102" y="123" class="uml-text-mono" font-size="11">[ok]</text><line x1="85" y1="142" x2="245" y2="142" class="uml-line" marker-end="url(#sA)"/><text x="165" y="135" text-anchor="middle" class="uml-text-mono" font-size="11.5">approve()</text><line x1="40" y1="158" x2="300" y2="158" stroke="#2c5f7c" stroke-dasharray="6,4" stroke-width="1.1"/><text x="48" y="173" class="uml-text-mono" font-size="11">[else]</text><text x="40" y="228" class="uml-text-italic" font-size="11.5">exactly one branch runs</text><text x="360" y="50" class="uml-text" font-weight="700" font-size="13">opt</text><rect x="375" y="60" width="90" height="34" class="uml-box"/><text x="420" y="82" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">a : A</text><rect x="545" y="60" width="90" height="34" class="uml-box"/><text x="590" y="82" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">b : B</text><line x1="420" y1="94" x2="420" y2="210" class="uml-line-dashed"/><line x1="590" y1="94" x2="590" y2="210" class="uml-line-dashed"/><rect x="380" y="108" width="260" height="90" fill="none" stroke="#2c5f7c" stroke-width="1.3"/><path d="M380 108 h54 v16 l-10 8 H380 Z" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.3"/><text x="396" y="125" class="uml-text-mono" font-size="11" font-weight="600">opt</text><text x="442" y="123" class="uml-text-mono" font-size="11">[vip]</text><line x1="425" y1="142" x2="585" y2="142" class="uml-line" marker-end="url(#sA)"/><text x="505" y="135" text-anchor="middle" class="uml-text-mono" font-size="11.5">applyDiscount()</text><text x="380" y="228" class="uml-text-italic" font-size="11.5">runs only if the guard holds</text><text x="700" y="50" class="uml-text" font-weight="700" font-size="13">loop</text><rect x="715" y="60" width="90" height="34" class="uml-box"/><text x="760" y="82" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">a : A</text><rect x="885" y="60" width="90" height="34" class="uml-box"/><text x="930" y="82" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">b : B</text><line x1="760" y1="94" x2="760" y2="210" class="uml-line-dashed"/><line x1="930" y1="94" x2="930" y2="210" class="uml-line-dashed"/><rect x="720" y="108" width="260" height="90" fill="none" stroke="#2c5f7c" stroke-width="1.3"/><path d="M720 108 h54 v16 l-10 8 H720 Z" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.3"/><text x="736" y="125" class="uml-text-mono" font-size="11" font-weight="600">loop</text><text x="782" y="123" class="uml-text-mono" font-size="11">[more]</text><line x1="765" y1="142" x2="925" y2="142" class="uml-line" marker-end="url(#sA)"/><text x="845" y="135" text-anchor="middle" class="uml-text-mono" font-size="11.5">addItem()</text><text x="720" y="228" class="uml-text-italic" font-size="11.5">runs 0+ times while guard holds</text><text x="20" y="310" class="uml-text" font-weight="700" font-size="13">par</text><rect x="35" y="320" width="90" height="34" class="uml-box"/><text x="80" y="342" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">a : A</text><rect x="205" y="320" width="90" height="34" class="uml-box"/><text x="250" y="342" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">b : B</text><line x1="80" y1="354" x2="80" y2="470" class="uml-line-dashed"/><line x1="250" y1="354" x2="250" y2="470" class="uml-line-dashed"/><rect x="40" y="368" width="260" height="90" fill="none" stroke="#2c5f7c" stroke-width="1.3"/><path d="M40 368 h54 v16 l-10 8 H40 Z" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.3"/><text x="56" y="385" class="uml-text-mono" font-size="11" font-weight="600">par</text><line x1="85" y1="394" x2="245" y2="394" class="uml-line" marker-end="url(#sA)"/><text x="165" y="387" text-anchor="middle" class="uml-text-mono" font-size="11.5">sendEmail()</text><line x1="85" y1="440" x2="245" y2="440" class="uml-line" marker-end="url(#sA)"/><text x="165" y="433" text-anchor="middle" class="uml-text-mono" font-size="11.5">updateLog()</text><line x1="40" y1="418" x2="300" y2="418" stroke="#2c5f7c" stroke-dasharray="6,4" stroke-width="1.1"/><text x="48" y="433" class="uml-text-mono" font-size="11"></text><text x="40" y="488" class="uml-text-italic" font-size="11.5">both branches run concurrently</text><text x="360" y="310" class="uml-text" font-weight="700" font-size="13">ref</text><rect x="375" y="320" width="90" height="34" class="uml-box"/><text x="420" y="342" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">a : A</text><rect x="545" y="320" width="90" height="34" class="uml-box"/><text x="590" y="342" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">b : B</text><line x1="420" y1="354" x2="420" y2="470" class="uml-line-dashed"/><line x1="590" y1="354" x2="590" y2="470" class="uml-line-dashed"/><rect x="380" y="368" width="260" height="90" fill="none" stroke="#2c5f7c" stroke-width="1.3"/><path d="M380 368 h54 v16 l-10 8 H380 Z" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.3"/><text x="396" y="385" class="uml-text-mono" font-size="11" font-weight="600">ref</text><line x1="425" y1="402" x2="585" y2="402" class="uml-line" marker-end="url(#sA)"/><text x="505" y="395" text-anchor="middle" class="uml-text-mono" font-size="11.5">Authenticate</text><text x="380" y="488" class="uml-text-italic" font-size="11.5">reuse another diagram (named)</text><text x="700" y="402" class="uml-text" font-weight="700" font-size="13">in one line</text><text x="700" y="430" class="uml-text" font-size="12.5">alt: many guarded branches, one fires.</text><text x="700" y="452" class="uml-text" font-size="12.5">opt: a single optional branch.</text><text x="700" y="474" class="uml-text" font-size="12.5">loop: repetition.</text><text x="700" y="496" class="uml-text" font-size="12.5">par: concurrency.</text><text x="700" y="518" class="uml-text" font-size="12.5">ref: a reusable sub-interaction.</text></svg><div class="figure-note"><strong>alt</strong> picks one of several guarded branches (here <code>[ok]</code> vs <code>[else]</code>); <strong>opt</strong> is a single branch that runs only if its guard holds; <strong>loop</strong> repeats while its guard holds; <strong>par</strong> runs its regions concurrently (order between them unspecified); <strong>ref</strong> stands in for a named sub-interaction drawn elsewhere. Use alt/opt for choice, loop for repetition, par for concurrency, ref for reuse.</div></div>
 
+
+    <h3 class="subhead">Worked example: the "Deposit Cash" use case</h3>
+    <p class="body">Adel's self-service-machine example, the normal scenario. Three internal objects do the work: the <em>front</em> (the customer interface), the <em>register</em> (where money is counted and the cash reserve kept), and the <em>dispenser</em> (which delivers the receipt).</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 7b</div>
+      <div class="figure-title">The &ldquo;Deposit Cash&rdquo; scenario: Customer, Front, Register and Dispenser.</div>
+      <svg viewBox="0 0 980 470" class="objfig" role="img" aria-label="Deposit Cash sequence diagram"><defs><marker id="sA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker><marker id="sO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker></defs><rect x="40" y="30" width="140" height="34" class="uml-box"/><text x="110" y="52" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">: Customer</text><line x1="110" y1="64" x2="110" y2="452" class="uml-line-dashed"/><rect x="246" y="30" width="168" height="34" class="uml-box"/><text x="330" y="52" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">front : UI</text><line x1="330" y1="64" x2="330" y2="452" class="uml-line-dashed"/><rect x="476" y="30" width="168" height="34" class="uml-box"/><text x="560" y="52" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">register : Register</text><line x1="560" y1="64" x2="560" y2="452" class="uml-line-dashed"/><rect x="750" y="30" width="140" height="34" class="uml-box"/><text x="820" y="52" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">: Dispenser</text><line x1="820" y1="64" x2="820" y2="452" class="uml-line-dashed"/><rect x="325" y="96" width="10" height="324" fill="#d6e0e8" stroke="#2c5f7c"/><rect x="555" y="188" width="10" height="172" fill="#d6e0e8" stroke="#2c5f7c"/><rect x="815" y="300" width="10" height="44" fill="#d6e0e8" stroke="#2c5f7c"/><line x1="115" y1="110" x2="325" y2="110" class="uml-line" marker-end="url(#sA)"/><text x="220" y="103" text-anchor="middle" class="uml-text-mono" font-size="11.5">1: insertMoney(amount)</text><line x1="115" y1="150" x2="325" y2="150" class="uml-line" marker-end="url(#sA)"/><text x="220" y="143" text-anchor="middle" class="uml-text-mono" font-size="11.5">2: makeSelection(acct, amount)</text><line x1="335" y1="190" x2="555" y2="190" class="uml-line" marker-end="url(#sA)"/><text x="445" y="183" text-anchor="middle" class="uml-text-mono" font-size="11.5">3: sendMoney(amount)</text><path d="M 565 222 C 620 218 620 250 565 246" class="uml-line" fill="none" marker-end="url(#sA)"/><text x="626" y="238" class="uml-text-mono" font-size="11.5">4: checkAmount()</text><path d="M 565 266 C 620 262 620 294 565 290" class="uml-line" fill="none" marker-end="url(#sA)"/><text x="626" y="282" class="uml-text-mono" font-size="11.5">5: updateReserve()</text><line x1="565" y1="310" x2="815" y2="310" class="uml-line" marker-end="url(#sA)"/><text x="690" y="303" text-anchor="middle" class="uml-text-mono" font-size="11.5">6: deliverReceipt()</text><line x1="815" y1="344" x2="565" y2="344" class="uml-line-dashed" marker-end="url(#sO)"/><text x="690" y="337" text-anchor="middle" class="uml-text-mono" font-size="11.5">confirmation</text><line x1="555" y1="376" x2="335" y2="376" class="uml-line-dashed" marker-end="url(#sO)"/><text x="445" y="369" text-anchor="middle" class="uml-text-mono" font-size="11.5">7: ok</text><line x1="325" y1="410" x2="115" y2="410" class="uml-line-dashed" marker-end="url(#sO)"/><text x="220" y="403" text-anchor="middle" class="uml-text-mono" font-size="11.5">8: showConfirmation()</text></svg>
+      <div class="figure-note">Read it top to bottom: each solid arrow is a synchronous call to an operation that exists on the receiver, and each dashed arrow is the return that hands control back. The activation bar on each lifeline covers exactly the time that participant is busy.</div>
+    </div>
+    <h3 class="subhead">Back to back: the Library "Borrow a copy" scenario</h3>
+    <p class="body">The same Library modelled earlier with a use case, an activity diagram and a class diagram, now in motion for one scenario. The lifelines are objects of the classes <code>LibraryMember</code>, <code>BookCopy</code> and <code>Loan</code>; the messages are their operations; the <code>alt</code> is the activity's "limit reached?" decision.</p>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 7c</div>
+      <div class="figure-title">Borrowing a copy, with an alt on the loan limit and a &laquo;create&raquo; message to a Loan object.</div>
+      <svg viewBox="0 0 1000 500" class="objfig" role="img" aria-label="Library Borrow a copy sequence diagram with alt and create"><defs><marker id="sA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker><marker id="sO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker></defs><rect x="35" y="30" width="170" height="34" class="uml-box"/><text x="120" y="52" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">: Librarian</text><line x1="120" y1="64" x2="120" y2="486" class="uml-line-dashed"/><rect x="275" y="30" width="170" height="34" class="uml-box"/><text x="360" y="52" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">m : LibraryMember</text><line x1="360" y1="64" x2="360" y2="486" class="uml-line-dashed"/><rect x="535" y="30" width="170" height="34" class="uml-box"/><text x="620" y="52" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">c : BookCopy</text><line x1="620" y1="64" x2="620" y2="486" class="uml-line-dashed"/><rect x="355" y="130" width="10" height="340" fill="#d6e0e8" stroke="#2c5f7c"/><line x1="125" y1="130" x2="355" y2="130" class="uml-line" marker-end="url(#sA)"/><text x="240" y="123" text-anchor="middle" class="uml-text-mono" font-size="11.5">1: borrow(c)</text><path d="M 365 162 C 420 158 420 190 365 186" class="uml-line" fill="none" marker-end="url(#sA)"/><text x="426" y="178" class="uml-text-mono" font-size="11.5">2: checkAllowance()</text><rect x="60" y="212" width="900" height="262" fill="none" stroke="#2c5f7c" stroke-width="1.3"/><path d="M60 212 h54 v16 l-10 8 H60 Z" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.3"/><text x="76" y="229" class="uml-text-mono" font-size="11" font-weight="600">alt</text><text x="122" y="227" class="uml-text-mono" font-size="11">[within limit]</text><rect x="615" y="250" width="10" height="50" fill="#d6e0e8" stroke="#2c5f7c"/><line x1="365" y1="250" x2="615" y2="250" class="uml-line" marker-end="url(#sA)"/><text x="490" y="243" text-anchor="middle" class="uml-text-mono" font-size="11.5">3: issue()</text><line x1="615" y1="294" x2="365" y2="294" class="uml-line-dashed" marker-end="url(#sO)"/><text x="490" y="287" text-anchor="middle" class="uml-text-mono" font-size="11.5">onLoan</text><rect x="780" y="318" width="160" height="34" class="uml-box"/><text x="860" y="340" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">: Loan</text><line x1="860" y1="352" x2="860" y2="412" class="uml-line-dashed"/><rect x="855" y="352" width="10" height="56" fill="#d6e0e8" stroke="#2c5f7c"/><line x1="365" y1="335" x2="780" y2="335" class="uml-line-dashed" marker-end="url(#sO)"/><text x="570" y="328" text-anchor="middle" class="uml-text-mono" font-size="11.5">4: &laquo;create&raquo; new(m, c, today)</text><line x1="355" y1="400" x2="125" y2="400" class="uml-line-dashed" marker-end="url(#sO)"/><text x="240" y="393" text-anchor="middle" class="uml-text-mono" font-size="11.5">5: loan recorded</text><line x1="60" y1="420" x2="960" y2="420" stroke="#2c5f7c" stroke-dasharray="6,4" stroke-width="1.1"/><text x="68" y="435" class="uml-text-mono" font-size="11">[limit reached]</text><line x1="355" y1="456" x2="125" y2="456" class="uml-line-dashed" marker-end="url(#sO)"/><text x="240" y="449" text-anchor="middle" class="uml-text-mono" font-size="11.5">6: loan refused</text></svg>
+      <div class="figure-note">The Librarian calls borrow(c) on the member m; m runs a self-message checkAllowance() to check the six-item limit. alt [within limit]: m calls issue() on the copy (which returns onLoan), then creates a new Loan object (the &laquo;create&raquo; message, whose lifeline begins where it is created), and returns "loan recorded". alt [limit reached]: m returns "loan refused" and nothing is issued or created. Every message targets an operation that exists on that class, and the Loan object's dates are set at creation, exactly the association class from the class diagram.</div>
+    </div>
+    <div class="practice-callout"><div class="tag">How to build one</div>
+      <p><strong>Recipe.</strong> (1) Pick one scenario of one use case, starting with the normal flow. (2) Place the participants across the top: the actor that starts it, then the objects it collaborates with. (3) Drop a lifeline from each. (4) Add messages in time order, top to bottom, naming the operation and its arguments. (5) Draw activation bars for the time each participant is busy, and the dashed returns. (6) Wrap conditional or repeating parts in fragments.</p>
+      <p><strong>Sanity checks.</strong> Every received message is an operation that exists on the receiver's class; every synchronous call has a matching return; time only goes down (no arrow points back up the page); one diagram is one scenario, branch with fragments rather than tangling two stories together.</p>
+    </div>
+    <h3 class="subhead">Pitfalls</h3>
+    <ul class="body">
+      <li><strong>All scenarios in one instance diagram.</strong> An instance shows one run; use alt / opt / loop (a generic diagram), or separate diagrams, for the rest.</li>
+      <li><strong>Forgotten returns.</strong> A synchronous call that never returns hides where control resumes; draw the dashed reply.</li>
+      <li><strong>Messages with no home.</strong> Sending <code>fetchRecord()</code> to a lifeline whose class has no such operation; fix the class diagram or the message.</li>
+      <li><strong>Time running upward.</strong> Messages must descend; an arrow back up the page is a modelling error, and repetition belongs in a loop fragment.</li>
+      <li><strong>Wrong activations.</strong> The bar should cover exactly the time the participant is processing, no more.</li>
+      <li><strong>Using a sequence diagram for structure.</strong> It shows one interaction over time, not what exists; that is the class diagram's job.</li>
+    </ul>
     <h3 class="subhead">Step through a sequence diagram</h3>
     <p class="body">The interactive below plays a sequence diagram one message at a time. Use it to see how activation bars grow and shrink as messages flow.</p>
 
@@ -2090,6 +2484,14 @@
     <div class="section-eyebrow"><span class="num">12.</span>State machines</div>
     <h2 class="section-title">State machine diagrams: <em>the object's life</em>.</h2>
     <p class="section-intro">A state machine diagram captures the states an object passes through during its lifetime and the events that cause transitions between them. It is the right diagram whenever a class has a meaningful "current state" that callers must reason about.</p>
+    <p class="body"><strong>Where it fits, and at what stage.</strong> A state machine describes the lifecycle of the <em>instances of one class</em> (a <code>Loan</code>, an <code>Order</code>, a <code>BookCopy</code>), so it is drawn at the <strong>design stage, after the class diagram</strong> has identified a class whose behaviour is <em>state-dependent</em>, the same call doing different things, or being illegal, in different states. Like the class diagram it is object-focused and long-lived; unlike a sequence diagram, which shows one scenario across many objects, a state machine shows <em>one object across its whole life</em>. Most classes never need one, reach for it only when an object's allowed operations change with its state.</p>
+    <div class="table-card" data-ch4-improved2="1"><table class="body-table">
+      <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead><tbody>
+        <tr><td><strong>What</strong></td><td>The complete lifecycle of <strong>one object</strong> (or one system): the finite set of <strong>states</strong> it can occupy, the <strong>events</strong> that move it between them, and the <strong>actions</strong> those moves trigger. It answers "what can happen to this object, and when is each operation legal?".</td></tr>
+        <tr><td><strong>How</strong></td><td>Identify the distinct states (each a condition in which the object behaves differently); draw one initial pseudostate and the final state(s); for every state ask which events are legal and where each leads, labelling transitions <code>event [guard] / action</code>; attach <code>entry</code>/<code>exit</code>/<code>do</code> activities where behaviour belongs to the state itself; nest related states into a composite state when the picture grows.</td></tr>
+        <tr><td><strong>When</strong></td><td>When an object's behaviour <strong>depends on its current state</strong> (the same call does different things, or is illegal, depending on state), or it has a real, observable lifecycle (Loan, Order, Ticket, Account). Not for passive data carriers, value objects, or pure functions.</td></tr>
+      </tbody></table></div>
+
 
     <h3 class="subhead">Notation</h3>
     <ul class="body">
@@ -2104,63 +2506,59 @@
     <div class="figure">
       <div class="figure-caption">Figure 8</div>
       <div class="figure-title">State machine: the lifecycle of a <code>BookCopy</code></div>
-      <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <marker id="st-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker>
-        </defs>
-        <!-- Initial -->
-        <circle cx="60" cy="180" r="9" fill="#0f1419"/>
-        <line x1="69" y1="180" x2="150" y2="180" class="uml-line" marker-end="url(#st-arrow)"/>
-
-        <!-- Available state -->
-        <rect x="150" y="155" width="170" height="60" rx="14" class="uml-box" fill="white"/>
-        <text x="235" y="180" text-anchor="middle" class="uml-text" font-weight="600">Available</text>
-        <line x1="160" y1="190" x2="310" y2="190" class="uml-line"/>
-        <text x="160" y="206" class="uml-text" font-size="13">entry / shelve()</text>
-
-        <!-- OnLoan state -->
-        <rect x="420" y="155" width="170" height="60" rx="14" class="uml-box" fill="white"/>
-        <text x="505" y="180" text-anchor="middle" class="uml-text" font-weight="600">OnLoan</text>
-        <line x1="430" y1="190" x2="580" y2="190" class="uml-line"/>
-        <text x="430" y="206" class="uml-text" font-size="13">do / countDays()</text>
-
-        <!-- Overdue state -->
-        <rect x="690" y="80" width="170" height="60" rx="14" class="uml-box" fill="white"/>
-        <text x="775" y="105" text-anchor="middle" class="uml-text" font-weight="600">Overdue</text>
-        <line x1="700" y1="115" x2="850" y2="115" class="uml-line"/>
-        <text x="700" y="131" class="uml-text" font-size="13">entry / sendReminder()</text>
-
-        <!-- Lost state -->
-        <rect x="690" y="240" width="170" height="60" rx="14" class="uml-box" fill="white"/>
-        <text x="775" y="265" text-anchor="middle" class="uml-text" font-weight="600">Lost</text>
-        <line x1="700" y1="275" x2="850" y2="275" class="uml-line"/>
-        <text x="700" y="291" class="uml-text" font-size="13">entry / chargeReplacement()</text>
-
-        <!-- Final -->
-        <circle cx="935" cy="270" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
-        <circle cx="935" cy="270" r="5" fill="#0f1419"/>
-
-        <!-- Transitions -->
-        <line x1="320" y1="180" x2="420" y2="180" class="uml-line" marker-end="url(#st-arrow)"/>
-        <text x="370" y="174" text-anchor="middle" class="uml-text-mono" font-size="12">borrow()</text>
-
-        <line x1="420" y1="200" x2="320" y2="200" class="uml-line" marker-end="url(#st-arrow)"/>
-        <text x="370" y="216" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text>
-
-        <path d="M 590 175 Q 660 130 690 110" class="uml-line" fill="none" marker-end="url(#st-arrow)"/>
-        <text x="650" y="138" class="uml-text-mono" font-size="12">overdue [days &gt; 30]</text>
-
-        <path d="M 690 130 Q 620 150 590 175" class="uml-line" fill="none" marker-end="url(#st-arrow)"/>
-        <text x="618" y="160" class="uml-text-mono" font-size="12">return()</text>
-
-        <path d="M 590 200 Q 660 240 690 260" class="uml-line" fill="none" marker-end="url(#st-arrow)"/>
-        <text x="616" y="240" class="uml-text-mono" font-size="12">reportedLost</text>
-
-        <line x1="860" y1="270" x2="925" y2="270" class="uml-line" marker-end="url(#st-arrow)"/>
-      </svg>
+      <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="State machine for the lifecycle of a BookCopy: Available, OnLoan, Overdue, Lost."><defs><marker id="st-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs><circle cx="58" cy="131" r="9" fill="#0f1419"/><line x1="67" y1="131" x2="110" y2="131" class="uml-line" marker-end="url(#st-arrow)"/><rect x="110" y="95" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="210" y="121" text-anchor="middle" class="uml-text" font-weight="600">Available</text><line x1="110" y1="133" x2="310" y2="133" class="uml-line"/><text x="124" y="154" class="uml-text" font-size="13">entry / shelve()</text><rect x="470" y="95" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="121" text-anchor="middle" class="uml-text" font-weight="600">OnLoan</text><line x1="470" y1="133" x2="670" y2="133" class="uml-line"/><text x="484" y="154" class="uml-text" font-size="13">do / countDays()</text><rect x="470" y="320" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="346" text-anchor="middle" class="uml-text" font-weight="600">Overdue</text><line x1="470" y1="358" x2="670" y2="358" class="uml-line"/><text x="484" y="379" class="uml-text" font-size="13">entry / notifyMember()</text><rect x="790" y="320" width="180" height="72" rx="14" class="uml-box" fill="white"/><text x="880" y="346" text-anchor="middle" class="uml-text" font-weight="600">Lost</text><line x1="790" y1="358" x2="970" y2="358" class="uml-line"/><text x="804" y="379" class="uml-text" font-size="13">entry / chargeFee()</text><circle cx="880" cy="440" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="880" cy="440" r="5" fill="#0f1419"/><line x1="310" y1="118" x2="470" y2="118" class="uml-line" marker-end="url(#st-arrow)"/><text x="390" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">borrow()</text><line x1="470" y1="144" x2="310" y2="144" class="uml-line" marker-end="url(#st-arrow)"/><text x="390" y="161" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><line x1="570" y1="167" x2="570" y2="320" class="uml-line" marker-end="url(#st-arrow)"/><text x="584" y="236" class="uml-text-mono" font-size="12">after(3 weeks)</text><text x="584" y="252" class="uml-text-mono" font-size="12">[overdue]</text><polyline points="470,356 210,356 210,167" class="uml-line" fill="none" marker-end="url(#st-arrow)"/><text x="338" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><polyline points="670,118 880,118 880,320" class="uml-line" fill="none" marker-end="url(#st-arrow)"/><text x="775" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="670" y1="356" x2="790" y2="356" class="uml-line" marker-end="url(#st-arrow)"/><text x="730" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="880" y1="392" x2="880" y2="429" class="uml-line" marker-end="url(#st-arrow)"/></svg>
       <div class="figure-note">Five named states, one initial, one final. Each transition has an event (and sometimes a guard). The <code>Overdue</code> state has an entry action; the <code>OnLoan</code> state has a <code>do</code> activity that continues while the state is active. A copy that is reported lost transitions directly to the terminal <code>Lost</code> state.</div>
     </div>
 
+
+    <h3 class="subhead">Theoretical foundations: from finite automata to statecharts</h3>
+    <p class="body">A state machine is a <strong>finite-state automaton</strong>: a finite set of states, an alphabet of events, and a transition function mapping a (state, event) pair to a next state. It is the oldest and most rigorously understood model of behaviour in computing, which is why the same idea drives compilers, network protocols and control systems.</p>
+    <ul class="body">
+      <li><strong>Moore vs Mealy.</strong> In a <em>Moore</em> machine the output is attached to the <strong>state</strong> (it depends only on where you are); in a <em>Mealy</em> machine the output is attached to the <strong>transition</strong> (it depends on the state and the event). UML deliberately allows both: <code>entry</code> / <code>do</code> / <code>exit</code> activities are Moore-style (tied to the state), while the action on a transition is Mealy-style (tied to the event). Knowing which you mean keeps the diagram unambiguous.</li>
+      <li><strong>Run-to-completion semantics.</strong> UML processes one event completely before starting the next: a transition, with its guard evaluation and action, runs atomically, and events arriving meanwhile queue. This is what makes a state machine implementable and free of mid-transition races, and why guards must be side-effect-free and actions short.</li>
+      <li><strong>Determinism.</strong> A well-formed machine is deterministic: from any state, an event and its guards select at most one transition. Two transitions on the same event with overlapping guards is a modelling error (nondeterminism), exactly the defect the diagram exists to expose.</li>
+      <li><strong>Harel statecharts.</strong> A flat machine suffers <em>state explosion</em>: model n independent on/off features and you need 2<sup>n</sup> states. David Harel's statecharts (1987), which UML adopts, add three ideas that tame this: <strong>hierarchy</strong> (a composite state groups sub-states and shares their outgoing transitions), <strong>orthogonality</strong> (concurrent regions active at once, so independent features add rather than multiply), and <strong>history</strong> (re-enter a composite state where it last left off). A UML state machine is, formally, a Harel statechart in UML notation.</li>
+    </ul>
+    <h3 class="subhead">Events, guards, actions, activities: the full vocabulary</h3>
+    <p class="body">A transition label has the form <code>event [guard] / action</code>, and each part is precise:</p>
+    <ul class="body">
+      <li><strong>Event</strong> (the trigger), of four kinds: a <em>call</em> event is an operation invoked on the object (<code>borrow()</code>); a <em>signal</em> event is an asynchronous message received; a <em>change</em> event fires when a condition becomes true, written <code>when(balance &lt; 0)</code>; a <em>time</em> event fires after a duration or at a moment, written <code>after(30 days)</code> or <code>at(09:00)</code>. A transition with <em>no</em> event is a <strong>completion (triggerless) transition</strong>: it fires as soon as the source state's activity finishes.</li>
+      <li><strong>Guard</strong>: a boolean condition in [brackets] that must hold for the transition to fire. It must be side-effect-free, and across the transitions leaving one state on the same event the guards should be mutually exclusive, so the machine stays deterministic.</li>
+      <li><strong>Action</strong>: instantaneous, uninterruptible behaviour, run as the transition is taken (Mealy-style) or on <code>entry</code> / <code>exit</code> of a state (run every time the state is entered or left, whichever transition was used).</li>
+      <li><strong>Do-activity</strong>: an <em>ongoing</em> activity that runs while the object sits in a state (<code>do / countDays()</code>) and is interrupted if an event causes an exit. Unlike an action it takes time and can be cut short.</li>
+      <li><strong>Internal vs self-transition</strong>: an <em>internal</em> transition handles an event without leaving the state, so <code>entry</code>/<code>exit</code> do <em>not</em> re-run; a <em>self</em>-transition exits and re-enters the state, so they <em>do</em>. Confusing the two is a frequent source of real bugs.</li>
+    </ul>
+    <h3 class="subhead">Composite, orthogonal, and history states</h3>
+    <p class="body">These are the statechart extensions that keep a real diagram readable. A <strong>composite</strong> state contains a nested sub-machine; a transition out of it applies to all its sub-states at once, so you draw the shared <code>cancel</code> arrow once rather than from every sub-state. <strong>Orthogonal</strong> regions, separated by a dashed line inside a composite state, are active simultaneously: independent concerns modelled as two regions need 2 + 2 states, where flat modelling needs 2 &times; 2, and the gap widens fast. A <strong>history</strong> pseudostate (a circled H) remembers which sub-state was active when the composite was last left, so re-entry resumes there: it is how a "resume" feature is modelled.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 8a</div>
+      <div class="figure-title">A composite state with two orthogonal regions, and a shared exit (Order processing).</div>
+      <svg viewBox="0 0 900 360" role="img" aria-label="Composite Active state with two concurrent regions, payment and fulfilment, and a shared cancel transition to Cancelled.">
+        <defs><marker id="stc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
+        <circle cx="34" cy="180" r="8" fill="#0f1419"/>
+        <line x1="42" y1="180" x2="120" y2="180" class="uml-line" marker-end="url(#stc-arrow)"/>
+        <rect x="120" y="60" width="540" height="250" rx="18" class="uml-box" fill="white"/>
+        <text x="140" y="86" class="uml-text" font-weight="700">Active</text>
+        <line x1="120" y1="98" x2="660" y2="98" class="uml-line"/>
+        <line x1="120" y1="206" x2="660" y2="206" class="uml-line-dashed"/>
+        <text x="650" y="120" text-anchor="end" class="uml-text-italic" font-size="12">payment region</text>
+        <text x="650" y="228" text-anchor="end" class="uml-text-italic" font-size="12">fulfilment region</text>
+        <circle cx="150" cy="150" r="7" fill="#0f1419"/>
+        <line x1="157" y1="150" x2="190" y2="150" class="uml-line" marker-end="url(#stc-arrow)"/>
+        <rect x="190" y="128" width="150" height="44" rx="12" class="uml-box" fill="white"/><text x="265" y="155" text-anchor="middle" class="uml-text">AwaitingPayment</text>
+        <line x1="340" y1="150" x2="440" y2="150" class="uml-line" marker-end="url(#stc-arrow)"/><text x="390" y="143" text-anchor="middle" class="uml-text-mono" font-size="12">pay()</text>
+        <rect x="440" y="128" width="120" height="44" rx="12" class="uml-box" fill="white"/><text x="500" y="155" text-anchor="middle" class="uml-text">Paid</text>
+        <circle cx="150" cy="262" r="7" fill="#0f1419"/>
+        <line x1="157" y1="262" x2="190" y2="262" class="uml-line" marker-end="url(#stc-arrow)"/>
+        <rect x="190" y="240" width="150" height="44" rx="12" class="uml-box" fill="white"/><text x="265" y="267" text-anchor="middle" class="uml-text">Picking</text>
+        <line x1="340" y1="262" x2="440" y2="262" class="uml-line" marker-end="url(#stc-arrow)"/><text x="390" y="255" text-anchor="middle" class="uml-text-mono" font-size="12">packed</text>
+        <rect x="440" y="240" width="120" height="44" rx="12" class="uml-box" fill="white"/><text x="500" y="267" text-anchor="middle" class="uml-text">Packed</text>
+        <circle cx="600" cy="262" r="11" fill="white" stroke="#0f1419" stroke-width="1.3"/><text x="600" y="267" text-anchor="middle" class="uml-text" font-size="12" font-weight="700">H</text>
+        <line x1="660" y1="180" x2="740" y2="180" class="uml-line" marker-end="url(#stc-arrow)"/><text x="700" y="172" text-anchor="middle" class="uml-text-mono" font-size="12">cancel</text>
+        <rect x="740" y="150" width="130" height="56" rx="12" class="uml-box" fill="#faf7f2"/><text x="805" y="183" text-anchor="middle" class="uml-text" font-weight="600">Cancelled</text>
+      </svg>
+      <div class="figure-note">Inside <strong>Active</strong>, two <strong>orthogonal regions</strong> run at once: payment moves AwaitingPayment&rarr;Paid while, independently, fulfilment moves Picking&rarr;Packed. The circled <strong>H</strong> is a history pseudostate, re-entry resumes the fulfilment region where it left off. The single <code>cancel</code> transition leaves the <em>whole</em> composite from any combination of sub-states, which is the economy a flat machine cannot offer.</div>
+    </div>
     <h3 class="subhead">When to draw a state machine</h3>
     <p class="body">State machines pay back when at least one of the following is true:</p>
 
@@ -2229,34 +2627,7 @@
         <span id="stCurrentLabel" style="font-family: var(--mono); font-size: 12px; color: var(--ink-mute); margin-left: auto;">state: Available</span>
       </div>
 
-      <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" id="stSvg">
-        <defs>
-          <marker id="sts-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker>
-        </defs>
-        <circle cx="60" cy="180" r="9" fill="#0f1419"/>
-        <line x1="69" y1="180" x2="150" y2="180" class="uml-line" marker-end="url(#sts-arrow)"/>
-        <rect id="stAvailable" x="150" y="155" width="170" height="60" rx="14" class="uml-box" fill="#e0e8d8"/>
-        <text x="235" y="190" text-anchor="middle" class="uml-text" font-weight="600">Available</text>
-        <rect id="stOnLoan" x="420" y="155" width="170" height="60" rx="14" class="uml-box" fill="white"/>
-        <text x="505" y="190" text-anchor="middle" class="uml-text" font-weight="600">OnLoan</text>
-        <rect id="stOverdue" x="690" y="80" width="170" height="60" rx="14" class="uml-box" fill="white"/>
-        <text x="775" y="115" text-anchor="middle" class="uml-text" font-weight="600">Overdue</text>
-        <rect id="stLost" x="690" y="240" width="170" height="60" rx="14" class="uml-box" fill="white"/>
-        <text x="775" y="275" text-anchor="middle" class="uml-text" font-weight="600">Lost</text>
-        <circle cx="935" cy="270" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/>
-        <circle cx="935" cy="270" r="5" fill="#0f1419"/>
-        <line x1="320" y1="180" x2="420" y2="180" class="uml-line" marker-end="url(#sts-arrow)"/>
-        <text x="370" y="174" text-anchor="middle" class="uml-text-mono" font-size="12">borrow()</text>
-        <line x1="420" y1="200" x2="320" y2="200" class="uml-line" marker-end="url(#sts-arrow)"/>
-        <text x="370" y="216" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text>
-        <path d="M 590 175 Q 660 130 690 110" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/>
-        <text x="650" y="138" class="uml-text-mono" font-size="12">overdue [days&gt;30]</text>
-        <path d="M 690 130 Q 620 150 590 175" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/>
-        <text x="618" y="160" class="uml-text-mono" font-size="12">return()</text>
-        <path d="M 590 200 Q 660 240 690 260" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/>
-        <text x="616" y="240" class="uml-text-mono" font-size="12">reportedLost</text>
-        <line x1="860" y1="270" x2="925" y2="270" class="uml-line" marker-end="url(#sts-arrow)"/>
-      </svg>
+      <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" id="stSvg"><defs><marker id="sts-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs><circle cx="58" cy="131" r="9" fill="#0f1419"/><line x1="67" y1="131" x2="110" y2="131" class="uml-line" marker-end="url(#sts-arrow)"/><rect id="stAvailable" x="110" y="95" width="200" height="72" rx="14" class="uml-box" fill="#e0e8d8"/><text x="210" y="121" text-anchor="middle" class="uml-text" font-weight="600">Available</text><line x1="110" y1="133" x2="310" y2="133" class="uml-line"/><text x="124" y="154" class="uml-text" font-size="13">entry / shelve()</text><rect id="stOnLoan" x="470" y="95" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="121" text-anchor="middle" class="uml-text" font-weight="600">OnLoan</text><line x1="470" y1="133" x2="670" y2="133" class="uml-line"/><text x="484" y="154" class="uml-text" font-size="13">do / countDays()</text><rect id="stOverdue" x="470" y="320" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="346" text-anchor="middle" class="uml-text" font-weight="600">Overdue</text><line x1="470" y1="358" x2="670" y2="358" class="uml-line"/><text x="484" y="379" class="uml-text" font-size="13">entry / notifyMember()</text><rect id="stLost" x="790" y="320" width="180" height="72" rx="14" class="uml-box" fill="white"/><text x="880" y="346" text-anchor="middle" class="uml-text" font-weight="600">Lost</text><line x1="790" y1="358" x2="970" y2="358" class="uml-line"/><text x="804" y="379" class="uml-text" font-size="13">entry / chargeFee()</text><circle cx="880" cy="440" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="880" cy="440" r="5" fill="#0f1419"/><line x1="310" y1="118" x2="470" y2="118" class="uml-line" marker-end="url(#sts-arrow)"/><text x="390" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">borrow()</text><line x1="470" y1="144" x2="310" y2="144" class="uml-line" marker-end="url(#sts-arrow)"/><text x="390" y="161" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><line x1="570" y1="167" x2="570" y2="320" class="uml-line" marker-end="url(#sts-arrow)"/><text x="584" y="236" class="uml-text-mono" font-size="12">after(3 weeks)</text><text x="584" y="252" class="uml-text-mono" font-size="12">[overdue]</text><polyline points="470,356 210,356 210,167" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/><text x="338" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><polyline points="670,118 880,118 880,320" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/><text x="775" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="670" y1="356" x2="790" y2="356" class="uml-line" marker-end="url(#sts-arrow)"/><text x="730" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="880" y1="392" x2="880" y2="429" class="uml-line" marker-end="url(#sts-arrow)"/></svg>
       <div class="step-info" id="stLog">Initial state: <b>Available</b>. Click an event button to fire a transition. If the event is not legal in the current state, no transition fires (and the simulator says so).</div>
     </div>
   </div>
@@ -2268,6 +2639,13 @@
     <div class="section-eyebrow"><span class="num">13.</span>Component &amp; deployment</div>
     <h2 class="section-title">Architectural diagrams: <em>components and deployment</em>.</h2>
     <p class="section-intro">Component and deployment diagrams sit higher up the abstraction ladder than the diagrams above. They are concerned with how the system is partitioned at build time and how it is distributed at run time.</p>
+    <div class="table-card" data-ch4-improved2="1"><table class="body-table">
+      <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead><tbody>
+        <tr><td><strong>What</strong></td><td>Structure at two higher levels: a <strong>component</strong> diagram shows the build-time parts (modules or services) and the <strong>contracts</strong> (provided and required interfaces) between them; a <strong>deployment</strong> diagram shows the run-time topology, which artefact runs on which node and over which protocol.</td></tr>
+        <tr><td><strong>How</strong></td><td>For components: group cohesive classes into a component, expose what it offers as a <em>provided</em> interface (lollipop) and what it needs as a <em>required</em> interface (socket), and wire one component's socket to another's lollipop. For deployment: draw each execution <em>node</em> as a 3D box, place the artefacts that run on it inside, and join nodes with labelled communication paths.</td></tr>
+        <tr><td><strong>When</strong></td><td>Once the system is non-trivially <strong>partitioned</strong> (several modules or services) or <strong>distributed</strong> (more than one machine or tier). These are the views operations and infrastructure engineers read; for a single-process toy they are over-engineering.</td></tr>
+      </tbody></table></div>
+
 
     <h3 class="subhead">Component diagrams</h3>
     <p class="body">A component diagram shows the structural relationships between the major components of a system. A <em>component</em> in UML 2 is a modular part of the system with well-defined interfaces. Components offer two kinds of interface:</p>
@@ -2279,10 +2657,18 @@
 
     <p class="body">A provided lollipop fits into a matching required socket; the connection is valid if the socket's required operations are a subset of the lollipop's provided operations and their signatures are compatible.</p>
 
+
+    <h3 class="subhead">What a component is, in theory</h3>
+    <p class="body">A <strong>component</strong> is a modular, replaceable unit of the system that hides its implementation behind well-defined interfaces. Its defining property is <strong>substitutability</strong>: anything that offers the same provided interfaces can replace it without the rest of the system noticing. That single idea is what makes plug-ins, device drivers and microservices possible.</p>
+    <ul class="body">
+      <li><strong>Component vs class.</strong> A class is a unit of code; a component is a larger unit of <em>delivery and replacement</em>, usually built from many classes, and defined by its interfaces rather than its internals. You design against a component's interface, never its classes.</li>
+      <li><strong>Interfaces as contracts.</strong> A provided interface (lollipop) is a promise the component keeps; a required interface (socket) is a need it has. A connection is valid only when a provided interface satisfies a required one (its operations are a superset, with compatible signatures). Programming to interfaces, not implementations, is what keeps the structure flexible.</li>
+      <li><strong>Ports and connectors.</strong> A <em>port</em> is a named interaction point on a component's boundary that groups the interfaces offered or needed there. Two connectors wire them: an <strong>assembly</strong> connector joins one component's required interface to another's provided interface (lollipop into socket); a <strong>delegation</strong> connector forwards an external port inward to the internal part that actually implements it. Ports and delegation are how a large component is built from smaller ones while still presenting one clean boundary.</li>
+    </ul>
     <div class="figure">
       <div class="figure-caption">Figure 9</div>
       <div class="figure-title">Component diagram with provided/required interfaces (Order example)</div>
-      <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1000 348" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="cmp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker>
         </defs>
@@ -2369,6 +2755,15 @@
       <li><strong>Component-to-node mapping</strong>: components from a component diagram are placed inside nodes to show which node hosts which component at runtime.</li>
     </ul>
 
+
+    <h3 class="subhead-small">Nodes, artefacts, and manifestation</h3>
+    <p class="body">Deployment has a small vocabulary worth getting exactly right:</p>
+    <ul class="body">
+      <li>A <strong>node</strong> is a run-time resource, split into a <em>device</em> (physical hardware: a server, a phone, a router) and an <em>execution environment</em> (software that hosts other software: a JVM, a Docker container, an application server, a browser). An execution environment is usually drawn nested inside the device that runs it.</li>
+      <li>An <strong>artefact</strong> is a concrete, deployable file: a <code>.jar</code>, a <code>.war</code>, an executable, a config file, a database file. Artefacts are what actually get copied onto nodes, as opposed to the logical components they realise.</li>
+      <li><strong>Manifestation</strong> is the link between the two worlds: an artefact <em>manifests</em> one or more components. So the chain runs component (logical part) &rarr; artefact (the physical file that embodies it) &rarr; node (where that file runs).</li>
+      <li><strong>Communication paths</strong> between nodes are labelled with the protocol (HTTPS, JDBC, AMQP, gRPC); they are the run-time analogue of the component diagram's connectors.</li>
+    </ul>
     <div class="figure">
       <div class="figure-caption">Figure 10</div>
       <div class="figure-title">Deployment diagram: 3-tier web application</div>
@@ -2425,6 +2820,30 @@
       <li>A <strong>software architecture</strong> is an instance of a style, applied to a specific system. The deployment diagram above is an instance of the 3-tier style.</li>
     </ul>
 
+
+    <h3 class="subhead">Architectural styles: a catalogue</h3>
+    <p class="body">A <strong>style</strong> is a reusable pattern for the system's overall layout, with a known shape and a known trade-off; an <strong>architecture</strong> is one style (or a blend) applied to a specific system. The common styles:</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Style</th><th>Core idea</th><th>Trade-off</th></tr></thead><tbody>
+        <tr><td>Layered (n-tier)</td><td>Stacked layers, each using only the one below.</td><td>Predictable and testable; can be slow and rigid. 3-tier is the common instance.</td></tr>
+        <tr><td>Client-server</td><td>Clients request; a server holds data and logic.</td><td>Centralises control; the server is a bottleneck and a single point of failure.</td></tr>
+        <tr><td>Model-View-Controller</td><td>Separate data, presentation, and input handling.</td><td>Dominant in UI frameworks; logic can scatter if overused.</td></tr>
+        <tr><td>Pipe-and-filter</td><td>Data flows through a chain of independent transforms.</td><td>Excellent for batch and stream work (Unix pipes, compilers); poor for interactive use.</td></tr>
+        <tr><td>Event-driven / pub-sub</td><td>Components emit and react to events, decoupled in time.</td><td>Scales and decouples; harder to trace and debug.</td></tr>
+        <tr><td>Microkernel / plug-in</td><td>A minimal core plus plug-ins.</td><td>Highly extensible (IDEs, browsers); the core API is hard to get right.</td></tr>
+        <tr><td>Service-oriented / microservices</td><td>Independent services communicating over the network.</td><td>Independent deploy and scale; operational and distributed-failure complexity.</td></tr>
+      </tbody></table></div>
+    <h3 class="subhead">The 4+1 view model: why one diagram is never enough</h3>
+    <p class="body">No single diagram captures an architecture, so Kruchten's <strong>4+1 view model</strong> (1995) describes it from several viewpoints at once, and each maps onto a UML diagram you now know:</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>View</th><th>Question it answers</th><th>UML diagram</th></tr></thead><tbody>
+        <tr><td>Logical</td><td>What functionality does the system provide?</td><td>class and object diagrams</td></tr>
+        <tr><td>Process</td><td>How does it behave and coordinate at run time?</td><td>activity and sequence diagrams</td></tr>
+        <tr><td>Development</td><td>How is the software organised for building?</td><td>component (and package) diagrams</td></tr>
+        <tr><td>Physical</td><td>How does the software map onto hardware?</td><td>deployment diagrams</td></tr>
+        <tr><td>+ Scenarios</td><td>Do the four views actually work together?</td><td>use case diagrams</td></tr>
+      </tbody></table></div>
+    <p class="body">This is the theoretical reason a chapter on system modelling needs <em>all</em> of these diagrams: each is a different projection of one system, and the use cases are the thread that checks the projections agree. It is the same point Sommerville makes with his four perspectives (context, interaction, structural, behavioural): you understand a system only by looking at it from more than one direction at once.</p>
     <div class="context-card">
       <div class="ctx-eyebrow">Context</div>
       <h4 class="ctx-title">Where component and deployment diagrams earn their place</h4>
