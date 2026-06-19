@@ -310,6 +310,7 @@
       <a href="#class">10. Class</a>
       <a href="#object">10b. Object</a>
       <a href="#sequence">11. Sequence</a>
+      <a href="#collab">11b. Communication</a>
       <a href="#state">12. State machine</a>
       <a href="#archi">13. Component &amp; deployment</a>
       <a href="#worked">14. Worked example</a>
@@ -368,6 +369,7 @@
       <li><span class="toc-num">10.</span><a href="#class">Class diagrams</a></li>
       <li><span class="toc-num">10b.</span><a href="#object">Object diagrams</a></li>
       <li><span class="toc-num">11.</span><a href="#sequence">Sequence diagrams (with step-through)</a></li>
+      <li><span class="toc-num">11b.</span><a href="#collab">Communication (collaboration) diagrams</a></li>
       <li><span class="toc-num">12.</span><a href="#state">State machine diagrams (with simulator)</a></li>
       <li><span class="toc-num">13.</span><a href="#archi">Component and deployment diagrams</a></li>
       <li><span class="toc-num">14.</span><a href="#worked">Worked example: elicitation to first-cut model</a></li>
@@ -2295,8 +2297,7 @@
         <line x1="590" y1="76" x2="590" y2="560" class="uml-line-dashed"/>
         <line x1="860" y1="76" x2="860" y2="560" class="uml-line-dashed"/>
 
-        <!-- Activations (sized to cover the messages each participant handles) -->
-        <rect x="105" y="110" width="10" height="370" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <!-- Activations (sized to cover the messages each participant handles; the Doctor is an actor, so no activation bar) -->
         <rect x="345" y="120" width="10" height="360" fill="#d6e0e8" stroke="#2c5f7c"/>
         <rect x="585" y="160" width="10" height="280" fill="#d6e0e8" stroke="#2c5f7c"/>
         <rect x="855" y="280" width="10" height="50" fill="#d6e0e8" stroke="#2c5f7c"/>
@@ -2475,6 +2476,134 @@
       <p>A sequence diagram is a horizontal cut: one scenario, many objects. The next diagram is the vertical cut: one object, many scenarios over its lifetime. The state machine asks "what states does this object pass through, and which events cause which transitions?", which is the question you should be asking about a Loan, an Order, or any other object whose behaviour <em>depends</em> on its current state.</p>
     </div>
 
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<section class="block" id="collab">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">11b.</span>Communication diagrams</div>
+    <h2 class="section-title">Communication (collaboration) diagrams: <em>the same interaction, drawn as a structure</em>.</h2>
+    <p class="section-intro">A communication diagram shows the very same message exchange as a sequence diagram, but it drops the time axis and keeps the <em>links</em> between participants instead. Order is recovered from numbered messages rather than from vertical position. UML&nbsp;1.x called this a <em>collaboration diagram</em>; UML&nbsp;2.x renamed it a <em>communication diagram</em>; Adel uses the two names interchangeably.</p>
+
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead>
+        <tbody>
+          <tr><td><strong>What</strong></td><td>One scenario's interaction laid out as a <strong>graph of participants</strong> joined by links, with each message written on the link it travels along and a <strong>sequence number</strong> giving its order. The emphasis is <em>who is connected to whom</em>, not elapsed time.</td></tr>
+          <tr><td><strong>How</strong></td><td>Place the objects (and the initiating actor) anywhere on the page; draw a <strong>link</strong> (a plain line) between any two that exchange a message; write each message along its link as <code>number: operation(args)</code> with a small arrow for direction; use <strong>nested (Dewey) numbering</strong> &mdash; 1, 2, 2.1, 2.1.1 &mdash; to show which call happens inside which.</td></tr>
+          <tr><td><strong>When</strong></td><td>When the point is <em>which objects are linked</em> and how the work fans out across them, rather than the precise timeline. For most teams the sequence diagram has won; communication diagrams survive for small interactions and for checking that links match the class diagram's associations.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Notation: links, messages, and Dewey numbering</h3>
+    <p class="body">A communication diagram has only three ingredients:</p>
+    <ul class="body">
+      <li><strong>Participants</strong> &mdash; objects, written <code>name : Class</code>, plus the initiating actor; the same participants as the matching sequence diagram.</li>
+      <li><strong>Links</strong> &mdash; a plain solid line between two participants that exchange at least one message. A link is an <em>instance of an association</em> from the class diagram, so every link should correspond to an association you have already drawn.</li>
+      <li><strong>Messages</strong> &mdash; written along the link as <code>seq: operation(args)</code> with a short arrow for direction. The <strong>sequence number</strong> carries the ordering that the sequence diagram got for free from top-to-bottom position. Nested calls take a decimal suffix (<code>2</code> contains <code>2.1</code>, which contains <code>2.1.1</code>); an iteration marker <code>*</code> and a guard <code>[condition]</code> may be added, e.g. <code>2.1 *[for each item]: add()</code>.</li>
+    </ul>
+    <div class="figure">
+      <div class="figure-caption">Figure 7e</div>
+      <div class="figure-title">Notation: two linked objects and a numbered message.</div>
+      <svg viewBox="0 0 920 200" class="objfig" role="img" aria-label="Communication diagram notation: two objects, a link, and a numbered message">
+        <defs><marker id="cm-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker></defs>
+        <rect x="70" y="70" width="180" height="46" class="uml-box"/>
+        <text x="160" y="98" text-anchor="middle" class="uml-text" font-weight="600">a : Caller</text>
+        <rect x="670" y="70" width="190" height="46" class="uml-box"/>
+        <text x="765" y="98" text-anchor="middle" class="uml-text" font-weight="600">b : Receiver</text>
+        <line x1="250" y1="93" x2="670" y2="93" class="uml-line"/>
+        <line x1="400" y1="78" x2="530" y2="78" class="uml-line" marker-end="url(#cm-a)"/>
+        <text x="465" y="68" text-anchor="middle" class="uml-text-mono" font-size="13">1: doRequest(x)</text>
+        <text x="465" y="140" text-anchor="middle" class="uml-text-italic" font-size="12">the line is the link; the arrow + number is the message</text>
+      </svg>
+      <div class="figure-note">The plain line between <code>a</code> and <code>b</code> is the <strong>link</strong> (an instance of an association). The short arrow over it, labelled <code>1: doRequest(x)</code>, is the <strong>message</strong>; its number fixes the order. Add <code>*</code> for repetition and <code>[guard]</code> for a condition.</div>
+    </div>
+
+    <h3 class="subhead">Same scenario, two diagrams: Deposit Cash</h3>
+    <p class="body">Here is the exact interaction from the <a href="#sequence">Deposit Cash sequence diagram</a> above, redrawn as a communication diagram. Nothing about the behaviour changes; only the emphasis does. The vertical timeline becomes a set of links, and the order that was implicit in the descent down the page is now carried by the message numbers. The nesting (<code>2.1.1</code>, <code>2.1.2</code>, <code>2.1.3</code>) shows that the register's work all happens <em>inside</em> the call it received.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 7f</div>
+      <div class="figure-title">&ldquo;Deposit Cash&rdquo; as a communication diagram &mdash; the structural twin of Figure 7b.</div>
+      <svg viewBox="0 0 1060 400" class="objfig" role="img" aria-label="Deposit Cash communication diagram">
+        <defs><marker id="cm-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker></defs>
+        <!-- participants -->
+        <rect x="40" y="170" width="160" height="46" class="uml-box"/>
+        <text x="120" y="198" text-anchor="middle" class="uml-text" font-weight="600">: Customer</text>
+        <rect x="350" y="170" width="160" height="46" class="uml-box"/>
+        <text x="430" y="198" text-anchor="middle" class="uml-text" font-weight="600">front : UI</text>
+        <rect x="660" y="170" width="200" height="46" class="uml-box"/>
+        <text x="760" y="198" text-anchor="middle" class="uml-text" font-weight="600">register : Register</text>
+        <rect x="700" y="320" width="170" height="46" class="uml-box"/>
+        <text x="785" y="348" text-anchor="middle" class="uml-text" font-weight="600">: Dispenser</text>
+        <!-- links -->
+        <line x1="200" y1="193" x2="350" y2="193" class="uml-line"/>
+        <line x1="510" y1="193" x2="660" y2="193" class="uml-line"/>
+        <line x1="760" y1="216" x2="785" y2="320" class="uml-line"/>
+        <!-- messages: Customer -> front (1, 2) -->
+        <line x1="245" y1="184" x2="305" y2="184" class="uml-line" marker-end="url(#cm-b)"/>
+        <text x="275" y="156" text-anchor="middle" class="uml-text-mono" font-size="12">2: makeSelection(acct, amount)</text>
+        <text x="275" y="172" text-anchor="middle" class="uml-text-mono" font-size="12">1: insertMoney(amount)</text>
+        <!-- message: front -> register (2.1) -->
+        <line x1="555" y1="184" x2="615" y2="184" class="uml-line" marker-end="url(#cm-b)"/>
+        <text x="585" y="170" text-anchor="middle" class="uml-text-mono" font-size="12">2.1: sendMoney(amount)</text>
+        <!-- register self-messages (2.1.1, 2.1.2) -->
+        <path d="M 860 184 C 916 176 916 210 860 202" class="uml-line" fill="none" marker-end="url(#cm-b)"/>
+        <text x="874" y="184" class="uml-text-mono" font-size="12">2.1.1: checkAmount()</text>
+        <text x="874" y="201" class="uml-text-mono" font-size="12">2.1.2: updateReserve()</text>
+        <!-- message: register -> Dispenser (2.1.3) -->
+        <line x1="762" y1="250" x2="780" y2="300" class="uml-line" marker-end="url(#cm-b)"/>
+        <text x="798" y="282" class="uml-text-mono" font-size="12">2.1.3: deliverReceipt()</text>
+      </svg>
+      <div class="figure-note">Same participants, same messages, same order as Figure 7b &mdash; but the timeline is gone and the links carry the story. The Dewey numbers (2.1, 2.1.1, &hellip;) encode the call nesting the sequence diagram showed by descending position. Each link is an instance of an association: <code>Customer&ndash;front</code>, <code>front&ndash;register</code>, <code>register&ndash;Dispenser</code> &mdash; if a message had no association to ride on, the class model would be missing a relationship.</div>
+    </div>
+
+    <h3 class="subhead">Sequence vs communication: when to reach for which</h3>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>&nbsp;</th><th>Sequence diagram</th><th>Communication diagram</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Emphasis</strong></td><td>time &mdash; the order of messages</td><td>structure &mdash; the links between participants</td></tr>
+        <tr><td><strong>Order shown by</strong></td><td>vertical position, top to bottom</td><td>message numbers (1, 2, 2.1&hellip;)</td></tr>
+        <tr><td><strong>Reads well for</strong></td><td>long flows, many steps, alt/opt/loop fragments</td><td>small interactions; checking links match associations</td></tr>
+        <tr><td><strong>Weak at</strong></td><td>showing the network of who-talks-to-whom</td><td>long sequences; control flow gets cramped</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">The two are formally interchangeable for a single scenario: any communication diagram can be redrawn as a sequence diagram and vice versa, because they hold the same information. Choose by the question you are answering. In modern practice the sequence diagram dominates; the communication diagram is worth knowing because it makes the link-to-association correspondence visible, and because it still appears in older designs and in exam questions.</p>
+
+    <div class="context-card">
+      <div class="ctx-eyebrow">Context</div>
+      <h4 class="ctx-title">Where communication diagrams earn their place</h4>
+      <div class="ctx-grid">
+        <div class="ctx-block">
+          <h5>Problem they solve</h5>
+          <p>Showing, for one scenario, which objects are connected and how a piece of work fans out across those links &mdash; a structural view of an interaction that a sequence diagram cannot give at a glance.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Domains where they still appear</h5>
+          <ul>
+            <li><strong>Teaching and exams.</strong> The cleanest way to show that an interaction's links are instances of the class diagram's associations.</li>
+            <li><strong>Embedded and control systems.</strong> Small, fixed sets of collaborating components where the wiring matters more than the timeline.</li>
+            <li><strong>Legacy UML&nbsp;1.x models</strong> where &ldquo;collaboration diagram&rdquo; is the original term.</li>
+          </ul>
+        </div>
+        <div class="ctx-block">
+          <h5>Problems they do not solve</h5>
+          <p>Long or branch-heavy flows (use a sequence diagram with fragments), an object's whole lifecycle (state machine), or static structure (class diagram). Numbered messages get unreadable past a dozen steps.</p>
+        </div>
+        <div class="ctx-block">
+          <h5>Tooling in current use</h5>
+          <p>Most UML tools (Visual Paradigm, StarUML, Enterprise Architect) switch a sequence diagram to its communication form automatically, since the two hold the same information. Text-driven tools such as PlantUML support communication-style diagrams directly.</p>
+        </div>
+      </div>
+      <div class="ctx-foot">
+        <strong>Naming note.</strong> &ldquo;Collaboration diagram&rdquo; (UML&nbsp;1.x) and &ldquo;communication diagram&rdquo; (UML&nbsp;2.x, current) are the same diagram; Fowler's <em>UML Distilled</em> and Sommerville both treat it as a structural re-projection of the sequence diagram.
+      </div>
+    </div>
+
+    <div class="project-note">
+      <strong>Project link.</strong> You are not asked to submit communication diagrams for the project, but drawing one for a single use case is a fast way to confirm that every message in your sequence diagram travels along a link that exists as an association in your class diagram. A message with no association to ride on means the class model is missing a relationship.
+    </div>
   </div>
 </section>
 
@@ -2743,6 +2872,108 @@
       <li><strong>Define component contracts as interfaces.</strong> Every service a component offers to its clients is an interface; this is what makes the component substitutable.</li>
     </ul>
 
+    <h3 class="subhead-small">Ports and delegation: building a large component from smaller ones</h3>
+    <p class="body">A <strong>port</strong> is a named interaction point drawn as a small square on a component's boundary; it groups the interfaces offered and needed at that point, so the outside world wires to the port rather than to the component's insides. A <strong>delegation connector</strong> then forwards the port inward to the internal part that actually implements it, and an <strong>assembly connector</strong> joins one inner part's required interface to another's provided interface. Ports plus delegation are how a big component presents one clean boundary while being built from smaller ones.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 9a</div>
+      <div class="figure-title">A composite component: an external port delegating to an inner part, with an internal assembly.</div>
+      <svg viewBox="0 0 940 320" class="objfig" role="img" aria-label="Ports and delegation inside a composite component">
+        <defs><marker id="pd-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+        <rect x="60" y="50" width="820" height="230" class="uml-box" fill="#fcfaf6"/>
+        <text x="84" y="80" class="uml-text" font-weight="600" font-size="15">OrderSystem</text>
+        <text x="84" y="98" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <g transform="translate(842,58)"><rect x="0" y="6" width="22" height="14" fill="white" stroke="#2c3540" stroke-width="1.2"/><rect x="-4" y="9" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/><rect x="-4" y="14" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/></g>
+        <!-- external port + provided lollipop -->
+        <rect x="52" y="168" width="16" height="16" fill="white" stroke="#2c3540" stroke-width="1.4"/>
+        <line x1="52" y1="176" x2="30" y2="176" class="uml-line"/>
+        <circle cx="22" cy="176" r="8" class="uml-line" fill="white"/>
+        <text x="84" y="140" class="uml-text-mono" font-size="11.5">port : OrderEntry (provided)</text>
+        <!-- inner parts -->
+        <rect x="160" y="150" width="200" height="86" class="uml-box" fill="white"/>
+        <text x="260" y="188" text-anchor="middle" class="uml-text" font-weight="600">: OrderHandler</text>
+        <text x="260" y="208" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <rect x="580" y="150" width="200" height="86" class="uml-box" fill="white"/>
+        <text x="680" y="188" text-anchor="middle" class="uml-text" font-weight="600">: Billing</text>
+        <text x="680" y="208" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <!-- delegation port -> inner part -->
+        <line x1="68" y1="176" x2="160" y2="190" class="uml-line" marker-end="url(#pd-open)"/>
+        <text x="74" y="166" class="uml-text-mono" font-size="11">&lt;&lt;delegate&gt;&gt;</text>
+        <!-- assembly: OrderHandler required -> Billing provided -->
+        <line x1="360" y1="193" x2="378" y2="193" class="uml-line"/>
+        <path d="M 378 181 A 12 12 0 0 1 378 205" class="uml-line" fill="none"/>
+        <line x1="580" y1="193" x2="556" y2="193" class="uml-line"/>
+        <circle cx="546" cy="193" r="9" class="uml-line" fill="white"/>
+        <line x1="394" y1="193" x2="534" y2="193" class="uml-line-dashed" marker-end="url(#pd-open)"/>
+        <text x="464" y="184" text-anchor="middle" class="uml-text-mono" font-size="12">Charging</text>
+        <text x="60" y="262" class="uml-text-italic" font-size="12">The square on the boundary is a port; the &lt;&lt;delegate&gt;&gt; connector forwards it to the inner part that implements it; the lollipop-into-socket between the parts is an assembly connector.</text>
+      </svg>
+      <div class="figure-note">The outer <code>OrderSystem</code> exposes one provided interface (<code>OrderEntry</code>) at a <strong>port</strong>; a <strong>delegation</strong> connector routes that port to <code>:OrderHandler</code>; inside, an <strong>assembly</strong> connector wires <code>:OrderHandler</code>'s required interface to <code>:Billing</code>'s provided <code>Charging</code> interface. Clients see only the port.</div>
+    </div>
+
+    <h3 class="subhead-small">A worked component diagram: the seminar-registration system</h3>
+    <p class="body">Adel's running architectural example is a university seminar-registration system, and it is the clearest way to see the <strong>componentisation guidelines</strong> applied: user-interface logic goes in <code>&lt;&lt;UI&gt;&gt;</code> components, each business concept becomes its own domain component, and the cross-cutting technical concerns (security, persistence) become shared <code>&lt;&lt;infrastructure&gt;&gt;</code> components. Reading top to bottom is reading the layers of the architecture.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 9b</div>
+      <div class="figure-title">Seminar-registration system: UI, business-domain, and infrastructure components.</div>
+      <svg viewBox="0 0 1000 540" class="objfig" role="img" aria-label="Seminar registration component diagram in three layers">
+        <defs><marker id="uc-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+        <!-- layer bands -->
+        <rect x="30" y="40" width="940" height="130" fill="#f7f1e7" stroke="#d9cdb8" stroke-dasharray="5,4"/>
+        <text x="44" y="58" class="uml-text-stereo" font-size="11">UI layer</text>
+        <rect x="30" y="210" width="940" height="130" fill="#f3ede2" stroke="#d9cdb8" stroke-dasharray="5,4"/>
+        <text x="44" y="228" class="uml-text-stereo" font-size="11">business / domain layer</text>
+        <rect x="30" y="380" width="940" height="140" fill="#eee7da" stroke="#d9cdb8" stroke-dasharray="5,4"/>
+        <text x="44" y="398" class="uml-text-stereo" font-size="11">infrastructure layer</text>
+        <!-- UI components -->
+        <rect x="150" y="78" width="240" height="68" class="uml-box" fill="white"/>
+        <text x="270" y="108" text-anchor="middle" class="uml-text" font-weight="600">Seminar Management</text>
+        <text x="270" y="128" text-anchor="middle" class="uml-text-stereo">&lt;&lt;UI&gt;&gt;</text>
+        <rect x="600" y="78" width="240" height="68" class="uml-box" fill="white"/>
+        <text x="720" y="108" text-anchor="middle" class="uml-text" font-weight="600">Student Administration</text>
+        <text x="720" y="128" text-anchor="middle" class="uml-text-stereo">&lt;&lt;UI&gt;&gt;</text>
+        <!-- business components -->
+        <rect x="180" y="250" width="180" height="64" class="uml-box" fill="white"/>
+        <text x="270" y="278" text-anchor="middle" class="uml-text" font-weight="600">Seminar</text>
+        <text x="270" y="297" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <rect x="410" y="250" width="180" height="64" class="uml-box" fill="white"/>
+        <text x="500" y="278" text-anchor="middle" class="uml-text" font-weight="600">Schedule</text>
+        <text x="500" y="297" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <rect x="630" y="250" width="180" height="64" class="uml-box" fill="white"/>
+        <text x="720" y="278" text-anchor="middle" class="uml-text" font-weight="600">Student</text>
+        <text x="720" y="297" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <!-- infrastructure components -->
+        <rect x="120" y="420" width="210" height="64" class="uml-box" fill="white"/>
+        <text x="225" y="448" text-anchor="middle" class="uml-text" font-weight="600">Security</text>
+        <text x="225" y="467" text-anchor="middle" class="uml-text-stereo">&lt;&lt;infrastructure&gt;&gt;</text>
+        <rect x="400" y="420" width="200" height="64" class="uml-box" fill="white"/>
+        <text x="500" y="448" text-anchor="middle" class="uml-text" font-weight="600">Persistence</text>
+        <text x="500" y="467" text-anchor="middle" class="uml-text-stereo">&lt;&lt;infrastructure&gt;&gt;</text>
+        <rect x="680" y="420" width="200" height="64" class="uml-box" fill="white"/>
+        <text x="780" y="448" text-anchor="middle" class="uml-text" font-weight="600">University DB</text>
+        <text x="780" y="467" text-anchor="middle" class="uml-text-stereo">&lt;&lt;database&gt;&gt;</text>
+        <!-- provided lollipops -->
+        <line x1="270" y1="250" x2="270" y2="241" class="uml-line"/><circle cx="270" cy="232" r="9" class="uml-line" fill="white"/>
+        <line x1="720" y1="250" x2="720" y2="241" class="uml-line"/><circle cx="720" cy="232" r="9" class="uml-line" fill="white"/>
+        <line x1="500" y1="420" x2="500" y2="411" class="uml-line"/><circle cx="500" cy="402" r="9" class="uml-line" fill="white"/>
+        <line x1="225" y1="420" x2="225" y2="411" class="uml-line"/><circle cx="225" cy="402" r="9" class="uml-line" fill="white"/>
+        <line x1="680" y1="452" x2="666" y2="452" class="uml-line"/><circle cx="656" cy="452" r="9" class="uml-line" fill="white"/>
+        <!-- dependencies: UI -> business -->
+        <line x1="270" y1="146" x2="270" y2="223" class="uml-line-dashed" marker-end="url(#uc-open)"/>
+        <text x="278" y="190" class="uml-text-mono" font-size="11">manageSeminars</text>
+        <line x1="720" y1="146" x2="720" y2="223" class="uml-line-dashed" marker-end="url(#uc-open)"/>
+        <text x="728" y="190" class="uml-text-mono" font-size="11">manageStudents</text>
+        <!-- dependencies: business -> persistence (DataAccess) -->
+        <line x1="290" y1="314" x2="486" y2="396" class="uml-line-dashed" marker-end="url(#uc-open)"/>
+        <line x1="500" y1="314" x2="500" y2="393" class="uml-line-dashed" marker-end="url(#uc-open)"/>
+        <line x1="700" y1="314" x2="514" y2="396" class="uml-line-dashed" marker-end="url(#uc-open)"/>
+        <text x="512" y="360" class="uml-text-mono" font-size="11">DataAccess</text>
+        <!-- persistence -> DB (JDBC) -->
+        <line x1="600" y1="452" x2="647" y2="452" class="uml-line-dashed" marker-end="url(#uc-open)"/>
+        <text x="604" y="443" class="uml-text-mono" font-size="11">&lt;&lt;JDBC&gt;&gt;</text>
+      </svg>
+      <div class="figure-note">Three layers, read top to bottom. The two <code>&lt;&lt;UI&gt;&gt;</code> components depend on the business-domain components (<code>Seminar</code>, <code>Schedule</code>, <code>Student</code>); those depend on the shared <code>Persistence</code> infrastructure component (the <code>DataAccess</code> interface); persistence reaches the <code>&lt;&lt;database&gt;&gt;</code> over <code>&lt;&lt;JDBC&gt;&gt;</code>. <code>Security</code> is a cross-cutting infrastructure component (its <code>AccessControl</code> lollipop is used by every layer; the wiring is omitted to keep the figure readable). This same component set is allocated to nodes in the deployment diagram below.</div>
+    </div>
+
     <h3 class="subhead">Deployment diagrams</h3>
     <p class="body">A deployment diagram shows the runtime configuration of the system: which software runs on which hardware (or virtual) nodes, and how the nodes connect. It is the right diagram when the system is non-trivially distributed.</p>
 
@@ -2812,6 +3043,18 @@
       <div class="figure-note">A typical 3-tier deployment: the client hosts the browser; the web server hosts UI and application components; the database server hosts the persistence component and the database. Communication paths are labelled with their protocols.</div>
     </div>
 
+    <h3 class="subhead-small">Choosing the tiers: 2-tier, 3-tier, 4-tier</h3>
+    <p class="body">The <em>same set of components</em> can be deployed onto different numbers of nodes, and that choice is itself a design decision with consequences for security, performance and cost. Adel draws the seminar system three ways; the trade-off is what to put where:</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Layout</th><th>Who hosts what</th><th>Trade-off</th></tr></thead>
+      <tbody>
+        <tr><td><strong>2-tier</strong></td><td>Client + one server that runs both the application and the database.</td><td>Simplest and cheapest; the database is exposed on the application server, and the single server limits scale and isolation.</td></tr>
+        <tr><td><strong>3-tier</strong></td><td>Client / application (web) server / separate database server.</td><td>The common web layout: the database sits behind the application tier (better security), and each tier scales on its own, at the cost of an extra hop and node.</td></tr>
+        <tr><td><strong>4-tier</strong></td><td>Adds a dedicated security/gateway (or caching) node in front of the application tier.</td><td>Strongest isolation and a single enforcement point for authentication; more infrastructure to run and a longer request path.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">The lesson Adel draws from this: a deployment diagram is not a transcription of the component diagram &mdash; the same components can be allocated to nodes in several ways, and the allocation is where security, performance and operational cost are actually traded off.</p>
+
     <h3 class="subhead-small">Architecture vs architectural style</h3>
     <p class="body">A small but useful distinction:</p>
 
@@ -2827,6 +3070,9 @@
       <thead><tr><th>Style</th><th>Core idea</th><th>Trade-off</th></tr></thead><tbody>
         <tr><td>Layered (n-tier)</td><td>Stacked layers, each using only the one below.</td><td>Predictable and testable; can be slow and rigid. 3-tier is the common instance.</td></tr>
         <tr><td>Client-server</td><td>Clients request; a server holds data and logic.</td><td>Centralises control; the server is a bottleneck and a single point of failure.</td></tr>
+        <tr><td>Three-tier / n-tier</td><td>Client-server split into presentation, business-logic, and data tiers on separate nodes.</td><td>The standard for web applications; each tier scales independently, at the cost of extra network hops. The instance of the layered style you saw in the deployment diagram above.</td></tr>
+        <tr><td>Peer-to-peer</td><td>Every node is both client and server; no central authority.</td><td>Resilient and scalable with no single point of failure (BitTorrent, blockchains); consistency and discovery are hard.</td></tr>
+        <tr><td>Repository (blackboard)</td><td>Components share state only through one central data store.</td><td>Simple integration and a single source of truth (IDEs, compilers, CAD); the repository becomes the bottleneck and couples everything to its schema.</td></tr>
         <tr><td>Model-View-Controller</td><td>Separate data, presentation, and input handling.</td><td>Dominant in UI frameworks; logic can scatter if overused.</td></tr>
         <tr><td>Pipe-and-filter</td><td>Data flows through a chain of independent transforms.</td><td>Excellent for batch and stream work (Unix pipes, compilers); poor for interactive use.</td></tr>
         <tr><td>Event-driven / pub-sub</td><td>Components emit and react to events, decoupled in time.</td><td>Scales and decouples; harder to trace and debug.</td></tr>

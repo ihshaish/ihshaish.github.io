@@ -287,7 +287,7 @@
 </head><body><div class="tut-wrap">
 <div class="tut-eyebrow">COMP433 &middot; Software Engineering &middot; Chapter 4 &middot; Tutorial</div>
 <h1>From requirements to a class and sequence diagram</h1>
-<div class="paper"><strong>Tutorial worksheet.</strong> Work the tasks below <strong>on paper</strong>, in the notation taught in this course (Adel / Sommerville). The use case and activity diagrams are given; you produce the class diagram and the sequence diagram. Solutions will be released after the session.</div>
+<div class="paper"><strong>Tutorial worksheet.</strong> Work the tasks below <strong>on paper</strong>, in the notation taught in this course (Adel / Sommerville). The use case and activity diagrams are given; you produce the class diagram and the sequence diagram. <strong>Worked solutions are provided in Section&nbsp;4 as collapsible panels</strong> &mdash; attempt each task first, then expand to check.</div>
 <h2>1. The problem</h2>
 <div class="problem">A university needs a system for <strong>course registration</strong>. A <strong>student</strong> may register for several course <strong>offerings</strong> in a semester, up to a credit limit. A <strong>course</strong> (for example COMP433) is given as one or more <strong>offerings</strong> (sections) per semester; each offering is taught by one <strong>instructor</strong>, has a time and room, and a maximum <strong>capacity</strong>. A student may register for an offering only if they have passed the course's <strong>prerequisites</strong> and the offering is not full. The system records each <strong>registration</strong> with a date and a status; at the end of the semester the instructor records a <strong>grade</strong> for each registration. A student may <strong>drop</strong> an offering before the deadline. A <strong>registrar</strong> manages the offerings.</div>
 <h2>2. Given to you</h2>
@@ -300,4 +300,197 @@
 
 <h2>3. Your tasks</h2>
 <ol class="tasklist"><li><strong>Noun-verb analysis:</strong> list candidate classes, then decide keep / reject / debatable with a one-line reason for each.</li><li><strong>Classes:</strong> draw the classes with their attributes and key operations.</li><li><strong>Associations:</strong> add associations with <strong>multiplicity at each end</strong>, plus any generalisation, aggregation/composition, and the association class. This is your class diagram.</li><li><strong>Sequence diagram</strong> for <em>Register for offering</em>: the normal (happy) path as an instance, then show where an <code>alt</code> handles &ldquo;prerequisite not met / offering full&rdquo;. Remember: actors get no activation bar.</li></ol>
+
+<h2>4. Worked solutions</h2>
+<div class="paper">Try each task on paper first, then expand the matching panel. There is rarely one &ldquo;correct&rdquo; diagram &mdash; what matters is that the classes, multiplicities and message order are defensible against the requirements.</div>
+
+<details class="reveal"><summary>Solution &mdash; Task 1: noun-verb analysis</summary><div class="reveal-body">
+<p class="body">Underline the nouns and verbs in the problem, then sort the nouns into classes, attributes, and things to discard. The verbs become candidate operations.</p>
+<div class="table-card"><table class="body-table">
+  <thead><tr><th>Candidate (noun)</th><th>Decision</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr><td>Student</td><td><strong>Keep &mdash; class</strong></td><td>Has identity, attributes (credit limit) and behaviour (registers, drops).</td></tr>
+    <tr><td>Course</td><td><strong>Keep &mdash; class</strong></td><td>A catalogue entry (e.g. COMP433) with code, title, credits; distinct from its offerings.</td></tr>
+    <tr><td>Offering / section</td><td><strong>Keep &mdash; class</strong></td><td>A specific delivery of a course in a semester, with time, room, capacity. The thing a student actually registers for.</td></tr>
+    <tr><td>Instructor</td><td><strong>Keep &mdash; class</strong></td><td>Teaches offerings and records grades.</td></tr>
+    <tr><td>Registrar</td><td><strong>Keep &mdash; class</strong></td><td>Manages offerings; a distinct role/actor with behaviour.</td></tr>
+    <tr><td>Registration</td><td><strong>Keep &mdash; association class</strong></td><td>It only exists for a (student, offering) pair and carries date, status and grade &mdash; the classic association class.</td></tr>
+    <tr><td>Semester, time, room, capacity, credit&nbsp;limit, date, status, grade</td><td>Reject as class &mdash; <strong>attributes</strong></td><td>Simple values that belong inside a class, not objects with their own identity.</td></tr>
+    <tr><td>COMP433</td><td>Reject</td><td>An <em>instance</em> of Course, not a class.</td></tr>
+    <tr><td>University, system</td><td>Reject</td><td>The context / the system boundary itself, not a domain class.</td></tr>
+    <tr><td>Prerequisite</td><td><strong>Debatable</strong></td><td>Best modelled as a reflexive association on Course (Course&ndash;Course), not a class. Could be a class only if it carried its own data.</td></tr>
+    <tr><td>Grade</td><td><strong>Debatable</strong></td><td>Here an attribute of Registration; would become a class only if grade history/scale needed its own behaviour.</td></tr>
+  </tbody>
+</table></div>
+<p class="body"><strong>Verbs &rarr; candidate operations:</strong> register (for offering), check prerequisites, refuse registration, create registration, confirm, drop (offering), record (grade), manage offerings, view schedule.</p>
+</div></details>
+
+<details class="reveal"><summary>Solution &mdash; Task 2: classes with attributes and operations</summary><div class="reveal-body">
+<p class="body">A defensible set of classes. Visibility is shown with <code>+</code> public, <code>-</code> private; types follow Sommerville/Adel style.</p>
+<div class="struct-spec"><table>
+  <tr><th>Class</th><th>Attributes</th><th>Key operations</th></tr>
+  <tr><td>Student</td><td>id, name, creditLimit : int</td><td>register(o), drop(o), viewSchedule()</td></tr>
+  <tr><td>Course</td><td>code, title, credits : int</td><td>&mdash;</td></tr>
+  <tr><td>Offering</td><td>offeringId, semester, time, room, capacity : int</td><td>isFull() : bool, addRegistration(r)</td></tr>
+  <tr><td>Instructor</td><td>id, name</td><td>recordGrade(r, g)</td></tr>
+  <tr><td>Registrar</td><td>id, name</td><td>manageOfferings()</td></tr>
+  <tr><td>Registration <em>(assoc. class)</em></td><td>date : Date, status, grade</td><td>setGrade(g), drop()</td></tr>
+</table></div>
+<p class="note">Student, Instructor and Registrar share id/name, so an abstract <strong>Person</strong> superclass generalising the three is a reasonable refinement (the generalisation asked for in Task&nbsp;3). It is optional; show it only if it earns its place.</p>
+</div></details>
+
+<details class="reveal"><summary>Solution &mdash; Task 3: the class diagram</summary><div class="reveal-body">
+<p class="body">The associations, with multiplicity at each end:</p>
+<ul class="body">
+  <li><strong>Student &mdash; Offering</strong> (<em>registers for</em>), <code>0..*</code> to <code>0..*</code>, with <strong>Registration</strong> as the <strong>association class</strong> (date, status, grade live on the link, not on Student or Offering).</li>
+  <li><strong>Course &#9670;&mdash; Offering</strong> (<em>offered as</em>), <strong>composition</strong>, <code>1</code> to <code>1..*</code>: an offering cannot exist without its course.</li>
+  <li><strong>Instructor &mdash; Offering</strong> (<em>teaches</em>), <code>1</code> to <code>0..*</code>.</li>
+  <li><strong>Registrar &mdash; Offering</strong> (<em>manages</em>), <code>1</code> to <code>0..*</code>.</li>
+  <li><strong>Course &mdash; Course</strong> (<em>prerequisite</em>), a <strong>reflexive</strong> association <code>0..*</code> to <code>0..*</code>.</li>
+</ul>
+<div class="figure">
+  <div class="figure-caption">Solution 3</div>
+  <div class="figure-title">Class diagram for the Course Registration System.</div>
+  <svg viewBox="0 0 1040 620" class="objfig" role="img" aria-label="Solution class diagram for course registration">
+    <defs><marker id="sol-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+    <!-- Student -->
+    <rect x="60" y="60" width="210" height="140" class="uml-box"/>
+    <text x="165" y="84" text-anchor="middle" class="uml-text" font-weight="600">Student</text>
+    <line x1="60" y1="96" x2="270" y2="96" class="uml-line"/>
+    <text x="72" y="114" class="uml-text-mono" font-size="12">id, name</text>
+    <text x="72" y="132" class="uml-text-mono" font-size="12">creditLimit : int</text>
+    <line x1="60" y1="146" x2="270" y2="146" class="uml-line"/>
+    <text x="72" y="166" class="uml-text-mono" font-size="12">register(o), drop(o)</text>
+    <text x="72" y="184" class="uml-text-mono" font-size="12">viewSchedule()</text>
+    <!-- Course -->
+    <rect x="780" y="56" width="210" height="112" class="uml-box"/>
+    <text x="885" y="80" text-anchor="middle" class="uml-text" font-weight="600">Course</text>
+    <line x1="780" y1="92" x2="990" y2="92" class="uml-line"/>
+    <text x="792" y="110" class="uml-text-mono" font-size="12">code, title</text>
+    <text x="792" y="128" class="uml-text-mono" font-size="12">credits : int</text>
+    <line x1="780" y1="140" x2="990" y2="140" class="uml-line"/>
+    <text x="792" y="158" class="uml-text-mono" font-size="12">&nbsp;</text>
+    <!-- reflexive prerequisite -->
+    <path d="M 840 56 V 30 H 980 V 56" class="uml-line" fill="none" marker-end="url(#sol-open)"/>
+    <text x="848" y="24" class="uml-text-mono" font-size="11">prerequisite  0..* / 0..*</text>
+    <!-- Offering -->
+    <rect x="410" y="235" width="240" height="180" class="uml-box"/>
+    <text x="530" y="259" text-anchor="middle" class="uml-text" font-weight="600">Offering</text>
+    <line x1="410" y1="271" x2="650" y2="271" class="uml-line"/>
+    <text x="422" y="289" class="uml-text-mono" font-size="12">offeringId, semester</text>
+    <text x="422" y="307" class="uml-text-mono" font-size="12">time, room</text>
+    <text x="422" y="325" class="uml-text-mono" font-size="12">capacity : int</text>
+    <line x1="410" y1="339" x2="650" y2="339" class="uml-line"/>
+    <text x="422" y="359" class="uml-text-mono" font-size="12">isFull() : bool</text>
+    <text x="422" y="377" class="uml-text-mono" font-size="12">addRegistration(r)</text>
+    <!-- Instructor -->
+    <rect x="780" y="300" width="210" height="110" class="uml-box"/>
+    <text x="885" y="324" text-anchor="middle" class="uml-text" font-weight="600">Instructor</text>
+    <line x1="780" y1="336" x2="990" y2="336" class="uml-line"/>
+    <text x="792" y="356" class="uml-text-mono" font-size="12">id, name</text>
+    <line x1="780" y1="368" x2="990" y2="368" class="uml-line"/>
+    <text x="792" y="388" class="uml-text-mono" font-size="12">recordGrade(r, g)</text>
+    <!-- Registrar -->
+    <rect x="60" y="470" width="210" height="100" class="uml-box"/>
+    <text x="165" y="494" text-anchor="middle" class="uml-text" font-weight="600">Registrar</text>
+    <line x1="60" y1="506" x2="270" y2="506" class="uml-line"/>
+    <text x="72" y="526" class="uml-text-mono" font-size="12">id, name</text>
+    <line x1="60" y1="538" x2="270" y2="538" class="uml-line"/>
+    <text x="72" y="558" class="uml-text-mono" font-size="12">manageOfferings()</text>
+    <!-- Registration (association class) -->
+    <rect x="60" y="250" width="230" height="140" class="uml-box"/>
+    <text x="175" y="274" text-anchor="middle" class="uml-text" font-weight="600">Registration</text>
+    <text x="175" y="290" text-anchor="middle" class="uml-text-stereo">association class</text>
+    <line x1="60" y1="300" x2="290" y2="300" class="uml-line"/>
+    <text x="72" y="318" class="uml-text-mono" font-size="12">date : Date</text>
+    <text x="72" y="336" class="uml-text-mono" font-size="12">status, grade</text>
+    <line x1="60" y1="350" x2="290" y2="350" class="uml-line"/>
+    <text x="72" y="370" class="uml-text-mono" font-size="12">setGrade(g), drop()</text>
+    <!-- Student-Offering association "registers for" -->
+    <line x1="210" y1="200" x2="430" y2="262" class="uml-line"/>
+    <text x="210" y="216" class="uml-text-mono" font-size="11">0..*</text>
+    <text x="404" y="258" class="uml-text-mono" font-size="11">0..*</text>
+    <text x="300" y="220" class="uml-text-italic" font-size="12">registers for</text>
+    <!-- Registration assoc-class dashed link to the association midpoint (320,231) -->
+    <line x1="320" y1="231" x2="280" y2="290" class="uml-line-dashed"/>
+    <!-- Course composition Offering "offered as" -->
+    <polygon points="838,168 850,180 838,192 826,180" class="uml-line" fill="#2c3540"/>
+    <line x1="838" y1="192" x2="648" y2="262" class="uml-line"/>
+    <text x="812" y="206" class="uml-text-mono" font-size="11">1</text>
+    <text x="652" y="258" class="uml-text-mono" font-size="11">1..*</text>
+    <text x="720" y="214" class="uml-text-italic" font-size="12">offered as</text>
+    <!-- Instructor-Offering "teaches" -->
+    <line x1="780" y1="355" x2="650" y2="355" class="uml-line"/>
+    <text x="762" y="348" class="uml-text-mono" font-size="11">1</text>
+    <text x="658" y="348" class="uml-text-mono" font-size="11">0..*</text>
+    <text x="690" y="372" class="uml-text-italic" font-size="12">teaches</text>
+    <!-- Registrar-Offering "manages" -->
+    <line x1="270" y1="490" x2="430" y2="400" class="uml-line"/>
+    <text x="285" y="486" class="uml-text-mono" font-size="11">1</text>
+    <text x="436" y="406" class="uml-text-mono" font-size="11">0..*</text>
+    <text x="320" y="462" class="uml-text-italic" font-size="12">manages</text>
+  </svg>
+  <div class="figure-note">The two hard decisions: <strong>Registration</strong> is an association class on Student&ndash;Offering (a registration belongs to the pairing, not to either side), and <strong>Course&#9670;&ndash;Offering</strong> is composition (no course, no offering). Prerequisite is a reflexive association on Course. An abstract <em>Person</em> over Student/Instructor/Registrar is an acceptable extra generalisation.</div>
+</div>
+</div></details>
+
+<details class="reveal"><summary>Solution &mdash; Task 4: the sequence diagram</summary><div class="reveal-body">
+<p class="body">One scenario of <em>Register for offering</em>. The two decisions from the activity diagram (prerequisites met? space available?) collapse into one <code>alt</code> with a guard. The Student is an actor, so it has <strong>no activation bar</strong>; the <code>&laquo;create&raquo;</code> message brings the Registration object to life at the point it is created.</p>
+<div class="figure">
+  <div class="figure-caption">Solution 4</div>
+  <div class="figure-title">Sequence diagram: &ldquo;Register for offering&rdquo; with an alt for refusal.</div>
+  <svg viewBox="0 0 1000 560" class="objfig" role="img" aria-label="Solution sequence diagram for register for offering">
+    <defs>
+      <marker id="sol-fill" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker>
+      <marker id="sol-ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker>
+    </defs>
+    <!-- participants -->
+    <rect x="45" y="36" width="120" height="36" class="uml-box"/><text x="105" y="59" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">: Student</text>
+    <rect x="250" y="36" width="180" height="36" class="uml-box"/><text x="340" y="59" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">: RegistrationUI</text>
+    <rect x="520" y="36" width="170" height="36" class="uml-box"/><text x="605" y="59" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">offering : Offering</text>
+    <!-- Registration created later -->
+    <rect x="785" y="288" width="180" height="36" class="uml-box"/><text x="875" y="311" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">r : Registration</text>
+    <!-- lifelines -->
+    <line x1="105" y1="72" x2="105" y2="540" class="uml-line-dashed"/>
+    <line x1="340" y1="72" x2="340" y2="540" class="uml-line-dashed"/>
+    <line x1="605" y1="72" x2="605" y2="540" class="uml-line-dashed"/>
+    <line x1="875" y1="324" x2="875" y2="470" class="uml-line-dashed"/>
+    <!-- activation bars (no bar on the Student actor) -->
+    <rect x="335" y="110" width="10" height="380" fill="#d6e0e8" stroke="#2c5f7c"/>
+    <rect x="600" y="150" width="10" height="110" fill="#d6e0e8" stroke="#2c5f7c"/>
+    <rect x="870" y="324" width="10" height="40" fill="#d6e0e8" stroke="#2c5f7c"/>
+    <!-- 1 register -->
+    <line x1="105" y1="110" x2="335" y2="110" class="uml-line" marker-end="url(#sol-fill)"/>
+    <text x="220" y="103" text-anchor="middle" class="uml-text" font-size="13">1: register(offering)</text>
+    <!-- 2 checkPrerequisites -->
+    <line x1="345" y1="150" x2="600" y2="150" class="uml-line" marker-end="url(#sol-fill)"/>
+    <text x="472" y="143" text-anchor="middle" class="uml-text" font-size="13">2: checkPrerequisites(student)</text>
+    <line x1="600" y1="185" x2="345" y2="185" class="uml-line-dashed" marker-end="url(#sol-ret)"/>
+    <text x="472" y="178" text-anchor="middle" class="uml-text" font-size="13">prerequisitesMet</text>
+    <!-- 3 isFull -->
+    <line x1="345" y1="225" x2="600" y2="225" class="uml-line" marker-end="url(#sol-fill)"/>
+    <text x="472" y="218" text-anchor="middle" class="uml-text" font-size="13">3: isFull()</text>
+    <line x1="600" y1="255" x2="345" y2="255" class="uml-line-dashed" marker-end="url(#sol-ret)"/>
+    <text x="472" y="248" text-anchor="middle" class="uml-text" font-size="13">false</text>
+    <!-- alt fragment -->
+    <rect x="60" y="280" width="905" height="240" fill="none" stroke="#2c5f7c" stroke-width="1.4"/>
+    <path d="M60 280 h60 v18 l-12 8 H60 Z" fill="#d6e0e8" stroke="#2c5f7c" stroke-width="1.4"/>
+    <text x="78" y="298" class="uml-text-mono" font-size="12" font-weight="600">alt</text>
+    <text x="132" y="300" class="uml-text-mono" font-size="12">[prerequisites met and space available]</text>
+    <!-- 4 create -->
+    <line x1="345" y1="306" x2="785" y2="306" class="uml-line-dashed" marker-end="url(#sol-ret)"/>
+    <text x="565" y="299" text-anchor="middle" class="uml-text" font-size="13">4: &laquo;create&raquo; new(student, offering, today)</text>
+    <!-- 5 confirm -->
+    <line x1="335" y1="360" x2="105" y2="360" class="uml-line-dashed" marker-end="url(#sol-ret)"/>
+    <text x="220" y="353" text-anchor="middle" class="uml-text" font-size="13">5: confirm()</text>
+    <!-- else divider -->
+    <line x1="60" y1="400" x2="965" y2="400" stroke="#2c5f7c" stroke-dasharray="6,4" stroke-width="1.3"/>
+    <text x="78" y="418" class="uml-text-mono" font-size="12">[else]</text>
+    <!-- 4' refuse -->
+    <line x1="335" y1="450" x2="105" y2="450" class="uml-line-dashed" marker-end="url(#sol-ret)"/>
+    <text x="220" y="443" text-anchor="middle" class="uml-text" font-size="13">4': refuse(reason)</text>
+  </svg>
+  <div class="figure-note">Solid arrows are synchronous calls; dashed open-headed arrows are returns. The Offering answers <code>checkPrerequisites</code> and <code>isFull</code>; in the happy branch the UI <code>&laquo;create&raquo;</code>s the Registration and confirms; in the <code>[else]</code> branch it refuses. The Student actor carries no activation bar.</div>
+</div>
+</div></details>
 </div></body></html>
