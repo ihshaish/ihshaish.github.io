@@ -2159,6 +2159,37 @@
     <h3 class="subhead">Generalisation: the substitutability test</h3>
     <p class="body">Draw generalisation only for an <em>is-a</em> relationship. The test is <strong>substitutability</strong>: anywhere the code expects a LibraryMember you can hand it a StaffMember and nothing breaks. <strong>Wrong:</strong> "Car is-a Engine", a car is not a kind of engine, it <em>has</em> one, so that is an association (Car has Engine). <strong>Right:</strong> "ElectricCar is-a Car". If the substitution would be absurd (an Engine where a Car is expected), it is not generalisation.</p>
 
+    <p class="body">A subclass <strong>inherits</strong> every attribute and operation of its superclass and may add its own; the inherited members are never repeated on the subclass. The arrow is a <strong>hollow triangle</strong> pointing at the parent. Below, <code>Hospital doctor</code> and <code>General practitioner</code> are both kinds of <code>Doctor</code>: each inherits Doctor's <code>name</code>, <code>phone</code>, <code>email</code> and the operations <code>editRecord()</code> and <code>viewRecord()</code>, and adds only what is specific to it.</p>
+    <div class="figure">
+      <div class="figure-caption">Generalisation and inheritance</div>
+      <div class="figure-title">Subclasses inherit the parent's members and add their own (Doctor hierarchy).</div>
+      <svg viewBox="0 0 760 360" class="objfig" role="img" aria-label="Doctor generalisation: Hospital doctor and General practitioner inherit Doctor's attributes and operations">
+        <defs><marker id="gh-gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker></defs>
+        <rect x="275" y="24" width="210" height="114" class="uml-box"/>
+        <text x="380" y="46" text-anchor="middle" class="uml-text" font-weight="700">Doctor</text>
+        <line x1="275" y1="58" x2="485" y2="58" class="uml-line"/>
+        <text x="287" y="80" class="uml-text-mono" font-size="12">name, phone, email</text>
+        <line x1="275" y1="92" x2="485" y2="92" class="uml-line"/>
+        <text x="287" y="112" class="uml-text-mono" font-size="12">editRecord()</text>
+        <text x="287" y="130" class="uml-text-mono" font-size="12">viewRecord()</text>
+        <rect x="55" y="250" width="210" height="92" class="uml-box"/>
+        <text x="160" y="272" text-anchor="middle" class="uml-text" font-weight="700">Hospital doctor</text>
+        <line x1="55" y1="284" x2="265" y2="284" class="uml-line"/>
+        <text x="67" y="304" class="uml-text-mono" font-size="12">staffNo : String</text>
+        <text x="67" y="322" class="uml-text-mono" font-size="12">pager : String</text>
+        <rect x="495" y="250" width="210" height="92" class="uml-box"/>
+        <text x="600" y="272" text-anchor="middle" class="uml-text" font-weight="700">General practitioner</text>
+        <line x1="495" y1="284" x2="705" y2="284" class="uml-line"/>
+        <text x="507" y="304" class="uml-text-mono" font-size="12">practice : String</text>
+        <text x="507" y="322" class="uml-text-mono" font-size="12">address : String</text>
+        <line x1="380" y1="196" x2="380" y2="138" class="uml-line" marker-end="url(#gh-gen)"/>
+        <line x1="160" y1="196" x2="600" y2="196" class="uml-line"/>
+        <line x1="160" y1="196" x2="160" y2="250" class="uml-line"/>
+        <line x1="600" y1="196" x2="600" y2="250" class="uml-line"/>
+      </svg>
+      <div class="figure-note">One hollow triangle points at the parent; the shared line then branches to the subclasses. Both subclasses inherit Doctor's <code>name</code>, <code>phone</code>, <code>email</code>, <code>editRecord()</code> and <code>viewRecord()</code> (not redrawn on them) and add their own members. This is the same generalisation already used in the Library model (StaffMember <em>is a</em> LibraryMember); shown here on its own so the inheritance of members is explicit.</div>
+    </div>
+
     <h3 class="subhead-small">Multiple inheritance</h3>
     <p class="body">A class may specialise more than one parent at once: <strong>multiple inheritance</strong>, drawn as one generalisation arrow to each parent. Adel's example: a <code>Professor</code> is both a <code>Tutor</code> and a <code>Researcher</code>, inheriting the attributes and operations of both. Use it with care, because it raises name-clash and repeated-ancestor questions and several programming languages forbid it; at the analysis level it is valid when the subclass truly <em>is</em> both.</p>
     <div class="figure">
