@@ -1849,6 +1849,36 @@
       <li><code>/</code> <strong>derived</strong>: a value computed from other attributes, not stored independently (e.g., <code>/age</code> computed from <code>birthDate</code>).</li>
     </ul>
 
+    <h3 class="subhead-small">Fuller attribute and operation notation</h3>
+    <p class="body">An attribute's full form is <code>visibility name : type [multiplicity] = default {property}</code> and an operation's is <code>visibility name(parameter : type, &hellip;) : returnType {property}</code>. Beyond plain name-and-type, the course uses a few markers worth recognising:</p>
+    <ul class="body">
+      <li><code>{id}</code> marks an attribute that <strong>identifies</strong> the object, a candidate key: <code>accountNo : String {id}</code>.</li>
+      <li>A leading <code>/</code> marks a <strong>derived</strong> attribute, computed rather than stored: <code>/balance</code>.</li>
+      <li>A <strong>multiplicity</strong> in brackets makes an attribute multi-valued: <code>holders : Person [1..*]</code> is a collection, not a single value.</li>
+      <li>An <strong>underlined</strong> member is <strong>class-scope</strong> (static): it belongs to the class itself, not to each object (<code>totalAccounts</code>).</li>
+      <li><code>&laquo;constructor&raquo;</code> stereotypes the operation that creates an instance; <code>{query}</code> marks an operation that returns a value without changing state.</li>
+      <li>An <strong>abstract</strong> class or operation, one that is never instantiated or has no implementation and exists only to be inherited, is written with its <em>name in italics</em>.</li>
+    </ul>
+    <div class="figure">
+      <div class="figure-caption">Figure 5b</div>
+      <div class="figure-title">The fuller notation in one class: an identifier, a derived value, a multi-valued attribute, a class-scope member, a constructor, and a query.</div>
+      <svg viewBox="0 0 600 310" class="objfig" role="img" aria-label="An Account class showing id, derived, multi-valued and class-scope members, a constructor and a query operation">
+        <rect x="150" y="30" width="320" height="258" class="uml-box"/>
+        <text x="310" y="54" text-anchor="middle" class="uml-text" font-weight="700">Account</text>
+        <line x1="150" y1="68" x2="470" y2="68" class="uml-line"/>
+        <text x="164" y="90" class="uml-text-mono" font-size="12">+ accountNo : String {id}</text>
+        <text x="164" y="110" class="uml-text-mono" font-size="12">+ /balance : Money</text>
+        <text x="164" y="130" class="uml-text-mono" font-size="12">+ holders : Person [1..*]</text>
+        <text x="164" y="150" class="uml-text-mono" font-size="12">totalAccounts : int</text>
+        <line x1="164" y1="154" x2="304" y2="154" class="uml-line"/>
+        <line x1="150" y1="166" x2="470" y2="166" class="uml-line"/>
+        <text x="164" y="188" class="uml-text-mono" font-size="12">&laquo;constructor&raquo; + create(o : Owner)</text>
+        <text x="164" y="208" class="uml-text-mono" font-size="12">+ deposit(amount : Money)</text>
+        <text x="164" y="228" class="uml-text-mono" font-size="12">+ getBalance() : Money { query }</text>
+      </svg>
+      <div class="figure-note"><code>accountNo</code> is the identifier (<code>{id}</code>); <code>/balance</code> is derived; <code>holders</code> is multi-valued (<code>[1..*]</code>); <code>totalAccounts</code> is underlined, so it is class-scope (one value shared by the class, not one per object); <code>create</code> is the <code>&laquo;constructor&raquo;</code>; <code>getBalance</code> is a <code>{query}</code> that does not change state. An abstract class would show its name in italics.</div>
+    </div>
+
     <h3 class="subhead">Relationships: associations, generalisation, aggregation</h3>
 
     <div class="figure">
@@ -1950,6 +1980,29 @@
 
     <h3 class="subhead">Association classes</h3>
     <p class="body">When an association itself has attributes that do not belong to either of the connected classes, those attributes live on an <em>association class</em>. Example: a <code>Loan</code> between a <code>LibraryMember</code> and a <code>BookCopy</code> has its own <code>startDate</code> and <code>returnDate</code>; these are attributes of the borrowing relationship, not of the member or of the copy. The association class is drawn as a regular class box, connected to the association line by a dashed link.</p>
+
+    <h3 class="subhead">Ternary and n-ary associations</h3>
+    <p class="body">Most associations are <strong>binary</strong>: they link two classes. A <strong>ternary</strong> association links three classes at once, and an <strong>n-ary</strong> association links n; it is drawn as a <strong>diamond</strong> with one line to each participating class. Like a binary association, a ternary association can carry its own data on an <strong>association class</strong>, attached to the diamond by a dashed link. Adel's example: a <code>Player</code> plays for a <code>Team</code> in a given <code>Year</code>; the facts that depend on all three together (goals scored, games played that season) belong to none of the three alone, so they live on an association class hung off the diamond.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 6g</div>
+      <div class="figure-title">A ternary association (Team, Player, Year) with an association class.</div>
+      <svg viewBox="0 0 760 430" class="objfig" role="img" aria-label="Ternary association among Team, Player and Year, with a PlayerSeason association class on the diamond">
+        <rect x="40" y="70" width="160" height="48" class="uml-box"/><text x="120" y="99" text-anchor="middle" class="uml-text" font-weight="700">Team</text>
+        <rect x="560" y="70" width="160" height="48" class="uml-box"/><text x="640" y="99" text-anchor="middle" class="uml-text" font-weight="700">Year</text>
+        <rect x="300" y="352" width="160" height="48" class="uml-box"/><text x="380" y="381" text-anchor="middle" class="uml-text" font-weight="700">Player</text>
+        <polygon points="380,166 420,200 380,234 340,200" class="uml-box"/>
+        <line x1="150" y1="118" x2="356" y2="190" class="uml-line"/>
+        <line x1="610" y1="118" x2="404" y2="190" class="uml-line"/>
+        <line x1="380" y1="352" x2="380" y2="234" class="uml-line"/>
+        <rect x="560" y="252" width="180" height="92" class="uml-box"/><text x="650" y="276" text-anchor="middle" class="uml-text" font-weight="700">PlayerSeason</text><line x1="560" y1="288" x2="740" y2="288" class="uml-line"/><text x="572" y="308" class="uml-text-mono" font-size="12">goals : int</text><text x="572" y="328" class="uml-text-mono" font-size="12">gamesPlayed : int</text>
+        <line x1="420" y1="200" x2="560" y2="280" class="uml-line-dashed"/>
+        <text x="176" y="138" class="uml-text-mono" font-size="11">*</text>
+        <text x="586" y="138" class="uml-text-mono" font-size="11">*</text>
+        <text x="392" y="344" class="uml-text-mono" font-size="11">*</text>
+        <text x="380" y="158" text-anchor="middle" class="uml-text-italic" font-size="12">plays-in</text>
+      </svg>
+      <div class="figure-note">The diamond joins all three classes; the dashed link carries the association class <code>PlayerSeason</code>, whose attributes describe one <em>(Team, Player, Year)</em> combination. Each end's multiplicity (here <code>*</code>) is read for a fixed value of the other two participants. <strong>Use ternary associations sparingly:</strong> if the link can be expressed as an intermediate class joined to each participant by ordinary binary associations, that is usually clearer (and is required if a participant can appear more than once). Reach for the diamond only when the three-way link is irreducible.</div>
+    </div>
 
     <h3 class="subhead">Data-driven noun-verb analysis</h3>
     <p class="body">The standard recipe, introduced by Shlaer and Mellor in the late 1980s and used in the course, is the <em>noun-verb analysis</em>: read through the requirements document and underline every noun phrase; collect those noun phrases as a candidate class list; discard inappropriate ones (redundant, omnipotent, vague, meta-language, outside the system scope, or are attributes of something else); then identify every verb and assign verbs to candidate classes as operations. The result is a first-cut class diagram that is grounded in the requirements you wrote, rather than the developer's imagination.</p>
@@ -2105,6 +2158,22 @@
     </div>
     <h3 class="subhead">Generalisation: the substitutability test</h3>
     <p class="body">Draw generalisation only for an <em>is-a</em> relationship. The test is <strong>substitutability</strong>: anywhere the code expects a LibraryMember you can hand it a StaffMember and nothing breaks. <strong>Wrong:</strong> "Car is-a Engine", a car is not a kind of engine, it <em>has</em> one, so that is an association (Car has Engine). <strong>Right:</strong> "ElectricCar is-a Car". If the substitution would be absurd (an Engine where a Car is expected), it is not generalisation.</p>
+
+    <h3 class="subhead-small">Multiple inheritance</h3>
+    <p class="body">A class may specialise more than one parent at once: <strong>multiple inheritance</strong>, drawn as one generalisation arrow to each parent. Adel's example: a <code>Professor</code> is both a <code>Tutor</code> and a <code>Researcher</code>, inheriting the attributes and operations of both. Use it with care, because it raises name-clash and repeated-ancestor questions and several programming languages forbid it; at the analysis level it is valid when the subclass truly <em>is</em> both.</p>
+    <div class="figure">
+      <div class="figure-caption">Multiple inheritance</div>
+      <div class="figure-title">A Professor is both a Tutor and a Researcher.</div>
+      <svg viewBox="0 0 540 230" class="objfig" role="img" aria-label="Multiple inheritance: Professor generalises to both Tutor and Researcher with two hollow-triangle arrows">
+        <defs><marker id="mi-gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker></defs>
+        <rect x="70" y="30" width="150" height="50" class="uml-box"/><text x="145" y="60" text-anchor="middle" class="uml-text" font-weight="700">Tutor</text>
+        <rect x="320" y="30" width="150" height="50" class="uml-box"/><text x="395" y="60" text-anchor="middle" class="uml-text" font-weight="700">Researcher</text>
+        <rect x="195" y="160" width="150" height="50" class="uml-box"/><text x="270" y="190" text-anchor="middle" class="uml-text" font-weight="700">Professor</text>
+        <line x1="250" y1="160" x2="160" y2="84" class="uml-line" marker-end="url(#mi-gen)"/>
+        <line x1="290" y1="160" x2="380" y2="84" class="uml-line" marker-end="url(#mi-gen)"/>
+      </svg>
+      <div class="figure-note">Two generalisation arrows (each a hollow triangle pointing at the parent) make Professor a subclass of both Tutor and Researcher. Professor inherits the members of both; if both define a member of the same name, the clash must be resolved, which is why multiple inheritance is used sparingly.</div>
+    </div>
 
     <div class="figure">
       <div class="figure-caption">Figure 6d</div>
@@ -2264,6 +2333,7 @@
     <p class="body">Objects are instances of classes. An object diagram captures objects and the relationships between them, that is, <strong>instances of classes and the links (instances of associations)</strong> between them. It is built during analysis and design to illustrate data and object structures, to specify <strong>snapshots</strong> of the system at a point in time, and above all to <strong>validate the class model</strong>, asking whether the classes are sufficient to hold the data and support the methods the system needs. Analysts, designers and implementers all draw them.</p>
     <h3 class="subhead">Notation: the object icon</h3>
     <p class="body">An object box has a <strong>name compartment</strong> and an optional <strong>attribute compartment</strong>. The name is written <code>objectName : ClassName</code> and is <strong>underlined</strong> (this is what distinguishes an object from a class); each attribute is shown as <code>attribute = value</code>. Crucially, <strong>operations and attribute types are not shown</strong> on an object diagram: it is about concrete data at one instant, not behaviour.</p>
+    <p class="body">When the instance-of link itself must be made explicit, for example drawing an object next to its class, UML uses a dependency stereotyped <code>&laquo;instantiate&raquo;</code> from the object to the class it is an instance of (or from a link to the association it instantiates). Inside a pure object diagram this is left implicit; the stereotype is simply the formal name for &ldquo;is an instance of&rdquo;.</p>
 
     <div class="figure"><div class="figure-caption">Figure 6h</div><div class="figure-title">The object icon: an underlined name and concrete attribute values.</div><svg viewBox="0 0 920 230" class="objfig" role="img" aria-label="Object icon: underlined name colon Class, attribute equals value, no operations or types"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gtri" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="darw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#0f1419" stroke-width="1.3"/></marker></defs><rect x="320" y="60" width="300" height="96" class="uml-box"/><text x="470" y="88" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">DSRsUMLBook : Book</text><line x1="320" y1="104" x2="620" y2="104" class="uml-line"/><text x="334" y="132" class="uml-text-mono" font-size="13">title = "Using UML"</text><text x="300" y="80" text-anchor="end" class="uml-text-italic" font-size="12">name compartment</text><text x="300" y="132" text-anchor="end" class="uml-text-italic" font-size="12">attribute = value</text><text x="640" y="80" class="uml-text-italic" font-size="12">object name : Class name (underlined)</text><text x="320" y="190" class="uml-text-italic" font-size="12.5" fill="#b85c38">Operations and attribute types are NOT shown on object diagrams.</text></svg><div class="figure-note">An object names its class and pins each attribute to a value. Compare with a class box, which shows attribute <em>types</em> and an operations compartment; an object box shows neither.</div></div>
     <h3 class="subhead">Worked example: a class model and its snapshot (SmartSoft)</h3>
