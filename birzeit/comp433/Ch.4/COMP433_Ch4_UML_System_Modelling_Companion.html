@@ -155,6 +155,17 @@
   .lifecycle-note .lc-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a3d52; font-weight: 700; white-space: nowrap; padding-top: 1px; }
   .lifecycle-note p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.55; }
   .lifecycle-note strong { color: var(--ink); }
+  details.worked { border: 1px solid var(--rule); border-left: 4px solid var(--gold); border-radius: 0 10px 10px 0; background: linear-gradient(90deg, #fffdf6 0%, #fffefb 100%); margin: 28px 0; max-width: 1140px; box-shadow: var(--shadow); }
+  details.worked > summary { cursor: pointer; list-style: none; padding: 16px 22px; display: flex; align-items: baseline; gap: 14px; font-family: var(--serif); font-weight: 600; font-size: 19px; color: var(--ink); letter-spacing: -0.01em; }
+  details.worked > summary::-webkit-details-marker { display: none; }
+  details.worked > summary::before { content: '\25B8'; color: var(--accent); font-size: 14px; transition: transform 0.18s ease; align-self: center; flex-shrink: 0; }
+  details.worked[open] > summary::before { transform: rotate(90deg); }
+  details.worked > summary:hover { color: var(--accent); }
+  details.worked > summary .we-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-deep, #9a7b32); font-weight: 700; align-self: center; }
+  details.worked > summary .we-title { flex: 1; }
+  details.worked .worked-body { padding: 4px 22px 22px; border-top: 1px solid var(--rule-soft); }
+  details.worked .worked-body > *:first-child { margin-top: 14px; }
+  details.worked .worked-body .figure { box-shadow: none; }
   .project-note strong { color: #806113; }
 
   .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 24px; max-width: 1140px; }
@@ -661,7 +672,7 @@
     <p class="body">Three observations worth pausing on:</p>
 
     <ol class="body">
-      <li><strong>Cost estimation is a decision gate, not a deliverable.</strong> Steps 1 and 2 produce the requirements; step 3 prices them. The estimate is what the customer needs to authorise the design work (steps 4&ndash;10). Doing the estimate too early, before requirements are stable, produces a number nobody can defend. Doing it too late, after design has started, means the team is committed to a price that may not match the work.</li>
+      <li><strong>Cost estimation is a decision gate, not a deliverable.</strong> Steps 1 and 2 produce the requirements; step 3 prices them. The estimate is what the customer needs to authorise the design work (steps 4-10). Doing the estimate too early, before requirements are stable, produces a number nobody can defend. Doing it too late, after design has started, means the team is committed to a price that may not match the work.</li>
       <li><strong>The arrows go forward but the work goes back and forward.</strong> A class diagram drawn at step 6 usually exposes a missing requirement at step 2, which is added and propagates back through the use cases (step 4). The pipeline is a thinking aid, not a waterfall.</li>
       <li><strong>Not every step is mandatory.</strong> A small project may skip the activity diagram entirely; a project with no domain objects with lifecycles may skip the state machine. The skip rule is the same as the model rule: if it does not change anyone's decision, do not draw it.</li>
     </ol>
@@ -2028,7 +2039,9 @@
 
     <h3 class="subhead">Analysis classes vs design classes</h3>
     <p class="body">An <strong>analysis class</strong> abstracts one or more classes of the eventual design; it models the problem domain, not the solution. It focuses on functional requirements, defines responsibilities (cohesive subsets of behaviour), names attributes at a domain level, and shows the relationships it takes part in. A <strong>design class</strong> adds full method signatures and types, tightened visibility, infrastructure classes (persistence, controllers, factories), design patterns, and navigability. In this course, Phase 3 expects an analysis-level class diagram drawn from your requirements; reserve the design-level detail for later.</p>
-    <h3 class="subhead">Worked example: the Library, noun analysis</h3>
+    <details class="worked">
+      <summary><span class="we-tag">Worked example</span><span class="we-title">The Library, by noun analysis</span></summary>
+      <div class="worked-body">
     <p class="body">Adel's running example. Underline the nouns in the requirement, then sift them.</p>
     <div class="struct-spec"><p style="font-style:italic;margin:0;">The library contains <strong>books</strong> and <strong>journals</strong>. It may have several <strong>copies</strong> of a given book. Some of the books are for short-term loans only. All other books may be borrowed by any library <strong>member</strong> for three weeks. Members of the library can normally borrow up to six items at a time, but <strong>members of staff</strong> may borrow up to 12 items at one time. Only members of staff may borrow journals. The system must keep track of when books and journals are borrowed and returned.</p></div>
     <p class="body"><strong>Candidate classes kept:</strong> Book, BookCopy, Journal, LibraryMember, StaffMember. <strong>Discarded or demoted:</strong> Library (the system itself), item (vague), three weeks / six / 12 (loan period and limits: attributes and multiplicities, not classes).</p>
@@ -2097,6 +2110,8 @@
 </svg>
       <div class="figure-note">The kept nouns become boxes; the verb analysis then fills in operations (borrow(), return(), recordLoan()), and the associations come next. Staff is-a member is generalisation; a book has copies is aggregation; a member borrows copies is the association whose dates live on the Loan association class; up to six is the multiplicity 0..6.</div>
     </div>
+      </div>
+    </details>
     <h3 class="subhead">What makes a good analysis class</h3>
     <p class="body">Five criteria, drawn from Cooper, Larman, and the broader OO design literature, that practitioner reviews look for:</p>
 
@@ -2227,7 +2242,9 @@
 </svg>
       <div class="figure-note">Both say part-of; they differ in the lifetime of the part, and the diamond always sits at the whole. A Team aggregates Employees (they outlive the team); a House is composed of Rooms (destroy the house and the rooms go too). Prefer composition where it fits: aggregation is semantically weak. Adel's examples: a Course is part of a Programme (and may sit in more than one); an Airplane is made of Assemblies made of Components, so aggregation can recurse; a chessboard is composed of exactly 64 Squares.</div>
     </div>
-    <h3 class="subhead">A second domain: the MHC-PMS</h3>
+    <details class="worked">
+      <summary><span class="we-tag">Worked example</span><span class="we-title">A second domain: the MHC-PMS</span></summary>
+      <div class="worked-body">
     <p class="body">Adel's other running example, from Sommerville's mental-health-care patient management system. It shows a different shape: one central, attribute-rich class, <code>Consultation</code>, that anchors the whole model.</p>
 
     <div class="figure">
@@ -2276,6 +2293,8 @@
 </svg>
       <div class="figure-note">The most important class in a model is often not an actor but a central event or interaction. Consultation's attributes are the data one consultation records; its operations are what a doctor does during one (prescribe, recordNotes). The two associations read straight from the sentence "a doctor conducts a consultation that a patient attends".</div>
     </div>
+      </div>
+    </details>
     <h3 class="subhead">What a class diagram can contain: classes, data types, enumerations, and dependency</h3>
     <p class="body">A class diagram is not limited to classes. It shows three kinds of box, each carrying a stereotype where it is not an ordinary class, and several kinds of line between them.</p>
     <ul class="body">
@@ -2429,7 +2448,7 @@
   <rect x="120" y="96" width="10" height="200" fill="#d6e0e8" stroke="#2c5f7c"/>
   <rect x="620" y="110" width="10" height="120" fill="#d6e0e8" stroke="#2c5f7c"/>
   <line x1="130" y1="110" x2="620" y2="110" class="uml-line" marker-end="url(#seqA)"/>
-  <text x="375" y="103" text-anchor="middle" class="uml-text" font-size="13">1: doRequest() &ndash; synchronous call (solid, filled head)</text>
+  <text x="375" y="103" text-anchor="middle" class="uml-text" font-size="13">1: doRequest() - synchronous call (solid, filled head)</text>
   <path d="M 630 150 H 700 V 175 H 630" class="uml-line" fill="none" marker-end="url(#seqA)"/>
   <text x="712" y="166" class="uml-text" font-size="13">2: validate() , self-message</text>
   <line x1="620" y1="210" x2="130" y2="210" class="uml-line-dashed" marker-end="url(#seqO)"/>
@@ -2731,7 +2750,7 @@
         <line x1="778" y1="252" x2="778" y2="285" class="uml-line" marker-end="url(#cm-b)"/>
         <text x="790" y="274" class="uml-text-mono" font-size="12">2.1.3: deliverReceipt()</text>
       </svg>
-      <div class="figure-note">Same participants, same messages, same order as Figure 7b - but the timeline is gone and the links carry the story. The Dewey numbers (2.1, 2.1.1, &hellip;) encode the call nesting the sequence diagram showed by descending position. Each link is an instance of an association: <code>Customer&ndash;front</code>, <code>front&ndash;register</code>, <code>register&ndash;Dispenser</code> - if a message had no association to ride on, the class model would be missing a relationship. <strong>Reading the numbers:</strong> they give the order of execution - <code>1</code> fires first, then <code>2</code>; a decimal suffix marks <em>nesting</em>, so <code>2.1</code> is the first call made <em>inside</em> message <code>2</code>, and <code>2.1.1</code> then <code>2.1.2</code> run inside <code>2.1</code>. On each link the plain line is the <em>association</em> the message travels on; the small arrow beside it shows only the message's <em>direction</em>.</div>
+      <div class="figure-note">Same participants, same messages, same order as Figure 7b - but the timeline is gone and the links carry the story. The Dewey numbers (2.1, 2.1.1, &hellip;) encode the call nesting the sequence diagram showed by descending position. Each link is an instance of an association: <code>Customer-front</code>, <code>front-register</code>, <code>register-Dispenser</code> - if a message had no association to ride on, the class model would be missing a relationship. <strong>Reading the numbers:</strong> they give the order of execution - <code>1</code> fires first, then <code>2</code>; a decimal suffix marks <em>nesting</em>, so <code>2.1</code> is the first call made <em>inside</em> message <code>2</code>, and <code>2.1.1</code> then <code>2.1.2</code> run inside <code>2.1</code>. On each link the plain line is the <em>association</em> the message travels on; the small arrow beside it shows only the message's <em>direction</em>.</div>
     </div>
 
     <h3 class="subhead">Sequence vs communication: when to reach for which</h3>
@@ -2940,18 +2959,19 @@
 
     <div class="interactive">
       <h4>State machine simulator</h4>
-      <div class="sub">The BookCopy lifecycle. Click an event; the simulator transitions if the event is legal in the current state and the guard holds.</div>
+      <div class="sub">The BookCopy lifecycle. Only the events that are legal in the current state are enabled; the rest are greyed out, so every click you can make fires a real transition. Hover any state to read its entry / do / exit actions, and hover the guarded transition to see where the guard sits.</div>
       <div class="controls">
-        <button onclick="stEvent('borrow')">borrow()</button>
-        <button onclick="stEvent('return')">return()</button>
-        <button onclick="stEvent('overdue')">days &gt; 30 (overdue)</button>
-        <button onclick="stEvent('lost')">reportedLost</button>
+        <button id="btn-borrow" onclick="stEvent('borrow')">borrow()</button>
+        <button id="btn-return" onclick="stEvent('return')">return()</button>
+        <button id="btn-overdue" onclick="stEvent('overdue')">after(3 weeks) [overdue]</button>
+        <button id="btn-lost" onclick="stEvent('lost')">reportedLost</button>
         <button onclick="stReset()" class="secondary">Reset</button>
         <span id="stCurrentLabel" style="font-family: var(--mono); font-size: 12px; color: var(--ink-mute); margin-left: auto;">state: Available</span>
       </div>
 
-      <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" id="stSvg"><defs><marker id="sts-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs><circle cx="58" cy="131" r="9" fill="#0f1419"/><line x1="67" y1="131" x2="110" y2="131" class="uml-line" marker-end="url(#sts-arrow)"/><rect id="stAvailable" x="110" y="95" width="200" height="72" rx="14" class="uml-box" fill="#e0e8d8"/><text x="210" y="121" text-anchor="middle" class="uml-text" font-weight="600">Available</text><line x1="110" y1="133" x2="310" y2="133" class="uml-line"/><text x="124" y="154" class="uml-text" font-size="13">entry / shelve()</text><rect id="stOnLoan" x="470" y="95" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="121" text-anchor="middle" class="uml-text" font-weight="600">OnLoan</text><line x1="470" y1="133" x2="670" y2="133" class="uml-line"/><text x="484" y="154" class="uml-text" font-size="13">do / countDays()</text><rect id="stOverdue" x="470" y="320" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="346" text-anchor="middle" class="uml-text" font-weight="600">Overdue</text><line x1="470" y1="358" x2="670" y2="358" class="uml-line"/><text x="484" y="379" class="uml-text" font-size="13">entry / notifyMember()</text><rect id="stLost" x="790" y="320" width="180" height="72" rx="14" class="uml-box" fill="white"/><text x="880" y="346" text-anchor="middle" class="uml-text" font-weight="600">Lost</text><line x1="790" y1="358" x2="970" y2="358" class="uml-line"/><text x="804" y="379" class="uml-text" font-size="13">entry / chargeFee()</text><circle cx="880" cy="440" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="880" cy="440" r="5" fill="#0f1419"/><line x1="310" y1="118" x2="470" y2="118" class="uml-line" marker-end="url(#sts-arrow)"/><text x="390" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">borrow()</text><line x1="470" y1="144" x2="310" y2="144" class="uml-line" marker-end="url(#sts-arrow)"/><text x="390" y="161" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><line x1="570" y1="167" x2="570" y2="320" class="uml-line" marker-end="url(#sts-arrow)"/><text x="584" y="236" class="uml-text-mono" font-size="12">after(3 weeks)</text><text x="584" y="252" class="uml-text-mono" font-size="12">[overdue]</text><polyline points="470,356 210,356 210,167" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/><text x="338" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><polyline points="670,118 880,118 880,320" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/><text x="775" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="670" y1="356" x2="790" y2="356" class="uml-line" marker-end="url(#sts-arrow)"/><text x="730" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="880" y1="392" x2="880" y2="429" class="uml-line" marker-end="url(#sts-arrow)"/></svg>
-      <div class="step-info" id="stLog">Initial state: <b>Available</b>. Click an event button to fire a transition. If the event is not legal in the current state, no transition fires (and the simulator says so).</div>
+      <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" id="stSvg"><defs><marker id="sts-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs><circle cx="58" cy="131" r="9" fill="#0f1419"/><line x1="67" y1="131" x2="110" y2="131" class="uml-line" marker-end="url(#sts-arrow)"/><rect id="stAvailable" x="110" y="95" width="200" height="72" rx="14" class="uml-box" fill="#e0e8d8"/><text x="210" y="121" text-anchor="middle" class="uml-text" font-weight="600">Available</text><line x1="110" y1="133" x2="310" y2="133" class="uml-line"/><text x="124" y="154" class="uml-text" font-size="13">entry / shelve()</text><rect id="stOnLoan" x="470" y="95" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="121" text-anchor="middle" class="uml-text" font-weight="600">OnLoan</text><line x1="470" y1="133" x2="670" y2="133" class="uml-line"/><text x="484" y="154" class="uml-text" font-size="13">do / countDays()</text><rect id="stOverdue" x="470" y="320" width="200" height="72" rx="14" class="uml-box" fill="white"/><text x="570" y="346" text-anchor="middle" class="uml-text" font-weight="600">Overdue</text><line x1="470" y1="358" x2="670" y2="358" class="uml-line"/><text x="484" y="379" class="uml-text" font-size="13">entry / notifyMember()</text><rect id="stLost" x="790" y="320" width="180" height="72" rx="14" class="uml-box" fill="white"/><text x="880" y="346" text-anchor="middle" class="uml-text" font-weight="600">Lost</text><line x1="790" y1="358" x2="970" y2="358" class="uml-line"/><text x="804" y="379" class="uml-text" font-size="13">entry / chargeFee()</text><circle cx="880" cy="440" r="9" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="880" cy="440" r="5" fill="#0f1419"/><line x1="310" y1="118" x2="470" y2="118" class="uml-line" marker-end="url(#sts-arrow)"/><text x="390" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">borrow()</text><line x1="470" y1="144" x2="310" y2="144" class="uml-line" marker-end="url(#sts-arrow)"/><text x="390" y="161" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><line x1="570" y1="167" x2="570" y2="320" class="uml-line" marker-end="url(#sts-arrow)"/><text x="584" y="236" class="uml-text-mono" font-size="12" data-tip="<strong>Guard and trigger</strong><br>after(3 weeks) is the trigger, a time event. [overdue] is the guard: a boolean written in square brackets, placed on the transition and checked when the event fires. The transition is taken only if the guard is true.">after(3 weeks)</text><text x="584" y="252" class="uml-text-mono" font-size="12" data-tip="<strong>Guard and trigger</strong><br>after(3 weeks) is the trigger, a time event. [overdue] is the guard: a boolean written in square brackets, placed on the transition and checked when the event fires. The transition is taken only if the guard is true.">[overdue]</text><polyline points="470,356 210,356 210,167" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/><text x="338" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">return()</text><polyline points="670,118 880,118 880,320" class="uml-line" fill="none" marker-end="url(#sts-arrow)"/><text x="775" y="110" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="670" y1="356" x2="790" y2="356" class="uml-line" marker-end="url(#sts-arrow)"/><text x="730" y="348" text-anchor="middle" class="uml-text-mono" font-size="12">reportedLost</text><line x1="880" y1="392" x2="880" y2="429" class="uml-line" marker-end="url(#sts-arrow)"/><rect x="110" y="95" width="200" height="72" rx="14" fill="transparent" pointer-events="all" data-tip="<strong>State: Available</strong><br>entry / shelve() runs once when a copy enters this state. There is no do-activity and no exit action. The only legal event here is borrow()."/><rect x="470" y="95" width="200" height="72" rx="14" fill="transparent" pointer-events="all" data-tip="<strong>State: OnLoan</strong><br>do / countDays() is an ongoing activity that runs the whole time the copy is on loan. Legal events: return(), the time event after(3 weeks) [overdue], and reportedLost."/><rect x="470" y="320" width="200" height="72" rx="14" fill="transparent" pointer-events="all" data-tip="<strong>State: Overdue</strong><br>entry / notifyMember() runs once on entry, sending a reminder. Legal events: return() and reportedLost."/><rect x="790" y="320" width="180" height="72" rx="14" fill="transparent" pointer-events="all" data-tip="<strong>State: Lost</strong><br>entry / chargeFee() runs once on entry. The copy then completes, an unguarded transition to the final state. No further events are accepted."/></svg>
+      <div class="figure-note" style="margin-top:14px;">Reading the notation: inside a state, <code>entry / do / exit</code> name its actions - entry and exit run once on the way in and out, while <code>do</code> runs the whole time the object is in the state. On a transition, the label reads <code>event [guard] / action</code>: the guard in square brackets must be true for the transition to fire. Here <code>after(3 weeks)</code> is a time event and <code>[overdue]</code> is its guard.</div>
+      <div class="step-info" id="stLog">Initial state: <b>Available</b>. Only the events legal in this state are enabled; click one to fire its transition.</div>
     </div>
   </div>
 </section>
@@ -2959,8 +2979,8 @@
 <!-- ===================================================================== -->
 <section class="block" id="archi">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">13.</span>Component &amp; deployment</div>
-    <h2 class="section-title">Architectural diagrams: <em>components and deployment</em>.</h2>
+    <div class="section-eyebrow"><span class="num">13.</span>Component, deployment &amp; architecture</div>
+    <h2 class="section-title">Architectural diagrams: <em>component, deployment and architecture</em>.</h2>
     <p class="section-intro">Component and deployment diagrams sit higher up the abstraction ladder than the diagrams above. They are concerned with how the system is partitioned at build time and how it is distributed at run time.</p>
     <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>Design &amp; system design (architecture).</strong> The component diagram is the build-time architecture/component view; the deployment diagram is the run-time execution view - the last structural models, mapping the system onto modules and onto the nodes they run on.</p></div>
     <div class="table-card" data-ch4-improved2="1"><table class="body-table">
@@ -3053,7 +3073,7 @@
 
         <!-- Legend -->
       </svg>
-      <div class="figure-note">Components carry the <code>&lt;&lt;component&gt;&gt;</code> stereotype and the small component icon (the two-rectangle glyph). The <strong>socket</strong> (half-circle) on Order is a <em>required</em> interface; the <strong>lollipop</strong> (&#9679;) on each provider is a <em>provided</em> interface; the dashed dependency arrow links a required&ndash;provided pair, labelled with the interface name (<code>CustomerLookup</code>, <code>ProductLookup</code>).</div>
+      <div class="figure-note">Components carry the <code>&lt;&lt;component&gt;&gt;</code> stereotype and the small component icon (the two-rectangle glyph). The <strong>socket</strong> (half-circle) on Order is a <em>required</em> interface; the <strong>lollipop</strong> (&#9679;) on each provider is a <em>provided</em> interface; the dashed dependency arrow links a required-provided pair, labelled with the interface name (<code>CustomerLookup</code>, <code>ProductLookup</code>).</div>
     </div>
 
     <h3 class="subhead-small">Componentisation guidelines</h3>
@@ -3070,37 +3090,51 @@
     <p class="body">A <strong>port</strong> is a named interaction point drawn as a small square on a component's boundary; it groups the interfaces offered and needed at that point, so the outside world wires to the port rather than to the component's insides. A <strong>delegation connector</strong> then forwards the port inward to the internal part that actually implements it, and an <strong>assembly connector</strong> joins one inner part's required interface to another's provided interface. Ports plus delegation are how a big component presents one clean boundary while being built from smaller ones.</p>
     <div class="figure">
       <div class="figure-caption">Figure 9a</div>
-      <div class="figure-title">A composite component: an external port delegating to an inner part, with an internal assembly.</div>
-      <svg viewBox="0 0 940 320" class="objfig" role="img" aria-label="Ports and delegation inside a composite component">
+      <div class="figure-title">A composite component: a port and a delegation connector on the boundary, an assembly connector inside. Hover any glyph for what it means and the messages it carries.</div>
+      <svg viewBox="0 0 960 395" class="objfig" role="img" aria-label="Ports, delegation and assembly connectors inside the OrderSystem composite component">
         <defs><marker id="pd-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
-        <rect x="60" y="50" width="820" height="230" class="uml-box" fill="#fcfaf6"/>
-        <text x="84" y="80" class="uml-text" font-weight="600" font-size="15">OrderSystem</text>
-        <text x="84" y="98" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
-        <g transform="translate(842,58)"><rect x="0" y="6" width="22" height="14" fill="white" stroke="#2c3540" stroke-width="1.2"/><rect x="-4" y="9" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/><rect x="-4" y="14" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/></g>
-        <!-- external port + provided lollipop -->
-        <rect x="52" y="168" width="16" height="16" fill="white" stroke="#2c3540" stroke-width="1.4"/>
-        <line x1="52" y1="176" x2="30" y2="176" class="uml-line"/>
-        <circle cx="22" cy="176" r="8" class="uml-line" fill="white"/>
-        <text x="84" y="140" class="uml-text-mono" font-size="11.5">port : OrderEntry (provided)</text>
+        <!-- outer composite component -->
+        <rect x="110" y="60" width="760" height="250" class="uml-box" fill="#fcfaf6"/>
+        <text x="130" y="88" class="uml-text" font-weight="700" font-size="15">OrderSystem</text>
+        <text x="130" y="106" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <g transform="translate(832,70)"><rect x="0" y="6" width="22" height="14" fill="white" stroke="#2c3540" stroke-width="1.2"/><rect x="-4" y="9" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/><rect x="-4" y="14" width="8" height="4" fill="white" stroke="#2c3540" stroke-width="1.2"/></g>
         <!-- inner parts -->
-        <rect x="160" y="150" width="200" height="86" class="uml-box" fill="white"/>
-        <text x="260" y="188" text-anchor="middle" class="uml-text" font-weight="600">: OrderHandler</text>
-        <text x="260" y="208" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
-        <rect x="580" y="150" width="200" height="86" class="uml-box" fill="white"/>
-        <text x="680" y="188" text-anchor="middle" class="uml-text" font-weight="600">: Billing</text>
-        <text x="680" y="208" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
-        <!-- delegation port -> inner part -->
-        <line x1="68" y1="176" x2="160" y2="190" class="uml-line" marker-end="url(#pd-open)"/>
-        <text x="74" y="166" class="uml-text-mono" font-size="11">&lt;&lt;delegate&gt;&gt;</text>
-        <!-- assembly: OrderHandler required -> Billing provided -->
-        <line x1="360" y1="193" x2="378" y2="193" class="uml-line"/>
-        <path d="M 378 181 A 12 12 0 0 1 378 205" class="uml-line" fill="none"/>
-        <line x1="580" y1="193" x2="556" y2="193" class="uml-line"/>
-        <circle cx="546" cy="193" r="9" class="uml-line" fill="white"/>
-        <line x1="394" y1="193" x2="534" y2="193" class="uml-line-dashed" marker-end="url(#pd-open)"/>
-        <text x="464" y="184" text-anchor="middle" class="uml-text-mono" font-size="12">Charging</text>
+        <rect x="230" y="165" width="210" height="80" class="uml-box" fill="white"/>
+        <text x="335" y="200" text-anchor="middle" class="uml-text" font-weight="600">: OrderHandler</text>
+        <text x="335" y="220" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <rect x="640" y="165" width="210" height="80" class="uml-box" fill="white"/>
+        <text x="745" y="200" text-anchor="middle" class="uml-text" font-weight="600">: Billing</text>
+        <text x="745" y="220" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <!-- (1) external port straddling the boundary, with (2) provided lollipop -->
+        <line x1="101" y1="205" x2="80" y2="205" class="uml-line"/>
+        <circle cx="70" cy="205" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>OrderEntry: the services OrderSystem offers to the outside. Messages: placeOrder(items), cancelOrder(orderId). Drawn as a ball on a stick."/>
+        <rect x="101" y="196" width="18" height="18" fill="white" stroke="#2c3540" stroke-width="1.6" data-tip="<strong>Port</strong><br>A named interaction point on the component boundary, drawn as a small square. It groups the interfaces offered or needed there, so clients wire to the port, not to the component internals. This port publishes the provided interface OrderEntry."/>
+        <text x="110" y="186" text-anchor="middle" class="uml-text-mono" font-size="10.5" fill="#b85c38">port</text>
+        <text x="70" y="238" text-anchor="middle" class="uml-text-mono" font-size="10.5">OrderEntry</text>
+        <text x="70" y="252" text-anchor="middle" class="uml-text-stereo">&lt;&lt;provided&gt;&gt;</text>
+        <!-- (3) delegation connector: port -> inner part -->
+        <line x1="119" y1="205" x2="230" y2="205" class="uml-line" marker-end="url(#pd-open)"/>
+        <line x1="119" y1="205" x2="230" y2="205" stroke="transparent" stroke-width="20" pointer-events="all" data-tip="<strong>Delegation connector</strong> (&lt;&lt;delegate&gt;&gt;)<br>Forwards the external port inward to the part that implements it. Calls arriving at the OrderEntry port are passed to :OrderHandler. It carries the port messages: placeOrder(), cancelOrder()."/>
+        <text x="174" y="196" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;delegate&gt;&gt;</text>
+        <text x="174" y="230" text-anchor="middle" class="uml-text-mono" font-size="10" fill="#b85c38">delegation connector</text>
+        <!-- (4) OrderHandler required interface (socket) -->
+        <line x1="440" y1="205" x2="449" y2="205" class="uml-line"/>
+        <path d="M 460 192 A 13 13 0 0 0 460 218" class="uml-line" fill="none" data-tip="<strong>Required interface (socket)</strong><br>:OrderHandler needs the Charging interface to do its job. Drawn as a half-circle cup whose mouth faces the provider. Messages it calls: charge(amount), refund(orderId)."/>
+        <text x="455" y="250" text-anchor="middle" class="uml-text-stereo">&lt;&lt;required&gt;&gt;</text>
+        <!-- (2b) Billing provided interface (lollipop) -->
+        <line x1="640" y1="205" x2="616" y2="205" class="uml-line"/>
+        <circle cx="606" cy="205" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>:Billing offers the Charging interface. Messages: charge(amount), refund(orderId)."/>
+        <!-- (5) assembly connector: required meets provided -->
+        <line x1="473" y1="205" x2="597" y2="205" class="uml-line"/>
+        <line x1="473" y1="205" x2="597" y2="205" stroke="transparent" stroke-width="20" pointer-events="all" data-tip="<strong>Assembly connector</strong><br>Wires one part's required interface to another's provided interface (the socket receives the ball). Here :OrderHandler's required Charging is satisfied by :Billing's provided Charging. Messages on the line: charge(amount), refund(orderId)."/>
+        <text x="536" y="196" text-anchor="middle" class="uml-text-mono" font-size="12">Charging</text>
+        <text x="536" y="230" text-anchor="middle" class="uml-text-mono" font-size="10" fill="#b85c38">assembly connector</text>
+        <!-- interface operations: the messages on the lines -->
+        <text x="130" y="340" class="uml-text-italic" font-size="11.5" fill="#5a6473">Interface operations (the messages carried on the lines):</text>
+        <text x="130" y="362" class="uml-text-mono" font-size="11.5">OrderEntry  &#183;  + placeOrder(items)   + cancelOrder(orderId)</text>
+        <text x="130" y="382" class="uml-text-mono" font-size="11.5">Charging  &#183;  + charge(amount)   + refund(orderId)</text>
       </svg>
-      <div class="figure-note">The outer <code>OrderSystem</code> exposes one provided interface (<code>OrderEntry</code>) at a <strong>port</strong>; a <strong>delegation</strong> connector routes that port to <code>:OrderHandler</code>; inside, an <strong>assembly</strong> connector wires <code>:OrderHandler</code>'s required interface to <code>:Billing</code>'s provided <code>Charging</code> interface. Clients see only the port.</div>
+      <div class="figure-note">Five notations, each shown once. <strong>(1) A port</strong> (small square on the boundary) groups what is offered or needed at one interaction point. <strong>(2) A provided interface</strong> (lollipop, &#9679;) is a service offered, here <code>OrderEntry</code>. <strong>(3) A delegation connector</strong> (&lt;&lt;delegate&gt;&gt;) forwards the port inward to <code>:OrderHandler</code>, the part that implements it. <strong>(4) A required interface</strong> (socket, the cup) is a service a part needs: <code>:OrderHandler</code> needs <code>Charging</code>. <strong>(5) An assembly connector</strong> joins that required interface to <code>:Billing</code>'s provided <code>Charging</code>. The operations listed at the foot are the actual messages each interface carries. Hover any glyph for its meaning and its messages.</div>
     </div>
 
     <h3 class="subhead-small">A worked component diagram: the seminar-registration system</h3>
@@ -3259,6 +3293,7 @@
 
     <h3 class="subhead">Architectural styles: a catalogue</h3>
     <p class="body">A <strong>style</strong> is a reusable pattern for the system's overall layout, with a known shape and a known trade-off; an <strong>architecture</strong> is one style (or a blend) applied to a specific system. The common styles:</p>
+    <p class="body">This catalogue is pitched at the depth Adel covers it: each style's core idea and its trade-off, serving as the run-time context that gives the component and deployment diagrams their shape. <em>Choosing</em> a style for a specific system, with the quality-attribute trade-offs that drive the decision, is architectural design proper and is developed in the System Design chapter.</p>
     <div class="table-card"><table class="body-table">
       <thead><tr><th>Style</th><th>Core idea</th><th>Trade-off</th></tr></thead><tbody>
         <tr><td>Layered (n-tier)</td><td>Stacked layers, each using only the one below.</td><td>Predictable and testable; can be slow and rigid. 3-tier is the common instance.</td></tr>
@@ -3671,8 +3706,11 @@ function stRender() {
     if (el) el.setAttribute("fill", s === stCurrent ? "#e0e8d8" : "white");
   });
   document.getElementById("stCurrentLabel").textContent = "state: " + stCurrent;
+  const stEvBtns = { borrow: "btn-borrow", "return": "btn-return", overdue: "btn-overdue", lost: "btn-lost" };
+  const stLegal = stTransitions[stCurrent] || {};
+  Object.keys(stEvBtns).forEach(ev => { const b = document.getElementById(stEvBtns[ev]); if (b) b.disabled = !stLegal[ev]; });
   const log = stHistory.length === 0
-    ? `Initial state: <b>Available</b>. Click an event button to fire a transition. If the event is not legal in the current state, no transition fires (and the simulator says so).`
+    ? `Initial state: <b>Available</b>. Only the events legal in this state are enabled; click one to fire its transition.`
     : "Current state: <b>" + stCurrent + "</b>. History:<br>" + stHistory.slice(-4).map(h => "&nbsp;&nbsp;" + h).join("<br>");
   document.getElementById("stLog").innerHTML = log;
 }
