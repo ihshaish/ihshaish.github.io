@@ -3005,8 +3005,8 @@
 <!-- ===================================================================== -->
 <section class="block" id="archi">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">13.</span>Component, deployment &amp; architecture</div>
-    <h2 class="section-title">Architectural diagrams: <em>component, deployment and architecture</em>.</h2>
+    <div class="section-eyebrow"><span class="num">13.</span>Component &amp; deployment</div>
+    <h2 class="section-title">Structural architecture: <em>components and deployment</em>.</h2>
     <p class="section-intro">Component and deployment diagrams sit higher up the abstraction ladder than the diagrams above. They are concerned with how the system is partitioned at build time and how it is distributed at run time.</p>
     <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>Design &amp; system design (architecture).</strong> The component diagram is the build-time architecture/component view; the deployment diagram is the run-time execution view - the last structural models, mapping the system onto modules and onto the nodes they run on.</p></div>
     <div class="table-card" data-ch4-improved2="1"><table class="body-table">
@@ -3319,42 +3319,9 @@
     </table></div>
     <p class="note">The lesson Adel draws from this: a deployment diagram is not a transcription of the component diagram - the same components can be allocated to nodes in several ways, and the allocation is where security, performance and operational cost are actually traded off.</p>
 
-    <h3 class="subhead-small">Architecture vs architectural style</h3>
-    <p class="body">A small but useful distinction:</p>
+    <p class="note"><strong>Architectural styles and the 4+1 view model</strong> (layered, client-server, peer-to-peer, three-tier/four-tier, MVC, repository, pipes-and-filters, SOA) belong to architectural design and are developed in full in the Chapter 5 System Design companion. A deployment diagram like the one above is an <em>instance</em> of an architectural style; choosing the style, and trading off the quality attributes that drive that choice, is the subject of that chapter.</p>
 
-    <ul class="body">
-      <li>An <strong>architectural style</strong> is a pattern for a system layout. Examples: layered, client-server, peer-to-peer, three-tier, model-view-controller (MVC), pipes-and-filters, service-oriented (SOA).</li>
-      <li>A <strong>software architecture</strong> is an instance of a style, applied to a specific system. The deployment diagram above is an instance of the 3-tier style.</li>
-    </ul>
-
-
-    <h3 class="subhead">Architectural styles: a catalogue</h3>
-    <p class="body">A <strong>style</strong> is a reusable pattern for the system's overall layout, with a known shape and a known trade-off; an <strong>architecture</strong> is one style (or a blend) applied to a specific system. The common styles:</p>
-    <p class="body">This catalogue is pitched at the depth Adel covers it: each style's core idea and its trade-off, serving as the run-time context that gives the component and deployment diagrams their shape. <em>Choosing</em> a style for a specific system, with the quality-attribute trade-offs that drive the decision, is architectural design proper and is developed in the System Design chapter.</p>
-    <div class="table-card"><table class="body-table">
-      <thead><tr><th>Style</th><th>Core idea</th><th>Trade-off</th></tr></thead><tbody>
-        <tr><td>Layered (n-tier)</td><td>Stacked layers, each using only the one below.</td><td>Predictable and testable; can be slow and rigid. 3-tier is the common instance.</td></tr>
-        <tr><td>Client-server</td><td>Clients request; a server holds data and logic.</td><td>Centralises control; the server is a bottleneck and a single point of failure.</td></tr>
-        <tr><td>Three-tier / n-tier</td><td>Client-server split into presentation, business-logic, and data tiers on separate nodes.</td><td>The standard for web applications; each tier scales independently, at the cost of extra network hops. The instance of the layered style you saw in the deployment diagram above.</td></tr>
-        <tr><td>Peer-to-peer</td><td>Every node is both client and server; no central authority.</td><td>Resilient and scalable with no single point of failure (BitTorrent, blockchains); consistency and discovery are hard.</td></tr>
-        <tr><td>Repository (blackboard)</td><td>Components share state only through one central data store.</td><td>Simple integration and a single source of truth (IDEs, compilers, CAD); the repository becomes the bottleneck and couples everything to its schema.</td></tr>
-        <tr><td>Model-View-Controller</td><td>Separate data, presentation, and input handling.</td><td>Dominant in UI frameworks; logic can scatter if overused.</td></tr>
-        <tr><td>Pipe-and-filter</td><td>Data flows through a chain of independent transforms.</td><td>Excellent for batch and stream work (Unix pipes, compilers); poor for interactive use.</td></tr>
-        <tr><td>Event-driven / pub-sub</td><td>Components emit and react to events, decoupled in time.</td><td>Scales and decouples; harder to trace and debug.</td></tr>
-        <tr><td>Microkernel / plug-in</td><td>A minimal core plus plug-ins.</td><td>Highly extensible (IDEs, browsers); the core API is hard to get right.</td></tr>
-        <tr><td>Service-oriented / microservices</td><td>Independent services communicating over the network.</td><td>Independent deploy and scale; operational and distributed-failure complexity.</td></tr>
-      </tbody></table></div>
-    <h3 class="subhead">The 4+1 view model: why one diagram is never enough</h3>
-    <p class="body">No single diagram captures an architecture, so Kruchten's <strong>4+1 view model</strong> (1995) describes it from several viewpoints at once, and each maps onto a UML diagram you now know:</p>
-    <div class="table-card"><table class="body-table">
-      <thead><tr><th>View</th><th>Question it answers</th><th>UML diagram</th></tr></thead><tbody>
-        <tr><td>Logical</td><td>What functionality does the system provide?</td><td>class and object diagrams</td></tr>
-        <tr><td>Process</td><td>How does it behave and coordinate at run time?</td><td>activity and sequence diagrams</td></tr>
-        <tr><td>Development</td><td>How is the software organised for building?</td><td>component (and package) diagrams</td></tr>
-        <tr><td>Physical</td><td>How does the software map onto hardware?</td><td>deployment diagrams</td></tr>
-        <tr><td>+ Scenarios</td><td>Do the four views actually work together?</td><td>use case diagrams</td></tr>
-      </tbody></table></div>
-    <p class="body">This is the theoretical reason a chapter on system modelling needs <em>all</em> of these diagrams: each is a different projection of one system, and the use cases are the thread that checks the projections agree. It is the same point Sommerville makes with his four perspectives (context, interaction, structural, behavioural): you understand a system only by looking at it from more than one direction at once.</p>
+    <p class="body">These two structural views complete the diagram set. Each UML diagram is a different projection of one system, and the use cases are the thread that checks the projections agree: the same point Sommerville makes with his four perspectives (context, interaction, structural, behavioural). The framework that organises these projections into named architectural viewpoints, Kruchten's <strong>4+1 view model</strong>, is developed in the Chapter 5 System Design companion.</p>
     <div class="context-card">
       <div class="ctx-eyebrow">Context</div>
       <h4 class="ctx-title">Where component and deployment diagrams earn their place</h4>
@@ -3387,7 +3354,7 @@
     </div>
 
     <div class="project-note">
-      <strong>Project link.</strong> For Phase 3, you typically need one component diagram (showing the major modules of your application and the interfaces between them) and one deployment diagram (showing where each module runs and how clients reach it). Keep both at the conceptual level; you are not expected to commit to Kubernetes manifests at this stage.
+      <strong>In practice.</strong> An architecture document typically carries one component diagram (the major modules and the interfaces between them) and one deployment diagram (where each module runs and how clients reach it). Both stay at the conceptual level; neither commits to deployment manifests.
     </div>
   </div>
 </section>
