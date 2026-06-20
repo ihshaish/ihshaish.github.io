@@ -2882,9 +2882,8 @@
         <text x="500" y="232" text-anchor="middle" class="uml-text-mono" font-size="13">ProductLookup</text>
 
         <!-- Legend -->
-        <text x="60" y="324" class="uml-text" font-size="13" fill="#5a6473" font-style="italic">Sockets ("(" on Order) = required interfaces. Lollipops (●) on the right = provided interfaces. Dashed dependency arrows connect a required-provided pair with the interface name as the label.</text>
       </svg>
-      <div class="figure-note">Components with <code>&lt;&lt;component&gt;&gt;</code> stereotype and the small component icon (the two-rectangle glyph). Lollipop-and-socket notation makes the dependency between Order and the other two components explicit.</div>
+      <div class="figure-note">Components carry the <code>&lt;&lt;component&gt;&gt;</code> stereotype and the small component icon (the two-rectangle glyph). The <strong>socket</strong> (half-circle) on Order is a <em>required</em> interface; the <strong>lollipop</strong> (&#9679;) on each provider is a <em>provided</em> interface; the dashed dependency arrow links a required&ndash;provided pair, labelled with the interface name (<code>CustomerLookup</code>, <code>ProductLookup</code>).</div>
     </div>
 
     <h3 class="subhead-small">Componentisation guidelines</h3>
