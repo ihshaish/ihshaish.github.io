@@ -302,7 +302,7 @@
 <ol class="tasklist"><li><strong>Noun-verb analysis:</strong> list candidate classes, then decide keep / reject / debatable with a one-line reason for each.</li><li><strong>Classes:</strong> draw the classes with their attributes and key operations.</li><li><strong>Associations:</strong> add associations with <strong>multiplicity at each end</strong>, plus any generalisation, aggregation/composition, and the association class. This is your class diagram.</li><li><strong>Sequence diagram</strong> for <em>Register for offering</em>: the normal (happy) path as an instance, then show where an <code>alt</code> handles &ldquo;prerequisite not met / offering full&rdquo;. Remember: actors get no activation bar.</li></ol>
 
 <h2>4. Worked solutions</h2>
-<div class="paper">Try each task on paper first, then expand the matching panel. There is rarely one &ldquo;correct&rdquo; diagram - what matters is that the classes, multiplicities and message order are defensible against the requirements.</div>
+<div class="paper">Try each task on paper first, then expand the matching panel. There is rarely one &ldquo;correct&rdquo; diagram - what matters is that the classes, multiplicities and message order are defensible against the requirements. <strong>Hover over the highlighted parts of each solution diagram</strong> for a note on what they are and where they come from.</div>
 
 <details class="reveal"><summary>Solution - Task 1: noun-verb analysis</summary><div class="reveal-body">
 <p class="body">Underline the nouns and verbs in the problem, then sort the nouns into classes, attributes, and things to discard. The verbs become candidate operations.</p>
@@ -429,6 +429,11 @@
     <text x="285" y="486" class="uml-text-mono" font-size="11">1</text>
     <text x="386" y="408" class="uml-text-mono" font-size="11">0..*</text>
     <text x="320" y="462" class="uml-text-italic" font-size="12">manages</text>
+    <!-- hover explanations -->
+    <rect class="hotspot" x="60" y="250" width="230" height="140" data-tip="<strong>Registration</strong> is an <strong>association class</strong>. It hangs off the Student-Offering association (the dashed line) and holds data about the pairing: date, status and grade. That data belongs to neither Student nor Offering alone, so it lives on the link."/>
+    <rect class="hotspot" x="818" y="160" width="48" height="44" data-tip="<strong>Filled diamond = composition.</strong> An Offering cannot exist without its Course; remove the Course and its Offerings go with it. A hollow diamond would be aggregation, where the part can outlive the whole."/>
+    <rect class="hotspot" x="838" y="22" width="160" height="40" data-tip="<strong>Reflexive association.</strong> A Course can require other Courses as prerequisites, so the association links Course to itself, 0..* at each end."/>
+    <rect class="hotspot" x="300" y="225" width="110" height="40" data-tip="<strong>registers for</strong>, with 0..* at each end: a student registers for many offerings (up to the credit limit) and an offering enrols many students (up to its capacity)."/>
   </svg>
   <div class="figure-note">The two hard decisions: <strong>Registration</strong> is an association class on Student&ndash;Offering (a registration belongs to the pairing, not to either side), and <strong>Course&#9670;&ndash;Offering</strong> is composition (no course, no offering). Prerequisite is a reflexive association on Course. An abstract <em>Person</em> over Student/Instructor/Registrar is an acceptable extra generalisation.</div>
 </div>
@@ -503,6 +508,12 @@
     <!-- refuse: the alternative reply that completes register() -->
     <line x1="335" y1="484" x2="105" y2="484" class="uml-line-dashed" marker-end="url(#sol-ret)"/>
     <text x="220" y="477" text-anchor="middle" class="uml-text" font-size="13">refuse(reason)</text>
+    <!-- hover explanations -->
+    <rect class="hotspot" x="785" y="306" width="180" height="36" data-tip="<strong>r : Registration</strong> is a newly-created object, an instance of the Registration association class from the class diagram. Message 4 (&laquo;create&raquo;) constructs it, which is why its lifeline starts here, lower than the others. It records this student's registration for this offering: date, status and grade."/>
+    <rect class="hotspot" x="345" y="314" width="440" height="22" data-tip="A <strong>&laquo;create&raquo;</strong> message constructs a new object. Its arrow points at the object's box, not at a lifeline, and the object exists from this point on."/>
+    <rect class="hotspot" x="345" y="350" width="265" height="44" data-tip="<strong>addRegistration(r)</strong> links the new registration to the offering. Its <strong>ok</strong> return hands control back to the RegistrationUI, which is how the UI knows the work is done and can reply to the student."/>
+    <rect class="hotspot" x="60" y="280" width="130" height="26" data-tip="<strong>alt</strong> = alternative. Exactly one branch runs, chosen by the guard: if prerequisites are met and there is space, the registration is created and confirmed; otherwise it is refused."/>
+    <rect class="hotspot" x="105" y="404" width="240" height="22" data-tip="<strong>confirm()</strong> and <strong>refuse(reason)</strong> are the reply to the student's register() call (dashed return arrows). The Student is an actor, so it has no activation bar."/>
   </svg>
   <div class="figure-note">Solid arrows are synchronous calls; dashed open-headed arrows are returns. The Offering answers <code>checkPrerequisites</code> and <code>isFull</code>. In the <code>[prerequisites met and space available]</code> branch the UI creates the Registration with a <code>&laquo;create&raquo;</code> message, registers it with the Offering through <code>addRegistration(r)</code> (whose <code>ok</code> return hands control back to the UI), then replies <code>confirm()</code> to the Student; in the <code>[else]</code> branch it replies <code>refuse(reason)</code>. The Student is an actor, so it carries no activation bar.</div>
 </div>
@@ -515,4 +526,32 @@
   <li><strong>The actor has no activation bar.</strong> The Student is external to the system; we model only the execution of the system's own objects, so only <code>RegistrationUI</code> and <code>Offering</code> are barred.</li>
 </ul>
 </div></details>
-</div></body></html>
+</div>
+<script>
+/* Floating tooltip for SVG hotspots: hover (or focus) any element with a data-tip. */
+(function () {
+  var tip = document.createElement('div');
+  tip.className = 'hotspot-tip'; tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  function place(x, y) {
+    var pad = 14, ow = tip.offsetWidth, oh = tip.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    var nx = x + 18, ny = y + 18;
+    if (nx + ow + pad > vw) nx = x - ow - 18;
+    if (nx < pad) nx = pad;
+    if (ny + oh + pad > vh) ny = y - oh - 18;
+    if (ny < pad) ny = pad;
+    tip.style.left = nx + 'px'; tip.style.top = ny + 'px';
+  }
+  function show(h, x, y) { tip.innerHTML = h; tip.classList.add('is-visible'); place(x, y); }
+  function hide() { tip.classList.remove('is-visible'); }
+  document.querySelectorAll('[data-tip]').forEach(function (n) {
+    n.style.cursor = 'help'; n.setAttribute('tabindex', '0');
+    n.addEventListener('mouseenter', function (e) { show(n.getAttribute('data-tip'), e.clientX, e.clientY); });
+    n.addEventListener('mousemove', function (e) { if (tip.classList.contains('is-visible')) place(e.clientX, e.clientY); });
+    n.addEventListener('mouseleave', hide);
+    n.addEventListener('focus', function () { var r = n.getBoundingClientRect(); show(n.getAttribute('data-tip'), r.left + r.width / 2, r.top + r.height / 2); });
+    n.addEventListener('blur', hide);
+  });
+})();
+</script>
+</body></html>
