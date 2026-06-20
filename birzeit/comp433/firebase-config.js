@@ -22,11 +22,12 @@
 // "booking not live yet" notice and a preview of the slot grid.
 // ---------------------------------------------------------------------------
 window.COMP433_FIREBASE_CONFIG = {
-  apiKey: "PASTE_YOUR_API_KEY_HERE",
-  authDomain: "PASTE_PROJECT.firebaseapp.com",
-  databaseURL: "https://PASTE_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "PASTE_PROJECT",
-  storageBucket: "PASTE_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSyAZLVyUbcm7FnGWb1Nn_cVq7BTVVy8nz00",
+  authDomain: "comp433-live.firebaseapp.com",
+  databaseURL: "https://comp433-live-default-rtdb.firebaseio.com",
+  projectId: "comp433-live",
+  storageBucket: "comp433-live.firebasestorage.app",
+  messagingSenderId: "56243359791",
+  appId: "1:56243359791:web:fcbdd99924028f057436da",
+  measurementId: "G-DTLJN0VWGT"
 };
