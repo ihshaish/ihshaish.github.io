@@ -2815,6 +2815,24 @@
       <div class="figure-note">Five named states, one initial, one final. Each transition has an event (and sometimes a guard). The <code>Overdue</code> state has an entry action; the <code>OnLoan</code> state has a <code>do</code> activity that continues while the state is active. A copy that is reported lost transitions directly to the terminal <code>Lost</code> state.</div>
     </div>
 
+    <h3 class="subhead-small">The smallest machine: a turnstile, and self-transitions</h3>
+    <p class="body">The canonical teaching machine is a coin-operated <strong>turnstile</strong> with two states, <code>Locked</code> and <code>Unlocked</code>. It is small enough to force the central question of state modelling: <em>what does every event do in every state?</em> A coin in <code>Locked</code> unlocks it; a push while <code>Unlocked</code> locks it again. But a push while still <code>Locked</code>, or a second coin while <code>Unlocked</code>, must also be answered: here by a <strong>self-transition</strong>, an event that fires an action but leaves the object in the same state (the loop back onto the state).</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 8b</div>
+      <div class="figure-title">The turnstile: two states, and a self-transition for each "ignored" event.</div>
+      <svg viewBox="0 0 640 290" class="objfig" role="img" aria-label="Turnstile state machine: Locked and Unlocked, with coin/unlock, push/lock, and self-transitions push/alarm and coin/thanks">
+        <defs><marker id="ts-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
+        <circle cx="48" cy="156" r="9" fill="#0f1419"/>
+        <line x1="57" y1="156" x2="118" y2="156" class="uml-line" marker-end="url(#ts-arrow)"/>
+        <rect x="120" y="124" width="160" height="64" rx="14" class="uml-box"/><text x="200" y="161" text-anchor="middle" class="uml-text" font-weight="600">Locked</text>
+        <rect x="420" y="124" width="160" height="64" rx="14" class="uml-box"/><text x="500" y="161" text-anchor="middle" class="uml-text" font-weight="600">Unlocked</text>
+        <line x1="280" y1="142" x2="420" y2="142" class="uml-line" marker-end="url(#ts-arrow)"/><text x="350" y="134" text-anchor="middle" class="uml-text-mono" font-size="12">coin / unlock</text>
+        <line x1="420" y1="170" x2="280" y2="170" class="uml-line" marker-end="url(#ts-arrow)"/><text x="350" y="186" text-anchor="middle" class="uml-text-mono" font-size="12">push / lock</text>
+        <polyline points="165,124 165,90 235,90 235,124" class="uml-line" fill="none" marker-end="url(#ts-arrow)"/><text x="200" y="82" text-anchor="middle" class="uml-text-mono" font-size="12">push / alarm</text>
+        <polyline points="465,124 465,90 535,90 535,124" class="uml-line" fill="none" marker-end="url(#ts-arrow)"/><text x="500" y="82" text-anchor="middle" class="uml-text-mono" font-size="12">coin / thanks</text>
+      </svg>
+      <div class="figure-note">Two states answer every event in both: a coin unlocks, a push locks; a push when already <code>Locked</code> sounds the alarm and a coin when already <code>Unlocked</code> just thanks the user, both <strong>self-transitions</strong> that act without changing state. A self-transition (the loop) leaves and re-enters the state, so it re-runs the state's <code>entry</code> and <code>exit</code> actions; an <strong>internal transition</strong> (written as a line inside the state box) handles the event without leaving, so entry/exit do not fire. Choose the self-transition when the event should reset the state, the internal one when it must not.</div>
+    </div>
 
     <h3 class="subhead">Theoretical foundations: from finite automata to statecharts</h3>
     <p class="body">A state machine is a <strong>finite-state automaton</strong>: a finite set of states, an alphabet of events, and a transition function mapping a (state, event) pair to a next state. It is the oldest and most rigorously understood model of behaviour in computing, which is why the same idea drives compilers, network protocols and control systems.</p>
