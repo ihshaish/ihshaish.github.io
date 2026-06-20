@@ -309,13 +309,13 @@
 <div class="table-card"><table class="body-table">
   <thead><tr><th>Candidate (noun)</th><th>Decision</th><th>Reason</th></tr></thead>
   <tbody>
-    <tr><td>Student</td><td><strong>Keep &mdash; class</strong></td><td>Has identity, attributes (credit limit) and behaviour (registers, drops).</td></tr>
-    <tr><td>Course</td><td><strong>Keep &mdash; class</strong></td><td>A catalogue entry (e.g. COMP433) with code, title, credits; distinct from its offerings.</td></tr>
-    <tr><td>Offering / section</td><td><strong>Keep &mdash; class</strong></td><td>A specific delivery of a course in a semester, with time, room, capacity. The thing a student actually registers for.</td></tr>
-    <tr><td>Instructor</td><td><strong>Keep &mdash; class</strong></td><td>Teaches offerings and records grades.</td></tr>
-    <tr><td>Registrar</td><td><strong>Keep &mdash; class</strong></td><td>Manages offerings; a distinct role/actor with behaviour.</td></tr>
-    <tr><td>Registration</td><td><strong>Keep &mdash; association class</strong></td><td>It only exists for a (student, offering) pair and carries date, status and grade &mdash; the classic association class.</td></tr>
-    <tr><td>Semester, time, room, capacity, credit&nbsp;limit, date, status, grade</td><td>Reject as class &mdash; <strong>attributes</strong></td><td>Simple values that belong inside a class, not objects with their own identity.</td></tr>
+    <tr><td>Student</td><td><strong>Keep (class)</strong></td><td>Has identity, attributes (credit limit) and behaviour (registers, drops).</td></tr>
+    <tr><td>Course</td><td><strong>Keep (class)</strong></td><td>A catalogue entry (e.g. COMP433) with code, title, credits; distinct from its offerings.</td></tr>
+    <tr><td>Offering / section</td><td><strong>Keep (class)</strong></td><td>A specific delivery of a course in a semester, with time, room, capacity. The thing a student actually registers for.</td></tr>
+    <tr><td>Instructor</td><td><strong>Keep (class)</strong></td><td>Teaches offerings and records grades.</td></tr>
+    <tr><td>Registrar</td><td><strong>Keep (class)</strong></td><td>Manages offerings; a distinct role/actor with behaviour.</td></tr>
+    <tr><td>Registration</td><td><strong>Keep (association class)</strong></td><td>It only exists for a (student, offering) pair and carries date, status and grade &mdash; the classic association class.</td></tr>
+    <tr><td>Semester, time, room, capacity, credit&nbsp;limit, date, status, grade</td><td>Reject; these are <strong>attributes</strong></td><td>Simple values that belong inside a class, not objects with their own identity.</td></tr>
     <tr><td>COMP433</td><td>Reject</td><td>An <em>instance</em> of Course, not a class.</td></tr>
     <tr><td>University, system</td><td>Reject</td><td>The context / the system boundary itself, not a domain class.</td></tr>
     <tr><td>Prerequisite</td><td><strong>Debatable</strong></td><td>Best modelled as a reflexive association on Course (Course&ndash;Course), not a class. Could be a class only if it carried its own data.</td></tr>
@@ -409,12 +409,12 @@
     <!-- Student-Offering association "registers for" -->
     <line x1="210" y1="200" x2="430" y2="262" class="uml-line"/>
     <text x="210" y="216" class="uml-text-mono" font-size="11">0..*</text>
-    <text x="404" y="258" class="uml-text-mono" font-size="11">0..*</text>
+    <text x="382" y="248" class="uml-text-mono" font-size="11">0..*</text>
     <text x="300" y="220" class="uml-text-italic" font-size="12">registers for</text>
     <!-- Registration assoc-class dashed link to the association midpoint (320,231) -->
     <line x1="320" y1="231" x2="280" y2="290" class="uml-line-dashed"/>
     <!-- Course composition Offering "offered as" -->
-    <polygon points="838,168 850,180 838,192 826,180" class="uml-line" fill="#2c3540"/>
+    <polygon points="838,168 850,180 838,192 826,180" fill="#0f1419" stroke="#0f1419" stroke-width="1.4"/>
     <line x1="838" y1="192" x2="648" y2="262" class="uml-line"/>
     <text x="812" y="206" class="uml-text-mono" font-size="11">1</text>
     <text x="652" y="258" class="uml-text-mono" font-size="11">1..*</text>
@@ -432,6 +432,15 @@
   </svg>
   <div class="figure-note">The two hard decisions: <strong>Registration</strong> is an association class on Student&ndash;Offering (a registration belongs to the pairing, not to either side), and <strong>Course&#9670;&ndash;Offering</strong> is composition (no course, no offering). Prerequisite is a reflexive association on Course. An abstract <em>Person</em> over Student/Instructor/Registrar is an acceptable extra generalisation.</div>
 </div>
+<div class="paper" style="margin-top:16px;"><strong>Why this model is defensible.</strong> The exercise has no single "right" picture; what matters is that each decision can be argued from the requirements.</div>
+<ul class="body">
+  <li><strong>Registration is an association class, not an attribute and not a plain class.</strong> A registration's <code>date</code>, <code>status</code> and <code>grade</code> describe one <em>(student, offering)</em> pairing. They cannot sit on Student (a student has many registrations) or on Offering (an offering has many), so they belong to the link itself. That is the textbook signal for an association class.</li>
+  <li><strong>Course&#9670;&ndash;Offering is composition, not aggregation or a plain association.</strong> An offering has no independent existence: it is always an offering <em>of</em> a course, and if the course is withdrawn its offerings go with it. That exclusive, lifecycle ownership is exactly what the filled diamond states; a hollow (aggregation) diamond would wrongly claim the offering can outlive its course.</li>
+  <li><strong>The multiplicities are read off the requirements.</strong> Student <code>0..*</code>&ndash;<code>0..*</code> Offering: a student registers for many offerings up to the credit limit, and an offering enrols many students up to its capacity (zero at each end, because a new student or a freshly created offering may have none yet). Course <code>1</code>&ndash;<code>1..*</code> Offering: every offering belongs to exactly one course, and a course is given as one or more offerings. Instructor <code>1</code>&ndash;<code>0..*</code> and Registrar <code>1</code>&ndash;<code>0..*</code> Offering read the same way.</li>
+  <li><strong>Prerequisite is a reflexive association on Course</strong> (<code>0..*</code> at both ends): a course may require several others and may itself be required by several. Modelling it as a class would add nothing, because it carries no data of its own.</li>
+  <li><strong>The Person generalisation is deliberately optional.</strong> Student, Instructor and Registrar share only <code>id</code> and <code>name</code>; if that is the whole overlap, keeping them separate is fine. Introduce an abstract <code>Person</code> superclass only when it removes real duplication of attributes or behaviour, not for its own sake.</li>
+  <li><strong>It is consistent with the behaviour.</strong> Every operation in the boxes is exercised by a use case: <code>register()</code>/<code>drop()</code> by the student, <code>isFull()</code> and <code>addRegistration()</code> during registration, <code>recordGrade()</code> by the instructor, <code>manageOfferings()</code> by the registrar. An operation that no scenario calls, or a message with no operation to land on, signals a gap between the structure and the behaviour.</li>
+</ul>
 </div></details>
 
 <details class="reveal"><summary>Solution &mdash; Task 4: the sequence diagram</summary><div class="reveal-body">
@@ -458,7 +467,6 @@
     <!-- activation bars (no bar on the Student actor) -->
     <rect x="335" y="110" width="10" height="380" fill="#d6e0e8" stroke="#2c5f7c"/>
     <rect x="600" y="150" width="10" height="110" fill="#d6e0e8" stroke="#2c5f7c"/>
-    <rect x="870" y="348" width="10" height="40" fill="#d6e0e8" stroke="#2c5f7c"/>
     <!-- 1 register -->
     <line x1="105" y1="110" x2="335" y2="110" class="uml-line" marker-end="url(#sol-fill)"/>
     <text x="220" y="103" text-anchor="middle" class="uml-text" font-size="13">1: register(offering)</text>
@@ -492,5 +500,13 @@
   </svg>
   <div class="figure-note">Solid arrows are synchronous calls; dashed open-headed arrows are returns. The Offering answers <code>checkPrerequisites</code> and <code>isFull</code>; in the happy branch the UI <code>&laquo;create&raquo;</code>s the Registration and confirms; in the <code>[else]</code> branch it refuses. The Student actor carries no activation bar.</div>
 </div>
+<div class="paper" style="margin-top:16px;"><strong>Why this interaction is a good realisation.</strong></div>
+<ul class="body">
+  <li><strong>One use case, one scenario.</strong> The diagram realises <em>Register for offering</em> for a single student and offering &mdash; the normal path &mdash; with the two failure paths folded into a single <code>alt</code>. It deliberately leaves dropping, grading and browsing to their own diagrams; trying to show every path in one picture is the most common sequence-diagram mistake.</li>
+  <li><strong>The checks mirror the activity diagram.</strong> <code>checkPrerequisites</code> and <code>isFull</code> are the two decisions of the given activity diagram, in the same order, and the guard <code>[prerequisites met and space available]</code> is precisely the conjunction of their two "yes" branches. The behavioural models stay in step.</li>
+  <li><strong>Every message lands on an operation in the class diagram.</strong> <code>isFull()</code> is declared on Offering; the controller only calls operations that exist. A message with no home would mean the class model is missing an operation &mdash; the sequence diagram is a live check on the structure.</li>
+  <li><strong>Creating the Registration is modelled honestly.</strong> The <code>&laquo;create&raquo;</code> message instantiates <code>r : Registration</code>, the association-class object from the class diagram. Its box appears at the moment of creation and there is no reply, because the object now existing <em>is</em> the result; it then stays idle in this scenario, so it shows no activation bar &mdash; the same reasoning as the Loan in the companion's Figure&nbsp;7c.</li>
+  <li><strong>The actor has no activation bar.</strong> The Student is external to the system; we model only the execution of the system's own objects, so only <code>RegistrationUI</code> and <code>Offering</code> are barred.</li>
+</ul>
 </div></details>
 </div></body></html>
