@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "comp433": {
+      "presentations": {
+        "v1": {
+          "bookings": {
+            ".read": "auth != null",
+            "$slot": {
+              ".write": "auth != null && ( (!data.exists() && newData.exists()) || (data.child('owner').val() === auth.uid) )",
+              ".validate": "!newData.exists() || newData.hasChildren(['section','letter','members','owner'])"
+            }
+          }
+        }
+      }
+    }
+  }
+}
