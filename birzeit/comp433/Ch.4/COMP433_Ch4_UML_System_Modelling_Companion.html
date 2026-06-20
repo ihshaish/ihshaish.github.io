@@ -150,6 +150,11 @@
 
   /* Project-link inline note */
   .project-note { background: linear-gradient(180deg, rgba(201,169,97,0.10) 0%, rgba(201,169,97,0.04) 100%); border-left: 3px solid var(--gold); padding: 14px 18px; border-radius: 0 6px 6px 0; margin: 22px 0; max-width: 1080px; font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+  /* Consistent per-diagram "where it sits in the software lifecycle" callout (Adel's lifecycle map) */
+  .lifecycle-note { display: flex; gap: 16px; align-items: baseline; background: #eef3f6; border: 1px solid #cdd8e3; border-left: 4px solid var(--steel); border-radius: 0 8px 8px 0; padding: 13px 18px; margin: 0 0 26px; max-width: 1080px; }
+  .lifecycle-note .lc-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a3d52; font-weight: 700; white-space: nowrap; padding-top: 1px; }
+  .lifecycle-note p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.55; }
+  .lifecycle-note strong { color: var(--ink); }
   .project-note strong { color: #806113; }
 
   .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 24px; max-width: 1140px; }
@@ -823,6 +828,17 @@
     <div class="section-eyebrow"><span class="num">7.</span>Use case diagrams</div>
     <h2 class="section-title">Use case diagrams: <em>actors, tasks, system boundary</em>.</h2>
     <p class="section-intro">A use case diagram is a one-page picture of who interacts with the system and the named tasks they perform. It is the first UML diagram drawn on most projects: it converts the list of User Requirements into something that fits on one A4 page, makes scope confirmable with the customer, and produces the index of tasks that downstream diagrams (activity, sequence, class) refine.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>Requirements analysis.</strong> In Adel's lifecycle map, elicitation (interviews, scenarios) feeds the <em>use case diagram</em>; it is the first model drawn, and its tasks become the index that the use case descriptions specify and the activity, sequence and class diagrams later refine.</p></div>
+    <div class="table-card">
+      <table class="body-table">
+        <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead>
+        <tbody>
+          <tr><td><strong>What</strong></td><td>A one-page picture of the <strong>actors</strong> (the users and external systems) and the named <strong>tasks</strong> (use cases) they perform, enclosed by the <strong>system boundary</strong>.</td></tr>
+          <tr><td><strong>How</strong></td><td>Find the actors (the roles/nouns that interact), find the use cases (the tasks/verbs the system provides), join each actor to the use cases it takes part in, then add <code>&laquo;include&raquo;</code>, <code>&laquo;extend&raquo;</code> and generalisation only where they earn their place. Keep it to one page.</td></tr>
+          <tr><td><strong>When</strong></td><td>First, during requirements analysis, to agree the system's scope with the customer and to produce the task list the rest of the modelling refines. Not for internal logic, data structure, or message order.</td></tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="practice-callout">
       <div class="tag">In this section</div>
@@ -1228,6 +1244,7 @@
     <div class="section-eyebrow"><span class="num">8.</span>UC descriptions</div>
     <h2 class="section-title">Use case descriptions: <em>the diagram is the index</em>.</h2>
     <p class="section-intro">A use case ellipse on a diagram is barely a label. The use case itself is fully specified in a structured description. This is the same template the requirements companion uses in Section 8; here it is applied to use cases specifically.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>Specification.</strong> Each use case ellipse is expanded into a structured description &mdash; preconditions, flow of events, postconditions &mdash; turning the agreed scope into a testable specification before design begins.</p></div>
 
     <p class="body">The fields are: System Name, Use Case Title, Description, Actors, Data, Stimulus/Trigger, Pre-conditions, Workflow (or Sequence/Flow of Events), Post-conditions/Response, Comments. Below is the course's canonical worked example.</p>
 
@@ -1312,6 +1329,7 @@
     <div class="section-eyebrow"><span class="num">9.</span>Activity diagrams</div>
     <h2 class="section-title">Activity diagrams: <em>flow, decisions, parallelism</em>.</h2>
     <p class="section-intro">An activity diagram captures the workflow of a use case or a business process. It is the right diagram when the team needs to talk about the order of work, the decisions that branch the flow, and the activities that can run in parallel.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>Requirements analysis.</strong> Drawn beside the use case diagram to model the workflow of one use case (or a business process); its decisions and loops later become the <code>alt</code> and <code>loop</code> fragments of the sequence diagram.</p></div>
     <div class="table-card" data-ch4-improved="1">
       <table class="body-table">
         <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead>
@@ -1684,6 +1702,7 @@
     <div class="section-eyebrow"><span class="num">10.</span>Class diagrams</div>
     <h2 class="section-title">Class diagrams: <em>the system's static structure</em>.</h2>
     <p class="section-intro">A class diagram shows the classes in a system and the associations between them. It is the longest-lived diagram on most projects, because the static structure changes more slowly than any particular flow through it.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>System &amp; object design (structure).</strong> The static structure of the system's entities, derived from the noun analysis of the requirements; the longest-lived model, refined from analysis level through to design.</p></div>
     <p class="body"><strong>Classes, not instances.</strong> A class diagram shows the <em>types</em> in the system, <code>Book</code>, <code>LibraryMember</code>, the kinds of thing that can exist, not the particular copy on the shelf or the member at the desk. To show specific instances at one moment (this member, that copy, with concrete values) you draw an <em>object diagram</em>, the section immediately after this one.</p>
     <div class="table-card" data-ch4-improved="1">
       <table class="body-table">
@@ -2187,6 +2206,7 @@
     <div class="section-eyebrow"><span class="num">10b.</span>Object diagrams</div>
     <h2 class="section-title">Object diagrams: <em>a snapshot of the running system</em>.</h2>
     <p class="section-intro">A class diagram shows the <em>types</em>; an object diagram shows specific <strong>instances</strong> of those types and the links between them at a single moment. Adel introduces it immediately after the class diagram, because the quickest way to test a class model is to populate it with real objects and see whether everything fits.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>System &amp; object design.</strong> A snapshot used to validate the class model; drawn in the same phase as the class diagram, by instantiating it with concrete objects to check every value has a home and every link a matching association.</p></div>
 
     <div class="table-card"><table class="body-table"><thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead><tbody><tr><td><strong>What</strong></td><td>A <strong>snapshot</strong>: specific <strong>objects</strong> (instances of your classes) and the <strong>links</strong> (instances of associations) between them at one moment, with each attribute set to a concrete <em>value</em>.</td></tr><tr><td><strong>How</strong></td><td>Take a class diagram and instantiate it: draw a box per object with an <strong>underlined</strong> <code>name : Class</code> header and an <code>attribute = value</code> line for each attribute; join objects that are linked. Show no operations and no attribute types.</td></tr><tr><td><strong>When</strong></td><td>During analysis and design, to <strong>validate the class model</strong> against real data: a concrete snapshot quickly exposes a missing class, a wrong multiplicity, or an attribute with nowhere to live.</td></tr></tbody></table></div>
     <h3 class="subhead">What an object diagram is</h3>
@@ -2220,6 +2240,7 @@
     <div class="section-eyebrow"><span class="num">11.</span>Sequence diagrams</div>
     <h2 class="section-title">Sequence diagrams: <em>the order of messages</em>.</h2>
     <p class="section-intro">A sequence diagram shows one specific interaction: who sends what message to whom, in what order. Time runs top to bottom; participants are arranged left to right. Unlike a class diagram, which captures the system at rest, a sequence diagram captures the system in motion.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>System &amp; object design (interaction).</strong> Realises one scenario of a use case as a timed exchange of messages between objects; it is a live check on the class diagram, since every message it sends must be an operation that class declares.</p></div>
     <p class="body"><strong>Instances, and one scenario at a time.</strong> The lifelines are <em>instances</em> (objects), written <code>: Class</code> (anonymous) or <code>name : Class</code>, never bare classes, because a sequence diagram shows real objects exchanging messages on one run. And one diagram tells <em>one</em> story: a single scenario of a single use case. Draw the <strong>normal (happy) path</strong> first as an instance diagram; fold the alternatives and errors in with combined fragments (<code>alt</code>, <code>opt</code>, <code>loop</code>), or draw them as separate diagrams (the generic diagram). Do not try to cram every path into one picture.</p>
     <div class="table-card" data-ch4-improved="1">
       <table class="body-table">
@@ -2486,6 +2507,7 @@
     <div class="section-eyebrow"><span class="num">11b.</span>Communication diagrams</div>
     <h2 class="section-title">Communication (collaboration) diagrams: <em>the same interaction, drawn as a structure</em>.</h2>
     <p class="section-intro">A communication diagram shows the very same message exchange as a sequence diagram, but it drops the time axis and keeps the <em>links</em> between participants instead. Order is recovered from numbered messages rather than from vertical position. UML&nbsp;1.x called this a <em>collaboration diagram</em>; UML&nbsp;2.x renamed it a <em>communication diagram</em>; Adel uses the two names interchangeably.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>System &amp; object design (interaction).</strong> The same object interaction as the sequence diagram, with a structural emphasis; it checks that every message rides on a <em>link</em> that exists as an association in the class diagram.</p></div>
 
     <div class="table-card">
       <table class="body-table">
@@ -2614,6 +2636,7 @@
     <div class="section-eyebrow"><span class="num">12.</span>State machines</div>
     <h2 class="section-title">State machine diagrams: <em>the object's life</em>.</h2>
     <p class="section-intro">A state machine diagram captures the states an object passes through during its lifetime and the events that cause transitions between them. It is the right diagram whenever a class has a meaningful "current state" that callers must reason about.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>System &amp; object design (behaviour).</strong> Models one object's lifecycle &mdash; the states it passes through and the events that move it between them &mdash; drawn for the classes that have a meaningful current state (a Loan, an Order, a BookCopy).</p></div>
     <p class="body"><strong>Where it fits, and at what stage.</strong> A state machine describes the lifecycle of the <em>instances of one class</em> (a <code>Loan</code>, an <code>Order</code>, a <code>BookCopy</code>), so it is drawn at the <strong>design stage, after the class diagram</strong> has identified a class whose behaviour is <em>state-dependent</em>, the same call doing different things, or being illegal, in different states. Like the class diagram it is object-focused and long-lived; unlike a sequence diagram, which shows one scenario across many objects, a state machine shows <em>one object across its whole life</em>. Most classes never need one, reach for it only when an object's allowed operations change with its state.</p>
     <div class="table-card" data-ch4-improved2="1"><table class="body-table">
       <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead><tbody>
@@ -2769,6 +2792,7 @@
     <div class="section-eyebrow"><span class="num">13.</span>Component &amp; deployment</div>
     <h2 class="section-title">Architectural diagrams: <em>components and deployment</em>.</h2>
     <p class="section-intro">Component and deployment diagrams sit higher up the abstraction ladder than the diagrams above. They are concerned with how the system is partitioned at build time and how it is distributed at run time.</p>
+    <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>Design &amp; system design (architecture).</strong> The component diagram is the build-time architecture/component view; the deployment diagram is the run-time execution view &mdash; the last structural models, mapping the system onto modules and onto the nodes they run on.</p></div>
     <div class="table-card" data-ch4-improved2="1"><table class="body-table">
       <thead><tr><th style="width:90px;">&nbsp;</th><th>In one line</th></tr></thead><tbody>
         <tr><td><strong>What</strong></td><td>Structure at two higher levels: a <strong>component</strong> diagram shows the build-time parts (modules or services) and the <strong>contracts</strong> (provided and required interfaces) between them; a <strong>deployment</strong> diagram shows the run-time topology, which artefact runs on which node and over which protocol.</td></tr>
