@@ -340,7 +340,7 @@
 <div class="hero">
   <div class="hero-eyebrow">COMP433 &middot; Software Engineering &middot; Chapter 4</div>
   <h1>UML and system modelling: <em>seven views of one system</em>.</h1>
-  <p class="hero-lede">System modelling is the engineering practice of producing selective abstractions of a system, each one emphasising a single concern (interaction, structure, behaviour, deployment) and ignoring the rest. The Unified Modelling Language (UML, ISO/IEC 19505 since 2012; current version 2.5.1, 2017) is the OMG-standardised notation in which these models are drawn. This companion covers the discipline's origin in the work of Booch, Rumbaugh, and Jacobson (the Three Amigos, 1994 to 1997), the four families into which models sort, accurate notation for the seven diagrams the course uses in depth, and a worked example that follows one user requirement from elicitation to first-cut design.</p>
+  <p class="hero-lede">System modelling is the engineering practice of producing selective abstractions of a system, each one emphasising a single concern (interaction, structure, behaviour, deployment) and ignoring the rest. The Unified Modelling Language (UML, ISO/IEC 19505 since 2012; current version 2.5.1, 2017) is the OMG-standardised notation in which these models are drawn. This companion covers the discipline's origin in the work of Booch, Rumbaugh, and Jacobson (the Three Amigos, 1994 to 1997), the four families into which models sort, accurate notation for the seven diagrams covered in depth, and a worked example that follows one user requirement from elicitation to first-cut design.</p>
   <div class="hero-meta">
     <div class="hero-meta-item"><span>course</span><span>COMP433</span></div>
     <div class="hero-meta-item"><span>chapter</span><span>4 of the syllabus</span></div>
@@ -369,7 +369,7 @@
   <div class="toc-card">
     <h3>Contents</h3>
     <div style="background:#fbeee4; border:1px solid #e3a878; border-left:5px solid var(--accent); border-radius:10px; padding:14px 18px; margin:0 0 22px;">
-      <div style="font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:6px;">Studying for the exam?</div>
+      <div style="font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:6px;">Short on time?</div>
       <p style="margin:0; color:var(--ink-soft); font-size:14.5px; line-height:1.55;">Focus on three sections: <a href="#usecase" style="color:var(--accent); font-weight:600;">Use case diagrams (Section 7)</a>, <a href="#activity" style="color:var(--accent); font-weight:600;">Activity diagrams (Section 9)</a>, and the <a href="#casestudy" style="color:var(--accent); font-weight:600;">back-to-back case study (Section 9b)</a>, which draws both diagrams from one set of requirements. Sections 1 to 6 are background and 10 to 16 are wider breadth.</p>
     </div>
     <ul class="toc-list">
@@ -420,7 +420,7 @@
       <li><strong>Who is the reader?</strong> A developer? An auditor? A clinical specialist? The customer's contracting officer? A model is a piece of communication; it has to be addressed to someone.</li>
       <li><strong>What decision does it support?</strong> Scope confirmation? An algorithm choice? A staffing estimate? A deployment topology? A model that does not help anyone decide anything is decoration.</li>
     </ul>
-    <p class="body">Every diagram in this companion is paired with a short "where it earns its place" panel that names the reader and the decision. Keep those two anchors in mind as you read; they are what separates a useful diagram from a textbook one.</p>
+    <p class="body">Every diagram below is paired with a short "where it earns its place" panel that names the reader and the decision it supports. Those two anchors, the audience and the decision, are what separate a useful diagram from a decorative one.</p>
 
     <h3 class="subhead">Three modelling moves</h3>
     <p class="body">Underneath the fourteen UML diagram types are just three modelling moves you make again and again. Recognising which move you are making is the easiest way to pick the right diagram:</p>
@@ -465,10 +465,10 @@
 
     <p class="body">The unification was not a vote between three favourites; it was a re-engineering of the combined notation around what each method did best. Rumbaugh's class-and-association notation became UML's structural backbone; Jacobson's use cases were lifted in essentially unchanged; Booch's emphasis on design-level diagrams supplied component and deployment views. The result was published as <strong>UML 0.9</strong> in June 1996, renamed Unified Modelling <em>Language</em> rather than Unified Method (a deliberate distinction: a language is a notation only, not a prescribed process).</p>
 
-    <p class="body">In November 1997, the Object Management Group (OMG) adopted UML 1.1 as a standard. The OMG is an industry consortium founded in 1989 to standardise object-oriented and distributed-system technologies (it also maintains CORBA and SysML). UML's transfer to OMG was the moment it stopped being a Rational product and became a public standard. The notation was frozen at UML 1.1, substantially revised at <strong>UML 2.0</strong> (2005, which added the sequence-diagram interaction fragments and refined activity diagrams along business-process lines), and has been stable since <strong>UML 2.5.1</strong> (2017), the version this course follows. The point of standardising was readability: after UML, a diagram drawn in one company is readable in another, in a research lab, and in a textbook.</p>
+    <p class="body">In November 1997, the Object Management Group (OMG) adopted UML 1.1 as a standard. The OMG is an industry consortium founded in 1989 to standardise object-oriented and distributed-system technologies (it also maintains CORBA and SysML). UML's transfer to OMG was the moment it stopped being a Rational product and became a public standard. The notation was frozen at UML 1.1, substantially revised at <strong>UML 2.0</strong> (2005, which added the sequence-diagram interaction fragments and refined activity diagrams along business-process lines), and has been stable since <strong>UML 2.5.1</strong> (2017), the current version. The point of standardising was readability: after UML, a diagram drawn in one company is readable in another, in a research lab, and in a textbook.</p>
 
     <h3 class="subhead">UML is a language, not a method</h3>
-    <p class="body">A common confusion is to expect UML to tell you <em>when</em> to draw each diagram. It does not. UML is a notation only: it standardises the shape of an ellipse for a use case, the rules for an include arrow, the compartments of a class box. The decisions about <em>which</em> diagrams to draw, in what order, and how much detail to put on them belong to the <em>process</em>, which is a separate concern. The most-cited process built around UML is the Rational Unified Process (RUP, Kruchten, 2003), but agile teams routinely use a small subset of UML inside Scrum or XP without adopting RUP at all. The course's structure follows this separation: chapter 3 covers the process by which requirements are produced; this chapter covers the language in which the resulting models are drawn.</p>
+    <p class="body">A common confusion is to expect UML to tell you <em>when</em> to draw each diagram. It does not. UML is a notation only: it standardises the shape of an ellipse for a use case, the rules for an include arrow, the compartments of a class box. The decisions about <em>which</em> diagrams to draw, in what order, and how much detail to put on them belong to the <em>process</em>, which is a separate concern. The most-cited process built around UML is the Rational Unified Process (RUP, Kruchten, 2003), but agile teams routinely use a small subset of UML inside Scrum or XP without adopting RUP at all. The separation carries through here: chapter 3 covers the process by which requirements are produced; this chapter covers the language in which the resulting models are drawn.</p>
   </div>
 </section>
 
@@ -485,7 +485,7 @@
 
     <p class="body"><strong>Areas of growth.</strong> The rise of safety- and security-critical AI systems has brought renewed interest in MBSE and formal modelling, including UML-derived notations. The diagrammatic vocabulary has also re-emerged in domain-specific contexts (database modelling tools, infrastructure-as-code visualisers, sequence diagrams generated automatically from distributed traces).</p>
 
-    <p class="body">For the COMP433 student, the practical takeaway is that the seven diagrams treated in depth here are <em>all</em> in current use somewhere, and being fluent in them is portable knowledge. The diagrams treated more briefly (object, communication, timing, interaction overview) are still in the standard but are encountered much less often in industry.</p>
+    <p class="body">The practical takeaway is that the seven diagrams treated in depth here are <em>all</em> in current use somewhere, and being fluent in them is portable knowledge. The diagrams treated more briefly (object, communication, timing, interaction overview) are still in the standard but are encountered much less often in industry.</p>
   </div>
 </section>
 
@@ -712,7 +712,7 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">6.</span>Taxonomy</div>
     <h2 class="section-title">UML 2.5: <em>fourteen diagram types</em>.</h2>
-    <p class="section-intro">The UML 2.5 specification defines fourteen diagram types, split into structural (seven) and behavioural (seven). Nine of these are conventionally treated as the "standard" set you will encounter on real projects, and seven are covered in depth in this companion (and used in the COMP433 project). The map below lists all fourteen for completeness; the italicised types are part of the standard but encountered less often in practice.</p>
+    <p class="section-intro">The UML 2.5 specification defines fourteen diagram types, split into structural (seven) and behavioural (seven). Nine of these are conventionally treated as the "standard" set encountered on real projects, and seven are covered in depth in the sections that follow. The map below lists all fourteen for completeness; the italicised types are part of the standard but encountered less often in practice.</p>
 
     <div class="figure">
       <div class="figure-caption">Figure 2</div>
@@ -825,7 +825,7 @@
         </g>
         <text x="830" y="494" text-anchor="middle" class="uml-text-mute" font-style="italic" font-size="12">(+ Interaction overview)</text>
       </svg>
-      <div class="figure-note"><strong>Rust labels</strong> above the divider mark the seven diagrams covered in depth in the rest of this companion (and used in COMP433's project work). <em>Italic muted labels</em> below the divider are part of the UML standard but encountered less often in practice; knowing they exist is enough at this stage. Hover any name for a fuller definition.</div>
+      <div class="figure-note"><strong>Rust labels</strong> above the divider mark the seven diagrams covered in depth in the sections that follow. <em>Italic muted labels</em> below the divider are part of the UML standard but encountered less often in practice; knowing they exist is enough at this stage. Hover any name for a fuller definition.</div>
       <div class="diagram-tooltip" id="taxonomyTip"><span class="placeholder">Hover any diagram name in the taxonomy for a one-line definition and a pointer to where it is covered.</span></div>
     </div>
 
@@ -864,7 +864,7 @@
       <li><strong>Task index.</strong> Names the tasks (use cases). Each use case will get its own textual description (section 8), at least one activity diagram if the workflow is non-trivial (section 9), and at least one sequence diagram for its key scenario (section 11). The diagram is the table of contents for those downstream artefacts.</li>
     </ul>
 
-    <p class="body">Beyond those three decisions, the use case model earns its keep across the whole project. The course notes list five further things a good use case set does: it <strong>specifies the context</strong> of the system (its boundary and the actors around it); it lets the team <strong>plan iterations</strong> of development (each use case is a unit of work to schedule); it <strong>validates the architecture</strong> (every architecturally significant use case must be realisable on the proposed design); it <strong>drives implementation</strong> (each use case becomes a thread of construction); and it <strong>generates test cases</strong> (each scenario through a use case is a system-test script). Use cases are built early in development, by analysts and domain experts during requirements analysis, and stay useful long after.</p>
+    <p class="body">Beyond those three decisions, the use case model earns its keep across the whole project. A good use case set does five further things: it <strong>specifies the context</strong> of the system (its boundary and the actors around it); it lets the team <strong>plan iterations</strong> of development (each use case is a unit of work to schedule); it <strong>validates the architecture</strong> (every architecturally significant use case must be realisable on the proposed design); it <strong>drives implementation</strong> (each use case becomes a thread of construction); and it <strong>generates test cases</strong> (each scenario through a use case is a system-test script). Use cases are built early in development, by analysts and domain experts during requirements analysis, and stay useful long after.</p>
 
     <p class="body">It does <em>not</em> show: the order of work inside a use case (use an activity diagram), the messages between objects realising a use case (use a sequence diagram), what data the system holds (use a class diagram), or where the system runs (use a deployment diagram). A use case ellipse is, deliberately, an opaque label; the substance lives in the textual description.</p>
 
@@ -1065,7 +1065,7 @@
     </div>
 
     <h3 class="subhead">Actors: primary and secondary</h3>
-    <p class="body">An actor is a role someone or something plays when interacting with the system. Actors are not specific people; the same person can be two actors at different times. A doctor who also borrows books at the staff library is a Doctor in one system and a BookBorrower in the other. The course conventionally splits actors into two kinds:</p>
+    <p class="body">An actor is a role someone or something plays when interacting with the system. Actors are not specific people; the same person can be two actors at different times. A doctor who also borrows books at the staff library is a Doctor in one system and a BookBorrower in the other. Actors are conventionally split into two kinds:</p>
 
     <ul class="body">
       <li><strong>Primary actor.</strong> The user who initiates or benefits from a use case. Usually a human role (BookBorrower, Librarian, Doctor, Nurse).</li>
@@ -1107,7 +1107,7 @@
     <p class="body">Generalisation removes repetition: rather than repeating every borrowing association on JournalBorrower, you draw it once on BookBorrower and let JournalBorrower inherit it. This is the actor-side counterpart of the use case generalisation covered below.</p>
 
     <h3 class="subhead">Use cases: things actors do with the system</h3>
-    <p class="body">A use case is a task an actor needs to perform with the help of the system. Two rules from the course notes:</p>
+    <p class="body">A use case is a task an actor needs to perform with the help of the system. Two rules:</p>
 
     <ul class="body">
       <li><strong>Always start a use case label with a verb.</strong> "Borrow copy of a book", not "Book borrowing". The verb is what tells you it is a use case rather than a class.</li>
@@ -1121,7 +1121,7 @@
       <li><strong>Actor-based analysis.</strong> Start from the actor list; for each actor, ask what they need from the system, and what other interactions they take part in for someone else's benefit.</li>
     </ul>
 
-    <p class="body">How do you know a candidate is a use case, and at the right granularity? The course's tests: estimate the <strong>frequency of use</strong> (something done once at setup may not warrant its own use case); examine the <strong>differences between candidate use cases</strong> (if two are nearly identical, they may be one use case with alternative scenarios); and distinguish the <strong>normal from the alternative course of events</strong> (an alternative path is usually a scenario of an existing use case, not a new use case). A use case should be a complete, valuable task from the actor's point of view, not a single click ("enter password") nor a whole subsystem ("manage everything").</p>
+    <p class="body">How do you know a candidate is a use case, and at the right granularity? Two tests: estimate the <strong>frequency of use</strong> (something done once at setup may not warrant its own use case); examine the <strong>differences between candidate use cases</strong> (if two are nearly identical, they may be one use case with alternative scenarios); and distinguish the <strong>normal from the alternative course of events</strong> (an alternative path is usually a scenario of an existing use case, not a new use case). A use case should be a complete, valuable task from the actor's point of view, not a single click ("enter password") nor a whole subsystem ("manage everything").</p>
 
     <h3 class="subhead">Building the diagram from the requirements: noun-verb analysis</h3>
     <p class="body">The course's standard technique for turning a written requirements document into a first-cut use case diagram is <strong>noun-verb analysis</strong>. Read the requirements text and mark it up in two colours:</p>
@@ -1221,7 +1221,7 @@
     <ul class="body">
       <li><strong>An <code>&lt;&lt;include&gt;&gt;</code> with one parent.</strong> If only one use case includes a particular sub-task, the sub-task is not being reused; it is being prematurely factored. Inline it into the description.</li>
       <li><strong>An <code>&lt;&lt;extend&gt;&gt;</code> with no extension point.</strong> Without a named extension point, the extension is just an alternative path of the base. Document it as an alternative scenario in the base's description (section 8) rather than as a separate ellipse.</li>
-      <li><strong>Generalisation between use cases that share no actor.</strong> Use case generalisation rarely earns its place in business systems; it is more useful in tooling that auto-generates code from the model. For COMP433 projects, prefer <code>&lt;&lt;include&gt;&gt;</code> for shared sub-tasks and <code>&lt;&lt;extend&gt;&gt;</code> for variants, and reach for generalisation only when the two are the same use case at different specificity levels.</li>
+      <li><strong>Generalisation between use cases that share no actor.</strong> Use case generalisation rarely earns its place in business systems; it is more useful in tooling that auto-generates code from the model. In practice, prefer <code>&lt;&lt;include&gt;&gt;</code> for shared sub-tasks and <code>&lt;&lt;extend&gt;&gt;</code> for variants, and reach for generalisation only when the two are the same use case at different specificity levels.</li>
     </ul>
 
     <div class="practice-callout">
@@ -1249,7 +1249,7 @@
     <h3 class="subhead">Multi-level (composite) use cases</h3>
     <p class="body">For larger systems, a single top-level diagram becomes unreadable. The standard pattern is to draw a high-level diagram with composite use cases (each one labelled with a verb phrase like "Manage patient registration"), and to draw a separate first-level diagram for each composite that decomposes it into its constituent use cases. A second-level diagram may decompose a particular first-level use case further, if needed.</p>
 
-    <p class="body">A composite use case is marked with a small grid icon to signal that it decomposes further. For the MHC-PMS, the course uses three levels:</p>
+    <p class="body">A composite use case is marked with a small grid icon to signal that it decomposes further. For the MHC-PMS, three levels are used:</p>
     <ul class="body">
       <li><strong>Top level (overall system).</strong> Composite use cases "Manage patient registration", "Manage patient medical record", "Generate medical report", alongside simple ones such as "View patient info", "Export statistics report" and "Setup consultation".</li>
       <li><strong>First level.</strong> Each composite is magnified: "Manage patient registration" splits into Register new patient and De-register existing patient; "Manage patient medical record" splits into View patient medical record and Edit patient medical record; "Generate reports" splits into Generate prescribed drugs report and Generate patient reports (itself still composite).</li>
@@ -1267,7 +1267,7 @@
     <p class="section-intro">A use case ellipse on a diagram is barely a label. The use case itself is fully specified in a structured description. This is the same template the requirements companion uses in Section 8; here it is applied to use cases specifically.</p>
     <div class="lifecycle-note"><span class="lc-tag">Where it fits</span><p><strong>Specification.</strong> Each use case ellipse is expanded into a structured description - preconditions, flow of events, postconditions - turning the agreed scope into a testable specification before design begins.</p></div>
 
-    <p class="body">The fields are: System Name, Use Case Title, Description, Actors, Data, Stimulus/Trigger, Pre-conditions, Workflow (or Sequence/Flow of Events), Post-conditions/Response, Comments. Below is the course's canonical worked example.</p>
+    <p class="body">The fields are: System Name, Use Case Title, Description, Actors, Data, Stimulus/Trigger, Pre-conditions, Workflow (or Sequence/Flow of Events), Post-conditions/Response, Comments. Below is the canonical worked example.</p>
 
     <div class="struct-spec">
       <table>
@@ -1314,7 +1314,7 @@
     </div>
 
     <h3 class="subhead">Scenarios: normal, alternative, error</h3>
-    <p class="body">Each time an actor interacts with the system, the triggered use case instantiates a <em>scenario</em>: a specific path through the use case with no branching. Scenarios are typically documented as text alongside the diagram and serve as the readable narratives that customers and testers can confirm against. For each non-trivial use case, the course expects at least three scenarios:</p>
+    <p class="body">Each time an actor interacts with the system, the triggered use case instantiates a <em>scenario</em>: a specific path through the use case with no branching. Scenarios are typically documented as text alongside the diagram and serve as the readable narratives that customers and testers can confirm against. For each non-trivial use case, expect at least three scenarios:</p>
 
     <ul class="body">
       <li><strong>Normal scenario.</strong> The happy path that completes successfully under the typical conditions.</li>
@@ -1709,7 +1709,7 @@
 
 
     <div class="practice-callout"><div class="tag">Modelling convention: the system is not an actor</div>
-      <p>The diagram above gives the system under development its own <em>Booking System</em> swimlane. That is a common industrial style, but Adel's convention, and the one to follow in this course, is <strong>not</strong> to model the system being built as an actor or a partition. The reason is the same one that makes the system the <em>boundary</em> rather than an actor in a use case diagram: an activity diagram already describes the behaviour <em>of</em> the system, so a lane named after the system is redundant and blurs the line between the system and the outside parties it serves.</p>
+      <p>The diagram above gives the system under development its own <em>Booking System</em> swimlane. That is a common industrial style, but Adel's convention is <strong>not</strong> to model the system being built as an actor or a partition. The reason is the same one that makes the system the <em>boundary</em> rather than an actor in a use case diagram: an activity diagram already describes the behaviour <em>of</em> the system, so a lane named after the system is redundant and blurs the line between the system and the outside parties it serves.</p>
       <p>Partitions should name the <strong>external participants</strong> whose responsibilities differ: the human roles that provide input or make decisions, and the external systems the flow hands off to. The system's own automated steps are just the actions of the activity, drawn without a dedicated lane. Figure 9b.3 redraws the same Book room flow on that principle: the two external parties (the <strong>Guest</strong> and the <strong>Payment Provider</strong>) are named in the actions that touch them, and every other action is the system's own behaviour.</p>
     </div>
     <div class="figure">
@@ -1871,7 +1871,7 @@
     </ul>
 
     <h3 class="subhead-small">Fuller attribute and operation notation</h3>
-    <p class="body">An attribute's full form is <code>visibility name : type [multiplicity] = default {property}</code> and an operation's is <code>visibility name(parameter : type, &hellip;) : returnType {property}</code>. Beyond plain name-and-type, the course uses a few markers worth recognising:</p>
+    <p class="body">An attribute's full form is <code>visibility name : type [multiplicity] = default {property}</code> and an operation's is <code>visibility name(parameter : type, &hellip;) : returnType {property}</code>. Beyond plain name-and-type, a few further markers are worth recognising:</p>
     <ul class="body">
       <li><code>{id}</code> marks an attribute that <strong>identifies</strong> the object, a candidate key: <code>accountNo : String {id}</code>.</li>
       <li>A leading <code>/</code> marks a <strong>derived</strong> attribute, computed rather than stored: <code>/balance</code>.</li>
@@ -2026,7 +2026,7 @@
     </div>
 
     <h3 class="subhead">Data-driven noun-verb analysis</h3>
-    <p class="body">The standard recipe, introduced by Shlaer and Mellor in the late 1980s and used in the course, is the <em>noun-verb analysis</em>: read through the requirements document and underline every noun phrase; collect those noun phrases as a candidate class list; discard inappropriate ones (redundant, omnipotent, vague, meta-language, outside the system scope, or are attributes of something else); then identify every verb and assign verbs to candidate classes as operations. The result is a first-cut class diagram that is grounded in the requirements you wrote, rather than the developer's imagination.</p>
+    <p class="body">The standard recipe, introduced by Shlaer and Mellor in the late 1980s, is the <em>noun-verb analysis</em>: read through the requirements document and underline every noun phrase; collect those noun phrases as a candidate class list; discard inappropriate ones (redundant, omnipotent, vague, meta-language, outside the system scope, or are attributes of something else); then identify every verb and assign verbs to candidate classes as operations. The result is a first-cut class diagram that is grounded in the requirements you wrote, rather than the developer's imagination.</p>
 
     <p class="body">Six categories of "inappropriate" noun, worth memorising because they recur in reviews of analysis-level class lists:</p>
     <ul class="body">
@@ -2048,7 +2048,7 @@
     </ul>
 
     <h3 class="subhead">Analysis classes vs design classes</h3>
-    <p class="body">An <strong>analysis class</strong> abstracts one or more classes of the eventual design; it models the problem domain, not the solution. It focuses on functional requirements, defines responsibilities (cohesive subsets of behaviour), names attributes at a domain level, and shows the relationships it takes part in. A <strong>design class</strong> adds full method signatures and types, tightened visibility, infrastructure classes (persistence, controllers, factories), design patterns, and navigability. In this course, Phase 3 expects an analysis-level class diagram drawn from your requirements; reserve the design-level detail for later.</p>
+    <p class="body">An <strong>analysis class</strong> abstracts one or more classes of the eventual design; it models the problem domain, not the solution. It focuses on functional requirements, defines responsibilities (cohesive subsets of behaviour), names attributes at a domain level, and shows the relationships it takes part in. A <strong>design class</strong> adds full method signatures and types, tightened visibility, infrastructure classes (persistence, controllers, factories), design patterns, and navigability. At the analysis stage, the class diagram is an analysis-level model drawn from the requirements; reserve the design-level detail for later.</p>
     <details class="worked">
       <summary><span class="we-tag">Worked example</span><span class="we-title">The Library, by noun analysis</span></summary>
       <div class="worked-body">
@@ -2069,7 +2069,7 @@
         <tr><td>three weeks, six, 12</td><td>reject</td><td>Loan period and borrowing limits: attributes and constraints (multiplicities), not classes.</td></tr>
       </tbody>
     </table></div>
-    <p class="body">The teaching point: a good class list is <strong>defended, not asserted</strong>. Be ready to say why BookCopy earns its place and library does not, to name the alternative you considered (the LibraryItem superclass, the Role class), and why you set it aside.</p>
+    <p class="body">The principle: a good class list is <strong>defended, not asserted</strong>. Be ready to say why BookCopy earns its place and library does not, to name the alternative you considered (the LibraryItem superclass, the Role class), and why you set it aside.</p>
 
     <div class="figure">
       <div class="figure-caption">Figure 6a</div>
@@ -2363,7 +2363,7 @@
         </div>
       </div>
       <div class="ctx-foot">
-        <strong>Documented industrial use.</strong> The Eclipse Modeling Framework (EMF), Java's RMI, and Spring Framework's bean configuration are all class-diagram-driven at the architectural level. Microsoft published the Office class hierarchy as a teaching example for many years. Google's protocol buffers and gRPC service definitions correspond directly to class-diagram structures, even when expressed in text.
+        <strong>Documented industrial use.</strong> The Eclipse Modeling Framework (EMF), Java's RMI, and Spring Framework's bean configuration are all class-diagram-driven at the architectural level. Microsoft published the Office class hierarchy as a reference example for many years. Google's protocol buffers and gRPC service definitions correspond directly to class-diagram structures, even when expressed in text.
       </div>
     </div>
 
@@ -2802,7 +2802,7 @@
         <div class="ctx-block">
           <h5>Domains where they still appear</h5>
           <ul>
-            <li><strong>Teaching and exams.</strong> The cleanest way to show that an interaction's links are instances of the class diagram's associations.</li>
+            <li><strong>Tracing links back to associations.</strong> The cleanest way to show that an interaction's links are instances of the class diagram's associations.</li>
             <li><strong>Embedded and control systems.</strong> Small, fixed sets of collaborating components where the wiring matters more than the timeline.</li>
             <li><strong>Legacy UML&nbsp;1.x models</strong> where &ldquo;collaboration diagram&rdquo; is the original term.</li>
           </ul>
@@ -2861,7 +2861,7 @@
     </div>
 
     <h3 class="subhead-small">The smallest machine: a turnstile, and self-transitions</h3>
-    <p class="body">The canonical teaching machine is a coin-operated <strong>turnstile</strong> with two states, <code>Locked</code> and <code>Unlocked</code>. It is small enough to force the central question of state modelling: <em>what does every event do in every state?</em> A coin in <code>Locked</code> unlocks it; a push while <code>Unlocked</code> locks it again. But a push while still <code>Locked</code>, or a second coin while <code>Unlocked</code>, must also be answered: here by a <strong>self-transition</strong>, an event that fires an action but leaves the object in the same state (the loop back onto the state).</p>
+    <p class="body">The canonical example is a coin-operated <strong>turnstile</strong> with two states, <code>Locked</code> and <code>Unlocked</code>. It is small enough to force the central question of state modelling: <em>what does every event do in every state?</em> A coin in <code>Locked</code> unlocks it; a push while <code>Unlocked</code> locks it again. But a push while still <code>Locked</code>, or a second coin while <code>Unlocked</code>, must also be answered: here by a <strong>self-transition</strong>, an event that fires an action but leaves the object in the same state (the loop back onto the state).</p>
     <div class="figure">
       <div class="figure-caption">Figure 8b</div>
       <div class="figure-title">The turnstile: two states, and a self-transition for each "ignored" event.</div>
@@ -2972,7 +2972,7 @@
     </div>
 
     <div class="project-note">
-      <strong>Project link.</strong> Most COMP433 projects will have one or two domain objects with a meaningful lifecycle (a Loan, an Appointment, an Order, a Booking). Draw a state machine for each of those. Drawing one for a passive data class (e.g., a Patient record) is usually unnecessary; if you find yourself drawing it, ask whether the lifecycle is about the record or about something else (the consultation, the registration).
+      <strong>In practice.</strong> Most systems have one or two domain objects with a meaningful lifecycle (a Loan, an Appointment, an Order, a Booking). Draw a state machine for each of those. Drawing one for a passive data class (e.g., a Patient record) is usually unnecessary; if you find yourself drawing it, ask whether the lifecycle is about the record or about something else (the consultation, the registration).
     </div>
 
     <div class="practice-callout">
@@ -3027,6 +3027,8 @@
 
     <p class="body">A provided lollipop fits into a matching required socket; the connection is valid if the socket's required operations are a subset of the lollipop's provided operations and their signatures are compatible.</p>
 
+    <p class="body">When a required socket and a provided lollipop are wired between two components, a <strong>dependency arrow</strong> is drawn along the connection as well: it leaves the <em>requiring</em> socket and its arrowhead meets the <em>provider's</em> lollipop, the same dashed dependency notation used on a class diagram. The arrow direction records who depends on whom; the consumer depends on the provider.</p>
+
 
     <h3 class="subhead">What a component is, in theory</h3>
     <p class="body">A <strong>component</strong> is a modular, replaceable unit of the system that hides its implementation behind well-defined interfaces. Its defining property is <strong>substitutability</strong>: anything that offers the same provided interfaces can replace it without the rest of the system noticing. That single idea is what makes plug-ins, device drivers and microservices possible.</p>
@@ -3075,31 +3077,31 @@
 
         <!-- Required interface (socket) on Order for CustomerLookup. Stem outward then "(" half-circle. -->
         <line x1="300" y1="150" x2="316" y2="150" class="uml-line"/>
-        <path d="M 316 138 A 12 12 0 0 1 316 162" class="uml-line" fill="none"/>
+        <path d="M 316 138 A 12 12 0 0 1 316 162" class="uml-line" fill="none" data-tip="<strong>Required interface (socket)</strong><br>Order needs the CustomerLookup interface. The socket (half-circle cup) is a service the component requires from another."/>
 
         <!-- Provided interface (lollipop) on CustomerRepository for CustomerLookup -->
         <line x1="700" y1="105" x2="678" y2="105" class="uml-line"/>
-        <circle cx="668" cy="105" r="10" class="uml-line" fill="white"/>
+        <circle cx="668" cy="105" r="10" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>CustomerRepository offers the CustomerLookup interface. The lollipop (ball on a stick) is a service the component provides to clients."/>
 
         <!-- Assembly: dashed dependency from Order's socket area toward CustomerRepository's lollipop -->
-        <path d="M 328 150 L 460 130 L 660 110" class="uml-line-dashed" fill="none"/>
+        <path d="M 328 150 L 460 130 L 660 110" class="uml-line-dashed" fill="none" marker-end="url(#cmp-arrow)" data-tip="<strong>Dependency arrow</strong><br>Runs from the requiring socket to the providing lollipop: Order depends on CustomerRepository for the CustomerLookup interface. The arrowhead points at the provider."/>
         <text x="500" y="120" text-anchor="middle" class="uml-text-mono" font-size="13">CustomerLookup</text>
 
         <!-- Required interface (socket) on Order for ProductLookup -->
         <line x1="300" y1="190" x2="316" y2="190" class="uml-line"/>
-        <path d="M 316 178 A 12 12 0 0 1 316 202" class="uml-line" fill="none"/>
+        <path d="M 316 178 A 12 12 0 0 1 316 202" class="uml-line" fill="none" data-tip="<strong>Required interface (socket)</strong><br>Order also needs the ProductLookup interface. A component can require several interfaces, one socket each."/>
 
         <!-- Provided interface (lollipop) on Inventory for ProductLookup -->
         <line x1="700" y1="245" x2="678" y2="245" class="uml-line"/>
-        <circle cx="668" cy="245" r="10" class="uml-line" fill="white"/>
+        <circle cx="668" cy="245" r="10" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>Inventory offers the ProductLookup interface. Order's ProductLookup socket is satisfied here."/>
 
         <!-- Assembly from Order to Inventory lollipop -->
-        <path d="M 328 190 L 460 220 L 660 240" class="uml-line-dashed" fill="none"/>
-        <text x="500" y="232" text-anchor="middle" class="uml-text-mono" font-size="13">ProductLookup</text>
+        <path d="M 328 190 L 460 220 L 660 240" class="uml-line-dashed" fill="none" marker-end="url(#cmp-arrow)" data-tip="<strong>Dependency arrow</strong><br>Order depends on Inventory for the ProductLookup interface. From requiring socket to providing lollipop, arrowhead at the provider."/>
+        <text x="500" y="214" text-anchor="middle" class="uml-text-mono" font-size="13">ProductLookup</text>
 
         <!-- Legend -->
       </svg>
-      <div class="figure-note">Components carry the <code>&lt;&lt;component&gt;&gt;</code> stereotype and the small component icon (the two-rectangle glyph). The <strong>socket</strong> (half-circle) on Order is a <em>required</em> interface; the <strong>lollipop</strong> (&#9679;) on each provider is a <em>provided</em> interface; the dashed dependency arrow links a required-provided pair, labelled with the interface name (<code>CustomerLookup</code>, <code>ProductLookup</code>).</div>
+      <div class="figure-note">Components carry the <code>&lt;&lt;component&gt;&gt;</code> stereotype and the small component icon (the two-rectangle glyph). The <strong>socket</strong> (half-circle) on Order is a <em>required</em> interface; the <strong>lollipop</strong> (&#9679;) on each provider is a <em>provided</em> interface; the dashed dependency arrow runs from the requiring socket to the provider's lollipop (Adel's convention, the same dependency notation as on a class diagram), labelled with the interface name (<code>CustomerLookup</code>, <code>ProductLookup</code>). Hover any socket, lollipop or arrow for what it is.</div>
     </div>
 
     <h3 class="subhead-small">Componentisation guidelines</h3>
@@ -3150,9 +3152,9 @@
         <!-- (2b) Billing provided interface (lollipop) -->
         <line x1="640" y1="205" x2="616" y2="205" class="uml-line"/>
         <circle cx="606" cy="205" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>:Billing offers the Charging interface. Messages: charge(amount), refund(orderId)."/>
-        <!-- (5) assembly connector: required meets provided -->
-        <line x1="473" y1="205" x2="597" y2="205" class="uml-line"/>
-        <line x1="473" y1="205" x2="597" y2="205" stroke="transparent" stroke-width="20" pointer-events="all" data-tip="<strong>Assembly connector</strong><br>Wires one part's required interface to another's provided interface (the socket receives the ball). Here :OrderHandler's required Charging is satisfied by :Billing's provided Charging. Messages on the line: charge(amount), refund(orderId)."/>
+        <!-- (5) assembly connector: dashed dependency from requiring socket to providing lollipop -->
+        <line x1="473" y1="205" x2="597" y2="205" class="uml-line-dashed" marker-end="url(#pd-open)"/>
+        <line x1="473" y1="205" x2="597" y2="205" stroke="transparent" stroke-width="20" pointer-events="all" data-tip="<strong>Assembly connector</strong><br>Joins one part's required interface to another's provided interface. On a component diagram it is drawn as a dependency arrow from the requiring socket to the provider's lollipop. Here :OrderHandler requires Charging, satisfied by :Billing. Messages: charge(amount), refund(orderId)."/>
         <text x="536" y="196" text-anchor="middle" class="uml-text-mono" font-size="12">Charging</text>
         <text x="536" y="230" text-anchor="middle" class="uml-text-mono" font-size="10" fill="#b85c38">assembly connector</text>
         <!-- interface operations: the messages on the lines -->
@@ -3207,11 +3209,11 @@
         <text x="780" y="448" text-anchor="middle" class="uml-text" font-weight="600">University DB</text>
         <text x="780" y="467" text-anchor="middle" class="uml-text-stereo">&lt;&lt;database&gt;&gt;</text>
         <!-- provided lollipops -->
-        <line x1="270" y1="250" x2="270" y2="241" class="uml-line"/><circle cx="270" cy="232" r="9" class="uml-line" fill="white"/>
-        <line x1="720" y1="250" x2="720" y2="241" class="uml-line"/><circle cx="720" cy="232" r="9" class="uml-line" fill="white"/>
-        <line x1="500" y1="420" x2="500" y2="411" class="uml-line"/><circle cx="500" cy="402" r="9" class="uml-line" fill="white"/>
-        <line x1="225" y1="420" x2="225" y2="411" class="uml-line"/><circle cx="225" cy="402" r="9" class="uml-line" fill="white"/>
-        <line x1="680" y1="452" x2="666" y2="452" class="uml-line"/><circle cx="656" cy="452" r="9" class="uml-line" fill="white"/>
+        <line x1="270" y1="250" x2="270" y2="241" class="uml-line"/><circle cx="270" cy="232" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>The Seminar component offers this interface; the Seminar Management UI depends on it."/>
+        <line x1="720" y1="250" x2="720" y2="241" class="uml-line"/><circle cx="720" cy="232" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>The Student component offers this interface; the Student Administration UI depends on it."/>
+        <line x1="500" y1="420" x2="500" y2="411" class="uml-line"/><circle cx="500" cy="402" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop): DataAccess</strong><br>Offered by the Persistence component and required by every business-domain component."/>
+        <line x1="225" y1="420" x2="225" y2="411" class="uml-line"/><circle cx="225" cy="402" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop): AccessControl</strong><br>Offered by the Security infrastructure component, a cross-cutting service used across the layers."/>
+        <line x1="680" y1="452" x2="666" y2="452" class="uml-line"/><circle cx="656" cy="452" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>The University DB offers this interface; the Persistence component reaches it over JDBC."/>
         <!-- dependencies: UI -> business -->
         <line x1="270" y1="146" x2="270" y2="223" class="uml-line-dashed" marker-end="url(#uc-open)"/>
         <text x="278" y="190" class="uml-text-mono" font-size="11">manageSeminars</text>
@@ -3238,7 +3240,7 @@
     <p class="body">Notation:</p>
 
     <ul class="body">
-      <li><strong>Nodes</strong>: 3D boxes representing a hardware or software execution environment. Common stereotypes: <code>&lt;&lt;server&gt;&gt;</code>, <code>&lt;&lt;client&gt;&gt;</code>, <code>&lt;&lt;database&gt;&gt;</code>, <code>&lt;&lt;mobile device&gt;&gt;</code>.</li>
+      <li><strong>Nodes</strong>: 3D boxes representing a hardware or software execution environment. UML provides standard node stereotypes that each display an icon in the node's top-right corner: <code>&lt;&lt;computer&gt;&gt;</code>, <code>&lt;&lt;pc&gt;&gt;</code>, <code>&lt;&lt;pc client&gt;&gt;</code>, <code>&lt;&lt;pc server&gt;&gt;</code>, <code>&lt;&lt;server&gt;&gt;</code>, <code>&lt;&lt;unix server&gt;&gt;</code>, <code>&lt;&lt;secure&gt;&gt;</code>, <code>&lt;&lt;storage&gt;&gt;</code>, <code>&lt;&lt;disk array&gt;&gt;</code>, <code>&lt;&lt;cdrom&gt;&gt;</code>, <code>&lt;&lt;user pc&gt;&gt;</code>. A <em>node instance</em> is written like an object: an underlined name with a colon before its node type, as in <code>BZUBranch : pc server</code>.</li>
       <li><strong>Artifacts</strong>: deployable items on a node. Drawn as a rectangle with a <code>&lt;&lt;artifact&gt;&gt;</code> stereotype and a small document icon. Executables, configuration files, databases.</li>
       <li><strong>Communication paths</strong>: lines between nodes, often labelled with the protocol (HTTPS, JDBC, AMQP).</li>
       <li><strong>Component-to-node mapping</strong>: components from a component diagram are placed inside nodes to show which node hosts which component at runtime.</li>
@@ -3251,52 +3253,56 @@
       <li>A <strong>node</strong> is a run-time resource, split into a <em>device</em> (physical hardware: a server, a phone, a router) and an <em>execution environment</em> (software that hosts other software: a JVM, a Docker container, an application server, a browser). An execution environment is usually drawn nested inside the device that runs it.</li>
       <li>An <strong>artefact</strong> is a concrete, deployable file: a <code>.jar</code>, a <code>.war</code>, an executable, a config file, a database file. Artefacts are what actually get copied onto nodes, as opposed to the logical components they realise.</li>
       <li><strong>Manifestation</strong> is the link between the two worlds: an artefact <em>manifests</em> one or more components. So the chain runs component (logical part) &rarr; artefact (the physical file that embodies it) &rarr; node (where that file runs).</li>
+      <li>A <strong>node can act as a container</strong>: components and artefacts are drawn <em>inside</em> the node box to show the node hosts them at run time, and an execution-environment node nests inside the device node that runs it.</li>
       <li><strong>Communication paths</strong> between nodes are labelled with the protocol (HTTPS, JDBC, AMQP, gRPC); they are the run-time analogue of the component diagram's connectors.</li>
     </ul>
     <div class="figure">
       <div class="figure-caption">Figure 10</div>
       <div class="figure-title">Deployment diagram: 3-tier web application</div>
-      <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
-        <!-- PC client (3D box) -->
-        <polygon points="60,80 200,80 230,60 90,60" class="uml-box" fill="#f3ede2"/>
-        <polygon points="200,80 200,200 230,180 230,60" class="uml-box" fill="#ebe2d1"/>
-        <rect x="60" y="80" width="140" height="120" class="uml-box" fill="white"/>
-        <text x="130" y="110" text-anchor="middle" class="uml-text" font-weight="600">PC Client</text>
-        <text x="130" y="128" text-anchor="middle" class="uml-text-stereo">&lt;&lt;pc client&gt;&gt;</text>
-        <rect x="76" y="146" width="108" height="42" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="130" y="170" text-anchor="middle" class="uml-text" font-size="13">Browser</text>
+      <svg viewBox="0 0 1000 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Deployment diagram: PC Client, Web Server and DB Server nodes hosting components and artifacts, joined by HTTPS and JDBC communication paths">
+        <!-- ===== PC Client node (3D box) ===== -->
+        <polygon points="50,110 200,110 222,88 72,88" class="uml-box" fill="#f3ede2"/>
+        <polygon points="200,110 222,88 222,198 200,220" class="uml-box" fill="#ebe2d1"/>
+        <rect x="50" y="110" width="150" height="110" class="uml-box" fill="white" data-tip="<strong>Node (device)</strong><br>A run-time hardware resource. The stereotype «pc client» selects the icon shown in the node's top-right corner. Components and artifacts placed inside run on this node."/>
+        <g transform="translate(176,116)"><rect x="0" y="4" width="14" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="0,4 14,4 17,1 3,1" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="14,4 17,1 17,10 14,13" fill="white" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="121" y="134" text-anchor="middle" class="uml-text" font-weight="600">PC Client</text>
+        <text x="121" y="152" text-anchor="middle" class="uml-text-stereo">&lt;&lt;pc client&gt;&gt;</text>
+        <rect x="64" y="166" width="120" height="44" fill="white" stroke="#2c3540" stroke-width="1" data-tip="<strong>Component inside a node</strong><br>The Browser component runs on the PC Client node. Drawing a component inside a node shows the node hosts it at run time."/>
+        <g transform="translate(166,170)"><rect x="0" y="3" width="15" height="11" fill="white" stroke="#2c3540" stroke-width="1"/><rect x="-3" y="5" width="6" height="3" fill="white" stroke="#2c3540" stroke-width="1"/><rect x="-3" y="9" width="6" height="3" fill="white" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="120" y="183" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;component&gt;&gt;</text>
+        <text x="120" y="200" text-anchor="middle" class="uml-text" font-size="13">Browser</text>
 
-        <!-- Web server -->
-        <polygon points="350,80 540,80 570,60 380,60" class="uml-box" fill="#f3ede2"/>
-        <polygon points="540,80 540,260 570,240 570,60" class="uml-box" fill="#ebe2d1"/>
-        <rect x="350" y="80" width="190" height="180" class="uml-box" fill="white"/>
-        <text x="445" y="110" text-anchor="middle" class="uml-text" font-weight="600">Web Server</text>
-        <text x="445" y="128" text-anchor="middle" class="uml-text-stereo">&lt;&lt;server&gt;&gt;</text>
-        <rect x="366" y="146" width="158" height="42" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="445" y="165" text-anchor="middle" class="uml-text-stereo" font-size="11">&lt;&lt;UI&gt;&gt;</text><text x="445" y="181" text-anchor="middle" class="uml-text" font-size="13">SeminarManagement</text>
-        <rect x="366" y="200" width="158" height="42" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="445" y="224" text-anchor="middle" class="uml-text" font-size="13">Schedule &lt;&lt;app&gt;&gt;</text>
+        <!-- ===== Web Server node ===== -->
+        <polygon points="400,110 580,110 602,88 422,88" class="uml-box" fill="#f3ede2"/>
+        <polygon points="580,110 602,88 602,218 580,240" class="uml-box" fill="#ebe2d1"/>
+        <rect x="400" y="110" width="180" height="130" class="uml-box" fill="white" data-tip="<strong>Node (execution environment)</strong><br>A server node that hosts deployed artifacts at run time. Stereotype «server». The web and application tiers run here."/>
+        <g transform="translate(556,116)"><rect x="0" y="4" width="14" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="0,4 14,4 17,1 3,1" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="14,4 17,1 17,10 14,13" fill="white" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="491" y="134" text-anchor="middle" class="uml-text" font-weight="600">Web Server</text>
+        <text x="491" y="152" text-anchor="middle" class="uml-text-stereo">&lt;&lt;server&gt;&gt;</text>
+        <rect x="416" y="168" width="150" height="50" fill="white" stroke="#2c3540" stroke-width="1" data-tip="<strong>Artifact</strong><br>A concrete deployable file (seminar.war). Drawn with the «artifact» keyword and a document icon (folded corner). It manifests the SeminarManagement application components."/>
+        <g transform="translate(544,172)"><path d="M0,0 H12 L16,4 V18 H0 Z" fill="white" stroke="#2c3540" stroke-width="1"/><polyline points="12,0 12,4 16,4" fill="none" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="485" y="186" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;artifact&gt;&gt;</text>
+        <text x="485" y="204" text-anchor="middle" class="uml-text-mono" font-size="12">seminar.war</text>
 
-        <!-- DB server -->
-        <polygon points="700,80 890,80 920,60 730,60" class="uml-box" fill="#f3ede2"/>
-        <polygon points="890,80 890,260 920,240 920,60" class="uml-box" fill="#ebe2d1"/>
-        <rect x="700" y="80" width="190" height="180" class="uml-box" fill="white"/>
-        <text x="795" y="110" text-anchor="middle" class="uml-text" font-weight="600">DB Server</text>
-        <text x="795" y="128" text-anchor="middle" class="uml-text-stereo">&lt;&lt;database&gt;&gt;</text>
-        <rect x="716" y="146" width="158" height="42" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="795" y="170" text-anchor="middle" class="uml-text" font-size="13">Persistence &lt;&lt;infra&gt;&gt;</text>
-        <rect x="716" y="200" width="158" height="42" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="795" y="224" text-anchor="middle" class="uml-text" font-size="13">University DB</text>
+        <!-- ===== DB Server node ===== -->
+        <polygon points="760,110 940,110 962,88 782,88" class="uml-box" fill="#f3ede2"/>
+        <polygon points="940,110 962,88 962,218 940,240" class="uml-box" fill="#ebe2d1"/>
+        <rect x="760" y="110" width="180" height="130" class="uml-box" fill="white" data-tip="<strong>Node</strong><br>The database server, stereotype «database». A node can host artifacts and components inside it; here the database file is deployed on it."/>
+        <g transform="translate(916,116)"><rect x="0" y="4" width="14" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="0,4 14,4 17,1 3,1" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="14,4 17,1 17,10 14,13" fill="white" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="851" y="134" text-anchor="middle" class="uml-text" font-weight="600">DB Server</text>
+        <text x="851" y="152" text-anchor="middle" class="uml-text-stereo">&lt;&lt;database&gt;&gt;</text>
+        <rect x="776" y="168" width="150" height="50" fill="white" stroke="#2c3540" stroke-width="1" data-tip="<strong>Artifact</strong><br>The database file (university.db) deployed on the DB server. Artifacts are the physical files copied onto nodes, as opposed to the logical components they realise."/>
+        <g transform="translate(904,172)"><path d="M0,0 H12 L16,4 V18 H0 Z" fill="white" stroke="#2c3540" stroke-width="1"/><polyline points="12,0 12,4 16,4" fill="none" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="845" y="186" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;artifact&gt;&gt;</text>
+        <text x="845" y="204" text-anchor="middle" class="uml-text-mono" font-size="12">university.db</text>
 
-        <!-- Connections -->
-        <line x1="230" y1="130" x2="350" y2="160" class="uml-line"/>
-        <text x="270" y="120" class="uml-text-mono" font-size="12">&lt;&lt;HTTPS&gt;&gt;</text>
-
-        <line x1="570" y1="190" x2="700" y2="190" class="uml-line"/>
-        <text x="610" y="180" class="uml-text-mono" font-size="12">&lt;&lt;JDBC&gt;&gt;</text>
-
-        <!-- Caption -->
-        <text x="60" y="300" class="uml-text" font-size="12" fill="#5a6473">Three tiers, each on its own node: client, application, persistence. The nodes communicate over labelled protocols.</text>
+        <!-- ===== Communication paths ===== -->
+        <line x1="211" y1="160" x2="400" y2="160" class="uml-line"/>
+        <line x1="211" y1="160" x2="400" y2="160" stroke="transparent" stroke-width="18" pointer-events="all" data-tip="<strong>Communication path</strong><br>A run-time link between two nodes, labelled with the protocol as a stereotype («HTTPS»). The browser reaches the web server over HTTPS."/>
+        <text x="305" y="152" text-anchor="middle" class="uml-text-mono" font-size="12">&lt;&lt;HTTPS&gt;&gt;</text>
+        <line x1="591" y1="175" x2="760" y2="175" class="uml-line"/>
+        <line x1="591" y1="175" x2="760" y2="175" stroke="transparent" stroke-width="18" pointer-events="all" data-tip="<strong>Communication path</strong><br>The web server reaches the database over «JDBC». Communication paths are the run-time analogue of the component diagram's connectors."/>
+        <text x="675" y="167" text-anchor="middle" class="uml-text-mono" font-size="12">&lt;&lt;JDBC&gt;&gt;</text>
       </svg>
       <div class="figure-note">A typical 3-tier deployment: the client hosts the browser; the web server hosts UI and application components; the database server hosts the persistence component and the database. Communication paths are labelled with their protocols.</div>
     </div>
@@ -3584,7 +3590,7 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">16.</span>References</div>
     <h2 class="section-title">Sources cited above, <em>and where to go next</em>.</h2>
-    <p class="section-intro">The course textbook and Prof Adel's lecture notes anchor the chapter; the books below are the works directly referenced in the text and the standard practitioner references.</p>
+    <p class="section-intro">Sommerville's textbook and Prof Adel Taweel's lecture notes anchor this material; the works below are those directly referenced in the text, alongside the standard practitioner references.</p>
 
     <h3 class="subhead-small">Course material</h3>
     <div class="ref-list">
