@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Chapter 7 Interactive Companion: functions on general sets, one-to-one and onto, bijections and inverses, composition, and the pigeonhole principle." />
+
+  <title>COMP233 Ch.7 Companion: Functions</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-critical: #fff9c4;
+      --c-broken-bg: #ffcdd2;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-critical: #4e4322;
+      --c-broken-bg: #5a2727;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .companion-hero { text-align: center; padding: 30px 0 12px; }
+    .companion-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 700; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .companion-hero h1 { font-size: 1.8rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .companion-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .companion-hero .back-link { font-size: 0.88rem; color: var(--c-primary); text-decoration: none; font-weight: 600; }
+    .companion-hero .back-link:hover { text-decoration: underline; }
+
+    .intro-card {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-primary); border-radius: 8px;
+      padding: 16px 22px; margin: 24px 0 0;
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
+    }
+    .intro-card h4 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .intro-card p { margin: 0 0 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    .toc {
+      background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-primary); border-radius: 12px;
+      padding: 18px 24px 14px; margin: 22px 0 18px;
+      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
+    }
+    body.dark .toc { background: linear-gradient(180deg, rgba(100,181,246,0.10) 0%, var(--c-card-bg) 100%); }
+    .toc-title {
+      margin: 0 0 12px; font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-primary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toc-section { margin-bottom: 10px; }
+    .toc-section:last-child { margin-bottom: 0; }
+    .toc-section h5 {
+      margin: 0 0 6px; font-size: 0.9rem; font-weight: 700;
+      color: var(--c-text); line-height: 1.4;
+    }
+    .toc-section h5 .toc-num {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      color: var(--c-primary); margin-right: 8px;
+    }
+    .toc-links {
+      display: flex; flex-wrap: wrap; gap: 6px 8px;
+      padding-left: 14px; border-left: 2px solid var(--c-border);
+    }
+    body.dark .toc-links { border-left-color: #2a3a4a; }
+    .toc-links a {
+      display: inline-block; font-size: 0.84rem;
+      color: var(--c-primary); background: var(--c-card-bg);
+      text-decoration: none; padding: 4px 12px;
+      border: 1px solid var(--c-border); border-radius: 16px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .toc-links a:hover { background: var(--c-primary); color: #fff; border-color: var(--c-primary); text-decoration: none; }
+    @media (max-width: 640px) { .toc { padding: 16px 18px 12px; } .toc-links { padding-left: 10px; } }
+
+    .chapter-section { margin-top: 44px; }
+    .chapter-section > h2 {
+      font-size: 1.45rem; font-weight: 700; color: var(--c-primary);
+      border-bottom: 2px solid var(--c-border); padding-bottom: 10px; margin: 0 0 22px;
+    }
+    .chapter-section > h2 .ch-num {
+      font-family: 'Roboto Mono', monospace; font-size: 1.15rem;
+      margin-right: 10px; color: var(--c-muted);
+    }
+
+    .section-intro {
+      font-size: 0.96rem; line-height: 1.65; color: var(--c-text); margin-bottom: 22px;
+    }
+    .section-intro ul { padding-left: 22px; }
+    .section-intro li { margin-bottom: 4px; }
+    .section-intro code, .section-intro .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86em;
+    }
+
+    .widget-card {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 22px 26px; margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .widget-card h3 {
+      font-size: 1.05rem; font-weight: 700; color: var(--c-primary); margin: 0 0 6px;
+    }
+    .widget-card .widget-desc {
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.55; margin-bottom: 16px;
+    }
+    .widget-card .widget-desc code,
+    .widget-card .widget-desc .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.88em;
+    }
+
+    /* Hover terms */
+    .term {
+      position: relative; cursor: help;
+      border-bottom: 1px dotted var(--c-primary);
+      color: inherit; font-weight: 700;
+    }
+    .term::after {
+      content: attr(data-tip); position: absolute;
+      bottom: calc(100% + 8px); left: 0;
+      background: #263238; color: #fff;
+      padding: 9px 13px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 400; line-height: 1.55;
+      white-space: normal; word-wrap: break-word; width: max-content;
+      max-width: min(360px, calc(100vw - 32px));
+      text-align: left; opacity: 0; pointer-events: none;
+      transition: opacity 0.15s; z-index: 50;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .term::before {
+      content: ''; position: absolute;
+      bottom: calc(100% + 3px); left: 14px;
+      border: 5px solid transparent; border-top-color: #263238;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50;
+    }
+    .term:hover::after, .term:focus::after,
+    .term:hover::before, .term:focus::before { opacity: 1; }
+
+    .mono-inline {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg);
+      padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+
+    /* Floating "How to use" widget */
+    .howto-fab {
+      position: fixed; top: 100px; right: 18px; z-index: 30;
+      max-width: 300px; display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .howto-fab-toggle {
+      background: var(--c-primary); color: #fff; border: none;
+      border-radius: 8px; padding: 10px 16px; cursor: pointer;
+      font-size: 0.84rem; font-weight: 700;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    .howto-fab-toggle:hover, .howto-fab-toggle:focus { background: var(--c-primary-dark); outline: none; }
+    .howto-fab-toggle .chev { font-size: 0.72rem; transition: transform 0.2s; }
+    .howto-fab[data-open="true"] .howto-fab-toggle .chev { transform: rotate(180deg); }
+    .howto-fab-body {
+      width: 300px; margin-top: 8px;
+      background: var(--c-card-bg); border: 1px solid var(--c-primary);
+      border-radius: 10px; padding: 14px 18px;
+      font-size: 0.86rem; line-height: 1.55;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+    .howto-fab-body[hidden] { display: none; }
+    .howto-fab-body h5 {
+      margin: 0 0 8px; font-size: 0.72rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+    }
+    .howto-fab-body ul { margin: 0; padding-left: 20px; }
+    .howto-fab-body li { margin-bottom: 8px; }
+    .howto-fab-body li:last-child { margin-bottom: 0; }
+    @media (max-width: 980px) {
+      .howto-fab { position: static; max-width: 100%; align-items: stretch; margin: 18px 0 0; }
+      .howto-fab-toggle { align-self: flex-start; }
+      .howto-fab-body { width: auto; }
+    }
+
+    /* Numeric input row */
+    .num-row {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .num-row label {
+      font-size: 0.88rem; color: var(--c-text);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .num-row input[type="number"], .num-row select {
+      padding: 7px 12px; border: 1px solid var(--c-border); border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.95rem;
+      background: var(--c-card-bg); color: var(--c-text);
+      width: 130px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .num-row input[type="number"]:focus, .num-row select:focus {
+      border-color: var(--c-primary); box-shadow: 0 0 0 2px rgba(21,101,192,0.13);
+    }
+
+    /* Result panels */
+    .result-panel {
+      background: var(--c-page-bg); border-radius: 8px;
+      padding: 12px 16px; margin-top: 8px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem; line-height: 1.7;
+    }
+    .result-panel .res-row {
+      display: flex; gap: 14px; align-items: baseline; padding: 4px 0;
+    }
+    .result-panel .res-row + .res-row {
+      border-top: 1px dotted var(--c-border);
+    }
+    .result-panel .res-label {
+      min-width: 130px; color: var(--c-muted); font-weight: 600;
+    }
+    .result-panel .res-val { color: var(--c-text); font-weight: 700; }
+    .result-panel .res-val.t { color: var(--c-true); }
+    .result-panel .res-val.f { color: var(--c-false); }
+    .result-panel .res-note {
+      font-family: 'Roboto', sans-serif; font-style: italic;
+      color: var(--c-muted); font-size: 0.86rem;
+    }
+
+    /* Verdict pill */
+    .verdict {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 16px;
+      font-size: 0.88rem; font-weight: 700; margin-top: 12px;
+    }
+    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
+    .verdict.warn { background: #fff3e0; color: #e65100; }
+    body.dark .verdict.warn { background: #3a2410; color: #ffb74d; }
+
+    /* Conjecture lab */
+    .conj-card {
+      background: var(--c-page-bg); border-radius: 8px;
+      padding: 14px 18px; margin-top: 8px;
+      font-size: 0.9rem; line-height: 1.65;
+    }
+    .conj-card .conj-stmt {
+      font-style: italic; color: var(--c-text); margin-bottom: 8px;
+    }
+    .conj-card .conj-result {
+      font-family: 'Roboto Mono', monospace; font-size: 0.86rem; line-height: 1.7;
+    }
+    .conj-card .conj-cex {
+      color: var(--c-false); font-weight: 700;
+    }
+    .conj-card .conj-note {
+      font-style: italic; color: var(--c-muted); font-size: 0.82rem;
+      margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--c-border);
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    .data-table th, .data-table td {
+      padding: 7px 12px; border-bottom: 1px solid var(--c-border);
+      text-align: left;
+    }
+    .data-table th {
+      background: var(--c-page-bg); color: var(--c-primary);
+      font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .data-table tr:hover { background: var(--c-page-bg); }
+    .data-table td.formal, .data-table td.mono {
+      font-family: 'Roboto Mono', monospace;
+    }
+    .data-table td.t { color: var(--c-true); font-weight: 700; }
+    .data-table td.f { color: var(--c-false); font-weight: 700; }
+    .data-table td.center { text-align: center; }
+
+    /* Theorem / definition box */
+    .thm-box {
+      border-left: 3px solid var(--c-primary);
+      background: var(--c-primary-light);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: 0.93rem; line-height: 1.65;
+    }
+    .thm-box .thm-title {
+      font-weight: 800; color: var(--c-primary); margin-bottom: 4px;
+      font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .thm-box .thm-body { color: var(--c-text); }
+    .thm-box.def { border-left-color: #2e7d32; background: var(--c-true-bg); }
+    .thm-box.def .thm-title { color: var(--c-true); }
+    body.dark .thm-box.def { background: rgba(46,125,50,0.18); }
+
+    /* Proof callout */
+    .proof-callout {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 14px 18px; margin: 12px 0;
+      font-family: 'Roboto', sans-serif; font-size: 0.9rem; line-height: 1.7;
+    }
+    .proof-callout .proof-label {
+      font-size: 0.74rem; font-weight: 800; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+    .proof-callout .proof-step { padding: 3px 0; }
+    .proof-callout .proof-step.mono {
+      font-family: 'Roboto Mono', monospace; padding-left: 18px;
+    }
+    .proof-callout .end-of-proof {
+      font-weight: 800; color: var(--c-primary); float: right;
+    }
+
+    /* Properties grid (the 7 even/odd properties) */
+    .props-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .prop-cell {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-radius: 6px; padding: 10px 14px;
+      font-size: 0.86rem; line-height: 1.5;
+    }
+    .prop-cell .prop-num {
+      font-size: 0.7rem; font-weight: 800; color: var(--c-primary);
+      letter-spacing: 0.5px;
+    }
+
+    /* Parity-class visualisation */
+    .class-row {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      align-items: baseline; padding: 6px 0;
+    }
+    .class-row + .class-row {
+      border-top: 1px dotted var(--c-border);
+    }
+    .class-row .class-label {
+      min-width: 130px; font-family: 'Roboto Mono', monospace;
+      font-weight: 700; color: var(--c-primary); font-size: 0.86rem;
+    }
+    .class-row .class-chip {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 12px;
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      font-family: 'Roboto Mono', monospace; font-size: 0.82rem;
+    }
+
+    /* Exercises */
+    .exercises-block { margin-top: 18px; }
+    .exercises-block > h3 { font-size: 1.05rem; color: var(--c-primary); margin: 0 0 6px; }
+    .exercises-block .ex-source { font-size: 0.82rem; color: var(--c-muted); font-style: italic; margin-bottom: 16px; }
+    .exercise {
+      background: var(--c-card-bg); border-left: 4px solid var(--c-primary);
+      border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px;
+    }
+    .exercise .ex-label {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+    .exercise .ex-body {
+      font-size: 0.94rem; color: var(--c-text); line-height: 1.6; margin-bottom: 10px;
+    }
+    .solution-btn {
+      background: var(--c-primary-light); color: var(--c-primary);
+      border: 1px solid var(--c-primary); padding: 5px 14px; border-radius: 6px;
+      font-size: 0.84rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-primary); color: #fff; }
+    .solution-btn.open { background: var(--c-primary); color: #fff; }
+    .solution {
+      margin-top: 12px; padding: 14px 18px;
+      background: var(--c-page-bg); border-radius: 6px;
+      font-size: 0.9rem; line-height: 1.65; color: var(--c-text); display: none;
+    }
+    .solution.open { display: block; }
+    .solution code, .solution .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px;
+    }
+    .solution strong { color: var(--c-primary); }
+
+    .recap-card {
+      background: var(--c-primary-light); border-radius: 10px;
+      padding: 22px 28px; margin-top: 36px;
+    }
+    .recap-card h3 { color: var(--c-primary); margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; }
+    .recap-card ul { margin: 0 0 12px; padding-left: 22px; line-height: 1.75; font-size: 0.92rem; }
+    .recap-card .preview {
+      font-size: 0.88rem; color: var(--c-text);
+      padding-top: 12px; border-top: 1px solid rgba(21,101,192,0.2); line-height: 1.6;
+    }
+    body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
+
+    @media (max-width: 640px) {
+      .companion-hero h1 { font-size: 1.4rem; }
+      .widget-card { padding: 16px 18px; }
+    }
+  </style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <aside class="howto-fab" id="howto-fab" data-open="false">
+    <button type="button" class="howto-fab-toggle" aria-expanded="false" aria-controls="howto-fab-body">
+      <i class="fas fa-question-circle"></i>
+      <span>How to use</span>
+      <i class="fas fa-chevron-down chev"></i>
+    </button>
+    <div class="howto-fab-body" id="howto-fab-body" hidden>
+      <h5>Using this companion</h5>
+      <ul>
+        <li><strong>Arrow-diagram widgets</strong>: type the domain and co-domain as comma lists, and the rule as <span class="mono-inline">x:y</span> pairs (e.g. <span class="mono-inline">a:2, b:4, c:2</span>). Repeat an input to test the single-valued rule (e.g. <span class="mono-inline">c:2, c:3</span>).</li>
+        <li><strong>One-to-one / onto / bijection</strong> checkers name the witness when a property fails: the colliding pair, or the missed target.</li>
+        <li><strong>Hover any underlined term</strong> for its symbol, Arabic name, and a short definition.</li>
+        <li><strong>Practice and worked solutions</strong> use Epp's recommended problems (4th ed.), listed per section. Try each on paper first, then reveal.</li>
+        <li><strong>Scope</strong>: 7.1 and 7.2 are the examinable core; 7.3 (composition) and 9.4 (pigeonhole) are enrichment.</li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="companion-hero">
+          <div class="eyebrow">COMP233 &middot; Chapter 7 Interactive Companion</div>
+          <h1>Functions</h1>
+          <div class="subtitle">What a function is, one-to-one and onto, bijections and inverses, composition, and the pigeonhole principle. Sections 7.1&ndash;7.3 and 9.4.</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="intro-card">
+          <h4><i class="fas fa-compass"></i> About this chapter</h4>
+          <p>A <strong>function</strong> is the most-used object in mathematics and computing: a rule that turns each input into exactly one output. Chapter 6 built sets and Cartesian products; a function is just a special <em>subset</em> of a product <span class="mono-inline">X &times; Y</span>, so this chapter stands directly on the last one.</p>
+          <p><strong>The thread.</strong> Section 7.1 pins down what a function is (every input gets <em>one</em> output) and the vocabulary of image, range and inverse image. Section 7.2 asks two questions about the output side: can two inputs collide (<span class="term" data-tip="&#8221;&#1583;&#1575;&#1604;&#1577; &#1605;&#1578;&#1576;&#1575;&#1610;&#1606;&#1577;&#8220; &middot; injective &middot; distinct inputs give distinct outputs"><strong>one-to-one</strong></span>?) and is every target hit (<span class="term" data-tip="&#1583;&#1575;&#1604;&#1577; &#1588;&#1575;&#1605;&#1604;&#1577; &middot; surjective &middot; every co-domain element is an image"><strong>onto</strong></span>?). Both at once is a <strong>bijection</strong>, which can be run backward to give an <strong>inverse</strong>. Section 7.3 chains functions together (composition), and 9.4 turns &ldquo;<em>not</em> one-to-one&rdquo; into a powerful counting tool, the pigeonhole principle.</p>
+          <div class="preview"><strong>Scope for the exam.</strong> Per the lecture notes, <strong>7.1 and 7.2 are the examinable core</strong> &ndash; spend most of your practice time there. <strong>7.3</strong> (composition) and <strong>9.4</strong> (pigeonhole) are enrichment: useful, elegant, and worth knowing, but not primary exam targets.</div>
+        </div>
+
+        <nav class="toc" aria-label="Companion contents">
+          <div class="toc-title"><i class="fas fa-list"></i> Contents</div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 7.1</span>Introduction to functions</h5>
+            <div class="toc-links">
+              <a href="#sec711">What a function is</a>
+              <a href="#sec712">Is it a function? (diagram checker)</a>
+              <a href="#sec713">Image, range, inverse image</a>
+              <a href="#sec714">A zoo of functions (evaluator)</a>
+              <a href="#sec715">Equality of functions (Thm 7.1.1)</a>
+              <a href="#sec716">Well-defined rules</a>
+              <a href="#ex71">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 7.2</span>One-to-one, onto, inverses</h5>
+            <div class="toc-links">
+              <a href="#sec721">One-to-one (injective)</a>
+              <a href="#sec722">Onto (surjective)</a>
+              <a href="#sec723">Injective / onto / bijection checker</a>
+              <a href="#sec724">The linear-function lab</a>
+              <a href="#sec725">Bijections and inverses (Thm 7.2.2)</a>
+              <a href="#sec726">Logarithms (Thm 7.2.1) &amp; change of base</a>
+              <a href="#ex72">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 7.3</span>Composition <span style="font-weight:400;color:var(--c-muted)">(enrichment)</span></h5>
+            <div class="toc-links">
+              <a href="#sec731">Definition and order</a>
+              <a href="#sec732">Composition tracer</a>
+              <a href="#sec733">Order matters (numeric)</a>
+              <a href="#sec734">Identity, inverse, preservation</a>
+              <a href="#ex73">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 9.4</span>The pigeonhole principle <span style="font-weight:400;color:var(--c-muted)">(enrichment)</span></h5>
+            <div class="toc-links">
+              <a href="#sec941">The principle</a>
+              <a href="#sec942">Pigeonhole calculator</a>
+              <a href="#sec943">Generalized &amp; contrapositive forms</a>
+              <a href="#ex94">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Worked</span>Taught solutions</h5>
+            <div class="toc-links">
+              <a href="#worked">Recommended exercises, solved</a>
+              <a href="#recap">Chapter recap</a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- ===================== SECTION 7.1 ===================== -->
+        <div class="chapter-section" id="section-71">
+          <h2><span class="ch-num">Section 7.1</span>Introduction to functions</h2>
+
+          <div class="section-intro" id="sec711">
+            <div class="thm-box def">
+              <div class="thm-title">Definition &middot; function</div>
+              <div class="thm-body">A <strong>function</strong> <span class="mono-inline">f : X &rarr; Y</span> is a relation from the <strong>domain</strong> <span class="mono-inline">X</span> to the <strong>co-domain</strong> <span class="mono-inline">Y</span> satisfying two rules:
+              <br>1. <strong>total</strong> &ndash; every <span class="mono-inline">x &isin; X</span> is related to some element of <span class="mono-inline">Y</span>, and
+              <br>2. <strong>single-valued</strong> &ndash; no <span class="mono-inline">x</span> is related to more than one element of <span class="mono-inline">Y</span>.
+              <br>So each <span class="mono-inline">x</span> has a <strong>unique image</strong> <span class="mono-inline">f(x)</span>.</div>
+            </div>
+            <p>In an <strong>arrow diagram</strong> the two rules read simply: <em>every left-hand element has exactly one arrow leaving it</em>. The right side is unconstrained &ndash; a co-domain element may receive zero, one, or many arrows.</p>
+            <ul>
+              <li><span class="term" data-tip="&#1589;&#1608;&#1585;&#1577; / &#1602;&#1610;&#1605;&#1577; &middot; the unique output f sends x to"><strong>image</strong></span> of <span class="mono-inline">x</span>: the value <span class="mono-inline">f(x)</span>.</li>
+              <li><span class="term" data-tip="&#1575;&#1604;&#1605;&#1583;&#1609; &middot; the outputs actually hit"><strong>range</strong></span>: <span class="mono-inline">{ y &isin; Y | y = f(x) for some x }</span>. Always <span class="mono-inline">range &sube; co-domain</span>, often strictly.</li>
+              <li><span class="term" data-tip="&#1575;&#1604;&#1589;&#1608;&#1585;&#1577; &#1575;&#1604;&#1593;&#1603;&#1587;&#1610;&#1577; &middot; all x mapping to a given y"><strong>inverse image</strong></span> of <span class="mono-inline">y</span>: <span class="mono-inline">{ x &isin; X | f(x) = y }</span>; it may be empty, one, or many.</li>
+            </ul>
+          </div>
+
+          <div class="widget-card" id="sec712">
+            <h3>7.1.1 Is it a function? &mdash; arrow-diagram checker</h3>
+            <div class="widget-desc">Enter a domain <span class="mono-inline">X</span>, a co-domain <span class="mono-inline">Y</span>, and the rule as <span class="mono-inline">x:y</span> arrows. The checker applies the two rules (<em>total</em> and <em>single-valued</em>), and if it is a function reports the range and every inverse image. Try breaking it: drop an input (rule&nbsp;1 fails) or give one input two arrows like <span class="mono-inline">c:2, c:3</span> (rule&nbsp;2 fails). Based on Examples 7.1.1&ndash;7.1.2.</div>
+            <div class="num-row">
+              <label>X (domain) <input type="text" id="f1-X" value="a, b, c" style="width:150px"></label>
+              <label>Y (co-domain) <input type="text" id="f1-Y" value="1, 2, 3, 4" style="width:150px"></label>
+            </div>
+            <div class="num-row">
+              <label>arrows <span class="mono-inline">x:y</span> <input type="text" id="f1-arrows" value="a:2, b:4, c:2" style="width:280px"></label>
+            </div>
+            <div class="result-panel" id="f1-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec714">
+            <h3>7.1.2 A zoo of functions &mdash; evaluator</h3>
+            <div class="widget-desc">Functions are everywhere: numbers, strings, subsets, bit-tuples. Pick one, give it an input, and see the output together with its domain, co-domain and range. These are Examples 7.1.6&ndash;7.1.11 from the notes.</div>
+            <div class="num-row">
+              <label>function
+                <select id="f2-fn">
+                  <option value="acount">g(s) = number of a&rsquo;s in a string of a/b</option>
+                  <option value="size">F(A) = |A|, size of a subset of {a,b,c}</option>
+                  <option value="parity">f(x&#8321;,x&#8322;,x&#8323;) = (x&#8321;+x&#8322;+x&#8323;) mod 2 &middot; parity</option>
+                  <option value="mod3">f(n) = n mod 3</option>
+                  <option value="abs">f(x) = |x|</option>
+                </select>
+              </label>
+              <label>input <input type="text" id="f2-x" value="ababb" style="width:150px"></label>
+            </div>
+            <div class="result-panel" id="f2-out"></div>
+          </div>
+
+          <div class="section-intro" id="sec713" style="margin-top:8px">
+            <p><strong>Reading a diagram (Example 7.1.2).</strong> With <span class="mono-inline">f(a)=2, f(b)=4, f(c)=2</span>: the range is <span class="mono-inline">{2, 4}</span>; the inverse image of 2 is <span class="mono-inline">{a, c}</span>; of 4 is <span class="mono-inline">{b}</span>; of 1 is <span class="mono-inline">&empty;</span> (nothing maps to 1). As ordered pairs, <span class="mono-inline">f = {(a,2),(b,4),(c,2)}</span>. Two arrows reaching 2 is allowed; 1 and 3 being missed is allowed &ndash; only the left side is constrained.</p>
+          </div>
+
+          <div class="widget-card" id="sec715">
+            <h3>7.1.3 Equality of functions (Theorem 7.1.1)</h3>
+            <div class="widget-desc">Two functions are <strong>equal</strong> exactly when they have the same domain, the same co-domain, and agree on every input.</div>
+            <div class="thm-box">
+              <div class="thm-title">Theorem 7.1.1 &middot; a test for equality</div>
+              <div class="thm-body">If <span class="mono-inline">F : X &rarr; Y</span> and <span class="mono-inline">G : X &rarr; Y</span> are functions, then <span class="mono-inline">F = G &nbsp;&hArr;&nbsp; F(x) = G(x)</span> for all <span class="mono-inline">x &isin; X</span>. <em>(A function is its set of ordered pairs, so F and G contain the same pairs precisely when they agree at every input.)</em></div>
+            </div>
+            <p class="widget-desc" style="margin:14px 0 6px"><strong>Example 7.1.3(a) &ndash; two rules, one function.</strong> On <span class="mono-inline">J&#8323; = {0,1,2}</span> take <span class="mono-inline">f(x) = (x&sup2;+x+1) mod 3</span> and <span class="mono-inline">g(x) = (x+2)&sup2; mod 3</span>. The table below is computed live &ndash; the <span class="mono-inline">f</span> and <span class="mono-inline">g</span> columns are identical, so by Theorem 7.1.1, <span class="mono-inline">f = g</span> even though the rules look nothing alike.</p>
+            <div class="result-panel" id="f3-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec716">
+            <h3>7.1.4 When a rule fails to be a function (well-defined)</h3>
+            <div class="widget-desc">A rule defines a function only if it gives <em>every</em> input <em>exactly one</em> unambiguous output. Two classic failures:</div>
+            <div class="thm-box" style="border-left-color:var(--c-false);background:var(--c-false-bg)">
+              <div class="thm-title" style="color:var(--c-false)">Not a function &middot; the unit circle</div>
+              <div class="thm-body">Try <span class="mono-inline">f : R &rarr; R</span> by &ldquo;<span class="mono-inline">f(x)</span> is the <span class="mono-inline">y</span> with <span class="mono-inline">x&sup2;+y&sup2;=1</span>&rdquo;. At <span class="mono-inline">x=2</span> no real <span class="mono-inline">y</span> works (rule&nbsp;1 fails); at <span class="mono-inline">x=0</span> both <span class="mono-inline">y=1</span> and <span class="mono-inline">y=&minus;1</span> work (rule&nbsp;2 fails). The vertical line misses the circle, or meets it twice.</div>
+            </div>
+            <div class="thm-box" style="border-left-color:var(--c-false);background:var(--c-false-bg)">
+              <div class="thm-title" style="color:var(--c-false)">Not a function &middot; reading a numerator (Example 7.1.12)</div>
+              <div class="thm-body">Try <span class="mono-inline">f : Q &rarr; Z</span> by <span class="mono-inline">f(m/n) = m</span>. The same number has many names: <span class="mono-inline">1/2 = 3/6</span>, yet the rule gives <span class="mono-inline">f(1/2)=1</span> but <span class="mono-inline">f(3/6)=3</span>. One input, two outputs &ndash; not a function. &ldquo;Well-defined&rdquo; is really what being a function <em>means</em>.</div>
+            </div>
+          </div>
+
+          <div class="exercises-block" id="ex71">
+            <h3>Practice exercises &middot; Section 7.1</h3>
+            <div class="ex-source">Epp, 4th ed. &sect;7.1 (p.&nbsp;393): recommended 2, 6, 7, 9, 18, 19, 20, 41, 42, 43. Two are worked here; more in <a href="#worked">Taught solutions</a>.</div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 7.1 A</div>
+              <div class="ex-body">Let <span class="mono-inline">X = {1,2,3}</span>, <span class="mono-inline">Y = {a,b,c,d}</span> and <span class="mono-inline">f = {(1,c),(2,a),(3,c)}</span>. State the domain, co-domain and range; find the inverse image of <span class="mono-inline">c</span> and of <span class="mono-inline">b</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-71A">Show solution</button>
+              <div class="solution" id="sol-71A">Domain <span class="mono">{1,2,3}</span>, co-domain <span class="mono">{a,b,c,d}</span>. Each input has exactly one image, so <span class="mono">f</span> is a function. <strong>Range</strong> <span class="mono">= {a, c}</span> (the outputs actually used). <strong>Inverse image of c</strong> <span class="mono">= {1, 3}</span> (both map to <span class="mono">c</span>); <strong>inverse image of b</strong> <span class="mono">= &empty;</span> (nothing maps to <span class="mono">b</span>, which is fine &ndash; <span class="mono">b</span> is just outside the range).</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 7.1 B</div>
+              <div class="ex-body">Is the rule <span class="mono-inline">h : Z &rarr; Z</span>, <span class="mono-inline">h(n) = n / 2</span>, a function? Explain using the two rules.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-71B">Show solution</button>
+              <div class="solution" id="sol-71B"><strong>No.</strong> The single-valued rule is fine, but the <em>total</em> rule fails: for an odd integer such as <span class="mono">n = 3</span>, <span class="mono">3/2</span> is not in the co-domain <span class="mono">Z</span>, so <span class="mono">3</span> has no image. The rule does define a function <span class="mono">Z &rarr; Q</span> (or on the even integers), but not <span class="mono">Z &rarr; Z</span>. <em>Domain and co-domain are part of the function.</em></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 7.2 ===================== -->
+        <div class="chapter-section" id="section-72">
+          <h2><span class="ch-num">Section 7.2</span>One-to-one and onto functions, inverses</h2>
+
+          <div class="section-intro" id="sec721">
+            <p>In 7.1 the constraint was only on the <em>left</em> (domain) side. Now two questions about the <em>right</em> (co-domain) side:</p>
+            <div class="thm-box def">
+              <div class="thm-title">Definition &middot; one-to-one (injective)</div>
+              <div class="thm-body"><span class="mono-inline">F : X &rarr; Y</span> is <strong>one-to-one</strong> if distinct inputs give distinct outputs:
+              <br><span class="mono-inline">&forall; x&#8321;, x&#8322; &isin; X, &nbsp; F(x&#8321;) = F(x&#8322;) &rArr; x&#8321; = x&#8322;</span>.
+              <br>It is <strong>not</strong> one-to-one iff <span class="mono-inline">&exist; x&#8321; &ne; x&#8322;</span> with <span class="mono-inline">F(x&#8321;) = F(x&#8322;)</span> (a <em>collision</em>).</div>
+            </div>
+            <div class="props-grid">
+              <div class="prop-cell"><span class="prop-num">TO PROVE one-to-one</span><br>Suppose <span class="mono-inline">F(x&#8321;)=F(x&#8322;)</span> for arbitrary inputs; work algebraically to <span class="mono-inline">x&#8321;=x&#8322;</span>.</div>
+              <div class="prop-cell"><span class="prop-num">TO DISPROVE one-to-one</span><br>Exhibit two specific unequal inputs with the same output. One pair is enough.</div>
+            </div>
+            <p><strong>Example 7.2.2.</strong> <span class="mono-inline">f : R &rarr; R, f(x)=4x&minus;1</span> is one-to-one (<span class="mono-inline">4x&#8321;&minus;1=4x&#8322;&minus;1 &rArr; x&#8321;=x&#8322;</span>). But <span class="mono-inline">g : Z &rarr; Z, g(n)=n&sup2;</span> is <em>not</em>: <span class="mono-inline">g(2)=g(&minus;2)=4</span> yet <span class="mono-inline">2 &ne; &minus;2</span> &ndash; squaring forgets the sign.</p>
+          </div>
+
+          <div class="section-intro" id="sec722">
+            <div class="thm-box def">
+              <div class="thm-title">Definition &middot; onto (surjective)</div>
+              <div class="thm-body"><span class="mono-inline">F : X &rarr; Y</span> is <strong>onto</strong> if every co-domain element is hit:
+              <br><span class="mono-inline">&forall; y &isin; Y, &nbsp; &exist; x &isin; X</span> with <span class="mono-inline">F(x) = y</span>. &nbsp; Equivalently <span class="mono-inline">range = co-domain</span>.
+              <br>It is <strong>not</strong> onto iff some <span class="mono-inline">y</span> is missed by every <span class="mono-inline">x</span>.</div>
+            </div>
+            <p><strong>Example 7.2.5.</strong> <span class="mono-inline">f : R &rarr; R, f(x)=4x&minus;1</span> is onto: given <span class="mono-inline">y</span>, take <span class="mono-inline">x=(y+1)/4 &isin; R</span>. But <span class="mono-inline">h : Z &rarr; Z, h(n)=4n&minus;1</span> is <em>not</em> onto: <span class="mono-inline">y=0</span> needs <span class="mono-inline">n=1/4 &notin; Z</span>. <em>Same rule, different domain, opposite verdict &ndash; one-to-one and onto are independent properties.</em></p>
+          </div>
+
+          <div class="widget-card" id="sec723">
+            <h3>7.2.1 One-to-one / onto / bijection checker</h3>
+            <div class="widget-desc">Define a finite function with <span class="mono-inline">x:y</span> arrows. The checker reports whether it is one-to-one (and names a colliding pair if not), onto (and names a missed target if not), and therefore a bijection. Based on Examples 7.2.1 and 7.2.4 &ndash; try <span class="mono-inline">G</span>, which is onto but not one-to-one.</div>
+            <div class="num-row">
+              <label>X (domain) <input type="text" id="p2-X" value="1, 2, 3, 4" style="width:150px"></label>
+              <label>Y (co-domain) <input type="text" id="p2-Y" value="a, b, c, d" style="width:150px"></label>
+            </div>
+            <div class="num-row">
+              <label>arrows <span class="mono-inline">x:y</span> <input type="text" id="p2-arrows" value="1:c, 2:a, 3:d, 4:b" style="width:280px"></label>
+            </div>
+            <div class="result-panel" id="p2-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec724">
+            <h3>7.2.2 The linear-function lab &mdash; <span class="mono-inline">f(x) = m&middot;x + c</span></h3>
+            <div class="widget-desc">Set the slope <span class="mono-inline">m</span>, intercept <span class="mono-inline">c</span>, and the domain/co-domain. The lab reports one-to-one and onto with reasons, and gives the inverse formula when it exists. This is Examples 7.2.2, 7.2.5 and 7.2.13 in one place &ndash; compare <span class="mono-inline">4x&minus;1</span> over <span class="mono-inline">R</span> (a bijection) with the same rule over <span class="mono-inline">Z</span> (one-to-one but not onto).</div>
+            <div class="num-row">
+              <label>m <input type="number" id="lin-m" value="4" style="width:90px"></label>
+              <label>c <input type="number" id="lin-c" value="-1" style="width:90px"></label>
+              <label>domain &amp; co-domain
+                <select id="lin-dom"><option value="R">R &rarr; R</option><option value="Z">Z &rarr; Z</option></select>
+              </label>
+            </div>
+            <div class="result-panel" id="lin-out"></div>
+          </div>
+
+          <div class="section-intro" id="sec725">
+            <div class="thm-box">
+              <div class="thm-title">Theorem 7.2.2 &middot; inverse functions</div>
+              <div class="thm-body">If <span class="mono-inline">F : X &rarr; Y</span> is a <strong>bijection</strong> (one-to-one and onto), it has an <strong>inverse</strong> <span class="mono-inline">F&#8315;&sup1; : Y &rarr; X</span> with <span class="mono-inline">F&#8315;&sup1;(y) = x &hArr; y = F(x)</span>. <em>Onto</em> makes <span class="mono-inline">F&#8315;&sup1;</span> defined everywhere; <em>one-to-one</em> makes it single-valued. To find it from a formula, solve <span class="mono-inline">y = F(x)</span> for <span class="mono-inline">x</span> (e.g. <span class="mono-inline">f(x)=4x&minus;1 &rArr; f&#8315;&sup1;(y)=(y+1)/4</span>); from a diagram, reverse the arrows.</div>
+            </div>
+            <p><strong>Bijections count.</strong> A bijection <span class="mono-inline">X &harr; Y</span> proves <span class="mono-inline">|X| = |Y|</span>. Example 7.2.8 pairs the four subsets of <span class="mono-inline">{a,b}</span> with the four length-2 bit strings (<span class="mono-inline">&empty;&harr;00, {a}&harr;10, {b}&harr;01, {a,b}&harr;11</span>) &ndash; a perfect matching, so a subset and a bit string are &ldquo;the same data&rdquo;.</p>
+          </div>
+
+          <div class="widget-card" id="sec726">
+            <h3>7.2.3 Logarithms (Theorem 7.2.1) &amp; change of base</h3>
+            <div class="widget-desc">The exponential <span class="mono-inline">exp&#8323;(x)=b&#7515;</span> and the logarithm <span class="mono-inline">log&#8323;</span> are both one-to-one and onto, so each is the inverse of the other: <span class="mono-inline">log&#8323; x = y &hArr; b&#7430; = x</span>. The calculator uses <strong>change of base</strong> (Theorem 7.2.1d), <span class="mono-inline">log&#8323; x = (ln x)/(ln b)</span>, which is how a calculator with only <span class="mono-inline">ln</span> finds any log.</div>
+            <div class="num-row">
+              <label>base b <input type="number" id="log-b" value="2" step="any" style="width:100px"></label>
+              <label>x <input type="number" id="log-x" value="5" step="any" style="width:100px"></label>
+            </div>
+            <div class="result-panel" id="log-out"></div>
+            <div class="props-grid" style="margin-top:14px">
+              <div class="prop-cell"><span class="prop-num">7.2.1 (a)</span> <span class="mono-inline">log&#8323;(xy) = log&#8323; x + log&#8323; y</span> &middot; product &rarr; sum</div>
+              <div class="prop-cell"><span class="prop-num">7.2.1 (b)</span> <span class="mono-inline">log&#8323;(x/y) = log&#8323; x &minus; log&#8323; y</span> &middot; quotient &rarr; difference</div>
+              <div class="prop-cell"><span class="prop-num">7.2.1 (c)</span> <span class="mono-inline">log&#8323;(x&#7491;) = a&middot;log&#8323; x</span> &middot; power &rarr; coefficient</div>
+              <div class="prop-cell"><span class="prop-num">7.2.1 (d)</span> <span class="mono-inline">log&#7580; x = (log&#8323; x)/(log&#8323; c)</span> &middot; change of base</div>
+            </div>
+          </div>
+
+          <div class="exercises-block" id="ex72">
+            <h3>Practice exercises &middot; Section 7.2</h3>
+            <div class="ex-source">Epp, 4th ed. &sect;7.2 (p.&nbsp;413): recommended 1, 8, 12, 13, 17, 18, 23, 25, 27, 33, 35, 43. The examinable core &ndash; practise these most.</div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 7.2 A</div>
+              <div class="ex-body">Define <span class="mono-inline">f : R &rarr; R</span> by <span class="mono-inline">f(x) = 3x + 5</span>. Prove it is one-to-one and onto, and find <span class="mono-inline">f&#8315;&sup1;</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-72A">Show solution</button>
+              <div class="solution" id="sol-72A"><strong>One-to-one.</strong> Suppose <span class="mono">f(x&#8321;)=f(x&#8322;)</span>. Then <span class="mono">3x&#8321;+5 = 3x&#8322;+5 &rArr; 3x&#8321;=3x&#8322; &rArr; x&#8321;=x&#8322;</span>. <strong>Onto.</strong> Given <span class="mono">y &isin; R</span>, set <span class="mono">x = (y&minus;5)/3 &isin; R</span>; then <span class="mono">f(x) = 3&middot;(y&minus;5)/3 + 5 = y</span>. So <span class="mono">f</span> is a bijection. <strong>Inverse.</strong> Solve <span class="mono">y = 3x+5</span>: <span class="mono">f&#8315;&sup1;(y) = (y&minus;5)/3</span>. Check: <span class="mono">f&#8315;&sup1;(f(x)) = (3x+5&minus;5)/3 = x</span>. &#10003;</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 7.2 B</div>
+              <div class="ex-body">Is <span class="mono-inline">g : R &rarr; R, g(x) = x&sup2;</span> one-to-one? onto? What if the domain and co-domain are changed to <span class="mono-inline">R&#8805;&#8320;</span> (the non-negative reals)?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-72B">Show solution</button>
+              <div class="solution" id="sol-72B">Over <span class="mono">R &rarr; R</span>: <strong>not one-to-one</strong> (<span class="mono">g(2)=g(&minus;2)=4</span>) and <strong>not onto</strong> (no <span class="mono">x</span> gives <span class="mono">g(x) = &minus;1</span>, since squares are <span class="mono">&ge; 0</span>). Restricting to <span class="mono">g : R&#8805;&#8320; &rarr; R&#8805;&#8320;</span> repairs both: distinct non-negatives have distinct squares (one-to-one), and every <span class="mono">y &ge; 0</span> is <span class="mono">(&radic;y)&sup2;</span> (onto), so it becomes a bijection with inverse <span class="mono">&radic;y</span>. <em>Domain and co-domain decide everything.</em></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 7.3 ===================== -->
+        <div class="chapter-section" id="section-73">
+          <h2><span class="ch-num">Section 7.3</span>Composition of functions <span style="font-size:0.7em;color:var(--c-muted);font-weight:400">&middot; enrichment</span></h2>
+
+          <div class="section-intro" id="sec731">
+            <div class="thm-box def">
+              <div class="thm-title">Definition &middot; composition</div>
+              <div class="thm-body">Given <span class="mono-inline">f : X &rarr; Y</span> and <span class="mono-inline">g : Y &rarr; Z</span> with <span class="mono-inline">range(f) &sube; domain(g)</span>, the <strong>composition</strong> <span class="mono-inline">g &compfn; f : X &rarr; Z</span> is <span class="mono-inline">(g &compfn; f)(x) = g(f(x))</span>. Read &ldquo;<em>g circle f</em>&rdquo;: <strong>f acts first</strong>, then <span class="mono-inline">g</span> &ndash; apply right-to-left. Two machines in series: <span class="mono-inline">x</span> enters <span class="mono-inline">f</span>, its output feeds straight into <span class="mono-inline">g</span>.</div>
+            </div>
+            <p><strong>Order is part of the operation (Example 7.3.1).</strong> For <span class="mono-inline">f(n)=n+1</span> and <span class="mono-inline">g(n)=n&sup2;</span>: <span class="mono-inline">(g&compfn;f)(n)=(n+1)&sup2;</span> but <span class="mono-inline">(f&compfn;g)(n)=n&sup2;+1</span>. At <span class="mono-inline">n=1</span> these give 4 and 2. So <strong>composition is not commutative</strong>.</p>
+          </div>
+
+          <div class="widget-card" id="sec732">
+            <h3>7.3.1 Composition tracer (finite)</h3>
+            <div class="widget-desc">Give <span class="mono-inline">f</span> (as <span class="mono-inline">X &rarr; Y</span> arrows) and <span class="mono-inline">g</span> (as <span class="mono-inline">Y &rarr; Z</span> arrows). The tracer follows each input all the way across, <span class="mono-inline">x &rarr; f(x) &rarr; g(f(x))</span>, builds <span class="mono-inline">g &compfn; f</span>, and warns if <span class="mono-inline">range(f) &nsube; domain(g)</span> so the composition is undefined. Based on Example 7.3.2.</div>
+            <div class="num-row">
+              <label>f &nbsp;<span class="mono-inline">x:y</span> <input type="text" id="comp-f" value="1:c, 2:b, 3:a" style="width:220px"></label>
+            </div>
+            <div class="num-row">
+              <label>g <span class="mono-inline">y:z</span> <input type="text" id="comp-g" value="a:y, b:y, c:z" style="width:220px"></label>
+            </div>
+            <div class="result-panel" id="comp-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec733">
+            <h3>7.3.2 Order matters &mdash; numeric composition</h3>
+            <div class="widget-desc">Pick two integer functions and an input. The tool computes both <span class="mono-inline">(g &compfn; f)(x)</span> and <span class="mono-inline">(f &compfn; g)(x)</span> so you can see they usually differ.</div>
+            <div class="num-row">
+              <label>f
+                <select id="nc-f"><option value="succ">n + 1</option><option value="sq">n&sup2;</option><option value="dbl">2n</option><option value="m3">n &minus; 3</option></select>
+              </label>
+              <label>g
+                <select id="nc-g"><option value="sq">n&sup2;</option><option value="succ">n + 1</option><option value="dbl">2n</option><option value="m3">n &minus; 3</option></select>
+              </label>
+              <label>x <input type="number" id="nc-x" value="1" style="width:90px"></label>
+            </div>
+            <div class="result-panel" id="nc-out"></div>
+          </div>
+
+          <div class="section-intro" id="sec734">
+            <div class="props-grid">
+              <div class="prop-cell"><span class="prop-num">Theorem 7.3.1 &middot; identity</span><br><span class="mono-inline">f &compfn; I&#8339; = f</span> and <span class="mono-inline">I&#8342; &compfn; f = f</span>. The identity is the &ldquo;1&rdquo; of composition.</div>
+              <div class="prop-cell"><span class="prop-num">Theorem 7.3.2 &middot; inverse</span><br>If <span class="mono-inline">f</span> is a bijection: <span class="mono-inline">f&#8315;&sup1; &compfn; f = I&#8339;</span> and <span class="mono-inline">f &compfn; f&#8315;&sup1; = I&#8342;</span>. A true two-sided undo.</div>
+              <div class="prop-cell"><span class="prop-num">Theorem 7.3.3</span><br>one-to-one &compfn; one-to-one is one-to-one.</div>
+              <div class="prop-cell"><span class="prop-num">Theorem 7.3.4</span><br>onto &compfn; onto is onto. <em>So bijection &compfn; bijection is a bijection.</em></div>
+            </div>
+            <p><strong>Why 7.3.3 holds.</strong> If <span class="mono-inline">g(f(x&#8321;))=g(f(x&#8322;))</span>, then <span class="mono-inline">g</span> one-to-one gives <span class="mono-inline">f(x&#8321;)=f(x&#8322;)</span>, then <span class="mono-inline">f</span> one-to-one gives <span class="mono-inline">x&#8321;=x&#8322;</span>.</p>
+          </div>
+
+          <div class="exercises-block" id="ex73">
+            <h3>Practice exercises &middot; Section 7.3</h3>
+            <div class="ex-source">Epp, 4th ed. &sect;7.3. Enrichment &ndash; lighter than 7.1/7.2.</div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 7.3 A</div>
+              <div class="ex-body">For <span class="mono-inline">f, g : R &rarr; R</span> with <span class="mono-inline">f(x)=2x</span> and <span class="mono-inline">g(x)=x+3</span>, find <span class="mono-inline">g &compfn; f</span> and <span class="mono-inline">f &compfn; g</span>, and confirm they differ.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-73A">Show solution</button>
+              <div class="solution" id="sol-73A"><span class="mono">(g &compfn; f)(x) = g(f(x)) = g(2x) = 2x + 3</span>. &nbsp; <span class="mono">(f &compfn; g)(x) = f(g(x)) = f(x+3) = 2(x+3) = 2x + 6</span>. They differ for every <span class="mono">x</span> (e.g. at <span class="mono">x=0</span>: 3 vs 6), confirming composition is not commutative. Both are themselves bijections (composition of bijections), with inverses <span class="mono">(y&minus;3)/2</span> and <span class="mono">(y&minus;6)/2</span> respectively.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 9.4 ===================== -->
+        <div class="chapter-section" id="section-94">
+          <h2><span class="ch-num">Section 9.4</span>The pigeonhole principle <span style="font-size:0.7em;color:var(--c-muted);font-weight:400">&middot; enrichment</span></h2>
+
+          <div class="section-intro" id="sec941">
+            <div class="thm-box def">
+              <div class="thm-title">The pigeonhole principle</div>
+              <div class="thm-body">If <span class="mono-inline">n</span> pigeons fly into <span class="mono-inline">m</span> holes and <span class="mono-inline">n &gt; m</span>, then at least one hole holds two or more. <br><em>In function language:</em> a function from a finite set to a <strong>smaller</strong> finite set <strong>cannot be one-to-one</strong> &ndash; two inputs must share an image. This is exactly &ldquo;not one-to-one&rdquo; from 7.2, used as a counting tool.</div>
+            </div>
+            <p><strong>The recipe every time:</strong> name the pigeons, name the holes, check <span class="mono-inline">pigeons &gt; holes</span>. The conclusion is then automatic; the art is choosing the holes. Examples: 13 people share a birth-month (13 &gt; 12); 3 socks guarantee a matched pair from 2 colours; among 8 integers <span class="mono-inline">{1..8}</span>, picking 5 forces a pair summing to 9 (holes <span class="mono-inline">{1,8},{2,7},{3,6},{4,5}</span>); every fraction&rsquo;s decimal terminates or repeats (only <span class="mono-inline">b</span> possible remainders).</p>
+          </div>
+
+          <div class="widget-card" id="sec942">
+            <h3>9.4.1 Pigeonhole calculator</h3>
+            <div class="widget-desc">Enter pigeons <span class="mono-inline">n</span> and holes <span class="mono-inline">m</span>. The tool reports whether a collision is forced, the guaranteed <em>fullest</em> hole <span class="mono-inline">&ge; &lceil;n/m&rceil;</span>, the least pigeons needed to force a shared hole, and &ndash; using the generalized form with your <span class="mono-inline">k</span> &ndash; whether some hole must hold <span class="mono-inline">&ge; k+1</span>.</div>
+            <div class="num-row">
+              <label>pigeons n <input type="number" id="ph-n" value="13" style="width:100px"></label>
+              <label>holes m <input type="number" id="ph-m" value="12" style="width:100px"></label>
+              <label>k (generalized) <input type="number" id="ph-k" value="1" style="width:90px"></label>
+            </div>
+            <div class="result-panel" id="ph-out"></div>
+          </div>
+
+          <div class="section-intro" id="sec943">
+            <div class="thm-box">
+              <div class="thm-title">Generalized pigeonhole principle</div>
+              <div class="thm-body">If <span class="mono-inline">n</span> pigeons go into <span class="mono-inline">m</span> holes and <span class="mono-inline">k &lt; n/m</span> for a positive integer <span class="mono-inline">k</span>, then some hole holds <span class="mono-inline">&ge; k+1</span>. The basic principle is the case <span class="mono-inline">k=1</span>. The fullest hole always holds <span class="mono-inline">&ge; &lceil;n/m&rceil;</span>.</div>
+            </div>
+            <p><strong>Example 9.4.5.</strong> Among 85 people, must 4 share a last initial? Holes <span class="mono-inline">= 26</span>, take <span class="mono-inline">k=3</span>: <span class="mono-inline">3 &lt; 85/26 &asymp; 3.27</span>, so some initial is shared by <span class="mono-inline">&ge; 4</span>. <strong>Contrapositive view</strong> (Example 9.4.6 style): if at most 3 shared each initial, at most <span class="mono-inline">3&times;26 = 78</span> people &ndash; but there are 85 &gt; 78, contradiction. &ldquo;At most <span class="mono-inline">k</span> per hole &rArr; at most <span class="mono-inline">k&middot;m</span> total&rdquo; is often the cleanest route.</p>
+          </div>
+
+          <div class="exercises-block" id="ex94">
+            <h3>Practice exercises &middot; Section 9.4</h3>
+            <div class="ex-source">Epp, 4th ed. &sect;9.4: try 1&ndash;12 (basic) and 13&ndash;20 (generalized). Enrichment, not a primary exam target.</div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 9.4 A</div>
+              <div class="ex-body">A drawer holds 10 black and 10 white socks. Pulling blindly, how many must you take to be <em>sure</em> of a matched pair? Does the count of each colour matter?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-94A">Show solution</button>
+              <div class="solution" id="sol-94A"><strong>3 socks.</strong> Pigeons = socks pulled, holes = the 2 colours. Two socks could be one of each colour, but a third has only 2 colours to land in, so <span class="mono">3 &gt; 2</span> forces two of the same colour. The number of socks <em>per</em> colour is irrelevant &ndash; only the number of colours (holes) matters. In general, with <span class="mono">m</span> colours you need <span class="mono">m+1</span> socks to force a pair.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== WORKED SOLUTIONS ===================== -->
+        <div class="chapter-section" id="worked">
+          <h2><span class="ch-num">Worked</span>Taught solutions to recommended exercises</h2>
+          <div class="exercises-block">
+            <div class="ex-source">A selection from Epp&rsquo;s recommended problems, solved in the style used in lecture. Attempt each on paper first.</div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.1 &middot; reading a diagram</div>
+              <div class="ex-body">Let <span class="mono-inline">f : {a,b,c} &rarr; {1,2,3,4}</span> with <span class="mono-inline">f(a)=2, f(b)=4, f(c)=2</span>. Give the range and the inverse image of each element of the co-domain.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W1">Show solution</button>
+              <div class="solution" id="sol-W1"><strong>Range</strong> <span class="mono">= {2, 4}</span>. Inverse images: <span class="mono">f&#8315;&sup1;(1) = &empty;</span>, <span class="mono">f&#8315;&sup1;(2) = {a, c}</span>, <span class="mono">f&#8315;&sup1;(3) = &empty;</span>, <span class="mono">f&#8315;&sup1;(4) = {b}</span>. The inverse images partition the domain: <span class="mono">{a,c} &cup; {b} = {a,b,c}</span>, and the empty ones correspond to co-domain elements outside the range.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.1 &middot; equality of functions</div>
+              <div class="ex-body">On <span class="mono-inline">J&#8323; = {0,1,2}</span>, are <span class="mono-inline">f(x) = (x&sup2;+x+1) mod 3</span> and <span class="mono-inline">g(x) = (x+2)&sup2; mod 3</span> equal?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W2">Show solution</button>
+              <div class="solution" id="sol-W2"><strong>Yes.</strong> Same domain and co-domain; check every input. <span class="mono">f(0)=1, f(1)=(3)mod3=0, f(2)=(7)mod3=1</span>. <span class="mono">g(0)=4mod3=1, g(1)=9mod3=0, g(2)=16mod3=1</span>. The values agree at 0, 1, 2, so by <strong>Theorem 7.1.1</strong>, <span class="mono">f = g</span> &ndash; even though the rules look different. (The widget 7.1.3 computes this table live.)</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.1 &middot; well-defined?</div>
+              <div class="ex-body">Is <span class="mono-inline">f : Q &rarr; Z</span> given by <span class="mono-inline">f(m/n) = m + n</span> well defined?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W3">Show solution</button>
+              <div class="solution" id="sol-W3"><strong>No.</strong> A rational has many names. Take <span class="mono">1/2 = 2/4</span>. The rule gives <span class="mono">f(1/2) = 1+2 = 3</span> but <span class="mono">f(2/4) = 2+4 = 6</span>. One input, two outputs &ndash; the single-valued rule fails, so this is not a function. Any rule that reads the numerator or denominator separately runs into this, because those are properties of the <em>name</em>, not of the number.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.2 &middot; one-to-one and onto from a formula</div>
+              <div class="ex-body">Define <span class="mono-inline">f : Z &rarr; Z</span> by <span class="mono-inline">f(n) = 2n + 1</span>. Is it one-to-one? onto?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W4">Show solution</button>
+              <div class="solution" id="sol-W4"><strong>One-to-one:</strong> if <span class="mono">2n&#8321;+1 = 2n&#8322;+1</span> then <span class="mono">n&#8321; = n&#8322;</span>. &#10003; <strong>Not onto:</strong> <span class="mono">f(n)</span> is always odd, so even targets are missed; e.g. <span class="mono">y = 2</span> needs <span class="mono">n = 1/2 &notin; Z</span>. So <span class="mono">f</span> is one-to-one but not onto. (Its range is the odd integers; restricting the co-domain to the odd integers would make it a bijection.)</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.2 &middot; bijection and inverse</div>
+              <div class="ex-body">Show <span class="mono-inline">h : R &minus; {2} &rarr; R &minus; {1}</span>, <span class="mono-inline">h(x) = x/(x&minus;2)</span>, is a bijection and find <span class="mono-inline">h&#8315;&sup1;</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W5">Show solution</button>
+              <div class="solution" id="sol-W5">Solve <span class="mono">y = x/(x&minus;2)</span> for <span class="mono">x</span>: <span class="mono">y(x&minus;2) = x &rArr; yx &minus; 2y = x &rArr; x(y&minus;1) = 2y &rArr; x = 2y/(y&minus;1)</span> (valid for <span class="mono">y &ne; 1</span>). Every <span class="mono">y &ne; 1</span> gives exactly one <span class="mono">x &ne; 2</span>, so <span class="mono">h</span> is one-to-one and onto, hence a bijection, with <span class="mono">h&#8315;&sup1;(y) = 2y/(y&minus;1)</span>. The excluded points (<span class="mono">x=2</span> and <span class="mono">y=1</span>) are exactly the values that would divide by zero.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.2 &middot; logarithm laws</div>
+              <div class="ex-body">Using Theorem 7.2.1, write <span class="mono-inline">log&#8322;(8x/y&sup3;)</span> in terms of <span class="mono-inline">log&#8322; x</span> and <span class="mono-inline">log&#8322; y</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W6">Show solution</button>
+              <div class="solution" id="sol-W6"><span class="mono">log&#8322;(8x/y&sup3;) = log&#8322;(8x) &minus; log&#8322;(y&sup3;)</span> (quotient) <span class="mono">= log&#8322; 8 + log&#8322; x &minus; 3&middot;log&#8322; y</span> (product, then power) <span class="mono">= 3 + log&#8322; x &minus; 3 log&#8322; y</span>, since <span class="mono">log&#8322; 8 = 3</span>.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.4 &middot; pigeonhole</div>
+              <div class="ex-body">Show that among any 5 integers chosen from <span class="mono-inline">{1,2,&hellip;,8}</span>, two of them sum to 9.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W7">Show solution</button>
+              <div class="solution" id="sol-W7">Partition <span class="mono">{1,&hellip;,8}</span> into the four &ldquo;sum-to-9&rdquo; pairs (the holes): <span class="mono">{1,8}, {2,7}, {3,6}, {4,5}</span>. Choosing 5 integers (pigeons) into 4 holes forces two chosen numbers into the <em>same</em> pair (since <span class="mono">5 &gt; 4</span>) &ndash; and that pair sums to 9. With only 4 chosen it can fail: <span class="mono">{1,2,3,4}</span> has no pair summing to 9. <em>The whole trick is choosing the partition so that &ldquo;two in one hole&rdquo; means exactly what you want.</em></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.4 &middot; generalized / contrapositive</div>
+              <div class="ex-body">42 students share 12 computers; each uses one and no computer serves more than 6. Show at least 5 computers serve 3 or more students.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W8">Show solution</button>
+              <div class="solution" id="sol-W8"><strong>Contradiction (contrapositive count).</strong> Suppose at most 4 computers serve <span class="mono">&ge; 3</span> students. Then at least 8 computers serve <span class="mono">&le; 2</span> each. Maximum students served: the 8 light computers carry <span class="mono">&le; 2&times;8 = 16</span>; the other 4 carry <span class="mono">&le; 6&times;4 = 24</span>; total <span class="mono">&le; 40</span>. But there are 42 &gt; 40 &ndash; contradiction. So at least <strong>5</strong> computers serve 3 or more.</div>
+            </div>
+          </div>
+
+          <div class="recap-card" id="recap">
+            <h3>Chapter recap &mdash; functions, end to end</h3>
+            <ul>
+              <li><strong>7.1</strong> &ndash; a function <span class="mono-inline">f : X &rarr; Y</span> gives every input exactly one image (total + single-valued); know image, range, co-domain, inverse image, equality (Thm 7.1.1), and what &ldquo;well-defined&rdquo; means.</li>
+              <li><strong>7.2</strong> &ndash; one-to-one (no collisions) and onto (nothing missed) are independent; both together make a <strong>bijection</strong>, which has an <strong>inverse</strong> (Thm 7.2.2). Logs are the inverse of exponentials; know the four log laws and change of base (Thm 7.2.1).</li>
+              <li><strong>7.3</strong> &ndash; composition <span class="mono-inline">(g&compfn;f)(x)=g(f(x))</span>, <span class="mono-inline">f</span> first; not commutative; identity and inverse behave as expected; one-to-one and onto are preserved.</li>
+              <li><strong>9.4</strong> &ndash; the pigeonhole principle is &ldquo;a function to a smaller set is not one-to-one&rdquo;, turned into a counting tool; generalized and contrapositive forms count the fullest hole.</li>
+            </ul>
+            <div class="preview"><strong>Exam focus.</strong> 7.1 and 7.2 are the examinable core &ndash; reading diagrams, proving/disproving one-to-one and onto, finding inverses, and the logarithm laws. 7.3 and 9.4 are enrichment. <strong>What&rsquo;s next:</strong> Chapter 8 (Relations) generalises functions &ndash; a function is a relation with the two special rules, and equivalence relations relax them.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+  <script>
+'use strict';
+    /* ===== helpers ===== */
+    function parseList(str){var seen={},out=[];(str||'').split(',').forEach(function(t){t=t.trim();if(t.length&&!seen[t]){seen[t]=1;out.push(t);}});return out;}
+    function fmt(a){return a.length?'{'+a.join(', ')+'}':'&empty;';}
+    function inA(a,x){return a.indexOf(x)!==-1;}
+    function row(label,val,cls,note){return '<div class="res-row"><span class="res-label">'+label+'</span><span class="res-val '+(cls||'')+'">'+val+'</span>'+(note?'<span class="res-note">'+note+'</span>':'')+'</div>';}
+    function parseArrows(str){var out=[];(str||'').split(',').forEach(function(t){t=t.trim();if(!t)return;var p=t.split(':');if(p.length===2){var x=p[0].trim(),y=p[1].trim();if(x.length)out.push([x,y]);}});return out;}
+
+    /* 7.1.1 Is it a function? */
+    (function(){
+      var X=document.getElementById('f1-X'),Y=document.getElementById('f1-Y'),AR=document.getElementById('f1-arrows'),out=document.getElementById('f1-out');
+      if(!X||!out)return;
+      function render(){
+        var dom=parseList(X.value),cod=parseList(Y.value),ar=parseArrows(AR.value);
+        var img={}; ar.forEach(function(p){(img[p[0]]=img[p[0]]||[]); if(!inA(img[p[0]],p[1]))img[p[0]].push(p[1]);});
+        var missing=dom.filter(function(x){return !img[x]||img[x].length===0;});
+        var multi=dom.filter(function(x){return img[x]&&img[x].length>1;});
+        var strayX=Object.keys(img).filter(function(x){return !inA(dom,x);});
+        var strayY=[]; ar.forEach(function(p){if(!inA(cod,p[1])&&!inA(strayY,p[1]))strayY.push(p[1]);});
+        var isFn=missing.length===0&&multi.length===0&&strayX.length===0&&strayY.length===0;
+        var html=
+          row('Rule 1 (total)',missing.length?'FAILS':'holds',missing.length?'f':'t',missing.length?missing.join(', ')+' &isin; X has no arrow':'every input has an arrow')+
+          row('Rule 2 (single-valued)',multi.length?'FAILS':'holds',multi.length?'f':'t',multi.length?multi[0]+' has arrows to '+fmt(img[multi[0]]):'no input has two arrows');
+        if(strayX.length)html+=row('Stray arrow','from '+strayX.join(', '),'f','not in domain X');
+        if(strayY.length)html+=row('Stray target',strayY.join(', '),'f','not in co-domain Y');
+        html+=row('Is it a function?',isFn?'YES':'NO',isFn?'t':'f','');
+        if(isFn){
+          var range=[]; dom.forEach(function(x){var y=img[x][0]; if(!inA(range,y))range.push(y);});
+          html+=row('range',fmt(range),'t','outputs actually hit');
+          cod.forEach(function(y){var inv=dom.filter(function(x){return img[x][0]===y;}); html+=row('f&#8315;&sup1;('+y+')',fmt(inv),inv.length?'t':'',inv.length?'':'nothing maps to '+y);});
+        }
+        out.innerHTML=html;
+      }
+      [X,Y,AR].forEach(function(e){e.addEventListener('input',render);}); render();
+    })();
+
+    /* 7.1.2 function evaluator */
+    (function(){
+      var FN=document.getElementById('f2-fn'),XV=document.getElementById('f2-x'),out=document.getElementById('f2-out');
+      if(!FN||!out)return;
+      function render(){
+        var k=FN.value,v=(XV.value||'').trim(),val,note,dom,ran;
+        if(k==='acount'){var c=0;for(var i=0;i<v.length;i++)if(v[i]==='a')c++;val=c+'';dom='S = strings over {a,b}';ran='Z&#8805;&#8320;';note='count of a&rsquo;s in &quot;'+(v||'&epsilon;')+'&quot;';}
+        else if(k==='size'){var els=parseList(v).filter(function(x){return inA(['a','b','c'],x);});val=els.length+'';dom='&#8473;({a,b,c})';ran='{0,1,2,3}';note='|'+fmt(parseList(v))+'| (only a,b,c count)';}
+        else if(k==='parity'){var bits=parseList(v);var ok=bits.length===3&&bits.every(function(b){return b==='0'||b==='1';});if(!ok){val='&mdash;';note='enter exactly three bits, e.g. 1, 0, 1';}else{var s=bits.reduce(function(a,b){return a+parseInt(b,10);},0);val=(s%2)+'';note='odd number of 1&rsquo;s &rArr; 1';}dom='{0,1}&sup3;';ran='{0,1}';}
+        else if(k==='mod3'){var n=parseInt(v,10);if(isNaN(n)){val='&mdash;';note='enter an integer';}else{val=(((n%3)+3)%3)+'';note='remainder of '+n+' on division by 3';}dom='Z';ran='{0,1,2}';}
+        else{var x=parseFloat(v);if(isNaN(x)){val='&mdash;';note='enter a number';}else{val=Math.abs(x)+'';note='distance of '+x+' from 0';}dom='R';ran='R&#8805;&#8320;';}
+        out.innerHTML=row('output',val,'t',note)+row('domain',dom,'')+row('range',ran,'','&sube; co-domain');
+      }
+      FN.addEventListener('change',render); XV.addEventListener('input',render); render();
+    })();
+
+    /* 7.1.3 equality table on J3 */
+    (function(){
+      var out=document.getElementById('f3-out'); if(!out)return;
+      var w=' style="min-width:88px"';
+      var html='<div class="res-row"><span class="res-label"'+w+'>x</span><span class="res-label"'+w+'>x&sup2;+x+1</span><span class="res-label"'+w+'>f(x)</span><span class="res-label"'+w+'>(x+2)&sup2;</span><span class="res-label"'+w+'>g(x)</span></div>';
+      var agree=true;
+      for(var x=0;x<=2;x++){var a=x*x+x+1,f=a%3,b=(x+2)*(x+2),g=b%3; if(f!==g)agree=false;
+        html+='<div class="res-row"><span class="res-val"'+w+'>'+x+'</span><span class="res-val"'+w+'>'+a+'</span><span class="res-val t"'+w+'>'+f+'</span><span class="res-val"'+w+'>'+b+'</span><span class="res-val t"'+w+'>'+g+'</span></div>';}
+      html+=row('f = g ?',agree?'YES':'NO',agree?'t':'f','by Theorem 7.1.1 (agree at every input)');
+      out.innerHTML=html;
+    })();
+
+    /* 7.2.1 injective / onto / bijection */
+    (function(){
+      var X=document.getElementById('p2-X'),Y=document.getElementById('p2-Y'),AR=document.getElementById('p2-arrows'),out=document.getElementById('p2-out');
+      if(!X||!out)return;
+      function render(){
+        var dom=parseList(X.value),cod=parseList(Y.value),ar=parseArrows(AR.value);
+        var f={}; ar.forEach(function(p){if(inA(dom,p[0])&&!(p[0] in f))f[p[0]]=p[1];});
+        var unmapped=dom.filter(function(x){return !(x in f);});
+        if(unmapped.length){out.innerHTML=row('Not a function yet',unmapped.join(', ')+' has no image','f','define an arrow for every input first'); return;}
+        // one-to-one: find collision
+        var coll=null; for(var i=0;i<dom.length&&!coll;i++)for(var j=i+1;j<dom.length&&!coll;j++)if(f[dom[i]]===f[dom[j]])coll=[dom[i],dom[j],f[dom[i]]];
+        // onto: find missed
+        var hit={}; dom.forEach(function(x){hit[f[x]]=1;}); var miss=cod.filter(function(y){return !hit[y];});
+        var oneone=!coll, onto=miss.length===0, bij=oneone&&onto;
+        out.innerHTML=
+          row('One-to-one?',oneone?'YES':'NO',oneone?'t':'f',oneone?'distinct inputs, distinct outputs':f[coll[0]]+' receives '+coll[0]+' and '+coll[1]+' ('+coll[0]+'&ne;'+coll[1]+')')+
+          row('Onto?',onto?'YES':'NO',onto?'t':'f',onto?'every target is hit (range = co-domain)':miss.join(', ')+' is never an output')+
+          row('Bijection?',bij?'YES':'NO',bij?'t':'f',bij?'has an inverse (Thm 7.2.2)':'needs both one-to-one and onto')+
+          (bij&&dom.length===cod.length?row('Counting',' |X| = |Y| = '+dom.length,'t','the pairing proves the sizes match'):'');
+      }
+      [X,Y,AR].forEach(function(e){e.addEventListener('input',render);}); render();
+    })();
+
+    /* 7.2.2 linear lab */
+    (function(){
+      var M=document.getElementById('lin-m'),C=document.getElementById('lin-c'),D=document.getElementById('lin-dom'),out=document.getElementById('lin-out');
+      if(!M||!out)return;
+      function render(){
+        var m=parseFloat(M.value),c=parseFloat(C.value),dom=D.value;
+        if(isNaN(m)||isNaN(c)){out.innerHTML=row('input','enter numbers m and c','f',''); return;}
+        var inj=(m!==0), onto, ontoNote, invNote;
+        if(m===0){onto=false;ontoNote='constant function: only hits '+c;}
+        else if(dom==='R'){onto=true;ontoNote='x = (y &minus; c)/m is always real';}
+        else{ // Z
+          onto=(Math.abs(m)===1);
+          ontoNote=onto?'|m| = 1, so (y &minus; c)/m is always an integer':'e.g. y = '+(c+1)+' needs x = 1/'+m+' &notin; Z';
+        }
+        var bij=inj&&onto;
+        out.innerHTML=
+          row('f(x)','f(x) = '+m+'x + ('+c+')','','over '+dom+' &rarr; '+dom)+
+          row('One-to-one?',inj?'YES':'NO',inj?'t':'f',inj?'m &ne; 0, so 4&times;1 form is injective':'m = 0 collapses everything to '+c)+
+          row('Onto?',onto?'YES':'NO',onto?'t':'f',ontoNote)+
+          row('Bijection?',bij?'YES':'NO',bij?'t':'f','')+
+          (bij?row('Inverse','f&#8315;&sup1;(y) = (y &minus; ('+c+'))/'+m,'t','solve y = mx + c for x'):row('Inverse','none','','only bijections have an inverse'));
+      }
+      [M,C].forEach(function(e){e.addEventListener('input',render);}); D.addEventListener('change',render); render();
+    })();
+
+    /* 7.2.3 log / change of base */
+    (function(){
+      var B=document.getElementById('log-b'),X=document.getElementById('log-x'),out=document.getElementById('log-out');
+      if(!B||!out)return;
+      function render(){
+        var b=parseFloat(B.value),x=parseFloat(X.value);
+        if(isNaN(b)||isNaN(x)){out.innerHTML=row('input','enter base b and x','f',''); return;}
+        if(b<=0||b===1){out.innerHTML=row('base','invalid','f','need b &gt; 0 and b &ne; 1'); return;}
+        if(x<=0){out.innerHTML=row('x','invalid','f','log is defined only for x &gt; 0'); return;}
+        var val=Math.log(x)/Math.log(b), back=Math.pow(b,val);
+        out.innerHTML=
+          row('log_'+B.value+'('+X.value+')',(Math.round(val*1e6)/1e6)+'','t','= (ln x)/(ln b), change of base')+
+          row('check','b^result = '+(Math.round(back*1e4)/1e4),'t','&asymp; x &rArr; log is the inverse of exp')+
+          row('meaning','the exponent giving '+X.value,'','log = &ldquo;the exponent&rdquo;');
+      }
+      [B,X].forEach(function(e){e.addEventListener('input',render);}); render();
+    })();
+
+    /* 7.3.1 composition tracer */
+    (function(){
+      var F=document.getElementById('comp-f'),G=document.getElementById('comp-g'),out=document.getElementById('comp-out');
+      if(!F||!out)return;
+      function render(){
+        var fa=parseArrows(F.value),ga=parseArrows(G.value);
+        var f={},fdom=[]; fa.forEach(function(p){if(!(p[0] in f)){f[p[0]]=p[1];fdom.push(p[0]);}});
+        var g={},gdom=[]; ga.forEach(function(p){if(!(p[0] in g)){g[p[0]]=p[1];gdom.push(p[0]);}});
+        var html='',range=[],bad=[];
+        fdom.forEach(function(x){var y=f[x]; if(y in g){var z=g[y]; if(!inA(range,z))range.push(z); html+=row('(g&compfn;f)('+x+')',z,'t',x+' &rarr; '+y+' &rarr; '+z);} else {bad.push(y); html+=row('(g&compfn;f)('+x+')','undefined','f',x+' &rarr; '+y+', but '+y+' &notin; domain(g)');}});
+        if(bad.length)html=row('Composition','not defined','f','range(f) &nsube; domain(g): '+bad.join(', ')+' has no g-arrow')+html;
+        else html+=row('range(g&compfn;f)',fmt(range),'t','f acts first, then g');
+        out.innerHTML=html||row('input','enter f and g arrows','','');
+      }
+      [F,G].forEach(function(e){e.addEventListener('input',render);}); render();
+    })();
+
+    /* 7.3.2 numeric order matters */
+    (function(){
+      var F=document.getElementById('nc-f'),G=document.getElementById('nc-g'),X=document.getElementById('nc-x'),out=document.getElementById('nc-out');
+      if(!F||!out)return;
+      var fns={succ:[function(n){return n+1;},'n+1'],sq:[function(n){return n*n;},'n&sup2;'],dbl:[function(n){return 2*n;},'2n'],m3:[function(n){return n-3;},'n&minus;3']};
+      function render(){
+        var f=fns[F.value],g=fns[G.value],x=parseInt(X.value,10);
+        if(isNaN(x)){out.innerHTML=row('x','enter an integer','f',''); return;}
+        var gof=g[0](f[0](x)), fog=f[0](g[0](x));
+        out.innerHTML=
+          row('f, g','f(n)='+f[1]+', g(n)='+g[1],'','')+
+          row('(g&compfn;f)('+x+')',gof+'','t','g(f('+x+')) = g('+f[0](x)+')')+
+          row('(f&compfn;g)('+x+')',fog+'','t','f(g('+x+')) = f('+g[0](x)+')')+
+          row('equal here?',gof===fog?'yes':'no',gof===fog?'t':'f',gof===fog?'they happen to agree at '+x:'composition is not commutative');
+      }
+      F.addEventListener('change',render); G.addEventListener('change',render); X.addEventListener('input',render); render();
+    })();
+
+    /* 9.4.1 pigeonhole calculator */
+    (function(){
+      var N=document.getElementById('ph-n'),M=document.getElementById('ph-m'),K=document.getElementById('ph-k'),out=document.getElementById('ph-out');
+      if(!N||!out)return;
+      function render(){
+        var n=parseInt(N.value,10),m=parseInt(M.value,10),k=parseInt(K.value,10);
+        if(isNaN(n)||isNaN(m)||m<1||n<0){out.innerHTML=row('input','need n &ge; 0 and m &ge; 1','f',''); return;}
+        var basic=n>m, fullest=Math.ceil(n/m), kok=(!isNaN(k)&&k>=1&&k<n/m);
+        out.innerHTML=
+          row('n &gt; m ?',basic?'YES':'NO',basic?'t':'f',basic?'some hole holds &ge; 2 (not one-to-one)':'no collision is forced')+
+          row('fullest hole','&ge; '+fullest,'t','&lceil;n/m&rceil; = &lceil;'+n+'/'+m+'&rceil;')+
+          row('to force a shared hole','take '+(m+1)+' pigeons','','m + 1')+
+          (!isNaN(k)&&k>=1?row('generalized (k = '+k+')',kok?'some hole &ge; '+(k+1):'not forced',kok?'t':'f',kok?'because '+k+' &lt; '+n+'/'+m+' &asymp; '+(Math.round(n/m*100)/100):k+' &lt; n/m is false ('+(Math.round(n/m*100)/100)+')')+
+            row('to force k+1 in a hole','take '+(k*m+1)+' pigeons','','k&middot;m + 1'):'');
+      }
+      [N,M,K].forEach(function(e){e.addEventListener('input',render);}); render();
+    })();
+
+    /* ===================================================== Generic behaviours ===================================================== */
+    /* Solution toggles */
+    document.querySelectorAll('.solution-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const sol = document.getElementById(btn.dataset.toggleSol);
+        if (!sol) return;
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+
+    /* Floating "How to use" toggle */
+    (function () {
+      const root = document.getElementById('howto-fab');
+      if (!root) return;
+      const toggle = root.querySelector('.howto-fab-toggle');
+      const body = root.querySelector('.howto-fab-body');
+      toggle.addEventListener('click', function () {
+        const willOpen = body.hasAttribute('hidden');
+        if (willOpen) { body.removeAttribute('hidden'); root.setAttribute('data-open', 'true'); toggle.setAttribute('aria-expanded', 'true'); }
+        else { body.setAttribute('hidden', ''); root.setAttribute('data-open', 'false'); toggle.setAttribute('aria-expanded', 'false'); }
+      });
+    })();
+  </script>
+</body>
+</html>
