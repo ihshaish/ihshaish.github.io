@@ -54,25 +54,23 @@
     .slot .time { font-weight:700; font-family:'Roboto Mono',monospace; }
     /* mode = colour: on-campus is blue, online (Teams) is purple */
     .slot.campus { background:#e6effd; border-left-color:#1565c0; }
-    .slot.teams  { background:#eeebfb; border-left-color:#6a4fce; }
+    .slot.teams  { background:#f1ecfe; border-left-color:#7c3aed; }
     /* state: bright = free (clickable), faded = booked */
     .slot.free { cursor:pointer; }
     .slot.free:hover { box-shadow:0 4px 14px rgba(0,0,0,.14); transform:translateY(-1px); }
-    /* booked slots are greyed (neutral) so free, colour-coded slots stand out */
+    /* booked slots are greyed (neutral); the campus/online tag stays colourful */
     .slot.taken { background:#ebedf0; border-left-color:#aeb4bd; }
     .slot.taken .time { color:#5b6472; }
     .slot.taken .lab b { color:#3a4250; }
-    .slot.taken .modepill.campus, .slot.taken .modepill.teams { background:#cfd4db; color:#566; }
-    .slot.taken .teamslink { color:#556; }
     .slot .lab { display:block; font-size:0.74rem; margin-top:4px; color:#33415c; line-height:1.35; }
     .slot .lab b { color:#0d47a1; }
     .slot .mem { display:block; font-size:0.72rem; color:#777; margin-top:2px; }
     .slot .cta { display:block; font-size:0.76rem; color:#1b7a33; font-weight:700; margin-top:6px; }
-    .slot .teamslink { display:inline-block; margin-top:7px; font-size:0.76rem; font-weight:700; color:#5b3fc7; text-decoration:none; }
+    .slot .teamslink { display:inline-block; margin-top:7px; font-size:0.76rem; font-weight:700; color:#7c3aed; text-decoration:none; }
     .slot .teamslink:hover { text-decoration:underline; }
     .slot .modepill { display:inline-block; font-size:0.62rem; font-weight:700; padding:2px 8px; border-radius:9px; vertical-align:2px; letter-spacing:.3px; }
     .slot .modepill.campus { background:#1565c0; color:#fff; }
-    .slot .modepill.teams { background:#6a4fce; color:#fff; }
+    .slot .modepill.teams { background:#7c3aed; color:#fff; }
     .slot.taken.mine { box-shadow:0 0 0 2px #e65100 inset; }
     .slot .cancelbtn { display:inline-block; margin-top:8px; font-size:0.74rem; font-weight:700; color:#c62828; background:#fff; border:1px solid #f0b4ae; border-radius:6px; padding:4px 9px; cursor:pointer; }
     .slot .cancelbtn:hover { background:#fdecea; }
@@ -139,7 +137,7 @@
       <h2><span class="step">2</span>Pick a free slot</h2>
       <div class="legend">
         <span><span class="legdot" style="background:#1565c0;"></span>On campus, Masri 320 (Wed &amp; Thu)</span>
-        <span><span class="legdot" style="background:#6a4fce;"></span>Online on MS Teams (Fri &amp; Sat)</span>
+        <span><span class="legdot" style="background:#7c3aed;"></span>Online on MS Teams (Fri &amp; Sat)</span>
         <span>Bright slot = free, click to book &middot; faded = already booked</span>
       </div>
       <div id="grid"></div>
