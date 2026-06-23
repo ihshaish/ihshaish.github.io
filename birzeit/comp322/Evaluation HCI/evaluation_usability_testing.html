@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMP322 - Evaluation and usability testing</title>
+<style>
+  :root{
+    --ink:#1c2530;
+    --muted:#5d6b78;
+    --faint:#6b7884;
+    --steel:#2C5F7C;
+    --steel-d:#21485f;
+    --steel-l:#e7eff4;
+    --gold:#b07c2e;
+    --gold-ink:#8a5f1f;
+    --gold-l:#f3ead7;
+    --line:#e2e7ec;
+    --paper:#ffffff;
+    --good:#2f7d54;
+    --bad:#b23b3b;
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:Calibri,"Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:#cdd5db;
+    overflow:hidden;
+  }
+  .stage{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .deck{
+    position:relative;
+    width:min(96vw,1180px);
+    height:min(92vh,700px);
+    background:var(--paper);
+    box-shadow:0 18px 60px rgba(20,40,55,.30);
+    overflow:hidden;
+    border-radius:4px;
+  }
+  .slide{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    padding:52px 64px 60px;
+  }
+  .slide.active{display:flex}
+  .topbar{
+    position:absolute;top:0;left:0;right:0;height:6px;
+    background:linear-gradient(90deg,var(--steel),var(--steel-d));
+    z-index:5;
+  }
+  .body{flex:1;display:flex;flex-direction:column;min-height:0}
+  .eyebrow{
+    font-family:var(--sans);
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-size:.72rem;
+    font-weight:700;
+    color:var(--steel);
+    margin-bottom:14px;
+  }
+  h1{font-family:var(--serif);font-weight:700;font-size:3.0rem;line-height:1.08;letter-spacing:-.5px;color:var(--ink)}
+  h2{font-family:var(--serif);font-weight:700;font-size:2.05rem;line-height:1.12;letter-spacing:-.3px;color:var(--ink);margin-bottom:16px}
+  h3{font-family:var(--serif);font-weight:700;font-size:1.16rem;color:var(--ink);margin-bottom:6px}
+  p{font-size:1.04rem;line-height:1.55;color:var(--muted)}
+  .lead{font-size:1.22rem;line-height:1.5;color:var(--ink)}
+  .k{color:var(--steel);font-weight:600}
+  .em{color:var(--gold-ink);font-weight:600}
+  .etag{display:inline-flex;align-items:center;gap:6px;font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+  .etag:before{content:"";width:7px;height:7px;border-radius:50%}
+  .etag.study{background:#e4efe8;color:#1f6b43}
+  .etag.study:before{background:#2f7d54}
+  .etag.field{background:#e7eff4;color:var(--steel-d)}
+  .etag.field:before{background:var(--steel)}
+  .etag.account{background:var(--gold-l);color:#7a531a}
+  .etag.account:before{background:var(--gold)}
+  .etag.model{background:#efe9f2;color:#5b3f78}
+  .etag.model:before{background:#7a5aa0}
+  strong{color:var(--ink);font-weight:700}
+  .footer{
+    position:absolute;left:64px;right:64px;bottom:22px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.74rem;color:var(--faint);letter-spacing:.02em;
+    border-top:1px solid var(--line);padding-top:10px;
+  }
+  .footer .fnum{font-variant-numeric:tabular-nums}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(14px)}
+  .slide.active .reveal{animation:rise .56s cubic-bezier(.2,.7,.25,1) forwards;animation-delay:var(--d,0ms)}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* title slide */
+  .title-wrap{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .title-kicker{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--steel);font-weight:700;margin-bottom:20px}
+  h1.big{font-size:3.5rem}
+  .title-sub{font-size:1.3rem;color:var(--muted);margin-top:18px;max-width:30ch;line-height:1.45}
+  .byline{margin-top:34px;font-size:.95rem;color:var(--faint)}
+  .byline b{color:var(--ink);font-weight:600}
+
+  /* cards / columns */
+  .cols{display:grid;gap:18px;margin-top:6px}
+  .c2{grid-template-columns:1fr 1fr}
+  .c3{grid-template-columns:1fr 1fr 1fr}
+  .card{
+    background:#fbfcfd;border:1px solid var(--line);border-radius:8px;padding:18px 18px 16px;
+  }
+  .card .tagn{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--steel);font-weight:700;margin-bottom:8px}
+  .card p{font-size:.95rem}
+  .card .mini{display:block;margin-top:10px;font-size:.82rem;color:var(--faint);font-style:italic}
+
+  /* case panel */
+  .case{
+    margin-top:auto;
+    background:var(--steel-l);
+    border-left:4px solid var(--steel);
+    border-radius:0 8px 8px 0;
+    padding:16px 20px;
+  }
+  .case .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;font-weight:700;color:var(--steel-d);display:block;margin-bottom:6px}
+  .case p{color:#2f3f4b;font-size:.98rem}
+  .case.gold{background:var(--gold-l);border-left-color:var(--gold)}
+  .case.gold .lbl{color:#8a5f1f}
+
+  .two{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;flex:1;min-height:0;align-items:center}
+  .stat{font-family:var(--serif);font-size:4.6rem;line-height:1;color:var(--steel);font-weight:700;letter-spacing:-1px}
+  .stat .u{font-size:1.4rem;color:var(--gold);margin-left:4px}
+  .statlbl{font-size:.95rem;color:var(--muted);margin-top:8px}
+
+  ul.clean{list-style:none;margin-top:8px}
+  ul.clean li{position:relative;padding-left:20px;margin-bottom:11px;font-size:1.02rem;color:var(--muted);line-height:1.45}
+  ul.clean li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;background:var(--steel);border-radius:50%}
+  ul.clean li b{color:var(--ink)}
+
+  /* notes overlay */
+  .notes-src{display:none}
+  #notesPanel{
+    position:fixed;right:0;top:0;bottom:0;width:min(440px,92vw);
+    background:#0f1a22;color:#dfe7ec;z-index:40;
+    transform:translateX(100%);transition:transform .26s ease;
+    padding:26px 26px 30px;overflow:auto;box-shadow:-12px 0 40px rgba(0,0,0,.35);
+  }
+  #notesPanel.open{transform:none}
+  #notesPanel h4{font-family:var(--serif);color:#fff;font-size:1.1rem;margin-bottom:14px;border-bottom:1px solid #29404e;padding-bottom:10px}
+  #notesPanel .row{margin-bottom:13px;font-size:.92rem;line-height:1.5;color:#c4d0d8}
+  #notesPanel .tag{display:inline-block;font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#7fd0ff;background:#15303e;border-radius:4px;padding:2px 7px;margin-right:6px}
+  #notesPanel .ar{font-family:"Segoe UI","Tahoma",sans-serif;direction:rtl;unicode-bidi:isolate;color:#ffe3a8}
+  .notes-hint{position:fixed;left:14px;bottom:12px;font-size:.7rem;color:#5d6b78;z-index:30;letter-spacing:.03em}
+
+  /* nav dots */
+  .progress{position:fixed;left:0;bottom:0;height:3px;background:var(--gold);z-index:30;transition:width .3s ease}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;animation:none!important}
+    .slide.active .reveal{animation:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide active" data-init="">
+  <div class="topbar"></div>
+  <div class="title-wrap">
+    <div class="title-kicker reveal" style="--d:60ms">COMP322 · Human computer interaction</div>
+    <h1 class="big reveal" style="--d:160ms">Evaluation</h1>
+    <h1 class="big reveal" style="--d:260ms">How do we know it is any good?</h1>
+    <p class="title-sub reveal" style="--d:420ms">Usability testing, the methods around it, and a couple of laws that let you judge a design before anyone touches it.</p>
+    <div class="byline reveal" style="--d:560ms"><b>Hisham Ihshaish</b> · Department of Computer Science, Birzeit University</div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Opening the session</h4>
+    <div class="row"><span class="tag">Say</span> Today we answer the question every designer eventually has to face. You have spent weeks on a screen, you think it is clear, but you are the worst possible judge of that, because you already know where everything is. Evaluation is how we replace opinion with evidence.</div>
+    <div class="row"><span class="tag">Frame</span> This is a topic in its own right, not just a project step. Three parts: why we evaluate, how we test with real users, and how we judge a design with no users at all.</div>
+    <div class="row"><span class="tag">Cite</span> Rogers, Sharp and Preece (2024), evaluation chapters.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">التقييم</span> evaluation · <span class="ar">قابلية الاستخدام</span> usability.</div>
+  </aside>
+</section>
+
+<!-- 2 THE CORE PROBLEM -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">The problem with your own design</p>
+    <h2 class="reveal" style="--d:80ms">You cannot see your own interface</h2>
+    <p class="lead reveal" style="--d:180ms;max-width:46ch">Once you know where the button is, you can never again experience not knowing. This is the <span class="k">curse of knowledge</span>, and it is why self review fails.</p>
+    <div class="cols c3" style="margin-top:26px">
+      <div class="card reveal" style="--d:300ms"><div class="tagn">The designer</div><p>Knows the menu structure, the labels, the hidden gesture. Everything is obvious. Of course it is.</p></div>
+      <div class="card reveal" style="--d:420ms"><div class="tagn">The new user</div><p>Sees a wall of choices, no memory of your intentions, and a goal that has nothing to do with your architecture.</p></div>
+      <div class="card reveal" style="--d:540ms"><div class="tagn">The gap</div><p>Evaluation exists to measure the distance between those two people. You cannot guess it. You have to look.</p></div>
+    </div>
+    <div class="case reveal" style="--d:680ms">
+      <span class="lbl">The working assumption</span>
+      <p>You are not the user. You will never be the user again. Test with someone who is.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Why we cannot trust our own judgement</h4>
+    <div class="row"><span class="tag">Say</span> The curse of knowledge is a real cognitive bias. Once you know something, you cannot model what it is like not to know it. Try this: tap a famous song on the desk and ask a neighbour to guess it. You hear the whole orchestra in your head, they hear random knocks. That is exactly the gap between a designer and a first time user.</div>
+    <div class="row"><span class="tag">Analogy</span> The tapper and the listener. The designer is always the tapper.</div>
+    <div class="row"><span class="tag">If asked</span> Does experience help? It makes you a better designer, not a substitute for users. Senior designers test more, not less, because they know how often they are wrong.</div>
+    <div class="row"><span class="tag">Cite</span> Curse of knowledge: Camerer, Loewenstein and Weber (1989). The tapping study: Newton (1990), Stanford.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">لعنة المعرفة</span> the curse of knowledge.</div>
+  </aside>
+</section>
+
+<!-- 3 COST OF SKIPPING -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <span class="etag account reveal">Documented case · Palm Beach County, 2000</span>
+    <h2 class="reveal" style="--d:80ms">A ballot layout that changed an election</h2>
+    <div class="diagram-row">
+      <div class="reveal" style="--d:220ms">
+        <svg viewBox="0 0 360 250" class="ballot-svg" role="img" aria-label="Schematic of the butterfly ballot misalignment">
+          <text x="8" y="16" class="bl-h">Left column</text>
+          <g class="bl-name"><rect x="6" y="26" width="120" height="34" rx="4"/><text x="16" y="47">Candidate A</text></g>
+          <g class="bl-name hot"><rect x="6" y="74" width="120" height="34" rx="4"/><text x="16" y="95">Candidate B</text></g>
+          <g class="bl-name"><rect x="6" y="122" width="120" height="34" rx="4"/><text x="16" y="143">Candidate C</text></g>
+          <text x="352" y="16" class="bl-h" text-anchor="end">Right column</text>
+          <g class="bl-name r"><rect x="234" y="50" width="120" height="34" rx="4"/><text x="244" y="71">Candidate D</text></g>
+          <g class="bl-name r"><rect x="234" y="98" width="120" height="34" rx="4"/><text x="244" y="119">Candidate E</text></g>
+          <g class="bl-hole"><circle cx="166" cy="43" r="8"/><text x="166" y="47">1</text></g>
+          <g class="bl-hole trap"><circle cx="194" cy="67" r="8"/><text x="194" y="71">2</text></g>
+          <g class="bl-hole ok"><circle cx="166" cy="91" r="8"/><text x="166" y="95">3</text></g>
+          <g class="bl-hole"><circle cx="194" cy="115" r="8"/><text x="194" y="119">4</text></g>
+          <g class="bl-hole"><circle cx="166" cy="139" r="8"/><text x="166" y="143">5</text></g>
+          <line x1="126" y1="91" x2="158" y2="91" class="bl-line ok"/>
+          <line x1="126" y1="91" x2="186" y2="67" class="bl-line trap"/>
+          <text x="6" y="186" class="bl-cap"><tspan class="okc">Correct:</tspan> B is the 2nd name, but its hole is the 3rd.</text>
+          <text x="6" y="206" class="bl-cap"><tspan class="trapc">Instinct:</tspan> punch the 2nd hole, and you vote for D.</text>
+        </svg>
+      </div>
+      <div>
+        <ul class="clean">
+          <li class="reveal" style="--d:420ms">Names ran down <b>two facing columns</b> with a single row of punch holes between them, so the second name on the left aligned with the <b>third</b> hole.</li>
+          <li class="reveal" style="--d:560ms">Voters reaching for the second name punched the second hole and recorded a vote they never intended.</li>
+          <li class="reveal" style="--d:700ms">Over <b>19,000</b> ballots in that county were spoiled by double punching.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:840ms">
+      <span class="lbl">Why it belongs in this lecture</span>
+      <p>The certified statewide margin was <b>537 votes</b>. This was not a software bug, it was a mapping failure in a paper layout that no one tested with ordinary voters. Recall Norman: when action and result do not line up, people make errors that are not their fault.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>The butterfly ballot</h4>
+    <div class="row"><span class="tag">Say</span> The diagram is the whole story. Two columns of candidates, one shared column of holes down the middle, staggered. The second name you read on the left does not line up with the second hole, it lines up with the third, because the top name on the right claimed the second hole. So the natural action, second name then second hole, casts the wrong vote.</div>
+    <div class="row"><span class="tag">Numbers</span> Over 19,000 ballots in Palm Beach County were invalidated by double punching, and analyses estimate a few thousand votes were misdirected. The certified Florida margin was 537. Present these as documented and analysed, not folklore.</div>
+    <div class="row"><span class="tag">Connect</span> This is Norman's mapping principle from lecture one, on paper, with national stakes. Good mapping makes the correct action obvious. This layout made the wrong action obvious instead.</div>
+    <div class="row"><span class="tag">If asked</span> Was it sabotage? No evidence. The designer enlarged the type to help older voters read it and spread names across two columns to fit. Good intention, zero testing, historic consequence.</div>
+    <div class="row"><span class="tag">Cite</span> Wand, Shotts, Sekhon, Mebane, Herron and Brady (2001), American Political Science Review, on the anomalous Buchanan vote.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">التوافق بين الفعل والنتيجة</span> mapping · <span class="ar">بطاقة الاقتراع</span> ballot.</div>
+  </aside>
+</section>
+
+<style>
+  .diagram-row{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;flex:1;min-height:0;margin-top:6px}
+  .ballot-svg{width:100%;height:auto;max-height:255px}
+  .ballot-svg .bl-h{font-family:var(--sans);font-size:11px;fill:var(--faint);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+  .ballot-svg .bl-name rect{fill:#f4f7f9;stroke:#d4dde3;stroke-width:1}
+  .ballot-svg .bl-name text{font-family:var(--sans);font-size:13px;fill:var(--ink)}
+  .ballot-svg .bl-name.hot rect{fill:#e7eff4;stroke:var(--steel);stroke-width:2}
+  .ballot-svg .bl-hole circle{fill:#fff;stroke:#9aa6b0;stroke-width:1.5}
+  .ballot-svg .bl-hole text{font-family:var(--sans);font-size:10px;fill:var(--faint);text-anchor:middle;dominant-baseline:middle}
+  .ballot-svg .bl-hole.ok circle{stroke:var(--good);stroke-width:2.5}
+  .ballot-svg .bl-hole.trap circle{fill:#fbe9e9;stroke:var(--bad);stroke-width:2.5}
+  .ballot-svg .bl-line{stroke-width:2.5;fill:none}
+  .ballot-svg .bl-line.ok{stroke:var(--good)}
+  .ballot-svg .bl-line.trap{stroke:var(--bad);stroke-dasharray:4 3}
+  .ballot-svg .bl-cap{font-family:var(--sans);font-size:11.5px;fill:var(--muted)}
+  .ballot-svg .okc{fill:var(--good);font-weight:700}
+  .ballot-svg .trapc{fill:var(--bad);font-weight:700}
+</style>
+
+<!-- 4 THE FLIP SIDE -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <span class="etag account reveal">Industry account · Jared Spool, 2009</span>
+    <h2 class="reveal" style="--d:80ms">The three hundred million dollar button</h2>
+    <div class="two">
+      <div class="reveal" style="--d:300ms">
+        <div class="stat" style="color:var(--gold)">$300m<span class="u" style="color:var(--steel)">/ year</span></div>
+        <div class="statlbl">extra revenue, reportedly, from removing one barrier that testing exposed</div>
+      </div>
+      <div>
+        <ul class="clean">
+          <li class="reveal" style="--d:200ms">A large retailer forced shoppers to <b>register</b> before buying. The checkout showed a Register button and a login form.</li>
+          <li class="reveal" style="--d:360ms">In testing, first time buyers were <b>furious</b>. They did not want a relationship, they wanted shoes. Returning customers could not remember if they had an account.</li>
+          <li class="reveal" style="--d:520ms">The team replaced Register with a single <b>Continue</b> button and a quiet line: you do not need an account to buy.</li>
+          <li class="reveal" style="--d:680ms">Purchases jumped immediately. One button, found by watching people, not by arguing in a meeting.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case gold reveal" style="--d:820ms">
+      <span class="lbl">Why it matters</span>
+      <p>Nobody on the team had predicted this. They were too close to it. A handful of real sessions found money that years of internal debate had missed.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Jared Spool's story</h4>
+    <div class="row"><span class="tag">Say</span> Same coin, other face. The ballot shows the cost of not testing. This shows the value of testing. A retailer made everyone register before checkout. Watching real users revealed two groups who both hated it, new buyers who felt ambushed, and returning buyers stuck in a maze of forgotten passwords and reset emails.</div>
+    <div class="row"><span class="tag">The fix</span> One word. Register became Continue. The reported lift was around 45 percent more completed purchases, about 300 million dollars in the first year for that site. Frame the figure as reported, the mechanism is the lesson.</div>
+    <div class="row"><span class="tag">If asked</span> Is this guaranteed for any site? No. The number is specific to that business. What generalises is the method: a registration wall is a classic, invisible to the team, obvious the moment you watch a stranger hit it.</div>
+    <div class="row"><span class="tag">Cite</span> Jared Spool, User Interface Engineering, "The 300 Million Dollar Button" (2009).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">إتمام الشراء</span> checkout · <span class="ar">إنشاء حساب</span> registration.</div>
+  </aside>
+</section>
+
+<!-- 4B TWO MORE FAILURES -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">The same root cause, decades apart</p>
+    <h2 class="reveal" style="--d:80ms">Two more failures, one shared cause</h2>
+    <p class="lead reveal" style="--d:160ms" style="margin-bottom:14px">Both systems were shipped without watching real people under real conditions. Both broke down in public, at the worst possible moment.</p>
+    <div class="cols c2" style="margin-top:18px">
+      <div class="card reveal" style="--d:320ms">
+        <span class="etag account">Documented incident</span>
+        <div class="tagn" style="color:var(--steel-d)">Three Mile Island · 1979</div>
+        <p>A control panel showed that a relief valve had been <b>commanded</b> shut, not that it was physically stuck open. Operators trusted the light while coolant drained away. Meanwhile hundreds of alarms lit at once with no priority. A feedback and mapping failure in a nuclear control room.</p>
+      </div>
+      <div class="card reveal" style="--d:480ms">
+        <span class="etag account">Documented launch failure</span>
+        <div class="tagn" style="color:var(--steel-d)">Healthcare.gov · 2013</div>
+        <p>The United States health insurance exchange launched with almost no end to end usability or load testing. On the first day a mere handful of people managed to enrol before the site collapsed under demand. Evaluation skipped at the scale where it mattered most.</p>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:640ms">
+      <span class="lbl">The pattern</span>
+      <p>Different decades, different domains, one lesson. A system never tested with real people under real load will still find its problems. It just finds them in front of the public instead of in a quiet room with five users.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Two more cautionary cases</h4>
+    <div class="row"><span class="tag">Say</span> The ballot and the button are vivid but old and small. Here are two larger systems that prove the same point in different domains, so students see this is a law of the field, not a quirk.</div>
+    <div class="row"><span class="tag">Three Mile Island</span> The 1979 partial meltdown in Pennsylvania had many causes, but a central one is pure HCI. A relief valve stuck open, yet the indicator only showed that the close command had been sent, not the valve's true state. Operators believed it was shut and let coolant escape for hours. On top of that, a flood of simultaneous alarms gave no sense of what mattered. This is Norman's feedback and visibility, in a reactor.</div>
+    <div class="row"><span class="tag">Healthcare.gov</span> In October 2013 the US federal insurance site launched to millions and almost immediately failed. Reporting and later government reviews found it had not been tested end to end or under realistic load. The technology was fixable, the absence of evaluation before launch was the real failure.</div>
+    <div class="row"><span class="tag">Connect</span> Both are the cost of skipping the cheap step. Tie forward to the five users idea: a fraction of this testing, done early, would have surfaced the worst of it.</div>
+    <div class="row"><span class="tag">Cite</span> Three Mile Island, the Kemeny Commission report (1979); widely analysed in human factors. Healthcare.gov, US Government Accountability Office reviews (2014) and contemporaneous reporting.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">التغذية الراجعة</span> feedback · <span class="ar">اختبار التحمل</span> load testing.</div>
+  </aside>
+</section>
+
+<!-- 5 DECIDE FRAMEWORK -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Before you test anything</p>
+    <h2 class="reveal" style="--d:80ms">Plan it: the DECIDE framework</h2>
+    <p class="lead reveal" style="--d:160ms" >Evaluation is not "grab a friend and poke the app". It is planned. Six questions, in order.</p>
+    <div class="cols c3" style="margin-top:22px">
+      <div class="card reveal" style="--d:280ms"><div class="tagn">D · Determine</div><p>What are the goals of this evaluation? What do you actually need to learn?</p></div>
+      <div class="card reveal" style="--d:360ms"><div class="tagn">E · Explore</div><p>What specific questions will answer those goals?</p></div>
+      <div class="card reveal" style="--d:440ms"><div class="tagn">C · Choose</div><p>Which approach and methods fit? Lab, field, or inspection?</p></div>
+      <div class="card reveal" style="--d:520ms"><div class="tagn">I · Identify</div><p>Practical issues: who, where, what kit, how long, how many?</p></div>
+      <div class="card reveal" style="--d:600ms"><div class="tagn">D · Decide</div><p>How will you handle ethics? Consent, privacy, the right to stop.</p></div>
+      <div class="card reveal" style="--d:680ms"><div class="tagn">E · Evaluate</div><p>Collect, analyse, interpret and present the data honestly.</p></div>
+    </div>
+    <div class="case reveal" style="--d:800ms">
+      <span class="lbl">Use it as a checklist</span>
+      <p>Most weak evaluations skip D and E at the front. They run sessions without deciding what a useful answer would even look like, then drown in notes.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>DECIDE: the planning scaffold</h4>
+    <div class="row"><span class="tag">Say</span> This is the framework from the textbook, and it stops the most common beginner mistake, which is testing without a question. Walk the letters quickly. Determine the goal. Explore it into concrete questions. Choose an approach. Identify the practical issues. Decide the ethics. Evaluate and present.</div>
+    <div class="row"><span class="tag">Worked example</span> Goal: can a new student register for a course unaided. Question: what proportion complete it without help, and where do they stall. Approach: usability test with five students. Practical: a laptop, the live site, fifteen minutes each. Ethics: consent form, anonymise. Evaluate: completion rate plus the points where they stalled.</div>
+    <div class="row"><span class="tag">If asked</span> Is the order strict? Broadly yes. The front two letters protect you from the most expensive mistake, collecting data you cannot use.</div>
+    <div class="row"><span class="tag">Cite</span> Rogers, Sharp and Preece (2024), the DECIDE framework.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">إطار التخطيط للتقييم</span> evaluation planning framework · <span class="ar">الأهداف</span> goals.</div>
+  </aside>
+</section>
+
+<!-- 6 THREE APPROACHES MAP -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">The map of methods</p>
+    <h2 class="reveal" style="--d:80ms">Three ways to evaluate, one question each</h2>
+    <div class="cols c3" style="margin-top:8px">
+      <div class="card reveal" style="--d:240ms"><div class="tagn">With users · controlled</div><h3 style="margin-top:2px">Usability testing</h3><p>Set tasks, watch closely, in a quiet room. You control the conditions.</p><span class="mini">Precise, slightly artificial.</span></div>
+      <div class="card reveal" style="--d:380ms"><div class="tagn">With users · natural</div><h3 style="margin-top:2px">Field studies</h3><p>Watch real use in the real setting, on a bus, in a shop, at 2am.</p><span class="mini">Realistic, hard to control.</span></div>
+      <div class="card reveal" style="--d:520ms"><div class="tagn">Without users</div><h3 style="margin-top:2px">Inspection and models</h3><p>Experts judge against principles. Or you predict performance with a formula.</p><span class="mini">Fast and cheap, blind to surprises.</span></div>
+    </div>
+    <div class="case reveal" style="--d:680ms">
+      <span class="lbl">Where this lecture goes</span>
+      <p>We spend most time on usability testing, because it is the workhorse. Then we end with the without users methods, because being able to judge a design with no people in the room is a quiet superpower.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>The three families</h4>
+    <div class="row"><span class="tag">Say</span> Every evaluation method sits in one of three families. Controlled testing with users, natural observation with users, and inspection without users. You have already met the third, heuristic evaluation, when you applied Nielsen's principles. Today we add the other two and the predictive models.</div>
+    <div class="row"><span class="tag">If asked which is best</span> None alone. Each sees what the others miss. Strong teams triangulate, which is our closing idea.</div>
+    <div class="row"><span class="tag">Cite</span> Rogers, Sharp and Preece (2024): controlled settings, natural settings, and inspection.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">الدراسة الميدانية</span> field study · <span class="ar">التقييم بالفحص</span> inspection.</div>
+  </aside>
+</section>
+
+<!-- 6B THE CHAIN -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Where these tasks come from, and where they lead</p>
+    <h2 class="reveal" style="--d:80ms">One evaluation is a chain, not a single act</h2>
+    <p class="lead reveal" style="--d:160ms" style="margin-bottom:14px">Each step exists because the one before it produced something the next step needs. Nothing here is busywork.</p>
+    <div class="chain">
+      <div class="cnode reveal" style="--d:280ms"><span class="cn">1</span><h3>Goal</h3><p>DECIDE: what must we learn?</p></div>
+      <div class="clink reveal" style="--d:340ms"></div>
+      <div class="cnode reveal" style="--d:400ms"><span class="cn">2</span><h3>Tasks</h3><p>Turn the goal into real user goals</p></div>
+      <div class="clink reveal" style="--d:460ms"></div>
+      <div class="cnode reveal" style="--d:520ms"><span class="cn">3</span><h3>Session</h3><p>Observe, think aloud, stay quiet</p></div>
+      <div class="clink reveal" style="--d:580ms"></div>
+      <div class="cnode reveal" style="--d:640ms"><span class="cn">4</span><h3>Measures</h3><p>Completion, time, errors, SUS</p></div>
+      <div class="clink reveal" style="--d:700ms"></div>
+      <div class="cnode reveal" style="--d:760ms"><span class="cn">5</span><h3>Findings</h3><p>Themes and severity ratings</p></div>
+      <div class="clink reveal" style="--d:820ms"></div>
+      <div class="cnode accent reveal" style="--d:880ms"><span class="cn">6</span><h3>Revise</h3><p>Fix, then test the fix</p></div>
+    </div>
+    <div class="loopline reveal" style="--d:980ms"><span>Step 6 feeds step 2 again. Evaluation is a loop, not a line, and that loop is exactly what your Phase 3 must show.</span></div>
+    <div class="lifebar reveal" style="--d:1080ms">
+      <div class="lb-title">Where each method attaches across the project</div>
+      <div class="lb-row">
+        <div class="lb-stage"><div class="lb-h">Discover</div><div class="lb-m nu2">Interviews, personas</div></div>
+        <div class="lb-link"></div>
+        <div class="lb-stage"><div class="lb-h">Design</div><div class="lb-m nu0">Heuristic inspection, Fitts models</div><div class="lb-u">no users</div></div>
+        <div class="lb-link"></div>
+        <div class="lb-stage"><div class="lb-h">Prototype</div><div class="lb-m nu1">Usability testing</div><div class="lb-u">a few users</div></div>
+        <div class="lb-link"></div>
+        <div class="lb-stage"><div class="lb-h">Live</div><div class="lb-m nu2">Analytics, A/B</div><div class="lb-u">many users</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>The evaluation chain</h4>
+    <div class="row"><span class="tag">Say</span> Beginners treat evaluation as one event, grab a user and poke the app. It is a chain, and every link feeds the next. The goal from DECIDE tells you which tasks to write. The tasks shape the session. The session produces measures. The measures plus the observations become findings. The findings drive revisions. And revisions send you back to step two with a better design.</div>
+    <div class="row"><span class="tag">Where it sits</span> Across the design lifecycle, the cheap links run early, inspection and Fitts style models in the design stage with no users, then usability testing on the prototype, then analytics once the product is live. Same chain, different fidelity each time round.</div>
+    <div class="row"><span class="tag">Why it matters</span> A common failure is stopping at step five, a pile of findings with no revision and no second round. The grade in Phase 3, and the value in industry, is in closing the loop.</div>
+    <div class="row"><span class="tag">Cite</span> The user centred design cycle, ISO 9241-210; Rogers, Sharp and Preece (2024).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">الدورة التكرارية</span> the iterative cycle · <span class="ar">إغلاق الحلقة</span> closing the loop.</div>
+  </aside>
+</section>
+
+<style>
+  .chain{display:flex;align-items:stretch;margin-top:8px}
+  .chain .cnode{flex:1;background:#fbfcfd;border:1px solid var(--line);border-radius:9px;padding:13px 12px;text-align:center;position:relative}
+  .chain .cnode.accent{background:var(--steel-l);border-color:var(--steel)}
+  .chain .cnode .cn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--steel);color:#fff;font-family:var(--serif);font-size:.95rem;margin-bottom:7px}
+  .chain .cnode.accent .cn{background:var(--gold)}
+  .chain .cnode h3{font-size:1rem;margin-bottom:3px}
+  .chain .cnode p{font-size:.78rem;line-height:1.35}
+  .chain .clink{width:20px;align-self:center;height:2px;background:var(--faint);flex:0 0 20px}
+  .loopline{margin-top:18px;border:1px dashed #c5cfd6;border-radius:8px;padding:13px 18px;background:#fafbfc}
+  .loopline span{font-size:.96rem;color:var(--muted)}
+  .loopline span:before{content:"";display:inline-block;width:9px;height:9px;border:2px solid var(--gold);border-radius:50%;margin-right:9px;vertical-align:middle}
+  .lifebar{margin-top:16px}
+  .lifebar .lb-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--faint);margin-bottom:8px}
+  .lifebar .lb-row{display:flex;align-items:stretch}
+  .lifebar .lb-stage{flex:1;text-align:center;padding:4px 6px}
+  .lifebar .lb-h{font-family:var(--serif);font-size:1rem;color:var(--ink);margin-bottom:4px}
+  .lifebar .lb-m{font-size:.8rem;line-height:1.3;border-radius:6px;padding:6px 7px;font-weight:600}
+  .lifebar .lb-m.nu0{background:#efe9f2;color:#5b3f78}
+  .lifebar .lb-m.nu1{background:var(--steel-l);color:var(--steel-d)}
+  .lifebar .lb-m.nu2{background:#e4efe8;color:#1f6b43}
+  .lifebar .lb-u{font-size:.68rem;color:var(--faint);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+  .lifebar .lb-link{width:18px;align-self:center;height:2px;background:var(--line);flex:0 0 18px}
+</style>
+
+<!-- 7 USABILITY TESTING SETUP -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">The workhorse method</p>
+    <h2 class="reveal" style="--d:80ms">A usability test is just structured watching</h2>
+    <p class="lead reveal" style="--d:160ms">Put a representative person in front of the real thing, give them a real goal, and watch without helping.</p>
+    <div class="cols c2" style="margin-top:22px">
+      <div class="card reveal" style="--d:300ms"><div class="tagn">What you do</div>
+        <ul class="clean" style="margin-top:2px">
+          <li>Recruit people who match your users</li>
+          <li>Give them realistic tasks, not a tour</li>
+          <li>Ask them to think aloud</li>
+          <li>Observe, time, count, stay quiet</li>
+        </ul>
+      </div>
+      <div class="card reveal" style="--d:440ms"><div class="tagn">What you do not do</div>
+        <ul class="clean" style="margin-top:2px">
+          <li>Demo the feature you are proud of</li>
+          <li>Explain where the button is</li>
+          <li>Ask "wouldn't it be nice if..."</li>
+          <li>Argue with the participant</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:600ms">
+      <span class="lbl">The mindset</span>
+      <p>You are not selling the design and you are not defending it. You are collecting evidence about it, and the most useful evidence is usually the part that stings.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>The basic test</h4>
+    <div class="row"><span class="tag">Say</span> Strip away the lab equipment and a usability test is structured watching. The structure is what makes it data rather than anecdote: matched participants, realistic tasks, the same protocol each time, and a facilitator who resists the urge to help.</div>
+    <div class="row"><span class="tag">Joke</span> The hardest moment in any test is when a participant is two centimetres from the button and you have to sit on your hands and say nothing. Every facilitator dies a little inside. That silence is the data.</div>
+    <div class="row"><span class="tag">If asked</span> How long per session? Usually thirty to sixty minutes. Longer and people tire and the data degrades.</div>
+    <div class="row"><span class="tag">Cite</span> Rogers, Sharp and Preece (2024), usability testing. Practitioner classic: Steve Krug, Don't Make Me Think.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">اختبار قابلية الاستخدام</span> usability testing · <span class="ar">المهمة</span> task.</div>
+  </aside>
+</section>
+
+<!-- 8 HOW MANY USERS -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <span class="etag model reveal">Mathematical model + replications</span>
+    <h2 class="reveal" style="--d:80ms">Why five users is usually enough</h2>
+    <div class="two">
+      <div>
+        <ul class="clean">
+          <li class="reveal" style="--d:240ms">Nielsen and Landauer modelled how problems are found. Each user reveals roughly the same <b>fraction</b> of issues, so discoveries pile up fast then flatten.</li>
+          <li class="reveal" style="--d:400ms">With about <b>five</b> users you have already seen around <b>85 percent</b> of the problems. The sixth mostly repeats what you saw.</li>
+          <li class="reveal" style="--d:560ms">So run small, fix, and test again. <b>Three rounds of five</b> beats one round of fifteen.</li>
+        </ul>
+      </div>
+      <div class="reveal" style="--d:680ms">
+        <div class="stat">~85%<span class="u">of issues</span></div>
+        <div class="statlbl">found by the fifth participant, in the classic model</div>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:820ms">
+      <span class="lbl">The honest caveat</span>
+      <p>The 85 per cent assumes each user finds about a third of the problems, which holds for a focused interface but not for a sprawling, varied one. To measure a number precisely you also need far more people. The argument over this single figure has run for thirty years.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>The five user finding</h4>
+    <div class="row"><span class="tag">Say</span> This is the single most cited and most argued number in HCI. The model says each user finds a similar proportion of problems, so the curve of total problems found rises steeply then levels off. By five users you have caught most of them, and your time is better spent fixing and retesting than adding a sixth.</div>
+    <div class="row"><span class="tag">The fight</span> Spool and Schroeder later argued that for large, diverse websites five is nowhere near enough. Faulkner showed the variance: sometimes five users catch 99 percent, sometimes 55 percent. So treat five as a floor for a quick formative test, not a ceiling for everything.</div>
+    <div class="row"><span class="tag">Distinguish</span> Finding problems needs few users. Measuring a number, such as average task time, needs many more for statistical confidence. Different goals, different sample sizes.</div>
+    <div class="row"><span class="tag">Cite</span> Nielsen and Landauer (1993), CHI. Counterpoints: Spool and Schroeder (2001); Faulkner (2003).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">حجم العينة</span> sample size · <span class="ar">التقييم التكويني</span> formative evaluation.</div>
+  </aside>
+</section>
+
+<!-- 9 WRITING TASKS -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">The skill nobody practises</p>
+    <h2 class="reveal" style="--d:80ms">Give a goal, not a recipe</h2>
+    <p class="lead reveal" style="--d:160ms">The wording of a task decides whether you learn anything. Tell people what to achieve, never how.</p>
+    <div class="cols c2" style="margin-top:22px">
+      <div class="card reveal" style="--d:320ms;border-color:#e6c9c9;background:#fdf6f6">
+        <div class="tagn" style="color:var(--bad)">Leading · tells them how</div>
+        <p style="color:var(--ink)">"Click the Registration menu at the top, choose Add Course, then type COMP322 in the search box."</p>
+        <span class="mini">You just tested whether they can follow instructions. Useless.</span>
+      </div>
+      <div class="card reveal" style="--d:480ms;border-color:#c8e0cf;background:#f5fbf7">
+        <div class="tagn" style="color:var(--good)">Goal · gives them a reason</div>
+        <p style="color:var(--ink)">"It is registration week. Add COMP322 to your schedule for a section that does not clash with your morning lab."</p>
+        <span class="mini">Now you see where the real journey breaks.</span>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:640ms">
+      <span class="lbl">Why the framing matters</span>
+      <p>A good task has a context and a clear finish line, so both you and the participant know when they are done. It should be something a real person would actually want to do.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Tasks make or break a test</h4>
+    <div class="row"><span class="tag">Say</span> This is where most student tests go wrong. If you tell someone the steps, you have tested their ability to follow you, not the design. Give them a goal with a reason and a finish line, then go quiet and watch them find their own path. The path they take is the finding.</div>
+    <div class="row"><span class="tag">Rule</span> A good task is realistic, has a clear end state, and never names a button. Add light context so it feels real, such as "it is registration week".</div>
+    <div class="row"><span class="tag">If asked</span> How many tasks per session? Three to five for a thirty minute test. Start with an easy one to build confidence.</div>
+    <div class="row"><span class="tag">Project link</span> Your Phase 3 scenarios from Phase 1 are exactly these tasks. Reuse them.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">سيناريو المهمة</span> task scenario · <span class="ar">الهدف</span> goal.</div>
+  </aside>
+</section>
+
+<!-- 10 THINK ALOUD -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Hearing the reasoning, not just the clicks</p>
+    <h2 class="reveal" style="--d:80ms">Think aloud: narrate the struggle</h2>
+    <p class="lead reveal" style="--d:160ms">Ask participants to say what they are thinking as they work. Clicks tell you what happened. Words tell you why.</p>
+    <div class="cols c2" style="margin-top:20px">
+      <div class="card reveal" style="--d:320ms"><div class="tagn">What it sounds like</div><p style="font-style:italic;color:var(--ink)">"I am looking for register... maybe under this menu... no, that is settings... wait, why is there a second login box... I will just try this one."</p></div>
+      <div class="card reveal" style="--d:460ms"><div class="tagn">How to prompt</div>
+        <ul class="clean" style="margin-top:2px">
+          <li>"Keep talking, what are you thinking now?"</li>
+          <li>Stay neutral, never "is it confusing?"</li>
+          <li>When they go silent, gently nudge</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:620ms">
+      <span class="lbl">It is genuinely unnatural</span>
+      <p>Nobody narrates their own thoughts in daily life, so people forget. Your job is to keep the stream running without putting words in their mouth.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>The think aloud protocol</h4>
+    <div class="row"><span class="tag">Say</span> Think aloud is the core technique. You ask the person to keep a running commentary while they work. The gold is in the hesitations and the wrong turns, the moment they expect one thing and the screen gives another. That gap is the usability problem, stated in their own words.</div>
+    <div class="row"><span class="tag">History</span> Introduced for interface work by Clayton Lewis at IBM in 1982, built on the wider method formalised by Ericsson and Simon in 1984. It comes originally from cognitive psychology, where verbal reports were studied as data.</div>
+    <div class="row"><span class="tag">Caution</span> Two honest limits. People sometimes rationalise after the fact, and talking can slightly change how they behave. Still, the insight far outweighs the noise.</div>
+    <div class="row"><span class="tag">If asked</span> What if they go quiet? A neutral nudge, "what are you thinking?". Never "are you confused?", that plants the answer.</div>
+    <div class="row"><span class="tag">Cite</span> Lewis (1982), IBM; Ericsson and Simon (1984), Protocol Analysis.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">التفكير بصوت عالٍ</span> think aloud · <span class="ar">البروتوكول اللفظي</span> verbal protocol.</div>
+  </aside>
+</section>
+
+<!-- 11 FACILITATOR -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">The hardest job in the room</p>
+    <h2 class="reveal" style="--d:80ms">The facilitator's only real skill: silence</h2>
+    <p class="lead reveal" style="--d:160ms">Every word you add contaminates the data. The instinct to rescue a struggling user is the instinct you must defeat.</p>
+    <div class="cols c3" style="margin-top:22px">
+      <div class="card reveal" style="--d:300ms"><div class="tagn">Do not lead</div><p>"What would you do here?" beats "would you click that button?". The second hands them the answer.</p></div>
+      <div class="card reveal" style="--d:420ms"><div class="tagn">Do not rescue</div><p>If they are stuck, that is a finding. Wait. Let the silence stretch. The struggle is the result you came for.</p></div>
+      <div class="card reveal" style="--d:540ms"><div class="tagn">Do not react</div><p>No wincing when they miss it, no smiling when they get it. Your face is feedback too.</p></div>
+    </div>
+    <div class="case reveal" style="--d:700ms">
+      <span class="lbl">The bias to name</span>
+      <p>People want to please you. They will praise a design to your face and abandon it the moment you leave. Neutral questions and a neutral face are how you get the truth instead of the compliment.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Moderating without contaminating</h4>
+    <div class="row"><span class="tag">Say</span> The facilitator is the instrument, and a leaky instrument gives false readings. Three discipline rules. Do not lead with yes or no questions. Do not rescue, because the struggle is the data. Do not react, because your face and tone are feedback that changes behaviour.</div>
+    <div class="row"><span class="tag">Name the bias</span> Social desirability and acquiescence bias. Participants tend to agree and to praise, especially to someone who clearly built the thing. Stay neutral so you measure the design, not their politeness.</div>
+    <div class="row"><span class="tag">Joke</span> Remember Clippy, the paperclip that popped up to "help" the moment you started typing. A facilitator who jumps in to help is just Clippy with a clipboard. Be less Clippy.</div>
+    <div class="row"><span class="tag">If asked</span> What if they truly cannot proceed and are distressed? After a real pause, offer a minimal hint, and log that you did. A rescued task is a partial result, not a clean one.</div>
+    <div class="row"><span class="tag">Cite</span> Social desirability bias: standard in survey and HCI methodology, see Rogers, Sharp and Preece (2024).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">انحياز الاستحسان الاجتماعي</span> social desirability bias · <span class="ar">الميسّر</span> facilitator.</div>
+  </aside>
+</section>
+
+<!-- 12 ANIMATED REPLAY -->
+<section class="slide" data-init="initReplay">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Watch one session</p>
+    <h2 class="reveal" style="--d:60ms">A test replay, narrated</h2>
+    <div class="replay-wrap no-adv reveal" style="--d:160ms">
+      <div class="browser" id="rp-browser">
+        <div class="br-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">ritaj.birzeit.edu / registration</span>
+        </div>
+        <div class="br-page" id="rp-page">
+          <div class="nav">
+            <span class="nav-i" id="nv-home">Home</span>
+            <span class="nav-i" id="nv-grades">Grades</span>
+            <span class="nav-i" id="nv-settings">Settings</span>
+            <span class="nav-i" id="nv-help">Help</span>
+            <span class="nav-i small" id="nv-reg">Registration</span>
+          </div>
+          <div class="panel" id="panel-land">
+            <div class="ph-title">Welcome back</div>
+            <div class="ph-line w70"></div><div class="ph-line w50"></div>
+            <div class="ph-cards"><div class="ph-card"></div><div class="ph-card"></div><div class="ph-card"></div></div>
+          </div>
+          <div class="panel hide" id="panel-search">
+            <div class="ph-title">Add a course</div>
+            <div class="search-row"><input id="search-box" readonly placeholder="Search course code..."><button class="srch">Search</button></div>
+          </div>
+          <div class="panel hide" id="panel-results">
+            <div class="ph-title">Results</div>
+            <div class="result-row"><div><b>COMP322</b><span> Human computer interaction</span></div><button class="add" id="add-btn">Add</button></div>
+            <div class="result-row dim"><div><b>COMP333</b><span> Software engineering</span></div><button class="add ghost">Add</button></div>
+          </div>
+          <div class="panel hide" id="panel-done">
+            <div class="done-tick">done</div>
+            <div class="ph-title">COMP322 added to your schedule</div>
+          </div>
+          <svg class="cursor" id="rp-cursor" width="22" height="22" viewBox="0 0 22 22"><path d="M2 2 L2 17 L6.5 13 L9.5 19.5 L12 18.3 L9 12 L15 12 Z" fill="#1c2530" stroke="#fff" stroke-width="1.1"/></svg>
+        </div>
+      </div>
+      <div class="hud">
+        <div class="hud-task" id="rp-task">Task: add COMP322 to your schedule</div>
+        <div class="hud-stats">
+          <div class="hud-s"><div class="v" id="rp-time">0:00</div><div class="l">time</div></div>
+          <div class="hud-s"><div class="v" id="rp-err">0</div><div class="l">wrong turns</div></div>
+          <div class="hud-s"><div class="v" id="rp-status">running</div><div class="l">status</div></div>
+        </div>
+        <div class="caption" id="rp-cap">Press play to watch the participant think aloud.</div>
+        <button class="play" id="rp-play" onclick="playReplay()">Play session</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Running the replay</h4>
+    <div class="row"><span class="tag">Say</span> This is a recreation of a real pattern, a student trying to add a course. Watch three things at once: the cursor and where it goes wrong, the think aloud caption, and the live counters. Two wrong turns, sixteen seconds, completed but only after dead ends. They found it, then told us exactly why it was hard.</div>
+    <div class="row"><span class="tag">Do</span> Press play, then narrate over it. Pause on the two wrong clicks. Ask the room: was the task failed? No, completed. But would you ship a menu nobody can find? The friction is the finding even when the task succeeds.</div>
+    <div class="row"><span class="tag">Label</span> This is a synthetic illustration, not a recording of a named person. Tell students that explicitly.</div>
+    <div class="row"><span class="tag">Backup</span> If you have internet and want real footage, search the Nielsen Norman Group channel for a moderated usability test demonstration.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">إعادة عرض الجلسة</span> session replay · <span class="ar">المنعطف الخاطئ</span> wrong turn.</div>
+  </aside>
+</section>
+
+<style>
+  .replay-wrap{display:grid;grid-template-columns:1.55fr 1fr;gap:22px;margin-top:14px;flex:1;min-height:0;align-items:stretch}
+  .browser{background:#f1f4f6;border:1px solid #cfd7dd;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+  .br-bar{display:flex;align-items:center;gap:7px;padding:9px 12px;background:#e3e9ed;border-bottom:1px solid #d2dae0}
+  .br-bar .dot{width:10px;height:10px;border-radius:50%}
+  .dot.r{background:#e6736a}.dot.y{background:#e7c15a}.dot.g{background:#6fbf86}
+  .br-bar .url{margin-left:10px;font-size:.78rem;color:#6c7a86;background:#fff;border-radius:5px;padding:4px 12px;flex:1}
+  .br-page{position:relative;flex:1;background:#fff;padding:0;overflow:hidden}
+  .nav{display:flex;gap:0;background:var(--steel);padding:0 6px}
+  .nav-i{color:#dbe8ef;font-size:.84rem;padding:11px 15px;cursor:default;border-bottom:3px solid transparent}
+  .nav-i.small{font-size:.78rem;opacity:.85;margin-left:auto;padding-right:12px}
+  .nav-i.flash{background:#21485f;color:#fff;border-bottom-color:var(--gold)}
+  .panel{padding:20px 22px;position:absolute;inset:46px 0 0 0;overflow:hidden}
+  .panel.hide{display:none}
+  .ph-title{font-family:var(--serif);font-size:1.15rem;color:var(--ink);margin-bottom:14px}
+  .ph-line{height:10px;background:#eef1f3;border-radius:5px;margin-bottom:9px}
+  .w70{width:70%}.w50{width:50%}
+  .ph-cards{display:flex;gap:12px;margin-top:18px}
+  .ph-card{flex:1;height:64px;background:#f3f6f8;border:1px solid #e7ecef;border-radius:8px}
+  .search-row{display:flex;gap:8px;margin-top:6px}
+  #search-box{flex:1;font-size:.92rem;padding:10px 12px;border:1px solid #cdd6dc;border-radius:7px;color:var(--ink);background:#fff}
+  .srch{background:var(--steel);color:#fff;border:none;border-radius:7px;padding:0 16px;font-size:.88rem;cursor:default}
+  .result-row{display:flex;align-items:center;justify-content:space-between;border:1px solid #e7ecef;border-radius:8px;padding:12px 14px;margin-bottom:9px;font-size:.92rem}
+  .result-row b{color:var(--ink)}.result-row span{color:var(--muted)}
+  .result-row.dim{opacity:.55}
+  .add{background:#fff;border:1.5px solid var(--steel);color:var(--steel);border-radius:6px;padding:7px 16px;font-weight:600;font-size:.85rem;cursor:default}
+  .add.flash{background:var(--steel);color:#fff}
+  .add.ghost{border-color:#cdd6dc;color:#9aa6b0}
+  .done-tick{display:inline-block;background:var(--good);color:#fff;border-radius:999px;padding:6px 18px;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px}
+  .cursor{position:absolute;left:0;top:0;transform:translate(120px,150px);transition:transform .85s cubic-bezier(.45,.05,.3,1);z-index:8;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+  .cursor.tap{animation:tap .3s ease}
+  @keyframes tap{50%{transform:translate(var(--cx),var(--cy)) scale(.8)}}
+  .hud{background:#0f1a22;border-radius:10px;padding:18px 18px 18px;display:flex;flex-direction:column;color:#dfe7ec}
+  .hud-task{font-size:.86rem;color:#9fb3c0;border-bottom:1px solid #25404f;padding-bottom:12px;margin-bottom:14px;line-height:1.4}
+  .hud-stats{display:flex;gap:10px;margin-bottom:16px}
+  .hud-s{flex:1;background:#15303e;border-radius:8px;padding:10px 8px;text-align:center}
+  .hud-s .v{font-family:var(--serif);font-size:1.5rem;color:#fff;font-variant-numeric:tabular-nums}
+  .hud-s .l{font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:#7f95a3;margin-top:2px}
+  .hud-s.warn .v{color:#ffb454}
+  .hud-s.ok .v{color:#7fdca0}
+  .caption{flex:1;background:#15252f;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:12px 14px;font-size:.95rem;line-height:1.5;color:#e9eef2;font-style:italic;min-height:74px}
+  .play{margin-top:14px;background:var(--gold);color:#231a08;border:none;border-radius:8px;padding:11px;font-size:.92rem;font-weight:700;cursor:pointer;letter-spacing:.02em}
+  .play:hover{background:#c98e36}
+</style>
+<script>
+(function(){
+  var timers=[],tick=null,started=0,running=false;
+  function $(id){return document.getElementById(id)}
+  function reset(){
+    timers.forEach(clearTimeout);timers=[];if(tick){clearInterval(tick);tick=null}
+    running=false;
+    $('rp-err').textContent='0';$('rp-time').textContent='0:00';
+    var st=$('rp-status');st.textContent='ready';st.parentElement.classList.remove('ok','warn');
+    $('rp-err').parentElement.classList.remove('warn');
+    $('rp-cap').textContent='Press play to watch the participant think aloud.';
+    $('search-box').value='';
+    ['panel-search','panel-results','panel-done'].forEach(function(p){$(p).classList.add('hide')});
+    $('panel-land').classList.remove('hide');
+    document.querySelectorAll('.nav-i').forEach(function(n){n.classList.remove('flash')});
+    $('add-btn').classList.remove('flash');
+    moveRaw(120,150);
+  }
+  window.initReplay=function(){reset();$('rp-play').textContent='Play session';};
+  function moveRaw(x,y){var c=$('rp-cursor');c.style.setProperty('--cx',x+'px');c.style.setProperty('--cy',y+'px');c.style.transform='translate('+x+'px,'+y+'px)';}
+  function moveTo(id){var el=$(id),box=$('rp-page').getBoundingClientRect(),r=el.getBoundingClientRect();moveRaw(r.left-box.left+r.width/2-3,r.top-box.top+r.height/2-3);}
+  function tap(){var c=$('rp-cursor');c.classList.remove('tap');void c.offsetWidth;c.classList.add('tap');}
+  function cap(t){$('rp-cap').textContent=t;}
+  function err(){var e=$('rp-err');e.textContent=(+e.textContent+1);e.parentElement.classList.add('warn');}
+  function flashNav(id){var n=$(id);n.classList.add('flash');timers.push(setTimeout(function(){n.classList.remove('flash')},700));}
+  function panel(id){['panel-land','panel-search','panel-results','panel-done'].forEach(function(p){$(p).classList.add('hide')});$(id).classList.remove('hide');}
+  function at(t,fn){timers.push(setTimeout(fn,t));}
+  window.playReplay=function(){
+    reset();running=true;started=Date.now();
+    $('rp-play').textContent='Replay';
+    var st=$('rp-status');st.textContent='running';
+    tick=setInterval(function(){var s=Math.floor((Date.now()-started)/1000);$('rp-time').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');},250);
+    at(200,function(){cap('Right, I need to add a course. Where is registration?');});
+    at(1600,function(){moveTo('nv-grades');cap('Maybe under Grades?');});
+    at(2600,function(){tap();flashNav('nv-grades');err();cap('No, that is just my marks.');});
+    at(4000,function(){moveTo('nv-settings');cap('Settings, then?');});
+    at(5000,function(){tap();flashNav('nv-settings');err();cap('Why would it be in Settings? It is not.');});
+    at(6400,function(){moveRaw(300,40);cap('This is taking longer than it should.');});
+    at(7700,function(){moveTo('nv-reg');cap('Oh. There it is, tucked away at the end.');});
+    at(8700,function(){tap();flashNav('nv-reg');panel('panel-search');cap('Finally. Now let me search.');});
+    at(10100,function(){moveTo('search-box');cap('Type the course code.');});
+    at(11000,function(){typeCode('COMP322',0);cap('C, O, M, P, three two two.');});
+    at(12800,function(){tap();panel('panel-results');cap('There it is.');});
+    at(13900,function(){moveTo('add-btn');cap('Add.');});
+    at(14800,function(){tap();$('add-btn').classList.add('flash');panel('panel-done');cap('Done. But I would never have found that menu on my own.');
+      running=false;if(tick){clearInterval(tick);tick=null}
+      var s2=$('rp-status');s2.textContent='completed';s2.parentElement.classList.add('ok');
+    });
+  };
+  function typeCode(code,i){if(i>code.length){return}$('search-box').value=code.slice(0,i);timers.push(setTimeout(function(){typeCode(code,i+1)},150));}
+})();
+</script>
+
+<!-- 13 WHAT TO MEASURE -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Numbers and stories together</p>
+    <h2 class="reveal" style="--d:80ms">Measure what happened, and why</h2>
+    <p class="lead reveal" style="--d:160ms">Quantitative data tells you that something is wrong. Qualitative data tells you why. You need both, or you are guessing.</p>
+    <div class="cols c2" style="margin-top:22px">
+      <div class="card reveal" style="--d:300ms"><div class="tagn">Quantitative · the what</div>
+        <ul class="clean" style="margin-top:2px">
+          <li><b>Task completion</b> rate, the headline number</li>
+          <li><b>Time on task</b>, how long the journey took</li>
+          <li><b>Errors</b>, wrong turns and recoveries</li>
+          <li><b>SUS</b>, a single satisfaction score</li>
+        </ul>
+      </div>
+      <div class="card reveal" style="--d:440ms"><div class="tagn">Qualitative · the why</div>
+        <ul class="clean" style="margin-top:2px">
+          <li>Think aloud quotes at the moment of failure</li>
+          <li>Where they hesitated, sighed, backtracked</li>
+          <li>The mental model they expected</li>
+          <li>What they said they would do next time</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:600ms">
+      <span class="lbl">The trap to avoid</span>
+      <p>A completion rate with no quotes is a thermometer with no diagnosis. You know there is a fever. You have no idea what to treat.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Two kinds of evidence</h4>
+    <div class="row"><span class="tag">Say</span> Strong evaluation always pairs the two. The four numbers, completion, time, errors, and SUS, are your quantitative spine. The think aloud quotes and observed struggles are the qualitative flesh. Numbers prove there is a problem to a sceptical stakeholder. Stories tell your team how to fix it.</div>
+    <div class="row"><span class="tag">Callback</span> In the replay you just watched, the numbers said completed in sixteen seconds with two wrong turns. The story said the menu is impossible to find. The story is what you act on.</div>
+    <div class="row"><span class="tag">If asked</span> Which matters more? For deciding what to change, qualitative. For proving the change worked across many users, quantitative. Use them at different moments.</div>
+    <div class="row"><span class="tag">Project link</span> Phase 3 asks for exactly this pairing: completion, time, errors, SUS, plus themed quotes.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">البيانات الكمية</span> quantitative · <span class="ar">البيانات النوعية</span> qualitative.</div>
+  </aside>
+</section>
+
+<!-- 14A SUS SCORING TRICK -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">One number for satisfaction</p>
+    <h2 class="reveal" style="--d:80ms">The System Usability Scale, and its scoring trick</h2>
+    <p class="lead reveal" style="--d:160ms">Ten statements, each rated 1 to 5. The wording alternates on purpose, odd items positive and even items negative, so agreeing means something different each time. Before you can add the answers, every one has to land on the same 0 to 4 scale where higher always means better.</p>
+    <div class="cols c2" style="margin-top:18px;align-items:start">
+      <div class="reveal" style="--d:320ms">
+        <div class="sus-rule"><span class="rk odd">Odd items · positive wording</span><p>"I would like to use this often." Agreeing is good, so the top answer 5 must become the best score. Subtract 1, and raw 1 to 5 becomes 0 to 4.</p><div class="rule-eq">score = raw <span class="d-c">− 1</span></div></div>
+        <div class="sus-rule"><span class="rk even">Even items · negative wording</span><p>"I found it unnecessarily complex." Agreeing is bad, so the top answer 5 must become the worst score. Subtract from 5, and the scale flips, 1 to 5 becomes 4 to 0.</p><div class="rule-eq">score = <span class="w-c">5 −</span> raw</div></div>
+      </div>
+      <div class="reveal" style="--d:460ms">
+        <table class="sus-conv">
+          <thead><tr><th>Raw answer</th><th class="odd">Odd: raw − 1</th><th class="even">Even: 5 − raw</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="odd">0</td><td class="even">4</td></tr>
+            <tr><td>2</td><td class="odd">1</td><td class="even">3</td></tr>
+            <tr><td>3</td><td class="odd">2</td><td class="even">2</td></tr>
+            <tr><td>4</td><td class="odd">3</td><td class="even">1</td></tr>
+            <tr><td>5</td><td class="odd">4</td><td class="even">0</td></tr>
+          </tbody>
+        </table>
+        <div class="sus-conv-note">Both columns cover 0 to 4, they simply run in opposite directions, because a 5 means the opposite thing on a positive versus a negative statement.</div>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:620ms">
+      <span class="lbl">The mnemonic</span>
+      <p>Odd, minus one. Even, from five. Subtracting from 5 reverses the scale, so disagreeing with a negative statement correctly counts as a good thing rather than a bad one.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Why the two rules exist</h4>
+    <div class="row"><span class="tag">Say</span> SUS asks ten questions but it deliberately flips the wording every other line. Odd numbered questions are praise, even numbered ones are complaints. That alternation forces people to read each statement instead of ticking the same column straight down the page, which would otherwise wreck the data.</div>
+    <div class="row"><span class="tag">The whole point</span> Every answer must end up on one common 0 to 4 scale where 4 is always good, so the ten can be summed. The two formulas are just the arithmetic that gets each question onto that scale.</div>
+    <div class="row"><span class="tag">Walk the table</span> For a positive question, agreeing with a 5 is good, and raw minus one turns 5 into 4. For a negative question, agreeing with a 5 is bad, and five minus raw turns that 5 into 0, while a 1, strongly disagreeing with a complaint, becomes a 4. Point at the two columns running in opposite directions.</div>
+    <div class="row"><span class="tag">Mnemonic</span> Odd, minus one. Even, from five. Then the next slide does it for real.</div>
+    <div class="row"><span class="tag">Cite</span> Brooke (1986), the original SUS instrument and scoring.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">مقياس قابلية استخدام النظام</span> System Usability Scale · <span class="ar">القطبية</span> polarity · <span class="ar">عكس المقياس</span> reversing the scale.</div>
+  </aside>
+</section>
+
+<!-- 14B SUS WORKED EXAMPLE -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">From ten answers to one number</p>
+    <h2 class="reveal" style="--d:80ms">SUS scored: a worked example</h2>
+    <p class="lead reveal" style="--d:160ms">One participant's ten answers, converted item by item with the two rules, then summed and scaled. Synthetic example, participant P2.</p>
+    <div class="cols c2" style="margin-top:12px;gap:22px">
+      <table class="we-table reveal" style="--d:300ms">
+        <thead><tr><th>Item</th><th>Raw</th><th>Rule</th><th>Score</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pn pos">1</span>Would use it often</td><td class="raw">4</td><td class="rule">4 − 1</td><td class="conv">3</td></tr>
+          <tr><td><span class="pn neg">2</span>Too complex</td><td class="raw">2</td><td class="rule">5 − 2</td><td class="conv">3</td></tr>
+          <tr><td><span class="pn pos">3</span>Easy to use</td><td class="raw">4</td><td class="rule">4 − 1</td><td class="conv">3</td></tr>
+          <tr><td><span class="pn neg">4</span>Needs tech help</td><td class="raw">1</td><td class="rule">5 − 1</td><td class="conv">4</td></tr>
+          <tr><td><span class="pn pos">5</span>Well integrated</td><td class="raw">4</td><td class="rule">4 − 1</td><td class="conv">3</td></tr>
+        </tbody>
+      </table>
+      <table class="we-table reveal" style="--d:440ms">
+        <thead><tr><th>Item</th><th>Raw</th><th>Rule</th><th>Score</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pn neg">6</span>Too inconsistent</td><td class="raw">2</td><td class="rule">5 − 2</td><td class="conv">3</td></tr>
+          <tr><td><span class="pn pos">7</span>Quick to learn</td><td class="raw">3</td><td class="rule">3 − 1</td><td class="conv">2</td></tr>
+          <tr><td><span class="pn neg">8</span>Cumbersome</td><td class="raw">2</td><td class="rule">5 − 2</td><td class="conv">3</td></tr>
+          <tr><td><span class="pn pos">9</span>Felt confident</td><td class="raw">4</td><td class="rule">4 − 1</td><td class="conv">3</td></tr>
+          <tr><td><span class="pn neg">10</span>Lots to learn first</td><td class="raw">3</td><td class="rule">5 − 3</td><td class="conv">2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="we-total reveal" style="--d:580ms">
+      <div class="we-sum">Sum of the ten converted scores <b>29</b><br>Then <b>29 × 2.5 = 72.5</b></div>
+      <div class="we-needle-wrap">
+        <div class="sus-bar"><div class="sus-fill" id="sus-fill"></div><div class="sus-needle" id="sus-needle"></div></div>
+        <div class="we-readout"><div class="sus-num" id="sus-num">--</div><div class="sus-band" id="sus-band">press score</div></div>
+      </div>
+      <button class="play" id="sus-btn" onclick="scoreSus()">Score it</button>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>SUS, scored end to end</h4>
+    <div class="row"><span class="tag">Say</span> Here is the whole process on one real set of answers. Take P2's raw rating on each line, apply the rule for that line, and write the converted score in the last column. Odd lines use raw minus one, even lines use five minus raw.</div>
+    <div class="row"><span class="tag">Add and scale</span> The ten converted scores add to 29. Multiply by 2.5 and you get 72.5. Press Score it and the needle settles there. Stress again that 72.5 is not a percentage, it is a point on a 0 to 100 scale.</div>
+    <div class="row"><span class="tag">Read the band</span> 72.5 sits in the good band, 70 to 80, and just above the long run average of about 68. For the project, average the score across the three participants and report that single number with the band.</div>
+    <div class="row"><span class="tag">If asked why 2.5</span> The ten converted items can total at most 40. Multiplying by 2.5 stretches 0 to 40 onto a tidy 0 to 100, nothing deeper than that.</div>
+    <div class="row"><span class="tag">Honesty</span> These answers are an invented illustration, labelled P2, not real data. Tell the class so, it models the habit you expect from them.</div>
+    <div class="row"><span class="tag">Cite</span> Brooke (1986); bands Bangor, Kortum and Miller (2008); average about 68, Sauro (2011).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">الدرجة المحوّلة</span> converted score · <span class="ar">المجموع</span> the sum · <span class="ar">المعدل</span> the average.</div>
+  </aside>
+</section>
+
+<style>
+  .sus-bar{position:relative;height:14px;border-radius:7px;margin:8px 0 0;background:linear-gradient(90deg,#b23b3b 0%,#d9a441 50%,#2f7d54 100%);overflow:hidden}
+  .sus-fill{position:absolute;inset:0;background:#15303e;left:0;width:100%;transition:width 1.3s cubic-bezier(.3,.7,.2,1)}
+  .sus-needle{position:absolute;top:-4px;width:3px;height:22px;background:#fff;left:0;transition:left 1.3s cubic-bezier(.3,.7,.2,1);box-shadow:0 0 4px rgba(0,0,0,.5)}
+  .sus-num{font-family:var(--serif);font-size:3rem;color:#fff;line-height:1.1;margin-top:14px;font-variant-numeric:tabular-nums}
+  .sus-band{font-size:.84rem;letter-spacing:.04em;color:#7fdca0;text-transform:uppercase}
+  .sus-rule{background:#fbfcfd;border:1px solid var(--line);border-radius:9px;padding:11px 15px;margin-bottom:11px}
+  .sus-rule:last-child{margin-bottom:0}
+  .sus-rule .rk{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+  .sus-rule .rk.odd{background:var(--steel-l);color:var(--steel-d)}
+  .sus-rule .rk.even{background:var(--gold-l);color:#7a531a}
+  .sus-rule p{font-size:.86rem;margin-bottom:9px;line-height:1.45}
+  .rule-eq{font-family:var(--serif);font-size:1.06rem;color:var(--ink);background:#fff;border:1px dashed #c9d2d9;border-radius:6px;padding:6px 12px;display:inline-block}
+  .sus-conv{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+  .sus-conv th,.sus-conv td{border:1px solid var(--line);padding:8px 6px;text-align:center;font-size:.95rem}
+  .sus-conv th{background:#f4f7f9;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
+  .sus-conv th.odd,.sus-conv td.odd{color:var(--steel-d);background:#f3f8fb}
+  .sus-conv th.even,.sus-conv td.even{color:#7a531a;background:#fbf6ec}
+  .sus-conv td:first-child{font-weight:700;color:var(--ink)}
+  .sus-conv-note{font-size:.8rem;color:var(--muted);margin-top:10px;line-height:1.45}
+  .we-table{width:100%;border-collapse:collapse;font-size:.84rem}
+  .we-table th{background:#f4f7f9;font-size:.64rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:6px;text-align:left;font-weight:700}
+  .we-table th:nth-child(2),.we-table th:nth-child(3),.we-table th:nth-child(4){text-align:center}
+  .we-table td{border-top:1px solid var(--line);padding:6px;vertical-align:middle}
+  .we-table .pn{display:inline-flex;width:19px;height:19px;border-radius:50%;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;color:#fff;margin-right:7px}
+  .we-table .pn.pos{background:var(--steel)}
+  .we-table .pn.neg{background:var(--gold)}
+  .we-table .raw,.we-table .rule,.we-table .conv{text-align:center;font-variant-numeric:tabular-nums}
+  .we-table .raw{font-weight:600;color:var(--muted)}
+  .we-table .rule{color:var(--faint);font-size:.8rem}
+  .we-table .conv{font-weight:700;color:var(--ink)}
+  .we-total{display:flex;align-items:center;gap:22px;background:#0f1a22;border-radius:11px;padding:14px 20px;color:#eaf1f5;margin-top:16px}
+  .we-sum{font-size:.92rem;color:#b9c8d2;line-height:1.7;flex:0 0 auto}
+  .we-sum b{color:#fff;font-family:var(--serif);font-size:1.1rem}
+  .we-needle-wrap{flex:1}
+  .we-readout{display:flex;justify-content:space-between;align-items:baseline;margin-top:9px}
+  .we-readout .sus-num{font-size:1.7rem;margin-top:0}
+  .we-total .play{margin:0;flex:0 0 auto}
+</style>
+<script>
+function scoreSus(){
+  var target=72.5;
+  document.getElementById('sus-fill').style.width=(100-target)+'%';
+  document.getElementById('sus-needle').style.left=target+'%';
+  var n=document.getElementById('sus-num'),b=document.getElementById('sus-band');
+  var v=0,iv=setInterval(function(){v+=2.5;if(v>=target){v=target;clearInterval(iv)}n.textContent=v;},28);
+  setTimeout(function(){b.textContent='72.5 · good';},1300);
+  document.getElementById('sus-btn').textContent='Score again';
+}
+window.initFitts=function(root){
+  if(root._fxBound) { root._fxReset && root._fxReset(); return; }
+  root._fxBound=true;
+  var startX=44, A=50, B=150;
+  var dS=root.querySelector('#fx-d'), wS=root.querySelector('#fx-w');
+  var cur=root.querySelector('#fx-cursor'), tgt=root.querySelector('#fx-target'), trk=root.querySelector('#fx-track');
+  var dcal=root.querySelector('#fx-dcal'), dtick=root.querySelector('#fx-dtick'), dbg=root.querySelector('#fx-dlblbg'), dlbl=root.querySelector('#fx-dlbl');
+  var wcal=root.querySelector('#fx-wcal'), wtick=root.querySelector('#fx-wtick'), wbg=root.querySelector('#fx-wlblbg'), wlbl=root.querySelector('#fx-wlbl');
+  var idOut=root.querySelector('#fx-id'), mtOut=root.querySelector('#fx-mt'), btn=root.querySelector('#fx-move');
+  var atStart=true, reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function calc(){var D=+dS.value, W=+wS.value, cx=startX+D, ID=Math.log2(2*D/W), MT=Math.round(A+B*ID);return {D:D,W:W,cx:cx,ID:ID,MT:MT};}
+  function redraw(){
+    var g=calc();
+    cur.style.transition='none'; cur.style.transform='translateX(0px)'; atStart=true;
+    tgt.classList.remove('hit');
+    tgt.setAttribute('x', g.cx-g.W/2); tgt.setAttribute('width', g.W);
+    trk.setAttribute('x2', g.cx);
+    dcal.setAttribute('d','M'+startX+' 36 L'+g.cx+' 36');
+    dtick.setAttribute('d','M'+startX+' 30 L'+startX+' 42 M'+g.cx+' 30 L'+g.cx+' 42');
+    var dmid=(startX+g.cx)/2; dbg.setAttribute('x', dmid-39); dlbl.setAttribute('x', dmid);
+    var wl=g.cx-g.W/2, wr=g.cx+g.W/2;
+    wcal.setAttribute('d','M'+wl+' 138 L'+wr+' 138');
+    wtick.setAttribute('d','M'+wl+' 132 L'+wl+' 144 M'+wr+' 132 L'+wr+' 144');
+    wbg.setAttribute('x', g.cx-38); wlbl.setAttribute('x', g.cx);
+    idOut.textContent=g.ID.toFixed(2); mtOut.textContent=g.MT;
+  }
+  function move(){
+    var g=calc();
+    if(atStart){
+      var dur=reduce?0:g.MT;
+      cur.style.transition='transform '+dur+'ms cubic-bezier(.5,0,.3,1)';
+      cur.style.transform='translateX('+(g.cx-startX)+'px)';
+      atStart=false; tgt.classList.add('hit'); btn.textContent='Reset';
+    } else { redraw(); btn.textContent='Move the cursor'; }
+  }
+  root._fxReset=function(){redraw();btn.textContent='Move the cursor';};
+  dS.addEventListener('input',redraw); wS.addEventListener('input',redraw); btn.addEventListener('click',move);
+  redraw();
+};
+</script>
+
+<!-- 15 ANALYTICS AND A/B -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <span class="etag field reveal">Field A/B results</span>
+    <h2 class="reveal" style="--d:80ms">A/B testing, and its famous limit</h2>
+    <p class="lead reveal" style="--d:160ms">Show version A to half your users and version B to the other half, then measure which performs better. At the scale of millions you can detect tiny effects, but you only learn which option wins, never why.</p>
+    <div class="cols c2" style="margin-top:20px">
+      <div class="card reveal" style="--d:320ms">
+        <div class="tagn" style="color:var(--good)">Done well · Obama campaign, 2008</div>
+        <p>The team tested splash page variants. A "Learn more" button paired with a family photo beat the original by about <b>40 per cent</b> more sign ups, an estimated <b>2.8 million</b> extra subscribers and tens of millions in donations.</p>
+      </div>
+      <div class="card reveal" style="--d:460ms">
+        <div class="tagn" style="color:var(--gold-ink)">Taken too far · Google, 2009</div>
+        <p>A debate over a link colour was settled by testing <b>41 shades of blue</b>. A senior designer resigned, arguing that data had replaced design judgement entirely.</p>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:620ms">
+      <span class="lbl">The limit of pure numbers</span>
+      <p>A/B testing picks the better of two options you already have. It cannot tell you that a third, better idea exists, and it cannot explain behaviour. It climbs the hill you are standing on, never asking whether you are on the right hill.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Analytics, A/B, and its limit</h4>
+    <div class="row"><span class="tag">Say</span> This is evaluation with no lab and no think aloud, just enormous numbers. You split live traffic, show two versions, and measure which performs better. It is genuinely powerful, and two real cases show both its strength and its edge.</div>
+    <div class="row"><span class="tag">Done well</span> In 2008 the Obama campaign A/B tested its sign up page. The winning combination, a "Learn more" button with a family photograph, lifted sign ups by roughly 40 per cent. Scaled across the traffic that meant about 2.8 million more email subscribers and an estimated 60 million dollars in additional donations. Evidence beat the team's gut, and the gut had been wrong.</div>
+    <div class="row"><span class="tag">Taken too far</span> At Google a dispute over a link colour was resolved by testing 41 shades of blue to see which earned a few more clicks. The design leader Douglas Bowman left in 2009 and wrote that a company unable to choose between two blues without data had abandoned judgement. Both cases are true, which is exactly why they teach well together.</div>
+    <div class="row"><span class="tag">Key idea</span> Local versus global maximum. A/B climbs the nearest hill. It will never tell you to tear down the page and build something different. For that you need the qualitative methods from earlier in the lecture.</div>
+    <div class="row"><span class="tag">If asked</span> Is large scale experimentation ethical? Not inherently, but it can cross a line when it manipulates wellbeing without consent, as in the 2014 Facebook emotion study. Consent and care scale with the experiment.</div>
+    <div class="row"><span class="tag">Cite</span> Obama A/B, Dan Siroker, Optimizely (2010). Bowman, "Goodbye, Google" (2009). Facebook emotion study, Kramer et al. (2014), PNAS.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">اختبار أ/ب</span> A/B testing · <span class="ar">القمة المحلية</span> local maximum.</div>
+  </aside>
+</section>
+
+<!-- 16 FITTS LAW (INTERACTIVE) -->
+<section class="slide" data-init="initFitts">
+  <div class="topbar"></div>
+  <div class="body">
+    <span class="etag model reveal">Established law · Paul Fitts, 1954</span>
+    <h2 class="reveal" style="--d:80ms">Fitts's law, made interactive</h2>
+    <p class="lead reveal" style="--d:160ms;margin-bottom:6px">Drag the sliders and the predicted time and the cursor obey the law. Pointing time depends on just how <span class="d-c">far</span> the target is and how <span class="w-c">wide</span> it is.</p>
+    <div class="fitts-stage no-adv reveal" style="--d:300ms">
+      <svg viewBox="0 0 680 150" class="fitts-svg" id="fx-svg" role="img" aria-label="Interactive Fitts's law diagram">
+        <line x1="44" y1="92" x2="404" y2="92" class="f-track" id="fx-track"/>
+        <rect x="370" y="58" width="70" height="68" rx="4" class="f-target" id="fx-target"/>
+        <g class="f-cursor" id="fx-cursor"><circle cx="44" cy="92" r="7"/><path d="M44 92 l16 6 l-6 2 l3 8 l-3 1 l-3 -8 l-5 4 z" transform="translate(-2,-3)"/></g>
+        <path d="M44 36 L404 36" class="f-dim d" id="fx-dcal"/>
+        <path d="M44 30 L44 42 M404 30 L404 42" class="f-tick d" id="fx-dtick"/>
+        <rect x="185" y="22" width="78" height="20" rx="3" class="f-lblbg d" id="fx-dlblbg"/>
+        <text x="224" y="36" class="f-lbl d" id="fx-dlbl">D · distance</text>
+        <path d="M370 138 L440 138" class="f-dim w" id="fx-wcal"/>
+        <path d="M370 132 L370 144 M440 132 L440 144" class="f-tick w" id="fx-wtick"/>
+        <rect x="367" y="128" width="76" height="20" rx="3" class="f-lblbg w" id="fx-wlblbg"/>
+        <text x="405" y="142" class="f-lbl w" id="fx-wlbl">W · width</text>
+      </svg>
+      <div class="fx-controls">
+        <div class="fx-sliders">
+          <label><span class="d-c">Distance D</span><input id="fx-d" type="range" min="160" max="500" value="360"></label>
+          <label><span class="w-c">Target width W</span><input id="fx-w" type="range" min="28" max="150" value="70"></label>
+        </div>
+        <div class="fx-readout">
+          <div class="fx-eq">MT = a + b · log<sub>2</sub>( 2<span class="d-c">D</span> / <span class="w-c">W</span> )</div>
+          <div class="fx-nums"><span>Difficulty <b id="fx-id">2.00</b> bits</span><span>Predicted <b id="fx-mt">350</b> ms</span></div>
+          <button id="fx-move" class="fx-btn">Move the cursor</button>
+        </div>
+      </div>
+      <div class="fx-law">
+        <div class="fxl"><span class="fxl-h d-c">Double the distance D</span>Difficulty rises by one bit, so the move takes clearly longer.</div>
+        <div class="fxl"><span class="fxl-h w-c">Halve the width W</span>Also exactly one bit harder, the same slowing as doubling the distance.</div>
+        <div class="fxl"><span class="fxl-h">Double both at once</span>The two effects cancel, so difficulty and time stay the same.</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>A genuine law of interaction</h4>
+    <div class="row"><span class="tag">Use it live</span> Drag the width slider down to its smallest and the distance up to its largest, press move, and the cursor crawls. Then make the target wide and near and it snaps across instantly. The class is watching the equation behave, not just reading it.</div>
+    <div class="row"><span class="tag">Who</span> Paul Fitts, 1912 to 1965, an American psychologist who worked on aircraft cockpits during and after the Second World War. He studied why pilots pulled the wrong lever, work that helped found human factors. In 1954 he published the law that carries his name.</div>
+    <div class="row"><span class="tag">The finding</span> Fitts borrowed the idea of information from Claude Shannon's communication theory and showed that aiming at a target carries a measurable difficulty: the log of twice the distance over the width. Move twice as far, or halve the target, and the task gets one bit harder.</div>
+    <div class="row"><span class="tag">Read the readout</span> Difficulty is the index of difficulty in bits, the bracket in the formula. Predicted time uses simple constants for a and b so the number moves sensibly. The exact milliseconds are illustrative, the relationship is the lesson.</div>
+    <div class="row"><span class="tag">Why it matters here</span> This is the predictive corner of our three families of methods. You can rank two layouts for speed before a single user arrives, which is evaluation with zero participants.</div>
+    <div class="row"><span class="tag">If asked</span> Fingers too? Yes, the same law governs touch, which is why a tap target smaller than a fingertip, about nine millimetres, is a known sin on phones.</div>
+    <div class="row"><span class="tag">Cite</span> Fitts (1954), Journal of Experimental Psychology. The information theoretic form, MacKenzie (1992).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">قانون فيتس</span> Fitts's law · <span class="ar">زمن الحركة</span> movement time · <span class="ar">المسافة</span> distance · <span class="ar">عرض الهدف</span> target width.</div>
+  </aside>
+</section>
+
+<style>
+  .d-c{color:var(--steel);font-weight:600}
+  .w-c{color:var(--gold-ink);font-weight:600}
+  .fitts-stage{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px;min-height:0}
+  .fitts-svg{width:100%;height:auto;max-height:128px}
+  .fitts-svg .f-track{stroke:#c2ccd3;stroke-width:2;stroke-dasharray:5 5}
+  .fitts-svg .f-cursor circle{fill:#fff;stroke:var(--ink);stroke-width:2}
+  .fitts-svg .f-cursor path{fill:var(--ink)}
+  .fitts-svg .f-cursor{transition:transform 350ms cubic-bezier(.5,0,.3,1)}
+  .fitts-svg .f-target{fill:#f3ead7;stroke:var(--gold);stroke-width:2.5;transition:fill .2s,stroke .2s}
+  .fitts-svg .f-target.hit{fill:#dff0e6;stroke:var(--good)}
+  .fitts-svg .f-dim{fill:none;stroke-width:2}
+  .fitts-svg .f-dim.d,.fitts-svg .f-tick.d{stroke:var(--steel)}
+  .fitts-svg .f-dim.w,.fitts-svg .f-tick.w{stroke:var(--gold)}
+  .fitts-svg .f-tick{stroke-width:2}
+  .fitts-svg .f-lblbg.d{fill:#e7eff4}
+  .fitts-svg .f-lblbg.w{fill:var(--gold-l)}
+  .fitts-svg .f-lbl{font-family:var(--sans);font-size:12px;font-weight:700;text-anchor:middle}
+  .fitts-svg .f-lbl.d{fill:var(--steel-d)}
+  .fitts-svg .f-lbl.w{fill:#7a531a}
+  .fx-controls{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+  .fx-sliders label{display:block;font-size:.86rem;color:var(--muted);font-weight:600;margin-bottom:14px}
+  .fx-sliders label:last-child{margin-bottom:0}
+  .fx-sliders input[type=range]{width:100%;margin-top:7px;height:6px}
+  #fx-d{accent-color:var(--steel)}
+  #fx-w{accent-color:var(--gold)}
+  .fx-readout{background:#0f1a22;border-radius:11px;padding:14px 18px;color:#eaf1f5}
+  .fx-eq{font-family:var(--serif);font-size:1.12rem;text-align:center;color:#cfe0ea}
+  .fx-eq .d-c{color:#7fb8d6}
+  .fx-eq .w-c{color:#e3b25f}
+  .fx-eq sub{font-size:.6em}
+  .fx-nums{display:flex;justify-content:center;gap:22px;margin:9px 0 11px;font-size:.92rem;color:#b9c8d2}
+  .fx-nums b{color:#fff;font-size:1.15rem;font-family:var(--serif)}
+  .fx-btn{display:block;width:100%;background:var(--gold);color:#23180a;border:none;border-radius:8px;padding:9px;font-family:var(--sans);font-size:.92rem;font-weight:700;cursor:pointer}
+  .fx-btn:hover{background:#c08a3a}
+  .fx-law{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .fxl{background:#fbfcfd;border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:.78rem;color:var(--muted);line-height:1.4}
+  .fxl-h{display:block;font-weight:700;color:var(--ink);margin-bottom:3px;font-size:.82rem}
+  .fxl-h.d-c{color:var(--steel)}
+  .fxl-h.w-c{color:var(--gold-ink)}
+</style>
+
+<!-- 17 FITTS APPLIED + DEMO -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Fitts's law, applied</p>
+    <h2 class="reveal" style="--d:80ms">Edges and corners are infinite targets</h2>
+    <div class="replay-wrap no-adv" style="grid-template-columns:1fr 1fr">
+      <div class="reveal" style="--d:200ms">
+        <ul class="clean">
+          <li>You cannot overshoot a screen edge. Slam the cursor up and it <b>stops at the wall</b>, so the target is effectively <b>infinitely tall</b>.</li>
+          <li>That is why the Mac menu bar sits glued to the top edge. You flick upward without aiming and you are there.</li>
+          <li>A <b>corner</b> is infinite in two directions, the easiest place on the whole screen to hit. Hot corners and the Start button live there for a reason.</li>
+          <li>A right click menu appears <b>at the cursor</b>, distance near zero, the fastest target of all.</li>
+        </ul>
+      </div>
+      <div class="card no-adv reveal" style="--d:380ms;background:#0f1a22;color:#dfe7ec;border:none;display:flex;flex-direction:column">
+        <div class="tagn" style="color:#7fd0ff">Feel it yourself</div>
+        <p style="color:#b9c6cf;font-size:.86rem;margin-bottom:10px">Click the two targets in turn. Watch which one your hand finds faster.</p>
+        <div class="fitts-arena" id="fitts-arena">
+          <button class="ftarget big" id="ft-big" onclick="fittsHit('big')">big · near</button>
+          <button class="ftarget small" id="ft-small" onclick="fittsHit('small')">small · far</button>
+        </div>
+        <div class="fitts-read" id="fitts-read">last move: --</div>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:520ms;margin-top:14px">
+      <span class="lbl">Design payoff</span>
+      <p>Put your most important, most frequent controls at edges and corners, or right under the cursor. The law was published in 1954 and your operating system is quietly obeying it right now.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>The most satisfying idea in the lecture</h4>
+    <div class="row"><span class="tag">Say</span> Here is the payoff. Because Fitts's law uses target width, a target at the screen edge behaves as if it were infinitely wide in that direction, you cannot fly past it. So the cheapest way to make a control fast is to push it against an edge. A corner is infinite in two directions, the single easiest pixel region on the screen.</div>
+    <div class="row"><span class="tag">Examples</span> The Mac menu bar at the very top. The Windows Start button in the bottom corner. The right click menu that appears exactly where your cursor already is, distance almost zero. None of this is decoration, it is Fitts's law applied.</div>
+    <div class="row"><span class="tag">Demo</span> Let a student click the big near target and the small far one a few times. The difference in feel is the law in their own hand.</div>
+    <div class="row"><span class="tag">Counter</span> Famous failure: a tiny close button far from the cursor, or a phone target smaller than a fingertip. Now they can explain why those feel awful.</div>
+    <div class="row"><span class="tag">Cite</span> Bruce Tognazzini, "A Quiz Designed to Give You Fitts" (AskTog).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">الحافة</span> edge · <span class="ar">الزاوية</span> corner.</div>
+  </aside>
+</section>
+
+<!-- 18 ETHICS -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Non negotiable</p>
+    <h2 class="reveal" style="--d:80ms">You are studying people, so behave like it</h2>
+    <p class="lead reveal" style="--d:160ms">Every method in this lecture involves a real human giving you their time and sometimes their frustration. Respect comes first, data second.</p>
+    <div class="cols c2" style="margin-top:22px">
+      <div class="card reveal" style="--d:300ms"><div class="tagn">Before</div>
+        <ul class="clean" style="margin-top:2px">
+          <li><b>Informed consent</b>, signed, before you start</li>
+          <li>Explain the purpose and that they can stop anytime</li>
+          <li>Ask permission before recording</li>
+        </ul>
+      </div>
+      <div class="card reveal" style="--d:440ms"><div class="tagn">During and after</div>
+        <ul class="clean" style="margin-top:2px">
+          <li>Test the <b>system</b>, never the person</li>
+          <li><b>Anonymise</b>: P1, P2, no names or ID numbers</li>
+          <li>Store data safely, delete it when done</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:600ms">
+      <span class="lbl">The phrase that protects everyone</span>
+      <p>Open every session with it: "We are testing the design, not you. If something is confusing, that is the design's fault, not yours." It relaxes the participant and gives you honest behaviour.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Research ethics, briefly</h4>
+    <div class="row"><span class="tag">Say</span> You are not poking software, you are studying a person. The ethics are simple and absolute. Informed consent before you begin. The right to stop without penalty. Permission before recording. Anonymise everything. And the golden framing, we are testing the design, not you.</div>
+    <div class="row"><span class="tag">Project link</span> Your consent form is Appendix C in the project spec. Every interview and every usability test participant signs before the session. No exceptions.</div>
+    <div class="row"><span class="tag">If asked</span> Why does it matter for a student project? Because the habit you build now is the habit you carry into industry, where a careless study can genuinely harm people.</div>
+    <div class="row"><span class="tag">Cite</span> Rogers, Sharp and Preece (2024), ethics in evaluation.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">الموافقة المستنيرة</span> informed consent · <span class="ar">إخفاء الهوية</span> anonymisation.</div>
+  </aside>
+</section>
+
+<style>
+  .fitts-eq{display:flex;align-items:baseline;gap:8px;justify-content:center;background:#0f1a22;border-radius:10px;padding:18px;color:#eaf1f5;font-family:var(--serif);font-size:1.8rem;margin-top:6px}
+  .fitts-eq .eq{color:#7fd0ff;font-style:italic}
+  .fitts-eq .op{color:#9fb3c0}
+  .fitts-eq sub{font-size:.6em}
+  .fitts-arena{position:relative;flex:1;background:#15252f;border-radius:8px;min-height:150px;margin-bottom:10px}
+  .ftarget{position:absolute;border:none;border-radius:8px;cursor:pointer;font-size:.78rem;color:#fff;font-weight:600}
+  .ftarget.big{width:96px;height:64px;left:14px;bottom:14px;background:var(--steel)}
+  .ftarget.big:hover{background:var(--steel-d)}
+  .ftarget.small{width:42px;height:26px;right:14px;top:12px;background:var(--gold);color:#231a08;font-size:.66rem}
+  .ftarget.small:hover{background:#c98e36}
+  .fitts-read{font-size:.9rem;color:#7fdca0;font-variant-numeric:tabular-nums}
+</style>
+<script>
+(function(){
+  var last=0,lastName=null;
+  window.fittsHit=function(name){
+    var now=performance.now();
+    if(lastName && lastName!==name){
+      var dt=Math.round(now-last);
+      var r=document.getElementById('fitts-read');
+      var label=(name==='big')?'to big near target':'to small far target';
+      r.textContent='move '+label+': '+dt+' ms';
+    }
+    last=now;lastName=name;
+  };
+})();
+</script>
+
+<!-- 19 TRIANGULATION -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">No method is enough alone</p>
+    <h2 class="reveal" style="--d:80ms">Triangulate, because each method is half blind</h2>
+    <div class="cols c3" style="margin-top:10px">
+      <div class="card reveal" style="--d:240ms"><div class="tagn">Inspection</div><p>Heuristic evaluation, fast and cheap, no users needed.</p><span class="mini">Misses the surprises only real people produce.</span></div>
+      <div class="card reveal" style="--d:380ms"><div class="tagn">Testing</div><p>Real users, real tasks, the unexpected made visible.</p><span class="mini">Slow, small samples, says little about scale.</span></div>
+      <div class="card reveal" style="--d:520ms"><div class="tagn">Analytics and models</div><p>Millions of data points, or a formula with none.</p><span class="mini">Tells you what, almost never why.</span></div>
+    </div>
+    <div class="case reveal" style="--d:680ms">
+      <span class="lbl">The professional move</span>
+      <p>Inspect early to catch the obvious for free. Test with five users to find the real surprises. Use analytics to confirm at scale. Each method covers another's blind spot. That is triangulation, and it is what separates a real evaluation from a vibe check.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Bringing the methods together</h4>
+    <div class="row"><span class="tag">Say</span> Here is the synthesis of the whole lecture. There is no single best method, because each one is half blind. Inspection is cheap but cannot see what surprises real users. Testing finds the surprises but on tiny samples. Analytics sees everything at scale but cannot tell you why. So you combine them, and where they agree you can trust the finding.</div>
+    <div class="row"><span class="tag">Sequence</span> The typical professional order: heuristic inspection first to clear the obvious cheaply, then usability testing to find the deep problems, then analytics or A/B to confirm the fix works at scale.</div>
+    <div class="row"><span class="tag">Term</span> Triangulation, borrowed from navigation and social science, using multiple bearings to fix one true position.</div>
+    <div class="row"><span class="tag">Cite</span> Rogers, Sharp and Preece (2024), combining evaluation methods.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">التثليث</span> triangulation.</div>
+  </aside>
+</section>
+
+<!-- 20 ROCKET SURGERY -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">The lower bar you should clear today</p>
+    <h2 class="reveal" style="--d:80ms">Watching one user beats watching none</h2>
+    <div class="two">
+      <div class="reveal" style="--d:300ms">
+        <div class="stat">1<span class="u">user</span></div>
+        <div class="statlbl">is infinitely more than zero. The first person you watch teaches you the most.</div>
+      </div>
+      <div>
+        <ul class="clean">
+          <li class="reveal" style="--d:240ms">You do not need a lab, a one way mirror, or special software. A laptop, a real person, and a quiet corner is a usability test.</li>
+          <li class="reveal" style="--d:400ms">Steve Krug calls it "rocket surgery made easy". The barrier is mostly in your head.</li>
+          <li class="reveal" style="--d:560ms">Test a little, early, often. A rough prototype tested this week beats a perfect one tested never.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:720ms">
+      <span class="lbl">The habit to build</span>
+      <p>The teams that improve fastest are not the ones with the best first design. They are the ones that put their work in front of a real person soonest and were willing to be wrong.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Lowering the barrier</h4>
+    <div class="row"><span class="tag">Say</span> If you remember one practical thing, remember this. The value curve of usability testing is steepest at the very start. Going from zero users to one user is the biggest single jump in understanding you will ever get. Everything after that is refinement.</div>
+    <div class="row"><span class="tag">Reassure</span> You do not need equipment or permission or a perfect prototype. Steve Krug wrote a whole book arguing that do it yourself testing, done badly and often, beats expert testing done rarely. Lower your standards for the setup and raise them for how often you do it.</div>
+    <div class="row"><span class="tag">Joke</span> It is called rocket surgery because it combines two things people think are hard and it is neither.</div>
+    <div class="row"><span class="tag">Cite</span> Steve Krug, Rocket Surgery Made Easy (2010); Don't Make Me Think (2000, revised 2014).</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">اختبار مبكر ومتكرر</span> test early and often.</div>
+  </aside>
+</section>
+
+<!-- 21 PHASE 3 CHECKLIST -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="body">
+    <p class="eyebrow reveal">Where this lands for you</p>
+    <h2 class="reveal" style="--d:80ms">Your Phase 3, mapped to today</h2>
+    <p class="lead reveal" style="--d:140ms">Everything in this lecture is the toolkit for the Phase 3 deliverable, due 24 June. Match each rubric line to a method you now have.</p>
+    <div class="cols c2" style="margin-top:18px">
+      <div class="card reveal" style="--d:300ms"><div class="tagn">The test itself</div>
+        <ul class="clean" style="margin-top:2px">
+          <li>Three participants, <b>distinct</b> from your Phase 1 interviewees</li>
+          <li>Goal based tasks from your Phase 1 scenarios</li>
+          <li>Think aloud, signed consent, anonymised</li>
+        </ul>
+      </div>
+      <div class="card reveal" style="--d:440ms"><div class="tagn">The evidence</div>
+        <ul class="clean" style="margin-top:2px">
+          <li>Completion, time on task, error counts</li>
+          <li>SUS score averaged across participants</li>
+          <li>Themed quotes, plus a before and after heuristic comparison</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case reveal" style="--d:600ms">
+      <span class="lbl">The point of the phase</span>
+      <p>Phase 3 is not about proving your design was perfect. It is about showing you can close the loop: test honestly, find the problems, and say clearly what you would change next. Iteration is the grade.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Connecting to the assessment</h4>
+    <div class="row"><span class="tag">Say</span> One slide on the project, deliberately at the end so the lecture stands on its own. Phase 3 asks you to run exactly the test we just covered, on your own prototype, with three new participants. The rubric rewards rigour and honesty, not a flawless result.</div>
+    <div class="row"><span class="tag">Stress</span> The single most common lost mark: reusing Phase 1 interviewees. Your test participants must be new people. And the revision plan, what you would change, is where the real understanding shows.</div>
+    <div class="row"><span class="tag">Reassure</span> A low SUS with a sharp, honest revision plan scores better than a suspiciously perfect score with no insight.</div>
+    <div class="row"><span class="tag">Cite</span> COMP322 project specification, Phase 3.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">إغلاق حلقة التصميم</span> closing the design loop.</div>
+  </aside>
+</section>
+
+<!-- 22 CLOSE -->
+<section class="slide">
+  <div class="topbar"></div>
+  <div class="title-wrap">
+    <div class="title-kicker reveal" style="--d:60ms">The thread through today</div>
+    <h1 class="reveal" style="--d:160ms">Evaluation is humility,</h1>
+    <h1 class="reveal" style="--d:260ms">made into a method.</h1>
+    <p class="title-sub reveal" style="--d:440ms;max-width:42ch">You cannot see your own design. So you plan a question, watch a real person, measure what happened and why, and let the evidence change your mind.</p>
+    <div class="case reveal" style="--d:600ms;margin-top:30px;max-width:60ch">
+      <span class="lbl">Next time</span>
+      <p>Data gathering in depth: interviews, observation, and questionnaires done properly, the raw material every method here depends on.</p>
+    </div>
+  </div>
+  <div class="footer"><span>COMP322 · Evaluation and usability testing</span><span class="fnum"></span></div>
+  <aside class="notes-src">
+    <h4>Closing</h4>
+    <div class="row"><span class="tag">Say</span> The thread through everything today was humility. The whole discipline of evaluation exists because we know we cannot trust our own judgement about our own work. So we build a method around that weakness. Plan the question with DECIDE, watch a real user, measure the what and the why, and crucially, be willing to be wrong.</div>
+    <div class="row"><span class="tag">Callback</span> If you taste your own soup while cooking, that is formative. When the guests taste it, that is summative. Either way, somebody has to taste it. Looking at the pot is not evaluation.</div>
+    <div class="row"><span class="tag">Bridge</span> Next session, data gathering in depth, the techniques underneath every method we used today.</div>
+    <div class="row"><span class="tag">Arabic</span> <span class="ar">التواضع المنهجي</span> methodological humility.</div>
+  </aside>
+</section>
+
+
+  </div>
+</div>
+<div class="progress" id="progress"></div>
+<div class="notes-hint">N notes &nbsp;·&nbsp; F fullscreen &nbsp;·&nbsp; arrows to move</div>
+<aside id="notesPanel"></aside>
+
+<script>
+const deck=document.getElementById('deck');
+let slides=[],cur=0;
+function build(){
+  slides=Array.from(deck.querySelectorAll('.slide'));
+  const total=slides.length;
+  slides.forEach((s,i)=>{
+    const f=s.querySelector('.fnum');
+    if(f) f.textContent=(i+1)+' / '+total;
+  });
+}
+function show(i){
+  if(i<0||i>=slides.length) return;
+  slides[cur].classList.remove('active');
+  cur=i;
+  slides[cur].classList.add('active');
+  document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%';
+  renderNotes();
+  const init=slides[cur].getAttribute('data-init');
+  if(init && window[init]) window[init](slides[cur]);
+}
+function next(){show(Math.min(cur+1,slides.length-1))}
+function prev(){show(Math.max(cur-1,0))}
+const panel=document.getElementById('notesPanel');
+function renderNotes(){
+  const src=slides[cur].querySelector('.notes-src');
+  panel.innerHTML=src?src.innerHTML:'<h4>No notes</h4>';
+}
+function toggleNotes(){panel.classList.toggle('open')}
+document.addEventListener('keydown',e=>{
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();next()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}
+  else if(e.key==='n'||e.key==='N'){toggleNotes()}
+  else if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}
+  else if(e.key==='Home'){show(0)}
+  else if(e.key==='End'){show(slides.length-1)}
+});
+deck.addEventListener('click',e=>{
+  if(e.target.closest('button')||e.target.closest('.no-adv')) return;
+  const r=deck.getBoundingClientRect();
+  if(e.clientX < r.left + r.width*0.28) prev(); else next();
+});
+build();show(0);
+</script>
+</body>
+</html>
