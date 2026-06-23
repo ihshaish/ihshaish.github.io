@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interaction design: the field, the process, the difference · COMP322</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1419;
+    --ink-soft: #2c3540;
+    --ink-mute: #5a6473;
+    --paper: #faf7f2;
+    --paper-warm: #f3ede2;
+    --paper-deep: #ebe2d1;
+    --accent: #b85c38;
+    --accent-deep: #7a3a23;
+    --steel: #2c5f7c;
+    --steel-soft: #d6e0e8;
+    --steel-deep: #1a3d52;
+    --moss: #4a6b3a;
+    --moss-soft: #e0e8d8;
+    --gold: #c9a961;
+    --rule: #d8cfc0;
+    --rule-soft: #ebe2d1;
+    --shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px rgba(15,20,25,0.06);
+    --shadow-lg: 0 4px 12px rgba(15,20,25,0.08), 0 24px 48px rgba(15,20,25,0.10);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter Tight', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
+      radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
+    min-height: 100vh;
+  }
+
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,0.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 0; }
+  .topbar-inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { font-family: var(--serif); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 5px; background: linear-gradient(135deg, var(--steel) 0%, var(--accent) 100%); display: inline-block; box-shadow: 0 2px 6px rgba(184,92,56,0.25); }
+  .nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .nav a { color: var(--ink-soft); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 999px; transition: all 0.15s; }
+  .nav a:hover { background: var(--paper-warm); color: var(--ink); }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 80px 32px 60px; position: relative; }
+  .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+  .hero-eyebrow::before { content: ''; flex-shrink: 0; width: 32px; height: 1px; background: var(--accent); }
+  .hero-eyebrow::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: var(--accent); }
+  .hero h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(44px, 7vw, 88px); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 28px; font-variation-settings: "opsz" 144; max-width: 1100px; }
+  .hero h1 em { font-style: italic; color: var(--accent); font-variation-settings: "opsz" 144, "wght" 400; }
+  .hero-lede { font-size: 20px; max-width: 720px; color: var(--ink-soft); line-height: 1.55; font-family: var(--serif); font-weight: 400; }
+  .hero-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--rule); }
+  .hero-meta-item { font-size: 13px; }
+  .hero-meta-item span:first-child { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
+  .hero-meta-item span:last-child { font-weight: 600; color: var(--ink); }
+
+  .toc { max-width: 1240px; margin: 0 auto; padding: 36px 32px 24px; }
+  .toc-card { background: white; border: 1px solid var(--rule); border-radius: 12px; padding: 32px 36px; box-shadow: var(--shadow); }
+  .toc-card h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); font-weight: 600; margin-bottom: 20px; }
+  .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 4px 28px; list-style: none; }
+  .toc-list li { padding: 8px 0; border-bottom: 1px dashed var(--rule); display: flex; align-items: baseline; gap: 14px; }
+  .toc-list a { color: var(--ink); text-decoration: none; font-size: 14px; flex: 1; transition: color 0.15s; }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-list .toc-num { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--accent); min-width: 28px; }
+
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  section.block { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .section-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+  .section-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--steel); }
+  .section-eyebrow .num { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--accent); margin-left: -6px; }
+  h2.section-title { font-family: var(--serif); font-weight: 500; font-size: clamp(32px, 5vw, 56px); letter-spacing: -0.025em; line-height: 1.02; margin-bottom: 20px; font-variation-settings: "opsz" 144; max-width: 900px; }
+  h2.section-title em { font-style: italic; color: var(--accent); }
+  .section-intro { font-size: 18px; max-width: 760px; color: var(--ink-soft); margin-bottom: 48px; line-height: 1.6; font-family: var(--serif); font-weight: 400; }
+  h3.subhead { font-family: var(--serif); font-weight: 600; font-size: 24px; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 14px; }
+  h3.subhead-small { font-family: var(--serif); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; margin-top: 32px; margin-bottom: 10px; }
+  p.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 14px; max-width: 760px; }
+  p.body strong { color: var(--ink); }
+  p.note { font-size: 13px; color: var(--ink-mute); font-style: italic; margin-top: 12px; max-width: 760px; }
+  ul.body, ol.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin: 12px 0 18px 24px; max-width: 760px; }
+  ul.body li, ol.body li { margin-bottom: 8px; }
+  ul.body li strong, ol.body li strong { color: var(--ink); }
+  a.inline { color: var(--accent-deep); border-bottom: 1px dotted; text-decoration: none; }
+  a.inline:hover { border-bottom-style: solid; }
+
+  .stakes { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 32px; max-width: 1100px; }
+  @media (max-width: 760px) { .stakes { grid-template-columns: 1fr; } }
+  .stake-card { background: white; border-radius: 10px; padding: 28px 32px; box-shadow: var(--shadow); border: 1px solid var(--rule); }
+  .stake-card.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stake-card .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 16px; color: var(--accent); }
+  .stake-card.dark .tag { color: var(--gold); }
+  .stake-card h4 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin-bottom: 14px; line-height: 1.25; letter-spacing: -0.01em; }
+  .stake-card p { font-size: 14.5px; line-height: 1.6; margin-bottom: 10px; }
+  .stake-card.dark p { color: rgba(250,247,242,0.85); }
+  .stake-card .citation { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; font-style: italic; color: var(--ink-mute); }
+  .stake-card.dark .citation { border-top-color: rgba(255,255,255,0.15); color: rgba(250,247,242,0.7); }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; max-width: 1100px; }
+  .cog-card { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 24px; transition: transform 0.2s, box-shadow 0.2s; }
+  .cog-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cog-card .icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 14px; background: var(--paper-warm); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 18px; color: var(--accent); }
+  .cog-card h4 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .cog-card p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 8px; }
+
+  .quotebox { background: var(--paper-warm); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 22px 28px; margin: 28px 0; max-width: 820px; }
+  .quotebox p { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .quotebox .source { display: block; margin-top: 10px; font-style: normal; font-size: 13px; font-family: var(--sans); color: var(--ink-mute); }
+
+  .table-card { background: white; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin: 24px 0; max-width: 1000px; }
+  table.body-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.body-table thead th { background: var(--paper-warm); padding: 14px 18px; text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  table.body-table tbody td { padding: 14px 18px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  table.body-table tbody tr:last-child td { border-bottom: none; }
+  table.body-table tbody td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+  .practice-callout { background: var(--steel-soft); border: 1px solid var(--steel); border-radius: 10px; padding: 24px 28px; margin: 28px 0; max-width: 900px; }
+  .practice-callout .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 10px; font-weight: 600; }
+  .practice-callout p { color: var(--steel-deep); font-size: 15px; line-height: 1.6; margin: 0 0 10px; }
+  .practice-callout p:last-child { margin-bottom: 0; }
+
+  .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 24px; max-width: 1100px; }
+  .pitfall { background: white; border-left: 4px solid var(--accent); padding: 18px 22px; border-radius: 0 8px 8px 0; box-shadow: var(--shadow); }
+  .pitfall h5 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+  .pitfall p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
+
+  .ref-list { max-width: 880px; margin-top: 32px; }
+  .ref-list .ref { padding: 14px 0; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; }
+  .ref-list .ref:last-child { border-bottom: none; }
+  .ref-list .ref strong { color: var(--ink); }
+  .ref-list .ref em { font-style: italic; }
+
+  .cta-card { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 36px 40px; margin: 32px 0; max-width: 900px; box-shadow: var(--shadow-lg); }
+  .cta-card .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .cta-card h4 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .cta-card p { font-size: 15px; line-height: 1.6; color: rgba(250,247,242,0.85); margin-bottom: 18px; }
+  .cta-card a.button { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: white; padding: 10px 20px; border-radius: 999px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: background 0.15s; }
+  .cta-card a.button:hover { background: var(--accent-deep); }
+
+  /* Persona card (worked example) */
+  .persona-card { background: white; border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--shadow-lg); margin: 32px 0; max-width: 980px; overflow: hidden; display: grid; grid-template-columns: 280px 1fr; }
+  @media (max-width: 800px) { .persona-card { grid-template-columns: 1fr; } }
+  .persona-portrait { background: linear-gradient(135deg, var(--paper-warm) 0%, var(--steel-soft) 100%); padding: 32px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; border-right: 1px solid var(--rule); }
+  @media (max-width: 800px) { .persona-portrait { border-right: none; border-bottom: 1px solid var(--rule); } }
+  .persona-portrait svg { width: 180px; height: 180px; margin-bottom: 20px; filter: drop-shadow(0 6px 18px rgba(44,95,124,0.18)); }
+  .persona-portrait .p-name { font-family: var(--serif); font-size: 26px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 6px; }
+  .persona-portrait .p-role { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 14px; }
+  .persona-portrait .p-quote { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-soft); line-height: 1.45; max-width: 220px; }
+  .persona-portrait .p-quote::before { content: '\201C'; display: block; font-size: 36px; line-height: 0.6; color: var(--accent); }
+  .persona-body { padding: 32px 36px; }
+  .persona-body h4 { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 18px 0 8px; font-weight: 600; }
+  .persona-body h4:first-child { margin-top: 0; }
+  .persona-body p { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
+  .persona-body ul { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 0 20px; }
+  .persona-body ul li { margin-bottom: 4px; }
+  .persona-body .demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px 18px; margin-top: 4px; }
+  .persona-body .demo { font-size: 12.5px; }
+  .persona-body .demo span:first-child { display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 2px; }
+  .persona-body .demo span:last-child { color: var(--ink); font-weight: 600; font-size: 13.5px; }
+
+  footer { background: var(--paper-deep); padding: 60px 32px; margin-top: 60px; border-top: 1px solid var(--rule); }
+  footer .inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  footer .inner a { color: var(--steel-deep); text-decoration: none; border-bottom: 1px dotted; }
+  .demo-embed { width:100%; height:1180px; border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); background:white; margin:22px 0; max-width:1120px; display:block; }
+  .embed-cap { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); margin: 30px 0 6px; font-weight: 600; }
+  .embed-note { font-size: 14px; color: var(--ink-mute); margin-bottom: 4px; max-width: 760px; font-style: italic; }
+  .dim-strip { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 6px; }
+  .dim-chip { font-family: var(--mono); font-size: 11px; letter-spacing:0.08em; padding:6px 12px; border-radius:999px; background:var(--paper-warm); border:1px solid var(--rule); color:var(--ink-soft); font-weight:600; }
+  .dim-chip b { color:var(--accent); }
+</style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-mark"></span>COMP322 &middot; Interaction design</div>
+    <nav class="nav">
+      <a href="/birzeit/comp322/">Course</a>
+      <a href="/birzeit/comp322/personas_companion.html">Personas</a>
+      <a href="/birzeit/comp322/scenarios_requirements_companion.html">Scenarios</a>
+      <a href="#what">i. What it is</a>
+      <a href="#good">ii. Good and bad design</a>
+      <a href="#neighbours">iii. UX and UI</a>
+      <a href="#dimensions">iv. Five dimensions</a>
+      <a href="#process">v. The process</a>
+      <a href="#principles">vi. Principles</a>
+      <a href="#usability">vii. Usability goals</a>
+      <a href="#ux">viii. UX goals</a>
+      <a href="#refs">ix. References</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">COMP322 &middot; Human-Computer Interaction</div>
+  <h1>Interaction design: <em>the field, the process, the difference</em>.</h1>
+  <p class="hero-lede">Interaction design shapes the back-and-forth between a person and a product: what the system shows, what it lets you do, and how it answers. This companion sets out what the field is, how it differs from usability and user experience, the five dimensions an interface is made of, the four activities that produce one, and the principles and goals against which a design is judged.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span>course</span><span>COMP322</span></div>
+    <div class="hero-meta-item"><span>chapter</span><span>1 &middot; Interaction design</span></div>
+    <div class="hero-meta-item"><span>instructor</span><span>Hisham Ihshaish</span></div>
+    <div class="hero-meta-item"><span>institution</span><span>Birzeit University</span></div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-card">
+    <h3>Contents</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">i.</span><a href="#what">What interaction design is</a></li>
+      <li><span class="toc-num">ii.</span><a href="#good">Good design and bad design</a></li>
+      <li><span class="toc-num">iii.</span><a href="#neighbours">Its neighbours: usability, UX, UI</a></li>
+      <li><span class="toc-num">iv.</span><a href="#dimensions">The five dimensions of interaction design</a></li>
+      <li><span class="toc-num">v.</span><a href="#process">The process: four activities</a></li>
+      <li><span class="toc-num">vi.</span><a href="#principles">Design principles</a></li>
+      <li><span class="toc-num">vii.</span><a href="#usability">Usability goals</a></li>
+      <li><span class="toc-num">viii.</span><a href="#ux">User experience goals</a></li>
+      <li><span class="toc-num">ix.</span><a href="#refs">References and further reading</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============= i. What interaction design is ============= -->
+<section class="block" id="what">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">i.</span>What it is</div>
+    <h2 class="section-title">What interaction design <em>is</em>.</h2>
+    <p class="section-intro">Interaction design is the practice of shaping the moment-to-moment exchange between a person and an interactive product: what the product makes visible, what it lets the person do, and how it responds.</p>
+
+    <p class="body">The standard definition is Preece, Rogers and Sharp's: <strong>designing interactive products to support the way people communicate and interact in their everyday and working lives</strong>. The emphasis falls on <em>interactive</em> and on <em>people</em>. The subject is not the screen in isolation but the back-and-forth: a person forms an intention, acts on the product, and the product answers, which shapes the next intention. Design is good when that loop runs without friction and bad when it fights the person at every turn.</p>
+
+    <div class="quotebox">
+      <p>Designing interactive products to support the way people communicate and interact in their everyday and working lives.</p>
+      <span class="source">Preece, Rogers and Sharp, <em>Interaction Design: Beyond Human-Computer Interaction</em></span>
+    </div>
+
+    <p class="body">Two things follow from the definition. First, interaction design is <strong>about behaviour, not decoration</strong>: it decides what happens when the person acts, not merely how the surface looks. Second, it is <strong>centred on the user</strong>: the measure of a design is whether real people can do what they came to do, not whether it satisfies the designer's taste. Those two commitments run through every later section of this companion.</p>
+  </div>
+</section>
+
+<!-- ============= ii. Good design and bad design ============= -->
+<section class="block" id="good">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ii.</span>Good and bad design</div>
+    <h2 class="section-title">Why some products feel obvious, and others feel like <em>a fight</em>.</h2>
+    <p class="section-intro">The difference between a product that feels obvious and one that feels like a fight is rarely the feature list. It is whether the design lets you see the state of the system and matches your action to your intention.</p>
+
+    <p class="body">A well-designed object tells you what it is doing and how to work it, often without a single word of instruction. A badly designed one hides its state, accepts actions that lead nowhere, and leaves you guessing whether anything happened. The same task, the same person; only the design has changed.</p>
+
+    <h3 class="subhead">An answering machine made of marbles</h3>
+    <p class="body">Durrell Bishop's 1992 answering machine is the cleanest illustration. Each incoming voice message drops a physical marble into a tray. You count the messages at a glance, because each one is an object you can see. To play a message, you place its marble in a dish. To call the person back, you set the marble on the phone. There is no screen and no menu: <strong>the object itself is the interface</strong>.</p>
+    <p class="body">Nothing about it has to be learned. It borrows what your hands have known since childhood: the state is simply <em>visible</em> (you can see how many messages are waiting), and the action <em>matches</em> the intention (to act on a message, you handle the thing that stands for it). This is Norman's <strong>visibility</strong> and <strong>mapping</strong>, working years before Norman named them. Section iv shows this machine moving, alongside the same ideas on a phone screen.</p>
+
+    <div class="practice-callout">
+      <div class="tag">The point</div>
+      <p>Good interaction design is usually invisible: when it works, the person never notices it and simply gets on with the task. You notice design most when it fails. Naming why a product feels like a fight, hidden state, a mismatch between action and effect, no response, is the first half of learning to design.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============= iii. Neighbours ============= -->
+<section class="block" id="neighbours">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iii.</span>Usability, UX, UI</div>
+    <h2 class="section-title">Interaction design and its <em>neighbours</em>.</h2>
+    <p class="section-intro">Interaction design sits among several overlapping terms that are often used loosely. Holding the distinctions makes the field, and what it is responsible for, much clearer.</p>
+
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Term</th><th>What it covers</th><th>Relation to interaction design</th></tr></thead><tbody>
+        <tr><td>Interaction design</td><td>The back-and-forth: what the product shows, what it lets you do, and how it answers.</td><td>The core craft.</td></tr>
+        <tr><td>User experience (UX)</td><td>The whole relationship a person has with a product or service, including moments that involve no interface at all (the packaging, the support call, the wait).</td><td>UX wraps <em>around</em> interaction design.</td></tr>
+        <tr><td>User interface (UI)</td><td>The concrete surface: the layout, type, colour, and controls a person sees and touches.</td><td>UI sits <em>inside</em> interaction design, as one of its outputs.</td></tr>
+        <tr><td>Usability</td><td>How effectively, efficiently and safely people can use the product; a measurable quality, not a discipline.</td><td>The property interaction design is trying to achieve, and the thing evaluation measures.</td></tr>
+      </tbody></table></div>
+
+    <p class="body">A working rule of thumb: <strong>interaction design is the core craft of the back-and-forth; UX wraps around it; UI sits inside it.</strong> Interaction design shapes the moment of interaction, the five dimensions of the next section. UX is the whole relationship that surrounds that moment, including service touchpoints and feelings that involve no interface at all. Usability is then the standard against which the interaction is judged, and the subject of the evaluation chapter.</p>
+  </div>
+</section>
+
+<!-- ============= iv. Five dimensions ============= -->
+<section class="block" id="dimensions">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iv.</span>Five dimensions</div>
+    <h2 class="section-title">What an interface is <em>made of</em>: five dimensions.</h2>
+    <p class="section-intro">Gillian Crampton Smith's framework, extended by Kevin Silver, describes the raw material of interaction design as five dimensions. The first three let a person act; the last two bring the interface to life.</p>
+
+    <div class="grid-3">
+      <div class="cog-card"><div class="icon">1D</div><h4>Words</h4><p>Labels, button text, instructions, the terms in a menu. Words carry meaning precisely, and they are translated for every language and reading level.</p></div>
+      <div class="cog-card"><div class="icon">2D</div><h4>Visual representations</h4><p>Icons, images, typography, diagrams. A camera icon carries its meaning across languages; visual style (iOS rounds and outlines, Android fills and squares) sets the tone.</p></div>
+      <div class="cog-card"><div class="icon">3D</div><h4>Physical objects and space</h4><p>The device or object the person acts through, and the space it occupies: a phone, a mouse, a marble, a kiosk. The thing in the hand is part of the interface.</p></div>
+      <div class="cog-card"><div class="icon">4D</div><h4>Time</h4><p>Media that change as you watch: animation, video, sound, and the time an action takes. A progress bar, a status that updates, a transition that shows where you came from.</p></div>
+      <div class="cog-card"><div class="icon">5D</div><h4>Behaviour</h4><p>Action and reaction: what the person does, and how the system answers. The rule that connects an input to its response, and the feedback that confirms it.</p></div>
+    </div>
+
+    <p class="body">A useful way to hold them: <strong>words, visuals and the physical device are the nouns of an interface; time and behaviour are its verbs</strong>. The first three dimensions describe a still picture. Time and behaviour are what separate a living interface from a frozen screenshot: a button is just a shape until it responds when pressed, and a message is just text until its status changes as it travels.</p>
+
+    <div class="practice-callout">
+      <div class="tag">Interaction design and UX, the difference</div>
+      <p>Interaction design shapes the moment of interaction, these five dimensions. User experience is the whole relationship around it, including service touchpoints and feelings that involve no interface at all. When you design the five dimensions of a control, you are doing interaction design; when you account for the wait, the email that follows, and how the person felt about the brand, you are working on UX.</p>
+    </div>
+
+    <h3 class="subhead">See the dimensions move</h3>
+    <p class="embed-note">The same dimensions from the deck, now interactive. Bishop's marble machine shows the physical object as interface (3D); the four phone demos show time (4D) and behaviour (5D): message ticks that change as a message travels, a like that reacts the instant you tap, an upload you can watch, and switches that show their state.</p>
+    <div class="embed-cap">Interactive &middot; interaction design, alive</div>
+    <iframe class="demo-embed" src="/birzeit/comp322/Chapter%201/dimensions_alive.html" loading="lazy" title="Interaction design, alive: the five dimensions in motion"></iframe>
+    <p class="note">If the frame does not load, open it directly: <a class="inline" href="/birzeit/comp322/Chapter%201/dimensions_alive.html">interaction design, alive</a>.</p>
+  </div>
+</section>
+
+<!-- ============= v. The process ============= -->
+<section class="block" id="process">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">v.</span>The process</div>
+    <h2 class="section-title">The process: <em>four activities, run in a loop</em>.</h2>
+    <p class="section-intro">Interaction design is not a single act of inspiration but a cycle of four activities, repeated until the design holds up against real use.</p>
+
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Activity</th><th>What it does</th></tr></thead><tbody>
+        <tr><td>Discovering requirements</td><td>Find out who the users are, what they are trying to do, and the constraints, through interviews, observation, personas and scenarios. State the requirements so they can be checked later, ideally as measurable usability requirements.</td></tr>
+        <tr><td>Designing alternatives</td><td>Propose more than one way the product could work. Generating alternatives, rather than committing to the first idea, is what gives the process something to choose between.</td></tr>
+        <tr><td>Prototyping</td><td>Build a version concrete enough that a person can move through it, from a paper sketch to an interactive prototype. A prototype turns an argument about the design into something testable.</td></tr>
+        <tr><td>Evaluating</td><td>Put the prototype in front of users and measure how well it supports the task. The findings feed back: refine the design, redesign, or even rethink the requirement.</td></tr>
+      </tbody></table></div>
+
+    <p class="body">The arrow from evaluation runs <strong>backwards</strong>: a result can send you back to the prototype, the alternatives, or all the way to the requirements. That loop is the heart of the method, and it is why the process matters more than any single rulebook. Each new form of a design breaks an assumption the last one relied on, and only evaluation tells you which assumptions held.</p>
+
+    <div class="practice-callout">
+      <div class="tag">The mapping to your project</div>
+      <p>The four activities are not abstract; the three project phases run them almost one to one. Phase one discovers requirements (heuristic evaluation, interviews, personas, scenarios, measurable usability requirements). Phase two designs alternatives and builds the interactive prototype a user can move through. Phase three evaluates (a usability test, the System Usability Scale, a heuristic re-evaluation) and closes the loop with a revision plan.</p>
+    </div>
+
+    <h3 class="subhead">Requirement and design decision are not the same thing</h3>
+    <p class="body">A <strong>requirement</strong> says what must be true; a <strong>design decision</strong> chooses what the system does so that it comes true. "A first-time user can register in under two minutes without help" is a requirement. Putting the seat counter on the first screen, defaulting the term to the current one, and confirming each step are design decisions that make it come true. Read a scenario the other way and its verbs and friction moments become a design to-do list, and each item lands on a design principle.</p>
+  </div>
+</section>
+
+<!-- ============= vi. Principles ============= -->
+<section class="block" id="principles">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vi.</span>Principles</div>
+    <h2 class="section-title">Design principles: <em>what makes an interface readable</em>.</h2>
+    <p class="section-intro">Donald Norman's principles are the small set of ideas that recur through every good design. They are not rules to apply mechanically but lenses for seeing why a design works or fails.</p>
+
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Principle</th><th>What it asks</th><th>In the marble machine</th></tr></thead><tbody>
+        <tr><td>Visibility</td><td>Can the person see the current state and the available actions?</td><td>The waiting messages are marbles you can count at a glance.</td></tr>
+        <tr><td>Feedback</td><td>Does every action produce a clear, immediate response?</td><td>Drop a marble in the dish and the message plays; the action and its effect are one.</td></tr>
+        <tr><td>Mapping</td><td>Does the relationship between a control and its effect match expectation?</td><td>To act on a message you handle the object that stands for it, the most natural mapping there is.</td></tr>
+        <tr><td>Affordances</td><td>Does the form suggest how it is used?</td><td>A marble invites picking up and placing; nothing else needs explaining.</td></tr>
+        <tr><td>Constraints</td><td>Does the design prevent actions that make no sense?</td><td>A marble fits the dish and the phone, so the only moves are the meaningful ones.</td></tr>
+        <tr><td>Consistency</td><td>Do similar things work in similar ways?</td><td>Every message is the same kind of object, handled the same way.</td></tr>
+      </tbody></table></div>
+
+    <p class="body">Three of these run through almost every example in this chapter: <strong>visibility</strong> (you can see the state), <strong>feedback</strong> (the system answers), and <strong>mapping</strong> (the control matches the intention). When a product feels obvious, one of these is usually being honoured; when it feels like a fight, one of them is usually being broken. Each principle also has a direct echo in the project brief, which is no coincidence, since the brief was built on them.</p>
+  </div>
+</section>
+
+<!-- ============= vii. Usability goals ============= -->
+<section class="block" id="usability">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vii.</span>Usability goals</div>
+    <h2 class="section-title">Usability goals: <em>can people use it?</em></h2>
+    <p class="section-intro">Usability goals are the functional standards a design must meet. Each is best stated as a question you can put to a real user and, with care, measure.</p>
+
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Goal</th><th>The question it asks</th></tr></thead><tbody>
+        <tr><td>Effective to use</td><td>Can people accomplish what they came to do, and accomplish it correctly?</td></tr>
+        <tr><td>Efficient to use</td><td>Once learned, can they do it quickly and with little effort?</td></tr>
+        <tr><td>Safe to use</td><td>Does it protect people from dangerous errors, and let them recover when one happens?</td></tr>
+        <tr><td>Good utility</td><td>Does it provide the right functions for what people actually need to do?</td></tr>
+        <tr><td>Easy to learn (learnability)</td><td>Can a first-timer manage with no help and no manual?</td></tr>
+        <tr><td>Easy to remember (memorability)</td><td>After a break, can a returning user pick it up again without relearning?</td></tr>
+      </tbody></table></div>
+
+    <p class="body">Stated this way, usability goals become <strong>measurable usability requirements</strong>: "a first-time user completes registration in under two minutes with no errors" is effectiveness, efficiency and learnability turned into a target a usability test can check. This is the bridge from interaction design to evaluation: the goals named here are precisely what the evaluation chapter sets out to measure.</p>
+  </div>
+</section>
+
+<!-- ============= viii. UX goals ============= -->
+<section class="block" id="ux">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">viii.</span>UX goals</div>
+    <h2 class="section-title">User experience goals: <em>how it feels to use</em>.</h2>
+    <p class="section-intro">Usability asks whether people <em>can</em> use a product. User experience goals ask how it <em>feels</em> to use it, the qualities of the experience rather than its mechanics.</p>
+
+    <p class="body">Where usability goals are functional, user experience goals are experiential. A product can be perfectly usable and still leave a person cold, or be a small joy to use. The desirable qualities a design may aim for include being <strong>satisfying, enjoyable, engaging, pleasurable, helpful, and motivating</strong>; the qualities to design <em>away</em> from include being frustrating, boring, annoying, or patronising.</p>
+
+    <div class="grid-3">
+      <div class="cog-card"><div class="icon">+</div><h4>Desirable</h4><p>Satisfying, enjoyable, engaging, pleasurable, helpful, motivating, aesthetically pleasing. The qualities that make a person want to return.</p></div>
+      <div class="cog-card"><div class="icon">&minus;</div><h4>To avoid</h4><p>Frustrating, boring, annoying, confusing, patronising. The qualities that quietly drive people away even when the product technically works.</p></div>
+      <div class="cog-card"><div class="icon">=</div><h4>The relationship</h4><p>Usability and experience are not in tension; an unusable product is rarely enjoyable. Usability is the floor, experience is what you build on top of it.</p></div>
+    </div>
+
+    <p class="body">User experience goals are harder to measure than usability goals, but not immeasurable: satisfaction is captured by instruments such as the System Usability Scale, and engagement by behaviour over time. The evaluation chapter returns to exactly how these softer qualities are turned into evidence.</p>
+  </div>
+</section>
+
+<!-- ============= ix. References ============= -->
+<section class="block" id="refs">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ix.</span>References</div>
+    <h2 class="section-title">References and <em>further reading</em>.</h2>
+    <p class="section-intro">The works this chapter draws on, and the sources for the marble machine and the five dimensions.</p>
+    <div class="ref-list">
+      <div class="ref"><strong>Preece, J., Rogers, Y. and Sharp, H.</strong> <em>Interaction Design: Beyond Human-Computer Interaction.</em> Wiley. The source of the definition, the four activities, and the usability and user experience goals.</div>
+      <div class="ref"><strong>Norman, D.</strong> <em>The Design of Everyday Things.</em> Revised edition, Basic Books, 2013. Visibility, feedback, affordances, constraints, mapping and consistency.</div>
+      <div class="ref"><strong>Silver, K.</strong> "What Puts the Design in Interaction Design." UX Matters, 2007. The five dimensions of interaction design, building on Gillian Crampton Smith's four.</div>
+      <div class="ref"><strong>Bishop, D.</strong> Marble answering machine, Royal College of Art, 1992. The tangible interface in which each message is a physical marble.</div>
+      <div class="ref"><strong>Interaction Design Foundation.</strong> "What is Interaction Design?" and related explainers. Short, example-rich primers on the field and the five dimensions.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div>COMP322 &middot; Human-Computer Interaction &middot; Birzeit University &middot; Spring 2025/2026</div>
+    <div><a href="/birzeit/comp322/">course page</a> &middot; <a href="/birzeit/comp322/personas_companion.html">personas companion</a> &middot; <a href="/birzeit/comp322/scenarios_requirements_companion.html">scenarios companion</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
