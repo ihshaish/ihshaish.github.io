@@ -12,6 +12,17 @@
           }
         }
       }
+    },
+    "presentations": {
+      "2026": {
+        "bookings": {
+          ".read": "auth != null",
+          "$slot": {
+            ".write": "auth != null && !data.exists() && newData.exists()",
+            ".validate": "newData.hasChildren(['course','members','owner'])"
+          }
+        }
+      }
     }
   }
 }
