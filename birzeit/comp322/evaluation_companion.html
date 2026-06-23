@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluation and usability testing · COMP322</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1419;
+    --ink-soft: #2c3540;
+    --ink-mute: #5a6473;
+    --paper: #faf7f2;
+    --paper-warm: #f3ede2;
+    --paper-deep: #ebe2d1;
+    --accent: #b85c38;
+    --accent-deep: #7a3a23;
+    --steel: #2c5f7c;
+    --steel-soft: #d6e0e8;
+    --steel-deep: #1a3d52;
+    --moss: #4a6b3a;
+    --moss-soft: #e0e8d8;
+    --gold: #c9a961;
+    --rule: #d8cfc0;
+    --rule-soft: #ebe2d1;
+    --shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px rgba(15,20,25,0.06);
+    --shadow-lg: 0 4px 12px rgba(15,20,25,0.08), 0 24px 48px rgba(15,20,25,0.10);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter Tight', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(184,92,56,0.05) 0%, transparent 35%),
+      radial-gradient(circle at 85% 85%, rgba(44,95,124,0.05) 0%, transparent 35%);
+    min-height: 100vh;
+  }
+
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(250,247,242,0.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--rule); padding: 14px 0; }
+  .topbar-inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { font-family: var(--serif); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 5px; background: linear-gradient(135deg, var(--steel) 0%, var(--accent) 100%); display: inline-block; box-shadow: 0 2px 6px rgba(184,92,56,0.25); }
+  .nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .nav a { color: var(--ink-soft); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 999px; transition: all 0.15s; }
+  .nav a:hover { background: var(--paper-warm); color: var(--ink); }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 80px 32px 60px; position: relative; }
+  .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+  .hero-eyebrow::before { content: ''; flex-shrink: 0; width: 32px; height: 1px; background: var(--accent); }
+  .hero-eyebrow::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: var(--accent); }
+  .hero h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(44px, 7vw, 88px); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 28px; font-variation-settings: "opsz" 144; max-width: 1100px; }
+  .hero h1 em { font-style: italic; color: var(--accent); font-variation-settings: "opsz" 144, "wght" 400; }
+  .hero-lede { font-size: 20px; max-width: 720px; color: var(--ink-soft); line-height: 1.55; font-family: var(--serif); font-weight: 400; }
+  .hero-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--rule); }
+  .hero-meta-item { font-size: 13px; }
+  .hero-meta-item span:first-child { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
+  .hero-meta-item span:last-child { font-weight: 600; color: var(--ink); }
+
+  .toc { max-width: 1240px; margin: 0 auto; padding: 36px 32px 24px; }
+  .toc-card { background: white; border: 1px solid var(--rule); border-radius: 12px; padding: 32px 36px; box-shadow: var(--shadow); }
+  .toc-card h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); font-weight: 600; margin-bottom: 20px; }
+  .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 4px 28px; list-style: none; }
+  .toc-list li { padding: 8px 0; border-bottom: 1px dashed var(--rule); display: flex; align-items: baseline; gap: 14px; }
+  .toc-list a { color: var(--ink); text-decoration: none; font-size: 14px; flex: 1; transition: color 0.15s; }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-list .toc-num { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--accent); min-width: 28px; }
+
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  section.block { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .section-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--steel); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+  .section-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--steel); }
+  .section-eyebrow .num { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--accent); margin-left: -6px; }
+  h2.section-title { font-family: var(--serif); font-weight: 500; font-size: clamp(32px, 5vw, 56px); letter-spacing: -0.025em; line-height: 1.02; margin-bottom: 20px; font-variation-settings: "opsz" 144; max-width: 900px; }
+  h2.section-title em { font-style: italic; color: var(--accent); }
+  .section-intro { font-size: 18px; max-width: 760px; color: var(--ink-soft); margin-bottom: 48px; line-height: 1.6; font-family: var(--serif); font-weight: 400; }
+  h3.subhead { font-family: var(--serif); font-weight: 600; font-size: 24px; letter-spacing: -0.015em; margin-top: 48px; margin-bottom: 14px; }
+  h3.subhead-small { font-family: var(--serif); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; margin-top: 32px; margin-bottom: 10px; }
+  p.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 14px; max-width: 760px; }
+  p.body strong { color: var(--ink); }
+  p.note { font-size: 13px; color: var(--ink-mute); font-style: italic; margin-top: 12px; max-width: 760px; }
+  ul.body, ol.body { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin: 12px 0 18px 24px; max-width: 760px; }
+  ul.body li, ol.body li { margin-bottom: 8px; }
+  ul.body li strong, ol.body li strong { color: var(--ink); }
+  a.inline { color: var(--accent-deep); border-bottom: 1px dotted; text-decoration: none; }
+  a.inline:hover { border-bottom-style: solid; }
+
+  .stakes { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 32px; max-width: 1100px; }
+  @media (max-width: 760px) { .stakes { grid-template-columns: 1fr; } }
+  .stake-card { background: white; border-radius: 10px; padding: 28px 32px; box-shadow: var(--shadow); border: 1px solid var(--rule); }
+  .stake-card.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stake-card .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 16px; color: var(--accent); }
+  .stake-card.dark .tag { color: var(--gold); }
+  .stake-card h4 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin-bottom: 14px; line-height: 1.25; letter-spacing: -0.01em; }
+  .stake-card p { font-size: 14.5px; line-height: 1.6; margin-bottom: 10px; }
+  .stake-card.dark p { color: rgba(250,247,242,0.85); }
+  .stake-card .citation { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; font-style: italic; color: var(--ink-mute); }
+  .stake-card.dark .citation { border-top-color: rgba(255,255,255,0.15); color: rgba(250,247,242,0.7); }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; max-width: 1100px; }
+  .cog-card { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 24px; transition: transform 0.2s, box-shadow 0.2s; }
+  .cog-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cog-card .icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 14px; background: var(--paper-warm); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 18px; color: var(--accent); }
+  .cog-card h4 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .cog-card p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 8px; }
+
+  .quotebox { background: var(--paper-warm); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 22px 28px; margin: 28px 0; max-width: 820px; }
+  .quotebox p { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .quotebox .source { display: block; margin-top: 10px; font-style: normal; font-size: 13px; font-family: var(--sans); color: var(--ink-mute); }
+
+  .table-card { background: white; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin: 24px 0; max-width: 1000px; }
+  table.body-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.body-table thead th { background: var(--paper-warm); padding: 14px 18px; text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  table.body-table tbody td { padding: 14px 18px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); vertical-align: top; line-height: 1.55; }
+  table.body-table tbody tr:last-child td { border-bottom: none; }
+  table.body-table tbody td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+  .practice-callout { background: var(--steel-soft); border: 1px solid var(--steel); border-radius: 10px; padding: 24px 28px; margin: 28px 0; max-width: 900px; }
+  .practice-callout .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 10px; font-weight: 600; }
+  .practice-callout p { color: var(--steel-deep); font-size: 15px; line-height: 1.6; margin: 0 0 10px; }
+  .practice-callout p:last-child { margin-bottom: 0; }
+
+  .pitfall-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 24px; max-width: 1100px; }
+  .pitfall { background: white; border-left: 4px solid var(--accent); padding: 18px 22px; border-radius: 0 8px 8px 0; box-shadow: var(--shadow); }
+  .pitfall h5 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+  .pitfall p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
+
+  .ref-list { max-width: 880px; margin-top: 32px; }
+  .ref-list .ref { padding: 14px 0; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; }
+  .ref-list .ref:last-child { border-bottom: none; }
+  .ref-list .ref strong { color: var(--ink); }
+  .ref-list .ref em { font-style: italic; }
+
+  .cta-card { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 36px 40px; margin: 32px 0; max-width: 900px; box-shadow: var(--shadow-lg); }
+  .cta-card .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .cta-card h4 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .cta-card p { font-size: 15px; line-height: 1.6; color: rgba(250,247,242,0.85); margin-bottom: 18px; }
+  .cta-card a.button { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: white; padding: 10px 20px; border-radius: 999px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: background 0.15s; }
+  .cta-card a.button:hover { background: var(--accent-deep); }
+
+  /* Persona card (worked example) */
+  .persona-card { background: white; border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--shadow-lg); margin: 32px 0; max-width: 980px; overflow: hidden; display: grid; grid-template-columns: 280px 1fr; }
+  @media (max-width: 800px) { .persona-card { grid-template-columns: 1fr; } }
+  .persona-portrait { background: linear-gradient(135deg, var(--paper-warm) 0%, var(--steel-soft) 100%); padding: 32px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; border-right: 1px solid var(--rule); }
+  @media (max-width: 800px) { .persona-portrait { border-right: none; border-bottom: 1px solid var(--rule); } }
+  .persona-portrait svg { width: 180px; height: 180px; margin-bottom: 20px; filter: drop-shadow(0 6px 18px rgba(44,95,124,0.18)); }
+  .persona-portrait .p-name { font-family: var(--serif); font-size: 26px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); margin-bottom: 6px; }
+  .persona-portrait .p-role { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel-deep); margin-bottom: 14px; }
+  .persona-portrait .p-quote { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-soft); line-height: 1.45; max-width: 220px; }
+  .persona-portrait .p-quote::before { content: '\201C'; display: block; font-size: 36px; line-height: 0.6; color: var(--accent); }
+  .persona-body { padding: 32px 36px; }
+  .persona-body h4 { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 18px 0 8px; font-weight: 600; }
+  .persona-body h4:first-child { margin-top: 0; }
+  .persona-body p { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
+  .persona-body ul { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 0 20px; }
+  .persona-body ul li { margin-bottom: 4px; }
+  .persona-body .demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px 18px; margin-top: 4px; }
+  .persona-body .demo { font-size: 12.5px; }
+  .persona-body .demo span:first-child { display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 2px; }
+  .persona-body .demo span:last-child { color: var(--ink); font-weight: 600; font-size: 13.5px; }
+
+  footer { background: var(--paper-deep); padding: 60px 32px; margin-top: 60px; border-top: 1px solid var(--rule); }
+  footer .inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  footer .inner a { color: var(--steel-deep); text-decoration: none; border-bottom: 1px dotted; }
+  .chain { display:flex; flex-wrap:wrap; gap:10px; align-items:stretch; margin:26px 0; max-width:1100px; }
+  .chain-step { flex:1; min-width:140px; background:white; border:1px solid var(--rule); border-radius:10px; padding:16px 18px; box-shadow:var(--shadow); }
+  .chain-step .n { font-family:var(--mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); font-weight:700; }
+  .chain-step h5 { font-family:var(--serif); font-size:17px; font-weight:600; margin:6px 0 5px; letter-spacing:-0.01em; }
+  .chain-step p { font-size:13px; color:var(--ink-soft); line-height:1.5; margin:0; }
+  .sus-tool { background:white; border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); padding:26px 30px; margin:26px 0; max-width:940px; }
+  .sus-q { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:11px 0; border-bottom:1px solid var(--rule-soft); }
+  .sus-q .qt { font-size:14.5px; color:var(--ink-soft); flex:1; line-height:1.45; }
+  .sus-q .qt b { color:var(--ink-mute); font-family:var(--mono); font-size:11px; margin-right:8px; }
+  .sus-q .pol { font-family:var(--mono); font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:2px 6px; border-radius:4px; margin-left:8px; }
+  .pol.pos { background:var(--moss-soft); color:var(--moss); } .pol.neg { background:var(--paper-deep); color:var(--accent-deep); }
+  .scale { display:flex; gap:5px; flex-shrink:0; }
+  .scale button { width:34px; height:34px; border-radius:7px; border:1px solid var(--rule); background:var(--paper); font-family:var(--mono); font-size:13px; color:var(--ink-soft); cursor:pointer; transition:all .12s; }
+  .scale button:hover { border-color:var(--steel); }
+  .scale button.sel { background:var(--steel); color:white; border-color:var(--steel); }
+  .sus-readout { display:flex; align-items:center; gap:22px; margin-top:22px; flex-wrap:wrap; }
+  .sus-score-num { font-family:var(--serif); font-size:48px; font-weight:600; color:var(--accent); line-height:1; min-width:120px; }
+  .sus-score-lab { font-size:13px; color:var(--ink-mute); line-height:1.5; }
+  .sus-tool .ctrls { margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; }
+  .sus-tool .ctrls button { font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; padding:9px 16px; border-radius:8px; border:0; cursor:pointer; background:var(--steel); color:white; }
+  .sus-tool .ctrls button.ghost { background:var(--paper-warm); color:var(--ink-soft); border:1px solid var(--rule); }
+  .toolkit-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin-top:26px; max-width:1100px; }
+  .toolkit-card { background:white; border:1px solid var(--rule); border-top:3px solid var(--steel); border-radius:0 0 10px 10px; padding:22px 24px; box-shadow:var(--shadow); }
+  .toolkit-card .lead { font-family:var(--mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:10px; }
+  .toolkit-card h4 { font-family:var(--serif); font-size:18px; font-weight:600; margin-bottom:8px; letter-spacing:-0.01em; }
+  .toolkit-card ul { margin:0 0 0 18px; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+  .toolkit-card ul li { margin-bottom:5px; }
+  .toolkit-card p { font-size:14px; color:var(--ink-soft); line-height:1.55; margin:0; }
+</style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-mark"></span>COMP322 &middot; Evaluation</div>
+    <nav class="nav">
+      <a href="/birzeit/comp322/">Course</a>
+      <a href="/birzeit/comp322/interaction_design_companion.html">Interaction design</a>
+      <a href="/birzeit/comp322/personas_companion.html">Personas</a>
+      <a href="#why">i. Why evaluate</a>
+      <a href="#cases">ii. The cost</a>
+      <a href="#kinds">iii. Formative/summative</a>
+      <a href="#decide">iv. DECIDE</a>
+      <a href="#families">v. Three families</a>
+      <a href="#chain">vi. The chain</a>
+      <a href="#testing">vii. Usability testing</a>
+      <a href="#sus">viii. SUS</a>
+      <a href="#other">ix. Other methods</a>
+      <a href="#ethics">x. Ethics</a>
+      <a href="#triangulate">xi. Triangulation</a>
+      <a href="#toolkit">xii. Your toolkit</a>
+      <a href="#refs">xiii. References</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">COMP322 &middot; Human-Computer Interaction</div>
+  <h1>Evaluation: <em>how do we know it is any good?</em></h1>
+  <p class="hero-lede">You cannot see your own interface; you already know where everything is. Evaluation is the discipline of replacing that blind spot with evidence: planning what to learn, watching real people use the design, measuring what happened and why, and feeding the findings back into the next version. This companion ends with the concrete toolkit you need for an evaluation phase.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span>course</span><span>COMP322</span></div>
+    <div class="hero-meta-item"><span>chapter</span><span>Evaluation</span></div>
+    <div class="hero-meta-item"><span>instructor</span><span>Hisham Ihshaish</span></div>
+    <div class="hero-meta-item"><span>institution</span><span>Birzeit University</span></div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-card">
+    <h3>Contents</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">i.</span><a href="#why">Why evaluate: you cannot see your own interface</a></li>
+      <li><span class="toc-num">ii.</span><a href="#cases">What skipping it costs</a></li>
+      <li><span class="toc-num">iii.</span><a href="#kinds">Formative and summative</a></li>
+      <li><span class="toc-num">iv.</span><a href="#decide">Plan it: the DECIDE framework</a></li>
+      <li><span class="toc-num">v.</span><a href="#families">Three families of method</a></li>
+      <li><span class="toc-num">vi.</span><a href="#chain">The evaluation chain</a></li>
+      <li><span class="toc-num">vii.</span><a href="#testing">Usability testing</a></li>
+      <li><span class="toc-num">viii.</span><a href="#sus">The System Usability Scale</a></li>
+      <li><span class="toc-num">ix.</span><a href="#other">Other methods: A/B, analytics, Fitts</a></li>
+      <li><span class="toc-num">x.</span><a href="#ethics">Ethics: you are studying people</a></li>
+      <li><span class="toc-num">xi.</span><a href="#triangulate">Triangulation</a></li>
+      <li><span class="toc-num">xii.</span><a href="#toolkit">Your evaluation toolkit</a></li>
+      <li><span class="toc-num">xiii.</span><a href="#refs">References</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============= i. Why evaluate ============= -->
+<section class="block" id="why">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">i.</span>Why evaluate</div>
+    <h2 class="section-title">You cannot see your own <em>interface</em>.</h2>
+    <p class="section-intro">After weeks on a screen you are the worst possible judge of whether it is clear, because you already know where everything is. Evaluation is the discipline that replaces that blind spot with evidence from people who do not.</p>
+
+    <p class="body">Every designer eventually has to face one question: is this any good? Your own judgement cannot answer it. You have built a mental model of the interface that no first-time user shares; the labels make sense to you, the flow is obvious to you, the error you never hit does not exist for you. This is not carelessness, it is unavoidable: knowledge of a design cannot be unlearned. The only way past it is to watch someone without that knowledge try to use the thing.</p>
+
+    <div class="quotebox">
+      <p>Evaluation is humility, made into a method.</p>
+      <span class="source">The discipline in one line</span>
+    </div>
+
+    <p class="body">So evaluation is not an optional polish at the end. It is the activity that closes the design loop from the interaction-design chapter: discover, design, prototype, <strong>evaluate</strong>, and back again. Without it, a team ships its own assumptions and finds out whether they were right from users who have already left.</p>
+  </div>
+</section>
+
+<!-- ============= ii. The cost ============= -->
+<section class="block" id="cases">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ii.</span>The cost of skipping it</div>
+    <h2 class="section-title">What skipping evaluation <em>costs</em>.</h2>
+    <p class="section-intro">Two well-documented cases show what a single untested design decision can cost, in money and in worse.</p>
+
+    <div class="stakes">
+      <div class="stake-card">
+        <div class="tag">Palm Beach County, 2000</div>
+        <h4>A ballot layout that changed an election</h4>
+        <p>The butterfly ballot put two columns of candidates around one shared, staggered column of punch holes. The second name on the left did not line up with the second hole; it lined up with the third. Thousands of voters punched the wrong hole, and the layout plausibly changed the outcome of a national election.</p>
+        <p>No new technology was needed to prevent it, only a layout that mapped names to holes. The failure was pure interaction design, and it was never tested with voters.</p>
+        <div class="citation">A mapping failure, on paper, at the largest possible stakes.</div>
+      </div>
+      <div class="stake-card dark">
+        <div class="tag">The three hundred million dollar button</div>
+        <h4>One barrier, removed after testing</h4>
+        <p>A large retailer forced shoppers to register before they could buy. The checkout showed a Register button and a login form. In testing, first-time buyers were not confused, they were furious: they did not want a relationship, they wanted shoes.</p>
+        <p>Replacing the register step with a Continue as guest option reportedly produced around three hundred million dollars a year in extra revenue. The barrier was invisible to the team and obvious the moment someone watched a real buyer hit it.</p>
+        <div class="citation">Reported by Jared Spool, User Interface Engineering.</div>
+      </div>
+    </div>
+
+    <p class="body">The cases are vivid but old and small; the same lesson holds for large modern systems. The shared cause is always the same: a decision that looked fine to the people who made it, never put in front of the people who would live with it. The fix in every case was cheap, an afternoon with a few users in a quiet room, set against the cost of the failure.</p>
+  </div>
+</section>
+
+<!-- ============= iii. Formative and summative ============= -->
+<section class="block" id="kinds">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iii.</span>Two kinds</div>
+    <h2 class="section-title">Formative and summative: <em>tasting versus serving</em>.</h2>
+    <p class="section-intro">Evaluation comes in two kinds, distinguished by when you do it and what you do with the result.</p>
+
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Kind</th><th>When</th><th>Purpose</th></tr></thead><tbody>
+        <tr><td>Formative</td><td>During design, on prototypes.</td><td>To improve the design while it can still change. The findings feed straight back into the next version.</td></tr>
+        <tr><td>Summative</td><td>After a version is built or shipped.</td><td>To judge how good it is, against a benchmark or a competitor. The findings grade the design rather than reshape it.</td></tr>
+      </tbody></table></div>
+
+    <p class="body">A kitchen makes the distinction concrete. When the chef tastes the sauce while cooking and adjusts it, that is <strong>formative</strong>. When the guests taste the finished dish, that is <strong>summative</strong>. Either way, somebody has to taste it: <strong>looking at the pot is not evaluation</strong>. Most of what a project team does is formative, because the point is to improve the design while there is still time to act on what you learn.</p>
+  </div>
+</section>
+
+<!-- ============= iv. DECIDE ============= -->
+<section class="block" id="decide">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">iv.</span>Plan it</div>
+    <h2 class="section-title">Plan it: the <em>DECIDE</em> framework.</h2>
+    <p class="section-intro">Evaluation is not "grab a friend and poke the app". It is planned. DECIDE is six questions, answered in order, before you test anything.</p>
+
+    <div class="grid-3">
+      <div class="cog-card"><div class="icon">D</div><h4>Determine</h4><p>What are the goals of this evaluation? What do you actually need to learn?</p></div>
+      <div class="cog-card"><div class="icon">E</div><h4>Explore</h4><p>What specific questions will answer those goals?</p></div>
+      <div class="cog-card"><div class="icon">C</div><h4>Choose</h4><p>Which approach and methods fit: lab, field, or inspection?</p></div>
+      <div class="cog-card"><div class="icon">I</div><h4>Identify</h4><p>The practical issues: who, where, what equipment, how long, how many participants?</p></div>
+      <div class="cog-card"><div class="icon">D</div><h4>Decide</h4><p>How will you handle ethics? Consent, privacy, and the right to stop.</p></div>
+      <div class="cog-card"><div class="icon">E</div><h4>Evaluate</h4><p>Collect, analyse, interpret and present the data as it is.</p></div>
+    </div>
+
+    <div class="practice-callout">
+      <div class="tag">Use it as a checklist</div>
+      <p>Most weak evaluations skip the front and the back: they run sessions without first deciding what they need to learn (the first D and E), and they gather data without analysing what it shows (the last E). The two letters at the front protect you from the most expensive mistake, running a study that cannot answer your question. Answer all six, in order, and the rest of the study almost designs itself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============= v. Three families ============= -->
+<section class="block" id="families">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">v.</span>Three families</div>
+    <h2 class="section-title">Three ways to evaluate, <em>one question each</em>.</h2>
+    <p class="section-intro">The "Choose" step picks from three families of method. Each answers a different question, and each is strongest at a different stage of the project.</p>
+
+    <div class="grid-3">
+      <div class="cog-card"><div class="icon">U</div><h4>Usability testing</h4><p>Watch real people attempt real tasks, in a lab or a controlled setting. Answers: <strong>can people actually use it, and where do they struggle?</strong></p></div>
+      <div class="cog-card"><div class="icon">F</div><h4>Field studies</h4><p>Observe use in its natural setting, over time. Answers: <strong>how does it fit into real life and work?</strong></p></div>
+      <div class="cog-card"><div class="icon">I</div><h4>Inspection and models</h4><p>Experts judge the design against heuristics, or models such as Fitts's law predict performance, with no users. Answers: <strong>what is likely wrong before we recruit anyone?</strong></p></div>
+    </div>
+
+    <h3 class="subhead">Where each method attaches across the project</h3>
+    <p class="body">The families are not rivals; they attach at different points, scaling from no users to many as the design firms up.</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Stage</th><th>Methods</th><th>Users</th></tr></thead><tbody>
+        <tr><td>Discover</td><td>Interviews, personas, scenarios</td><td>a few, for context</td></tr>
+        <tr><td>Design</td><td>Heuristic inspection, Fitts's law models</td><td>no users</td></tr>
+        <tr><td>Prototype</td><td>Usability testing</td><td>a few users</td></tr>
+        <tr><td>Live</td><td>Analytics, A/B testing</td><td>many users</td></tr>
+      </tbody></table></div>
+  </div>
+</section>
+
+<!-- ============= vi. The evaluation chain ============= -->
+<section class="block" id="chain">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vi.</span>The chain</div>
+    <h2 class="section-title">One evaluation is a <em>chain</em>, not a single act.</h2>
+    <p class="section-intro">Beginners treat evaluation as one event: run a test. It is really a chain of six linked steps, and a weak link anywhere wastes the rest.</p>
+
+    <div class="chain">
+      <div class="chain-step"><div class="n">1 &middot; Goal</div><h5>Goal</h5><p>What this round must learn, taken straight from DECIDE.</p></div>
+      <div class="chain-step"><div class="n">2 &middot; Tasks</div><h5>Tasks</h5><p>Real tasks that exercise the goal, framed as outcomes not instructions.</p></div>
+      <div class="chain-step"><div class="n">3 &middot; Session</div><h5>Session</h5><p>The run itself: a participant, the tasks, think-aloud, and a quiet facilitator.</p></div>
+      <div class="chain-step"><div class="n">4 &middot; Measures</div><h5>Measures</h5><p>What you record: completion, time, errors, and the reasons behind them.</p></div>
+      <div class="chain-step"><div class="n">5 &middot; Findings</div><h5>Findings</h5><p>The problems found, ranked by how badly they hurt the task.</p></div>
+      <div class="chain-step"><div class="n">6 &middot; Revise</div><h5>Revise</h5><p>The changes you will make, and the loop back to a fresh goal.</p></div>
+    </div>
+
+    <p class="body">The chain ends where it began: a revision sets the goal for the next round. That loop is exactly what a project's evaluation phase has to show, not a single test in isolation but evidence that findings led to changes, and that the changes were checked.</p>
+  </div>
+</section>
+
+<!-- ============= vii. Usability testing ============= -->
+<section class="block" id="testing">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">vii.</span>Usability testing</div>
+    <h2 class="section-title">A usability test is just <em>structured watching</em>.</h2>
+    <p class="section-intro">Strip away the equipment and a usability test is one person trying to do a real task while you watch and stay quiet. The structure is what turns watching into evidence.</p>
+
+    <h3 class="subhead">Why five users is usually enough</h3>
+    <p class="body">The common worry is that a handful of participants cannot be representative. For finding usability <em>problems</em>, that worry is misplaced. Nielsen's finding is that around <strong>five users surface roughly 85% of the problems</strong> in an interface, because the serious problems are hit by almost everyone. After five, you mostly watch the same issues recur. The efficient move is not one big study but several small rounds: test five, fix, test five again. Summative studies that need a stable number, such as a benchmark score, require more participants, but for finding what to fix, five per round is the working rule.</p>
+
+    <h3 class="subhead">Give a goal, not a recipe</h3>
+    <p class="body">A task must be framed as an <strong>outcome the participant wants, not a list of steps to follow</strong>. "Click Menu, then Settings, then Notifications, then toggle the switch" tests whether they can read; it cannot fail. "You want the app to stop sending you alerts at night, make that happen" tests the design, because now the participant has to find the path themselves, and where they go wrong is exactly the finding. Give the goal and the starting point, never the route.</p>
+
+    <h3 class="subhead">Think aloud: narrate the struggle</h3>
+    <p class="body">Ask participants to say what they are thinking as they work. Clicks tell you <em>what</em> happened; words tell you <em>why</em>. "I am looking for a settings cog, usually it is top right" reveals an expectation the design can meet or break, which no log file would ever show. Thinking aloud is the cheapest way to recover the reasoning behind a wrong turn.</p>
+
+    <h3 class="subhead">The facilitator's only real skill: silence</h3>
+    <p class="body">The hardest part of running a test is not helping. The moment you say "try the menu", the finding is gone: you have shown them the thing the design failed to. Let the silence sit, let the participant struggle, and record where the struggle happens. A facilitator gives the task, the encouragement to keep narrating, and nothing else.</p>
+  </div>
+</section>
+
+<!-- ============= viii. SUS ============= -->
+<section class="block" id="sus">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">viii.</span>The System Usability Scale</div>
+    <h2 class="section-title">One number for satisfaction: the <em>System Usability Scale</em>.</h2>
+    <p class="section-intro">The SUS is ten statements, each rated 1 to 5, that produce a single satisfaction score from 0 to 100. It is short, free, decades-proven, and the standard way to put a number on how a system felt to use.</p>
+
+    <p class="body">The wording <strong>alternates on purpose</strong>: odd-numbered statements are positive and even-numbered ones are negative, so a high rating means something different on each. That is what stops a participant from ticking the same box down the page without reading. It also means you cannot simply add the answers; every one first has to be converted to the same 0-to-4 scale where higher is always better.</p>
+
+    <h3 class="subhead">The scoring trick</h3>
+    <p class="body">Convert each answer, then sum and scale:</p>
+    <ul class="body">
+      <li><strong>Odd items (positive):</strong> converted score = rating &minus; 1.</li>
+      <li><strong>Even items (negative):</strong> converted score = 5 &minus; rating.</li>
+      <li><strong>Total:</strong> add the ten converted scores (0 to 40), then multiply by 2.5 to land on 0 to 100.</li>
+    </ul>
+    <p class="body">Worked example: take one participant's ten answers, convert each with the rule above, and suppose the converted scores add up to 29. Then 29 &times; 2.5 = <strong>72.5</strong>. The benchmark to remember is <strong>68</strong>: that is the average SUS score across hundreds of studies, so 72.5 sits just above average. SUS is a measure of perceived usability, not a percentage, so treat it as a relative score against that 68 line and against your own previous rounds.</p>
+
+    <h3 class="subhead-small">Score it yourself</h3>
+    <p class="embed-note">Rate the ten statements as a participant would (1 = strongly disagree, 5 = strongly agree). The score updates live, applying the odd/even conversion for you.</p>
+    <div class="sus-tool" id="susTool">
+      <div class="sus-q" data-q="1" data-pol="pos"><span class="qt"><b>1</b>I would like to use this system frequently.<span class="pol pos">positive</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="2" data-pol="neg"><span class="qt"><b>2</b>I found the system unnecessarily complex.<span class="pol neg">negative</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="3" data-pol="pos"><span class="qt"><b>3</b>I thought the system was easy to use.<span class="pol pos">positive</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="4" data-pol="neg"><span class="qt"><b>4</b>I would need the support of a technical person to use this system.<span class="pol neg">negative</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="5" data-pol="pos"><span class="qt"><b>5</b>I found the various functions well integrated.<span class="pol pos">positive</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="6" data-pol="neg"><span class="qt"><b>6</b>I thought there was too much inconsistency in this system.<span class="pol neg">negative</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="7" data-pol="pos"><span class="qt"><b>7</b>Most people would learn to use this system very quickly.<span class="pol pos">positive</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="8" data-pol="neg"><span class="qt"><b>8</b>I found the system very cumbersome to use.<span class="pol neg">negative</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="9" data-pol="pos"><span class="qt"><b>9</b>I felt very confident using the system.<span class="pol pos">positive</span></span><div class="scale"></div></div>
+      <div class="sus-q" data-q="10" data-pol="neg"><span class="qt"><b>10</b>I needed to learn a lot before I could get going with this system.<span class="pol neg">negative</span></span><div class="scale"></div></div>
+      <div class="sus-readout">
+        <div class="sus-score-num" id="susScore">&middot;</div>
+        <div class="sus-score-lab" id="susLab">Rate all ten statements to see the score.</div>
+      </div>
+      <div class="ctrls">
+        <button id="susNeutral" class="ghost">Set all to 3 (neutral)</button>
+        <button id="susReset" class="ghost">Clear</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= ix. Other methods ============= -->
+<section class="block" id="other">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">ix.</span>Other methods</div>
+    <h2 class="section-title">A/B testing, analytics, and a <em>law of movement</em>.</h2>
+    <p class="section-intro">Beyond the moderated test, three methods earn their place: two that work at the scale of live traffic, and one that predicts performance with no users at all.</p>
+
+    <h3 class="subhead">A/B testing, and its famous limit</h3>
+    <p class="body">An A/B test splits live users between two versions and measures which does better on one metric. It is the most decisive method there is for the question it answers, because real users vote with real behaviour at scale. Its <strong>famous limit</strong> is that it can only choose between the options you give it. It will tell you that button B beats button A, but never that a different design C, which you did not build, would beat both. A/B testing optimises within the current idea; it cannot find a better idea, and it cannot tell you <em>why</em> the winner won.</p>
+
+    <h3 class="subhead">Analytics</h3>
+    <p class="body">Analytics record what many users do in the live product: which screens they reach, where they drop off, how long they take. The strength is scale, thousands of real sessions. The weakness is the same as A/B testing: analytics tell you <strong>what</strong> happened but never <strong>why</strong>. A cliff in the funnel shows where people leave, not what confused them. The why has to come from watching.</p>
+
+    <h3 class="subhead">Fitts's law, a model you can apply without users</h3>
+    <p class="body">Fitts's law states that the time to move to a target depends on its <strong>distance</strong> and its <strong>size</strong>: the closer and larger the target, the faster it is to hit. It is a model, so it predicts performance from the design alone, before anyone is recruited. The practical consequence is sharp: <strong>edges and corners are effectively infinite targets</strong>. A cursor cannot overshoot the edge of the screen, so a target pinned to an edge is infinitely deep and easy to hit, and a corner is easier still. This is why menu bars sit at the top edge and why a corner is prime real estate; the model tells you so without a single test.</p>
+  </div>
+</section>
+
+<!-- ============= x. Ethics ============= -->
+<section class="block" id="ethics">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">x.</span>Ethics</div>
+    <h2 class="section-title">You are studying people, so <em>behave like it</em>.</h2>
+    <p class="section-intro">A usability session puts a person in a position where they may feel tested and may struggle in front of you. That carries obligations, and they are not optional.</p>
+
+    <ul class="body">
+      <li><strong>Informed consent.</strong> Before you start, explain what the session involves, what you will record, and how the data will be used. Take their agreement, ideally on a short consent form.</li>
+      <li><strong>The right to stop.</strong> Make clear they can pause or leave at any time, for any reason, with no penalty. It is the design under test, never the participant.</li>
+      <li><strong>Privacy and anonymity.</strong> Anonymise recordings and notes, store them securely, and report findings in a way that cannot identify anyone.</li>
+      <li><strong>No deception that you do not undo.</strong> If a task requires withholding something, debrief afterwards so the person leaves understanding what happened.</li>
+    </ul>
+
+    <div class="practice-callout">
+      <div class="tag">The frame to hold</div>
+      <p>The participant is doing you a favour by exposing your design's weaknesses. Reassure them often that any difficulty is the design's fault, not theirs; an anxious participant changes their behaviour, and you lose the very honesty you came for.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============= xi. Triangulation ============= -->
+<section class="block" id="triangulate">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xi.</span>Triangulation</div>
+    <h2 class="section-title">Triangulate, because each method is <em>half blind</em>.</h2>
+    <p class="section-intro">No single method sees the whole picture. Each has a blind spot that another method covers, so strong evaluation combines them rather than trusting one.</p>
+
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Method</th><th>Sees</th><th>Is blind to</th></tr></thead><tbody>
+        <tr><td>Inspection (heuristics, models)</td><td>Likely problems, fast and cheap, with no users.</td><td>The surprises only real people produce.</td></tr>
+        <tr><td>Usability testing</td><td>Real users, the why behind a struggle, the surprises.</td><td>Scale; a small sample in a lab, not life.</td></tr>
+        <tr><td>Analytics and A/B</td><td>What thousands of real users do, at scale.</td><td>The why; and any option you did not build.</td></tr>
+      </tbody></table></div>
+
+    <p class="body">Run together, they cover each other: inspection finds the obvious faults cheaply before you spend a participant on them; testing explains the why that analytics can only point at; analytics confirms at scale what a handful of sessions suggested. The one rule that beats all method debates: <strong>watching one user beats watching none</strong>. A single session, run with care, will tell you more than another week of arguing about the design in a quiet room.</p>
+  </div>
+</section>
+
+<!-- ============= xii. Your evaluation toolkit ============= -->
+<section class="block" id="toolkit">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xii.</span>Your evaluation toolkit</div>
+    <h2 class="section-title">By the end, here is what you <em>need</em>, and what it looks like.</h2>
+    <p class="section-intro">Pulling the chapter together: an evaluation phase is not one test but a small, complete kit of artefacts. Here is each one, ready to fill in.</p>
+
+    <div class="toolkit-grid">
+      <div class="toolkit-card"><div class="lead">1 &middot; Plan</div><h4>A DECIDE plan</h4><p>One short page: the goal of this round, the questions it answers, the method chosen, the practical details, and the ethics. Written before anything else.</p></div>
+      <div class="toolkit-card"><div class="lead">2 &middot; Methods</div><h4>A method mix</h4><ul><li>Heuristic inspection first (no users, catches the cheap faults)</li><li>A moderated usability test (five participants)</li><li>The SUS at the end of each session</li></ul></div>
+      <div class="toolkit-card"><div class="lead">3 &middot; Participants</div><h4>Five users, recruited</h4><p>Five people who resemble the real users, not classmates who built the thing. Booked for about fifteen minutes each.</p></div>
+      <div class="toolkit-card"><div class="lead">4 &middot; Tasks</div><h4>A task sheet</h4><ul><li>Three to five tasks, each a goal not a recipe</li><li>A clear starting point for each</li><li>A definition of "done" you can score</li></ul></div>
+      <div class="toolkit-card"><div class="lead">5 &middot; Session</div><h4>A session script</h4><ul><li>Welcome and consent</li><li>The think-aloud prompt</li><li>The tasks, read one at a time</li><li>The SUS, then a short debrief</li></ul></div>
+      <div class="toolkit-card"><div class="lead">6 &middot; Ethics</div><h4>A consent form</h4><p>What the session involves, what is recorded, how data is stored and anonymised, and the right to stop. Signed before you begin.</p></div>
+      <div class="toolkit-card"><div class="lead">7 &middot; Measures</div><h4>What to record</h4><ul><li>Task completion (yes / no / with help)</li><li>Time on task, and errors</li><li>The points where each person stalled, and why</li><li>The SUS score per participant</li></ul></div>
+      <div class="toolkit-card"><div class="lead">8 &middot; Findings</div><h4>A findings table</h4><p>Every problem, ranked by severity, with the evidence behind it, leading to a concrete change and a plan to re-test.</p></div>
+    </div>
+
+    <h3 class="subhead">The findings table, ready to fill in</h3>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Problem</th><th>Severity</th><th>Evidence</th><th>Change</th></tr></thead><tbody>
+        <tr><td>Users could not find the night-mute setting</td><td>High</td><td>4 of 5 stalled; "I expected a cog top right"</td><td>Move settings to a top-right cog; re-test</td></tr>
+        <tr><td>Term defaulted to last year</td><td>Medium</td><td>2 of 5 registered for the wrong term</td><td>Default to the current term</td></tr>
+        <tr><td>Confirmation wording unclear</td><td>Low</td><td>1 of 5 asked "did that work?"</td><td>Reword the confirmation; lower priority</td></tr>
+      </tbody></table></div>
+
+    <div class="cta-card">
+      <div class="tag">Your Phase 3, mapped to this chapter</div>
+      <h4>One round, end to end</h4>
+      <p><strong>Goal:</strong> can a first-time user register for a seminar without help? <strong>Tasks:</strong> three goal-framed tasks. <strong>Session:</strong> five participants, about fifteen minutes each, thinking aloud, facilitator silent. <strong>Ethics:</strong> consent form, data anonymised, right to stop. <strong>Measures:</strong> completion rate, time, the points where people stalled, and a SUS score each. <strong>Findings and revise:</strong> the table above, then the changes you will make and the re-test that closes the loop. That loop, evidence leading to change, is exactly what an evaluation phase has to show.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============= xiii. References ============= -->
+<section class="block" id="refs">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">xiii.</span>References</div>
+    <h2 class="section-title">References and <em>further reading</em>.</h2>
+    <p class="section-intro">The works this chapter draws on for the framework, the methods, and the cases.</p>
+    <div class="ref-list">
+      <div class="ref"><strong>Preece, J., Rogers, Y. and Sharp, H.</strong> <em>Interaction Design: Beyond Human-Computer Interaction.</em> Wiley. The evaluation chapters and the DECIDE framework.</div>
+      <div class="ref"><strong>Nielsen, J.</strong> "Why You Only Need to Test with 5 Users." Nielsen Norman Group, 2000; and <em>Usability Engineering</em>, 1993.</div>
+      <div class="ref"><strong>Brooke, J.</strong> "SUS: A Quick and Dirty Usability Scale." In <em>Usability Evaluation in Industry</em>, 1996. The original System Usability Scale.</div>
+      <div class="ref"><strong>Sauro, J. and Lewis, J. R.</strong> <em>Quantifying the User Experience.</em> Morgan Kaufmann, 2016. The SUS benchmarks, including the average of 68.</div>
+      <div class="ref"><strong>Fitts, P. M.</strong> "The information capacity of the human motor system in controlling the amplitude of movement." <em>Journal of Experimental Psychology</em>, 1954.</div>
+      <div class="ref"><strong>Spool, J.</strong> "The $300 Million Button." User Interface Engineering, 2009.</div>
+      <div class="ref"><strong>Krug, S.</strong> <em>Rocket Surgery Made Easy.</em> New Riders, 2010. Running your own low-cost usability tests, and the discipline of facilitator silence.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div>COMP322 &middot; Human-Computer Interaction &middot; Birzeit University &middot; Spring 2025/2026</div>
+    <div><a href="/birzeit/comp322/">course page</a> &middot; <a href="/birzeit/comp322/interaction_design_companion.html">interaction design companion</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tool = document.getElementById('susTool'); if(!tool) return;
+  var ratings = {};
+  tool.querySelectorAll('.sus-q').forEach(function(row){
+    var q = +row.dataset.q, scale = row.querySelector('.scale');
+    for(var v=1; v<=5; v++){ (function(v){
+      var b = document.createElement('button'); b.type='button'; b.textContent=v;
+      b.addEventListener('click', function(){
+        ratings[q]=v;
+        scale.querySelectorAll('button').forEach(function(x){ x.classList.remove('sel'); });
+        b.classList.add('sel'); compute();
+      });
+      scale.appendChild(b);
+    })(v); }
+  });
+  function compute(){
+    var sum=0, n=0;
+    for(var q=1; q<=10; q++){ if(ratings[q]){ n++; var r=ratings[q]; sum += (q%2===1) ? (r-1) : (5-r); } }
+    var s=document.getElementById('susScore'), l=document.getElementById('susLab');
+    if(n<10){ s.textContent='·'; l.textContent = n+' of 10 rated. Rate all ten to see the score.'; return; }
+    var score = sum*2.5;
+    s.textContent = score.toFixed(1);
+    var band = score>=85 ? 'excellent' : score>=68 ? 'above the 68 average' : score>=51 ? 'below average' : 'poor';
+    l.innerHTML = 'raw sum '+sum+' &times; 2.5 = <b>'+score.toFixed(1)+'</b> out of 100. That is '+band+' (68 is the long-run average across studies).';
+  }
+  function setAll(v){
+    tool.querySelectorAll('.sus-q').forEach(function(row){
+      var q=+row.dataset.q; ratings[q]=v;
+      var bs=row.querySelectorAll('.scale button');
+      bs.forEach(function(x){ x.classList.remove('sel'); }); if(bs[v-1]) bs[v-1].classList.add('sel');
+    });
+    compute();
+  }
+  document.getElementById('susNeutral').addEventListener('click', function(){ setAll(3); });
+  document.getElementById('susReset').addEventListener('click', function(){
+    ratings={}; tool.querySelectorAll('.scale button').forEach(function(x){ x.classList.remove('sel'); });
+    document.getElementById('susScore').textContent='·';
+    document.getElementById('susLab').textContent='Rate all ten statements to see the score.';
+  });
+})();
+</script>
+
+</body>
+</html>
