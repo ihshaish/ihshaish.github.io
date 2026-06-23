@@ -58,8 +58,12 @@
     /* state: bright = free (clickable), faded = booked */
     .slot.free { cursor:pointer; }
     .slot.free:hover { box-shadow:0 4px 14px rgba(0,0,0,.14); transform:translateY(-1px); }
-    .slot.taken { opacity:.82; }
+    /* booked slots are greyed (neutral) so free, colour-coded slots stand out */
+    .slot.taken { background:#ebedf0; border-left-color:#aeb4bd; }
     .slot.taken .time { color:#5b6472; }
+    .slot.taken .lab b { color:#3a4250; }
+    .slot.taken .modepill.campus, .slot.taken .modepill.teams { background:#cfd4db; color:#566; }
+    .slot.taken .teamslink { color:#556; }
     .slot .lab { display:block; font-size:0.74rem; margin-top:4px; color:#33415c; line-height:1.35; }
     .slot .lab b { color:#0d47a1; }
     .slot .mem { display:block; font-size:0.72rem; color:#777; margin-top:2px; }
@@ -69,7 +73,7 @@
     .slot .modepill { display:inline-block; font-size:0.62rem; font-weight:700; padding:2px 8px; border-radius:9px; vertical-align:2px; letter-spacing:.3px; }
     .slot .modepill.campus { background:#1565c0; color:#fff; }
     .slot .modepill.teams { background:#6a4fce; color:#fff; }
-    .slot.taken.mine { opacity:1; box-shadow:0 0 0 2px #e65100 inset; }
+    .slot.taken.mine { box-shadow:0 0 0 2px #e65100 inset; }
     .slot .cancelbtn { display:inline-block; margin-top:8px; font-size:0.74rem; font-weight:700; color:#c62828; background:#fff; border:1px solid #f0b4ae; border-radius:6px; padding:4px 9px; cursor:pointer; }
     .slot .cancelbtn:hover { background:#fdecea; }
     .booking-closed .slot.free.closed { cursor:default; opacity:.65; }
