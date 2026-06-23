@@ -245,6 +245,10 @@
     </div>
 
     <p class="body">Two things follow from the definition. First, interaction design is <strong>about behaviour, not decoration</strong>: it decides what happens when the person acts, not merely how the surface looks. Second, it is <strong>centred on the user</strong>: the measure of a design is whether real people can do what they came to do, not whether it satisfies the designer's taste. Those two commitments run through every later section of this companion.</p>
+
+    <h3 class="subhead">Where the term comes from</h3>
+    <p class="body">The phrase <em>interaction design</em> was coined in the mid-1980s by Bill Moggridge and Bill Verplank, who needed a name for the discipline forming around the design of software <em>behaviour</em> rather than physical form. Moggridge had designed the first laptop computer, the GRiD Compass, and found that industrial design had no vocabulary for the part of a product you cannot touch. Gillian Crampton Smith then established the teaching of the field, first at the Royal College of Art in London and later at Interaction Design Ivrea. The discipline is the behavioural counterpart to graphic and industrial design: where those shape how a product looks and how it feels in the hand, interaction design shapes what it <em>does</em> in response to a person.</p>
+    <p class="body">The international standard <strong>ISO 9241-210</strong> frames the same work as <em>human-centred design</em>: an iterative process that rests on an explicit understanding of users, tasks and contexts, involves users throughout, and is driven by user-centred evaluation. The four activities in the process section below are that standard made concrete, and the evaluation chapter is its final clause.</p>
   </div>
 </section>
 
@@ -261,9 +265,46 @@
     <p class="body">Durrell Bishop's 1992 answering machine is the cleanest illustration. Each incoming voice message drops a physical marble into a tray. You count the messages at a glance, because each one is an object you can see. To play a message, you place its marble in a dish. To call the person back, you set the marble on the phone. There is no screen and no menu: <strong>the object itself is the interface</strong>.</p>
     <p class="body">Nothing about it has to be learned. It borrows what your hands have known since childhood: the state is simply <em>visible</em> (you can see how many messages are waiting), and the action <em>matches</em> the intention (to act on a message, you handle the thing that stands for it). This is Norman's <strong>visibility</strong> and <strong>mapping</strong>, working years before Norman named them. Section iv shows this machine moving, alongside the same ideas on a phone screen.</p>
 
+    <h3 class="subhead">How people act: the seven stages and the two gulfs</h3>
+    <p class="body">Donald Norman models any interaction as a cycle of <strong>seven stages of action</strong>. Starting from a goal, the person <em>plans</em>, <em>specifies</em> and <em>performs</em> an action on the world (the execution side); then <em>perceives</em>, <em>interprets</em> and <em>compares</em> the result against the goal (the evaluation side). A design must support both arcs, and it fails at two specific places Norman names the <strong>gulfs</strong>.</p>
+
+    <div class="fig-cap">The action cycle and the two gulfs (Norman)</div>
+    <div style="background:white; border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); padding:24px 26px; margin:18px 0; max-width:800px;">
+      <svg viewBox="0 0 720 300" role="img" aria-label="The action cycle: an execution arc crossing the gulf of execution and an evaluation arc crossing the gulf of evaluation, between the person and the world">
+        <defs>
+          <marker id="ac-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c5f7c"/></marker>
+          <marker id="ac-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#b85c38"/></marker>
+        </defs>
+        <rect x="34" y="118" width="140" height="68" rx="12" fill="#f3ede2" stroke="#d8cfc0"/>
+        <text x="104" y="148" text-anchor="middle" font-family="Fraunces,serif" font-size="16" font-weight="600" fill="#0f1419">The person</text>
+        <text x="104" y="168" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#5a6473">a goal</text>
+        <rect x="546" y="118" width="140" height="68" rx="12" fill="#d6e0e8" stroke="#2c5f7c"/>
+        <text x="616" y="148" text-anchor="middle" font-family="Fraunces,serif" font-size="16" font-weight="600" fill="#0f1419">The world</text>
+        <text x="616" y="168" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#5a6473">the system</text>
+        <path d="M158 116 C 270 36, 450 36, 560 116" fill="none" stroke="#2c5f7c" stroke-width="2.5" marker-end="url(#ac-s)"/>
+        <text x="360" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" letter-spacing="0.08em" fill="#2c5f7c">GULF OF EXECUTION</text>
+        <text x="234" y="78" text-anchor="middle" font-family="Inter Tight,sans-serif" font-size="12" fill="#2c5f7c">plan</text>
+        <text x="360" y="60" text-anchor="middle" font-family="Inter Tight,sans-serif" font-size="12" fill="#2c5f7c">specify</text>
+        <text x="486" y="78" text-anchor="middle" font-family="Inter Tight,sans-serif" font-size="12" fill="#2c5f7c">perform</text>
+        <path d="M560 188 C 450 268, 270 268, 160 188" fill="none" stroke="#b85c38" stroke-width="2.5" marker-end="url(#ac-a)"/>
+        <text x="360" y="288" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" letter-spacing="0.08em" fill="#b85c38">GULF OF EVALUATION</text>
+        <text x="486" y="232" text-anchor="middle" font-family="Inter Tight,sans-serif" font-size="12" fill="#b85c38">perceive</text>
+        <text x="360" y="250" text-anchor="middle" font-family="Inter Tight,sans-serif" font-size="12" fill="#b85c38">interpret</text>
+        <text x="234" y="232" text-anchor="middle" font-family="Inter Tight,sans-serif" font-size="12" fill="#b85c38">compare</text>
+      </svg>
+    </div>
+    <ul class="body">
+      <li><strong>The Gulf of Execution</strong> is the distance between what the person wants to do and what the system lets them do. It is wide when the right actions are hidden, hard to reach, or do not match the intention. The marble machine all but closes it: the action you want, acting on a message, is the action available, handling its marble.</li>
+      <li><strong>The Gulf of Evaluation</strong> is the distance between what the system did and what the person can perceive and make sense of. It is wide when state is hidden or feedback is missing. The marble machine closes this one too: the number of waiting messages is simply visible as a count of marbles.</li>
+    </ul>
+    <p class="body">A product feels obvious when both gulfs are narrow and feels like a fight when either is wide. The butterfly ballot in the evaluation chapter is a Gulf-of-Execution failure committed on paper; a progress bar that never moves is a Gulf-of-Evaluation failure. Bridging the two gulfs is, in one sentence, what interaction design is for.</p>
+
+    <h3 class="subhead">Conceptual model, mental model, and the system image</h3>
+    <p class="body">Norman separates three things that are easily confused. The <strong>conceptual model</strong> is the designer's account of how the system works. The <strong>mental model</strong> is the user's account of how it works, assembled from experience. The two never meet directly, because the designer cannot speak to every user; everything the designer wants to convey has to travel through the <strong>system image</strong>, the visible structure of the product itself, its controls, labels, feedback and behaviour. Good design is the work of building a system image from which the intended mental model forms on its own. When the system image is poor, the user invents a mental model that is wrong, and every later action inherits the error.</p>
+
     <div class="practice-callout">
-      <div class="tag">The point</div>
-      <p>Good interaction design is usually invisible: when it works, the person never notices it and simply gets on with the task. You notice design most when it fails. Naming why a product feels like a fight, hidden state, a mismatch between action and effect, no response, is the first half of learning to design.</p>
+      <div class="tag">In one line</div>
+      <p>A product feels obvious when both gulfs are narrow: the right action is available and visible, and the result of acting is perceivable and clear. You notice design most when it fails, because a wide gulf forces the user to think. Naming which gulf a product fails at, execution or evaluation, is the first diagnostic move of interaction design.</p>
     </div>
   </div>
 </section>
@@ -284,6 +325,8 @@
       </tbody></table></div>
 
     <p class="body">A working rule of thumb: <strong>interaction design is the core craft of the back-and-forth; UX wraps around it; UI sits inside it.</strong> Interaction design shapes the moment of interaction, the five dimensions of the next section. UX is the whole relationship that surrounds that moment, including service touchpoints and feelings that involve no interface at all. Usability is then the standard against which the interaction is judged, and the subject of the evaluation chapter.</p>
+
+    <p class="body">Usability has a precise standard definition. <strong>ISO 9241-11</strong> defines it as the extent to which a product can be used by specified users to achieve specified goals with <strong>effectiveness</strong>, <strong>efficiency</strong> and <strong>satisfaction</strong> in a specified <em>context of use</em>. The clause that is easy to miss is the last one: usability is not a fixed property of a product but a relation between a product, its users, their goals and their situation. The same interface can be highly usable for one group and unusable for another, which is why evaluation always fixes the users, the tasks and the context before it measures anything.</p>
   </div>
 </section>
 
@@ -292,7 +335,7 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">iv.</span>Five dimensions</div>
     <h2 class="section-title">What an interface is <em>made of</em>: five dimensions.</h2>
-    <p class="section-intro">Gillian Crampton Smith's framework, extended by Kevin Silver, describes the raw material of interaction design as five dimensions. The first three let a person act; the last two bring the interface to life.</p>
+    <p class="section-intro">Gillian Crampton Smith named four dimensions of the language of interaction design, words, visual representations, physical objects or space, and time; Kevin Silver added a fifth, behaviour, in 2007. Together they describe the raw material an interaction is built from. The first three let a person act; the last two bring the interface to life.</p>
 
     <div class="grid-3">
       <div class="cog-card"><div class="icon">1D</div><h4>Words</h4><p>Labels, button text, instructions, the terms in a menu. Words carry meaning precisely, and they are translated for every language and reading level.</p></div>
@@ -322,7 +365,7 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">v.</span>The process</div>
     <h2 class="section-title">The process: <em>four activities, run in a loop</em>.</h2>
-    <p class="section-intro">Interaction design is not a single act of inspiration but a cycle of four activities, repeated until the design holds up against real use.</p>
+    <p class="section-intro">Interaction design is not a single act of inspiration but a cycle of four activities, repeated until the design holds up against real use. This is the loop ISO 9241-210 calls human-centred design.</p>
 
     <div class="table-card"><table class="body-table">
       <thead><tr><th>Activity</th><th>What it does</th></tr></thead><tbody>
@@ -361,7 +404,10 @@
         <tr><td>Consistency</td><td>Do similar things work in similar ways?</td><td>Every message is the same kind of object, handled the same way.</td></tr>
       </tbody></table></div>
 
-    <p class="body">Three of these run through almost every example in this chapter: <strong>visibility</strong> (you can see the state), <strong>feedback</strong> (the system answers), and <strong>mapping</strong> (the control matches the intention). When a product feels obvious, one of these is usually being honoured; when it feels like a fight, one of them is usually being broken. Each principle also has a direct echo in the project brief, which is no coincidence, since the brief was built on them.</p>
+    <p class="body">Three of these run through almost every example in this chapter: <strong>visibility</strong> (you can see the state), <strong>feedback</strong> (the system answers), and <strong>mapping</strong> (the control matches the intention). When a product feels obvious, one of these is usually being honoured; when it feels like a fight, one of them is usually being broken.</p>
+
+    <h3 class="subhead">Affordances and signifiers, precisely</h3>
+    <p class="body">Two of these terms are routinely confused, and Norman sharpened them in the 2013 revision of his book. An <strong>affordance</strong> is a relationship between an object and a person: a possibility for action the object offers, given that person's capabilities. A chair affords sitting; a flat plate on a door affords pushing. The concept is James Gibson's, from ecological psychology (1979). A <strong>signifier</strong>, by contrast, is the perceivable cue that tells the person <em>where</em> and <em>how</em> to act: the word "push", the shape of a handle, the underline on a link. Affordances make an action <em>possible</em>; signifiers make it <em>discoverable</em>. Many failures of so-called intuitive design are objects that afford the right action but signify the wrong one, or signify nothing at all, which is why a door that must be pushed but carries a pull handle defeats almost everyone. Such doors are now called Norman doors.</p>
   </div>
 </section>
 
@@ -413,8 +459,12 @@
     <p class="section-intro">The works this chapter draws on, and the sources for the marble machine and the five dimensions.</p>
     <div class="ref-list">
       <div class="ref"><strong>Preece, J., Rogers, Y. and Sharp, H.</strong> <em>Interaction Design: Beyond Human-Computer Interaction.</em> Wiley. The source of the definition, the four activities, and the usability and user experience goals.</div>
-      <div class="ref"><strong>Norman, D.</strong> <em>The Design of Everyday Things.</em> Revised edition, Basic Books, 2013. Visibility, feedback, affordances, constraints, mapping and consistency.</div>
-      <div class="ref"><strong>Silver, K.</strong> "What Puts the Design in Interaction Design." UX Matters, 2007. The five dimensions of interaction design, building on Gillian Crampton Smith's four.</div>
+      <div class="ref"><strong>Norman, D.</strong> <em>The Design of Everyday Things.</em> Revised and expanded edition, Basic Books, 2013. The seven stages of action, the gulfs of execution and evaluation, the conceptual model, mental model and system image, and the affordance / signifier distinction.</div>
+      <div class="ref"><strong>Moggridge, B.</strong> <em>Designing Interactions.</em> MIT Press, 2007. The origin of the term and the field, told by one of the two people who named it.</div>
+      <div class="ref"><strong>Gibson, J. J.</strong> <em>The Ecological Approach to Visual Perception.</em> Houghton Mifflin, 1979. The original concept of affordances, which Norman later adapted for design.</div>
+      <div class="ref"><strong>Silver, K.</strong> "What Puts the Design in Interaction Design." UX Matters, 2007. The fifth dimension, behaviour, added to Gillian Crampton Smith's original four.</div>
+      <div class="ref"><strong>ISO 9241-210.</strong> <em>Human-centred design for interactive systems.</em> International Organization for Standardization, 2019. The standard definition of the human-centred design process.</div>
+      <div class="ref"><strong>ISO 9241-11.</strong> <em>Usability: definitions and concepts.</em> International Organization for Standardization, 2018. Usability as effectiveness, efficiency and satisfaction in a specified context of use.</div>
       <div class="ref"><strong>Bishop, D.</strong> Marble answering machine, Royal College of Art, 1992. The tangible interface in which each message is a physical marble.</div>
       <div class="ref"><strong>Interaction Design Foundation.</strong> "What is Interaction Design?" and related explainers. Short, example-rich primers on the field and the five dimensions.</div>
     </div>
