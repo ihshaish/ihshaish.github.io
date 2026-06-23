@@ -198,6 +198,105 @@
   .toolkit-card ul { margin:0 0 0 18px; font-size:14px; color:var(--ink-soft); line-height:1.6; }
   .toolkit-card ul li { margin-bottom:5px; }
   .toolkit-card p { font-size:14px; color:var(--ink-soft); line-height:1.55; margin:0; }
+  .fig-cap { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); margin: 28px 0 6px; font-weight: 600; }
+  .fig-note { font-size: 13px; color: var(--ink-mute); font-style: italic; margin-top: 12px; max-width: 820px; line-height: 1.5; }
+  /* butterfly ballot */
+  .ballot-fig { display:grid; grid-template-columns: 420px 1fr; gap:30px; align-items:center; margin:24px 0; max-width:1040px; }
+  @media(max-width:760px){ .ballot-fig{ grid-template-columns:1fr; } }
+  .ballot-svg { width:100%; height:auto; }
+  .ballot-svg .bl-h{ font-family:var(--mono); font-size:10px; fill:var(--ink-mute); font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+  .ballot-svg .bl-name rect{ fill:#f4f1ea; stroke:var(--rule); stroke-width:1; }
+  .ballot-svg .bl-name text{ font-family:var(--sans); font-size:13px; fill:var(--ink); }
+  .ballot-svg .bl-name.hot rect{ fill:var(--steel-soft); stroke:var(--steel); stroke-width:2; }
+  .ballot-svg .bl-hole circle{ fill:#fff; stroke:#9aa6b0; stroke-width:1.5; }
+  .ballot-svg .bl-hole text{ font-family:var(--mono); font-size:10px; fill:var(--ink-mute); text-anchor:middle; dominant-baseline:middle; }
+  .ballot-svg .bl-hole.ok circle{ stroke:var(--moss); stroke-width:2.5; }
+  .ballot-svg .bl-hole.trap circle{ fill:#f6e7e0; stroke:var(--accent); stroke-width:2.5; }
+  .ballot-svg .bl-line{ stroke-width:2.5; fill:none; }
+  .ballot-svg .bl-line.ok{ stroke:var(--moss); }
+  .ballot-svg .bl-line.trap{ stroke:var(--accent); stroke-dasharray:4 3; }
+  .ballot-svg .bl-cap{ font-family:var(--sans); font-size:11.5px; fill:var(--ink-mute); }
+  .ballot-svg .okc{ fill:var(--moss); font-weight:700; } .ballot-svg .trapc{ fill:var(--accent); font-weight:700; }
+  /* test replay */
+  .replay-wrap { display:grid; grid-template-columns:1.5fr 1fr; gap:22px; margin:24px 0; max-width:1100px; align-items:stretch; }
+  @media(max-width:820px){ .replay-wrap{ grid-template-columns:1fr; } }
+  .browser { background:#f1f4f6; border:1px solid var(--rule); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; box-shadow:var(--shadow); }
+  .br-bar { display:flex; align-items:center; gap:7px; padding:9px 12px; background:#e6e0d4; border-bottom:1px solid var(--rule); }
+  .br-bar .dot{ width:10px; height:10px; border-radius:50%; }
+  .dot.r{background:#e6736a;} .dot.y{background:#e7c15a;} .dot.g{background:#6fbf86;}
+  .br-bar .url{ margin-left:10px; font-size:12px; color:var(--ink-mute); background:#fff; border-radius:5px; padding:4px 12px; flex:1; }
+  .br-page { position:relative; flex:1; min-height:320px; background:#fff; overflow:hidden; }
+  .rp-nav { display:flex; background:var(--steel); padding:0 6px; }
+  .nav-i { color:#dbe8ef; font-size:13px; padding:11px 15px; border-bottom:3px solid transparent; }
+  .nav-i.small { font-size:12px; opacity:.85; margin-left:auto; }
+  .nav-i.flash { background:var(--steel-deep); color:#fff; border-bottom-color:var(--gold); }
+  .panel { padding:20px 22px; position:absolute; inset:46px 0 0 0; overflow:hidden; }
+  .panel.hide { display:none; }
+  .ph-title { font-family:var(--serif); font-size:18px; color:var(--ink); margin-bottom:14px; }
+  .ph-line { height:10px; background:#eee9df; border-radius:5px; margin-bottom:9px; }
+  .w70{width:70%;} .w50{width:50%;}
+  .ph-cards { display:flex; gap:12px; margin-top:18px; }
+  .ph-card { flex:1; height:60px; background:#f4f1ea; border:1px solid var(--rule); border-radius:8px; }
+  .search-row { display:flex; gap:8px; margin-top:6px; }
+  #rp-search { flex:1; font-size:14px; padding:10px 12px; border:1px solid var(--rule); border-radius:7px; color:var(--ink); background:#fff; }
+  .srch { background:var(--steel); color:#fff; border:none; border-radius:7px; padding:0 16px; font-size:13px; }
+  .result-row { display:flex; align-items:center; justify-content:space-between; border:1px solid var(--rule); border-radius:8px; padding:12px 14px; margin-bottom:9px; font-size:14px; }
+  .result-row b{ color:var(--ink); } .result-row span{ color:var(--ink-mute); }
+  .result-row.dim { opacity:.5; }
+  .add { background:#fff; border:1.5px solid var(--steel); color:var(--steel); border-radius:6px; padding:7px 16px; font-weight:600; font-size:13px; }
+  .add.flash { background:var(--steel); color:#fff; }
+  .add.ghost { border-color:var(--rule); color:var(--ink-mute); }
+  .done-tick { display:inline-block; background:var(--moss); color:#fff; border-radius:999px; padding:6px 18px; font-size:12px; letter-spacing:.05em; text-transform:uppercase; margin-bottom:14px; }
+  .rp-cursor { position:absolute; left:0; top:0; transform:translate(120px,150px); transition:transform .85s cubic-bezier(.45,.05,.3,1); z-index:8; pointer-events:none; filter:drop-shadow(0 2px 3px rgba(0,0,0,.25)); }
+  .rp-cursor.tap { animation:rptap .3s ease; }
+  @keyframes rptap { 50%{ transform:translate(var(--cx),var(--cy)) scale(.8); } }
+  .hud { background:#0f1a22; border-radius:10px; padding:18px; display:flex; flex-direction:column; color:#dfe7ec; }
+  .hud-task { font-size:13px; color:#9fb3c0; border-bottom:1px solid #25404f; padding-bottom:12px; margin-bottom:14px; line-height:1.4; }
+  .hud-stats { display:flex; gap:10px; margin-bottom:16px; }
+  .hud-s { flex:1; background:#15303e; border-radius:8px; padding:10px 8px; text-align:center; }
+  .hud-s .v { font-family:var(--serif); font-size:24px; color:#fff; font-variant-numeric:tabular-nums; }
+  .hud-s .l { font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:#7f95a3; margin-top:2px; }
+  .hud-s.warn .v { color:#ffb454; } .hud-s.ok .v { color:#7fdca0; }
+  .rp-caption { flex:1; background:#15252f; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:12px 14px; font-size:14.5px; line-height:1.5; color:#e9eef2; font-style:italic; min-height:74px; }
+  .rp-play { margin-top:14px; background:var(--gold); color:#231a08; border:none; border-radius:8px; padding:11px; font-size:13px; font-weight:700; cursor:pointer; font-family:var(--mono); letter-spacing:.06em; text-transform:uppercase; }
+  /* SUS gauge */
+  .sus-gauge { margin-top:18px; max-width:520px; }
+  .sus-bar { position:relative; height:20px; border-radius:10px; background:linear-gradient(90deg,#c96a4e 0%,#c96a4e 51%,#d6b24f 51%,#d6b24f 68%,#5a8a52 68%,#5a8a52 100%); }
+  .sus-needle { position:absolute; top:-6px; width:3px; height:32px; background:var(--ink); left:0; transition:left .6s cubic-bezier(.3,.7,.2,1); box-shadow:0 0 3px rgba(0,0,0,.4); border-radius:2px; }
+  .sus-scaleline { display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; color:var(--ink-mute); margin-top:7px; }
+  /* Fitts */
+  .fitts-tool { background:white; border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); padding:24px 28px; margin:24px 0; max-width:940px; }
+  .fitts-svg { width:100%; height:auto; max-height:150px; }
+  .fitts-svg .f-track { stroke:var(--rule); stroke-width:2; stroke-dasharray:5 5; }
+  .fitts-svg .f-cursor circle { fill:#fff; stroke:var(--ink); stroke-width:2; }
+  .fitts-svg .f-cursor path { fill:var(--ink); }
+  .fitts-svg .f-cursor { transition:transform .4s cubic-bezier(.5,0,.3,1); }
+  .fitts-svg .f-target { fill:#f3ead7; stroke:var(--gold); stroke-width:2.5; transition:fill .2s,stroke .2s; }
+  .fitts-svg .f-target.hit { fill:var(--moss-soft); stroke:var(--moss); }
+  .fitts-svg .f-dim { fill:none; stroke-width:2; }
+  .fitts-svg .f-dim.d { stroke:var(--steel); } .fitts-svg .f-dim.w { stroke:var(--gold); }
+  .fitts-svg .f-tick { stroke-width:2; } .fitts-svg .f-tick.d { stroke:var(--steel); } .fitts-svg .f-tick.w { stroke:var(--gold); }
+  .fitts-svg .f-lbl { font-family:var(--mono); font-size:11px; font-weight:700; text-anchor:middle; }
+  .fitts-svg .f-lbl.d { fill:var(--steel-deep); } .fitts-svg .f-lbl.w { fill:#7a531a; }
+  .fitts-svg .f-lblbg.d { fill:var(--steel-soft); } .fitts-svg .f-lblbg.w { fill:#f3ead7; }
+  .fx-controls { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:center; margin-top:10px; }
+  @media(max-width:700px){ .fx-controls{ grid-template-columns:1fr; } }
+  .fx-sliders label { display:block; font-size:13.5px; color:var(--ink-soft); font-weight:600; margin-bottom:16px; }
+  .fx-sliders label:last-child { margin-bottom:0; }
+  .fx-sliders input[type=range] { width:100%; margin-top:8px; height:6px; }
+  #fx-d { accent-color:var(--steel); } #fx-w { accent-color:var(--gold); }
+  .d-c { color:var(--steel); font-weight:600; } .w-c { color:#9a7b32; font-weight:600; }
+  .fx-readout { background:#0f1a22; border-radius:11px; padding:16px 18px; color:#eaf1f5; }
+  .fx-eq { font-family:var(--serif); font-size:18px; text-align:center; color:#cfe0ea; }
+  .fx-eq .d-c { color:#7fb8d6; } .fx-eq .w-c { color:#e3b25f; } .fx-eq sub { font-size:.6em; }
+  .fx-nums { display:flex; justify-content:center; gap:22px; margin:10px 0; font-size:14px; color:#b9c8d2; }
+  .fx-nums b { color:#fff; font-size:18px; font-family:var(--serif); }
+  .fx-btn { display:block; width:100%; background:var(--gold); color:#23180a; border:none; border-radius:8px; padding:9px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; cursor:pointer; }
+  .fitts-arena { position:relative; background:#15252f; border-radius:10px; height:170px; margin:16px 0 10px; }
+  .ftarget { position:absolute; border:none; border-radius:8px; cursor:pointer; font-size:11px; color:#fff; font-weight:600; font-family:var(--mono); }
+  .ftarget.big { background:var(--steel); width:96px; height:60px; left:18px; top:56px; }
+  .ftarget.small { background:var(--accent); width:30px; height:30px; right:24px; top:22px; }
+  .fitts-read { font-family:var(--mono); font-size:12.5px; color:var(--ink-mute); }
 </style>
   <script src="/birzeit/gate.js"></script>
 </head>
@@ -284,6 +383,32 @@
     <div class="section-eyebrow"><span class="num">ii.</span>The cost of skipping it</div>
     <h2 class="section-title">What skipping evaluation <em>costs</em>.</h2>
     <p class="section-intro">Two well-documented cases show what a single untested design decision can cost, in money and in worse.</p>
+
+    <div class="fig-cap">The butterfly ballot, Palm Beach County, 2000</div>
+    <div class="ballot-fig">
+      <svg viewBox="0 0 360 220" class="ballot-svg" role="img" aria-label="Schematic of the butterfly ballot misalignment: the second name on the left lines up with the third hole">
+        <text x="8" y="16" class="bl-h">Left column</text>
+        <g class="bl-name"><rect x="6" y="26" width="120" height="34" rx="4"/><text x="16" y="47">Candidate A</text></g>
+        <g class="bl-name hot"><rect x="6" y="74" width="120" height="34" rx="4"/><text x="16" y="95">Candidate B</text></g>
+        <g class="bl-name"><rect x="6" y="122" width="120" height="34" rx="4"/><text x="16" y="143">Candidate C</text></g>
+        <text x="352" y="16" class="bl-h" text-anchor="end">Right column</text>
+        <g class="bl-name"><rect x="234" y="50" width="120" height="34" rx="4"/><text x="244" y="71">Candidate D</text></g>
+        <g class="bl-name"><rect x="234" y="98" width="120" height="34" rx="4"/><text x="244" y="119">Candidate E</text></g>
+        <g class="bl-hole"><circle cx="166" cy="43" r="8"/><text x="166" y="47">1</text></g>
+        <g class="bl-hole trap"><circle cx="194" cy="67" r="8"/><text x="194" y="71">2</text></g>
+        <g class="bl-hole ok"><circle cx="166" cy="91" r="8"/><text x="166" y="95">3</text></g>
+        <g class="bl-hole"><circle cx="194" cy="115" r="8"/><text x="194" y="119">4</text></g>
+        <g class="bl-hole"><circle cx="166" cy="139" r="8"/><text x="166" y="143">5</text></g>
+        <line x1="126" y1="91" x2="158" y2="91" class="bl-line ok"/>
+        <line x1="126" y1="91" x2="186" y2="67" class="bl-line trap"/>
+        <text x="6" y="184" class="bl-cap"><tspan class="okc">Correct:</tspan> Candidate B is the 2nd name, but its hole is the 3rd.</text>
+        <text x="6" y="204" class="bl-cap"><tspan class="trapc">Instinct:</tspan> punch the 2nd hole, and the vote goes to D.</text>
+      </svg>
+      <div>
+        <p class="body">Names ran down <strong>two facing columns</strong> with a single row of punch holes between them, so the second name on the left lined up with the <strong>third</strong> hole, because the top name on the right had claimed the second. A voter reaching for the second name punched the second hole and recorded a vote they never intended.</p>
+        <p class="body">Over <strong>19,000</strong> ballots in the county were spoiled by double punching, against a certified statewide margin of <strong>537</strong>. This was not a software bug; it was a mapping failure in a paper layout that no one tested with ordinary voters.</p>
+      </div>
+    </div>
 
     <div class="stakes">
       <div class="stake-card">
@@ -398,8 +523,75 @@
     <h2 class="section-title">A usability test is just <em>structured watching</em>.</h2>
     <p class="section-intro">Strip away the equipment and a usability test is one person trying to do a real task while you watch and stay quiet. The structure is what turns watching into evidence.</p>
 
+    <div class="fig-cap">Interactive &middot; a usability session, replayed</div>
+    <p class="embed-note">A reconstruction of a common pattern: a student adding a course. Press play and watch three things at once, where the cursor goes wrong, the think-aloud caption, and the live counters.</p>
+    <div class="replay-wrap">
+      <div class="browser" id="rp-browser">
+        <div class="br-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="url">ritaj.birzeit.edu / registration</span></div>
+        <div class="br-page" id="rp-page">
+          <div class="rp-nav">
+            <span class="nav-i" id="nv-home">Home</span>
+            <span class="nav-i" id="nv-grades">Grades</span>
+            <span class="nav-i" id="nv-settings">Settings</span>
+            <span class="nav-i" id="nv-help">Help</span>
+            <span class="nav-i small" id="nv-reg">Registration</span>
+          </div>
+          <div class="panel" id="panel-land">
+            <div class="ph-title">Welcome back</div>
+            <div class="ph-line w70"></div><div class="ph-line w50"></div>
+            <div class="ph-cards"><div class="ph-card"></div><div class="ph-card"></div><div class="ph-card"></div></div>
+          </div>
+          <div class="panel hide" id="panel-search">
+            <div class="ph-title">Add a course</div>
+            <div class="search-row"><input id="rp-search" readonly placeholder="Search course code..."><button class="srch">Search</button></div>
+          </div>
+          <div class="panel hide" id="panel-results">
+            <div class="ph-title">Results</div>
+            <div class="result-row"><div><b>COMP322</b><span> Human-computer interaction</span></div><button class="add" id="add-btn">Add</button></div>
+            <div class="result-row dim"><div><b>COMP333</b><span> Software engineering</span></div><button class="add ghost">Add</button></div>
+          </div>
+          <div class="panel hide" id="panel-done">
+            <div class="done-tick">done</div>
+            <div class="ph-title">COMP322 added to your schedule</div>
+          </div>
+          <svg class="rp-cursor" id="rp-cursor" width="22" height="22" viewBox="0 0 22 22"><path d="M2 2 L2 17 L6.5 13 L9.5 19.5 L12 18.3 L9 12 L15 12 Z" fill="#1c2530" stroke="#fff" stroke-width="1.1"/></svg>
+        </div>
+      </div>
+      <div class="hud">
+        <div class="hud-task" id="rp-task">Task: add COMP322 to your schedule</div>
+        <div class="hud-stats">
+          <div class="hud-s"><div class="v" id="rp-time">0:00</div><div class="l">time</div></div>
+          <div class="hud-s"><div class="v" id="rp-err">0</div><div class="l">wrong turns</div></div>
+          <div class="hud-s"><div class="v" id="rp-status">ready</div><div class="l">status</div></div>
+        </div>
+        <div class="rp-caption" id="rp-cap">Press play to watch the participant think aloud.</div>
+        <button class="rp-play" id="rp-play" onclick="playReplay()">Play session</button>
+      </div>
+    </div>
+    <p class="fig-note">A synthetic illustration, not a recording of a real person. The task succeeds, yet the two wrong turns and the time taken are the evidence: you would not ship a menu nobody can find. Friction is a finding even when the task is completed.</p>
+
     <h3 class="subhead">Why five users is usually enough</h3>
     <p class="body">The common worry is that a handful of participants cannot be representative. For finding usability <em>problems</em>, that worry is misplaced. Nielsen's finding is that around <strong>five users surface roughly 85% of the problems</strong> in an interface, because the serious problems are hit by almost everyone. After five, you mostly watch the same issues recur. The efficient move is not one big study but several small rounds: test five, fix, test five again. Summative studies that need a stable number, such as a benchmark score, require more participants, but for finding what to fix, five per round is the working rule.</p>
+
+    <div class="fig-cap">Problems found against number of users (Nielsen)</div>
+    <div style="background:white; border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); padding:24px 26px; margin:18px 0; max-width:640px;">
+      <svg viewBox="0 0 540 250" role="img" aria-label="Curve of usability problems found rising steeply to five users then flattening">
+        <line x1="42" y1="24" x2="42" y2="202" stroke="var(--rule)" stroke-width="1.5"/>
+        <line x1="42" y1="202" x2="512" y2="202" stroke="var(--rule)" stroke-width="1.5"/>
+        <line x1="42" y1="57" x2="490" y2="57" stroke="var(--rule)" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="192" y1="202" x2="192" y2="57" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 4"/>
+        <polyline points="42,202 72,148 102,112 132,87 162,69 192,57 222,49 252,43 282,39 312,36 342,34 372,33 402,32 432,32 462,31 490,31" fill="none" stroke="var(--steel)" stroke-width="2.5"/>
+        <circle cx="192" cy="57" r="5" fill="var(--accent)"/>
+        <text x="200" y="50" font-family="var(--mono)" font-size="12" fill="var(--accent)" font-weight="700">5 users &#8776; 85%</text>
+        <text x="48" y="18" font-family="var(--mono)" font-size="10" fill="var(--ink-mute)" letter-spacing="0.08em">PROBLEMS FOUND</text>
+        <text x="276" y="236" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-mute)" letter-spacing="0.08em">USERS TESTED</text>
+        <text x="42" y="218" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-mute)">0</text>
+        <text x="192" y="218" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-mute)">5</text>
+        <text x="342" y="218" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-mute)">10</text>
+        <text x="490" y="218" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-mute)">15</text>
+      </svg>
+    </div>
+    <p class="fig-note">The curve is steepest at the start: the first user alone finds about a third of the problems, and by the fifth the line has all but flattened. Spending the sixth, seventh and eighth participant on the same round mostly re-finds what you already know; a fresh round of five after a fix is the better use of them.</p>
 
     <h3 class="subhead">Give a goal, not a recipe</h3>
     <p class="body">A task must be framed as an <strong>outcome the participant wants, not a list of steps to follow</strong>. "Click Menu, then Settings, then Notifications, then toggle the switch" tests whether they can read; it cannot fail. "You want the app to stop sending you alerts at night, make that happen" tests the design, because now the participant has to find the path themselves, and where they go wrong is exactly the finding. Give the goal and the starting point, never the route.</p>
@@ -447,6 +639,15 @@
         <div class="sus-score-num" id="susScore">&middot;</div>
         <div class="sus-score-lab" id="susLab">Rate all ten statements to see the score.</div>
       </div>
+      <div class="sus-gauge">
+        <div class="sus-bar"><div class="sus-needle" id="susNeedle" style="left:0%;"></div></div>
+        <div class="sus-scaleline" style="position:relative; height:14px;">
+          <span style="position:absolute; left:0;">0</span>
+          <span style="position:absolute; left:51%; transform:translateX(-50%);">51</span>
+          <span style="position:absolute; left:68%; transform:translateX(-50%);">68 average</span>
+          <span style="position:absolute; right:0;">100</span>
+        </div>
+      </div>
       <div class="ctrls">
         <button id="susNeutral" class="ghost">Set all to 3 (neutral)</button>
         <button id="susReset" class="ghost">Clear</button>
@@ -469,7 +670,44 @@
     <p class="body">Analytics record what many users do in the live product: which screens they reach, where they drop off, how long they take. The strength is scale, thousands of real sessions. The weakness is the same as A/B testing: analytics tell you <strong>what</strong> happened but never <strong>why</strong>. A cliff in the funnel shows where people leave, not what confused them. The why has to come from watching.</p>
 
     <h3 class="subhead">Fitts's law, a model you can apply without users</h3>
-    <p class="body">Fitts's law states that the time to move to a target depends on its <strong>distance</strong> and its <strong>size</strong>: the closer and larger the target, the faster it is to hit. It is a model, so it predicts performance from the design alone, before anyone is recruited. The practical consequence is sharp: <strong>edges and corners are effectively infinite targets</strong>. A cursor cannot overshoot the edge of the screen, so a target pinned to an edge is infinitely deep and easy to hit, and a corner is easier still. This is why menu bars sit at the top edge and why a corner is prime real estate; the model tells you so without a single test.</p>
+    <p class="body">Fitts's law states that the time to move to a target depends on its <strong>distance</strong> and its <strong>size</strong>: the closer and larger the target, the faster it is to hit. It is a model, so it predicts performance from the design alone, before anyone is recruited.</p>
+
+    <div class="fig-cap">Interactive &middot; Fitts's law</div>
+    <div class="fitts-tool">
+      <svg viewBox="0 0 680 150" class="fitts-svg" id="fx-svg" role="img" aria-label="Interactive Fitts's law diagram: a cursor, a target, and the distance and width it depends on">
+        <line x1="44" y1="92" x2="404" y2="92" class="f-track" id="fx-track"/>
+        <rect x="370" y="58" width="70" height="68" rx="4" class="f-target" id="fx-target"/>
+        <g class="f-cursor" id="fx-cursor"><circle cx="44" cy="92" r="7"/><path d="M44 92 l16 6 l-6 2 l3 8 l-3 1 l-3 -8 l-5 4 z" transform="translate(-2,-3)"/></g>
+        <path d="M44 36 L404 36" class="f-dim d" id="fx-dcal"/>
+        <path d="M44 30 L44 42 M404 30 L404 42" class="f-tick d" id="fx-dtick"/>
+        <rect x="185" y="22" width="78" height="20" rx="3" class="f-lblbg d" id="fx-dlblbg"/>
+        <text x="224" y="36" class="f-lbl d" id="fx-dlbl">D &middot; distance</text>
+        <path d="M370 138 L440 138" class="f-dim w" id="fx-wcal"/>
+        <path d="M370 132 L370 144 M440 132 L440 144" class="f-tick w" id="fx-wtick"/>
+        <rect x="367" y="128" width="76" height="20" rx="3" class="f-lblbg w" id="fx-wlblbg"/>
+        <text x="405" y="142" class="f-lbl w" id="fx-wlbl">W &middot; width</text>
+      </svg>
+      <div class="fx-controls">
+        <div class="fx-sliders">
+          <label><span class="d-c">Distance D</span><input id="fx-d" type="range" min="160" max="500" value="360"></label>
+          <label><span class="w-c">Target width W</span><input id="fx-w" type="range" min="28" max="150" value="70"></label>
+        </div>
+        <div class="fx-readout">
+          <div class="fx-eq">MT = a + b &middot; log<sub>2</sub>( 2<span class="d-c">D</span> / <span class="w-c">W</span> )</div>
+          <div class="fx-nums"><span>Difficulty <b id="fx-id">2.00</b> bits</span><span>Predicted <b id="fx-mt">350</b> ms</span></div>
+          <button id="fx-move" class="fx-btn">Move the cursor</button>
+        </div>
+      </div>
+    </div>
+    <p class="fig-note">Drag the sliders. Difficulty is the index of difficulty in bits, the bracket in the formula; the predicted time uses simple constants for a and b, so the exact milliseconds are illustrative and the relationship is the point. Double the distance, or halve the width, and the move gets exactly one bit harder; double both and the two effects cancel.</p>
+
+    <h3 class="subhead-small">Edges and corners are infinite targets</h3>
+    <p class="body">Because the law uses target width, a target pinned to an edge behaves as if it were infinitely deep: the cursor cannot overshoot the screen edge, so you flick towards it without aiming. A <strong>corner</strong> is infinite in two directions, the single easiest region on the screen, which is why menu bars sit at the top edge and why corners hold the most-used controls. Click the two targets below and feel the difference the law predicts.</p>
+    <div class="fitts-arena" id="fitts-arena">
+      <button class="ftarget big" id="ft-big" onclick="fittsHit('big · near')">big &middot; near</button>
+      <button class="ftarget small" id="ft-small" onclick="fittsHit('small · far')">small &middot; far</button>
+    </div>
+    <p class="fitts-read" id="fitts-read">last move: tap one target, then the other.</p>
   </div>
 </section>
 
@@ -590,10 +828,11 @@
   function compute(){
     var sum=0, n=0;
     for(var q=1; q<=10; q++){ if(ratings[q]){ n++; var r=ratings[q]; sum += (q%2===1) ? (r-1) : (5-r); } }
-    var s=document.getElementById('susScore'), l=document.getElementById('susLab');
-    if(n<10){ s.textContent='·'; l.textContent = n+' of 10 rated. Rate all ten to see the score.'; return; }
+    var s=document.getElementById('susScore'), l=document.getElementById('susLab'), nd=document.getElementById('susNeedle');
+    if(n<10){ s.textContent='·'; l.textContent = n+' of 10 rated. Rate all ten to see the score.'; if(nd) nd.style.left='0%'; return; }
     var score = sum*2.5;
     s.textContent = score.toFixed(1);
+    if(nd) nd.style.left = score+'%';
     var band = score>=85 ? 'excellent' : score>=68 ? 'above the 68 average' : score>=51 ? 'below average' : 'poor';
     l.innerHTML = 'raw sum '+sum+' &times; 2.5 = <b>'+score.toFixed(1)+'</b> out of 100. That is '+band+' (68 is the long-run average across studies).';
   }
@@ -610,8 +849,107 @@
     ratings={}; tool.querySelectorAll('.scale button').forEach(function(x){ x.classList.remove('sel'); });
     document.getElementById('susScore').textContent='·';
     document.getElementById('susLab').textContent='Rate all ten statements to see the score.';
+    var nd=document.getElementById('susNeedle'); if(nd) nd.style.left='0%';
   });
 })();
+</script>
+
+<script>
+/* ---- test replay ---- */
+(function(){
+  var timers=[], tick=null, started=0;
+  function $(id){ return document.getElementById(id); }
+  if(!$('rp-cursor')) return;
+  function moveRaw(x,y){ var c=$('rp-cursor'); c.style.setProperty('--cx',x+'px'); c.style.setProperty('--cy',y+'px'); c.style.transform='translate('+x+'px,'+y+'px)'; }
+  function moveTo(id){ var el=$(id), box=$('rp-page').getBoundingClientRect(), r=el.getBoundingClientRect(); moveRaw(r.left-box.left+r.width/2-3, r.top-box.top+r.height/2-3); }
+  function tap(){ var c=$('rp-cursor'); c.classList.remove('tap'); void c.offsetWidth; c.classList.add('tap'); }
+  function cap(t){ $('rp-cap').textContent=t; }
+  function err(){ var e=$('rp-err'); e.textContent=(+e.textContent+1); e.parentElement.classList.add('warn'); }
+  function flashNav(id){ var n=$(id); n.classList.add('flash'); timers.push(setTimeout(function(){ n.classList.remove('flash'); },700)); }
+  function panel(id){ ['panel-land','panel-search','panel-results','panel-done'].forEach(function(p){ $(p).classList.add('hide'); }); $(id).classList.remove('hide'); }
+  function at(t,fn){ timers.push(setTimeout(fn,t)); }
+  function typeCode(code,i){ if(i>code.length) return; $('rp-search').value=code.slice(0,i); timers.push(setTimeout(function(){ typeCode(code,i+1); },150)); }
+  function reset(){
+    timers.forEach(clearTimeout); timers=[]; if(tick){ clearInterval(tick); tick=null; }
+    $('rp-err').textContent='0'; $('rp-time').textContent='0:00';
+    var st=$('rp-status'); st.textContent='ready'; st.parentElement.classList.remove('ok','warn');
+    $('rp-err').parentElement.classList.remove('warn');
+    $('rp-cap').textContent='Press play to watch the participant think aloud.';
+    $('rp-search').value='';
+    ['panel-search','panel-results','panel-done'].forEach(function(p){ $(p).classList.add('hide'); });
+    $('panel-land').classList.remove('hide');
+    document.querySelectorAll('.nav-i').forEach(function(n){ n.classList.remove('flash'); });
+    $('add-btn').classList.remove('flash');
+    moveRaw(120,150);
+  }
+  window.playReplay=function(){
+    reset(); started=Date.now(); $('rp-play').textContent='Replay'; $('rp-status').textContent='running';
+    tick=setInterval(function(){ var s=Math.floor((Date.now()-started)/1000); $('rp-time').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); },250);
+    at(200,function(){ cap('Right, I need to add a course. Where is registration?'); });
+    at(1600,function(){ moveTo('nv-grades'); cap('Maybe under Grades?'); });
+    at(2600,function(){ tap(); flashNav('nv-grades'); err(); cap('No, that is just my marks.'); });
+    at(4000,function(){ moveTo('nv-settings'); cap('Settings, then?'); });
+    at(5000,function(){ tap(); flashNav('nv-settings'); err(); cap('Why would it be in Settings? It is not.'); });
+    at(6400,function(){ moveRaw(300,40); cap('This is taking longer than it should.'); });
+    at(7700,function(){ moveTo('nv-reg'); cap('Oh. There it is, tucked away at the end.'); });
+    at(8700,function(){ tap(); flashNav('nv-reg'); panel('panel-search'); cap('Finally. Now let me search.'); });
+    at(10100,function(){ moveTo('rp-search'); cap('Type the course code.'); });
+    at(11000,function(){ typeCode('COMP322',0); cap('C, O, M, P, three two two.'); });
+    at(12800,function(){ tap(); panel('panel-results'); cap('There it is.'); });
+    at(13900,function(){ moveTo('add-btn'); cap('Add.'); });
+    at(14800,function(){ tap(); $('add-btn').classList.add('flash'); panel('panel-done'); cap('Done. But I would never have found that menu on my own.');
+      if(tick){ clearInterval(tick); tick=null; }
+      var s2=$('rp-status'); s2.textContent='completed'; s2.parentElement.classList.add('ok');
+    });
+  };
+  reset();
+})();
+
+/* ---- Fitts interactive ---- */
+(function(){
+  var dEl=document.getElementById('fx-d'), wEl=document.getElementById('fx-w');
+  if(!dEl) return;
+  function set(id,a,v){ document.getElementById(id).setAttribute(a,v); }
+  function upd(){
+    var D=+dEl.value, W=+wEl.value;
+    var ID=Math.log(2*D/W)/Math.log(2), MT=Math.round(100+125*ID);
+    document.getElementById('fx-id').textContent=ID.toFixed(2);
+    document.getElementById('fx-mt').textContent=MT;
+    var dend = 140 + (D-160)/340*300;          // target centre x
+    var tw = Math.max(16, W*0.5), th = Math.max(30, W*0.62), tx = dend - tw/2;
+    set('fx-target','x',tx); set('fx-target','width',tw); set('fx-target','y',92-th/2); set('fx-target','height',th);
+    set('fx-track','x2',dend);
+    set('fx-dcal','d','M44 36 L'+dend+' 36');
+    set('fx-dtick','d','M44 30 L44 42 M'+dend+' 30 L'+dend+' 42');
+    var dmid=(44+dend)/2; set('fx-dlbl','x',dmid); set('fx-dlblbg','x',dmid-39);
+    set('fx-wcal','d','M'+tx+' 138 L'+(tx+tw)+' 138');
+    set('fx-wtick','d','M'+tx+' 132 L'+tx+' 144 M'+(tx+tw)+' 132 L'+(tx+tw)+' 144');
+    set('fx-wlbl','x',tx+tw/2); set('fx-wlblbg','x',tx+tw/2-38);
+    var c=document.getElementById('fx-cursor'); c.style.transition='none'; c.style.transform='translate(0,0)';
+    document.getElementById('fx-target').classList.remove('hit');
+  }
+  document.getElementById('fx-move').addEventListener('click',function(){
+    var t=document.getElementById('fx-target'), tx=+t.getAttribute('x'), tw=+t.getAttribute('width');
+    var dx=(tx+tw/2)-44, MT=+document.getElementById('fx-mt').textContent, dur=0.2+MT/700;
+    var c=document.getElementById('fx-cursor');
+    c.style.transition='transform '+dur+'s cubic-bezier(.5,0,.3,1)'; c.style.transform='translate('+dx+'px,0)';
+    setTimeout(function(){ t.classList.add('hit'); }, dur*1000);
+  });
+  dEl.addEventListener('input',upd); wEl.addEventListener('input',upd); upd();
+})();
+
+/* ---- Fitts arena ---- */
+var fittsLast=null, fittsT=0;
+function fittsHit(which){
+  var now=(window.performance&&performance.now)?performance.now():Date.now();
+  var read=document.getElementById('fitts-read');
+  if(fittsLast && fittsLast!==which){
+    read.textContent='last move: '+fittsLast+' → '+which+' = '+Math.round(now-fittsT)+' ms';
+  } else {
+    read.textContent='now click the '+(which.indexOf('big')===0?'small · far':'big · near')+' target.';
+  }
+  fittsLast=which; fittsT=now;
+}
 </script>
 
 </body>
