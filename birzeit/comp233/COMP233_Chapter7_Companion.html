@@ -546,6 +546,7 @@
               <a href="#sec724">The linear-function lab</a>
               <a href="#sec725">Bijections and inverses (Thm 7.2.2)</a>
               <a href="#sec726">Logarithms (Thm 7.2.1) &amp; change of base</a>
+              <a href="#sec726c">Log-law verifier</a>
               <a href="#ex72">Practice exercises</a>
             </div>
           </div>
@@ -565,6 +566,8 @@
               <a href="#sec941">The principle</a>
               <a href="#sec942">Pigeonhole calculator</a>
               <a href="#sec943">Generalized &amp; contrapositive forms</a>
+              <a href="#sec944">Pigeonhole visualiser</a>
+              <a href="#sec945">Repeating-decimal demo</a>
               <a href="#ex94">Practice exercises</a>
             </div>
           </div>
@@ -598,7 +601,7 @@
           </div>
 
           <div class="widget-card" id="sec712">
-            <h3>7.1.1 Is it a function? &mdash; arrow-diagram checker</h3>
+            <h3>7.1.1 Is it a function? &ndash; arrow-diagram checker</h3>
             <div class="widget-desc">Enter a domain <span class="mono-inline">X</span>, a co-domain <span class="mono-inline">Y</span>, and the rule as <span class="mono-inline">x:y</span> arrows. The checker applies the two rules (<em>total</em> and <em>single-valued</em>), and if it is a function reports the range and every inverse image. Try breaking it: drop an input (rule&nbsp;1 fails) or give one input two arrows like <span class="mono-inline">c:2, c:3</span> (rule&nbsp;2 fails). Based on Examples 7.1.1&ndash;7.1.2.</div>
             <div class="num-row">
               <label>X (domain) <input type="text" id="f1-X" value="a, b, c" style="width:150px"></label>
@@ -611,7 +614,7 @@
           </div>
 
           <div class="widget-card" id="sec714">
-            <h3>7.1.2 A zoo of functions &mdash; evaluator</h3>
+            <h3>7.1.2 A zoo of functions &ndash; evaluator</h3>
             <div class="widget-desc">Functions are everywhere: numbers, strings, subsets, bit-tuples. Pick one, give it an input, and see the output together with its domain, co-domain and range. These are Examples 7.1.6&ndash;7.1.11 from the notes.</div>
             <div class="num-row">
               <label>function
@@ -717,7 +720,7 @@
           </div>
 
           <div class="widget-card" id="sec724">
-            <h3>7.2.2 The linear-function lab &mdash; <span class="mono-inline">f(x) = m&middot;x + c</span></h3>
+            <h3>7.2.2 The linear-function lab &ndash; <span class="mono-inline">f(x) = m&middot;x + c</span></h3>
             <div class="widget-desc">Set the slope <span class="mono-inline">m</span>, intercept <span class="mono-inline">c</span>, and the domain/co-domain. The lab reports one-to-one and onto with reasons, and gives the inverse formula when it exists. This is Examples 7.2.2, 7.2.5 and 7.2.13 in one place &ndash; compare <span class="mono-inline">4x&minus;1</span> over <span class="mono-inline">R</span> (a bijection) with the same rule over <span class="mono-inline">Z</span> (one-to-one but not onto).</div>
             <div class="num-row">
               <label>m <input type="number" id="lin-m" value="4" style="width:90px"></label>
@@ -751,6 +754,44 @@
               <div class="prop-cell"><span class="prop-num">7.2.1 (c)</span> <span class="mono-inline">log&#8323;(x&#7491;) = a&middot;log&#8323; x</span> &middot; power &rarr; coefficient</div>
               <div class="prop-cell"><span class="prop-num">7.2.1 (d)</span> <span class="mono-inline">log&#7580; x = (log&#8323; x)/(log&#8323; c)</span> &middot; change of base</div>
             </div>
+          </div>
+
+          <div class="section-intro" id="sec726b">
+            <div class="thm-box">
+              <div class="thm-title">Laws of exponents &middot; the engine behind the log laws</div>
+              <div class="thm-body"><span class="mono-inline">b&#7512;&middot;b&#7515; = b&#7512;&#8314;&#7515;</span> &nbsp;&middot;&nbsp; <span class="mono-inline">(b&#7512;)&#7515; = b&#7512;&#7515;</span> &nbsp;&middot;&nbsp; <span class="mono-inline">b&#7512;/b&#7515; = b&#7512;&#8315;&#7515;</span> &nbsp;&middot;&nbsp; <span class="mono-inline">(bc)&#7512; = b&#7512;c&#7512;</span>. Each of the four log laws is just one of these read <em>backwards</em> through the inverse <span class="mono-inline">log&#8323; = (exp&#8323;)&#8315;&sup1;</span>: logs report exponents, so &ldquo;multiply the powers&rdquo; becomes &ldquo;add the logs&rdquo;. <strong>Why this matters in computing:</strong> logarithms turn exponential questions into linear ones &ndash; the engine behind measuring information (bits), algorithmic complexity (<span class="mono-inline">log&#8322; n</span> levels of a balanced tree), and scale.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">Proof &middot; product rule 7.2.1(a)</div>
+              <div class="ex-body"><span class="mono-inline">log&#8323;(xy) = log&#8323; x + log&#8323; y</span> for <span class="mono-inline">b &ne; 1</span>, <span class="mono-inline">x, y &gt; 0</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-logA">Show proof</button>
+              <div class="solution" id="sol-logA">Let <span class="mono">u = log&#8323; x</span> and <span class="mono">v = log&#8323; y</span>, so by definition <span class="mono">x = b&#7512;</span> and <span class="mono">y = b&#7515;</span>. Then <span class="mono">xy = b&#7512;&middot;b&#7515; = b&#7512;&#8314;&#7515;</span> (exponent law), so reading the definition backward, <span class="mono">log&#8323;(xy) = u + v = log&#8323; x + log&#8323; y</span>. <em>Check (b=10):</em> <span class="mono">log(100&middot;1000)=log 100000 = 5</span> and <span class="mono">log 100 + log 1000 = 2 + 3 = 5</span>. &#10003; Laws (b) and (c) follow the same way from the quotient and power laws.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">Proof &middot; change of base 7.2.1(d)</div>
+              <div class="ex-body"><span class="mono-inline">log&#7580; x = (log&#8323; x)/(log&#8323; c)</span> &ndash; and why a calculator with only <span class="mono-inline">ln</span> can find <span class="mono-inline">log&#8322; 5</span>.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-logB">Show proof</button>
+              <div class="solution" id="sol-logB">Let <span class="mono">u = log&#8323; c</span>, <span class="mono">v = log&#7580; x</span>, <span class="mono">w = log&#8323; x</span>, so <span class="mono">c = b&#7512;</span>, <span class="mono">x = c&#7515;</span>, <span class="mono">x = b&#7493;</span>. Then <span class="mono">x = c&#7515; = (b&#7512;)&#7515; = b&#7512;&#7515;</span>, and also <span class="mono">x = b&#7493;</span>. Since <span class="mono">exp&#8323;</span> is <strong>one-to-one</strong>, <span class="mono">uv = w</span>, i.e. <span class="mono">(log&#8323; c)(log&#7580; x) = log&#8323; x</span>, giving <span class="mono">log&#7580; x = (log&#8323; x)/(log&#8323; c)</span>. <em>Use it:</em> <span class="mono">log&#8322; 5 = (ln 5)/(ln 2) &asymp; 1.6094/0.6931 &asymp; 2.3219</span>. The one-to-oneness of <span class="mono">exp</span> is not just a box to tick &ndash; it is the proof tool that turns an exponent equality into a log identity.</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec726c">
+            <h3>7.2.4 Log-law verifier &ndash; see both sides agree</h3>
+            <div class="widget-desc">Pick a law from Theorem 7.2.1, choose a base and values, and the tool computes the <strong>left</strong> and <strong>right</strong> sides independently and checks they are equal (to rounding). This is a numeric sanity check, not a proof &ndash; the proofs above are the real reason they hold.</div>
+            <div class="num-row">
+              <label>law
+                <select id="ll-law">
+                  <option value="prod">(a) log&#8323;(xy) = log&#8323;x + log&#8323;y</option>
+                  <option value="quot">(b) log&#8323;(x/y) = log&#8323;x &minus; log&#8323;y</option>
+                  <option value="pow">(c) log&#8323;(x&#7491;) = a&middot;log&#8323;x</option>
+                  <option value="base">(d) log&#7580;x = (log&#8323;x)/(log&#8323;c)</option>
+                </select>
+              </label>
+              <label>base b <input type="number" id="ll-b" value="2" step="any" style="width:80px"></label>
+              <label>x <input type="number" id="ll-x" value="8" step="any" style="width:80px"></label>
+              <label id="ll-ylab">y <input type="number" id="ll-y" value="32" step="any" style="width:80px"></label>
+            </div>
+            <div class="result-panel" id="ll-out"></div>
           </div>
 
           <div class="exercises-block" id="ex72">
@@ -796,7 +837,7 @@
           </div>
 
           <div class="widget-card" id="sec733">
-            <h3>7.3.2 Order matters &mdash; numeric composition</h3>
+            <h3>7.3.2 Order matters &ndash; numeric composition</h3>
             <div class="widget-desc">Pick two integer functions and an input. The tool computes both <span class="mono-inline">(g &compfn; f)(x)</span> and <span class="mono-inline">(f &compfn; g)(x)</span> so you can see they usually differ.</div>
             <div class="num-row">
               <label>f
@@ -861,6 +902,34 @@
               <div class="thm-body">If <span class="mono-inline">n</span> pigeons go into <span class="mono-inline">m</span> holes and <span class="mono-inline">k &lt; n/m</span> for a positive integer <span class="mono-inline">k</span>, then some hole holds <span class="mono-inline">&ge; k+1</span>. The basic principle is the case <span class="mono-inline">k=1</span>. The fullest hole always holds <span class="mono-inline">&ge; &lceil;n/m&rceil;</span>.</div>
             </div>
             <p><strong>Example 9.4.5.</strong> Among 85 people, must 4 share a last initial? Holes <span class="mono-inline">= 26</span>, take <span class="mono-inline">k=3</span>: <span class="mono-inline">3 &lt; 85/26 &asymp; 3.27</span>, so some initial is shared by <span class="mono-inline">&ge; 4</span>. <strong>Contrapositive view</strong> (Example 9.4.6 style): if at most 3 shared each initial, at most <span class="mono-inline">3&times;26 = 78</span> people &ndash; but there are 85 &gt; 78, contradiction. &ldquo;At most <span class="mono-inline">k</span> per hole &rArr; at most <span class="mono-inline">k&middot;m</span> total&rdquo; is often the cleanest route.</p>
+          </div>
+
+          <div class="section-intro" id="sec943b">
+            <div class="thm-box">
+              <div class="thm-title">Contrapositive form &middot; the counting route</div>
+              <div class="thm-body">&ldquo;At most <span class="mono-inline">k</span> per hole&rdquo; <span class="mono-inline">&rArr;</span> &ldquo;at most <span class="mono-inline">k&middot;m</span> in total&rdquo;. To prove some hole has <span class="mono-inline">&ge; k+1</span>, <strong>assume the opposite</strong> (every hole has <span class="mono-inline">&le; k</span>), add up the maximum that allows (<span class="mono-inline">k&middot;m</span>), and show the real total overshoots it. This is usually the cleanest written proof.</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec944">
+            <h3>9.4.2 Pigeonhole visualiser &ndash; watch the collision become unavoidable</h3>
+            <div class="widget-desc">Spread <span class="mono-inline">n</span> pigeons into <span class="mono-inline">m</span> holes as <em>evenly</em> as possible (the best case for avoiding a crowd). Even then, the fullest hole is forced to hold <span class="mono-inline">&ge; &lceil;n/m&rceil;</span>. Increase <span class="mono-inline">n</span> past <span class="mono-inline">m</span> and a doubled-up hole appears; push further and watch the floor rise.</div>
+            <div class="num-row">
+              <label>pigeons n <input type="number" id="pv-n" value="7" min="0" max="60" style="width:90px"></label>
+              <label>holes m <input type="number" id="pv-m" value="4" min="1" max="20" style="width:90px"></label>
+            </div>
+            <div id="pv-svg" style="overflow-x:auto;margin:10px 0"></div>
+            <div class="result-panel" id="pv-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec945">
+            <h3>9.4.3 Why every fraction repeats &ndash; the remainder demo (Example 9.4.4)</h3>
+            <div class="widget-desc">Long-divide <span class="mono-inline">a/b</span>. Each remainder is one of only <span class="mono-inline">b</span> values <span class="mono-inline">(0 &hellip; b&minus;1)</span>, so by pigeonhole a remainder must eventually <strong>repeat</strong> &ndash; and from that point the digits cycle forever. The tool shows each step <span class="mono-inline">r &rarr; digit</span> and marks where the cycle closes.</div>
+            <div class="num-row">
+              <label>a <input type="number" id="rd-a" value="3" min="0" style="width:90px"></label>
+              <label>b <input type="number" id="rd-b" value="14" min="1" style="width:90px"></label>
+            </div>
+            <div class="result-panel" id="rd-out"></div>
           </div>
 
           <div class="exercises-block" id="ex94">
@@ -928,10 +997,34 @@
               <button type="button" class="solution-btn" data-toggle-sol="sol-W8">Show solution</button>
               <div class="solution" id="sol-W8"><strong>Contradiction (contrapositive count).</strong> Suppose at most 4 computers serve <span class="mono">&ge; 3</span> students. Then at least 8 computers serve <span class="mono">&le; 2</span> each. Maximum students served: the 8 light computers carry <span class="mono">&le; 2&times;8 = 16</span>; the other 4 carry <span class="mono">&le; 6&times;4 = 24</span>; total <span class="mono">&le; 40</span>. But there are 42 &gt; 40 &ndash; contradiction. So at least <strong>5</strong> computers serve 3 or more.</div>
             </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.2 &middot; change of base (Examples 7.2.6&ndash;7)</div>
+              <div class="ex-body">A calculator has only <span class="mono-inline">ln</span>. Evaluate <span class="mono-inline">log&#8322; 10</span> to four decimal places.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W9">Show solution</button>
+              <div class="solution" id="sol-W9">By change of base (7.2.1d), <span class="mono">log&#8322; 10 = (ln 10)/(ln 2) = 2.302585&hellip;/0.693147&hellip; &asymp; 3.3219</span>. Sanity check: <span class="mono">2&sup3; = 8 &lt; 10 &lt; 16 = 2&#8308;</span>, so <span class="mono">log&#8322; 10</span> sits between 3 and 4. &#10003; Any base gives the same ratio.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;7.2 &middot; one-to-one / onto from a formula</div>
+              <div class="ex-body">Is the floor function <span class="mono-inline">f : R &rarr; Z, f(x) = &lfloor;x&rfloor;</span> one-to-one? onto?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W10">Show solution</button>
+              <div class="solution" id="sol-W10"><strong>Not one-to-one:</strong> <span class="mono">&lfloor;1.2&rfloor; = &lfloor;1.7&rfloor; = 1</span>, two inputs share an image. <strong>Onto:</strong> for any integer <span class="mono">n</span>, <span class="mono">f(n) = &lfloor;n&rfloor; = n</span>, so every target is hit. So <span class="mono">f</span> is onto but not one-to-one &ndash; the two properties are independent.</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.4 &middot; basic (remainders)</div>
+              <div class="ex-body">Show that among any 100 integers, two leave the same remainder on division by 99.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W11">Show solution</button>
+              <div class="solution" id="sol-W11">Pigeons = the 100 integers; holes = the 99 possible remainders <span class="mono">0,1,&hellip;,98</span> modulo 99. Since <span class="mono">100 &gt; 99</span>, two integers <span class="mono">a, b</span> share a remainder &ndash; and then <span class="mono">a &minus; b</span> is divisible by 99. (The map &ldquo;integer &rarr; its remainder&rdquo; from a 100-set to a 99-set cannot be one-to-one.)</div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.4 &middot; generalized</div>
+              <div class="ex-body">Show that in any group of 30 students, at least 3 share a birth month.</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W12">Show solution</button>
+              <div class="solution" id="sol-W12">Holes <span class="mono">m = 12</span> months, pigeons <span class="mono">n = 30</span>. Take <span class="mono">k = 2</span>: since <span class="mono">2 &lt; 30/12 = 2.5</span>, the generalized principle forces some month to hold <span class="mono">&ge; k+1 = 3</span>. Contrapositive check: at most 2 per month would allow only <span class="mono">2&times;12 = 24 &lt; 30</span> students. The fullest month holds <span class="mono">&ge; &lceil;30/12&rceil; = 3</span>.</div>
+            </div>
           </div>
 
           <div class="recap-card" id="recap">
-            <h3>Chapter recap &mdash; functions, end to end</h3>
+            <h3>Chapter recap &ndash; functions, end to end</h3>
             <ul>
               <li><strong>7.1</strong> &ndash; a function <span class="mono-inline">f : X &rarr; Y</span> gives every input exactly one image (total + single-valued); know image, range, co-domain, inverse image, equality (Thm 7.1.1), and what &ldquo;well-defined&rdquo; means.</li>
               <li><strong>7.2</strong> &ndash; one-to-one (no collisions) and onto (nothing missed) are independent; both together make a <strong>bijection</strong>, which has an <strong>inverse</strong> (Thm 7.2.2). Logs are the inverse of exponentials; know the four log laws and change of base (Thm 7.2.1).</li>
@@ -1003,9 +1096,9 @@
         var k=FN.value,v=(XV.value||'').trim(),val,note,dom,ran;
         if(k==='acount'){var c=0;for(var i=0;i<v.length;i++)if(v[i]==='a')c++;val=c+'';dom='S = strings over {a,b}';ran='Z&#8805;&#8320;';note='count of a&rsquo;s in &quot;'+(v||'&epsilon;')+'&quot;';}
         else if(k==='size'){var els=parseList(v).filter(function(x){return inA(['a','b','c'],x);});val=els.length+'';dom='&#8473;({a,b,c})';ran='{0,1,2,3}';note='|'+fmt(parseList(v))+'| (only a,b,c count)';}
-        else if(k==='parity'){var bits=parseList(v);var ok=bits.length===3&&bits.every(function(b){return b==='0'||b==='1';});if(!ok){val='&mdash;';note='enter exactly three bits, e.g. 1, 0, 1';}else{var s=bits.reduce(function(a,b){return a+parseInt(b,10);},0);val=(s%2)+'';note='odd number of 1&rsquo;s &rArr; 1';}dom='{0,1}&sup3;';ran='{0,1}';}
-        else if(k==='mod3'){var n=parseInt(v,10);if(isNaN(n)){val='&mdash;';note='enter an integer';}else{val=(((n%3)+3)%3)+'';note='remainder of '+n+' on division by 3';}dom='Z';ran='{0,1,2}';}
-        else{var x=parseFloat(v);if(isNaN(x)){val='&mdash;';note='enter a number';}else{val=Math.abs(x)+'';note='distance of '+x+' from 0';}dom='R';ran='R&#8805;&#8320;';}
+        else if(k==='parity'){var bits=parseList(v);var ok=bits.length===3&&bits.every(function(b){return b==='0'||b==='1';});if(!ok){val='&ndash;';note='enter exactly three bits, e.g. 1, 0, 1';}else{var s=bits.reduce(function(a,b){return a+parseInt(b,10);},0);val=(s%2)+'';note='odd number of 1&rsquo;s &rArr; 1';}dom='{0,1}&sup3;';ran='{0,1}';}
+        else if(k==='mod3'){var n=parseInt(v,10);if(isNaN(n)){val='&ndash;';note='enter an integer';}else{val=(((n%3)+3)%3)+'';note='remainder of '+n+' on division by 3';}dom='Z';ran='{0,1,2}';}
+        else{var x=parseFloat(v);if(isNaN(x)){val='&ndash;';note='enter a number';}else{val=Math.abs(x)+'';note='distance of '+x+' from 0';}dom='R';ran='R&#8805;&#8320;';}
         out.innerHTML=row('output',val,'t',note)+row('domain',dom,'')+row('range',ran,'','&sube; co-domain');
       }
       FN.addEventListener('change',render); XV.addEventListener('input',render); render();
@@ -1140,6 +1233,84 @@
             row('to force k+1 in a hole','take '+(k*m+1)+' pigeons','','k&middot;m + 1'):'');
       }
       [N,M,K].forEach(function(e){e.addEventListener('input',render);}); render();
+    })();
+
+    /* 7.2.4 log-law verifier */
+    (function(){
+      var L=document.getElementById('ll-law'),B=document.getElementById('ll-b'),X=document.getElementById('ll-x'),Y=document.getElementById('ll-y'),YL=document.getElementById('ll-ylab'),out=document.getElementById('ll-out');
+      if(!L||!out)return;
+      function lg(base,v){return Math.log(v)/Math.log(base);}
+      function r6(v){return Math.round(v*1e6)/1e6;}
+      function render(){
+        var law=L.value,b=parseFloat(B.value),x=parseFloat(X.value),y=parseFloat(Y.value);
+        YL.childNodes[0].nodeValue=(law==='pow'?'a ':(law==='base'?'c ':'y '));
+        if(isNaN(b)||b<=0||b===1){out.innerHTML=row('base','invalid','f','need b &gt; 0, b &ne; 1');return;}
+        if(isNaN(x)||x<=0){out.innerHTML=row('x','invalid','f','need x &gt; 0');return;}
+        var lhs,rhs,lhsT,rhsT;
+        if(law==='prod'){ if(isNaN(y)||y<=0){out.innerHTML=row('y','need y &gt; 0','f','');return;} lhs=lg(b,x*y); rhs=lg(b,x)+lg(b,y); lhsT='log&#8323;('+x+'&middot;'+y+')'; rhsT='log&#8323;'+x+' + log&#8323;'+y; }
+        else if(law==='quot'){ if(isNaN(y)||y<=0){out.innerHTML=row('y','need y &gt; 0','f','');return;} lhs=lg(b,x/y); rhs=lg(b,x)-lg(b,y); lhsT='log&#8323;('+x+'/'+y+')'; rhsT='log&#8323;'+x+' &minus; log&#8323;'+y; }
+        else if(law==='pow'){ if(isNaN(y)){out.innerHTML=row('a','enter an exponent','f','');return;} lhs=lg(b,Math.pow(x,y)); rhs=y*lg(b,x); lhsT='log&#8323;('+x+'^'+y+')'; rhsT=y+'&middot;log&#8323;'+x; }
+        else { if(isNaN(y)||y<=0||y===1){out.innerHTML=row('c','need c &gt; 0, c &ne; 1','f','');return;} lhs=lg(y,x); rhs=lg(b,x)/lg(b,y); lhsT='log_'+y+' '+x; rhsT='(log&#8323;'+x+')/(log&#8323;'+y+')'; }
+        var eq=Math.abs(lhs-rhs)<1e-9;
+        out.innerHTML=
+          row('left side',lhsT+' = '+r6(lhs),'t','')+
+          row('right side',rhsT+' = '+r6(rhs),'t','')+
+          row('equal?',eq?'YES':'NO',eq?'t':'f',eq?'both sides match &ndash; the law holds':'check your inputs');
+      }
+      [L,B,X,Y].forEach(function(e){e.addEventListener('input',render);e.addEventListener('change',render);}); render();
+    })();
+
+    /* 9.4.2 pigeonhole visualiser */
+    (function(){
+      var N=document.getElementById('pv-n'),M=document.getElementById('pv-m'),svg=document.getElementById('pv-svg'),out=document.getElementById('pv-out');
+      if(!N||!svg)return;
+      function render(){
+        var n=parseInt(N.value,10),m=parseInt(M.value,10);
+        if(isNaN(n)||isNaN(m)||m<1||n<0){svg.innerHTML='';out.innerHTML=row('input','need n &ge; 0, m &ge; 1','f','');return;}
+        n=Math.min(n,60); m=Math.min(m,20);
+        var counts=[],i; for(i=0;i<m;i++)counts.push(0); for(i=0;i<n;i++)counts[i%m]++;
+        var fullest=0; counts.forEach(function(c){if(c>fullest)fullest=c;});
+        var ceil=Math.ceil(n/m);
+        var holeW=Math.max(30,Math.min(64,Math.floor(560/m))),gap=8,pad=12,dotR=6,dotGap=3;
+        var holeH=Math.max(50,Math.max(fullest,1)*(2*dotR+dotGap)+16);
+        var W=pad*2+m*holeW+(m-1)*gap,H=holeH+34;
+        var s='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" font-family="inherit">';
+        for(var h=0;h<m;h++){
+          var x=pad+h*(holeW+gap),full=(counts[h]===fullest&&fullest>=2);
+          s+='<rect x="'+x+'" y="6" width="'+holeW+'" height="'+holeH+'" rx="7" fill="'+(full?'#fdecec':'#eef3fb')+'" stroke="'+(full?'#c0392b':'#9fb6d6')+'" stroke-width="'+(full?2:1)+'"/>';
+          for(var p=0;p<counts[h];p++){var cy=6+holeH-12-p*(2*dotR+dotGap);s+='<circle cx="'+(x+holeW/2)+'" cy="'+cy+'" r="'+dotR+'" fill="'+(full?'#c0392b':'#1f6fb2')+'"/>';}
+          s+='<text x="'+(x+holeW/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="12" fill="#667">'+counts[h]+'</text>';
+        }
+        s+='</svg>'; svg.innerHTML=s;
+        out.innerHTML=
+          row('most even split',counts.join(' &middot; '),'','round-robin &ndash; the best case for avoiding a crowd')+
+          row('fullest hole','&ge; '+fullest,'t','&lceil;'+n+'/'+m+'&rceil; = '+ceil+(fullest>=2?' &rArr; a shared hole is unavoidable':''))+
+          row('collision forced?',n>m?'YES':'NO',n>m?'t':'f',n>m?'n &gt; m, so not one-to-one':'n &le; m, an injection is still possible');
+      }
+      [N,M].forEach(function(e){e.addEventListener('input',render);}); render();
+    })();
+
+    /* 9.4.3 repeating-decimal demo */
+    (function(){
+      var A=document.getElementById('rd-a'),B=document.getElementById('rd-b'),out=document.getElementById('rd-out');
+      if(!A||!out)return;
+      function render(){
+        var a=parseInt(A.value,10),b=parseInt(B.value,10);
+        if(isNaN(a)||isNaN(b)||b<1||a<0){out.innerHTML=row('input','need a &ge; 0, b &ge; 1','f','');return;}
+        var intpart=Math.floor(a/b),r=a%b,seen={},digits=[],rems=[],idx=0,repeatAt=-1;
+        while(r!==0){ if(r in seen){repeatAt=seen[r];break;} seen[r]=idx; rems.push(r); r*=10; digits.push(Math.floor(r/b)); r=r%b; idx++; if(idx>60)break; }
+        var html=row('a / b',a+' / '+b,'','');
+        if(r===0&&repeatAt<0){ html+=row('decimal',intpart+'.'+(digits.join('')||'0'),'t','terminates &ndash; a remainder hit 0'); }
+        else if(repeatAt>=0){ var nonrep=digits.slice(0,repeatAt).join(''),rep=digits.slice(repeatAt).join('');
+          html+=row('decimal',intpart+'.'+nonrep+'('+rep+')','t','the block ('+rep+') repeats forever')+
+            row('period',rep.length+'','','&le; b &minus; 1 = '+(b-1)+' possible remainders')+
+            row('why repeats',  'remainder '+rems[repeatAt]+' returns at step '+(repeatAt+1),'','a remainder value reused &rArr; digits cycle (pigeonhole)'); }
+        else { html+=row('decimal',intpart+'.'+digits.join('')+'&hellip;','','stopped at 60 digits'); }
+        var k=Math.min(rems.length,10),steps=[]; for(var i=0;i<k;i++)steps.push('r'+i+'='+rems[i]+'&rarr;'+digits[i]);
+        html+=row('steps',steps.join('&nbsp; ')||'&ndash;','','remainder &rarr; digit');
+        out.innerHTML=html;
+      }
+      [A,B].forEach(function(e){e.addEventListener('input',render);}); render();
     })();
 
     /* ===================================================== Generic behaviours ===================================================== */
