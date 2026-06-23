@@ -74,6 +74,11 @@
     .slot.taken.mine { box-shadow:0 0 0 2px #e65100 inset; }
     .slot .cancelbtn { display:inline-block; margin-top:8px; font-size:0.74rem; font-weight:700; color:#c62828; background:#fff; border:1px solid #f0b4ae; border-radius:6px; padding:4px 9px; cursor:pointer; }
     .slot .cancelbtn:hover { background:#fdecea; }
+    .slot-pair { display:flex; flex-direction:column; gap:5px; }
+    .slot.half { padding:6px 10px; }
+    .slot.half .time { font-size:0.8rem; }
+    .slot.half .cta, .slot.half .lab, .slot.half .mem { font-size:0.72rem; }
+    .slot.aionly { cursor:default; opacity:.85; }
     .booking-closed .slot.free.closed { cursor:default; opacity:.65; }
     .booking-closed .slot.free.closed:hover { box-shadow:none; transform:none; }
     .closed-banner { background:#fff3cd; border:1px solid #ffe08a; border-left:5px solid #e0a800; color:#7a5b00; border-radius:10px; padding:14px 18px; margin:16px 0; font-size:0.95rem; line-height:1.5; }
@@ -121,6 +126,7 @@
       </tbody></table>
       <p class="note"><strong>Please book as early as possible:</strong> this is a single, shared, live calendar booked across three courses (AI, Software Engineering and HCI), so slots fill up fast. Each presentation is 20 minutes, one slot per group, and a slot taken for any course disappears for everyone the moment it is booked. <strong>Wednesday and Thursday slots are on campus in Masri 320; Friday and Saturday slots are online on MS Teams.</strong></p>
       <p class="note cam"><strong>Online (MS Teams) slots:</strong> make sure your connection is good and your camera is switched on, otherwise the presentation will not be considered.</p>
+      <p class="note"><strong>Ten-minute slots are for AI (COMP338) discussions only.</strong> When an AI group books a slot it takes 10 minutes and the other 10 minutes opens as a second AI-only slot. COMP332 and COMP433 groups present in the full 20-minute slots.</p>
     </div>
 
     <div class="card">
@@ -204,20 +210,24 @@
       return s;
     }
 
-    // Build one slot card. o: {start,end,mode,free,booking,blockedNote,mine,cancelKey,onbook}
+    // Build one slot card. o: {start,end,mode,free,booking,mine,cancelKey,onbook,half,aiOnly}
     function slotCard(o) {
       var c = document.createElement('div');
       var teams = o.mode === 'teams' ? '<a class="teamslink" href="' + TEAMS_URL + '" target="_blank" rel="noopener"><i class="fas fa-video"></i> Join on Teams</a>' : '';
       var pill = o.mode === 'teams' ? '<span class="modepill teams"><i class="fas fa-video"></i> Online</span>' : '<span class="modepill campus"><i class="fas fa-building"></i> On campus</span>';
       var time = '<span class="time">' + o.start + '&ndash;' + o.end + '</span> ' + pill;
-      if (o.free) {
-        c.className = 'slot free ' + o.mode + (BOOKING_OPEN ? '' : ' closed');
+      var base = 'slot ' + o.mode + (o.half ? ' half' : '');
+      if (o.aiOnly) {
+        c.className = base + ' aionly';
+        c.innerHTML = time + '<div class="body"><span class="cta" style="color:#8a8678;">10 min &middot; AI only</span></div>' + teams;
+      } else if (o.free) {
+        c.className = base + ' free' + (BOOKING_OPEN ? '' : ' closed');
         c.innerHTML = time + '<div class="body"><span class="cta">' + (BOOKING_OPEN ? '<i class="fas fa-plus-circle"></i> Free, click to book' : 'Free') + '</span></div>' + teams;
         if (BOOKING_OPEN && o.onbook) c.onclick = o.onbook;
       } else {
-        c.className = 'slot taken ' + o.mode + (o.mine ? ' mine' : '');
+        c.className = base + ' taken' + (o.mine ? ' mine' : '');
         var mem = o.booking ? (o.booking.members || []).map(function (m) { return m.name || m.id; }).filter(Boolean).join(', ') : '';
-        var lab = o.blockedNote ? o.blockedNote : (o.booking ? labelFor(o.booking) : 'Booked');
+        var lab = o.booking ? labelFor(o.booking) : 'Booked';
         c.innerHTML = time + '<div class="body"><span class="lab"><b>' + lab + '</b></span>' + (mem ? '<span class="mem">' + esc(mem) + '</span>' : '') +
           (o.mine ? '<button type="button" class="cancelbtn"><i class="fas fa-times"></i> Cancel our booking</button>' : '') + '</div>' + teams;
         if (o.mine) { var cbn = c.querySelector('.cancelbtn'); if (cbn) cbn.addEventListener('click', function (e) { e.stopPropagation(); cancelBooking(o.cancelKey); }); }
@@ -226,10 +236,18 @@
       return c;
     }
 
+    // A 10-minute half (booked, or free-and-AI-only). Splitting happens only
+    // once an AI group has booked the slot, never for SE/HCI bookings.
+    function halfCard(id, half, start, end, bk, key, isAI, u, mode) {
+      if (bk) return slotCard({ start:(bk.start || start), end:(bk.end || end), mode:mode, booking:bk, mine:(u && bk.owner === u), cancelKey:key, half:true });
+      if (isAI) return slotCard({ start:start, end:end, mode:mode, free:true, half:true, onbook:function () { openForm(id, half); } });
+      return slotCard({ start:start, end:end, mode:mode, half:true, aiOnly:true });
+    }
+
     function renderBoard() {
       var data = (window._fb && window._fb.data) || {};
       var u = uid();
-      var aiView = state.course === 'AI';
+      var isAI = state.course === 'AI';
       grid.innerHTML = '';
       SLOTS.forEach(function (d) {
         var wrap = document.createElement('div'); wrap.className = 'day';
@@ -239,31 +257,23 @@
         d.items.forEach(function (s) {
           var id = s[0], start = s[1], end = s[2], mid = addMin(start, 10);
           var full = data[id];
-          var sehciFull = full && full.course !== 'AI';            // a real 20-minute booking
-          var legacyAI = full && full.course === 'AI';             // old AI booking -> counts as first half
+          var sehciFull = full && full.course !== 'AI';            // a 20-minute SE/HCI booking (never split)
+          var legacyAI = full && full.course === 'AI';             // old AI booking -> treat as first half
           var aBk = data[id + '_a'] || (legacyAI ? full : null);
           var aKey = data[id + '_a'] ? id + '_a' : (legacyAI ? id : id + '_a');
           var bBk = data[id + '_b'] || null;
-          if (aiView) {
-            if (sehciFull) {
-              g.appendChild(slotCard({ start:start, end:mid, mode:d.mode, booking:full, blockedNote:labelFor(full) }));
-              g.appendChild(slotCard({ start:mid, end:end, mode:d.mode, booking:full, blockedNote:labelFor(full) }));
-            } else {
-              g.appendChild(aBk
-                ? slotCard({ start:(aBk.start || start), end:(aBk.end || mid), mode:d.mode, booking:aBk, mine:(u && aBk.owner === u), cancelKey:aKey })
-                : slotCard({ start:start, end:mid, mode:d.mode, free:true, onbook:function () { openForm(id, 'a'); } }));
-              g.appendChild(bBk
-                ? slotCard({ start:(bBk.start || mid), end:(bBk.end || end), mode:d.mode, booking:bBk, mine:(u && bBk.owner === u), cancelKey:id + '_b' })
-                : slotCard({ start:mid, end:end, mode:d.mode, free:true, onbook:function () { openForm(id, 'b'); } }));
-            }
+          if (sehciFull) {
+            // one 20-minute card
+            g.appendChild(slotCard({ start:start, end:end, mode:d.mode, booking:full, mine:(u && full.owner === u), cancelKey:id }));
+          } else if (aBk || bBk) {
+            // forked by an AI booking -> two smaller 10-minute halves (second half is AI-only)
+            var pair = document.createElement('div'); pair.className = 'slot-pair';
+            pair.appendChild(halfCard(id, 'a', start, mid, aBk, aKey, isAI, u, d.mode));
+            pair.appendChild(halfCard(id, 'b', mid, end, bBk, id + '_b', isAI, u, d.mode));
+            g.appendChild(pair);
           } else {
-            if (sehciFull) {
-              g.appendChild(slotCard({ start:start, end:end, mode:d.mode, booking:full, mine:(u && full.owner === u), cancelKey:id }));
-            } else if (aBk || bBk) {
-              g.appendChild(slotCard({ start:start, end:end, mode:d.mode, blockedNote:'Reserved for AI (10-minute discussions)' }));
-            } else {
-              g.appendChild(slotCard({ start:start, end:end, mode:d.mode, free:true, onbook:function () { openForm(id, null); } }));
-            }
+            // free 20-minute slot: AI books a 10-min half (forking the slot); SE/HCI book the full 20
+            g.appendChild(slotCard({ start:start, end:end, mode:d.mode, free:true, onbook:function () { openForm(id, isAI ? 'a' : null); } }));
           }
         });
         wrap.appendChild(g); grid.appendChild(wrap);
