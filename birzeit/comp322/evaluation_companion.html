@@ -445,6 +445,7 @@
       </tbody></table></div>
 
     <p class="body">A kitchen makes the distinction concrete. When the chef tastes the sauce while cooking and adjusts it, that is <strong>formative</strong>. When the guests taste the finished dish, that is <strong>summative</strong>. Either way, somebody has to taste it: <strong>looking at the pot is not evaluation</strong>. Most of what a project team does is formative, because the point is to improve the design while there is still time to act on what you learn.</p>
+    <p class="note">The distinction is Michael Scriven's (1967), borrowed from educational evaluation: formative evaluation shapes something while it is being made; summative judges the finished result.</p>
   </div>
 </section>
 
@@ -453,7 +454,7 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">iv.</span>Plan it</div>
     <h2 class="section-title">Plan it: the <em>DECIDE</em> framework.</h2>
-    <p class="section-intro">Evaluation is not "grab a friend and poke the app". It is planned. DECIDE is six questions, answered in order, before you test anything.</p>
+    <p class="section-intro">Evaluation is not "grab a friend and poke the app". It is planned. DECIDE, the framework of Rogers, Sharp and Preece, is six questions answered in order before you test anything.</p>
 
     <div class="grid-3">
       <div class="cog-card"><div class="icon">D</div><h4>Determine</h4><p>What are the goals of this evaluation? What do you actually need to learn?</p></div>
@@ -493,6 +494,35 @@
         <tr><td>Prototype</td><td>Usability testing</td><td>a few users</td></tr>
         <tr><td>Live</td><td>Analytics, A/B testing</td><td>many users</td></tr>
       </tbody></table></div>
+
+    <h3 class="subhead">Inspection: Nielsen's ten heuristics</h3>
+    <p class="body">The cheapest family is <strong>heuristic evaluation</strong>, introduced by Jakob Nielsen and Rolf Molich in 1990: several evaluators independently judge the interface against a short list of recognised principles, then pool their findings. Three to five evaluators usually uncover most of the problems an inspection can find, because no single evaluator catches everything. Nielsen's ten heuristics are the standard checklist.</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Heuristic</th><th>What it checks</th></tr></thead><tbody>
+        <tr><td>1. Visibility of system status</td><td>The system keeps the user informed about what is going on, through timely feedback.</td></tr>
+        <tr><td>2. Match with the real world</td><td>It speaks the user's language and follows real-world conventions, not system jargon.</td></tr>
+        <tr><td>3. User control and freedom</td><td>It offers a clearly marked way out: undo and redo, an emergency exit from a wrong state.</td></tr>
+        <tr><td>4. Consistency and standards</td><td>The same words and actions mean the same thing throughout, and follow platform convention.</td></tr>
+        <tr><td>5. Error prevention</td><td>It designs out the error in the first place, better than any good error message.</td></tr>
+        <tr><td>6. Recognition rather than recall</td><td>Options and information are visible, so the user need not remember things between steps.</td></tr>
+        <tr><td>7. Flexibility and efficiency</td><td>Accelerators (shortcuts, defaults) speed the expert without obstructing the novice.</td></tr>
+        <tr><td>8. Aesthetic and minimalist design</td><td>It shows only what is relevant; every extra unit competes with the important ones.</td></tr>
+        <tr><td>9. Recover from errors</td><td>Error messages are in plain language, state the problem, and suggest a fix.</td></tr>
+        <tr><td>10. Help and documentation</td><td>Where help is needed it is searchable, task-focused and concrete.</td></tr>
+      </tbody></table></div>
+    <p class="note">These are the same family as Norman's principles from the interaction-design chapter, turned into an inspection checklist. Heuristic evaluation needs no users, so it is run early to clear the obvious faults before a participant is ever recruited.</p>
+
+    <h3 class="subhead">Rating what you find: severity</h3>
+    <p class="body">A list of problems is not yet actionable; each needs a severity so the team fixes the worst first. Nielsen's severity scale folds frequency, impact and persistence into a single rating from 0 to 4.</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Rating</th><th>Meaning</th></tr></thead><tbody>
+        <tr><td>0</td><td>Not a usability problem at all.</td></tr>
+        <tr><td>1</td><td>Cosmetic: fix only if spare time allows.</td></tr>
+        <tr><td>2</td><td>Minor: low priority.</td></tr>
+        <tr><td>3</td><td>Major: important to fix, high priority.</td></tr>
+        <tr><td>4</td><td>Catastrophe: imperative to fix before release.</td></tr>
+      </tbody></table></div>
+    <p class="body">The findings table at the end of this chapter carries exactly this rating, so the revision plan is ordered by severity rather than by whoever argued hardest.</p>
   </div>
 </section>
 
@@ -571,7 +601,7 @@
     <p class="fig-note">A synthetic illustration, not a recording of a real person. The task succeeds, yet the two wrong turns and the time taken are the evidence: you would not ship a menu nobody can find. Friction is a finding even when the task is completed.</p>
 
     <h3 class="subhead">Why five users is usually enough</h3>
-    <p class="body">The common worry is that a handful of participants cannot be representative. For finding usability <em>problems</em>, that worry is misplaced. Nielsen's finding is that around <strong>five users surface roughly 85% of the problems</strong> in an interface, because the serious problems are hit by almost everyone. After five, you mostly watch the same issues recur. The efficient move is not one big study but several small rounds: test five, fix, test five again. Summative studies that need a stable number, such as a benchmark score, require more participants, but for finding what to fix, five per round is the working rule.</p>
+    <p class="body">The common worry is that a handful of participants cannot be representative. For finding usability <em>problems</em>, that worry is misplaced. Nielsen and Landauer (1993) modelled the number of problems found as <em>N</em>(1 &minus; (1 &minus; <em>L</em>)<sup>n</sup>), where <em>n</em> is the number of users and <em>L</em> is the proportion of problems a single user finds, on average about 0.31. With <em>L</em> = 0.31, <strong>five users surface roughly 85% of the problems</strong>, because the serious ones are hit by almost everyone; Robert Virzi had reported the same pattern independently in 1992. After five, you mostly watch the same issues recur. The efficient move is not one big study but several small rounds: test five, fix, test five again. Summative studies that need a stable number, such as a benchmark score, require more participants, but for finding what to fix, five per round is the working rule.</p>
 
     <div class="fig-cap">Problems found against number of users (Nielsen)</div>
     <div style="background:white; border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); padding:24px 26px; margin:18px 0; max-width:640px;">
@@ -597,7 +627,7 @@
     <p class="body">A task must be framed as an <strong>outcome the participant wants, not a list of steps to follow</strong>. "Click Menu, then Settings, then Notifications, then toggle the switch" tests whether they can read; it cannot fail. "You want the app to stop sending you alerts at night, make that happen" tests the design, because now the participant has to find the path themselves, and where they go wrong is exactly the finding. Give the goal and the starting point, never the route.</p>
 
     <h3 class="subhead">Think aloud: narrate the struggle</h3>
-    <p class="body">Ask participants to say what they are thinking as they work. Clicks tell you <em>what</em> happened; words tell you <em>why</em>. "I am looking for a settings cog, usually it is top right" reveals an expectation the design can meet or break, which no log file would ever show. Thinking aloud is the cheapest way to recover the reasoning behind a wrong turn.</p>
+    <p class="body">Ask participants to say what they are thinking as they work. Clicks tell you <em>what</em> happened; words tell you <em>why</em>. "I am looking for a settings cog, usually it is top right" reveals an expectation the design can meet or break, which no log file would ever show. Thinking aloud is the cheapest way to recover the reasoning behind a wrong turn. The technique is <em>verbal protocol analysis</em>, formalised by Ericsson and Simon (1984): a <em>concurrent</em> protocol, narrated during the task, captures reasoning in the moment, while a <em>retrospective</em> one, gathered just after, disturbs the task less but loses detail to memory.</p>
 
     <h3 class="subhead">The facilitator's only real skill: silence</h3>
     <p class="body">The hardest part of running a test is not helping. The moment you say "try the menu", the finding is gone: you have shown them the thing the design failed to. Let the silence sit, let the participant struggle, and record where the struggle happens. A facilitator gives the task, the encouragement to keep narrating, and nothing else.</p>
@@ -609,7 +639,7 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">viii.</span>The System Usability Scale</div>
     <h2 class="section-title">One number for satisfaction: the <em>System Usability Scale</em>.</h2>
-    <p class="section-intro">The SUS is ten statements, each rated 1 to 5, that produce a single satisfaction score from 0 to 100. It is short, free, decades-proven, and the standard way to put a number on how a system felt to use.</p>
+    <p class="section-intro">The SUS is ten statements, each rated 1 to 5, that produce a single satisfaction score from 0 to 100. Published by John Brooke in 1996, it has become the most widely used standardised usability questionnaire, valued because it is short, free, and reliable even with the small samples a project can afford.</p>
 
     <p class="body">The wording <strong>alternates on purpose</strong>: odd-numbered statements are positive and even-numbered ones are negative, so a high rating means something different on each. That is what stops a participant from ticking the same box down the page without reading. It also means you cannot simply add the answers; every one first has to be converted to the same 0-to-4 scale where higher is always better.</p>
 
@@ -620,7 +650,7 @@
       <li><strong>Even items (negative):</strong> converted score = 5 &minus; rating.</li>
       <li><strong>Total:</strong> add the ten converted scores (0 to 40), then multiply by 2.5 to land on 0 to 100.</li>
     </ul>
-    <p class="body">Worked example: take one participant's ten answers, convert each with the rule above, and suppose the converted scores add up to 29. Then 29 &times; 2.5 = <strong>72.5</strong>. The benchmark to remember is <strong>68</strong>: that is the average SUS score across hundreds of studies, so 72.5 sits just above average. SUS is a measure of perceived usability, not a percentage, so treat it as a relative score against that 68 line and against your own previous rounds.</p>
+    <p class="body">Worked example: take one participant's ten answers, convert each with the rule above, and suppose the converted scores add up to 29. Then 29 &times; 2.5 = <strong>72.5</strong>. The benchmark to remember is <strong>68</strong>: that is the average SUS score across hundreds of studies, so 72.5 sits just above average. SUS is a measure of perceived usability, not a percentage, so treat it as a relative score against that 68 line and against your own previous rounds. Jeff Sauro's analysis of hundreds of studies maps the raw score onto a percentile and a letter grade: 68 is roughly the 50th percentile (a C), and a score must reach about 80 to land in the top tier (an A). Bangor and colleagues add an <em>adjective</em> reading, where the low 70s correspond to "good" and the mid 80s to "excellent".</p>
 
     <h3 class="subhead-small">Score it yourself</h3>
     <p class="embed-note">Rate the ten statements as a participant would (1 = strongly disagree, 5 = strongly agree). The score updates live, applying the odd/even conversion for you.</p>
@@ -792,9 +822,13 @@
     <p class="section-intro">The works this chapter draws on for the framework, the methods, and the cases.</p>
     <div class="ref-list">
       <div class="ref"><strong>Preece, J., Rogers, Y. and Sharp, H.</strong> <em>Interaction Design: Beyond Human-Computer Interaction.</em> Wiley. The evaluation chapters and the DECIDE framework.</div>
-      <div class="ref"><strong>Nielsen, J.</strong> "Why You Only Need to Test with 5 Users." Nielsen Norman Group, 2000; and <em>Usability Engineering</em>, 1993.</div>
+      <div class="ref"><strong>Nielsen, J. and Molich, R.</strong> "Heuristic Evaluation of User Interfaces." <em>CHI '90.</em> The inspection method; the ten heuristics are Nielsen's 1994 refinement.</div>
+      <div class="ref"><strong>Nielsen, J. and Landauer, T. K.</strong> "A Mathematical Model of the Finding of Usability Problems." <em>INTERCHI '93.</em> The model behind the five-users rule; see also Virzi (1992).</div>
+      <div class="ref"><strong>Nielsen, J.</strong> "Severity Ratings for Usability Problems," and "Why You Only Need to Test with 5 Users." Nielsen Norman Group; and <em>Usability Engineering</em>, 1993.</div>
+      <div class="ref"><strong>Ericsson, K. A. and Simon, H. A.</strong> <em>Protocol Analysis: Verbal Reports as Data.</em> MIT Press, 1984. The basis of the think-aloud method.</div>
+      <div class="ref"><strong>Scriven, M.</strong> "The Methodology of Evaluation," 1967. The origin of the formative / summative distinction.</div>
       <div class="ref"><strong>Brooke, J.</strong> "SUS: A Quick and Dirty Usability Scale." In <em>Usability Evaluation in Industry</em>, 1996. The original System Usability Scale.</div>
-      <div class="ref"><strong>Sauro, J. and Lewis, J. R.</strong> <em>Quantifying the User Experience.</em> Morgan Kaufmann, 2016. The SUS benchmarks, including the average of 68.</div>
+      <div class="ref"><strong>Sauro, J. and Lewis, J. R.</strong> <em>Quantifying the User Experience.</em> Morgan Kaufmann, 2016. SUS benchmarks, the 68 average, percentiles and grades; with Bangor et al. (2009) for the adjective scale.</div>
       <div class="ref"><strong>Fitts, P. M.</strong> "The information capacity of the human motor system in controlling the amplitude of movement." <em>Journal of Experimental Psychology</em>, 1954.</div>
       <div class="ref"><strong>Spool, J.</strong> "The $300 Million Button." User Interface Engineering, 2009.</div>
       <div class="ref"><strong>Krug, S.</strong> <em>Rocket Surgery Made Easy.</em> New Riders, 2010. Running your own low-cost usability tests, and the discipline of facilitator silence.</div>
