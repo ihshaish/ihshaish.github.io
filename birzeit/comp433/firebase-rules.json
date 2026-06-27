@@ -14,11 +14,16 @@
       }
     },
     "presentations": {
+      "admins": {
+        "$uid": {
+          ".read": "auth != null && $uid === auth.uid"
+        }
+      },
       "2026": {
         "bookings": {
           ".read": "auth != null",
           "$slot": {
-            ".write": "auth != null && ( (!data.exists() && newData.exists()) || (data.child('owner').val() === auth.uid) )",
+            ".write": "auth != null && ( (!data.exists() && newData.exists()) || (data.child('owner').val() === auth.uid) || (root.child('presentations/admins').child(auth.uid).val() === true) )",
             ".validate": "!newData.exists() || newData.hasChildren(['course','members','owner'])"
           }
         }
