@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Chapter 9 Interactive Companion (9.1-9.2): sample spaces and equally likely probability, counting lists, possibility trees, the multiplication rule, and permutations." />
+
+  <title>COMP233 Ch.9 Companion: Counting &amp; Probability (9.1-9.2)</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-critical: #fff9c4;
+      --c-broken-bg: #ffcdd2;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-critical: #4e4322;
+      --c-broken-bg: #5a2727;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .companion-hero { text-align: center; padding: 30px 0 12px; }
+    .companion-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 700; color: var(--c-primary);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .companion-hero h1 { font-size: 1.8rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .companion-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .companion-hero .back-link { font-size: 0.88rem; color: var(--c-primary); text-decoration: none; font-weight: 600; }
+    .companion-hero .back-link:hover { text-decoration: underline; }
+
+    .intro-card {
+      background: var(--c-page-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-primary); border-radius: 8px;
+      padding: 16px 22px; margin: 24px 0 0;
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
+    }
+    .intro-card h4 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .intro-card p { margin: 0 0 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    .toc {
+      background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-primary); border-radius: 12px;
+      padding: 18px 24px 14px; margin: 22px 0 18px;
+      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
+    }
+    body.dark .toc { background: linear-gradient(180deg, rgba(100,181,246,0.10) 0%, var(--c-card-bg) 100%); }
+    .toc-title {
+      margin: 0 0 12px; font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-primary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toc-section { margin-bottom: 10px; }
+    .toc-section:last-child { margin-bottom: 0; }
+    .toc-section h5 {
+      margin: 0 0 6px; font-size: 0.9rem; font-weight: 700;
+      color: var(--c-text); line-height: 1.4;
+    }
+    .toc-section h5 .toc-num {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      color: var(--c-primary); margin-right: 8px;
+    }
+    .toc-links {
+      display: flex; flex-wrap: wrap; gap: 6px 8px;
+      padding-left: 14px; border-left: 2px solid var(--c-border);
+    }
+    body.dark .toc-links { border-left-color: #2a3a4a; }
+    .toc-links a {
+      display: inline-block; font-size: 0.84rem;
+      color: var(--c-primary); background: var(--c-card-bg);
+      text-decoration: none; padding: 4px 12px;
+      border: 1px solid var(--c-border); border-radius: 16px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .toc-links a:hover { background: var(--c-primary); color: #fff; border-color: var(--c-primary); text-decoration: none; }
+    @media (max-width: 640px) { .toc { padding: 16px 18px 12px; } .toc-links { padding-left: 10px; } }
+
+    .chapter-section { margin-top: 44px; }
+    .chapter-section > h2 {
+      font-size: 1.45rem; font-weight: 700; color: var(--c-primary);
+      border-bottom: 2px solid var(--c-border); padding-bottom: 10px; margin: 0 0 22px;
+    }
+    .chapter-section > h2 .ch-num {
+      font-family: 'Roboto Mono', monospace; font-size: 1.15rem;
+      margin-right: 10px; color: var(--c-muted);
+    }
+
+    .section-intro {
+      font-size: 0.96rem; line-height: 1.65; color: var(--c-text); margin-bottom: 22px;
+    }
+    .section-intro ul { padding-left: 22px; }
+    .section-intro li { margin-bottom: 4px; }
+    .section-intro code, .section-intro .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86em;
+    }
+
+    .widget-card {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 22px 26px; margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .widget-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--c-primary); margin: 0 0 6px; }
+    .widget-card .widget-desc { font-size: 0.92rem; color: var(--c-text); line-height: 1.55; margin-bottom: 16px; }
+    .widget-card .widget-desc code, .widget-card .widget-desc .mono-inline {
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.88em;
+    }
+
+    /* Hover terms */
+    .term { position: relative; cursor: help; border-bottom: 1px dotted var(--c-primary); color: inherit; font-weight: 700; }
+    .term::after {
+      content: attr(data-tip); position: absolute;
+      bottom: calc(100% + 8px); left: 0;
+      background: #263238; color: #fff;
+      padding: 9px 13px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 400; line-height: 1.55;
+      white-space: normal; word-wrap: break-word; width: max-content;
+      max-width: min(360px, calc(100vw - 32px));
+      text-align: left; opacity: 0; pointer-events: none;
+      transition: opacity 0.15s; z-index: 50; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .term::before {
+      content: ''; position: absolute; bottom: calc(100% + 3px); left: 14px;
+      border: 5px solid transparent; border-top-color: #263238;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50;
+    }
+    .term:hover::after, .term:focus::after, .term:hover::before, .term:focus::before { opacity: 1; }
+
+    .mono-inline { font-family: 'Roboto Mono', monospace; background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.92em; }
+
+    /* Floating "How to use" widget */
+    .howto-fab { position: fixed; top: 100px; right: 18px; z-index: 30; max-width: 300px; display: flex; flex-direction: column; align-items: flex-end; }
+    .howto-fab-toggle {
+      background: var(--c-primary); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; cursor: pointer;
+      font-size: 0.84rem; font-weight: 700; box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px; transition: background 0.15s;
+    }
+    .howto-fab-toggle:hover, .howto-fab-toggle:focus { background: var(--c-primary-dark); outline: none; }
+    .howto-fab-toggle .chev { font-size: 0.72rem; transition: transform 0.2s; }
+    .howto-fab[data-open="true"] .howto-fab-toggle .chev { transform: rotate(180deg); }
+    .howto-fab-body {
+      width: 300px; margin-top: 8px; background: var(--c-card-bg); border: 1px solid var(--c-primary);
+      border-radius: 10px; padding: 14px 18px; font-size: 0.86rem; line-height: 1.55; box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+    .howto-fab-body[hidden] { display: none; }
+    .howto-fab-body h5 { margin: 0 0 8px; font-size: 0.72rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px; }
+    .howto-fab-body ul { margin: 0; padding-left: 20px; }
+    .howto-fab-body li { margin-bottom: 8px; }
+    .howto-fab-body li:last-child { margin-bottom: 0; }
+    @media (max-width: 980px) {
+      .howto-fab { position: static; max-width: 100%; align-items: stretch; margin: 18px 0 0; }
+      .howto-fab-toggle { align-self: flex-start; }
+      .howto-fab-body { width: auto; }
+    }
+
+    .num-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .num-row label { font-size: 0.88rem; color: var(--c-text); display: inline-flex; align-items: center; gap: 6px; }
+    .num-row input[type="number"], .num-row input[type="text"], .num-row select {
+      padding: 7px 12px; border: 1px solid var(--c-border); border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-size: 0.95rem;
+      background: var(--c-card-bg); color: var(--c-text); width: 130px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .num-row input:focus, .num-row select:focus { border-color: var(--c-primary); box-shadow: 0 0 0 2px rgba(21,101,192,0.13); }
+
+    .result-panel { background: var(--c-page-bg); border-radius: 8px; padding: 12px 16px; margin-top: 8px; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; line-height: 1.7; }
+    .result-panel .res-row { display: flex; gap: 14px; align-items: baseline; padding: 4px 0; }
+    .result-panel .res-row + .res-row { border-top: 1px dotted var(--c-border); }
+    .result-panel .res-label { min-width: 160px; color: var(--c-muted); font-weight: 600; }
+    .result-panel .res-val { color: var(--c-text); font-weight: 700; word-break: break-word; }
+    .result-panel .res-val.t { color: var(--c-true); }
+    .result-panel .res-val.f { color: var(--c-false); }
+    .result-panel .res-note { font-family: 'Roboto', sans-serif; font-style: italic; color: var(--c-muted); font-size: 0.86rem; }
+
+    /* dice grid */
+    .dice-wrap { overflow-x: auto; margin: 8px 0; }
+    table.dice { border-collapse: collapse; font-family: 'Roboto Mono', monospace; font-size: 0.82rem; }
+    table.dice th, table.dice td { border: 1px solid var(--c-border); width: 38px; height: 34px; text-align: center; }
+    table.dice th { background: var(--c-page-bg); color: var(--c-primary); font-weight: 700; }
+    table.dice td.hit { background: var(--c-true-bg); color: var(--c-true); font-weight: 700; box-shadow: inset 0 0 0 2px var(--c-true); }
+    table.dice td.miss { color: var(--c-muted); }
+
+    /* SVG holder */
+    .svg-holder { overflow-x: auto; margin: 8px 0; text-align: center; }
+    .svg-legend { font-size: 0.8rem; color: var(--c-muted); margin-top: 4px; line-height: 1.6; }
+
+    /* Theorem / definition box */
+    .thm-box { border-left: 3px solid var(--c-primary); background: var(--c-primary-light); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 12px 0; font-size: 0.93rem; line-height: 1.65; }
+    .thm-box .thm-title { font-weight: 800; color: var(--c-primary); margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .thm-box .thm-body { color: var(--c-text); }
+    .thm-box.def { border-left-color: #2e7d32; background: var(--c-true-bg); }
+    .thm-box.def .thm-title { color: var(--c-true); }
+    body.dark .thm-box.def { background: rgba(46,125,50,0.18); }
+    .thm-box.warnbox { border-left-color: #e65100; background: #fff3e0; }
+    .thm-box.warnbox .thm-title { color: #e65100; }
+    body.dark .thm-box.warnbox { background: #3a2410; }
+
+    .proof-callout { background: var(--c-card-bg); border: 1px solid var(--c-border); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: 'Roboto', sans-serif; font-size: 0.9rem; line-height: 1.7; }
+    .proof-callout .proof-label { font-size: 0.74rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+    .proof-callout .proof-step { padding: 3px 0; }
+    .proof-callout .end-of-proof { font-weight: 800; color: var(--c-primary); float: right; }
+
+    .props-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 14px 0; }
+    .prop-cell { background: var(--c-page-bg); border: 1px solid var(--c-border); border-radius: 6px; padding: 10px 14px; font-size: 0.86rem; line-height: 1.5; }
+    .prop-cell .prop-num { font-size: 0.7rem; font-weight: 800; color: var(--c-primary); letter-spacing: 0.5px; }
+
+    .exercises-block { margin-top: 18px; }
+    .exercises-block > h3 { font-size: 1.05rem; color: var(--c-primary); margin: 0 0 6px; }
+    .exercises-block .ex-source { font-size: 0.82rem; color: var(--c-muted); font-style: italic; margin-bottom: 16px; }
+    .exercise { background: var(--c-card-bg); border-left: 4px solid var(--c-primary); border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px; }
+    .exercise.challenge { border-left-color: #6a1b9a; }
+    body.dark .exercise.challenge { border-left-color: #ce93d8; }
+    .exercise .ex-label { font-size: 0.78rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+    .exercise.challenge .ex-label { color: #6a1b9a; }
+    body.dark .exercise.challenge .ex-label { color: #ce93d8; }
+    .exercise .ex-label .chip-hard { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 10px; background: #f3e5f5; color: #6a1b9a; font-size: 0.62rem; letter-spacing: 0.5px; }
+    body.dark .exercise .ex-label .chip-hard { background: #3a1b3a; color: #ce93d8; }
+    .exercise .ex-body { font-size: 0.94rem; color: var(--c-text); line-height: 1.6; margin-bottom: 10px; }
+    .solution-btn { background: var(--c-primary-light); color: var(--c-primary); border: 1px solid var(--c-primary); padding: 5px 14px; border-radius: 6px; font-size: 0.84rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .solution-btn:hover { background: var(--c-primary); color: #fff; }
+    .solution-btn.open { background: var(--c-primary); color: #fff; }
+    .solution { margin-top: 12px; padding: 14px 18px; background: var(--c-page-bg); border-radius: 6px; font-size: 0.9rem; line-height: 1.65; color: var(--c-text); display: none; }
+    .solution.open { display: block; }
+    .solution code, .solution .mono { font-family: 'Roboto Mono', monospace; background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px; }
+    .solution strong { color: var(--c-primary); }
+    .solution .step { padding: 2px 0; }
+
+    .recap-card { background: var(--c-primary-light); border-radius: 10px; padding: 22px 28px; margin-top: 36px; }
+    .recap-card h3 { color: var(--c-primary); margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; }
+    .recap-card ul { margin: 0 0 12px; padding-left: 22px; line-height: 1.75; font-size: 0.92rem; }
+    .recap-card .preview { font-size: 0.88rem; color: var(--c-text); padding-top: 12px; border-top: 1px solid rgba(21,101,192,0.2); line-height: 1.6; }
+    body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
+
+    @media (max-width: 640px) {
+      .companion-hero h1 { font-size: 1.4rem; }
+      .widget-card { padding: 16px 18px; }
+      .result-panel .res-label { min-width: 120px; }
+    }
+  </style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <aside class="howto-fab" id="howto-fab" data-open="false">
+    <button type="button" class="howto-fab-toggle" aria-expanded="false" aria-controls="howto-fab-body">
+      <i class="fas fa-question-circle"></i>
+      <span>How to use</span>
+      <i class="fas fa-chevron-down chev"></i>
+    </button>
+    <div class="howto-fab-body" id="howto-fab-body" hidden>
+      <h5>Using this companion</h5>
+      <ul>
+        <li><strong>Probability</strong> tools take whole-number counts and reduce the fraction for you, showing decimal and percent too.</li>
+        <li>The <strong>possibility-tree</strong> tool takes stages separated by <span class="mono-inline">;</span> and options by <span class="mono-inline">,</span> &mdash; e.g. <span class="mono-inline">soup,salad ; fish,beef,pasta</span> &mdash; and draws the tree, counting the leaves.</li>
+        <li>The <strong>multiplication-rule</strong> and <strong>permutation</strong> calculators show the full breakdown, not just the answer.</li>
+        <li><strong>Hover any underlined term</strong> for its symbol, Arabic name, and a short definition.</li>
+        <li><strong>Practice and challenges</strong> reference Epp&rsquo;s problems (4th ed.); try each on paper, then reveal the worked solution.</li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="companion-hero">
+          <div class="eyebrow">COMP233 &middot; Chapter 9 Interactive Companion</div>
+          <h1>Counting &amp; Probability</h1>
+          <div class="subtitle">Sample spaces and equally likely probability, counting the elements of a list, possibility trees, the multiplication rule, and permutations. Sections 9.1&ndash;9.2.</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="intro-card">
+          <h4><i class="fas fa-compass"></i> About these sections</h4>
+          <p>Almost every probability question reduces to one skill: <strong>counting carefully</strong>. If every outcome is equally likely, the probability of an event is simply <em>how many outcomes you want</em> divided by <em>how many there are in total</em> &mdash; so the real work is the counting, and that is what these two sections build.</p>
+          <p><strong>The thread.</strong> Section 9.1 sets up the language &mdash; a <span class="term" data-tip="&#1601;&#1590;&#1575;&#1569; &#1575;&#1604;&#1593;&#1610;&#1606;&#1577; &middot; sample space: the set of all possible outcomes">sample space</span> of outcomes, an <span class="term" data-tip="&#1575;&#1604;&#1581;&#1583;&#1579; &middot; event: a subset of the sample space">event</span> as a subset, and the equally-likely <span class="term" data-tip="&#1575;&#1604;&#1575;&#1581;&#1578;&#1605;&#1575;&#1604; &middot; probability = favourable outcomes / total outcomes">probability</span> formula &mdash; plus the simplest counting fact, how many integers lie in a range. Section 9.2 gives the two engines of counting: the <span class="term" data-tip="&#1602;&#1575;&#1593;&#1583;&#1577; &#1575;&#1604;&#1590;&#1585;&#1576; &middot; multiplication rule: multiply the number of choices at each step">multiplication rule</span> (visualised by a <span class="term" data-tip="&#1588;&#1580;&#1585;&#1577; &#1575;&#1604;&#1575;&#1581;&#1578;&#1605;&#1575;&#1604;&#1575;&#1578; &middot; possibility tree: one branch per choice; leaves are outcomes">possibility tree</span>) and <span class="term" data-tip="&#1575;&#1604;&#1578;&#1576;&#1575;&#1583;&#1610;&#1604; &middot; permutation: an ordered arrangement, no repeats">permutations</span> for counting ordered arrangements.</p>
+        </div>
+
+        <nav class="toc" aria-label="Companion contents">
+          <div class="toc-title"><i class="fas fa-list"></i> Contents</div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 9.1</span>The basics of counting &amp; probability</h5>
+            <div class="toc-links">
+              <a href="#sec911">Sample space, event, probability</a>
+              <a href="#sec912">Probability calculator</a>
+              <a href="#sec913">Two-dice explorer</a>
+              <a href="#sec914">Counting a list</a>
+              <a href="#ex91">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">Section 9.2</span>Possibility trees &amp; the multiplication rule</h5>
+            <div class="toc-links">
+              <a href="#sec921">The multiplication rule</a>
+              <a href="#sec922">Possibility-tree visualiser</a>
+              <a href="#sec923">Multiplication-rule calculator</a>
+              <a href="#sec924">Permutations</a>
+              <a href="#sec925">Strings &amp; the choice of model</a>
+              <a href="#ex92">Practice exercises</a>
+            </div>
+          </div>
+          <div class="toc-section">
+            <h5><span class="toc-num">More</span>Worked solutions &amp; challenges</h5>
+            <div class="toc-links">
+              <a href="#worked">Taught solutions</a>
+              <a href="#challenges">Challenge problems</a>
+              <a href="#recap">Recap</a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- ===================== SECTION 9.1 ===================== -->
+        <div class="chapter-section" id="section-91">
+          <h2><span class="ch-num">Section 9.1</span>The basics of counting &amp; probability</h2>
+
+          <div class="section-intro" id="sec911">
+            <div class="thm-box def">
+              <div class="thm-title">Definitions &middot; sample space, event, probability</div>
+              <div class="thm-body">A <strong>random process</strong> has a <strong>sample space</strong> <span class="mono-inline">S</span> = the set of all possible <strong>outcomes</strong>. An <strong>event</strong> <span class="mono-inline">E</span> is any subset <span class="mono-inline">E &sube; S</span>. When the outcomes are <strong>equally likely</strong>, the probability of <span class="mono-inline">E</span> is
+              <br><span class="mono-inline">P(E) = N(E) / N(S)</span> = (number of outcomes in <span class="mono-inline">E</span>) / (total number of outcomes).</div>
+            </div>
+            <p>Three things follow immediately and are worth holding onto:</p>
+            <ul>
+              <li><span class="mono-inline">0 &le; P(E) &le; 1</span> always: an event cannot have fewer than 0 or more than all of the outcomes.</li>
+              <li><span class="mono-inline">P(S) = 1</span> (something happens) and <span class="mono-inline">P(&empty;) = 0</span> (the impossible event).</li>
+              <li>The equally-likely formula is <em>only</em> valid when outcomes truly are equally likely &mdash; a fair die, a well-shuffled deck. &ldquo;Sum of two dice&rdquo; is <em>not</em> equally likely (7 is far more common than 2); to use the formula you must count the equally-likely <em>pairs</em>, not the sums.</li>
+            </ul>
+            <div class="thm-box">
+              <div class="thm-title">Counting the elements of a list (Theorem 9.1.1)</div>
+              <div class="thm-body">The number of integers from <span class="mono-inline">m</span> through <span class="mono-inline">n</span> <strong>inclusive</strong> is <span class="mono-inline">n &minus; m + 1</span>. The &ldquo;<span class="mono-inline">+1</span>&rdquo; is the classic off-by-one guard: from 5 through 12 there are <span class="mono-inline">12 &minus; 5 + 1 = 8</span> numbers, not 7. Counting outcomes correctly starts here.</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec912">
+            <h3>9.1.1 Equally-likely probability calculator</h3>
+            <div class="widget-desc">Enter the number of favourable outcomes <span class="mono-inline">N(E)</span> and the total <span class="mono-inline">N(S)</span>. The tool reduces the fraction and gives the decimal and percentage, plus the probability of the <strong>complement</strong> &ldquo;not <span class="mono-inline">E</span>&rdquo; (which is <span class="mono-inline">1 &minus; P(E)</span>).</div>
+            <div class="num-row">
+              <label>N(E) favourable <input type="number" id="pr-e" value="13" min="0" style="width:110px"></label>
+              <label>N(S) total <input type="number" id="pr-s" value="52" min="1" style="width:110px"></label>
+            </div>
+            <div class="result-panel" id="pr-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec913">
+            <h3>9.1.2 Two-dice explorer &mdash; why counting the grid matters</h3>
+            <div class="widget-desc">Roll two fair dice. The 36 equally-likely outcomes are the cells of the grid (row = first die, column = second). Choose an event and the tool <strong>highlights and counts</strong> the favourable cells, then computes the probability. Notice that the <em>sums</em> are not equally likely &mdash; but the 36 <em>pairs</em> are, which is why we count cells.</div>
+            <div class="num-row">
+              <label>event
+                <select id="dice-ev">
+                  <option value="sumeq">sum equals</option>
+                  <option value="sumge">sum at least</option>
+                  <option value="sumle">sum at most</option>
+                  <option value="doubles">doubles (both equal)</option>
+                  <option value="atleast">at least one die equals</option>
+                </select>
+              </label>
+              <label id="dice-klab">value <input type="number" id="dice-k" value="7" min="1" max="12" style="width:80px"></label>
+            </div>
+            <div class="dice-wrap" id="dice-grid"></div>
+            <div class="result-panel" id="dice-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec914">
+            <h3>9.1.3 Counting a list &mdash; the <span class="mono-inline">n &minus; m + 1</span> rule</h3>
+            <div class="widget-desc">How many integers from <span class="mono-inline">m</span> through <span class="mono-inline">n</span>? And how many of them are multiples of <span class="mono-inline">k</span>? The second is a favourite building block (&ldquo;how many three-digit numbers are divisible by 7?&rdquo;). The count of multiples of <span class="mono-inline">k</span> in <span class="mono-inline">[m, n]</span> is <span class="mono-inline">&lfloor;n/k&rfloor; &minus; &lfloor;(m&minus;1)/k&rfloor;</span>.</div>
+            <div class="num-row">
+              <label>from m <input type="number" id="cl-m" value="5" style="width:100px"></label>
+              <label>to n <input type="number" id="cl-n" value="12" style="width:100px"></label>
+              <label>multiples of k <input type="number" id="cl-k" value="3" min="1" style="width:90px"></label>
+            </div>
+            <div class="result-panel" id="cl-out"></div>
+          </div>
+
+          <div class="exercises-block" id="ex91">
+            <h3>Practice exercises &middot; Section 9.1</h3>
+            <div class="ex-source">Epp, 4th ed. &sect;9.1: recommended 2, 3, 8, 9, 12, 13, 15. Try each on paper first.</div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 9.1 A</div>
+              <div class="ex-body">Two fair dice are rolled. What is the probability that the sum is 7? That the sum is 11? That the sum is 7 <em>or</em> 11?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-91A">Show solution</button>
+              <div class="solution" id="sol-91A"><span class="step">Total outcomes <span class="mono">N(S) = 36</span> (6 &times; 6 equally-likely pairs).</span> <span class="step">Sum 7: <span class="mono">(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)</span> &mdash; 6 pairs, so <span class="mono">P = 6/36 = 1/6</span>.</span> <span class="step">Sum 11: <span class="mono">(5,6),(6,5)</span> &mdash; 2 pairs, <span class="mono">P = 2/36 = 1/18</span>.</span> <span class="step">7 or 11 are disjoint, so add: <span class="mono">6/36 + 2/36 = 8/36 = 2/9</span>.</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 9.1 B</div>
+              <div class="ex-body">How many integers from 100 through 999 are there, and how many are divisible by 5?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-91B">Show solution</button>
+              <div class="solution" id="sol-91B"><span class="step">Count of the list: <span class="mono">999 &minus; 100 + 1 = 900</span> three-digit integers.</span> <span class="step">Divisible by 5: <span class="mono">&lfloor;999/5&rfloor; &minus; &lfloor;99/5&rfloor; = 199 &minus; 19 = 180</span>. (Check: the multiples run <span class="mono">100, 105, &hellip;, 995</span>, which is <span class="mono">(995&minus;100)/5 + 1 = 180</span>.)</span> <span class="step">So the probability a random three-digit number is divisible by 5 is <span class="mono">180/900 = 1/5</span> &mdash; as expected.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== SECTION 9.2 ===================== -->
+        <div class="chapter-section" id="section-92">
+          <h2><span class="ch-num">Section 9.2</span>Possibility trees and the multiplication rule</h2>
+
+          <div class="section-intro" id="sec921">
+            <div class="thm-box def">
+              <div class="thm-title">The multiplication rule (Theorem 9.2.1)</div>
+              <div class="thm-body">If an operation is performed as a <strong>sequence of <span class="mono-inline">k</span> steps</strong>, and step 1 can be done in <span class="mono-inline">n&#8321;</span> ways, step 2 in <span class="mono-inline">n&#8322;</span> ways (no matter how step 1 went), &hellip;, step <span class="mono-inline">k</span> in <span class="mono-inline">n&#8342;</span> ways, then the whole operation can be done in
+              <br><span class="mono-inline">n&#8321; &middot; n&#8322; &middot; &hellip; &middot; n&#8342;</span> ways.</div>
+            </div>
+            <p>The <strong>possibility tree</strong> is the picture behind the rule: step 1 fans into <span class="mono-inline">n&#8321;</span> branches, each fans into <span class="mono-inline">n&#8322;</span>, and so on; the <strong>leaves</strong> are the outcomes, and there are <span class="mono-inline">n&#8321; &middot; n&#8322; &middot; &hellip;</span> of them. The one condition to check: the <em>number</em> of choices at each step must not depend on the earlier choices (the choices themselves may differ).</p>
+            <div class="thm-box warnbox">
+              <div class="thm-title">With repetition vs without</div>
+              <div class="thm-body">Choosing a 3-letter code from 26 letters <strong>with repetition allowed</strong> gives <span class="mono-inline">26 &middot; 26 &middot; 26 = 26&sup3;</span>. <strong>Without repetition</strong> (no letter reused), each step has one fewer choice: <span class="mono-inline">26 &middot; 25 &middot; 24</span>. The first is &ldquo;<span class="mono-inline">n&#7495;</span>&rdquo;; the second is a <strong>permutation</strong> <span class="mono-inline">P(26, 3)</span>. Spotting which model a problem wants is the whole game.</div>
+            </div>
+          </div>
+
+          <div class="widget-card" id="sec922">
+            <h3>9.2.1 Possibility-tree visualiser</h3>
+            <div class="widget-desc">Enter the stages of a process: separate <strong>stages</strong> with <span class="mono-inline">;</span> and the <strong>options</strong> in a stage with <span class="mono-inline">,</span>. The tool draws the tree (root at top, outcomes as green leaves) and counts the leaves &mdash; which equals the product of the stage sizes, the multiplication rule in action.</div>
+            <div class="num-row">
+              <label style="align-items:flex-start">stages <input type="text" id="tree-in" value="soup,salad ; fish,beef,pasta" style="width:340px"></label>
+            </div>
+            <div class="svg-holder" id="tree-svg"></div>
+            <div class="result-panel" id="tree-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec923">
+            <h3>9.2.2 Multiplication-rule calculator</h3>
+            <div class="widget-desc">Enter the number of choices at each step as a comma list, e.g. <span class="mono-inline">26, 26, 10, 10</span> for two letters then two digits. The tool multiplies them and shows the breakdown. Large products are kept exact.</div>
+            <div class="num-row">
+              <label>choices per step <input type="text" id="mul-in" value="26, 26, 10, 10" style="width:260px"></label>
+            </div>
+            <div class="result-panel" id="mul-out"></div>
+          </div>
+
+          <div class="section-intro" id="sec924">
+            <div class="thm-box def">
+              <div class="thm-title">Definition &middot; permutations (Theorem 9.2.2&ndash;9.2.3)</div>
+              <div class="thm-body">A <strong>permutation</strong> of a set is an <em>ordered</em> arrangement of its elements. The number of ways to order all <span class="mono-inline">n</span> distinct objects is <span class="mono-inline">n!</span> (&ldquo;<span class="term" data-tip="&#1605;&#1590;&#1585;&#1608;&#1576; / &#1593;&#1575;&#1605;&#1604;&#1610; &middot; n! = n&middot;(n&minus;1)&middot;&hellip;&middot;2&middot;1, with 0! = 1">n factorial</span>&rdquo; <span class="mono-inline">= n &middot; (n&minus;1) &middot; &hellip; &middot; 2 &middot; 1</span>, and <span class="mono-inline">0! = 1</span>). The number of ordered arrangements of <span class="mono-inline">r</span> objects chosen from <span class="mono-inline">n</span> (an <strong><span class="mono-inline">r</span>-permutation</strong>) is
+              <br><span class="mono-inline">P(n, r) = n! / (n &minus; r)! = n &middot; (n&minus;1) &middot; &hellip; &middot; (n &minus; r + 1)</span> &nbsp;(<span class="mono-inline">r</span> falling factors).</div>
+            </div>
+            <p>The product form is the multiplication rule again: <span class="mono-inline">n</span> choices for the first position, <span class="mono-inline">n&minus;1</span> for the second (one is used up), down to <span class="mono-inline">n&minus;r+1</span> for the <span class="mono-inline">r</span>-th. <em>Order matters and repetition is not allowed</em> &mdash; that is exactly what &ldquo;permutation&rdquo; means.</p>
+          </div>
+
+          <div class="widget-card" id="sec924b">
+            <h3>9.2.3 Permutation calculator &mdash; with the derivation</h3>
+            <div class="widget-desc">Enter <span class="mono-inline">n</span> and <span class="mono-inline">r</span>. The tool computes <span class="mono-inline">P(n, r)</span> two ways &mdash; as <span class="mono-inline">n!/(n&minus;r)!</span> and as the falling product &mdash; and, for contrast, the <strong>with-repetition</strong> count <span class="mono-inline">n&#7495;</span>. Set <span class="mono-inline">r = n</span> to get <span class="mono-inline">n!</span> (a full ordering).</div>
+            <div class="num-row">
+              <label>n <input type="number" id="perm-n" value="5" min="0" max="170" style="width:90px"></label>
+              <label>r <input type="number" id="perm-r" value="3" min="0" max="170" style="width:90px"></label>
+            </div>
+            <div class="result-panel" id="perm-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec925">
+            <h3>9.2.4 Strings &amp; PINs &mdash; choosing the right model</h3>
+            <div class="widget-desc">Count strings of a given <strong>length</strong> over an <strong>alphabet</strong> of a given size, under each model. <em>With repetition</em> a symbol may reappear (<span class="mono-inline">size&#7495;</span>); <em>without repetition</em> none repeats (<span class="mono-inline">P(size, length)</span>). The tool shows both so the gap is visible.</div>
+            <div class="num-row">
+              <label>alphabet size <input type="number" id="str-a" value="26" min="1" max="100" style="width:110px"></label>
+              <label>length <input type="number" id="str-l" value="3" min="0" max="60" style="width:90px"></label>
+            </div>
+            <div class="result-panel" id="str-out"></div>
+          </div>
+
+          <div class="exercises-block" id="ex92">
+            <h3>Practice exercises &middot; Section 9.2</h3>
+            <div class="ex-source">Epp, 4th ed. &sect;9.2: recommended 3, 4, 9, 10, 13, 16, 19, 22. More in <a href="#worked">Taught solutions</a>.</div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 9.2 A</div>
+              <div class="ex-body">A password is 2 letters (A&ndash;Z) followed by 3 digits (0&ndash;9). How many are possible if repetition is allowed? How many if no character repeats?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-92A">Show solution</button>
+              <div class="solution" id="sol-92A"><span class="step"><strong>With repetition:</strong> <span class="mono">26 &middot; 26 &middot; 10 &middot; 10 &middot; 10 = 676 &middot; 1000 = 676,000</span>.</span> <span class="step"><strong>No repeats</strong> (letters distinct among themselves, digits distinct among themselves): letters <span class="mono">26 &middot; 25 = 650</span>, digits <span class="mono">10 &middot; 9 &middot; 8 = 720</span>, total <span class="mono">650 &middot; 720 = 468,000</span>.</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">Exercise 9.2 B</div>
+              <div class="ex-body">In how many ways can 6 people line up in a row? In how many ways can a president and a vice-president be chosen from the 6?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-92B">Show solution</button>
+              <div class="solution" id="sol-92B"><span class="step"><strong>Line up all 6:</strong> <span class="mono">6! = 720</span> &mdash; a full permutation.</span> <span class="step"><strong>President + VP:</strong> ordered choice of 2 from 6: <span class="mono">P(6,2) = 6 &middot; 5 = 30</span>. (The roles are different, so order matters; one person cannot hold both, so no repetition.)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== WORKED SOLUTIONS ===================== -->
+        <div class="chapter-section" id="worked">
+          <h2><span class="ch-num">Worked</span>Taught solutions to recommended exercises</h2>
+          <div class="exercises-block">
+            <div class="ex-source">A selection from Epp&rsquo;s recommended problems (4th ed.), solved in the style used in lecture. Attempt each on paper first.</div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.1 &middot; a card draw</div>
+              <div class="ex-body">One card is drawn from a standard 52-card deck. Find the probability it is (a) a king, (b) a heart, (c) a face card (J, Q, K).</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W1">Show solution</button>
+              <div class="solution" id="sol-W1"><span class="step"><span class="mono">N(S) = 52</span>, all equally likely.</span> <span class="step">(a) 4 kings: <span class="mono">P = 4/52 = 1/13</span>. (b) 13 hearts: <span class="mono">P = 13/52 = 1/4</span>. (c) face cards: <span class="mono">3 &times; 4 = 12</span>, so <span class="mono">P = 12/52 = 3/13</span>.</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.1 &middot; counting a sublist</div>
+              <div class="ex-body">How many integers from 1 through 1000 are multiples of 6? Of both 6 and 9?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W2">Show solution</button>
+              <div class="solution" id="sol-W2"><span class="step">Multiples of 6: <span class="mono">&lfloor;1000/6&rfloor; = 166</span>.</span> <span class="step">&ldquo;Both 6 and 9&rdquo; means a multiple of <span class="mono">lcm(6,9) = 18</span>: <span class="mono">&lfloor;1000/18&rfloor; = 55</span>. (A common trap is to multiply 6&middot;9 = 54; the correct combiner is the <em>least common multiple</em>, 18.)</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.2 &middot; multiplication rule</div>
+              <div class="ex-body">A menu offers 3 starters, 4 mains, 2 desserts. How many three-course meals are possible? Draw the tree in your head &mdash; how many leaves?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W3">Show solution</button>
+              <div class="solution" id="sol-W3"><span class="step">Three steps with <span class="mono">3, 4, 2</span> choices: <span class="mono">3 &middot; 4 &middot; 2 = 24</span> meals.</span> <span class="step">The tree fans out <span class="mono">3</span>, then each into <span class="mono">4</span>, then each into <span class="mono">2</span> &mdash; <span class="mono">24</span> leaves, one per meal. (Use the 9.2.1 visualiser with <span class="mono">a,b,c ; a,b,c,d ; a,b</span>.)</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.2 &middot; permutations</div>
+              <div class="ex-body">How many different ways can the letters of the word <span class="mono-inline">COMPUTE</span> be arranged? (All 7 letters are distinct.)</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W4">Show solution</button>
+              <div class="solution" id="sol-W4"><span class="step">All 7 letters are distinct, so it is a full permutation: <span class="mono">7! = 5040</span>.</span> <span class="step">(If letters repeated &mdash; as in <span class="mono">LETTER</span> &mdash; you would divide by the factorial of each repeat count; that is &sect;9.5, beyond these two sections.)</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.2 &middot; r-permutation</div>
+              <div class="ex-body">From 10 runners, how many ways can the gold, silver and bronze medals be awarded (no ties)?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W5">Show solution</button>
+              <div class="solution" id="sol-W5"><span class="step">Order matters (the three medals are different) and no repeats (no runner wins two), so it is <span class="mono">P(10, 3) = 10 &middot; 9 &middot; 8 = 720</span>.</span> <span class="step">As a quotient: <span class="mono">10!/7! = 720</span>. Both routes agree &mdash; the falling-product form is just the quotient with the common tail cancelled.</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;9.2 &middot; with vs without repetition</div>
+              <div class="ex-body">How many 4-digit PINs are there? How many have all four digits different?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W6">Show solution</button>
+              <div class="solution" id="sol-W6"><span class="step"><strong>Any PIN</strong> (repetition allowed): <span class="mono">10&#8308; = 10,000</span> (each position 0&ndash;9, independent).</span> <span class="step"><strong>All different:</strong> <span class="mono">P(10,4) = 10 &middot; 9 &middot; 8 &middot; 7 = 5040</span>. So the probability a random PIN has all-different digits is <span class="mono">5040/10000 = 0.504</span>.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== CHALLENGES ===================== -->
+        <div class="chapter-section" id="challenges">
+          <h2><span class="ch-num">Harder</span>Challenge problems &mdash; and how to crack them</h2>
+          <div class="exercises-block">
+            <div class="ex-source">Tougher problems that reward real understanding. Each solution shows the <em>idea</em> first, then the steps.</div>
+            <div class="exercise challenge">
+              <div class="ex-label">Challenge 1 <span class="chip-hard">count the complement</span></div>
+              <div class="ex-body">How many 4-letter strings over <span class="mono-inline">{A&ndash;Z}</span> contain <strong>at least one</strong> vowel (A, E, I, O, U)?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-C1">Show solution</button>
+              <div class="solution" id="sol-C1"><span class="step"><strong>Idea:</strong> &ldquo;at least one&rdquo; is painful directly &mdash; count the <em>opposite</em> (no vowels) and subtract from the total. This complement trick is the single most useful counting move.</span> <span class="step">Total strings: <span class="mono">26&#8308; = 456,976</span>. No-vowel strings use only the 21 consonants: <span class="mono">21&#8308; = 194,481</span>.</span> <span class="step"><strong>At least one vowel</strong> <span class="mono">= 26&#8308; &minus; 21&#8308; = 456,976 &minus; 194,481 = 262,495</span>. (Check the size with the 9.2.2 calculator on <span class="mono">26,26,26,26</span> and <span class="mono">21,21,21,21</span>.)</span></div>
+            </div>
+            <div class="exercise challenge">
+              <div class="ex-label">Challenge 2 <span class="chip-hard">a constraint per position</span></div>
+              <div class="ex-body">How many 3-digit numbers (100&ndash;999) have <strong>no repeated digit</strong>? (The first digit cannot be 0.)</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-C2">Show solution</button>
+              <div class="solution" id="sol-C2"><span class="step"><strong>Idea:</strong> apply the multiplication rule position by position, honouring the &ldquo;no leading zero&rdquo; and &ldquo;no repeat&rdquo; constraints as you go.</span> <span class="step">Hundreds digit: <span class="mono">9</span> choices (1&ndash;9). Tens digit: <span class="mono">9</span> choices (0&ndash;9 except the one used &mdash; note 0 is now allowed). Units digit: <span class="mono">8</span> choices (anything not already used).</span> <span class="step">Total <span class="mono">9 &middot; 9 &middot; 8 = 648</span>. The subtlety is that the tens digit also has 9 options: it loses the hundreds digit but regains 0.</span></div>
+            </div>
+            <div class="exercise challenge">
+              <div class="ex-label">Challenge 3 <span class="chip-hard">probability via permutations</span></div>
+              <div class="ex-body">Five people sit in a random row of 5 chairs. What is the probability that two particular people, Sara and Omar, sit next to each other?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-C3">Show solution</button>
+              <div class="solution" id="sol-C3"><span class="step"><strong>Idea:</strong> equally-likely arrangements &mdash; count favourable orderings over all orderings.</span> <span class="step"><strong>Total:</strong> <span class="mono">5! = 120</span>.</span> <span class="step"><strong>Favourable</strong> (Sara&amp;Omar adjacent): glue them into one block, giving <span class="mono">4</span> items to arrange in <span class="mono">4! = 24</span> ways, and the block has <span class="mono">2!</span> internal orders &mdash; <span class="mono">24 &middot; 2 = 48</span>.</span> <span class="step"><span class="mono">P = 48/120 = 2/5</span>. (The &ldquo;glue the block&rdquo; technique turns an adjacency condition into an ordinary permutation count.)</span></div>
+            </div>
+            <div class="exercise challenge">
+              <div class="ex-label">Challenge 4 <span class="chip-hard">all different</span></div>
+              <div class="ex-body">Three fair dice are rolled. What is the probability that all three show <strong>different</strong> faces?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-C4">Show solution</button>
+              <div class="solution" id="sol-C4"><span class="step"><strong>Idea:</strong> total outcomes by the multiplication rule (with repetition); favourable by a permutation (without repetition).</span> <span class="step">Total: <span class="mono">6&sup3; = 216</span>. All different: <span class="mono">P(6,3) = 6 &middot; 5 &middot; 4 = 120</span>.</span> <span class="step"><span class="mono">P = 120/216 = 5/9 &asymp; 0.556</span>. Equivalently: 2nd die avoids the 1st (<span class="mono">5/6</span>), 3rd avoids both (<span class="mono">4/6</span>), giving <span class="mono">(5/6)(4/6) = 5/9</span> &mdash; the same answer two ways.</span></div>
+            </div>
+          </div>
+
+          <div class="recap-card" id="recap">
+            <h3>Recap &mdash; sections 9.1 and 9.2</h3>
+            <ul>
+              <li><strong>9.1</strong> &mdash; a sample space is the set of outcomes, an event a subset; for equally-likely outcomes <span class="mono-inline">P(E) = N(E)/N(S)</span> with <span class="mono-inline">0 &le; P &le; 1</span>. Count a list with <span class="mono-inline">n &minus; m + 1</span>, and multiples of <span class="mono-inline">k</span> with floors.</li>
+              <li><strong>9.2</strong> &mdash; the <strong>multiplication rule</strong> multiplies the choices at each step (the possibility tree&rsquo;s leaves). <strong>Permutations</strong> count ordered, no-repeat arrangements: <span class="mono-inline">n!</span> for all, <span class="mono-inline">P(n,r) = n!/(n&minus;r)!</span> for <span class="mono-inline">r</span> of them; with repetition it is <span class="mono-inline">n&#7495;</span> instead.</li>
+              <li><strong>Two reflexes</strong> worth keeping: count the <strong>complement</strong> when &ldquo;at least one&rdquo; appears, and decide <strong>with- or without-repetition</strong> before you compute.</li>
+            </ul>
+            <div class="preview"><strong>The link forward.</strong> When order does <em>not</em> matter, an <span class="mono-inline">r</span>-permutation overcounts each group by <span class="mono-inline">r!</span> &mdash; dividing it out gives the <strong>combination</strong> <span class="mono-inline">C(n,r)</span> of the next section, the tool for counting unordered selections.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+  <script>
+'use strict';
+    function row(label,val,cls,note){return '<div class="res-row"><span class="res-label">'+label+'</span><span class="res-val '+(cls||'')+'">'+val+'</span>'+(note?'<span class="res-note">'+note+'</span>':'')+'</div>';}
+    function esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a||1;}
+    function commaB(b){var s=b.toString(),out='',c=0;for(var i=s.length-1;i>=0;i--){out=s[i]+out;if(++c%3===0&&i>0)out=','+out;}return out;}
+    function permB(n,r){if(r<0||r>n)return null;var p=BigInt(1);for(var i=0;i<r;i++)p*=BigInt(n-i);return p;}
+    function powB(b,e){var p=BigInt(1),B=BigInt(b);for(var i=0;i<e;i++)p*=B;return p;}
+
+    /* 9.1.1 probability calculator */
+    (function(){
+      var E=document.getElementById('pr-e'),S=document.getElementById('pr-s'),out=document.getElementById('pr-out');
+      if(!E||!out)return;
+      function render(){
+        var e=parseInt(E.value,10),s=parseInt(S.value,10);
+        if(isNaN(e)||isNaN(s)||s<1||e<0){out.innerHTML=row('input','need N(S) &ge; 1 and N(E) &ge; 0','f','');return;}
+        if(e>s){out.innerHTML=row('input','N(E) cannot exceed N(S)','f','an event has at most all outcomes');return;}
+        var g=gcd(e,s),dec=e/s;
+        out.innerHTML=
+          row('P(E)',(e/g)+'/'+(s/g),'t',(g>1?'= '+e+'/'+s+' reduced':'already in lowest terms'))+
+          row('as a decimal',(Math.round(dec*1e6)/1e6)+'','t','')+
+          row('as a percent',(Math.round(dec*1e4)/100)+'%','t','')+
+          row('P(not E)',((s-e)/gcd(s-e,s))+'/'+(s/gcd(s-e,s)),'','= 1 &minus; P(E) = '+(Math.round((1-dec)*1e6)/1e6));
+      }
+      [E,S].forEach(function(x){x.addEventListener('input',render);}); render();
+    })();
+
+    /* 9.1.2 two-dice explorer */
+    (function(){
+      var EV=document.getElementById('dice-ev'),K=document.getElementById('dice-k'),KL=document.getElementById('dice-klab'),
+          grid=document.getElementById('dice-grid'),out=document.getElementById('dice-out');
+      if(!EV||!out)return;
+      function favourable(i,j,ev,k){
+        if(ev==='sumeq')return i+j===k;
+        if(ev==='sumge')return i+j>=k;
+        if(ev==='sumle')return i+j<=k;
+        if(ev==='doubles')return i===j;
+        if(ev==='atleast')return i===k||j===k;
+        return false;
+      }
+      function render(){
+        var ev=EV.value,k=parseInt(K.value,10);
+        KL.style.display = (ev==='doubles')?'none':'inline-flex';
+        if(ev!=='doubles'&&(isNaN(k))){out.innerHTML=row('value','enter a value','f','');grid.innerHTML='';return;}
+        var count=0,s='<table class="dice"><tr><th>&#9856;\\&#9857;</th>';
+        for(var c=1;c<=6;c++)s+='<th>'+c+'</th>';
+        s+='</tr>';
+        for(var i=1;i<=6;i++){s+='<tr><th>'+i+'</th>';
+          for(var j=1;j<=6;j++){var fav=favourable(i,j,ev,k);if(fav)count++;
+            s+='<td class="'+(fav?'hit':'miss')+'">'+(i+j)+'</td>';}
+          s+='</tr>';}
+        s+='</table>';grid.innerHTML=s;
+        var g=gcd(count,36),names={sumeq:'sum = '+k,sumge:'sum &ge; '+k,sumle:'sum &le; '+k,doubles:'doubles',atleast:'a die shows '+k};
+        out.innerHTML=
+          row('event',names[ev],'','cells show the sum i + j')+
+          row('N(E) favourable',''+count,'t','highlighted cells')+
+          row('N(S) total','36','','all equally-likely pairs')+
+          row('P(E)',count?((count/g)+'/'+(36/g)):'0','t','= '+(Math.round(count/36*1e4)/1e4));
+      }
+      [EV,K].forEach(function(x){x.addEventListener('input',render);x.addEventListener('change',render);}); render();
+    })();
+
+    /* 9.1.3 counting a list */
+    (function(){
+      var M=document.getElementById('cl-m'),N=document.getElementById('cl-n'),K=document.getElementById('cl-k'),out=document.getElementById('cl-out');
+      if(!M||!out)return;
+      function render(){
+        var m=parseInt(M.value,10),n=parseInt(N.value,10),k=parseInt(K.value,10);
+        if(isNaN(m)||isNaN(n)){out.innerHTML=row('input','enter integers m and n','f','');return;}
+        if(n<m){out.innerHTML=row('input','need m &le; n','f','the list from m to n is empty otherwise');return;}
+        var count=n-m+1,html=row('integers m through n',''+count,'t','n &minus; m + 1 = '+n+' &minus; '+m+' + 1');
+        if(!isNaN(k)&&k>=1){
+          var mult=Math.floor(n/k)-Math.floor((m-1)/k);
+          html+=row('multiples of '+k,''+mult,'t','&lfloor;'+n+'/'+k+'&rfloor; &minus; &lfloor;'+(m-1)+'/'+k+'&rfloor; = '+Math.floor(n/k)+' &minus; '+Math.floor((m-1)/k));
+        }
+        out.innerHTML=html;
+      }
+      [M,N,K].forEach(function(x){x.addEventListener('input',render);}); render();
+    })();
+
+    /* 9.2.1 possibility tree */
+    function buildTree(stages){
+      var k=stages.length;
+      var sizes=stages.map(function(s){return s.length;});
+      var leaves=sizes.reduce(function(a,b){return a*b;},1);
+      if(!k||sizes.some(function(z){return z===0;}))return {svg:'<div class="svg-legend">enter at least one stage, each with one or more options</div>',leaves:0,sizes:sizes};
+      if(leaves>24||k>4)return {svg:'<div class="svg-legend">tree too large to draw cleanly ('+leaves+' leaves) &mdash; the count and product appear below</div>',leaves:leaves,sizes:sizes};
+      var levelGap=72,topPad=22,leftPad=14,rightPad=14;
+      var W=Math.max(320,leaves*72),H=topPad+k*levelGap+26;
+      var counts=[1];for(var i=0;i<k;i++)counts.push(counts[i]*sizes[i]);
+      function xat(level,idx){var cnt=counts[level];return leftPad+(idx+0.5)*((W-leftPad-rightPad)/cnt);}
+      var s='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" font-family="Roboto Mono, monospace">';
+      for(var lvl=0;lvl<k;lvl++){var cnt=counts[lvl];
+        for(var p=0;p<cnt;p++){var px=xat(lvl,p),py=topPad+lvl*levelGap;
+          for(var c=0;c<sizes[lvl];c++){var ci=p*sizes[lvl]+c,cx=xat(lvl+1,ci),cy=topPad+(lvl+1)*levelGap;
+            s+='<line x1="'+px.toFixed(1)+'" y1="'+(py+6).toFixed(1)+'" x2="'+cx.toFixed(1)+'" y2="'+(cy-6).toFixed(1)+'" stroke="#9fb6d6" stroke-width="1.4"/>';
+            var mx=(px+cx)/2,my=(py+cy)/2-2,lab=stages[lvl][c];if(lab.length>8)lab=lab.slice(0,8);
+            s+='<text x="'+mx.toFixed(1)+'" y="'+my.toFixed(1)+'" text-anchor="middle" font-size="11" fill="#1f6fb2">'+esc(lab)+'</text>';
+          }
+        }
+      }
+      for(var L=0;L<=k;L++){var cn=counts[L];for(var j=0;j<cn;j++){var nx=xat(L,j),ny=topPad+L*levelGap;
+        var fill=L===k?'#2e7d32':(L===0?'#1f6fb2':'#eef3fb');
+        s+='<circle cx="'+nx.toFixed(1)+'" cy="'+ny.toFixed(1)+'" r="6" fill="'+fill+'" stroke="#1f6fb2" stroke-width="1.4"/>';
+      }}
+      s+='</svg>';
+      return {svg:s,leaves:leaves,sizes:sizes};
+    }
+    (function(){
+      var IN=document.getElementById('tree-in'),svg=document.getElementById('tree-svg'),out=document.getElementById('tree-out');
+      if(!IN||!out)return;
+      function render(){
+        var stages=(IN.value||'').split(';').map(function(st){return st.split(',').map(function(t){return t.trim();}).filter(function(t){return t.length;});}).filter(function(st){return st.length;});
+        var t=buildTree(stages);
+        svg.innerHTML=t.svg;
+        out.innerHTML=
+          row('# stages',''+stages.length,'t','')+
+          row('options per stage',t.sizes.join(' &middot; '),'','')+
+          row('# outcomes (leaves)',''+t.leaves,'t','= '+t.sizes.join(' &times; ')+' (multiplication rule)');
+      }
+      IN.addEventListener('input',render); render();
+    })();
+
+    /* 9.2.2 multiplication-rule calculator */
+    (function(){
+      var IN=document.getElementById('mul-in'),out=document.getElementById('mul-out');
+      if(!IN||!out)return;
+      function render(){
+        var parts=(IN.value||'').split(',').map(function(t){return t.trim();}).filter(function(t){return t.length;});
+        var nums=[],bad=false;
+        parts.forEach(function(t){var v=parseInt(t,10);if(isNaN(v)||v<0)bad=true;else nums.push(v);});
+        if(bad||!nums.length){out.innerHTML=row('input','enter non-negative whole numbers, comma separated','f','');return;}
+        var prod=BigInt(1);nums.forEach(function(v){prod*=BigInt(v);});
+        out.innerHTML=
+          row('steps',''+nums.length,'','')+
+          row('choices',nums.join(' &times; '),'','')+
+          row('total ways',commaB(prod),'t','the product of the per-step choices');
+      }
+      IN.addEventListener('input',render); render();
+    })();
+
+    /* 9.2.3 permutation calculator */
+    (function(){
+      var N=document.getElementById('perm-n'),R=document.getElementById('perm-r'),out=document.getElementById('perm-out');
+      if(!N||!out)return;
+      function render(){
+        var n=parseInt(N.value,10),r=parseInt(R.value,10);
+        if(isNaN(n)||isNaN(r)||n<0||r<0){out.innerHTML=row('input','enter whole numbers n, r &ge; 0','f','');return;}
+        if(n>170||r>170){out.innerHTML=row('input','keep n, r &le; 170 here','f','factorials grow astronomically');return;}
+        if(r>n){out.innerHTML=row('P(n, r)','0','f','cannot arrange more than you have (r &gt; n)');return;}
+        var P=permB(n,r),withRep=powB(n,r);
+        var factors=[];for(var i=0;i<r;i++)factors.push(n-i);
+        out.innerHTML=
+          row('P('+n+', '+r+')',commaB(P),'t','ordered, no repetition')+
+          row('as a quotient',n+'! / '+(n-r)+'!','','= P('+n+', '+r+')')+
+          row('as a product',r?factors.join(' &middot; '):'1 (empty product)','',r+' falling factor'+(r===1?'':'s'))+
+          row('with repetition: '+n+'^'+r,commaB(withRep),'','for contrast &mdash; repeats allowed')+
+          (r===n?row('note','P(n, n) = n! = '+commaB(P),'','a full ordering of all '+n):'');
+      }
+      [N,R].forEach(function(x){x.addEventListener('input',render);}); render();
+    })();
+
+    /* 9.2.4 strings & model */
+    (function(){
+      var A=document.getElementById('str-a'),L=document.getElementById('str-l'),out=document.getElementById('str-out');
+      if(!A||!out)return;
+      function render(){
+        var a=parseInt(A.value,10),l=parseInt(L.value,10);
+        if(isNaN(a)||isNaN(l)||a<1||l<0){out.innerHTML=row('input','need alphabet &ge; 1, length &ge; 0','f','');return;}
+        if(l>60){out.innerHTML=row('input','keep length &le; 60','f','');return;}
+        var withRep=powB(a,l),noRep=(l<=a)?permB(a,l):null;
+        out.innerHTML=
+          row('with repetition',commaB(withRep),'t','size^length = '+a+'^'+l)+
+          row('without repetition',noRep===null?'0':commaB(noRep),noRep===null?'f':'t',noRep===null?'length &gt; alphabet, impossible without repeats':'P('+a+', '+l+') = '+a+' &middot; &hellip; &middot; '+(a-l+1))+
+          (noRep!==null&&l>=1?row('fraction distinct',(Math.round(Number(noRep)/Number(withRep)*1e4)/1e4)+'','','share of strings with no repeat'):'');
+      }
+      [A,L].forEach(function(x){x.addEventListener('input',render);}); render();
+    })();
+
+    /* ===== generic behaviours ===== */
+    document.querySelectorAll('.solution-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var sol = document.getElementById(btn.dataset.toggleSol);
+        if (!sol) return;
+        var isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+    (function () {
+      var root = document.getElementById('howto-fab'); if (!root) return;
+      var toggle = root.querySelector('.howto-fab-toggle'), body = root.querySelector('.howto-fab-body');
+      toggle.addEventListener('click', function () {
+        var willOpen = body.hasAttribute('hidden');
+        if (willOpen) { body.removeAttribute('hidden'); root.setAttribute('data-open', 'true'); toggle.setAttribute('aria-expanded', 'true'); }
+        else { body.setAttribute('hidden', ''); root.setAttribute('data-open', 'false'); toggle.setAttribute('aria-expanded', 'false'); }
+      });
+    })();
+  </script>
+</body>
+</html>
