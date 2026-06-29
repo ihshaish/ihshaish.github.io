@@ -18,311 +18,125 @@
 
   <meta name="theme-color" content="#1565c0" />
   <meta name="author" content="Hisham Ihshaish" />
-  <meta name="description" content="COMP233 Chapter 8 Interactive Companion: relations on sets, the directed graph and matrix of a relation, reflexivity, symmetry and transitivity, and equivalence relations with their classes and partitions." />
+  <meta name="description" content="COMP233 Chapter 8 Interactive Companion: relations on sets, arrow diagrams, matrices and directed graphs, reflexivity/symmetry/transitivity, closures, and equivalence relations with classes and partitions." />
 
   <title>COMP233 Ch.8 Companion: Relations</title>
 
   <style>
     :root {
-      --c-primary: #1565c0;
-      --c-primary-dark: #0d47a1;
-      --c-primary-light: #e3f2fd;
-      --c-true: #2e7d32;
-      --c-true-bg: #e8f5e9;
-      --c-false: #c62828;
-      --c-false-bg: #ffebee;
-      --c-critical: #fff9c4;
-      --c-broken-bg: #ffcdd2;
-      --c-border: #e0e0e0;
-      --c-muted: #777;
-      --c-text: #333;
-      --c-card-bg: #fff;
-      --c-page-bg: #fafbfc;
+      --c-primary: #1565c0; --c-primary-dark: #0d47a1; --c-primary-light: #e3f2fd;
+      --c-true: #2e7d32; --c-true-bg: #e8f5e9; --c-false: #c62828; --c-false-bg: #ffebee;
+      --c-critical: #fff9c4; --c-broken-bg: #ffcdd2; --c-border: #e0e0e0;
+      --c-muted: #777; --c-text: #333; --c-card-bg: #fff; --c-page-bg: #fafbfc;
+      --c-fig-bg: #f7fafd; --c-fig-border: #d7e3f0;
     }
     body.dark {
-      --c-primary: #64b5f6;
-      --c-primary-dark: #90caf9;
-      --c-primary-light: #1e3a5f;
-      --c-true: #81c784;
-      --c-true-bg: #1b3a23;
-      --c-false: #ef9a9a;
-      --c-false-bg: #3a1b1b;
-      --c-critical: #4e4322;
-      --c-broken-bg: #5a2727;
-      --c-border: #333;
-      --c-muted: #999;
-      --c-text: #e0e0e0;
-      --c-card-bg: #1a1a2e;
-      --c-page-bg: #0f0f1a;
+      --c-primary: #64b5f6; --c-primary-dark: #90caf9; --c-primary-light: #1e3a5f;
+      --c-true: #81c784; --c-true-bg: #1b3a23; --c-false: #ef9a9a; --c-false-bg: #3a1b1b;
+      --c-critical: #4e4322; --c-broken-bg: #5a2727; --c-border: #333;
+      --c-muted: #999; --c-text: #e0e0e0; --c-card-bg: #1a1a2e; --c-page-bg: #0f0f1a;
+      --c-fig-bg: #14233a; --c-fig-border: #2a3f5c;
     }
 
     .companion-hero { text-align: center; padding: 30px 0 12px; }
-    .companion-hero .eyebrow {
-      font-size: 0.78rem; font-weight: 700; color: var(--c-primary);
-      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
-    }
+    .companion-hero .eyebrow { font-size: 0.78rem; font-weight: 700; color: var(--c-primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .companion-hero h1 { font-size: 1.8rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
     .companion-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
     .companion-hero .back-link { font-size: 0.88rem; color: var(--c-primary); text-decoration: none; font-weight: 600; }
     .companion-hero .back-link:hover { text-decoration: underline; }
 
-    .intro-card {
-      background: var(--c-page-bg); border: 1px solid var(--c-border);
-      border-left: 4px solid var(--c-primary); border-radius: 8px;
-      padding: 16px 22px; margin: 24px 0 0;
-      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
-    }
-    .intro-card h4 {
-      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
-      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
-      display: flex; align-items: center; gap: 6px;
-    }
+    .intro-card { background: var(--c-page-bg); border: 1px solid var(--c-border); border-left: 4px solid var(--c-primary); border-radius: 8px; padding: 16px 22px; margin: 24px 0 0; font-size: 0.92rem; color: var(--c-text); line-height: 1.6; }
+    .intro-card h4 { margin: 0 0 8px; font-size: 0.74rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px; display: flex; align-items: center; gap: 6px; }
     .intro-card p { margin: 0 0 8px; }
     .intro-card p:last-child { margin-bottom: 0; }
 
-    .toc {
-      background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%);
-      border: 2px solid var(--c-primary); border-radius: 12px;
-      padding: 18px 24px 14px; margin: 22px 0 18px;
-      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
-    }
+    .toc { background: linear-gradient(180deg, var(--c-primary-light) 0%, var(--c-card-bg) 100%); border: 2px solid var(--c-primary); border-radius: 12px; padding: 18px 24px 14px; margin: 22px 0 18px; box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08); }
     body.dark .toc { background: linear-gradient(180deg, rgba(100,181,246,0.10) 0%, var(--c-card-bg) 100%); }
-    .toc-title {
-      margin: 0 0 12px; font-size: 0.78rem; font-weight: 800;
-      letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-primary);
-      display: flex; align-items: center; gap: 8px;
-    }
+    .toc-title { margin: 0 0 12px; font-size: 0.78rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-primary); display: flex; align-items: center; gap: 8px; }
     .toc-section { margin-bottom: 10px; }
     .toc-section:last-child { margin-bottom: 0; }
-    .toc-section h5 {
-      margin: 0 0 6px; font-size: 0.9rem; font-weight: 700;
-      color: var(--c-text); line-height: 1.4;
-    }
-    .toc-section h5 .toc-num {
-      font-family: 'Roboto Mono', monospace; font-weight: 800;
-      color: var(--c-primary); margin-right: 8px;
-    }
-    .toc-links {
-      display: flex; flex-wrap: wrap; gap: 6px 8px;
-      padding-left: 14px; border-left: 2px solid var(--c-border);
-    }
+    .toc-section h5 { margin: 0 0 6px; font-size: 0.9rem; font-weight: 700; color: var(--c-text); line-height: 1.4; }
+    .toc-section h5 .toc-num { font-family: 'Roboto Mono', monospace; font-weight: 800; color: var(--c-primary); margin-right: 8px; }
+    .toc-links { display: flex; flex-wrap: wrap; gap: 6px 8px; padding-left: 14px; border-left: 2px solid var(--c-border); }
     body.dark .toc-links { border-left-color: #2a3a4a; }
-    .toc-links a {
-      display: inline-block; font-size: 0.84rem;
-      color: var(--c-primary); background: var(--c-card-bg);
-      text-decoration: none; padding: 4px 12px;
-      border: 1px solid var(--c-border); border-radius: 16px;
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
-    }
+    .toc-links a { display: inline-block; font-size: 0.84rem; color: var(--c-primary); background: var(--c-card-bg); text-decoration: none; padding: 4px 12px; border: 1px solid var(--c-border); border-radius: 16px; transition: background 0.12s, color 0.12s, border-color 0.12s; }
     .toc-links a:hover { background: var(--c-primary); color: #fff; border-color: var(--c-primary); text-decoration: none; }
     @media (max-width: 640px) { .toc { padding: 16px 18px 12px; } .toc-links { padding-left: 10px; } }
 
     .chapter-section { margin-top: 44px; }
-    .chapter-section > h2 {
-      font-size: 1.45rem; font-weight: 700; color: var(--c-primary);
-      border-bottom: 2px solid var(--c-border); padding-bottom: 10px; margin: 0 0 22px;
-    }
-    .chapter-section > h2 .ch-num {
-      font-family: 'Roboto Mono', monospace; font-size: 1.15rem;
-      margin-right: 10px; color: var(--c-muted);
-    }
+    .chapter-section > h2 { font-size: 1.45rem; font-weight: 700; color: var(--c-primary); border-bottom: 2px solid var(--c-border); padding-bottom: 10px; margin: 0 0 22px; }
+    .chapter-section > h2 .ch-num { font-family: 'Roboto Mono', monospace; font-size: 1.15rem; margin-right: 10px; color: var(--c-muted); }
+    .subhead { font-size: 1.04rem; font-weight: 700; color: var(--c-text); margin: 26px 0 8px; display:flex; align-items:center; gap:8px; }
+    .subhead .dot { width:8px;height:8px;border-radius:50%;background:var(--c-primary);display:inline-block; }
 
-    .section-intro {
-      font-size: 0.96rem; line-height: 1.65; color: var(--c-text); margin-bottom: 22px;
-    }
-    .section-intro ul { padding-left: 22px; }
-    .section-intro li { margin-bottom: 4px; }
-    .section-intro code, .section-intro .mono-inline {
-      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
-      font-family: 'Roboto Mono', monospace; font-size: 0.86em;
-    }
+    .section-intro { font-size: 0.96rem; line-height: 1.68; color: var(--c-text); margin-bottom: 20px; }
+    .section-intro ul, .section-intro ol { padding-left: 22px; }
+    .section-intro li { margin-bottom: 5px; }
+    .section-intro code, .section-intro .mono-inline { background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px; font-family: 'Roboto Mono', monospace; font-size: 0.86em; }
 
-    .widget-card {
-      background: var(--c-card-bg); border: 1px solid var(--c-border);
-      border-radius: 10px; padding: 22px 26px; margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-    }
-    .widget-card h3 {
-      font-size: 1.05rem; font-weight: 700; color: var(--c-primary); margin: 0 0 6px;
-    }
-    .widget-card .widget-desc {
-      font-size: 0.92rem; color: var(--c-text); line-height: 1.55; margin-bottom: 16px;
-    }
-    .widget-card .widget-desc code,
-    .widget-card .widget-desc .mono-inline {
-      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px;
-      font-family: 'Roboto Mono', monospace; font-size: 0.88em;
-    }
+    .widget-card { background: var(--c-card-bg); border: 1px solid var(--c-border); border-radius: 10px; padding: 22px 26px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+    .widget-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--c-primary); margin: 0 0 6px; }
+    .widget-card .widget-desc { font-size: 0.92rem; color: var(--c-text); line-height: 1.55; margin-bottom: 16px; }
+    .widget-card .widget-desc code, .widget-card .widget-desc .mono-inline { background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px; font-family: 'Roboto Mono', monospace; font-size: 0.88em; }
 
-    /* Hover terms */
-    .term {
-      position: relative; cursor: help;
-      border-bottom: 1px dotted var(--c-primary);
-      color: inherit; font-weight: 700;
-    }
-    .term::after {
-      content: attr(data-tip); position: absolute;
-      bottom: calc(100% + 8px); left: 0;
-      background: #263238; color: #fff;
-      padding: 9px 13px; border-radius: 6px;
-      font-size: 0.82rem; font-weight: 400; line-height: 1.55;
-      white-space: normal; word-wrap: break-word; width: max-content;
-      max-width: min(360px, calc(100vw - 32px));
-      text-align: left; opacity: 0; pointer-events: none;
-      transition: opacity 0.15s; z-index: 50;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-    }
-    .term::before {
-      content: ''; position: absolute;
-      bottom: calc(100% + 3px); left: 14px;
-      border: 5px solid transparent; border-top-color: #263238;
-      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50;
-    }
-    .term:hover::after, .term:focus::after,
-    .term:hover::before, .term:focus::before { opacity: 1; }
+    .term { position: relative; cursor: help; border-bottom: 1px dotted var(--c-primary); color: inherit; font-weight: 700; }
+    .term::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 0; background: #263238; color: #fff; padding: 9px 13px; border-radius: 6px; font-size: 0.82rem; font-weight: 400; line-height: 1.55; white-space: normal; word-wrap: break-word; width: max-content; max-width: min(360px, calc(100vw - 32px)); text-align: left; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+    .term::before { content: ''; position: absolute; bottom: calc(100% + 3px); left: 14px; border: 5px solid transparent; border-top-color: #263238; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50; }
+    .term:hover::after, .term:focus::after, .term:hover::before, .term:focus::before { opacity: 1; }
 
-    .mono-inline {
-      font-family: 'Roboto Mono', monospace;
-      background: var(--c-page-bg);
-      padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
-    }
+    .mono-inline { font-family: 'Roboto Mono', monospace; background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.92em; }
 
-    /* Floating "How to use" widget */
-    .howto-fab {
-      position: fixed; top: 100px; right: 18px; z-index: 30;
-      max-width: 300px; display: flex; flex-direction: column; align-items: flex-end;
-    }
-    .howto-fab-toggle {
-      background: var(--c-primary); color: #fff; border: none;
-      border-radius: 8px; padding: 10px 16px; cursor: pointer;
-      font-size: 0.84rem; font-weight: 700;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
-      display: inline-flex; align-items: center; gap: 8px;
-      transition: background 0.15s;
-    }
+    .howto-fab { position: fixed; top: 100px; right: 18px; z-index: 30; max-width: 300px; display: flex; flex-direction: column; align-items: flex-end; }
+    .howto-fab-toggle { background: var(--c-primary); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; cursor: pointer; font-size: 0.84rem; font-weight: 700; box-shadow: 0 3px 12px rgba(0,0,0,0.18); display: inline-flex; align-items: center; gap: 8px; transition: background 0.15s; }
     .howto-fab-toggle:hover, .howto-fab-toggle:focus { background: var(--c-primary-dark); outline: none; }
     .howto-fab-toggle .chev { font-size: 0.72rem; transition: transform 0.2s; }
     .howto-fab[data-open="true"] .howto-fab-toggle .chev { transform: rotate(180deg); }
-    .howto-fab-body {
-      width: 300px; margin-top: 8px;
-      background: var(--c-card-bg); border: 1px solid var(--c-primary);
-      border-radius: 10px; padding: 14px 18px;
-      font-size: 0.86rem; line-height: 1.55;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
-    }
+    .howto-fab-body { width: 300px; margin-top: 8px; background: var(--c-card-bg); border: 1px solid var(--c-primary); border-radius: 10px; padding: 14px 18px; font-size: 0.86rem; line-height: 1.55; box-shadow: 0 8px 24px rgba(0,0,0,0.14); }
     .howto-fab-body[hidden] { display: none; }
-    .howto-fab-body h5 {
-      margin: 0 0 8px; font-size: 0.72rem; font-weight: 800;
-      color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px;
-    }
+    .howto-fab-body h5 { margin: 0 0 8px; font-size: 0.72rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.7px; }
     .howto-fab-body ul { margin: 0; padding-left: 20px; }
     .howto-fab-body li { margin-bottom: 8px; }
     .howto-fab-body li:last-child { margin-bottom: 0; }
-    @media (max-width: 980px) {
-      .howto-fab { position: static; max-width: 100%; align-items: stretch; margin: 18px 0 0; }
-      .howto-fab-toggle { align-self: flex-start; }
-      .howto-fab-body { width: auto; }
-    }
+    @media (max-width: 980px) { .howto-fab { position: static; max-width: 100%; align-items: stretch; margin: 18px 0 0; } .howto-fab-toggle { align-self: flex-start; } .howto-fab-body { width: auto; } }
 
-    /* Numeric / text input row */
-    .num-row {
-      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-    .num-row label {
-      font-size: 0.88rem; color: var(--c-text);
-      display: inline-flex; align-items: center; gap: 6px;
-    }
-    .num-row input[type="number"], .num-row input[type="text"], .num-row select {
-      padding: 7px 12px; border: 1px solid var(--c-border); border-radius: 6px;
-      font-family: 'Roboto Mono', monospace; font-size: 0.95rem;
-      background: var(--c-card-bg); color: var(--c-text);
-      width: 130px; outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .num-row input:focus, .num-row select:focus {
-      border-color: var(--c-primary); box-shadow: 0 0 0 2px rgba(21,101,192,0.13);
-    }
+    .num-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .num-row label { font-size: 0.88rem; color: var(--c-text); display: inline-flex; align-items: center; gap: 6px; }
+    .num-row input[type="number"], .num-row input[type="text"], .num-row select { padding: 7px 12px; border: 1px solid var(--c-border); border-radius: 6px; font-family: 'Roboto Mono', monospace; font-size: 0.95rem; background: var(--c-card-bg); color: var(--c-text); width: 130px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    .num-row input:focus, .num-row select:focus { border-color: var(--c-primary); box-shadow: 0 0 0 2px rgba(21,101,192,0.13); }
 
-    /* Result panels */
-    .result-panel {
-      background: var(--c-page-bg); border-radius: 8px;
-      padding: 12px 16px; margin-top: 8px;
-      font-family: 'Roboto Mono', monospace;
-      font-size: 0.9rem; line-height: 1.7;
-    }
-    .result-panel .res-row {
-      display: flex; gap: 14px; align-items: baseline; padding: 4px 0;
-    }
-    .result-panel .res-row + .res-row {
-      border-top: 1px dotted var(--c-border);
-    }
-    .result-panel .res-label {
-      min-width: 150px; color: var(--c-muted); font-weight: 600;
-    }
-    .result-panel .res-val { color: var(--c-text); font-weight: 700; }
+    .result-panel { background: var(--c-page-bg); border-radius: 8px; padding: 12px 16px; margin-top: 8px; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; line-height: 1.7; }
+    .result-panel .res-row { display: flex; gap: 14px; align-items: baseline; padding: 4px 0; }
+    .result-panel .res-row + .res-row { border-top: 1px dotted var(--c-border); }
+    .result-panel .res-label { min-width: 150px; color: var(--c-muted); font-weight: 600; }
+    .result-panel .res-val { color: var(--c-text); font-weight: 700; word-break: break-word; }
     .result-panel .res-val.t { color: var(--c-true); }
     .result-panel .res-val.f { color: var(--c-false); }
-    .result-panel .res-note {
-      font-family: 'Roboto', sans-serif; font-style: italic;
-      color: var(--c-muted); font-size: 0.86rem;
-    }
+    .result-panel .res-note { font-family: 'Roboto', sans-serif; font-style: italic; color: var(--c-muted); font-size: 0.86rem; }
 
-    /* Verdict pill */
-    .verdict {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 14px; border-radius: 16px;
-      font-size: 0.88rem; font-weight: 700; margin-top: 12px;
-    }
-    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
-    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
-    .verdict.warn { background: #fff3e0; color: #e65100; }
-    body.dark .verdict.warn { background: #3a2410; color: #ffb74d; }
+    /* Figures (SVG) */
+    .fig-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; align-items: start; margin: 8px 0 4px; }
+    .fig { background: var(--c-fig-bg); border: 1px solid var(--c-fig-border); border-radius: 10px; padding: 12px 12px 8px; text-align: center; }
+    .fig svg { max-width: 100%; height: auto; display: inline-block; }
+    .fig-cap { font-size: 0.78rem; color: var(--c-muted); margin-top: 6px; line-height: 1.45; }
+    .fig-cap b { color: var(--c-primary); font-weight: 700; }
+    .legend { font-size: 0.78rem; color: var(--c-muted); margin-top: 8px; line-height: 1.7; }
+    .legend .lg { display: inline-flex; align-items: center; gap: 6px; margin-right: 16px; white-space: nowrap; }
+    .legend .swl { display: inline-block; width: 24px; border-top: 3px solid; }
+    .legend .swd { display: inline-block; width: 24px; border-top: 3px dashed; }
+    .legend .dotg { display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid; }
 
-    /* Tables */
-    .data-table {
-      width: 100%; border-collapse: collapse; font-size: 0.88rem;
-    }
-    .data-table th, .data-table td {
-      padding: 7px 12px; border-bottom: 1px solid var(--c-border);
-      text-align: left;
-    }
-    .data-table th {
-      background: var(--c-page-bg); color: var(--c-primary);
-      font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
-    }
-    .data-table tr:hover { background: var(--c-page-bg); }
-    .data-table td.formal, .data-table td.mono { font-family: 'Roboto Mono', monospace; }
-    .data-table td.t { color: var(--c-true); font-weight: 700; }
-    .data-table td.f { color: var(--c-false); font-weight: 700; }
-    .data-table td.center { text-align: center; }
-
-    /* Matrix grid */
-    .matrix-wrap { overflow-x: auto; margin: 6px 0 4px; }
-    table.rel-matrix { border-collapse: collapse; font-family: 'Roboto Mono', monospace; font-size: 0.86rem; }
-    table.rel-matrix th, table.rel-matrix td {
-      border: 1px solid var(--c-border); width: 34px; height: 34px;
-      text-align: center; vertical-align: middle;
-    }
+    /* Matrix */
+    .matrix-wrap { overflow-x: auto; margin: 4px 0; }
+    table.rel-matrix { border-collapse: collapse; font-family: 'Roboto Mono', monospace; font-size: 0.86rem; margin: 0 auto; }
+    table.rel-matrix th, table.rel-matrix td { border: 1px solid var(--c-border); width: 34px; height: 34px; text-align: center; vertical-align: middle; }
     table.rel-matrix th { background: var(--c-page-bg); color: var(--c-primary); font-weight: 700; }
     table.rel-matrix td.one { background: var(--c-true-bg); color: var(--c-true); font-weight: 700; }
     table.rel-matrix td.zero { color: var(--c-muted); }
     table.rel-matrix td.diag.one { box-shadow: inset 0 0 0 2px var(--c-true); }
     table.rel-matrix td.diag.zero { background: var(--c-false-bg); }
 
-    /* Theorem / definition box */
-    .thm-box {
-      border-left: 3px solid var(--c-primary);
-      background: var(--c-primary-light);
-      border-radius: 0 8px 8px 0;
-      padding: 14px 18px;
-      margin: 12px 0;
-      font-size: 0.93rem; line-height: 1.65;
-    }
-    .thm-box .thm-title {
-      font-weight: 800; color: var(--c-primary); margin-bottom: 4px;
-      font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
-    }
+    .thm-box { border-left: 3px solid var(--c-primary); background: var(--c-primary-light); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 12px 0; font-size: 0.93rem; line-height: 1.65; }
+    .thm-box .thm-title { font-weight: 800; color: var(--c-primary); margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
     .thm-box .thm-body { color: var(--c-text); }
     .thm-box.def { border-left-color: #2e7d32; background: var(--c-true-bg); }
     .thm-box.def .thm-title { color: var(--c-true); }
@@ -331,109 +145,48 @@
     .thm-box.warnbox .thm-title { color: #e65100; }
     body.dark .thm-box.warnbox { background: #3a2410; }
 
-    /* Proof callout */
-    .proof-callout {
-      background: var(--c-card-bg); border: 1px solid var(--c-border);
-      border-radius: 8px; padding: 14px 18px; margin: 12px 0;
-      font-family: 'Roboto', sans-serif; font-size: 0.9rem; line-height: 1.7;
-    }
-    .proof-callout .proof-label {
-      font-size: 0.74rem; font-weight: 800; color: var(--c-primary);
-      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
-    }
+    .proof-callout { background: var(--c-card-bg); border: 1px solid var(--c-border); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: 'Roboto', sans-serif; font-size: 0.9rem; line-height: 1.7; }
+    .proof-callout .proof-label { font-size: 0.74rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
     .proof-callout .proof-step { padding: 3px 0; }
     .proof-callout .end-of-proof { font-weight: 800; color: var(--c-primary); float: right; }
 
-    /* Properties grid */
-    .props-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px; margin: 14px 0;
-    }
-    .prop-cell {
-      background: var(--c-page-bg); border: 1px solid var(--c-border);
-      border-radius: 6px; padding: 10px 14px;
-      font-size: 0.86rem; line-height: 1.5;
-    }
-    .prop-cell .prop-num {
-      font-size: 0.7rem; font-weight: 800; color: var(--c-primary); letter-spacing: 0.5px;
-    }
+    .props-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin: 14px 0; }
+    .prop-cell { background: var(--c-page-bg); border: 1px solid var(--c-border); border-radius: 6px; padding: 11px 14px; font-size: 0.86rem; line-height: 1.5; }
+    .prop-cell .prop-num { font-size: 0.7rem; font-weight: 800; color: var(--c-primary); letter-spacing: 0.5px; display:block; margin-bottom:3px; }
 
-    /* Class chips */
-    .class-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; padding: 6px 0; }
+    .class-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 6px 0; }
     .class-row + .class-row { border-top: 1px dotted var(--c-border); }
-    .class-row .class-label {
-      min-width: 90px; font-family: 'Roboto Mono', monospace;
-      font-weight: 700; color: var(--c-primary); font-size: 0.86rem;
-    }
-    .class-chip {
-      display: inline-block; padding: 2px 10px; border-radius: 12px;
-      background: var(--c-true-bg); border: 1px solid var(--c-true);
-      color: var(--c-true); font-family: 'Roboto Mono', monospace; font-size: 0.82rem; font-weight: 700;
-    }
+    .class-row .class-label { min-width: 70px; font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 0.88rem; }
+    .class-chip { display: inline-block; padding: 3px 12px; border-radius: 14px; font-family: 'Roboto Mono', monospace; font-size: 0.84rem; font-weight: 700; color: #fff; }
 
-    /* SVG holder */
-    .svg-holder { overflow-x: auto; margin: 8px 0; text-align: center; }
-    .svg-legend { font-size: 0.8rem; color: var(--c-muted); margin-top: 4px; line-height: 1.6; }
-    .svg-legend .lg { display: inline-flex; align-items: center; gap: 5px; margin-right: 14px; }
-    .svg-legend .sw { display: inline-block; width: 22px; height: 0; border-top: 3px solid; vertical-align: middle; }
-
-    /* Exercises */
     .exercises-block { margin-top: 18px; }
     .exercises-block > h3 { font-size: 1.05rem; color: var(--c-primary); margin: 0 0 6px; }
     .exercises-block .ex-source { font-size: 0.82rem; color: var(--c-muted); font-style: italic; margin-bottom: 16px; }
-    .exercise {
-      background: var(--c-card-bg); border-left: 4px solid var(--c-primary);
-      border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px;
-    }
+    .exercise { background: var(--c-card-bg); border-left: 4px solid var(--c-primary); border-radius: 0 8px 8px 0; padding: 14px 20px; margin-bottom: 14px; }
     .exercise.challenge { border-left-color: #6a1b9a; }
     body.dark .exercise.challenge { border-left-color: #ce93d8; }
-    .exercise .ex-label {
-      font-size: 0.78rem; font-weight: 800; color: var(--c-primary);
-      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
-    }
+    .exercise .ex-label { font-size: 0.78rem; font-weight: 800; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
     .exercise.challenge .ex-label { color: #6a1b9a; }
     body.dark .exercise.challenge .ex-label { color: #ce93d8; }
-    .exercise .ex-label .chip-hard {
-      display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 10px;
-      background: #f3e5f5; color: #6a1b9a; font-size: 0.62rem; letter-spacing: 0.5px;
-    }
+    .exercise .ex-label .chip-hard { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 10px; background: #f3e5f5; color: #6a1b9a; font-size: 0.62rem; letter-spacing: 0.5px; }
     body.dark .exercise .ex-label .chip-hard { background: #3a1b3a; color: #ce93d8; }
     .exercise .ex-body { font-size: 0.94rem; color: var(--c-text); line-height: 1.6; margin-bottom: 10px; }
-    .solution-btn {
-      background: var(--c-primary-light); color: var(--c-primary);
-      border: 1px solid var(--c-primary); padding: 5px 14px; border-radius: 6px;
-      font-size: 0.84rem; font-weight: 700; cursor: pointer; transition: background 0.15s;
-    }
+    .solution-btn { background: var(--c-primary-light); color: var(--c-primary); border: 1px solid var(--c-primary); padding: 5px 14px; border-radius: 6px; font-size: 0.84rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
     .solution-btn:hover { background: var(--c-primary); color: #fff; }
     .solution-btn.open { background: var(--c-primary); color: #fff; }
-    .solution {
-      margin-top: 12px; padding: 14px 18px;
-      background: var(--c-page-bg); border-radius: 6px;
-      font-size: 0.9rem; line-height: 1.65; color: var(--c-text); display: none;
-    }
+    .solution { margin-top: 12px; padding: 14px 18px; background: var(--c-page-bg); border-radius: 6px; font-size: 0.9rem; line-height: 1.7; color: var(--c-text); display: none; }
     .solution.open { display: block; }
-    .solution code, .solution .mono {
-      font-family: 'Roboto Mono', monospace;
-      background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px;
-    }
+    .solution code, .solution .mono { font-family: 'Roboto Mono', monospace; background: var(--c-card-bg); padding: 1px 5px; border-radius: 3px; }
     .solution strong { color: var(--c-primary); }
-    .solution .step { padding: 2px 0; }
+    .solution .step { padding: 3px 0; }
 
     .recap-card { background: var(--c-primary-light); border-radius: 10px; padding: 22px 28px; margin-top: 36px; }
     .recap-card h3 { color: var(--c-primary); margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; }
     .recap-card ul { margin: 0 0 12px; padding-left: 22px; line-height: 1.75; font-size: 0.92rem; }
-    .recap-card .preview {
-      font-size: 0.88rem; color: var(--c-text);
-      padding-top: 12px; border-top: 1px solid rgba(21,101,192,0.2); line-height: 1.6;
-    }
+    .recap-card .preview { font-size: 0.88rem; color: var(--c-text); padding-top: 12px; border-top: 1px solid rgba(21,101,192,0.2); line-height: 1.6; }
     body.dark .recap-card .preview { border-color: rgba(100,181,246,0.25); }
 
-    @media (max-width: 640px) {
-      .companion-hero h1 { font-size: 1.4rem; }
-      .widget-card { padding: 16px 18px; }
-      .result-panel .res-label { min-width: 110px; }
-    }
+    @media (max-width: 640px) { .companion-hero h1 { font-size: 1.4rem; } .widget-card { padding: 16px 18px; } .result-panel .res-label { min-width: 110px; } }
   </style>
   <script src="/birzeit/gate.js"></script>
 </head>
@@ -446,11 +199,7 @@
       <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
         <div class="container-xl">
           <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
-          <button type="button" class="navbar-toggler" data-toggle="collapse"
-                  data-target="#navbar-content" aria-controls="navbar-content"
-                  aria-expanded="false" aria-label="Toggle navigation">
-            <span><i class="fas fa-bars"></i></span>
-          </button>
+          <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation"><span><i class="fas fa-bars"></i></span></button>
           <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
             <ul class="navbar-nav d-md-inline-flex">
               <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
@@ -467,18 +216,17 @@
 
   <aside class="howto-fab" id="howto-fab" data-open="false">
     <button type="button" class="howto-fab-toggle" aria-expanded="false" aria-controls="howto-fab-body">
-      <i class="fas fa-question-circle"></i>
-      <span>How to use</span>
-      <i class="fas fa-chevron-down chev"></i>
+      <i class="fas fa-question-circle"></i><span>How to use</span><i class="fas fa-chevron-down chev"></i>
     </button>
     <div class="howto-fab-body" id="howto-fab-body" hidden>
       <h5>Using this companion</h5>
       <ul>
-        <li><strong>Enter a set</strong> as a comma list, e.g. <span class="mono-inline">1, 2, 3</span>, and a <strong>relation</strong> as <span class="mono-inline">x:y</span> pairs, e.g. <span class="mono-inline">1:1, 1:2, 2:3</span> &mdash; each pair means &ldquo;<span class="mono-inline">x</span> is related to <span class="mono-inline">y</span>&rdquo;.</li>
-        <li>The <strong>matrix</strong> and the <strong>directed graph</strong> redraw as you type, so you can watch a property appear or break.</li>
-        <li>The property and equivalence checkers <strong>name the exact witness</strong> when something fails &mdash; the missing self-loop, the one-way edge, or the broken transitive chain.</li>
+        <li><strong>Sets</strong> are comma lists: <span class="mono-inline">1, 2, 3</span>. A <strong>relation</strong> is <span class="mono-inline">x:y</span> pairs: <span class="mono-inline">1:1, 1:2, 2:3</span> &mdash; each means &ldquo;<span class="mono-inline">x</span> is related to <span class="mono-inline">y</span>&rdquo;.</li>
+        <li>Every figure &mdash; <strong>arrow diagram</strong>, <strong>matrix</strong>, <strong>directed graph</strong> &mdash; redraws live as you type, so you can watch a property appear or break.</li>
+        <li>The checkers <strong>name the exact witness</strong> when a property fails, and the graph colours it: a missing self-loop is a red dashed node, a one-way link is an orange arrow.</li>
+        <li>In Section 8.3, equivalence <strong>classes are colour-coded</strong> across the graph and the partition.</li>
         <li><strong>Hover any underlined term</strong> for its symbol, Arabic name, and a short definition.</li>
-        <li><strong>Practice and challenges</strong> reference Epp&rsquo;s problems (4th ed.); try each on paper, then reveal the worked solution.</li>
+        <li><strong>Practice and challenges</strong> reference Epp&rsquo;s problems (4th ed.); try each on paper, then reveal.</li>
       </ul>
     </div>
   </aside>
@@ -490,14 +238,14 @@
         <div class="companion-hero">
           <div class="eyebrow">COMP233 &middot; Chapter 8 Interactive Companion</div>
           <h1>Relations</h1>
-          <div class="subtitle">What a relation is, its matrix and directed graph, the three core properties (reflexive, symmetric, transitive), and equivalence relations with their classes and partitions. Sections 8.1&ndash;8.3.</div>
+          <div class="subtitle">What a relation is and the three ways to picture it; the core properties (reflexive, symmetric, transitive); closures; and equivalence relations with their classes and partitions. Sections 8.1&ndash;8.3.</div>
           <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
         </div>
 
         <div class="intro-card">
           <h4><i class="fas fa-compass"></i> About this chapter</h4>
-          <p>A <strong>relation</strong> records <em>which elements are connected to which</em>. &ldquo;Is less than&rdquo;, &ldquo;divides&rdquo;, &ldquo;has the same remainder as&rdquo;, &ldquo;is a friend of&rdquo; &mdash; each is just a set of <span class="term" data-tip="&#1575;&#1604;&#1571;&#1586;&#1608;&#1575;&#1580; &#1575;&#1604;&#1605;&#1585;&#1578;&#1576;&#1577; &middot; ordered pairs: (x,y) keeps x first, y second">ordered pairs</span>. This is the same raw material as Chapter 7: a <strong>function is a special relation</strong> (every input related to exactly one output), so here we drop that restriction and study connections in full generality.</p>
-          <p><strong>The thread.</strong> Section 8.1 defines a relation and gives three ways to see it: as a set of pairs, as a <strong>matrix</strong>, and as a <strong>directed graph</strong>. Section 8.2 asks three yes/no questions about a relation on a set &mdash; is every element related to itself (<span class="term" data-tip="&#1575;&#1606;&#1593;&#1603;&#1575;&#1587;&#1610;&#1577; &middot; reflexive: x R x for every x">reflexive</span>), does every arrow have a return arrow (<span class="term" data-tip="&#1578;&#1605;&#1575;&#1579;&#1604;&#1610;&#1577; &middot; symmetric: x R y forces y R x">symmetric</span>), and do two-step links close up (<span class="term" data-tip="&#1578;&#1593;&#1583;&#1610;&#1577; &middot; transitive: x R y and y R z force x R z">transitive</span>). Section 8.3 combines all three into an <strong>equivalence relation</strong>, the precise idea of &ldquo;being the same in some respect&rdquo;, which cuts a set cleanly into <strong>classes</strong>.</p>
+          <p>A <strong>relation</strong> records <em>which things are connected to which</em>. &ldquo;Is less than&rdquo;, &ldquo;divides&rdquo;, &ldquo;has the same remainder as&rdquo;, &ldquo;is a friend of&rdquo;, &ldquo;is a prerequisite of&rdquo; &mdash; each is simply a set of <span class="term" data-tip="&#1575;&#1604;&#1571;&#1586;&#1608;&#1575;&#1580; &#1575;&#1604;&#1605;&#1585;&#1578;&#1576;&#1577; &middot; ordered pairs: (x, y) keeps x first and y second">ordered pairs</span>. It is the same raw material as Chapter 7: a <strong>function is a special relation</strong> (every input related to exactly one output), so here we drop that restriction and study connection in full generality. Relations are the backbone of databases, graphs, equality up to a rule, and modular arithmetic.</p>
+          <p><strong>The thread.</strong> Section 8.1 defines a relation and gives <em>three equivalent pictures</em> &mdash; the <strong>arrow diagram</strong>, the <strong>0/1 matrix</strong>, and the <strong>directed graph</strong> &mdash; plus domain, range, inverse and complement. Section 8.2 asks three yes/no questions about a relation on one set &mdash; <span class="term" data-tip="&#1575;&#1606;&#1593;&#1603;&#1575;&#1587;&#1610;&#1577; &middot; reflexive: x R x for every x">reflexive</span>, <span class="term" data-tip="&#1578;&#1605;&#1575;&#1579;&#1604;&#1610;&#1577; &middot; symmetric: x R y forces y R x">symmetric</span>, <span class="term" data-tip="&#1605;&#1578;&#1593;&#1583;&#1610;&#1577; &middot; transitive: x R y and y R z force x R z">transitive</span> &mdash; shows what each looks like in the graph, and how to <em>prove</em> and <em>disprove</em> them; then it builds the smallest fix, the <strong>closure</strong>. Section 8.3 combines all three into an <strong>equivalence relation</strong>, the exact idea of &ldquo;being the same in some respect&rdquo;, which cuts a set cleanly into <strong>classes</strong>.</p>
         </div>
 
         <nav class="toc" aria-label="Companion contents">
@@ -506,31 +254,33 @@
             <h5><span class="toc-num">Section 8.1</span>Relations on sets</h5>
             <div class="toc-links">
               <a href="#sec811">What a relation is</a>
-              <a href="#sec812">Relation explorer (matrix)</a>
+              <a href="#sec812">Three pictures (arrow / matrix / graph)</a>
               <a href="#sec813">Directed graph of a relation</a>
               <a href="#sec814">Standard relations</a>
-              <a href="#sec815">The inverse relation</a>
-              <a href="#ex81">Practice exercises</a>
+              <a href="#sec815">Inverse, complement, composition</a>
+              <a href="#ex81">Practice</a>
             </div>
           </div>
           <div class="toc-section">
             <h5><span class="toc-num">Section 8.2</span>Reflexivity, symmetry, transitivity</h5>
             <div class="toc-links">
-              <a href="#sec821">The three properties</a>
+              <a href="#sec821">The three properties in the graph</a>
               <a href="#sec822">Property checker</a>
-              <a href="#sec823">How to prove / disprove</a>
-              <a href="#sec824">Transitive closure</a>
-              <a href="#ex82">Practice exercises</a>
+              <a href="#sec823">Proving &amp; disproving</a>
+              <a href="#sec824">Further properties</a>
+              <a href="#sec825">Closures</a>
+              <a href="#ex82">Practice</a>
             </div>
           </div>
           <div class="toc-section">
             <h5><span class="toc-num">Section 8.3</span>Equivalence relations</h5>
             <div class="toc-links">
-              <a href="#sec831">Definition &amp; classes</a>
-              <a href="#sec832">Equivalence checker</a>
-              <a href="#sec833">Congruence mod n</a>
-              <a href="#sec834">Partition &harr; relation</a>
-              <a href="#ex83">Practice exercises</a>
+              <a href="#sec831">Definition, classes, partitions</a>
+              <a href="#sec832">Why classes partition (the lemmas)</a>
+              <a href="#sec833">Equivalence checker &amp; classes</a>
+              <a href="#sec834">Congruence mod n</a>
+              <a href="#sec835">Partition &harr; relation</a>
+              <a href="#ex83">Practice</a>
             </div>
           </div>
           <div class="toc-section">
@@ -550,70 +300,78 @@
           <div class="section-intro" id="sec811">
             <div class="thm-box def">
               <div class="thm-title">Definition &middot; relation</div>
-              <div class="thm-body">A <strong>relation</strong> <span class="mono-inline">R</span> from a set <span class="mono-inline">A</span> to a set <span class="mono-inline">B</span> is a <strong>subset of the Cartesian product</strong> <span class="mono-inline">A &times; B</span>. We write <span class="mono-inline">x R y</span> (&ldquo;<span class="mono-inline">x</span> is related to <span class="mono-inline">y</span>&rdquo;) to mean <span class="mono-inline">(x, y) &isin; R</span>, and <span class="mono-inline">x &#8512; y</span> to mean <span class="mono-inline">(x, y) &notin; R</span>. When <span class="mono-inline">B = A</span> we call it a <strong>relation on <span class="mono-inline">A</span></strong>.</div>
+              <div class="thm-body">A <strong>relation</strong> <span class="mono-inline">R</span> from a set <span class="mono-inline">A</span> to a set <span class="mono-inline">B</span> is a <strong>subset of the Cartesian product</strong> <span class="mono-inline">A &times; B</span>. We write <span class="mono-inline">x R y</span> (&ldquo;<span class="mono-inline">x</span> is related to <span class="mono-inline">y</span>&rdquo;) for <span class="mono-inline">(x, y) &isin; R</span>, and <span class="mono-inline">x &#8512; y</span> for <span class="mono-inline">(x, y) &notin; R</span>. When <span class="mono-inline">B = A</span> it is a <strong>relation on <span class="mono-inline">A</span></strong>.</div>
             </div>
-            <p>That single line is the whole idea: a relation is just a <em>chosen set of ordered pairs</em>. Chapter 6 built <span class="mono-inline">A &times; B</span> (every possible pair); a relation simply picks out the pairs you care about. Because it is a set, everything you know about sets &mdash; subset, union, complement &mdash; applies to relations too.</p>
+            <p>That one line is the whole idea: a relation is a <em>chosen set of ordered pairs</em>. Chapter 6 built <span class="mono-inline">A &times; B</span> (every possible pair); a relation simply selects the pairs you care about. Because it is a set, the language of sets &mdash; subset, union, intersection, complement &mdash; transfers to relations directly.</p>
             <ul>
-              <li>The <span class="term" data-tip="&#1575;&#1604;&#1605;&#1580;&#1575;&#1604; (&#1575;&#1604;&#1605;&#1606;&#1591;&#1604;&#1602;) &middot; domain: the x-values that appear as a first coordinate"><strong>domain</strong></span> of <span class="mono-inline">R</span> is the set of <span class="mono-inline">x</span> that appear as a first coordinate of some pair.</li>
-              <li>The <span class="term" data-tip="&#1575;&#1604;&#1605;&#1583;&#1609; &middot; range: the y-values that appear as a second coordinate"><strong>range</strong></span> (or image) is the set of <span class="mono-inline">y</span> that appear as a second coordinate.</li>
-              <li>A relation can be drawn three equivalent ways: as a <strong>set of pairs</strong>, as a 0/1 <span class="term" data-tip="&#1605;&#1589;&#1601;&#1608;&#1601;&#1577; &#1575;&#1604;&#1593;&#1604;&#1575;&#1602;&#1577; &middot; the matrix has a 1 in row x, column y exactly when x R y"><strong>matrix</strong></span>, or as a <span class="term" data-tip="&#1605;&#1582;&#1591;&#1591; (&#1576;&#1610;&#1575;&#1606;) &#1605;&#1608;&#1580;&#1617;&#1607; &middot; directed graph: an arrow x &rarr; y for each pair (only for a relation on one set)"><strong>directed graph</strong></span> (when it is a relation on one set).</li>
+              <li>The <span class="term" data-tip="&#1575;&#1604;&#1605;&#1580;&#1575;&#1604; &middot; domain: the x-values that appear as a first coordinate"><strong>domain</strong></span> of <span class="mono-inline">R</span> is the set of <span class="mono-inline">x</span> appearing as a first coordinate; the <span class="term" data-tip="&#1575;&#1604;&#1605;&#1583;&#1609; &middot; range: the y-values that appear as a second coordinate"><strong>range</strong></span> is the set of <span class="mono-inline">y</span> appearing as a second coordinate.</li>
+              <li>How big can a relation be? On a set of size <span class="mono-inline">n</span> there are <span class="mono-inline">n&sup2;</span> possible pairs, so there are <span class="mono-inline">2<sup>n&sup2;</sup></span> different relations &mdash; one per subset of <span class="mono-inline">A &times; A</span>.</li>
+              <li><strong>A relation generalises a function.</strong> A function <span class="mono-inline">f : A &rarr; B</span> is exactly a relation in which every <span class="mono-inline">x &isin; A</span> appears as a first coordinate <em>exactly once</em>. Relations relax that: an <span class="mono-inline">x</span> may relate to many elements, or to none.</li>
             </ul>
-            <p><strong>A relation generalises a function.</strong> A function <span class="mono-inline">f : A &rarr; B</span> is exactly a relation in which every <span class="mono-inline">x &isin; A</span> appears as a first coordinate <em>exactly once</em>. Relations relax that: an <span class="mono-inline">x</span> may relate to several elements, or to none.</p>
           </div>
 
           <div class="widget-card" id="sec812">
-            <h3>8.1.1 Relation explorer &mdash; pairs, matrix, domain and range</h3>
-            <div class="widget-desc">Enter a domain <span class="mono-inline">A</span>, a co-domain <span class="mono-inline">B</span>, and the relation as <span class="mono-inline">x:y</span> pairs. The tool shows the relation as a set, builds the <strong>0/1 matrix</strong> (row <span class="mono-inline">x</span>, column <span class="mono-inline">y</span> is 1 exactly when <span class="mono-inline">x R y</span>), and reports the domain and range. Leave <span class="mono-inline">B</span> empty to make it a relation on <span class="mono-inline">A</span>.</div>
+            <h3>8.1.1 The three pictures &mdash; arrow diagram, matrix, and the relation itself</h3>
+            <div class="widget-desc">A relation from <span class="mono-inline">A</span> to <span class="mono-inline">B</span> can be drawn as an <strong>arrow diagram</strong> (an arrow <span class="mono-inline">x &rarr; y</span> for every pair) or written as a <strong>0/1 matrix</strong> (a 1 in row <span class="mono-inline">x</span>, column <span class="mono-inline">y</span> exactly when <span class="mono-inline">x R y</span>). Enter <span class="mono-inline">A</span>, <span class="mono-inline">B</span> and the pairs and watch all three update together. This is the picture behind Examples 8.1.1&ndash;8.1.2.</div>
             <div class="num-row">
-              <label>A (domain) <input type="text" id="r1-A" value="1, 2, 3" style="width:140px"></label>
-              <label>B (co-domain) <input type="text" id="r1-B" value="1, 2, 3, 4" style="width:140px"></label>
+              <label>A (domain) <input type="text" id="r1-A" value="1, 2, 3" style="width:130px"></label>
+              <label>B (co-domain) <input type="text" id="r1-B" value="a, b, c, d" style="width:130px"></label>
+              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="r1-pairs" value="1:a, 1:c, 2:d, 3:a" style="width:260px"></label>
             </div>
-            <div class="num-row">
-              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="r1-pairs" value="1:2, 1:3, 2:4, 3:2" style="width:300px"></label>
+            <div class="fig-grid">
+              <div class="fig"><div id="r1-arrow"></div><div class="fig-cap"><b>Arrow diagram</b> &mdash; every related pair is an arrow from <span class="mono-inline">A</span> to <span class="mono-inline">B</span>.</div></div>
+              <div class="fig"><div class="matrix-wrap" id="r1-matrix"></div><div class="fig-cap"><b>Matrix</b> &mdash; a 1 marks each related pair (green&nbsp;= related).</div></div>
             </div>
-            <div class="matrix-wrap" id="r1-matrix"></div>
             <div class="result-panel" id="r1-out"></div>
           </div>
 
           <div class="widget-card" id="sec813">
-            <h3>8.1.2 Directed graph of a relation on a set</h3>
-            <div class="widget-desc">For a relation <em>on a single set</em>, the clearest picture is a <strong>directed graph</strong>: one node per element, and an arrow <span class="mono-inline">x &rarr; y</span> for every pair <span class="mono-inline">(x, y)</span>. A pair <span class="mono-inline">(x, x)</span> is a <strong>self-loop</strong>. Watch how the three properties of Section 8.2 look here: a self-loop at every node (reflexive), every arrow paired with its reverse (symmetric), and every two-step path having a direct shortcut (transitive).</div>
+            <h3>8.1.2 Directed graph of a relation <em>on a set</em></h3>
+            <div class="widget-desc">When a relation is <em>on one set</em>, the sharpest picture is a <strong>directed graph</strong>: one node per element and an arrow <span class="mono-inline">x &rarr; y</span> for each pair. A pair <span class="mono-inline">(x, x)</span> is a <strong>self-loop</strong>; a mutual pair <span class="mono-inline">(x, y)</span> and <span class="mono-inline">(y, x)</span> shows as two arrows curving opposite ways. The three properties of Section 8.2 each have an obvious look here, which is why this picture is worth getting comfortable with now.</div>
             <div class="num-row">
-              <label>set A <input type="text" id="dg1-A" value="1, 2, 3, 4" style="width:160px"></label>
-              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="dg1-pairs" value="1:1, 1:2, 2:3, 3:1" style="width:240px"></label>
+              <label>set A <input type="text" id="dg1-A" value="1, 2, 3, 4" style="width:150px"></label>
+              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="dg1-pairs" value="1:1, 1:2, 2:3, 3:1, 4:4" style="width:240px"></label>
             </div>
-            <div class="svg-holder" id="dg1-svg"></div>
-            <div class="svg-legend">
-              <span class="lg"><span class="sw" style="border-color:#1f6fb2"></span> arrow <span class="mono-inline">x&rarr;y</span></span>
-              <span class="lg"><span class="sw" style="border-color:#1f6fb2;border-style:solid"></span> self-loop = <span class="mono-inline">(x,x)</span></span>
+            <div class="fig"><div id="dg1-svg"></div></div>
+            <div class="legend">
+              <span class="lg"><span class="swl" style="border-color:#1f6fb2"></span> arrow <span class="mono-inline">x&rarr;y</span></span>
+              <span class="lg"><span class="dotg" style="border-color:#1f6fb2;background:#eaf2fb"></span> element of <span class="mono-inline">A</span></span>
+              <span class="lg">a loop on a node is a pair <span class="mono-inline">(x, x)</span></span>
             </div>
           </div>
 
           <div class="widget-card" id="sec814">
             <h3>8.1.3 Standard relations &mdash; see the famous ones</h3>
-            <div class="widget-desc">The relations you will meet again and again are defined by a <em>rule</em>, not a list. Pick one on the set <span class="mono-inline">{1, 2, &hellip;, n}</span> and the tool generates its pairs, matrix and graph so you can feel its shape. These are Examples 8.1.3&ndash;8.1.4 (&ldquo;divides&rdquo;, &ldquo;&le;&rdquo;, congruence) brought to life.</div>
+            <div class="widget-desc">The relations you meet again and again are defined by a <em>rule</em>, not a list. Pick one on <span class="mono-inline">{1, &hellip;, n}</span>; the tool generates its pairs, draws the graph, builds the matrix, and reports the three properties at a glance &mdash; so you can <em>feel</em> why &ldquo;divides&rdquo; is a partial order while &ldquo;congruence&rdquo; is an equivalence relation. (Examples 8.1.3&ndash;8.1.4 and the &sect;8.2 examples.)</div>
             <div class="num-row">
               <label>relation
                 <select id="std-rel">
-                  <option value="div">x | y &nbsp; (x divides y)</option>
+                  <option value="div">x | y &nbsp;(x divides y)</option>
                   <option value="le">x &le; y</option>
                   <option value="lt">x &lt; y</option>
                   <option value="eq">x = y</option>
-                  <option value="cong">x &equiv; y (mod m) &middot; same remainder</option>
+                  <option value="cong">x &equiv; y (mod m)</option>
+                  <option value="copr">gcd(x, y) = 1 (coprime)</option>
                 </select>
               </label>
               <label>n <input type="number" id="std-n" value="6" min="1" max="12" style="width:80px"></label>
               <label id="std-mlab" style="display:none">m <input type="number" id="std-m" value="3" min="2" max="9" style="width:70px"></label>
             </div>
-            <div class="svg-holder" id="std-svg"></div>
+            <div class="fig-grid">
+              <div class="fig"><div id="std-svg"></div><div class="fig-cap"><b>Directed graph</b> (shown for <span class="mono-inline">n &le; 8</span>).</div></div>
+              <div class="fig"><div class="matrix-wrap" id="std-matrix"></div><div class="fig-cap"><b>Matrix</b> &mdash; the diagonal shows reflexivity at a glance.</div></div>
+            </div>
             <div class="result-panel" id="std-out"></div>
           </div>
 
           <div class="section-intro" id="sec815">
-            <div class="thm-box">
-              <div class="thm-title">Definition &middot; the inverse relation</div>
-              <div class="thm-body">The <strong>inverse</strong> of <span class="mono-inline">R</span> (from <span class="mono-inline">A</span> to <span class="mono-inline">B</span>) is <span class="mono-inline">R&#8315;&sup1; = { (y, x) : (x, y) &isin; R }</span>, a relation from <span class="mono-inline">B</span> to <span class="mono-inline">A</span> &mdash; just <strong>reverse every arrow</strong>. In the matrix this is the <strong>transpose</strong> (swap rows and columns). For example, the inverse of &ldquo;<span class="mono-inline">&lt;</span>&rdquo; is &ldquo;<span class="mono-inline">&gt;</span>&rdquo;, and the inverse of &ldquo;is a child of&rdquo; is &ldquo;is a parent of&rdquo;. The 8.1.1 explorer prints <span class="mono-inline">R&#8315;&sup1;</span> for whatever you type.</div>
+            <div class="subhead"><span class="dot"></span> Inverse, complement, and composition</div>
+            <div class="props-grid">
+              <div class="prop-cell"><span class="prop-num">INVERSE R&#8315;&sup1;</span><span class="term" data-tip="&#1575;&#1604;&#1593;&#1604;&#1575;&#1602;&#1577; &#1575;&#1604;&#1593;&#1603;&#1587;&#1610;&#1577; &middot; inverse relation: reverse every pair">Reverse every arrow</span>: <span class="mono-inline">R&#8315;&sup1; = {(y, x) : (x, y) &isin; R}</span>. In the matrix this is the <strong>transpose</strong>. Inverse of <span class="mono-inline">&lt;</span> is <span class="mono-inline">&gt;</span>; inverse of &ldquo;child of&rdquo; is &ldquo;parent of&rdquo;.</div>
+              <div class="prop-cell"><span class="prop-num">COMPLEMENT</span>The pairs <em>not</em> in <span class="mono-inline">R</span>: <span class="mono-inline">R&#7580; = (A &times; B) &minus; R</span>. Complement of <span class="mono-inline">&le;</span> is <span class="mono-inline">&gt;</span>; complement of <span class="mono-inline">=</span> is <span class="mono-inline">&ne;</span>.</div>
+              <div class="prop-cell"><span class="prop-num">COMPOSITION S &compfn; R</span>Chain two relations: <span class="mono-inline">x (S&compfn;R) z</span> iff there is a <span class="mono-inline">y</span> with <span class="mono-inline">x R y</span> and <span class="mono-inline">y S z</span> &mdash; a two-step hop. This is exactly how transitivity is tested.</div>
             </div>
+            <p>The 8.1.1 explorer prints <span class="mono-inline">R&#8315;&sup1;</span> for whatever you type. A relation that satisfies <span class="mono-inline">R&#8315;&sup1; = R</span> is precisely a <strong>symmetric</strong> one &mdash; the first hint that the next section&rsquo;s properties are really statements about this algebra of relations.</p>
           </div>
 
           <div class="exercises-block" id="ex81">
@@ -621,15 +379,15 @@
             <div class="ex-source">Epp, 4th ed. &sect;8.1: recommended 1, 2, 9, 10, 13, 15, 16. Try each on paper first, then reveal.</div>
             <div class="exercise">
               <div class="ex-label">Exercise 8.1 A</div>
-              <div class="ex-body">Let <span class="mono-inline">A = {2, 3, 4}</span> and <span class="mono-inline">B = {6, 8, 10}</span>, and define <span class="mono-inline">x R y &hArr; x | y</span> (<span class="mono-inline">x</span> divides <span class="mono-inline">y</span>). List <span class="mono-inline">R</span> as a set of pairs and give its domain and range.</div>
+              <div class="ex-body">Let <span class="mono-inline">A = {2, 3, 4}</span>, <span class="mono-inline">B = {6, 8, 10}</span>, and <span class="mono-inline">x R y &hArr; x | y</span>. List <span class="mono-inline">R</span>, give its domain and range, and write <span class="mono-inline">R&#8315;&sup1;</span>.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-81A">Show solution</button>
-              <div class="solution" id="sol-81A"><span class="step">Test every pair: <span class="mono">2|6, 2|8, 2|10</span> all hold; <span class="mono">3|6</span> holds, <span class="mono">3|8</span> no, <span class="mono">3|10</span> no; <span class="mono">4|8</span> holds, <span class="mono">4|6</span> no, <span class="mono">4|10</span> no.</span> <span class="step"><strong>R = {(2,6),(2,8),(2,10),(3,6),(4,8)}</strong>.</span> <span class="step">Domain <span class="mono">= {2,3,4}</span> (all of them appear as a first coordinate); range <span class="mono">= {6,8,10}</span> (all appear as a second coordinate).</span></div>
+              <div class="solution" id="sol-81A"><span class="step">Test each pair: <span class="mono">2|6, 2|8, 2|10</span>; <span class="mono">3|6</span>; <span class="mono">4|8</span> &mdash; the rest fail.</span> <span class="step"><strong>R = {(2,6),(2,8),(2,10),(3,6),(4,8)}</strong>. Domain <span class="mono">= {2,3,4}</span>, range <span class="mono">= {6,8,10}</span>.</span> <span class="step"><strong>R&#8315;&sup1; = {(6,2),(8,2),(10,2),(6,3),(8,4)}</strong> &mdash; the relation &ldquo;is a multiple of&rdquo;, from <span class="mono">B</span> back to <span class="mono">A</span>.</span></div>
             </div>
             <div class="exercise">
               <div class="ex-label">Exercise 8.1 B</div>
-              <div class="ex-body">On <span class="mono-inline">A = {0, 1, 2, 3}</span> let <span class="mono-inline">x R y &hArr; 2 | (x + y)</span> (the sum is even). Find <span class="mono-inline">R</span> and its inverse <span class="mono-inline">R&#8315;&sup1;</span>. What do you notice?</div>
+              <div class="ex-body">On <span class="mono-inline">A = {0,1,2,3}</span> let <span class="mono-inline">x R y &hArr; 2 | (x + y)</span>. Find <span class="mono-inline">R</span> and <span class="mono-inline">R&#8315;&sup1;</span>. What do you notice, and how many pairs would the relation have on <span class="mono-inline">{0,&hellip;,5}</span>?</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-81B">Show solution</button>
-              <div class="solution" id="sol-81B"><span class="step"><span class="mono">x + y</span> is even exactly when <span class="mono">x</span> and <span class="mono">y</span> have the <em>same parity</em>. Even members: <span class="mono">{0,2}</span>; odd: <span class="mono">{1,3}</span>.</span> <span class="step"><strong>R</strong> = all pairs within <span class="mono">{0,2}</span> plus all within <span class="mono">{1,3}</span> = <span class="mono">{(0,0),(0,2),(2,0),(2,2),(1,1),(1,3),(3,1),(3,3)}</span>.</span> <span class="step"><strong>R&#8315;&sup1; = R</strong>: reversing each pair gives a pair already present. A relation equal to its own inverse is precisely a <strong>symmetric</strong> one (Section 8.2) &mdash; and this one is in fact an equivalence relation (&ldquo;same parity&rdquo;).</span></div>
+              <div class="solution" id="sol-81B"><span class="step"><span class="mono">x+y</span> is even iff <span class="mono">x, y</span> share parity. Evens <span class="mono">{0,2}</span>, odds <span class="mono">{1,3}</span>.</span> <span class="step"><strong>R</strong> = all pairs inside <span class="mono">{0,2}</span> and inside <span class="mono">{1,3}</span> = <span class="mono">{(0,0),(0,2),(2,0),(2,2),(1,1),(1,3),(3,1),(3,3)}</span>.</span> <span class="step"><strong>R&#8315;&sup1; = R</strong> &mdash; it is symmetric (in fact an equivalence relation, &ldquo;same parity&rdquo;). On <span class="mono">{0,&hellip;,5}</span> the blocks are <span class="mono">{0,2,4}</span> and <span class="mono">{1,3,5}</span>, giving <span class="mono">3&sup2; + 3&sup2; = 18</span> pairs.</span></div>
             </div>
           </div>
         </div>
@@ -639,59 +397,78 @@
           <h2><span class="ch-num">Section 8.2</span>Reflexivity, symmetry, and transitivity</h2>
 
           <div class="section-intro" id="sec821">
-            <p>For a relation <em>on a single set</em> <span class="mono-inline">A</span>, three properties come up constantly. Each is a statement about <em>all</em> elements, so to <strong>prove</strong> one you argue about an arbitrary case, and to <strong>disprove</strong> it you give a single counterexample.</p>
-            <div class="thm-box def">
-              <div class="thm-title">The three properties</div>
-              <div class="thm-body">
-                <strong>Reflexive</strong> (<span class="term" data-tip="&#1575;&#1606;&#1593;&#1603;&#1575;&#1587;&#1610;&#1577;">&#1575;&#1606;&#1593;&#1603;&#1575;&#1587;&#1610;&#1577;</span>): <span class="mono-inline">&forall; x &isin; A, &nbsp; x R x</span>. <em>Every element relates to itself</em> &mdash; a self-loop at every node.<br>
-                <strong>Symmetric</strong> (<span class="term" data-tip="&#1578;&#1605;&#1575;&#1579;&#1604;&#1610;&#1577;">&#1578;&#1605;&#1575;&#1579;&#1604;&#1610;&#1577;</span>): <span class="mono-inline">&forall; x, y &isin; A, &nbsp; x R y &rArr; y R x</span>. <em>Every arrow has a return arrow.</em><br>
-                <strong>Transitive</strong> (<span class="term" data-tip="&#1578;&#1593;&#1583;&#1610;&#1577;">&#1578;&#1593;&#1583;&#1610;&#1577;</span>): <span class="mono-inline">&forall; x, y, z &isin; A, &nbsp; (x R y &and; y R z) &rArr; x R z</span>. <em>Every two-step path has a one-step shortcut.</em>
-              </div>
-            </div>
-            <p>The negations tell you exactly what a counterexample looks like:</p>
+            <p>For a relation <em>on one set</em> <span class="mono-inline">A</span>, three properties come up everywhere. Each is a statement about <em>all</em> elements, so you <strong>prove</strong> it by arguing an arbitrary case and <strong>disprove</strong> it with a single counterexample. Crucially, each has a picture in the directed graph &mdash; learn the picture and the verdict becomes something you can <em>see</em>.</p>
             <div class="props-grid">
-              <div class="prop-cell"><span class="prop-num">NOT reflexive</span><br>some <span class="mono-inline">x</span> with <span class="mono-inline">x &#8512; x</span> (one missing self-loop).</div>
-              <div class="prop-cell"><span class="prop-num">NOT symmetric</span><br>some <span class="mono-inline">x, y</span> with <span class="mono-inline">x R y</span> but <span class="mono-inline">y &#8512; x</span> (a one-way arrow).</div>
-              <div class="prop-cell"><span class="prop-num">NOT transitive</span><br>some <span class="mono-inline">x, y, z</span> with <span class="mono-inline">x R y</span>, <span class="mono-inline">y R z</span>, but <span class="mono-inline">x &#8512; z</span> (a broken shortcut).</div>
+              <div class="prop-cell"><span class="prop-num">REFLEXIVE</span><span class="mono-inline">&forall; x, &nbsp; x R x</span><br>In the graph: <strong>a self-loop on every node</strong>. In the matrix: <strong>all-1 diagonal</strong>.</div>
+              <div class="prop-cell"><span class="prop-num">SYMMETRIC</span><span class="mono-inline">&forall; x,y, &nbsp; xRy &rArr; yRx</span><br>In the graph: <strong>every arrow has its reverse</strong> (all two-way). Matrix: <strong>symmetric across the diagonal</strong>.</div>
+              <div class="prop-cell"><span class="prop-num">TRANSITIVE</span><span class="mono-inline">&forall; x,y,z, &nbsp; xRy &and; yRz &rArr; xRz</span><br>In the graph: <strong>every 2-step path has a 1-step shortcut</strong>.</div>
             </div>
+            <p>The negations tell you exactly what a counterexample looks like &mdash; you only need one:</p>
+            <ul>
+              <li><strong>Not reflexive:</strong> some <span class="mono-inline">x</span> with <span class="mono-inline">x &#8512; x</span> (one missing self-loop).</li>
+              <li><strong>Not symmetric:</strong> some <span class="mono-inline">x, y</span> with <span class="mono-inline">x R y</span> but <span class="mono-inline">y &#8512; x</span> (a one-way arrow).</li>
+              <li><strong>Not transitive:</strong> some <span class="mono-inline">x, y, z</span> with <span class="mono-inline">x R y</span>, <span class="mono-inline">y R z</span>, but <span class="mono-inline">x &#8512; z</span> (a broken shortcut).</li>
+            </ul>
             <div class="thm-box warnbox">
-              <div class="thm-title">Watch the difference: &ldquo;reflexive&rdquo; vs &ldquo;a self-loop somewhere&rdquo;</div>
-              <div class="thm-body">Reflexive demands a self-loop on <strong>every</strong> element. A relation with one or two self-loops but not all of them is <strong>not</strong> reflexive. Also note the empty relation on a non-empty set is <em>not</em> reflexive (it has no self-loops), yet it <em>is</em> vacuously symmetric and transitive &mdash; there is no arrow to violate those.</div>
+              <div class="thm-title">Two traps worth naming</div>
+              <div class="thm-body"><strong>(1)</strong> Reflexive needs a loop on <em>every</em> element, not just somewhere. <strong>(2)</strong> The empty relation on a non-empty set is <em>not</em> reflexive (no loops), yet it <em>is</em> vacuously symmetric and transitive &mdash; there is no arrow to violate those. &ldquo;No counterexample exists&rdquo; counts as true.</div>
             </div>
           </div>
 
           <div class="widget-card" id="sec822">
-            <h3>8.2.1 Property checker &mdash; with the exact witness</h3>
-            <div class="widget-desc">Enter a relation on a set and the checker tests all three properties. When one <strong>fails it names the witness</strong>: the element missing a self-loop, the one-way arrow, or the two-step chain whose shortcut is missing. The directed graph marks missing self-loops with a dashed red ring and draws every arrow, so you can see the verdict, not just read it.</div>
+            <h3>8.2.1 Property checker &mdash; with the exact witness, drawn</h3>
+            <div class="widget-desc">Enter a relation on a set. The checker tests all three properties and, when one <strong>fails, names the witness</strong> and <strong>colours it on the graph</strong>: a node missing its self-loop turns red and dashed; a one-way arrow turns orange. Use the presets to see each shape, then edit freely.</div>
             <div class="num-row">
-              <label>set A <input type="text" id="pc-A" value="1, 2, 3" style="width:150px"></label>
-              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="pc-pairs" value="1:1, 2:2, 3:3, 1:2, 2:1" style="width:280px"></label>
+              <label>set A <input type="text" id="pc-A" value="1, 2, 3" style="width:140px"></label>
+              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="pc-pairs" value="1:1, 2:2, 1:2, 2:3" style="width:260px"></label>
             </div>
-            <div class="svg-holder" id="pc-svg"></div>
+            <div class="fig"><div id="pc-svg"></div></div>
+            <div class="legend">
+              <span class="lg"><span class="swl" style="border-color:#1f6fb2"></span> normal arrow</span>
+              <span class="lg"><span class="swl" style="border-color:#e08a1e"></span> one-way (symmetry fails here)</span>
+              <span class="lg"><span class="dotg" style="border-color:#2e9e5b;background:#eaf2fb"></span> has self-loop</span>
+              <span class="lg"><span class="dotg" style="border-color:#c0392b;background:#fdecec;border-style:dashed"></span> missing self-loop</span>
+            </div>
             <div class="result-panel" id="pc-out"></div>
-            <div class="svg-legend" style="margin-top:8px">Try presets:
+            <div class="legend" style="margin-top:10px">Presets:
               <a href="#" class="mono-inline" data-pc="1,2,3|1:2,2:1,2:3,3:2">symmetric, not transitive</a> &middot;
-              <a href="#" class="mono-inline" data-pc="1,2,3|1:1,1:2,1:3,2:2,2:3,3:3">a partial order (&le;)</a> &middot;
-              <a href="#" class="mono-inline" data-pc="1,2,3|1:2,2:3,1:3">transitive, not reflexive/symmetric (&lt;)</a> &middot;
-              <a href="#" class="mono-inline" data-pc="1,2,3,4|1:1,2:2,3:3,4:4,1:2,2:1,3:4,4:3">an equivalence relation</a>
+              <a href="#" class="mono-inline" data-pc="1,2,3|1:1,1:2,1:3,2:2,2:3,3:3">reflexive + transitive (&le;)</a> &middot;
+              <a href="#" class="mono-inline" data-pc="1,2,3|1:2,2:3,1:3">transitive only (&lt;)</a> &middot;
+              <a href="#" class="mono-inline" data-pc="1,2,3,4|1:1,2:2,3:3,4:4,1:2,2:1,3:4,4:3">equivalence relation</a>
             </div>
           </div>
 
           <div class="section-intro" id="sec823">
+            <div class="subhead"><span class="dot"></span> Proving and disproving &mdash; the templates</div>
             <div class="proof-callout">
-              <div class="proof-label">Worked proof &middot; congruence mod 3 is transitive</div>
-              <div class="proof-step">Claim: on <span class="mono-inline">Z</span>, define <span class="mono-inline">a R b &hArr; 3 | (a &minus; b)</span>. Then <span class="mono-inline">R</span> is transitive.</div>
-              <div class="proof-step">Suppose <span class="mono-inline">a R b</span> and <span class="mono-inline">b R c</span> for arbitrary integers. By definition <span class="mono-inline">3 | (a &minus; b)</span> and <span class="mono-inline">3 | (b &minus; c)</span>, so <span class="mono-inline">a &minus; b = 3s</span> and <span class="mono-inline">b &minus; c = 3t</span> for some integers <span class="mono-inline">s, t</span>.</div>
-              <div class="proof-step">Add: <span class="mono-inline">(a &minus; b) + (b &minus; c) = a &minus; c = 3s + 3t = 3(s + t)</span>. Since <span class="mono-inline">s + t &isin; Z</span>, we get <span class="mono-inline">3 | (a &minus; c)</span>, i.e. <span class="mono-inline">a R c</span>. <span class="end-of-proof">&#8718;</span></div>
+              <div class="proof-label">Template &middot; prove transitive (congruence mod 3)</div>
+              <div class="proof-step">Claim: on <span class="mono-inline">Z</span>, <span class="mono-inline">a R b &hArr; 3 | (a &minus; b)</span> is transitive.</div>
+              <div class="proof-step"><strong>Assume the hypotheses for arbitrary <span class="mono-inline">a, b, c</span>:</strong> <span class="mono-inline">a R b</span> and <span class="mono-inline">b R c</span>. By definition <span class="mono-inline">a &minus; b = 3s</span> and <span class="mono-inline">b &minus; c = 3t</span> for some <span class="mono-inline">s, t &isin; Z</span>.</div>
+              <div class="proof-step"><strong>Reach the conclusion:</strong> add them &mdash; <span class="mono-inline">a &minus; c = 3s + 3t = 3(s + t)</span> with <span class="mono-inline">s + t &isin; Z</span>, so <span class="mono-inline">3 | (a &minus; c)</span>, i.e. <span class="mono-inline">a R c</span>. <span class="end-of-proof">&#8718;</span></div>
             </div>
-            <p>This is the model for &ldquo;<em>prove transitive</em>&rdquo;: <strong>assume the two hypotheses</strong> <span class="mono-inline">x R y</span> and <span class="mono-inline">y R z</span> using the <em>definition</em>, then manipulate to reach <span class="mono-inline">x R z</span>. Reflexive and symmetric proofs follow the same shape with one fewer hypothesis.</p>
+            <div class="proof-callout">
+              <div class="proof-label">Template &middot; disprove with one counterexample</div>
+              <div class="proof-step">Claim to refute: &ldquo;<span class="mono-inline">x R y &hArr; x | y</span> on <span class="mono-inline">Z&#8314;</span> is symmetric.&rdquo;</div>
+              <div class="proof-step"><strong>Exhibit one pair:</strong> <span class="mono-inline">2 | 6</span> is true, but <span class="mono-inline">6 | 2</span> is false. So <span class="mono-inline">2 R 6</span> while <span class="mono-inline">6 &#8512; 2</span> &mdash; symmetry fails. One witness is enough. <span class="end-of-proof">&#8718;</span></div>
+            </div>
+            <p>The shape is always the same: to <em>prove</em> a &ldquo;for all&rdquo; property, start from an <em>arbitrary</em> case using the <em>definition</em> and derive the conclusion; to <em>disprove</em> it, produce a single concrete failure.</p>
           </div>
 
-          <div class="widget-card" id="sec824">
-            <h3>8.2.2 Transitive closure &mdash; the smallest fix</h3>
-            <div class="widget-desc">If a relation is not transitive, its <strong>transitive closure</strong> <span class="mono-inline">R&#7511;</span> is the smallest superset of <span class="mono-inline">R</span> that <em>is</em> transitive: keep adding the missing shortcut <span class="mono-inline">(x, z)</span> whenever <span class="mono-inline">x R y</span> and <span class="mono-inline">y R z</span>, until nothing new appears. Equivalently, <span class="mono-inline">x R&#7511; z</span> iff there is a directed path <span class="mono-inline">x &rarr; &hellip; &rarr; z</span> of length <span class="mono-inline">&ge; 1</span>. The tool lists the pairs it adds, round by round.</div>
+          <div class="section-intro" id="sec824">
+            <div class="subhead"><span class="dot"></span> Two further properties (and where they lead)</div>
+            <p>Beyond the core three, two more properties are worth recognising &mdash; they are what turn &ldquo;divides&rdquo; and &ldquo;&le;&rdquo; into <em>orderings</em> rather than equivalences:</p>
+            <div class="props-grid">
+              <div class="prop-cell"><span class="prop-num">ANTISYMMETRIC</span><span class="mono-inline">x R y &and; y R x &rArr; x = y</span><br>The only two-way links are self-loops. True of <span class="mono-inline">&le;</span> and <span class="mono-inline">|</span>. <em>(Not the opposite of symmetric.)</em></div>
+              <div class="prop-cell"><span class="prop-num">IRREFLEXIVE</span><span class="mono-inline">&forall; x, &nbsp; x &#8512; x</span><br>No self-loops at all. True of <span class="mono-inline">&lt;</span>. <em>(Also not the opposite of reflexive &mdash; a relation can be neither.)</em></div>
+            </div>
+            <p>Reflexive + antisymmetric + transitive defines a <strong>partial order</strong> (Section 8.5); reflexive + symmetric + transitive defines an <strong>equivalence relation</strong> (Section 8.3, next). Same three slots, two famous combinations.</p>
+          </div>
+
+          <div class="widget-card" id="sec825">
+            <h3>8.2.2 Closures &mdash; the smallest repair</h3>
+            <div class="widget-desc">The <strong>closure</strong> of <span class="mono-inline">R</span> with respect to a property is the <em>smallest</em> relation containing <span class="mono-inline">R</span> that has the property. <strong>Reflexive closure</strong> adds the missing self-loops; <strong>symmetric closure</strong> adds the missing reverse arrows; <strong>transitive closure</strong> keeps adding the missing shortcut <span class="mono-inline">(x, z)</span> whenever <span class="mono-inline">x R y</span> and <span class="mono-inline">y R z</span> until nothing new appears (equivalently, <span class="mono-inline">x &rarr; &hellip; &rarr; z</span> by some directed path). The tool lists exactly what each closure adds.</div>
             <div class="num-row">
-              <label>set A <input type="text" id="tc-A" value="1, 2, 3, 4" style="width:150px"></label>
+              <label>set A <input type="text" id="tc-A" value="1, 2, 3, 4" style="width:140px"></label>
               <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="tc-pairs" value="1:2, 2:3, 3:4" style="width:240px"></label>
             </div>
             <div class="result-panel" id="tc-out"></div>
@@ -699,18 +476,18 @@
 
           <div class="exercises-block" id="ex82">
             <h3>Practice exercises &middot; Section 8.2</h3>
-            <div class="ex-source">Epp, 4th ed. &sect;8.2: recommended 2, 3, 10, 12, 13, 14, 15, 18. More are solved in <a href="#worked">Taught solutions</a>.</div>
+            <div class="ex-source">Epp, 4th ed. &sect;8.2: recommended 2, 3, 10, 12, 13, 14, 15, 18. More in <a href="#worked">Taught solutions</a>.</div>
             <div class="exercise">
               <div class="ex-label">Exercise 8.2 A</div>
-              <div class="ex-body">On <span class="mono-inline">A = {1, 2, 3}</span> let <span class="mono-inline">R = {(1,1),(2,2),(3,3),(1,2),(2,1),(2,3),(3,2)}</span>. Which of reflexive, symmetric, transitive hold? Give a witness for any that fail.</div>
+              <div class="ex-body">On <span class="mono-inline">A = {1,2,3}</span> let <span class="mono-inline">R = {(1,1),(2,2),(3,3),(1,2),(2,1),(2,3),(3,2)}</span>. Which of reflexive / symmetric / transitive hold? Give a witness for any failure.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-82A">Show solution</button>
-              <div class="solution" id="sol-82A"><span class="step"><strong>Reflexive:</strong> yes &mdash; <span class="mono">(1,1),(2,2),(3,3)</span> are all present.</span> <span class="step"><strong>Symmetric:</strong> yes &mdash; <span class="mono">(1,2)/(2,1)</span> and <span class="mono">(2,3)/(3,2)</span> both come in pairs.</span> <span class="step"><strong>Transitive:</strong> <strong>no</strong>. We have <span class="mono">(1,2)</span> and <span class="mono">(2,3)</span> but <span class="mono">(1,3)</span> is missing &mdash; the shortcut is broken. Witness: <span class="mono">x=1, y=2, z=3</span>.</span></div>
+              <div class="solution" id="sol-82A"><span class="step"><strong>Reflexive:</strong> yes &mdash; all of <span class="mono">(1,1),(2,2),(3,3)</span> present.</span> <span class="step"><strong>Symmetric:</strong> yes &mdash; <span class="mono">(1,2)/(2,1)</span> and <span class="mono">(2,3)/(3,2)</span> both appear.</span> <span class="step"><strong>Transitive: no.</strong> <span class="mono">(1,2)</span> and <span class="mono">(2,3)</span> are present but <span class="mono">(1,3)</span> is missing. Witness <span class="mono">x=1, y=2, z=3</span>. (Paste it into 8.2.1 to see the broken shortcut.)</span></div>
             </div>
             <div class="exercise">
               <div class="ex-label">Exercise 8.2 B</div>
-              <div class="ex-body">Define <span class="mono-inline">R</span> on <span class="mono-inline">Z</span> by <span class="mono-inline">a R b &hArr; a &middot; b &gt; 0</span> (same sign, both non-zero). Is it reflexive? symmetric? transitive?</div>
+              <div class="ex-body">Define <span class="mono-inline">R</span> on <span class="mono-inline">Z</span> by <span class="mono-inline">a R b &hArr; ab &gt; 0</span>. Decide reflexive / symmetric / transitive, watching the role of <span class="mono-inline">0</span>.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-82B">Show solution</button>
-              <div class="solution" id="sol-82B"><span class="step"><strong>Reflexive:</strong> <strong>no</strong> &mdash; <span class="mono">0 &middot; 0 = 0</span>, not <span class="mono">&gt; 0</span>, so <span class="mono">0 &#8512; 0</span>. (It is reflexive on the <em>non-zero</em> integers, but not on all of <span class="mono">Z</span>.)</span> <span class="step"><strong>Symmetric:</strong> yes &mdash; <span class="mono">ab &gt; 0 &rArr; ba &gt; 0</span>.</span> <span class="step"><strong>Transitive:</strong> yes &mdash; if <span class="mono">ab &gt; 0</span> and <span class="mono">bc &gt; 0</span> then <span class="mono">a</span> and <span class="mono">b</span> share a sign, and <span class="mono">b</span> and <span class="mono">c</span> share a sign, so <span class="mono">a</span> and <span class="mono">c</span> share a sign, giving <span class="mono">ac &gt; 0</span>. <em>Domain matters: the verdict on &ldquo;reflexive&rdquo; flips between <span class="mono">Z</span> and <span class="mono">Z &minus; {0}</span>.</em></span></div>
+              <div class="solution" id="sol-82B"><span class="step"><strong>Reflexive: no</strong> &mdash; <span class="mono">0&middot;0 = 0</span>, not <span class="mono">&gt; 0</span>, so <span class="mono">0 &#8512; 0</span>. (It <em>is</em> reflexive on <span class="mono">Z &minus; {0}</span>.)</span> <span class="step"><strong>Symmetric: yes</strong> &mdash; <span class="mono">ab &gt; 0 &rArr; ba &gt; 0</span>.</span> <span class="step"><strong>Transitive: yes</strong> &mdash; <span class="mono">ab&gt;0</span> means <span class="mono">a,b</span> share a sign; <span class="mono">bc&gt;0</span> means <span class="mono">b,c</span> share a sign; so <span class="mono">a,c</span> share a sign and <span class="mono">ac&gt;0</span>. <em>The domain decides the &ldquo;reflexive&rdquo; verdict.</em></span></div>
             </div>
           </div>
         </div>
@@ -721,48 +498,64 @@
 
           <div class="section-intro" id="sec831">
             <div class="thm-box def">
-              <div class="thm-title">Definition &middot; equivalence relation</div>
-              <div class="thm-body">A relation on <span class="mono-inline">A</span> is an <span class="term" data-tip="&#1593;&#1604;&#1575;&#1602;&#1577; &#1578;&#1603;&#1575;&#1601;&#1572; &middot; equivalence relation: reflexive AND symmetric AND transitive"><strong>equivalence relation</strong></span> if it is <strong>reflexive, symmetric, and transitive</strong> &mdash; all three at once. It captures the idea of being &ldquo;<em>the same in some respect</em>&rdquo;: equal, same remainder, same parity, same length, same colour.</div>
+              <div class="thm-title">Definition &middot; equivalence relation &amp; class</div>
+              <div class="thm-body">A relation on <span class="mono-inline">A</span> is an <span class="term" data-tip="&#1593;&#1604;&#1575;&#1602;&#1577; &#1578;&#1603;&#1575;&#1601;&#1572; &middot; equivalence relation: reflexive AND symmetric AND transitive"><strong>equivalence relation</strong></span> if it is <strong>reflexive, symmetric, and transitive</strong> &mdash; all three at once. It formalises &ldquo;<em>the same in some respect</em>&rdquo;. For <span class="mono-inline">a &isin; A</span>, the <span class="term" data-tip="&#1589;&#1601; &#1575;&#1604;&#1578;&#1603;&#1575;&#1601;&#1572; &middot; equivalence class: everything related to a"><strong>equivalence class</strong></span> of <span class="mono-inline">a</span> is <span class="mono-inline">[a] = { x &isin; A : x R a }</span> &mdash; everything related to <span class="mono-inline">a</span>. Any member can name its class (a <strong>representative</strong>).</div>
             </div>
-            <div class="thm-box def">
-              <div class="thm-title">Definition &middot; equivalence class</div>
-              <div class="thm-body">For <span class="mono-inline">a &isin; A</span>, the <span class="term" data-tip="&#1589;&#1601; (&#1601;&#1574;&#1577;) &#1575;&#1604;&#1578;&#1603;&#1575;&#1601;&#1572; &middot; equivalence class: everything related to a"><strong>equivalence class</strong></span> of <span class="mono-inline">a</span> is <span class="mono-inline">[a] = { x &isin; A : x R a }</span> &mdash; everything related to <span class="mono-inline">a</span>. Any member of a class can serve as its name (a <strong>representative</strong>).</div>
-            </div>
+            <p>The reason equivalence relations matter so much is that they are exactly the tool for <strong>grouping</strong>: deduplicating records by a key, bucketing by a hash, identifying states in an automaton, reducing fractions (every fraction names one rational number, and &ldquo;equals the same rational&rdquo; is an equivalence relation). The grouping is never arbitrary &mdash; it is forced to be a clean split:</p>
             <div class="thm-box">
-              <div class="thm-title">Theorem 8.3.1 &amp; 8.3.4 &middot; classes partition the set</div>
-              <div class="thm-body">If <span class="mono-inline">R</span> is an equivalence relation on <span class="mono-inline">A</span>, then its distinct equivalence classes form a <span class="term" data-tip="&#1578;&#1580;&#1586;&#1574;&#1577; &middot; partition: a split into non-empty, disjoint blocks that cover A"><strong>partition</strong></span> of <span class="mono-inline">A</span>: every element lies in exactly one class. The key facts: <span class="mono-inline">a R b &hArr; [a] = [b]</span>, and any two classes are either <strong>identical or disjoint</strong> &mdash; never partly overlapping. Conversely (Theorem 8.3.4), <em>any</em> partition of <span class="mono-inline">A</span> defines an equivalence relation (&ldquo;in the same block&rdquo;). So <strong>equivalence relations and partitions are two views of the same thing</strong>.</div>
+              <div class="thm-title">Theorem 8.3.1 / 8.3.4 &middot; classes partition the set</div>
+              <div class="thm-body">If <span class="mono-inline">R</span> is an equivalence relation on <span class="mono-inline">A</span>, its distinct classes form a <span class="term" data-tip="&#1578;&#1580;&#1586;&#1574;&#1577; &middot; partition: non-empty, disjoint blocks that cover A"><strong>partition</strong></span> of <span class="mono-inline">A</span> &mdash; every element lies in exactly one class. Conversely, <em>any</em> partition defines an equivalence relation (&ldquo;in the same block&rdquo;). So <strong>equivalence relations and partitions are the same data, seen two ways.</strong></div>
             </div>
-            <p>This is why equivalence relations matter so much in computing: they are exactly the tool for <em>grouping</em> &mdash; deduplicating records by a key, bucketing by hash, identifying states in an automaton, or reducing fractions (every fraction names one rational number, and &ldquo;equals the same rational&rdquo; is an equivalence relation).</p>
           </div>
 
-          <div class="widget-card" id="sec832">
-            <h3>8.3.1 Equivalence checker &mdash; and the classes it produces</h3>
-            <div class="widget-desc">Enter a relation on a set. The tool checks the three properties; if all hold, it is an equivalence relation and the tool <strong>computes the equivalence classes</strong> and shows the partition. If any property fails, it names the witness so you can see <em>why</em> it is not an equivalence relation.</div>
-            <div class="num-row">
-              <label>set A <input type="text" id="eq-A" value="1, 2, 3, 4, 5" style="width:160px"></label>
-              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="eq-pairs" value="1:1,2:2,3:3,4:4,5:5,1:3,3:1,2:4,4:2" style="width:300px"></label>
+          <div class="section-intro" id="sec832">
+            <div class="subhead"><span class="dot"></span> Why the classes partition &mdash; the three lemmas</div>
+            <p>The partition theorem rests on three short facts. They are worth seeing because they show <em>where each of the three properties is used</em>.</p>
+            <div class="proof-callout">
+              <div class="proof-label">Lemma 1 &middot; every element is in its own class</div>
+              <div class="proof-step"><span class="mono-inline">a &isin; [a]</span>, because <span class="mono-inline">a R a</span> by <strong>reflexivity</strong>. So no class is empty, and the classes cover <span class="mono-inline">A</span>.</div>
             </div>
-            <div class="result-panel" id="eq-out"></div>
+            <div class="proof-callout">
+              <div class="proof-label">Lemma 2 &middot; related elements share a class</div>
+              <div class="proof-step">If <span class="mono-inline">a R b</span> then <span class="mono-inline">[a] = [b]</span>. Take <span class="mono-inline">x &isin; [a]</span>, so <span class="mono-inline">x R a</span>; with <span class="mono-inline">a R b</span>, <strong>transitivity</strong> gives <span class="mono-inline">x R b</span>, i.e. <span class="mono-inline">x &isin; [b]</span>. The reverse inclusion uses <strong>symmetry</strong> (<span class="mono-inline">b R a</span>) the same way. Hence the two classes are equal.</div>
+            </div>
+            <div class="proof-callout">
+              <div class="proof-label">Lemma 3 &middot; classes are equal or disjoint</div>
+              <div class="proof-step">If <span class="mono-inline">[a]</span> and <span class="mono-inline">[b]</span> share any element <span class="mono-inline">x</span>, then <span class="mono-inline">x R a</span> and <span class="mono-inline">x R b</span>, so (symmetry + transitivity) <span class="mono-inline">a R b</span>, and by Lemma 2 <span class="mono-inline">[a] = [b]</span>. So two classes never <em>partly</em> overlap &mdash; they coincide or miss entirely. <span class="end-of-proof">&#8718;</span></div>
+            </div>
+            <p>Together: the classes are non-empty (Lemma 1), they cover <span class="mono-inline">A</span> (Lemma 1), and any two are equal or disjoint (Lemma 3) &mdash; the definition of a partition.</p>
           </div>
 
           <div class="widget-card" id="sec833">
-            <h3>8.3.2 Congruence mod n &mdash; the model example</h3>
-            <div class="widget-desc">The most important equivalence relation: <span class="mono-inline">a &equiv; b (mod n)</span> means <span class="mono-inline">n | (a &minus; b)</span>, i.e. <span class="mono-inline">a</span> and <span class="mono-inline">b</span> leave the <strong>same remainder</strong> on division by <span class="mono-inline">n</span>. It splits the integers into exactly <span class="mono-inline">n</span> classes <span class="mono-inline">[0], [1], &hellip;, [n&minus;1]</span> (the residue classes). Pick <span class="mono-inline">n</span> and a range to see the classes, and test any two integers.</div>
+            <h3>8.3.1 Equivalence checker &mdash; classes colour-coded</h3>
+            <div class="widget-desc">Enter a relation on a set. The tool checks the three properties; if all hold, it is an equivalence relation and the tool <strong>computes the classes, colours them</strong>, and shows the partition &mdash; the same colours appear on the directed graph, so you can see each class as its own connected cluster. If a property fails, it names the witness instead.</div>
             <div class="num-row">
-              <label>n <input type="number" id="cong-n" value="3" min="2" max="12" style="width:80px"></label>
-              <label>show integers from <input type="number" id="cong-lo" value="0" style="width:80px"></label>
-              <label>to <input type="number" id="cong-hi" value="11" style="width:80px"></label>
+              <label>set A <input type="text" id="eq-A" value="1, 2, 3, 4, 5" style="width:150px"></label>
+              <label>pairs <span class="mono-inline">x:y</span> <input type="text" id="eq-pairs" value="1:1,2:2,3:3,4:4,5:5,1:3,3:1,2:4,4:2" style="width:300px"></label>
+            </div>
+            <div class="fig"><div id="eq-svg"></div></div>
+            <div class="result-panel" id="eq-out"></div>
+          </div>
+
+          <div class="widget-card" id="sec834">
+            <h3>8.3.2 Congruence mod n &mdash; the model example</h3>
+            <div class="widget-desc">The most important equivalence relation: <span class="mono-inline">a &equiv; b (mod n)</span> means <span class="mono-inline">n | (a &minus; b)</span>, i.e. <span class="mono-inline">a</span> and <span class="mono-inline">b</span> leave the <strong>same remainder</strong> on division by <span class="mono-inline">n</span>. It splits the integers into exactly <span class="mono-inline">n</span> classes <span class="mono-inline">[0], &hellip;, [n&minus;1]</span>. The number line below is coloured by class, so the repeating pattern is visible; pick <span class="mono-inline">n</span> and test any two integers.</div>
+            <div class="num-row">
+              <label>n <input type="number" id="cong-n" value="3" min="2" max="10" style="width:80px"></label>
+              <label>show from <input type="number" id="cong-lo" value="0" style="width:80px"></label>
+              <label>to <input type="number" id="cong-hi" value="14" style="width:80px"></label>
             </div>
             <div class="num-row">
               <label>test: a <input type="number" id="cong-a" value="17" style="width:90px"></label>
               <label>b <input type="number" id="cong-b" value="2" style="width:90px"></label>
             </div>
+            <div class="fig"><div id="cong-svg"></div><div class="fig-cap">Each colour is one residue class; the pattern repeats every <span class="mono-inline">n</span> integers.</div></div>
             <div class="result-panel" id="cong-out"></div>
           </div>
 
-          <div class="widget-card" id="sec834">
+          <div class="widget-card" id="sec835">
             <h3>8.3.3 Partition &harr; relation &mdash; the two-way street</h3>
-            <div class="widget-desc">Enter a <strong>partition</strong> as blocks separated by <span class="mono-inline">|</span>, each block a space- or comma-list, e.g. <span class="mono-inline">1 2 | 3 | 4 5</span>. The tool builds the induced equivalence relation (&ldquo;<span class="mono-inline">x ~ y</span> iff same block&rdquo;) &mdash; all pairs within each block &mdash; and confirms the three properties hold automatically. This is Theorem 8.3.4 made concrete.</div>
+            <div class="widget-desc">Enter a <strong>partition</strong> as blocks separated by <span class="mono-inline">|</span>, each a space/comma list, e.g. <span class="mono-inline">1 2 | 3 | 4 5</span>. The tool builds the induced equivalence relation (&ldquo;<span class="mono-inline">x ~ y</span> iff same block&rdquo;), colours the blocks, and confirms the three properties hold automatically &mdash; Theorem 8.3.4 made concrete.</div>
             <div class="num-row">
               <label>partition <input type="text" id="part-in" value="1 2 | 3 | 4 5" style="width:280px"></label>
             </div>
@@ -774,15 +567,15 @@
             <div class="ex-source">Epp, 4th ed. &sect;8.3: recommended 1, 9, 10, 15, 16, 24, 28, 30. More in <a href="#worked">Taught solutions</a>.</div>
             <div class="exercise">
               <div class="ex-label">Exercise 8.3 A</div>
-              <div class="ex-body">On <span class="mono-inline">A = {0, 1, 2, 3, 4, 5}</span> define <span class="mono-inline">a R b &hArr; 3 | (a &minus; b)</span>. Show it is an equivalence relation and list the classes.</div>
+              <div class="ex-body">On <span class="mono-inline">A = {0,1,2,3,4,5}</span> let <span class="mono-inline">a R b &hArr; 3 | (a &minus; b)</span>. Show it is an equivalence relation and list the classes.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-83A">Show solution</button>
-              <div class="solution" id="sol-83A"><span class="step"><strong>Reflexive:</strong> <span class="mono">3 | (a &minus; a) = 0</span>. <strong>Symmetric:</strong> if <span class="mono">3 | (a &minus; b)</span> then <span class="mono">3 | (b &minus; a)</span> (negate). <strong>Transitive:</strong> shown in 8.2 (add the multiples of 3). So it is an equivalence relation.</span> <span class="step"><strong>Classes</strong> = group by remainder mod 3: <span class="mono">[0] = {0, 3}</span>, <span class="mono">[1] = {1, 4}</span>, <span class="mono">[2] = {2, 5}</span>. These three blocks partition <span class="mono">A</span>.</span></div>
+              <div class="solution" id="sol-83A"><span class="step"><strong>Reflexive:</strong> <span class="mono">3 | 0</span>. <strong>Symmetric:</strong> <span class="mono">3 | (a&minus;b) &rArr; 3 | (b&minus;a)</span>. <strong>Transitive:</strong> add the multiples of 3 (template above). So it is an equivalence relation.</span> <span class="step"><strong>Classes</strong> by remainder mod 3: <span class="mono">[0]={0,3}</span>, <span class="mono">[1]={1,4}</span>, <span class="mono">[2]={2,5}</span> &mdash; three blocks partitioning <span class="mono">A</span>.</span></div>
             </div>
             <div class="exercise">
               <div class="ex-label">Exercise 8.3 B</div>
-              <div class="ex-body">How many <strong>different</strong> equivalence classes does &ldquo;<span class="mono-inline">a &equiv; b (mod 5)</span>&rdquo; have on all of <span class="mono-inline">Z</span>, and which integers lie in <span class="mono-inline">[2]</span>?</div>
+              <div class="ex-body">How many <em>distinct</em> classes does &ldquo;<span class="mono-inline">a &equiv; b (mod 5)</span>&rdquo; have on <span class="mono-inline">Z</span>, and which integers form <span class="mono-inline">[2]</span>?</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-83B">Show solution</button>
-              <div class="solution" id="sol-83B"><span class="step"><strong>Five classes</strong>, one per possible remainder: <span class="mono">[0], [1], [2], [3], [4]</span>. (More representatives exist &mdash; <span class="mono">[5] = [0]</span> &mdash; but only five <em>distinct</em> classes.)</span> <span class="step"><span class="mono">[2] = { &hellip;, &minus;8, &minus;3, 2, 7, 12, 17, &hellip; } = { 5k + 2 : k &isin; Z }</span> &mdash; every integer leaving remainder 2.</span></div>
+              <div class="solution" id="sol-83B"><span class="step"><strong>Five</strong>, one per remainder: <span class="mono">[0],[1],[2],[3],[4]</span>. (More <em>names</em> exist &mdash; <span class="mono">[5]=[0]</span> &mdash; but five distinct classes.)</span> <span class="step"><span class="mono">[2] = { 5k + 2 : k &isin; Z } = {&hellip;,&minus;8,&minus;3,2,7,12,&hellip;}</span>.</span></div>
             </div>
           </div>
         </div>
@@ -794,39 +587,45 @@
             <div class="ex-source">A selection from Epp&rsquo;s recommended problems (4th ed.), solved in the style used in lecture. Attempt each on paper first.</div>
             <div class="exercise">
               <div class="ex-label">&sect;8.1 &middot; a relation from its rule</div>
-              <div class="ex-body">Let <span class="mono-inline">A = {1, 2, 3, 4}</span> and define <span class="mono-inline">x R y &hArr; x + y</span> is even. Write <span class="mono-inline">R</span>, then read off whether it is reflexive, symmetric, transitive.</div>
+              <div class="ex-body">On <span class="mono-inline">A = {1,2,3,4}</span> define <span class="mono-inline">x R y &hArr; x + y</span> is even. Write <span class="mono-inline">R</span> and read off the three properties.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-W1">Show solution</button>
-              <div class="solution" id="sol-W1"><span class="step">Same-parity pairs. Evens <span class="mono">{2,4}</span>, odds <span class="mono">{1,3}</span>.</span> <span class="step"><span class="mono">R = {(1,1),(1,3),(3,1),(3,3),(2,2),(2,4),(4,2),(4,4)}</span>.</span> <span class="step"><strong>Reflexive</strong> (each <span class="mono">(a,a)</span> present, since <span class="mono">a+a=2a</span> is even), <strong>symmetric</strong> (<span class="mono">x+y=y+x</span>), <strong>transitive</strong> (same parity is &ldquo;the same in a respect&rdquo;). It is an equivalence relation with classes <span class="mono">{1,3}</span> and <span class="mono">{2,4}</span>.</span></div>
+              <div class="solution" id="sol-W1"><span class="step">Same-parity pairs. Evens <span class="mono">{2,4}</span>, odds <span class="mono">{1,3}</span>: <span class="mono">R = {(1,1),(1,3),(3,1),(3,3),(2,2),(2,4),(4,2),(4,4)}</span>.</span> <span class="step"><strong>Reflexive</strong> (<span class="mono">a+a</span> even), <strong>symmetric</strong> (<span class="mono">x+y=y+x</span>), <strong>transitive</strong> (same parity chains). An equivalence relation with classes <span class="mono">{1,3}</span> and <span class="mono">{2,4}</span>.</span></div>
             </div>
             <div class="exercise">
               <div class="ex-label">&sect;8.2 &middot; prove symmetric</div>
-              <div class="ex-body">On <span class="mono-inline">Z</span>, <span class="mono-inline">a R b &hArr; 5 | (a &minus; b)</span>. Prove <span class="mono-inline">R</span> is symmetric.</div>
+              <div class="ex-body">On <span class="mono-inline">Z</span>, <span class="mono-inline">a R b &hArr; 5 | (a &minus; b)</span>. Prove symmetry.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-W2">Show solution</button>
-              <div class="solution" id="sol-W2"><span class="step">Suppose <span class="mono">a R b</span>, so <span class="mono">5 | (a &minus; b)</span>, i.e. <span class="mono">a &minus; b = 5k</span> for some <span class="mono">k &isin; Z</span>.</span> <span class="step">Then <span class="mono">b &minus; a = &minus;5k = 5(&minus;k)</span>, and <span class="mono">&minus;k &isin; Z</span>, so <span class="mono">5 | (b &minus; a)</span>, i.e. <span class="mono">b R a</span>. Hence <span class="mono">R</span> is symmetric. <span class="end-of-proof">&#8718;</span></span></div>
+              <div class="solution" id="sol-W2"><span class="step">Assume <span class="mono">a R b</span>: <span class="mono">a &minus; b = 5k</span>, <span class="mono">k &isin; Z</span>. Then <span class="mono">b &minus; a = 5(&minus;k)</span> with <span class="mono">&minus;k &isin; Z</span>, so <span class="mono">5 | (b &minus; a)</span>, i.e. <span class="mono">b R a</span>. <span class="end-of-proof">&#8718;</span></span></div>
             </div>
             <div class="exercise">
-              <div class="ex-label">&sect;8.2 &middot; disprove transitive</div>
-              <div class="ex-body">On <span class="mono-inline">A = {a, b, c}</span> let <span class="mono-inline">R = {(a,b),(b,c)}</span>. Is <span class="mono-inline">R</span> transitive? Make it transitive by adding the fewest pairs.</div>
+              <div class="ex-label">&sect;8.2 &middot; closure</div>
+              <div class="ex-body">On <span class="mono-inline">{a,b,c}</span>, <span class="mono-inline">R = {(a,b),(b,c)}</span>. Give the reflexive, symmetric, and transitive closures.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-W3">Show solution</button>
-              <div class="solution" id="sol-W3"><span class="step"><strong>Not transitive:</strong> <span class="mono">(a,b)</span> and <span class="mono">(b,c)</span> are present but <span class="mono">(a,c)</span> is not &mdash; the shortcut is missing.</span> <span class="step">Add <span class="mono">(a,c)</span>. Now check again: the only two-step paths are <span class="mono">a&rarr;b&rarr;c</span> (shortcut <span class="mono">(a,c)</span> now present). So <span class="mono">R&#7511; = {(a,b),(b,c),(a,c)}</span> is the transitive closure &mdash; one pair suffices.</span></div>
+              <div class="solution" id="sol-W3"><span class="step"><strong>Reflexive closure:</strong> add <span class="mono">(a,a),(b,b),(c,c)</span>.</span> <span class="step"><strong>Symmetric closure:</strong> add <span class="mono">(b,a),(c,b)</span>.</span> <span class="step"><strong>Transitive closure:</strong> <span class="mono">(a,b),(b,c)</span> force <span class="mono">(a,c)</span>; no further pair appears, so <span class="mono">R&#7511; = {(a,b),(b,c),(a,c)}</span>.</span></div>
             </div>
             <div class="exercise">
               <div class="ex-label">&sect;8.3 &middot; verify an equivalence relation</div>
-              <div class="ex-body">On the set of all strings over <span class="mono-inline">{0,1}</span>, define <span class="mono-inline">s R t &hArr; s</span> and <span class="mono-inline">t</span> have the same length. Show it is an equivalence relation and describe the classes.</div>
+              <div class="ex-body">On all binary strings, <span class="mono-inline">s R t &hArr;</span> same length. Show it is an equivalence relation and describe the classes.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-W4">Show solution</button>
-              <div class="solution" id="sol-W4"><span class="step"><strong>Reflexive:</strong> <span class="mono">s</span> has the same length as itself. <strong>Symmetric:</strong> if <span class="mono">len(s)=len(t)</span> then <span class="mono">len(t)=len(s)</span>. <strong>Transitive:</strong> equal lengths chain through. So it is an equivalence relation (it is &ldquo;same value of the function <span class="mono">length</span>&rdquo; &mdash; every function induces such a relation).</span> <span class="step"><strong>Classes:</strong> one class per length: <span class="mono">[&epsilon;] = {&epsilon;}</span> (length 0), length-1 strings <span class="mono">{0, 1}</span>, length-2 strings <span class="mono">{00,01,10,11}</span>, and so on.</span></div>
+              <div class="solution" id="sol-W4"><span class="step">This is &ldquo;same value of the function <span class="mono">length</span>&rdquo;. <strong>Reflexive / symmetric / transitive</strong> all hold because equality of lengths does. <em>(In general, &ldquo;<span class="mono">f(x)=f(y)</span>&rdquo; for any function <span class="mono">f</span> is always an equivalence relation.)</em></span> <span class="step"><strong>Classes:</strong> one per length &mdash; <span class="mono">{&epsilon;}</span>, <span class="mono">{0,1}</span>, <span class="mono">{00,01,10,11}</span>, &hellip;</span></div>
             </div>
             <div class="exercise">
               <div class="ex-label">&sect;8.3 &middot; classes of congruence</div>
-              <div class="ex-body">For congruence mod 4 on <span class="mono-inline">Z</span>, list the four classes and decide whether <span class="mono-inline">&minus;6</span> and <span class="mono-inline">10</span> are in the same class.</div>
+              <div class="ex-body">For congruence mod 4, list the four classes and decide whether <span class="mono-inline">&minus;6</span> and <span class="mono-inline">10</span> share a class.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-W5">Show solution</button>
-              <div class="solution" id="sol-W5"><span class="step"><span class="mono">[0]={&hellip;,&minus;4,0,4,8,&hellip;}</span>, <span class="mono">[1]={&hellip;,&minus;3,1,5,&hellip;}</span>, <span class="mono">[2]={&hellip;,&minus;2,2,6,10,&hellip;}</span>, <span class="mono">[3]={&hellip;,&minus;1,3,7,&hellip;}</span>.</span> <span class="step"><span class="mono">&minus;6 mod 4</span>: <span class="mono">&minus;6 = 4&middot;(&minus;2) + 2</span>, remainder <span class="mono">2</span>. <span class="mono">10 = 4&middot;2 + 2</span>, remainder <span class="mono">2</span>. Same remainder &rArr; <strong>same class</strong> <span class="mono">[2]</span>. Equivalently <span class="mono">4 | (10 &minus; (&minus;6)) = 16</span>. &#10003;</span></div>
+              <div class="solution" id="sol-W5"><span class="step"><span class="mono">[0]={&hellip;,&minus;4,0,4,8,&hellip;}</span>, <span class="mono">[1]</span>, <span class="mono">[2]={&hellip;,&minus;2,2,6,10,&hellip;}</span>, <span class="mono">[3]</span>.</span> <span class="step"><span class="mono">&minus;6 = 4(&minus;2)+2</span> and <span class="mono">10 = 4(2)+2</span> &mdash; both remainder <span class="mono">2</span>, so <strong>same class</strong> <span class="mono">[2]</span>. Equivalently <span class="mono">4 | (10&minus;(&minus;6)) = 16</span>. &#10003;</span></div>
             </div>
             <div class="exercise">
               <div class="ex-label">&sect;8.3 &middot; partition to relation</div>
-              <div class="ex-body">The partition of <span class="mono-inline">{1,2,3,4,5}</span> into <span class="mono-inline">{1,4,5}</span> and <span class="mono-inline">{2,3}</span> induces which relation? How many pairs does it contain?</div>
+              <div class="ex-body">The partition of <span class="mono-inline">{1,2,3,4,5}</span> into <span class="mono-inline">{1,4,5}</span> and <span class="mono-inline">{2,3}</span> induces which relation, and how many pairs?</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-W6">Show solution</button>
-              <div class="solution" id="sol-W6"><span class="step">&ldquo;Same block&rdquo; gives all ordered pairs within each block. Block <span class="mono">{1,4,5}</span> contributes <span class="mono">3&sup2; = 9</span> pairs; block <span class="mono">{2,3}</span> contributes <span class="mono">2&sup2; = 4</span> pairs.</span> <span class="step"><strong>Total <span class="mono">9 + 4 = 13</span> pairs.</strong> In general a block of size <span class="mono">k</span> contributes <span class="mono">k&sup2;</span> pairs, and the induced relation is automatically reflexive, symmetric and transitive.</span></div>
+              <div class="solution" id="sol-W6"><span class="step">&ldquo;Same block&rdquo; gives all ordered pairs within each block: <span class="mono">3&sup2; = 9</span> from <span class="mono">{1,4,5}</span> and <span class="mono">2&sup2; = 4</span> from <span class="mono">{2,3}</span>.</span> <span class="step"><strong>Total <span class="mono">13</span> pairs.</strong> A block of size <span class="mono">k</span> always contributes <span class="mono">k&sup2;</span>, and the result is automatically reflexive, symmetric, and transitive.</span></div>
+            </div>
+            <div class="exercise">
+              <div class="ex-label">&sect;8.2 &middot; matrix view</div>
+              <div class="ex-body">How can you tell reflexive, symmetric, and transitive from the 0/1 matrix <span class="mono-inline">M</span> of <span class="mono-inline">R</span>?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-W7">Show solution</button>
+              <div class="solution" id="sol-W7"><span class="step"><strong>Reflexive:</strong> the diagonal is all 1s. <strong>Symmetric:</strong> <span class="mono">M</span> equals its transpose (<span class="mono">M&#7511; = M</span>) &mdash; mirror image across the diagonal.</span> <span class="step"><strong>Transitive:</strong> wherever <span class="mono">M&sup2;</span> (Boolean product) has a 1, <span class="mono">M</span> already has a 1 &mdash; a 2-step path implies a direct edge. The 8.1.1 and 8.1.3 tools draw <span class="mono">M</span> for you to inspect.</span></div>
             </div>
           </div>
         </div>
@@ -838,38 +637,44 @@
             <div class="ex-source">Tougher problems that reward real understanding. Each solution shows the <em>idea</em> first, then the steps.</div>
             <div class="exercise challenge">
               <div class="ex-label">Challenge 1 <span class="chip-hard">the classic trap</span></div>
-              <div class="ex-body">A student &ldquo;proves&rdquo;: <em>symmetric + transitive &rArr; reflexive</em> &mdash; &ldquo;if <span class="mono-inline">x R y</span> then by symmetry <span class="mono-inline">y R x</span>, and then by transitivity <span class="mono-inline">x R x</span>.&rdquo; Find the flaw and give a relation that is symmetric and transitive but <strong>not</strong> reflexive.</div>
+              <div class="ex-body">A student &ldquo;proves&rdquo; <em>symmetric + transitive &rArr; reflexive</em>: &ldquo;if <span class="mono-inline">x R y</span> then by symmetry <span class="mono-inline">y R x</span>, then by transitivity <span class="mono-inline">x R x</span>.&rdquo; Find the flaw and give a symmetric, transitive, but <strong>not</strong> reflexive relation.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-C1">Show solution</button>
-              <div class="solution" id="sol-C1"><span class="step"><strong>The flaw:</strong> the argument needs an <span class="mono">x</span> that is related to <em>some</em> <span class="mono">y</span> to start. If an element <span class="mono">x</span> is related to <strong>nothing</strong>, the chain never begins, so <span class="mono">x R x</span> is never forced.</span> <span class="step"><strong>Counterexample:</strong> on <span class="mono">A = {1, 2}</span> take <span class="mono">R = {(1,1)}</span>. It is symmetric (the only pair is its own reverse) and transitive (the only chain <span class="mono">1&rarr;1&rarr;1</span> closes), but <strong>not reflexive</strong> because <span class="mono">(2,2)</span> is missing &mdash; element 2 is related to nothing. (The empty relation on any non-empty set is the extreme case.)</span> <span class="step"><strong>Lesson:</strong> reflexivity is genuinely independent &mdash; it must be checked on its own, and the property checker (8.2.1) will flag exactly the orphaned element.</span></div>
+              <div class="solution" id="sol-C1"><span class="step"><strong>The flaw:</strong> the chain needs an <span class="mono">x</span> related to <em>some</em> <span class="mono">y</span> to start. An element related to <strong>nothing</strong> never gets a self-loop forced on it.</span> <span class="step"><strong>Counterexample:</strong> on <span class="mono">{1,2}</span> take <span class="mono">R = {(1,1)}</span>. Symmetric &#10003;, transitive &#10003;, but not reflexive (<span class="mono">(2,2)</span> missing &mdash; 2 is related to nothing). The empty relation on a non-empty set is the extreme case.</span> <span class="step"><strong>Lesson:</strong> reflexivity is genuinely independent &mdash; 8.2.1 flags exactly the orphaned element.</span></div>
             </div>
             <div class="exercise challenge">
               <div class="ex-label">Challenge 2 <span class="chip-hard">count the structures</span></div>
-              <div class="ex-body">How many different equivalence relations are there on a 4-element set? (Equivalently, how many ways to partition it.)</div>
+              <div class="ex-body">How many equivalence relations are there on a 4-element set?</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-C2">Show solution</button>
-              <div class="solution" id="sol-C2"><span class="step"><strong>Idea:</strong> by Theorem 8.3.4 an equivalence relation <em>is</em> a partition, so just count partitions of <span class="mono">{1,2,3,4}</span>. Count by block-size shape.</span> <span class="step">1 block of 4: <span class="mono">1</span> way. &nbsp; 3+1: <span class="mono">C(4,3)=4</span>. &nbsp; 2+2: <span class="mono">C(4,2)/2 = 3</span> (divide by 2 because the two pairs are interchangeable). &nbsp; 2+1+1: <span class="mono">C(4,2)=6</span>. &nbsp; 1+1+1+1: <span class="mono">1</span>.</span> <span class="step">Total <span class="mono">1 + 4 + 3 + 6 + 1 = <strong>15</strong></span>. (These are the <em>Bell numbers</em>: <span class="mono">B&#8320;..B&#8324; = 1, 1, 2, 5, 15</span>.) The counting tools of Chapter 9 are exactly what makes this systematic.</span></div>
+              <div class="solution" id="sol-C2"><span class="step"><strong>Idea:</strong> an equivalence relation <em>is</em> a partition (8.3.4), so count partitions of <span class="mono">{1,2,3,4}</span> by block-size shape.</span> <span class="step"><span class="mono">4</span>: 1 way. <span class="mono">3+1</span>: <span class="mono">C(4,3)=4</span>. <span class="mono">2+2</span>: <span class="mono">C(4,2)/2 = 3</span>. <span class="mono">2+1+1</span>: <span class="mono">C(4,2)=6</span>. <span class="mono">1+1+1+1</span>: 1.</span> <span class="step">Total <span class="mono">1+4+3+6+1 = <strong>15</strong></span> &mdash; the Bell number <span class="mono">B&#8324;</span> (<span class="mono">1,1,2,5,15,&hellip;</span>). Chapter 9&rsquo;s counting tools make this systematic.</span></div>
             </div>
             <div class="exercise challenge">
               <div class="ex-label">Challenge 3 <span class="chip-hard">prove it carefully</span></div>
-              <div class="ex-body">On <span class="mono-inline">R</span> (the reals) define <span class="mono-inline">x R y &hArr; x &minus; y &isin; Z</span> (their difference is an integer). Prove it is an equivalence relation and describe <span class="mono-inline">[0]</span> and <span class="mono-inline">[0.5]</span>.</div>
+              <div class="ex-body">On <span class="mono-inline">R</span> define <span class="mono-inline">x R y &hArr; x &minus; y &isin; Z</span>. Prove it is an equivalence relation and describe <span class="mono-inline">[0]</span> and <span class="mono-inline">[0.5]</span>.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-C3">Show solution</button>
-              <div class="solution" id="sol-C3"><span class="step"><strong>Reflexive:</strong> <span class="mono">x &minus; x = 0 &isin; Z</span>. <strong>Symmetric:</strong> if <span class="mono">x &minus; y &isin; Z</span> then <span class="mono">y &minus; x = &minus;(x &minus; y) &isin; Z</span>. <strong>Transitive:</strong> if <span class="mono">x &minus; y &isin; Z</span> and <span class="mono">y &minus; z &isin; Z</span>, add them: <span class="mono">x &minus; z &isin; Z</span> (sum of integers). So it is an equivalence relation.</span> <span class="step"><strong>Classes</strong> group reals by their <em>fractional part</em>. <span class="mono">[0] = Z</span> (all integers); <span class="mono">[0.5] = { &hellip;, &minus;1.5, &minus;0.5, 0.5, 1.5, &hellip; } = { n + 0.5 : n &isin; Z }</span>. There is one class for each value in <span class="mono">[0, 1)</span> &mdash; this is the circle you get by &ldquo;gluing&rdquo; the number line at every integer.</span></div>
+              <div class="solution" id="sol-C3"><span class="step"><strong>Reflexive:</strong> <span class="mono">x&minus;x=0&isin;Z</span>. <strong>Symmetric:</strong> <span class="mono">x&minus;y&isin;Z &rArr; y&minus;x&isin;Z</span>. <strong>Transitive:</strong> add two integer differences. &#10003;</span> <span class="step">Classes group reals by <strong>fractional part</strong>. <span class="mono">[0] = Z</span>; <span class="mono">[0.5] = {n + 0.5 : n &isin; Z}</span>. One class per value in <span class="mono">[0,1)</span> &mdash; the circle you get by gluing the line at every integer.</span></div>
             </div>
             <div class="exercise challenge">
               <div class="ex-label">Challenge 4 <span class="chip-hard">build to order</span></div>
-              <div class="ex-body">On <span class="mono-inline">A = {1,2,3,4}</span>, construct a relation that is reflexive and symmetric but <strong>not</strong> transitive, using as few pairs as possible. Then take its transitive closure.</div>
+              <div class="ex-body">On <span class="mono-inline">{1,2,3,4}</span> build a reflexive, symmetric, <strong>non</strong>-transitive relation with as few pairs as possible, then take its transitive closure.</div>
               <button type="button" class="solution-btn" data-toggle-sol="sol-C4">Show solution</button>
-              <div class="solution" id="sol-C4"><span class="step"><strong>Idea:</strong> link <span class="mono">1&ndash;2</span> and <span class="mono">2&ndash;3</span> symmetrically but leave <span class="mono">1&ndash;3</span> out; add all self-loops for reflexivity.</span> <span class="step"><span class="mono">R = {(1,1),(2,2),(3,3),(4,4),(1,2),(2,1),(2,3),(3,2)}</span>. Reflexive &#10003;, symmetric &#10003;. Not transitive: <span class="mono">(1,2),(2,3)</span> present but <span class="mono">(1,3)</span> missing.</span> <span class="step"><strong>Transitive closure</strong> forces <span class="mono">(1,3)</span> and, by symmetry of the result, <span class="mono">(3,1)</span>. Now <span class="mono">{1,2,3}</span> is fully connected, so the closure becomes the equivalence relation with classes <span class="mono">{1,2,3}</span> and <span class="mono">{4}</span> &mdash; a nice illustration that closing a reflexive-symmetric relation transitively yields an equivalence relation.</span></div>
+              <div class="solution" id="sol-C4"><span class="step"><strong>Idea:</strong> link <span class="mono">1&ndash;2</span> and <span class="mono">2&ndash;3</span> symmetrically but skip <span class="mono">1&ndash;3</span>; add all self-loops.</span> <span class="step"><span class="mono">R = {(1,1),(2,2),(3,3),(4,4),(1,2),(2,1),(2,3),(3,2)}</span>: reflexive &#10003;, symmetric &#10003;, not transitive (<span class="mono">(1,2),(2,3)</span> but no <span class="mono">(1,3)</span>).</span> <span class="step">Transitive closure forces <span class="mono">(1,3)</span> and (by symmetry) <span class="mono">(3,1)</span>, fusing <span class="mono">{1,2,3}</span>. The closure is the equivalence relation with classes <span class="mono">{1,2,3}</span> and <span class="mono">{4}</span> &mdash; closing a reflexive-symmetric relation transitively always yields an equivalence relation.</span></div>
+            </div>
+            <div class="exercise challenge">
+              <div class="ex-label">Challenge 5 <span class="chip-hard">count, with classes</span></div>
+              <div class="ex-body">For congruence mod <span class="mono-inline">n</span>, how many integers from <span class="mono-inline">1</span> to <span class="mono-inline">1000</span> lie in class <span class="mono-inline">[0]</span> when <span class="mono-inline">n = 7</span>?</div>
+              <button type="button" class="solution-btn" data-toggle-sol="sol-C5">Show solution</button>
+              <div class="solution" id="sol-C5"><span class="step"><span class="mono">[0]</span> mod 7 is the multiples of 7. Count them in <span class="mono">[1,1000]</span>: <span class="mono">&lfloor;1000/7&rfloor; = 142</span>.</span> <span class="step">The classes are nearly balanced: most hold 143 and some hold 142, summing to 1000 &mdash; the partition splits the range as evenly as 7 allows. (This counting move is exactly &sect;9.1.)</span></div>
             </div>
           </div>
 
           <div class="recap-card" id="recap">
             <h3>Chapter recap &mdash; relations, end to end</h3>
             <ul>
-              <li><strong>8.1</strong> &mdash; a relation is a subset of <span class="mono-inline">A &times; B</span> (a chosen set of pairs); see it as pairs, a 0/1 matrix, or a directed graph; know domain, range, and the inverse <span class="mono-inline">R&#8315;&sup1;</span> (reverse the arrows / transpose the matrix). A function is the special case &ldquo;each input exactly once&rdquo;.</li>
-              <li><strong>8.2</strong> &mdash; on one set, test <strong>reflexive</strong> (self-loop on every element), <strong>symmetric</strong> (every arrow has its reverse), <strong>transitive</strong> (every two-step path has a shortcut). Prove with an arbitrary case from the definition; disprove with one counterexample. The transitive closure is the smallest transitive enlargement.</li>
-              <li><strong>8.3</strong> &mdash; reflexive + symmetric + transitive = an <strong>equivalence relation</strong>; its <strong>classes</strong> <span class="mono-inline">[a]</span> partition the set (equal or disjoint, never overlapping). Partitions and equivalence relations are the same data. Congruence mod <span class="mono-inline">n</span> is the model: <span class="mono-inline">n</span> classes by remainder.</li>
+              <li><strong>8.1</strong> &mdash; a relation is a subset of <span class="mono-inline">A &times; B</span>; picture it as an arrow diagram, a 0/1 matrix, or a directed graph; know domain, range, inverse (reverse / transpose), complement, and composition. A function is the special case &ldquo;each input exactly once&rdquo;.</li>
+              <li><strong>8.2</strong> &mdash; <strong>reflexive</strong> (loop on every node / all-1 diagonal), <strong>symmetric</strong> (every arrow two-way / <span class="mono-inline">M=M&#7511;</span>), <strong>transitive</strong> (every 2-step path has a shortcut). Prove from the definition on an arbitrary case; disprove with one counterexample. Closures add the smallest fix; antisymmetric + irreflexive lead to orderings.</li>
+              <li><strong>8.3</strong> &mdash; reflexive + symmetric + transitive = an <strong>equivalence relation</strong>; classes <span class="mono-inline">[a]</span> partition the set (equal or disjoint), one fact per property. Partitions and equivalence relations are the same data. Congruence mod <span class="mono-inline">n</span> is the model: <span class="mono-inline">n</span> classes by remainder.</li>
             </ul>
-            <div class="preview"><strong>The link forward.</strong> Counting the equivalence relations in Challenge 2 needed the multiplication rule and combinations &mdash; exactly the toolkit of Chapter 9 (Counting &amp; Probability), where &ldquo;how many ways?&rdquo; becomes a method rather than a guess.</div>
+            <div class="preview"><strong>The link forward.</strong> Counting equivalence relations (Challenge 2) and counting a residue class (Challenge 5) both needed systematic counting &mdash; exactly the toolkit of Chapter 9 (Counting &amp; Probability), where &ldquo;how many?&rdquo; becomes a method.</div>
           </div>
         </div>
 
@@ -898,79 +703,134 @@
     function row(label,val,cls,note){return '<div class="res-row"><span class="res-label">'+label+'</span><span class="res-val '+(cls||'')+'">'+val+'</span>'+(note?'<span class="res-note">'+note+'</span>':'')+'</div>';}
     function parseArrows(str){var out=[],seen={};(str||'').split(',').forEach(function(t){t=t.trim();if(!t)return;var p=t.split(':');if(p.length===2){var x=p[0].trim(),y=p[1].trim();if(x.length&&y.length){var k=x+''+y;if(!seen[k]){seen[k]=1;out.push([x,y]);}}}});return out;}
     function esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function f1(x){return Math.round(x*10)/10;}
+    var PALETTE=['#2563eb','#16a34a','#d97706','#9333ea','#dc2626','#0891b2','#ca8a04','#db2777','#4f46e5','#15803d'];
 
-    /* ===== directed-graph drawer ===== */
+    /* ===== SVG directed-graph engine (curved edges, real self-loops) ===== */
+    function svgMarkers(){
+      function mk(id,c){return '<marker id="'+id+'" markerWidth="11" markerHeight="11" refX="8.5" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,1 L9,5 L0,9 Z" fill="'+c+'"/></marker>';}
+      return '<defs>'+mk('ah-b','#1f6fb2')+mk('ah-o','#e08a1e')+mk('ah-g','#2e9e5b')+mk('ah-r','#c0392b')+'</defs>';
+    }
     function digraph(A, pairs, opts){
       opts=opts||{};
-      var n=A.length; if(n===0) return '<div class="svg-legend">enter a non-empty set</div>';
-      function hasP(x,y){for(var i=0;i<pairs.length;i++)if(pairs[i][0]===x&&pairs[i][1]===y)return true;return false;}
-      var R=Math.max(64, 30*n/Math.PI+30), cx=R+46, cy=R+30, W=Math.ceil(2*cx), H=Math.ceil(2*cy-16), nodeR=17;
+      var n=A.length;
+      if(n===0) return '<div class="fig-cap">enter a non-empty set</div>';
+      function has(x,y){for(var i=0;i<pairs.length;i++)if(pairs[i][0]===x&&pairs[i][1]===y)return true;return false;}
+      var nodeR = n<=4?23:(n<=6?20:17);
+      var ringR = Math.max(82, (n*(nodeR*2+24))/(2*Math.PI));
+      if(n===1) ringR=0;
+      var pad = nodeR + 46;
+      var cx = ringR + pad, cy = ringR + pad, W = Math.ceil(2*cx), H = Math.ceil(2*cy);
       var pos={};
-      A.forEach(function(a,i){var ang=-Math.PI/2 + 2*Math.PI*i/n; pos[a]={x:cx+R*Math.cos(ang), y:cy+R*Math.sin(ang)};});
-      var s='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" font-family="Roboto Mono, monospace">';
-      s+='<defs>'+
-         '<marker id="ah-b" markerWidth="9" markerHeight="9" refX="7.5" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1f6fb2"/></marker>'+
-         '<marker id="ah-o" markerWidth="9" markerHeight="9" refX="7.5" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#e08a1e"/></marker>'+
-         '</defs>';
-      // edges between distinct nodes
+      A.forEach(function(a,i){var ang=-Math.PI/2 + 2*Math.PI*i/n; pos[a]={x:cx+ringR*Math.cos(ang), y:cy+ringR*Math.sin(ang), ang:ang};});
+      var edges='', loops='', nodes='';
       pairs.forEach(function(p){
-        var x=p[0],y=p[1]; if(!(x in pos)||!(y in pos)||x===y) return;
-        var a=pos[x], b=pos[y], dx=b.x-a.x, dy=b.y-a.y, L=Math.sqrt(dx*dx+dy*dy)||1, ux=dx/L, uy=dy/L;
-        // perpendicular offset so opposite arrows don't overlap exactly
-        var px=-uy, py=ux, mutual=hasP(y,x), off=mutual?5:0;
-        var sx=a.x+ux*nodeR+px*off, sy=a.y+uy*nodeR+py*off, ex=b.x-ux*(nodeR+3)+px*off, ey=b.y-uy*(nodeR+3)+py*off;
-        var asym=opts.markAsym&&!mutual, col=asym?'#e08a1e':'#1f6fb2', mk=asym?'ah-o':'ah-b';
-        s+='<line x1="'+sx.toFixed(1)+'" y1="'+sy.toFixed(1)+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="'+col+'" stroke-width="1.8" marker-end="url(#'+mk+')"/>';
+        var x=p[0],y=p[1]; if(x===y||!(x in pos)||!(y in pos))return;
+        var a=pos[x], b=pos[y], dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)||1, ux=dx/d, uy=dy/d, nx=-uy, ny=ux;
+        var bend = Math.min(36, d*0.18) + (has(y,x)?15:0);
+        var mx=(a.x+b.x)/2 + nx*bend, my=(a.y+b.y)/2 + ny*bend;
+        var sa=Math.atan2(my-a.y,mx-a.x), sb=Math.atan2(my-b.y,mx-b.x);
+        var sx=a.x+Math.cos(sa)*nodeR, sy=a.y+Math.sin(sa)*nodeR;
+        var ex=b.x+Math.cos(sb)*(nodeR+5), ey=b.y+Math.sin(sb)*(nodeR+5);
+        var asym = opts.markAsym && !has(y,x), col = asym?'#e08a1e':'#1f6fb2', mk = asym?'ah-o':'ah-b';
+        edges+='<path d="M'+f1(sx)+','+f1(sy)+' Q'+f1(mx)+','+f1(my)+' '+f1(ex)+','+f1(ey)+'" fill="none" stroke="'+col+'" stroke-width="2.1" marker-end="url(#'+mk+')"/>';
       });
-      // self loops + nodes
       A.forEach(function(a){
-        var P=pos[a], ang=Math.atan2(P.y-cy,P.x-cx); if(n===1)ang=-Math.PI/2;
-        var loop=hasP(a,a);
-        if(loop){var ox=P.x+Math.cos(ang)*(nodeR+11), oy=P.y+Math.sin(ang)*(nodeR+11);
-          s+='<circle cx="'+ox.toFixed(1)+'" cy="'+oy.toFixed(1)+'" r="9" fill="none" stroke="#1f6fb2" stroke-width="1.8"/>';}
-        var missing=opts.markReflex&&!loop;
-        s+='<circle cx="'+P.x.toFixed(1)+'" cy="'+P.y.toFixed(1)+'" r="'+nodeR+'" fill="'+(missing?'#fdecec':'#eef3fb')+'" stroke="'+(missing?'#c0392b':'#1f6fb2')+'" stroke-width="2"'+(missing?' stroke-dasharray="4 3"':'')+'/>';
-        s+='<text x="'+P.x.toFixed(1)+'" y="'+(P.y+4).toFixed(1)+'" text-anchor="middle" font-size="13" fill="#234">'+esc(a)+'</text>';
+        var P=pos[a], ang=(n===1?-Math.PI/2:P.ang), loop=has(a,a);
+        if(loop){
+          var t1=ang-0.55, t2=ang+0.55, out2=nodeR+30;
+          var p1x=P.x+Math.cos(t1)*nodeR, p1y=P.y+Math.sin(t1)*nodeR;
+          var p2x=P.x+Math.cos(t2)*(nodeR+5), p2y=P.y+Math.sin(t2)*(nodeR+5);
+          var c1x=P.x+Math.cos(t1)*out2, c1y=P.y+Math.sin(t1)*out2;
+          var c2x=P.x+Math.cos(t2)*out2, c2y=P.y+Math.sin(t2)*out2;
+          var lc=opts.markReflex?'#2e9e5b':'#1f6fb2', lm=opts.markReflex?'ah-g':'ah-b';
+          loops+='<path d="M'+f1(p1x)+','+f1(p1y)+' C'+f1(c1x)+','+f1(c1y)+' '+f1(c2x)+','+f1(c2y)+' '+f1(p2x)+','+f1(p2y)+'" fill="none" stroke="'+lc+'" stroke-width="2.1" marker-end="url(#'+lm+')"/>';
+        }
+        var missing = opts.markReflex && !loop;
+        var fill='#eaf2fb', stroke='#1f6fb2';
+        if(opts.colorOf){var col=opts.colorOf(a); if(col){fill=col; stroke=col;}}
+        if(missing){fill='#fdecec'; stroke='#c0392b';}
+        var txtFill = (opts.colorOf&&opts.colorOf(a)&&!missing)?'#fff':'#1a3a5c';
+        nodes+='<circle cx="'+f1(P.x)+'" cy="'+f1(P.y)+'" r="'+nodeR+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2.5"'+(missing?' stroke-dasharray="5 4"':'')+'/>';
+        nodes+='<text x="'+f1(P.x)+'" y="'+f1(P.y+5)+'" text-anchor="middle" font-size="15" font-weight="700" fill="'+txtFill+'">'+esc(a)+'</text>';
       });
+      var disp=Math.min(W,440);
+      return '<svg viewBox="0 0 '+W+' '+H+'" width="'+disp+'" font-family="Roboto Mono, monospace">'+svgMarkers()+edges+loops+nodes+'</svg>';
+    }
+
+    /* ===== arrow diagram (A -> B) ===== */
+    function arrowDiagram(A,B,pairs){
+      if(!A.length&&!B.length) return '<div class="fig-cap">enter sets A and B</div>';
+      var rows=Math.max(A.length,B.length,1), rowH=44, topPad=40, nodeR=15, colGap=176, sidePad=58;
+      var leftX=sidePad, rightX=sidePad+colGap, W=rightX+sidePad, H=topPad+rows*rowH+14;
+      function yA(i){return topPad+i*rowH+(rows-A.length)*rowH/2;}
+      function yB(j){return topPad+j*rowH+(rows-B.length)*rowH/2;}
+      var posA={},posB={};
+      A.forEach(function(a,i){posA[a]=yA(i);}); B.forEach(function(b,j){posB[b]=yB(j);});
+      var s='<svg viewBox="0 0 '+W+' '+H+'" width="'+Math.min(W,360)+'" font-family="Roboto Mono, monospace">'+svgMarkers();
+      // column frames
+      function frame(x,cnt,startY){if(!cnt)return '';var top=startY-26,h=cnt*rowH+8;return '<rect x="'+(x-30)+'" y="'+top+'" width="60" height="'+h+'" rx="26" fill="none" stroke="#9fb6d6" stroke-dasharray="4 4"/>';}
+      s+=frame(leftX,A.length,yA(0))+frame(rightX,B.length,yB(0));
+      s+='<text x="'+leftX+'" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#1f6fb2">A</text>';
+      s+='<text x="'+rightX+'" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#1f6fb2">B</text>';
+      // arrows
+      pairs.forEach(function(p){var x=p[0],y=p[1]; if(!(x in posA)||!(y in posB))return;
+        var sx=leftX+nodeR, sy=posA[x], ex=rightX-nodeR-5, ey=posB[y];
+        s+='<line x1="'+sx+'" y1="'+sy+'" x2="'+ex+'" y2="'+ey+'" stroke="#1f6fb2" stroke-width="1.8" marker-end="url(#ah-b)"/>';
+      });
+      A.forEach(function(a){var y=posA[a];s+='<circle cx="'+leftX+'" cy="'+y+'" r="'+nodeR+'" fill="#eaf2fb" stroke="#1f6fb2" stroke-width="2"/><text x="'+leftX+'" y="'+(y+5)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#1a3a5c">'+esc(a)+'</text>';});
+      B.forEach(function(b){var y=posB[b];s+='<circle cx="'+rightX+'" cy="'+y+'" r="'+nodeR+'" fill="#eafaef" stroke="#2e9e5b" stroke-width="2"/><text x="'+rightX+'" y="'+(y+5)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a2c">'+esc(b)+'</text>';});
       s+='</svg>'; return s;
     }
 
-    /* ===== matrix builder ===== */
+    /* ===== matrix ===== */
     function matrixHTML(rows, cols, has, opts){
       opts=opts||{};
-      if(!rows.length||!cols.length) return '<div class="svg-legend">enter set(s) and pairs</div>';
+      if(!rows.length||!cols.length) return '<div class="fig-cap">enter set(s) and pairs</div>';
       var s='<table class="rel-matrix"><tr><th>R</th>';
-      cols.forEach(function(c){s+='<th>'+esc(c)+'</th>';});
-      s+='</tr>';
-      rows.forEach(function(r){
-        s+='<tr><th>'+esc(r)+'</th>';
-        cols.forEach(function(c){var on=has(r,c),diag=opts.square&&r===c;
-          s+='<td class="'+(on?'one':'zero')+(diag?' diag':'')+'">'+(on?'1':'0')+'</td>';});
-        s+='</tr>';
-      });
-      s+='</table>'; return s;
+      cols.forEach(function(c){s+='<th>'+esc(c)+'</th>';}); s+='</tr>';
+      rows.forEach(function(r){s+='<tr><th>'+esc(r)+'</th>';
+        cols.forEach(function(c){var on=has(r,c),diag=opts.square&&r===c; s+='<td class="'+(on?'one':'zero')+(diag?' diag':'')+'">'+(on?'1':'0')+'</td>';});
+        s+='</tr>';}); s+='</table>'; return s;
     }
 
-    /* 8.1.1 relation explorer */
+    /* ===== property check ===== */
+    function checkProps(A,pr){
+      var inR={}; pr.forEach(function(p){inR[p[0]+''+p[1]]=1;});
+      function has(x,y){return !!inR[x+''+y];}
+      var reflMiss=A.filter(function(a){return !has(a,a);});
+      var symBad=null; for(var i=0;i<pr.length&&!symBad;i++){if(inA(A,pr[i][0])&&inA(A,pr[i][1])&&!has(pr[i][1],pr[i][0]))symBad=[pr[i][0],pr[i][1]];}
+      var transBad=null;
+      for(var a=0;a<pr.length&&!transBad;a++)for(var b=0;b<pr.length&&!transBad;b++){
+        if(pr[a][1]===pr[b][0]){var x=pr[a][0],y=pr[a][1],z=pr[b][1]; if(inA(A,x)&&inA(A,z)&&!has(x,z))transBad=[x,y,z];}}
+      return {has:has,refl:reflMiss.length===0,reflMiss:reflMiss,sym:!symBad,symBad:symBad,trans:!transBad,transBad:transBad};
+    }
+    function classesOf(A,r){
+      var classes=[],assigned={};
+      A.forEach(function(a){if(assigned[a])return;var cls=A.filter(function(x){return r.has(x,a);});cls.forEach(function(x){assigned[x]=1;});classes.push(cls);});
+      return classes;
+    }
+
+    /* 8.1.1 three pictures */
     (function(){
       var A=document.getElementById('r1-A'),B=document.getElementById('r1-B'),P=document.getElementById('r1-pairs'),
-          mx=document.getElementById('r1-matrix'),out=document.getElementById('r1-out');
+          arr=document.getElementById('r1-arrow'),mx=document.getElementById('r1-matrix'),out=document.getElementById('r1-out');
       if(!A||!out)return;
       function render(){
         var dom=parseList(A.value), cod=B.value.trim()?parseList(B.value):dom.slice(), pr=parseArrows(P.value);
-        var inR={}; pr.forEach(function(p){inR[p[0]+''+p[1]]=1;});
-        function has(x,y){return !!inR[x+''+y];}
-        mx.innerHTML=matrixHTML(dom,cod,has,{square:B.value.trim()===''});
-        var strayX=[],strayY=[]; pr.forEach(function(p){if(!inA(dom,p[0])&&!inA(strayX,p[0]))strayX.push(p[0]); if(!inA(cod,p[1])&&!inA(strayY,p[1]))strayY.push(p[1]);});
         var valid=pr.filter(function(p){return inA(dom,p[0])&&inA(cod,p[1]);});
+        var inR={}; valid.forEach(function(p){inR[p[0]+''+p[1]]=1;});
+        function has(x,y){return !!inR[x+''+y];}
+        arr.innerHTML=arrowDiagram(dom,cod,valid);
+        mx.innerHTML=matrixHTML(dom,cod,has,{square:B.value.trim()===''});
         var domR=[],ranR=[]; valid.forEach(function(p){if(!inA(domR,p[0]))domR.push(p[0]); if(!inA(ranR,p[1]))ranR.push(p[1]);});
-        var inv=valid.map(function(p){return '('+p[1]+', '+p[0]+')';});
+        var inv=valid.map(function(p){return '('+esc(p[1])+', '+esc(p[0])+')';});
+        var strayX=[],strayY=[]; pr.forEach(function(p){if(!inA(dom,p[0])&&!inA(strayX,p[0]))strayX.push(p[0]); if(!inA(cod,p[1])&&!inA(strayY,p[1]))strayY.push(p[1]);});
         var html=row('R',valid.length?'{'+valid.map(function(p){return '('+esc(p[0])+', '+esc(p[1])+')';}).join(', ')+'}':'&empty;','','the chosen pairs')+
-          row('domain of R',fmt(domR.map(esc)),'t','first coordinates used')+
-          row('range of R',fmt(ranR.map(esc)),'t','second coordinates used')+
-          row('R&#8315;&sup1; (inverse)',inv.length?'{'+inv.map(esc).join(', ')+'}':'&empty;','','reverse every arrow / transpose');
-        if(strayX.length)html+=row('&#9888; stray first coord',strayX.map(esc).join(', '),'f','not in A &mdash; ignored');
-        if(strayY.length)html+=row('&#9888; stray second coord',strayY.map(esc).join(', '),'f','not in B &mdash; ignored');
+          row('domain of R',fmt(domR.map(esc)),'t','')+
+          row('range of R',fmt(ranR.map(esc)),'t','')+
+          row('R&#8315;&sup1; (inverse)',inv.length?'{'+inv.join(', ')+'}':'&empty;','','reverse every arrow / transpose');
+        if(strayX.length||strayY.length)html+=row('&#9888; ignored','strays: '+strayX.concat(strayY).map(esc).join(', '),'f','not in A or B');
         out.innerHTML=html;
       }
       [A,B,P].forEach(function(e){e.addEventListener('input',render);}); render();
@@ -986,58 +846,35 @@
 
     /* 8.1.3 standard relations */
     (function(){
-      var REL=document.getElementById('std-rel'),N=document.getElementById('std-n'),M=document.getElementById('std-m'),
-          ML=document.getElementById('std-mlab'),svg=document.getElementById('std-svg'),out=document.getElementById('std-out');
+      var REL=document.getElementById('std-rel'),N=document.getElementById('std-n'),M=document.getElementById('std-m'),ML=document.getElementById('std-mlab'),
+          svg=document.getElementById('std-svg'),mxx=document.getElementById('std-matrix'),out=document.getElementById('std-out');
       if(!REL||!out)return;
+      function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}
       function render(){
-        ML.style.display = REL.value==='cong' ? 'inline-flex' : 'none';
-        var n=parseInt(N.value,10), m=parseInt(M.value,10);
-        if(isNaN(n)||n<1){out.innerHTML=row('n','enter n &ge; 1','f','');svg.innerHTML='';return;}
+        ML.style.display = REL.value==='cong'?'inline-flex':'none';
+        var n=parseInt(N.value,10), m=parseInt(M.value,10); if(isNaN(m)||m<2)m=3;
+        if(isNaN(n)||n<1){out.innerHTML=row('n','enter n &ge; 1','f','');svg.innerHTML='';mxx.innerHTML='';return;}
         n=Math.min(n,12); var A=[]; for(var i=1;i<=n;i++)A.push(''+i);
-        var rel=REL.value, pr=[], label;
-        function add(x,y){pr.push([''+x,''+y]);}
-        for(var x=1;x<=n;x++)for(var y=1;y<=n;y++){
-          var ok=false;
-          if(rel==='div')ok=(y%x===0);
-          else if(rel==='le')ok=(x<=y);
-          else if(rel==='lt')ok=(x<y);
-          else if(rel==='eq')ok=(x===y);
-          else if(rel==='cong'){var mm=(isNaN(m)||m<2)?3:m; ok=(((x-y)%mm)===0);}
-          if(ok)add(x,y);
-        }
-        label={div:'x | y',le:'x &le; y',lt:'x &lt; y',eq:'x = y',cong:'x &equiv; y (mod '+((isNaN(m)||m<2)?3:m)+')'}[rel];
-        function has(a,b){var xi=parseInt(a,10),yi=parseInt(b,10),ok=false;
-          if(rel==='div')ok=(yi%xi===0);else if(rel==='le')ok=(xi<=yi);else if(rel==='lt')ok=(xi<yi);else if(rel==='eq')ok=(xi===yi);
-          else {var mm=(isNaN(m)||m<2)?3:m; ok=(((xi-yi)%mm)===0);} return ok;}
-        svg.innerHTML = n<=8 ? digraph(A,pr,{}) : '<div class="svg-legend">graph hidden for n &gt; 8 (too dense) &mdash; see the matrix below</div>';
-        // properties at a glance
-        var refl=true,sym=true,trans=true;
-        for(var a=1;a<=n&&refl;a++)if(!has(''+a,''+a))refl=false;
-        outer:for(var i2=0;i2<pr.length;i2++){if(!has(pr[i2][1],pr[i2][0])){sym=false;break;}}
-        for(var i3=0;i3<pr.length&&trans;i3++)for(var j3=0;j3<pr.length&&trans;j3++)if(pr[i3][1]===pr[j3][0]&&!has(pr[i3][0],pr[j3][1]))trans=false;
+        var rel=REL.value;
+        function holds(x,y){if(rel==='div')return y%x===0;if(rel==='le')return x<=y;if(rel==='lt')return x<y;if(rel==='eq')return x===y;if(rel==='cong')return ((x-y)%m)===0;if(rel==='copr')return gcd(x,y)===1;return false;}
+        var pr=[]; for(var x=1;x<=n;x++)for(var y=1;y<=n;y++)if(holds(x,y))pr.push([''+x,''+y]);
+        function has(a,b){return holds(parseInt(a,10),parseInt(b,10));}
+        var label={div:'x | y',le:'x &le; y',lt:'x &lt; y',eq:'x = y',cong:'x &equiv; y (mod '+m+')',copr:'gcd(x,y) = 1'}[rel];
+        svg.innerHTML = n<=8 ? digraph(A,pr,{}) : '<div class="fig-cap">graph hidden for n &gt; 8 &mdash; see the matrix</div>';
+        mxx.innerHTML=matrixHTML(A,A,has,{square:true});
+        var r=checkProps(A,pr);
         out.innerHTML=
           row('relation',label,'','on {1, &hellip;, '+n+'}')+
           row('# pairs',''+pr.length,'t','')+
-          row('reflexive?',refl?'YES':'NO',refl?'t':'f','')+
-          row('symmetric?',sym?'YES':'NO',sym?'t':'f','')+
-          row('transitive?',trans?'YES':'NO',trans?'t':'f','')+
-          '<div class="matrix-wrap" style="margin-top:8px">'+matrixHTML(A,A,has,{square:true})+'</div>';
+          row('reflexive?',r.refl?'YES':'NO',r.refl?'t':'f','')+
+          row('symmetric?',r.sym?'YES':'NO',r.sym?'t':'f','')+
+          row('transitive?',r.trans?'YES':'NO',r.trans?'t':'f','')+
+          row('equivalence relation?',(r.refl&&r.sym&&r.trans)?'YES':'NO',(r.refl&&r.sym&&r.trans)?'t':'f','');
       }
       [REL,N,M].forEach(function(e){e.addEventListener('input',render);e.addEventListener('change',render);}); render();
     })();
 
     /* 8.2.1 property checker */
-    function checkProps(A,pr){
-      var inR={}; pr.forEach(function(p){inR[p[0]+''+p[1]]=1;});
-      function has(x,y){return !!inR[x+''+y];}
-      var reflMiss=A.filter(function(a){return !has(a,a);});
-      var symBad=null; for(var i=0;i<pr.length&&!symBad;i++){if(inA(A,pr[i][0])&&inA(A,pr[i][1])&&!has(pr[i][1],pr[i][0]))symBad=[pr[i][0],pr[i][1]];}
-      var transBad=null;
-      for(var a=0;a<pr.length&&!transBad;a++)for(var b=0;b<pr.length&&!transBad;b++){
-        if(pr[a][1]===pr[b][0]){var x=pr[a][0],y=pr[a][1],z=pr[b][1]; if(inA(A,x)&&inA(A,z)&&!has(x,z))transBad=[x,y,z];}
-      }
-      return {has:has,refl:reflMiss.length===0,reflMiss:reflMiss,sym:!symBad,symBad:symBad,trans:!transBad,transBad:transBad};
-    }
     (function(){
       var A=document.getElementById('pc-A'),P=document.getElementById('pc-pairs'),svg=document.getElementById('pc-svg'),out=document.getElementById('pc-out');
       if(!A||!out)return;
@@ -1047,90 +884,97 @@
         svg.innerHTML=digraph(dom,pr,{markReflex:!r.refl,markAsym:!r.sym});
         var equiv=r.refl&&r.sym&&r.trans;
         out.innerHTML=
-          row('Reflexive?',r.refl?'YES':'NO',r.refl?'t':'f',r.refl?'every element has a self-loop':'no self-loop on '+r.reflMiss.map(esc).join(', '))+
-          row('Symmetric?',r.sym?'YES':'NO',r.sym?'t':'f',r.sym?'every arrow has its reverse':'('+esc(r.symBad[0])+','+esc(r.symBad[1])+') present but ('+esc(r.symBad[1])+','+esc(r.symBad[0])+') missing')+
-          row('Transitive?',r.trans?'YES':'NO',r.trans?'t':'f',r.trans?'every 2-step path has a shortcut':esc(r.transBad[0])+'&rarr;'+esc(r.transBad[1])+'&rarr;'+esc(r.transBad[2])+' but ('+esc(r.transBad[0])+','+esc(r.transBad[2])+') missing')+
+          row('Reflexive?',r.refl?'YES':'NO',r.refl?'t':'f',r.refl?'self-loop on every element':'no self-loop on '+r.reflMiss.map(esc).join(', '))+
+          row('Symmetric?',r.sym?'YES':'NO',r.sym?'t':'f',r.sym?'every arrow has its reverse':'('+esc(r.symBad[0])+','+esc(r.symBad[1])+') present, ('+esc(r.symBad[1])+','+esc(r.symBad[0])+') missing')+
+          row('Transitive?',r.trans?'YES':'NO',r.trans?'t':'f',r.trans?'every 2-step path has a shortcut':esc(r.transBad[0])+'&rarr;'+esc(r.transBad[1])+'&rarr;'+esc(r.transBad[2])+', but ('+esc(r.transBad[0])+','+esc(r.transBad[2])+') missing')+
           row('Equivalence relation?',equiv?'YES':'NO',equiv?'t':'f',equiv?'all three hold':'needs all three');
       }
       [A,P].forEach(function(e){e.addEventListener('input',render);}); render();
-      document.querySelectorAll('[data-pc]').forEach(function(lnk){lnk.addEventListener('click',function(e){e.preventDefault();var parts=lnk.getAttribute('data-pc').split('|');A.value=parts[0];P.value=parts[1];render();out.scrollIntoView({behavior:'smooth',block:'center'});});});
+      document.querySelectorAll('[data-pc]').forEach(function(lnk){lnk.addEventListener('click',function(e){e.preventDefault();var parts=lnk.getAttribute('data-pc').split('|');A.value=parts[0];P.value=parts[1];render();svg.scrollIntoView({behavior:'smooth',block:'center'});});});
     })();
 
-    /* 8.2.2 transitive closure */
+    /* 8.2.2 closures */
     (function(){
       var A=document.getElementById('tc-A'),P=document.getElementById('tc-pairs'),out=document.getElementById('tc-out');
       if(!A||!out)return;
       function render(){
         var dom=parseList(A.value), pr=parseArrows(P.value).filter(function(p){return inA(dom,p[0])&&inA(dom,p[1]);});
         var set={}; pr.forEach(function(p){set[p[0]+''+p[1]]=1;});
-        function has(x,y){return !!set[x+''+y];}
-        var added=[],rounds=0,changed=true;
-        while(changed&&rounds<dom.length+2){changed=false;rounds++;
-          for(var i=0;i<dom.length;i++)for(var j=0;j<dom.length;j++)for(var k=0;k<dom.length;k++){
-            var x=dom[i],y=dom[j],z=dom[k];
-            if(has(x,y)&&has(y,z)&&!has(x,z)){set[x+''+z]=1;added.push('('+x+','+z+')');changed=true;}
-          }
-        }
-        var all=[]; dom.forEach(function(x){dom.forEach(function(y){if(has(x,y))all.push('('+esc(x)+','+esc(y)+')');});});
+        function has(s,x,y){return !!s[x+''+y];}
+        var reflAdd=dom.filter(function(a){return !has(set,a,a);}).map(function(a){return '('+esc(a)+','+esc(a)+')';});
+        var symAdd=[]; pr.forEach(function(p){if(!has(set,p[1],p[0])&&!inA(symAdd,'('+esc(p[1])+','+esc(p[0])+')'))symAdd.push('('+esc(p[1])+','+esc(p[0])+')');});
+        // transitive closure
+        var tset={}; for(var k in set)tset[k]=1;
+        var added=[],changed=true,guard=0;
+        while(changed&&guard++<dom.length+2){changed=false;
+          for(var i=0;i<dom.length;i++)for(var j=0;j<dom.length;j++)for(var l=0;l<dom.length;l++){
+            var x=dom[i],y=dom[j],z=dom[l];
+            if(has(tset,x,y)&&has(tset,y,z)&&!has(tset,x,z)){tset[x+''+z]=1;added.push('('+esc(x)+','+esc(z)+')');changed=true;}}}
+        var allT=[]; dom.forEach(function(x){dom.forEach(function(y){if(has(tset,x,y))allT.push('('+esc(x)+','+esc(y)+')');});});
         out.innerHTML=
           row('start R',pr.length?'{'+pr.map(function(p){return '('+esc(p[0])+','+esc(p[1])+')';}).join(', ')+'}':'&empty;','','')+
-          row('already transitive?',added.length===0?'YES':'NO',added.length===0?'t':'f',added.length===0?'nothing to add':'needs '+added.length+' more pair(s)')+
-          row('pairs added',added.length?added.map(esc).join(', '):'&ndash;','t','each was a missing shortcut')+
-          row('closure R&#7511;','{'+all.join(', ')+'}','t','smallest transitive relation containing R');
+          row('reflexive closure adds',reflAdd.length?reflAdd.join(', '):'nothing','t','missing self-loops')+
+          row('symmetric closure adds',symAdd.length?symAdd.join(', '):'nothing','t','missing reverse arrows')+
+          row('transitive closure adds',added.length?added.join(', '):'nothing','t','missing shortcuts')+
+          row('transitive closure R&#7511;','{'+allT.join(', ')+'}','t','smallest transitive relation containing R');
       }
       [A,P].forEach(function(e){e.addEventListener('input',render);}); render();
     })();
 
-    /* 8.3.1 equivalence checker + classes */
+    /* 8.3.1 equivalence checker + classes (colour-coded) */
     (function(){
-      var A=document.getElementById('eq-A'),P=document.getElementById('eq-pairs'),out=document.getElementById('eq-out');
+      var A=document.getElementById('eq-A'),P=document.getElementById('eq-pairs'),svg=document.getElementById('eq-svg'),out=document.getElementById('eq-out');
       if(!A||!out)return;
       function render(){
         var dom=parseList(A.value), pr=parseArrows(P.value).filter(function(p){return inA(dom,p[0])&&inA(dom,p[1]);});
-        var r=checkProps(dom,pr);
-        var html=
-          row('Reflexive?',r.refl?'YES':'NO',r.refl?'t':'f',r.refl?'':'no self-loop on '+r.reflMiss.map(esc).join(', '))+
-          row('Symmetric?',r.sym?'YES':'NO',r.sym?'t':'f',r.sym?'':'('+(r.symBad?esc(r.symBad[0])+','+esc(r.symBad[1]):'')+') has no reverse')+
-          row('Transitive?',r.trans?'YES':'NO',r.trans?'t':'f',r.trans?'':(r.transBad?esc(r.transBad[0])+'&rarr;'+esc(r.transBad[1])+'&rarr;'+esc(r.transBad[2])+' has no shortcut':''));
-        if(r.refl&&r.sym&&r.trans){
-          // classes = group a by {x : x R a}
-          var classes=[],assigned={};
-          dom.forEach(function(a){if(assigned[a])return;var cls=dom.filter(function(x){return r.has(x,a);});cls.forEach(function(x){assigned[x]=1;});classes.push(cls);});
-          html+=row('Equivalence relation?','YES','t','reflexive + symmetric + transitive');
-          html+=row('# classes',''+classes.length,'t','the partition has this many blocks');
+        var r=checkProps(dom,pr), equiv=r.refl&&r.sym&&r.trans;
+        var colorOf=null,html='';
+        if(equiv){
+          var classes=classesOf(dom,r), idx={};
+          classes.forEach(function(c,i){c.forEach(function(x){idx[x]=i;});});
+          colorOf=function(a){return PALETTE[idx[a]%PALETTE.length];};
+          svg.innerHTML=digraph(dom,pr,{colorOf:colorOf});
+          html+=row('Equivalence relation?','YES','t','reflexive + symmetric + transitive')+row('# classes',''+classes.length,'t','blocks of the partition');
           html+='<div style="margin-top:6px">';
-          classes.forEach(function(c,i){html+='<div class="class-row"><span class="class-label">['+esc(c[0])+']</span><span class="class-chip">{'+c.map(esc).join(', ')+'}</span></div>';});
+          classes.forEach(function(c){var col=PALETTE[idx[c[0]]%PALETTE.length];html+='<div class="class-row"><span class="class-label" style="color:'+col+'">['+esc(c[0])+']</span><span class="class-chip" style="background:'+col+'">{'+c.map(esc).join(', ')+'}</span></div>';});
           html+='</div>';
         } else {
-          html+=row('Equivalence relation?','NO','f','fix the failing property above');
+          svg.innerHTML=digraph(dom,pr,{markReflex:!r.refl,markAsym:!r.sym});
+          html+=row('Reflexive?',r.refl?'YES':'NO',r.refl?'t':'f',r.refl?'':'no self-loop on '+r.reflMiss.map(esc).join(', '))+
+            row('Symmetric?',r.sym?'YES':'NO',r.sym?'t':'f',r.sym?'':'('+(r.symBad?esc(r.symBad[0])+','+esc(r.symBad[1]):'')+') has no reverse')+
+            row('Transitive?',r.trans?'YES':'NO',r.trans?'t':'f',r.trans?'':(r.transBad?esc(r.transBad[0])+'&rarr;'+esc(r.transBad[1])+'&rarr;'+esc(r.transBad[2])+' has no shortcut':''))+
+            row('Equivalence relation?','NO','f','fix the failing property');
         }
         out.innerHTML=html;
       }
       [A,P].forEach(function(e){e.addEventListener('input',render);}); render();
     })();
 
-    /* 8.3.2 congruence mod n */
+    /* 8.3.2 congruence mod n (number line coloured) */
     (function(){
       var N=document.getElementById('cong-n'),LO=document.getElementById('cong-lo'),HI=document.getElementById('cong-hi'),
-          AA=document.getElementById('cong-a'),BB=document.getElementById('cong-b'),out=document.getElementById('cong-out');
+          AA=document.getElementById('cong-a'),BB=document.getElementById('cong-b'),svg=document.getElementById('cong-svg'),out=document.getElementById('cong-out');
       if(!N||!out)return;
       function mod(a,n){return ((a%n)+n)%n;}
       function render(){
         var n=parseInt(N.value,10),lo=parseInt(LO.value,10),hi=parseInt(HI.value,10),a=parseInt(AA.value,10),b=parseInt(BB.value,10);
-        if(isNaN(n)||n<2){out.innerHTML=row('n','need n &ge; 2','f','');return;}
-        if(isNaN(lo)||isNaN(hi)||hi<lo){out.innerHTML=row('range','need from &le; to','f','');return;}
-        if(hi-lo>120)hi=lo+120;
-        var buckets={}; for(var r=0;r<n;r++)buckets[r]=[];
-        for(var v=lo;v<=hi;v++)buckets[mod(v,n)].push(v);
-        var html=row('classes',''+n,'t','[0], [1], &hellip;, ['+(n-1)+'] &mdash; one per remainder');
-        html+='<div style="margin-top:6px">';
-        for(var rr=0;rr<n;rr++)html+='<div class="class-row"><span class="class-label">['+rr+']</span><span class="class-chip">{'+(buckets[rr].join(', ')||'&hellip;')+'}</span></div>';
-        html+='</div>';
-        if(!isNaN(a)&&!isNaN(b)){
-          var same=mod(a,n)===mod(b,n);
-          html+=row('a mod n, b mod n',mod(a,n)+' , '+mod(b,n),'','remainders')+
-            row('a &equiv; b (mod '+n+')?',same?'YES':'NO',same?'t':'f',(same?'n | (a&minus;b): ':'n does not divide (a&minus;b): ')+n+' | ('+a+'&minus;'+b+'='+(a-b)+')'+(same?'':' is false'));
+        if(isNaN(n)||n<2){out.innerHTML=row('n','need n &ge; 2','f','');svg.innerHTML='';return;}
+        if(isNaN(lo)||isNaN(hi)||hi<lo){out.innerHTML=row('range','need from &le; to','f','');svg.innerHTML='';return;}
+        if(hi-lo>40)hi=lo+40;
+        var cells=hi-lo+1, cw=Math.max(26,Math.min(40,Math.floor(560/cells))), H=64, W=cells*cw+2;
+        var s='<svg viewBox="0 0 '+W+' '+H+'" width="'+Math.min(W,560)+'" font-family="Roboto Mono, monospace">';
+        for(var v=lo,i=0;v<=hi;v++,i++){var r=mod(v,n),col=PALETTE[r%PALETTE.length],x=i*cw+1;
+          s+='<rect x="'+x+'" y="14" width="'+(cw-3)+'" height="30" rx="5" fill="'+col+'"/>';
+          s+='<text x="'+(x+(cw-3)/2)+'" y="34" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">'+v+'</text>';
+          s+='<text x="'+(x+(cw-3)/2)+'" y="58" text-anchor="middle" font-size="10" fill="#888">'+r+'</text>';
         }
+        s+='</svg>'; svg.innerHTML=s;
+        var buckets={}; for(var rr=0;rr<n;rr++)buckets[rr]=[];
+        for(var w=lo;w<=hi;w++)buckets[mod(w,n)].push(w);
+        var html=row('classes',''+n,'t','[0], &hellip;, ['+(n-1)+'] &mdash; one per remainder (the row of small numbers)');
+        if(!isNaN(a)&&!isNaN(b)){var same=mod(a,n)===mod(b,n);
+          html+=row('a mod n , b mod n',mod(a,n)+' , '+mod(b,n),'','remainders')+
+            row('a &equiv; b (mod '+n+')?',same?'YES':'NO',same?'t':'f',(same?'n | (a&minus;b): ':'n &#8740; (a&minus;b): ')+n+' | ('+a+'&minus;'+b+'='+(a-b)+')'+(same?'':' is false'));}
         out.innerHTML=html;
       }
       [N,LO,HI,AA,BB].forEach(function(e){e.addEventListener('input',render);}); render();
@@ -1143,16 +987,16 @@
       function render(){
         var blocks=(IN.value||'').split('|').map(function(b){return b.trim().split(/[\s,]+/).filter(function(t){return t.length;});}).filter(function(b){return b.length;});
         if(!blocks.length){out.innerHTML=row('partition','enter blocks separated by |','f','');return;}
-        // check disjoint
-        var seen={},dup=[];
-        blocks.forEach(function(b){b.forEach(function(x){if(seen[x])dup.push(x);else seen[x]=1;});});
-        var pairs=[],count=0;
-        blocks.forEach(function(b){b.forEach(function(x){b.forEach(function(y){pairs.push('('+esc(x)+','+esc(y)+')');count++;});});});
-        var html=row('blocks',blocks.map(function(b){return '{'+b.map(esc).join(',')+'}';}).join('  '),'t',blocks.length+' block(s)');
-        if(dup.length){html+=row('&#9888; not a partition','repeated: '+dup.map(esc).join(', '),'f','blocks must be disjoint');}
-        html+=row('induced relation',count<=40?'{'+pairs.join(', ')+'}':pairs.slice(0,40).join(', ')+', &hellip;','t','all pairs within a block (x ~ y iff same block)')+
-          row('# pairs',''+count,'t','sum of (block size)&sup2; = '+blocks.map(function(b){return b.length+'&sup2;';}).join(' + '))+
-          row('reflexive / symmetric / transitive','YES / YES / YES','t','automatic for any partition (Theorem 8.3.4)');
+        var seen={},dup=[]; blocks.forEach(function(b){b.forEach(function(x){if(seen[x])dup.push(x);else seen[x]=1;});});
+        var count=0,pairs=[]; blocks.forEach(function(b){b.forEach(function(x){b.forEach(function(y){pairs.push('('+esc(x)+','+esc(y)+')');count++;});});});
+        var html='<div style="margin-bottom:8px">';
+        blocks.forEach(function(b,i){var col=PALETTE[i%PALETTE.length];html+='<span class="class-chip" style="background:'+col+';margin-right:6px">{'+b.map(esc).join(', ')+'}</span>';});
+        html+='</div>';
+        html+=row('blocks',''+blocks.length,'t','');
+        if(dup.length)html+=row('&#9888; not a partition','repeated: '+dup.map(esc).join(', '),'f','blocks must be disjoint');
+        html+=row('induced relation',count<=44?'{'+pairs.join(', ')+'}':pairs.slice(0,44).join(', ')+', &hellip;','t','x ~ y iff same block')+
+          row('# pairs',''+count,'t','&Sigma; (block size)&sup2; = '+blocks.map(function(b){return b.length+'&sup2;';}).join(' + '))+
+          row('refl / sym / trans','YES / YES / YES','t','automatic for any partition (Thm 8.3.4)');
         out.innerHTML=html;
       }
       IN.addEventListener('input',render); render();
@@ -1161,10 +1005,8 @@
     /* ===== generic behaviours ===== */
     document.querySelectorAll('.solution-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var sol = document.getElementById(btn.dataset.toggleSol);
-        if (!sol) return;
-        var isOpen = sol.classList.toggle('open');
-        btn.classList.toggle('open', isOpen);
+        var sol = document.getElementById(btn.dataset.toggleSol); if (!sol) return;
+        var isOpen = sol.classList.toggle('open'); btn.classList.toggle('open', isOpen);
         btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
       });
     });
