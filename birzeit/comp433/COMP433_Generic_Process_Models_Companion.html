@@ -961,7 +961,33 @@
   <h3>The idea</h3>
   <p>Formal systems development is based on the transformation of a mathematical specification through different representations to an executable program. Each transformation is <em>correctness-preserving</em>, so showing that the program conforms to its specification is straightforward – the proof is built in.</p>
 
-  <p>This approach is embodied in the <strong>Cleanroom approach</strong>, originally developed by IBM. Some authors consider it a variant of the waterfall model, with the development phase replaced by a chain of formal transformations. The classic variant is sometimes called the V-model when test planning is mirrored onto each specification stage.</p>
+  <p><strong>Its relationship to waterfall.</strong> Scientifically, formal systems development is not a wholly separate paradigm so much as a <em>specialisation of the waterfall model</em>. It keeps the same plan-driven, sequential, document-driven lifecycle – requirements definition, then specification, then implementation, then integration and testing – but replaces the ordinary implementation phase with a chain of correctness-preserving formal transformations. Sommerville presents it in exactly this way, and the approach is embodied in IBM's <strong>Cleanroom</strong> method; the closely related <strong>V-model</strong> simply mirrors a test-planning activity onto each specification stage. So when you weigh it against the other models, treat it as &ldquo;waterfall with a mathematically verified implementation step&rdquo;, not as an unrelated fifth process. That also explains its shared limitations with waterfall: it commits to the requirements early and does not deliver incrementally.</p>
+
+  <h3>First, what "formal transformation" actually means</h3>
+  <p>The name of this model is the idea itself. You begin from a <strong>formal specification</strong> – a description of what the system must do written in a notation with a precise mathematical meaning instead of in ordinary English – and you <em>transform</em> it, step by step, into running code, where each step is proven to preserve meaning (that is the chain in the figure below). An English requirement such as &ldquo;the controller shall never show green on both roads at once&rdquo; can be read more than one way; a formal specification re-states it as a logical statement that is either true or false. Because it is mathematics, you can prove that a property can never be violated. That is the whole point: testing can only show that bugs are present, whereas a proof over a formal specification can show that a class of bugs is absent. (One common, visual way to write such a specification is a <em>state machine</em>: a set of states the system can be in and the transitions between them, as in the traffic-light example used further down.)</p>
+
+  <p>The slides also name four notations without explaining them. <strong>Z, B, VDM and TLA+</strong> are not algorithms or tools you run; they are formal specification <em>languages</em> &ndash; mathematical &ldquo;dialects&rdquo;, each with its own style and tools. You are not expected to write in them in this course, only to recognise what they are:</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="ttl">Z</div>
+      <div class="desc">(Pronounced &ldquo;zed&rdquo;.) A notation built on set theory and first-order logic. It describes the <em>state</em> of a system and the operations that read or change that state. Strong for data-rich systems; the specification is reviewed and proven, not executed. Developed at Oxford in the late 1970s.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">B (the B-Method)</div>
+      <div class="desc">A close relative of Z that goes one step further: it supports stepwise <em>refinement</em> from an abstract specification down towards executable code, with tool-supported proof at each step. Used in industry, most famously for the driverless signalling on Paris M&eacute;tro Line 14.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">VDM</div>
+      <div class="desc">The Vienna Development Method, one of the oldest formal methods (IBM&rsquo;s Vienna lab, 1970s). Like Z it models system state and operations using pre- and post-conditions; like B it supports refinement towards an implementation.</div>
+    </div>
+    <div class="card">
+      <div class="ttl">TLA+</div>
+      <div class="desc">Temporal Logic of Actions, by Leslie Lamport. Specialised for <em>concurrent and distributed</em> systems: it describes how state evolves over time and can model-check that safety and liveness properties hold across every possible interleaving. Used at Amazon and Microsoft on cloud infrastructure.</div>
+    </div>
+  </div>
+
+  <p>All four exist for the same reason: to pin down <em>what</em> a system must do precisely enough that conformance can be proven rather than merely tested. Which one a team reaches for depends on the domain &ndash; Z and VDM for data and state, B for refinement down to code, TLA+ for concurrency. With that vocabulary in hand, the transformation chain below reads cleanly.</p>
 
   <figure>
     <svg viewBox="0 0 740 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Formal systems development: Requirements definition leads to Formal specification leads to Formal transformation chain T1 T2 T3 T4 with proofs P1 P2 P3 P4, ending in Integration and system testing.">
@@ -1107,7 +1133,7 @@
 
   <div class="callout">
     <div class="label">Why the example is small on purpose</div>
-    <p>A real traffic-light controller has more states (yellow flashing for failure modes, pedestrian crossings, emergency-vehicle preemption), more invariants, and far more proof work. The example here has been deliberately stripped to its bare bones so the structure of the T-and-P chain is visible. Each Tᵢ refines the representation toward implementation; each Pᵢ rebuilds the safety guarantee at the new level. The same shape applies to airbag controllers, infusion-pump dosing logic, and railway interlocking systems.</p>
+    <p>A real traffic-light controller has more states (yellow flashing for failure modes, pedestrian crossings, emergency-vehicle preemption), more invariants, and far more proof work. The example here has been deliberately stripped to its bare bones so the structure of the T-and-P chain is visible. Each Tᵢ refines the representation toward implementation; each Pᵢ rebuilds the safety guarantee at the new level. The same shape applies to airbag controllers, aircraft flight-control laws, and railway interlocking systems.</p>
   </div>
 
   <h3>Problems</h3>
@@ -1117,6 +1143,15 @@
   </div>
 
   <h3>Applicability</h3>
+  <p>Formal transformation is the right <em>main</em> model when several of these signals hold together:</p>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The system is critical.</strong> A failure can cause loss of life, injury, large financial loss, or a security breach, so a safety or security case must be made <em>before</em> the system is put into operation.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The core requirements can be expressed mathematically.</strong> The essential behaviour is precise and rule-based (a dosage calculation, a control law, a cryptographic protocol), so it can be written as a formal specification rather than as prose.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Requirements are stable and not difficult to establish.</strong> Formal specification is expensive to redo, so the approach suits domains where the &ldquo;what&rdquo; is settled and unlikely to churn.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The system, or its critical core, is small to medium.</strong> Formal methods scale poorly, so they are usually applied to the safety-critical kernel rather than to a whole large system.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Incremental delivery is not the priority.</strong> What the customer values is provable correctness, not early partial releases.</div></div>
+  </div>
+
   <div class="cards">
     <div class="card">
       <div class="ttl">Critical systems</div>
@@ -1126,6 +1161,11 @@
       <div class="ttl">Small systems or parts of large systems</div>
       <div class="desc">Formal methods scale poorly. They are typically applied to the safety-critical core of a larger system rather than the whole.</div>
     </div>
+  </div>
+
+  <div class="callout">
+    <div class="label">A textbook fit</div>
+    <p>A railway signalling interlocking, the logic that decides which trains may enter which sections of track and which signals may show &ldquo;proceed&rdquo;, is the kind of system formal transformation was made for. The core is small, the safety rule (no two trains are ever granted conflicting routes over the same track) is precise and can be written as mathematics, a wrong decision can cause a collision, and there is no value in shipping &ldquo;half&rdquo; the interlocking logic early. The B-method was used in exactly this way on the driverless Paris M&eacute;tro Line 14. The mathematics of the safety rule is what a formal specification captures, and the correctness proofs are the evidence a railway safety authority wants to see. Plausible runners-up are waterfall (the trackside hardware still has to be built and certified around the software) or, if one is being lenient, agile, but neither gives the proof-based guarantee the critical core needs.</p>
   </div>
 </section>
 
@@ -1216,6 +1256,15 @@
   </div>
 
   <h3>Applicability</h3>
+  <p>Reuse-oriented development is the right <em>main</em> model when several of these signals hold together:</p>
+  <div class="bar-list">
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Mature components already exist for most of the work.</strong> The functionality needed (authentication, payment, mapping, search, notifications, document handling) is available as libraries, COTS products, or third-party and cloud services rather than as something only this team can build.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The effort is mostly integration, not invention.</strong> The hard part is wiring existing pieces together and adapting the requirements to fit them, which lowers in-house development cost and time.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The system is not critical and not algorithmically complex.</strong> The team is willing to trust components whose internals it did not write and cannot fully verify.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>Requirements are not difficult to establish</strong> and can be adjusted to match what the available components actually provide.</div></div>
+    <div class="bar-item"><div class="bar"></div><div class="txt"><strong>The system is medium to large.</strong> Component analysis and integration carry an overhead that pays off at that scale but is usually too heavy for a small project. Incremental delivery is optional, not a driver.</div></div>
+  </div>
+
   <div class="cards">
     <div class="card">
       <div class="ttl">Non-critical systems with common functionality</div>
@@ -1225,6 +1274,11 @@
       <div class="ttl">Large systems</div>
       <div class="desc">Component analysis and integration may be too expensive for small or mid-size projects, but pay off when the project is large.</div>
     </div>
+  </div>
+
+  <div class="callout">
+    <div class="label">A textbook fit</div>
+    <p>A holiday-booking website that lets travellers search flights, reserve hotels, hire a car and pay, by calling an airline-search service, a hotel-inventory service, a car-hire service, a payment gateway and a maps provider, is almost pure integration. The team writes very little novel logic; the value is in selecting, combining and orchestrating components that other companies build and maintain. It is not critical, the requirements are easy to establish, and there is no reason to deliver it in safety-driven increments. That profile points straight at reuse-oriented development, with waterfall as a plausible runner-up for the surrounding structure.</p>
   </div>
 
   <div class="callout">
@@ -1326,6 +1380,42 @@
 
   <p>To make the choice tangible, here are four examples drawn from systems you may know. Each example states the problem, names the dominant factors, and proposes a process – usually a blend of models, not a pure one. The reasoning matters more than the conclusion.</p>
 
+  <p>When you are asked to pick the single best <em>main</em> model for a described system, the move is always the same: read off the system&rsquo;s profile (its size, how critical it is, how settled the requirements are, how much already exists to reuse, and whether delivery has to be incremental), then match that profile to the model whose strengths fit it. The table below is that mapping in one place. Name the dominant factor first, then justify the model against it; a one-line reason for why the obvious runner-up is weaker earns the rest of the marks.</p>
+
+  <table class="comp">
+    <thead>
+      <tr>
+        <th>Best main model</th>
+        <th>Choose it when the system&hellip;</th>
+        <th>Typical runner-up</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="row-h">Waterfall<br>(plan-driven)</td>
+        <td>is relatively large; requirements are well understood and not difficult to establish up front; the scope and deadline are fixed; delivery does not need to be incremental; it is not safety-critical. <em>E.g. a payroll system for a large organisation, where the rules are fixed by well-documented regulations and the launch date is set in advance.</em></td>
+        <td>Agile, where the user interface or a sub-part still needs feedback; reuse-oriented if much of it already exists.</td>
+      </tr>
+      <tr>
+        <td class="row-h">Agile<br>(evolutionary)</td>
+        <td>is small to medium; requirements are <em>hard</em> to establish without prototyping or user feedback (a consumer product in an uncertain market); adaptation and speed matter more than a signed-off specification. <em>E.g. a new social or content-sharing app whose key features can only be pinned down by putting early versions in front of real users and iterating.</em></td>
+        <td>Waterfall, if one wrongly assumes the requirements are already clear.</td>
+      </tr>
+      <tr>
+        <td class="row-h">Formal<br>transformation</td>
+        <td>is critical (safety or security); its core is small to medium; the requirements are precise, stable, and can be expressed mathematically; provable correctness matters more than early delivery. <em>E.g. a railway signalling interlocking that must never grant two trains conflicting routes, or an avionics flight-control law.</em></td>
+        <td>Waterfall (there may be a hardware fabrication step); agile only if one is being lenient.</td>
+      </tr>
+      <tr>
+        <td class="row-h">Reuse-<br>oriented</td>
+        <td>can be assembled largely from existing components or external/cloud services; the effort is mainly integration; it is not critical and not complex; requirements are easy to establish; size is medium to large. <em>E.g. an e-commerce store assembled from off-the-shelf payment, search, shipping and email components.</em></td>
+        <td>Waterfall, for the surrounding structure and procurement.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size: 13px; color: var(--muted)">The four worked examples below show the same reasoning at length. Note that a real project is usually a blend: the table names the <em>dominant</em> model, the one a single-best-answer question is asking for.</p>
+
   <h3>Example 1 – A university course registration portal</h3>
   <div class="panel">
     <div class="label">The system</div>
@@ -1344,13 +1434,13 @@
   <p><strong>Proposed process.</strong> Strongly <em>evolutionary / agile</em>, with two-week iterations and continuous customer feedback. <em>Prototyping</em> is used at the start to validate the core flows before any real engineering. <em>Reuse-oriented</em> for the parts that are not differentiators – maps, payments, push notifications, identity – buy or use third-party APIs rather than build. Waterfall would actively damage this project; the team needs to learn from real users in weeks, not produce a specification document over months.</p>
   <p><strong>What you would not do.</strong> Lock the specification before the first release. Build in-house what already exists as a paid API. Skip user testing because "we know what users want".</p>
 
-  <h3>Example 3 – A medical infusion-pump controller</h3>
+  <h3>Example 3 – A railway signalling and train-control system</h3>
   <div class="panel">
     <div class="label">The system</div>
-    <p style="margin:0">Embedded software that controls the rate at which a hospital infusion pump delivers medication to a patient. A failure can kill. The software must be approved by a regulator before deployment.</p>
+    <p style="margin:0">Embedded software that decides which trains may enter which sections of track and which signals may show &ldquo;proceed&rdquo;, so that two trains are never routed into collision. A failure can kill many people at once. The software must be certified by a railway safety authority before it is allowed to operate.</p>
   </div>
-  <p><strong>Dominant factors.</strong> Failure consequences are catastrophic. Requirements come from a regulator and from clinical experts, and they are stable but voluminous. Documentation must be exhaustive – every requirement must be traceable to a design decision, to code, and to a test. Cost is a secondary concern; correctness is primary.</p>
-  <p><strong>Proposed process.</strong> A <em>formal systems development</em> approach for the safety-critical control loop (drug-rate calculation, alarm logic), surrounded by a <em>waterfall-like</em> structure with full V&amp;V (verification and validation) at every stage for the rest of the system. <em>Prototyping</em> may be used for the operator interface (which is where most clinical errors actually originate), but the prototype is then re-specified and re-built rigorously, not handed over as a finished product. Agile and Spiral are unsuitable here: the regulator does not accept "we will refine the requirements as we go".</p>
+  <p><strong>Dominant factors.</strong> Failure consequences are catastrophic. Requirements come from safety regulations and signalling engineers, and they are stable but voluminous. Documentation must be exhaustive – every requirement must be traceable to a design decision, to code, and to a test. Cost is a secondary concern; correctness is primary.</p>
+  <p><strong>Proposed process.</strong> A <em>formal systems development</em> approach for the safety-critical interlocking logic (route locking, signal-aspect rules), surrounded by a <em>waterfall-like</em> structure with full V&amp;V (verification and validation) at every stage for the rest of the system. <em>Prototyping</em> may be used for the signaller's control console (which is where most operating errors actually originate), but the prototype is then re-specified and re-built rigorously, not handed over as a finished product. Agile and Spiral are unsuitable for the safety core here: the regulator does not accept "we will refine the requirements as we go".</p>
   <p><strong>What you would not do.</strong> Use evolutionary development for the safety kernel. Skip the formal proof obligations. Treat documentation as overhead.</p>
 
   <h3>Example 4 – A national tax-filing system being modernised</h3>
