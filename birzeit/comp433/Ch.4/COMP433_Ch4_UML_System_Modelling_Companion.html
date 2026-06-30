@@ -365,6 +365,22 @@
   </div>
 </section>
 
+<!-- ===================================================================== -->
+<!-- Lecture decks (Prof. Adel Taweel) -->
+<section style="max-width: 1240px; margin: 0 auto; padding: 0 32px 40px;">
+  <div style="background: white; border: 1px solid var(--rule); border-radius: 14px; box-shadow: var(--shadow); padding: 28px 32px;">
+    <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; font-weight: 600;">Lecture decks by Prof Adel Taweel</div>
+    <h3 style="font-family: var(--serif); font-weight: 600; font-size: 22px; margin: 0 0 8px; color: var(--ink); letter-spacing: -0.01em;">Chapter 4 slides: UML diagrams</h3>
+    <p style="font-size: 15px; color: var(--ink-soft); margin: 0 0 18px; max-width: 800px;">The Chapter 4 lecture deck, in its parts. This companion follows these decks; download them for the original slides and the in-class exercises.</p>
+    <ul class="toc-list" style="grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));">
+      <li><span class="toc-num">&darr;</span><a class="inline" href="L4-UML-p89-v1.48-with%20exercises.pdf"><strong>Use cases, activity diagrams &amp; estimation</strong>: use-case diagrams, use-case descriptions, scenarios, activity diagrams and the effort/cost estimation method (slides 1&ndash;89, v1.48).</a></li>
+      <li><span class="toc-num">&darr;</span><a class="inline" href="L4-UML-p90-156-v1.48-with%20exercises.pdf"><strong>Class, object &amp; sequence diagrams</strong>: class and object diagrams, associations and the interaction (sequence) diagrams (slides 90&ndash;156, v1.48).</a></li>
+      <li><span class="toc-num">&darr;</span><a class="inline" href="L4-UML-p180-223-v1.48-with%20exercises.pdf"><strong>Component &amp; deployment diagrams</strong>: the structural design diagrams: components, interfaces and hardware nodes (slides 180&ndash;223, v1.48).</a></li>
+      <li><span class="toc-num">&darr;</span><a class="inline" href="L4-p29-UML-v1.475-with%20exercises.pdf"><strong>UML &amp; use-case modelling</strong>: introductory excerpt covering UML and the use-case view (slides 1&ndash;29, v1.475).</a></li>
+    </ul>
+  </div>
+</section>
+
 <div class="toc">
   <div class="toc-card">
     <h3>Contents</h3>
@@ -678,7 +694,7 @@
     </ol>
 
     <h3 class="subhead">Cost estimation in context</h3>
-    <p class="body">Cost estimation is treated in depth in the <a class="inline" href="/birzeit/comp433/Ch.3/COMP433_Ch3_Requirements_Engineering_Companion.html#effort">Ch.3 companion</a>, which includes an interactive calculator. The view from this chapter is about <em>when and why</em>, not <em>how</em>. The key implications:</p>
+    <p class="body">Cost estimation is treated in depth in the <a class="inline" href="/birzeit/comp433/Ch.3/COMP433_Ch3_Requirements_Engineering_Companion.html#effort">Ch.3 companion</a>, which includes an interactive calculator. The view from this chapter is about <em>when and why</em>, not <em>how</em>. The implications:</p>
 
     <ul class="body">
       <li><strong>What you estimate.</strong> The unit of estimation is the <em>User Requirement</em>, not the use case. A single user requirement may map to several use cases (or none); the estimate has to attach to the requirement so it survives the design pass.</li>
@@ -861,7 +877,7 @@
     <ul class="body">
       <li><strong>Scope confirmation.</strong> The customer signs off (or contests) that the listed use cases are the right set and that no major task is missing. The diagram is read from the actor side: "as a BookBorrower, the system lets me Borrow, Return, Renew, and Browse; is that all I need it to do?".</li>
       <li><strong>Actor inventory.</strong> Names the primary and secondary actors that interact with the system. This list flows directly into requirements (each actor needs its sentence-long description) and into design (each actor becomes a class or external system in the class diagram).</li>
-      <li><strong>Task index.</strong> Names the tasks (use cases). Each use case will get its own textual description (section 8), at least one activity diagram if the workflow is non-trivial (section 9), and at least one sequence diagram for its key scenario (section 11). The diagram is the table of contents for those downstream artefacts.</li>
+      <li><strong>Task index.</strong> Names the tasks (use cases). Each use case will get its own textual description (section 8), at least one activity diagram if the workflow is non-trivial (section 9), and at least one sequence diagram for its main scenario (section 11). The diagram is the table of contents for those downstream artefacts.</li>
     </ul>
 
     <p class="body">Beyond those three decisions, the use case model earns its keep across the whole project. A good use case set does five further things: it <strong>specifies the context</strong> of the system (its boundary and the actors around it); it lets the team <strong>plan iterations</strong> of development (each use case is a unit of work to schedule); it <strong>validates the architecture</strong> (every architecturally significant use case must be realisable on the proposed design); it <strong>drives implementation</strong> (each use case becomes a thread of construction); and it <strong>generates test cases</strong> (each scenario through a use case is a system-test script). Use cases are built early in development, by analysts and domain experts during requirements analysis, and stay useful long after.</p>
@@ -1514,6 +1530,8 @@
       <div class="diagram-tooltip" id="actTip"><span class="placeholder">Hover any node, edge, or swimlane to see what it represents.</span></div>
     </div>
 
+    <div class="lifecycle-note"><span class="lc-tag">When System is a lane</span><p>A swimlane (UML calls it an <em>activity partition</em>) can represent <strong>any</strong> participant that performs work, including the software itself, not only human actors. Add a <strong>System</strong> lane when a step runs with no person in the loop: sending a notification, computing a total or price, persisting a record, or a timer firing an expiry. Put those automated actions in the System lane and leave each human action in the actor's own lane, so the cross-lane arrows still read as the hand-offs between the people and the system. Two faults to avoid: do not drop automated steps into a human lane (it reads as a person doing the machine's work), and do not let one System lane swallow the whole diagram (then the partition tells the reader nothing). Use a System lane when the automated steps are real and worth attributing; omit it at the business-process level, where the focus is the order and concurrency of the work rather than who performs each step.</p></div>
+
     <div class="embed-cap">Interactive: unpack a use case into a flow</div>
     <p class="embed-note">Watch the Book room use case become an activity diagram, with each step of its description highlighted as the matching action appears.</p>
     <iframe class="builder-embed" allowfullscreen src="slides/poc_activity_build.html" loading="lazy" title="Animated activity diagram build"></iframe>
@@ -1873,7 +1891,7 @@
     <h3 class="subhead-small">Fuller attribute and operation notation</h3>
     <p class="body">An attribute's full form is <code>visibility name : type [multiplicity] = default {property}</code> and an operation's is <code>visibility name(parameter : type, &hellip;) : returnType {property}</code>. Beyond plain name-and-type, a few further markers are worth recognising:</p>
     <ul class="body">
-      <li><code>{id}</code> marks an attribute that <strong>identifies</strong> the object, a candidate key: <code>accountNo : String {id}</code>.</li>
+      <li><code>{id}</code> marks an attribute that <strong>identifies</strong> the object, its identifier: <code>accountNo : String {id}</code>.</li>
       <li>A leading <code>/</code> marks a <strong>derived</strong> attribute, computed rather than stored: <code>/balance</code>.</li>
       <li>A <strong>multiplicity</strong> in brackets makes an attribute multi-valued: <code>holders : Person [1..*]</code> is a collection, not a single value.</li>
       <li>An <strong>underlined</strong> member is <strong>class-scope</strong> (static): it belongs to the class itself, not to each object (<code>totalAccounts</code>).</li>
@@ -2074,51 +2092,44 @@
     <div class="figure">
       <div class="figure-caption">Figure 6a</div>
       <div class="figure-title">First-cut analysis class model, derived from the Library description.</div>
-      <svg viewBox="0 0 940 580" role="img" aria-label="Library class diagram derived from the description: LibraryMember, StaffMember, Book, BookCopy and a Loan association class"><defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker><marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#0f1419" stroke-width="1.4"/></marker><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#0f1419"/></marker></defs>
-  <defs><marker id="gen-arrow-bb" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
-  <rect x="60" y="60" width="200" height="110" class="uml-box" fill="white"/>
-  <text x="160" y="84" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
-  <line x1="60" y1="96" x2="260" y2="96" class="uml-line"/>
-  <text x="74" y="116" class="uml-text-mono">+ memberId: String</text>
-  <text x="74" y="134" class="uml-text-mono">+ name: String</text>
-  <line x1="60" y1="148" x2="260" y2="148" class="uml-line"/>
-  <text x="74" y="166" class="uml-text-mono">+ borrow()  + return()</text>
-  <rect x="60" y="320" width="200" height="100" class="uml-box" fill="white"/>
-  <text x="160" y="344" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
-  <line x1="60" y1="356" x2="260" y2="356" class="uml-line"/>
-  <text x="74" y="376" class="uml-text-mono">+ department: String</text>
-  <text x="74" y="394" class="uml-text-mono">+ borrowJournal()</text>
-  <line x1="160" y1="320" x2="160" y2="170" class="uml-line" marker-end="url(#gen-arrow-bb)"/>
-  <rect x="540" y="60" width="200" height="110" class="uml-box" fill="white"/>
-  <text x="640" y="84" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
-  <line x1="540" y1="96" x2="740" y2="96" class="uml-line"/>
-  <text x="554" y="116" class="uml-text-mono">+ ISBN: String</text>
-  <text x="554" y="134" class="uml-text-mono">+ title: String</text>
-  <line x1="540" y1="148" x2="740" y2="148" class="uml-line"/>
-  <text x="554" y="166" class="uml-text-mono">+ catalog()</text>
-  <rect x="540" y="320" width="200" height="100" class="uml-box" fill="white"/>
-  <text x="640" y="344" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
-  <line x1="540" y1="356" x2="740" y2="356" class="uml-line"/>
-  <text x="554" y="376" class="uml-text-mono">+ barcode: String</text>
-  <text x="554" y="394" class="uml-text-mono">+ status: LoanStatus</text>
-  <line x1="640" y1="200" x2="640" y2="320" class="uml-line"/>
-  <polygon points="640,170 654,185 640,200 626,185" fill="white" stroke="#2c3540" stroke-width="1.4"/>
-  <text x="650" y="220" class="uml-text-mono" font-size="13">1</text>
-  <text x="650" y="312" class="uml-text-mono" font-size="13">1..*</text>
-  <text x="650" y="260" class="uml-text-italic" font-size="13">has copies</text>
-  <line x1="260" y1="120" x2="540" y2="360" class="uml-line"/>
-  <text x="270" y="116" class="uml-text-mono" font-size="13">0..1</text>
-  <text x="486" y="346" class="uml-text-mono" font-size="13">0..6</text>
-  <text x="340" y="208" class="uml-text-italic" font-size="13">borrows / returns</text>
-  <line x1="400" y1="240" x2="400" y2="460" class="uml-line-dashed"/>
-  <rect x="310" y="460" width="180" height="100" class="uml-box" fill="#faf7f2"/>
-  <text x="400" y="484" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
-  <line x1="310" y1="496" x2="490" y2="496" class="uml-line"/>
-  <text x="324" y="516" class="uml-text-mono">+ startDate: Date</text>
-  <text x="324" y="534" class="uml-text-mono">+ returnDate: Date</text>
-  <text x="324" y="552" class="uml-text-mono">+ computeReturnDate()</text>
+      <svg viewBox="0 0 940 560" role="img" aria-label="Library analysis class model derived from the description: LibraryMember, StaffMember, Book, BookCopy and a Loan association class, attributes only with no operations"><defs><marker id="gen-arrow-bb" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M 0 0 L 14 7 L 0 14 Z" fill="white" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+  <rect x="60" y="60" width="200" height="92" class="uml-box" fill="white" data-tip="<strong>Analysis class: LibraryMember</strong><br>A domain concept lifted straight from the requirement. At analysis it carries a name and domain-level attributes only; no operations yet, those are assigned when this becomes a design class."/>
+  <text x="160" y="86" text-anchor="middle" class="uml-text" font-weight="700">LibraryMember</text>
+  <line x1="60" y1="100" x2="260" y2="100" class="uml-line"/>
+  <text x="74" y="124" class="uml-text-mono">+ memberId: String</text>
+  <text x="74" y="142" class="uml-text-mono">+ name: String</text>
+  <rect x="60" y="300" width="200" height="64" class="uml-box" fill="white" data-tip="<strong>Analysis class: StaffMember</strong><br>A specialisation of LibraryMember (staff are members with extra borrowing rights). Attributes only at this stage."/>
+  <text x="160" y="326" text-anchor="middle" class="uml-text" font-weight="700">StaffMember</text>
+  <line x1="60" y1="340" x2="260" y2="340" class="uml-line"/>
+  <text x="74" y="362" class="uml-text-mono">+ department: String</text>
+  <line x1="160" y1="300" x2="160" y2="152" class="uml-line" marker-end="url(#gen-arrow-bb)" data-tip="<strong>Generalisation</strong> (hollow triangle)<br>StaffMember is-a LibraryMember, so it inherits memberId and name and the borrows/returns association, and adds journal-borrowing on top. The triangle points at the parent."/>
+  <rect x="540" y="60" width="200" height="92" class="uml-box" fill="white" data-tip="<strong>Analysis class: Book</strong><br>The work itself (the title), distinct from its physical copies. Attributes only; you lend a copy, not the title."/>
+  <text x="640" y="86" text-anchor="middle" class="uml-text" font-weight="700">Book</text>
+  <line x1="540" y1="100" x2="740" y2="100" class="uml-line"/>
+  <text x="554" y="124" class="uml-text-mono">+ ISBN: String</text>
+  <text x="554" y="142" class="uml-text-mono">+ title: String</text>
+  <rect x="540" y="300" width="200" height="94" class="uml-box" fill="white" data-tip="<strong>Analysis class: BookCopy</strong><br>One physical copy on the shelf, with its own barcode and loan status. This is the thing a member actually borrows."/>
+  <text x="640" y="326" text-anchor="middle" class="uml-text" font-weight="700">BookCopy</text>
+  <line x1="540" y1="340" x2="740" y2="340" class="uml-line"/>
+  <text x="554" y="362" class="uml-text-mono">+ barcode: String</text>
+  <text x="554" y="380" class="uml-text-mono">+ status: LoanStatus</text>
+  <line x1="640" y1="152" x2="640" y2="300" class="uml-line" data-tip="<strong>Aggregation</strong> (hollow diamond)<br>A Book has copies: one title (1) is realised by one or more physical BookCopy items (1..*). The diamond sits on the whole, Book."/>
+  <polygon points="640,152 654,167 640,182 626,167" fill="white" stroke="#2c3540" stroke-width="1.4"/>
+  <text x="650" y="190" class="uml-text-mono" font-size="13">1</text>
+  <text x="650" y="294" class="uml-text-mono" font-size="13">1..*</text>
+  <text x="650" y="236" class="uml-text-italic" font-size="13">has copies</text>
+  <line x1="260" y1="118" x2="540" y2="330" class="uml-line" data-tip="<strong>Association: borrows / returns</strong><br>A LibraryMember (0..1) borrows up to six BookCopy items (0..6). The line is a structural link; the loan's own data does not live on either end, which is why a Loan association class hangs off it."/>
+  <text x="266" y="112" class="uml-text-mono" font-size="13">0..1</text>
+  <text x="498" y="326" class="uml-text-mono" font-size="13">0..6</text>
+  <text x="305" y="262" class="uml-text-italic" font-size="13">borrows / returns</text>
+  <line x1="400" y1="224" x2="400" y2="438" class="uml-line-dashed" data-tip="<strong>Association class link</strong><br>The dashed line ties the Loan class to the borrows/returns association: Loan records data that belongs to the member-copy pairing, not to the member or the copy alone."/>
+  <rect x="310" y="438" width="180" height="88" class="uml-box" fill="#faf7f2" data-tip="<strong>Association class: Loan</strong><br>Carries the data of one borrowing event (its dates). It belongs to the member-and-copy pair, so it attaches to the association rather than to either class. Still attributes only at analysis."/>
+  <text x="400" y="462" text-anchor="middle" class="uml-text" font-weight="700">Loan</text>
+  <line x1="310" y1="476" x2="490" y2="476" class="uml-line"/>
+  <text x="324" y="498" class="uml-text-mono">+ startDate: Date</text>
+  <text x="324" y="516" class="uml-text-mono">+ returnDate: Date</text>
 </svg>
-      <div class="figure-note">The kept nouns become boxes; the verb analysis then fills in operations (borrow(), return(), recordLoan()), and the associations come next. Staff is-a member is generalisation; a book has copies is aggregation; a member borrows copies is the association whose dates live on the Loan association class; up to six is the multiplicity 0..6.</div>
+      <div class="figure-note">An <strong>analysis class model</strong>, the shape Adel labels the &ldquo;first-cut class model (analysis classes)&rdquo;: the kept nouns become boxes with a name and <em>domain-level attributes only</em>, joined by the relationships the analysis has argued for. Note what is <strong>not</strong> here: no operations and no types beyond the domain ones. Operations are responsibilities you assign when the model is taken forward to a <a href="#classes">design class diagram</a> (the design-level figures in this section show that fuller form, with operations and types). The relationships are decided at analysis: Staff is-a member is a <strong>generalisation</strong>; a Book has copies is an <strong>aggregation</strong> (1 to 1..*); a member borrows copies is an <strong>association</strong> (0..1 to 0..6) whose dates live on the <strong>Loan association class</strong>. Hover any box, line or diamond for what it is.</div>
     </div>
       </div>
     </details>
@@ -2749,18 +2760,18 @@
       <svg viewBox="0 0 1060 400" class="objfig" role="img" aria-label="Deposit Cash communication diagram">
         <defs><marker id="cm-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker></defs>
         <!-- participants -->
-        <rect x="40" y="170" width="160" height="46" class="uml-box"/>
+        <rect x="40" y="170" width="160" height="46" class="uml-box" data-tip="<strong>Participant: the Customer</strong><br>The initiating actor, written as an object. Communication diagrams place participants anywhere on the page; position carries no meaning here (unlike a sequence diagram's left-to-right order)."/>
         <text x="120" y="198" text-anchor="middle" class="uml-text" font-weight="600">: Customer</text>
-        <rect x="350" y="170" width="160" height="46" class="uml-box"/>
+        <rect x="350" y="170" width="160" height="46" class="uml-box" data-tip="<strong>Participant: front : UI</strong><br>An object named <code>front</code> of class <code>UI</code>. It receives the customer's messages and forwards work to the register."/>
         <text x="430" y="198" text-anchor="middle" class="uml-text" font-weight="600">front : UI</text>
-        <rect x="660" y="170" width="200" height="46" class="uml-box"/>
+        <rect x="660" y="170" width="200" height="46" class="uml-box" data-tip="<strong>Participant: register : Register</strong><br>Does the real work: it receives sendMoney and makes the nested calls 2.1.1 to 2.1.3 inside that one call."/>
         <text x="760" y="198" text-anchor="middle" class="uml-text" font-weight="600">register : Register</text>
-        <rect x="660" y="320" width="200" height="46" class="uml-box"/>
+        <rect x="660" y="320" width="200" height="46" class="uml-box" data-tip="<strong>Participant: : Dispenser</strong><br>An anonymous object the register calls last, to deliver the receipt (message 2.1.3)."/>
         <text x="760" y="348" text-anchor="middle" class="uml-text" font-weight="600">: Dispenser</text>
         <!-- links -->
-        <line x1="200" y1="193" x2="350" y2="193" class="uml-line"/>
-        <line x1="510" y1="193" x2="660" y2="193" class="uml-line"/>
-        <line x1="760" y1="216" x2="760" y2="320" class="uml-line"/>
+        <line x1="200" y1="193" x2="350" y2="193" class="uml-line" data-tip="<strong>Link (Customer to front)</strong><br>A plain line is a link, an instance of an association in the class diagram. Messages 1 and 2 ride along it. No link, no message: a message with no association under it means the class model is missing a relationship."/>
+        <line x1="510" y1="193" x2="660" y2="193" class="uml-line" data-tip="<strong>Link (front to register)</strong><br>Carries message 2.1 (sendMoney). The UI delegates the deposit to the register over this link."/>
+        <line x1="760" y1="216" x2="760" y2="320" class="uml-line" data-tip="<strong>Link (register to Dispenser)</strong><br>Carries message 2.1.3 (deliverReceipt). One link per pair of participants that exchange at least one message."/>
         <!-- messages: Customer -> front (1, 2) -->
         <line x1="245" y1="176" x2="305" y2="176" class="uml-line" marker-end="url(#cm-b)"/>
         <text x="275" y="148" text-anchor="middle" class="uml-text-mono" font-size="12">2: makeSelection(acct, amount)</text>
@@ -2769,14 +2780,14 @@
         <line x1="555" y1="184" x2="615" y2="184" class="uml-line" marker-end="url(#cm-b)"/>
         <text x="585" y="170" text-anchor="middle" class="uml-text-mono" font-size="12">2.1: sendMoney(amount)</text>
         <!-- register self-messages (2.1.1, 2.1.2) -->
-        <path d="M 860 184 C 916 176 916 210 860 202" class="uml-line" fill="none" marker-end="url(#cm-b)"/>
+        <path d="M 860 184 C 916 176 916 210 860 202" class="uml-line" fill="none" marker-end="url(#cm-b)" data-tip="<strong>Self-messages 2.1.1, 2.1.2</strong><br>The register calls itself: checkAmount() then updateReserve(). The Dewey suffix .1, .2 shows these run <em>inside</em> message 2.1, in that order. A self-message loops back to the same participant."/>
         <text x="874" y="184" class="uml-text-mono" font-size="12">2.1.1: checkAmount()</text>
         <text x="874" y="201" class="uml-text-mono" font-size="12">2.1.2: updateReserve()</text>
         <!-- message: register -> Dispenser (2.1.3) -->
         <line x1="778" y1="252" x2="778" y2="285" class="uml-line" marker-end="url(#cm-b)"/>
         <text x="790" y="274" class="uml-text-mono" font-size="12">2.1.3: deliverReceipt()</text>
       </svg>
-      <div class="figure-note">Same participants, same messages, same order as Figure 7b - but the timeline is gone and the links carry the story. The Dewey numbers (2.1, 2.1.1, &hellip;) encode the call nesting the sequence diagram showed by descending position. Each link is an instance of an association: <code>Customer-front</code>, <code>front-register</code>, <code>register-Dispenser</code> - if a message had no association to ride on, the class model would be missing a relationship. <strong>Reading the numbers:</strong> they give the order of execution - <code>1</code> fires first, then <code>2</code>; a decimal suffix marks <em>nesting</em>, so <code>2.1</code> is the first call made <em>inside</em> message <code>2</code>, and <code>2.1.1</code> then <code>2.1.2</code> run inside <code>2.1</code>. On each link the plain line is the <em>association</em> the message travels on; the small arrow beside it shows only the message's <em>direction</em>.</div>
+      <div class="figure-note">Same participants, same messages, same order as Figure 7b - but the timeline is gone and the links carry the story. The Dewey numbers (2.1, 2.1.1, &hellip;) encode the call nesting the sequence diagram showed by descending position. Each link is an instance of an association: <code>Customer-front</code>, <code>front-register</code>, <code>register-Dispenser</code> - if a message had no association to ride on, the class model would be missing a relationship. <strong>Reading the numbers:</strong> they give the order of execution - <code>1</code> fires first, then <code>2</code>; a decimal suffix marks <em>nesting</em>, so <code>2.1</code> is the first call made <em>inside</em> message <code>2</code>, and <code>2.1.1</code> then <code>2.1.2</code> run inside <code>2.1</code>. On each link the plain line is the <em>association</em> the message travels on; the small arrow beside it shows only the message's <em>direction</em>. Hover any participant, link or message for what it represents.</div>
     </div>
 
     <h3 class="subhead">Sequence vs communication: when to reach for which</h3>
@@ -3138,13 +3149,12 @@
         <circle cx="70" cy="205" r="9" class="uml-line" fill="white" data-tip="<strong>Provided interface (lollipop)</strong><br>OrderEntry: the services OrderSystem offers to the outside. Messages: placeOrder(items), cancelOrder(orderId). Drawn as a ball on a stick."/>
         <rect x="101" y="196" width="18" height="18" fill="white" stroke="#2c3540" stroke-width="1.6" data-tip="<strong>Port</strong><br>A named interaction point on the component boundary, drawn as a small square. It groups the interfaces offered or needed there, so clients wire to the port, not to the component internals. This port publishes the provided interface OrderEntry."/>
         <text x="110" y="186" text-anchor="middle" class="uml-text-mono" font-size="10.5" fill="#b85c38">port</text>
-        <text x="70" y="238" text-anchor="middle" class="uml-text-mono" font-size="10.5">OrderEntry</text>
-        <text x="70" y="252" text-anchor="middle" class="uml-text-stereo">&lt;&lt;provided&gt;&gt;</text>
+        <text x="64" y="266" text-anchor="middle" class="uml-text-mono" font-size="10.5">OrderEntry</text>
+        <text x="64" y="280" text-anchor="middle" class="uml-text-stereo">&lt;&lt;provided&gt;&gt;</text>
         <!-- (3) delegation connector: port -> inner part -->
         <line x1="119" y1="205" x2="230" y2="205" class="uml-line" marker-end="url(#pd-open)"/>
         <line x1="119" y1="205" x2="230" y2="205" stroke="transparent" stroke-width="20" pointer-events="all" data-tip="<strong>Delegation connector</strong> (&lt;&lt;delegate&gt;&gt;)<br>Forwards the external port inward to the part that implements it. Calls arriving at the OrderEntry port are passed to :OrderHandler. It carries the port messages: placeOrder(), cancelOrder()."/>
-        <text x="174" y="196" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;delegate&gt;&gt;</text>
-        <text x="174" y="230" text-anchor="middle" class="uml-text-mono" font-size="10" fill="#b85c38">delegation connector</text>
+        <text x="174" y="198" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;delegate&gt;&gt;</text>
         <!-- (4) OrderHandler required interface (socket) -->
         <line x1="440" y1="205" x2="449" y2="205" class="uml-line"/>
         <path d="M 460 192 A 13 13 0 0 0 460 218" class="uml-line" fill="none" data-tip="<strong>Required interface (socket)</strong><br>:OrderHandler needs the Charging interface to do its job. Drawn as a half-circle cup whose mouth faces the provider. Messages it calls: charge(amount), refund(orderId)."/>
@@ -3561,7 +3571,7 @@
 
     <h3 class="subhead-small">Course material</h3>
     <div class="ref-list">
-      <div class="ref"><strong>Taweel, A.</strong> (2025/26). <em>COMP433 Software Engineering: Unified Modelling Language (Chapter 4)</em>. Birzeit University lecture notes. <em>The primary course source; the running examples (Library system, Mentcare), the diagram taxonomy, and the modelling conventions in this companion follow Adel's notes directly.</em></div>
+      <div class="ref"><strong>Taweel, A.</strong> (2025/26). <em>COMP433 Software Engineering: Unified Modelling Language (Chapter 4)</em>. Birzeit University lecture notes. <em>The primary course source; the running examples (Library system, Mentcare), the diagram taxonomy, and the modelling conventions in this companion follow Adel's notes directly.</em> Lecture decks: <a class="inline" href="L4-UML-p89-v1.48-with%20exercises.pdf">use cases &amp; activity (1&ndash;89)</a>, <a class="inline" href="L4-UML-p90-156-v1.48-with%20exercises.pdf">class, object &amp; sequence (90&ndash;156)</a>, <a class="inline" href="L4-UML-p180-223-v1.48-with%20exercises.pdf">component &amp; deployment (180&ndash;223)</a>, <a class="inline" href="L4-p29-UML-v1.475-with%20exercises.pdf">UML intro (1&ndash;29)</a>.</div>
       <div class="ref"><strong>Sommerville, I.</strong> (2015). <em>Software Engineering</em> (10th ed.). Pearson. <em>Chapter 5 on System Modelling is the textbook treatment of the four model families (context, interaction, structural, behavioural) and the standard reference for the diagrams discussed here.</em></div>
     </div>
 

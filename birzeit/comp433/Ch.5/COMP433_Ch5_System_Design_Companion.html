@@ -314,7 +314,7 @@
       <a href="/birzeit/comp433/">Course</a>
       <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html" style="color:var(--accent); font-weight:600;">Ch.4 companion</a>
       <a href="#design">1. Analysis to design</a>
-      <a href="#issues">2. Key design issues</a>
+      <a href="#issues">2. Design issues</a>
       <a href="#goals">3. Design goals</a>
       <a href="#cohesion">4. Cohesion &amp; coupling</a>
       <a href="#decomp">5. Decomposition</a>
@@ -325,7 +325,8 @@
       <a href="#views">10. 4+1 views</a>
       <a href="#worked">11. Worked example</a>
       <a href="#pitfalls">12. Pitfalls</a>
-      <a href="#refs">13. References</a>
+      <a href="#exam">13. Exam practice</a>
+      <a href="#refs">14. References</a>
     </nav>
   </div>
 </div>
@@ -347,7 +348,7 @@
     <h3>Contents</h3>
     <ul class="toc-list">
       <li><span class="toc-num">1.</span><a href="#design">From analysis to design</a></li>
-      <li><span class="toc-num">2.</span><a href="#issues">The key issues of system design</a></li>
+      <li><span class="toc-num">2.</span><a href="#issues">The issues of system design</a></li>
       <li><span class="toc-num">3.</span><a href="#goals">Design goals and trade-offs</a></li>
       <li><span class="toc-num">4.</span><a href="#cohesion">Cohesion and coupling</a></li>
       <li><span class="toc-num">5.</span><a href="#decomp">Subsystem decomposition</a></li>
@@ -358,7 +359,8 @@
       <li><span class="toc-num">10.</span><a href="#views">The 4+1 view model</a></li>
       <li><span class="toc-num">11.</span><a href="#worked">Worked example: designing an architecture</a></li>
       <li><span class="toc-num">12.</span><a href="#pitfalls">Pitfalls</a></li>
-      <li><span class="toc-num">13.</span><a href="#refs">References</a></li>
+      <li><span class="toc-num">13.</span><a href="#exam">Exam practice</a></li>
+      <li><span class="toc-num">14.</span><a href="#refs">References</a></li>
     </ul>
   </div>
 </div>
@@ -395,10 +397,10 @@
   </div>
 </section>
 
-<!-- ============= 2. Key design issues ============= -->
+<!-- ============= 2. Design issues ============= -->
 <section class="block" id="issues">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">2.</span>The key issues of system design</div>
+    <div class="section-eyebrow"><span class="num">2.</span>The issues of system design</div>
     <h2 class="section-title">The questions a design must <em>answer</em>.</h2>
     <p class="section-intro">System design is the set of decisions that turn an analysis model into an implementable structure. It is worth naming those decisions, because a design is incomplete until each has an answer.</p>
 
@@ -446,6 +448,19 @@
         <tr><td>Security</td><td>Usability and performance: extra checks and extra hops.</td></tr>
         <tr><td>Short delivery time</td><td>Functionality, or the long-term cost of the design debt incurred.</td></tr>
       </tbody></table></div>
+
+    <h3 class="subhead">How each goal is achieved in the architecture</h3>
+    <p class="body">A goal is only worth stating if there is a structural move that serves it. The architecture is where most non-functional goals are won or lost, so each one points to a recognised technique:</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Design goal</th><th>How to achieve it (architecturally)</th></tr></thead><tbody>
+        <tr><td><strong>Performance</strong></td><td>Localise critical operations and minimise communication between components; use large rather than fine-grain components.</td></tr>
+        <tr><td><strong>Security</strong></td><td>Use a layered architecture with the critical assets in the inner layers.</td></tr>
+        <tr><td><strong>Safety</strong></td><td>Localise the safety-critical features in a small number of subsystems.</td></tr>
+        <tr><td><strong>Availability</strong> (and robustness)</td><td>Include redundant components and mechanisms for fault tolerance.</td></tr>
+        <tr><td><strong>Maintainability</strong></td><td>Use fine-grain, replaceable components.</td></tr>
+      </tbody></table></div>
+    <p class="note">These pull against each other: performance wants <em>large</em> components and few calls, while maintainability wants <em>fine-grain</em> replaceable ones. That direct conflict is why the goals must be prioritised, not merely listed.</p>
+
     <p class="body">A design goal is only useful if it can be attributed to a stakeholder and, ideally, measured. "The system should be secure" is not yet a goal; "an unauthenticated request must never reach the patient record, enforced at a single gateway" is one a design can be checked against.</p>
   </div>
 </section>
@@ -637,8 +652,56 @@
         <line x1="360" y1="246" x2="360" y2="274" class="uml-line" marker-end="url(#ly-arrow)"/>
         <text x="408" y="108" class="uml-text-italic" font-size="12">uses</text>
       </svg>
-      <div class="figure-note">A <strong>partition</strong> divides one layer into weakly coupled, same-level subsystems (by area of responsibility); a <strong>layer</strong> divides by level of abstraction. Layering can be <strong>closed</strong> (opaque): a layer may call only the one directly below, which minimises dependencies but adds call overhead; or <strong>open</strong> (transparent): a layer may call any layer beneath it, which is faster but couples layers to more than their immediate neighbour. <strong>When to use:</strong> incremental development on top of existing facilities, and when interface stability matters. <strong>Cost:</strong> performance can suffer from passing requests through several layers.</div>
+      <div class="figure-note">A <strong>partition</strong> divides one layer into weakly coupled, same-level subsystems (by area of responsibility); a <strong>layer</strong> divides by level of abstraction. The classic illustration is an operating system: layer 0 the scheduler, layer 1 the pager, layer 2 communication with the console, layer 3 the I/O device manager, layer 4 the user programs, with a GUI-services partition sitting beside the user-programs layer.</div>
     </div>
+
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Layered architecture</th></tr>
+      <tr><td>Description</td><td>Organises the system into layers with related functionality associated with each layer. A layer provides services to the layer above it, so the lowest-level layers represent core services that are likely to be used throughout the system.</td></tr>
+      <tr><td>When used</td><td>When building new facilities on top of existing systems; when the development is spread across several teams with each team responsible for a layer of functionality; when there is a requirement for multi-level security.</td></tr>
+      <tr><td>Advantages</td><td>Allows replacement of entire layers so long as the interface is maintained. Redundant facilities (e.g. authentication) can be provided in each layer to increase the dependability of the system.</td></tr>
+      <tr><td>Disadvantages</td><td>In practice, providing a clean separation between layers is often difficult, and a high-level layer may have to interact directly with lower-level layers rather than through the one immediately below it. Performance can be a problem because of the multiple levels of interpretation of a service request as it is processed at each layer.</td></tr>
+    </table></div>
+    <p class="note">The pattern table above is Sommerville's standard form (name, description, when used, advantages, disadvantages); the same form is given for each of the styles below, because it is the form examined.</p>
+
+    <h3 class="subhead-small">Closed (opaque) versus open (transparent) layering</h3>
+    <p class="body">A layered architecture comes in two variants that differ only in <em>which</em> lower layers a layer is allowed to call. The choice is a direct trade between coupling and runtime efficiency, and it is tied to different design goals.</p>
+    <ul class="body">
+      <li><strong>Closed (opaque) layering.</strong> Each layer may call operations only from the layer <em>directly</em> below it: this is called <strong>direct addressing</strong>. Closed architectures are more <strong>portable</strong> and provide <strong>low coupling</strong> (a layer is bound only to its immediate neighbour). Design goals served: <strong>maintainability and flexibility</strong>.</li>
+      <li><strong>Open (transparent) layering.</strong> Each layer may call operations from <em>any</em> layer below it, skipping intermediate layers: this is called <strong>indirect addressing</strong>. Open architectures are more <strong>efficient</strong> (a call goes straight to the layer that can serve it) but they <strong>increase coupling</strong> (an upper layer now depends on several lower layers, not just one). Design goal served: <strong>runtime efficiency</strong>.</li>
+    </ul>
+    <div class="figure">
+      <div class="figure-caption">Figure 3b</div>
+      <div class="figure-title">Closed layering (direct addressing) versus open layering (indirect addressing).</div>
+      <svg viewBox="0 0 760 320" class="objfig" role="img" aria-label="Closed layering calls only the layer below; open layering calls any layer below">
+        <defs><marker id="cl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
+        <text x="170" y="28" text-anchor="middle" class="uml-text-stereo" font-size="12" fill="#2c5f7c">Closed &middot; direct addressing</text>
+        <rect x="70" y="46" width="200" height="44" rx="6" class="uml-box" fill="white" data-tip="<strong>L1</strong><br>Calls only L2, the layer directly below. A closed layer is bound to one neighbour, which keeps coupling low and the layer portable."/><text x="170" y="73" text-anchor="middle" class="uml-text" font-weight="600">Layer 1</text>
+        <rect x="70" y="116" width="200" height="44" rx="6" class="uml-box" fill="white"/><text x="170" y="143" text-anchor="middle" class="uml-text" font-weight="600">Layer 2</text>
+        <rect x="70" y="186" width="200" height="44" rx="6" class="uml-box" fill="white"/><text x="170" y="213" text-anchor="middle" class="uml-text" font-weight="600">Layer 3</text>
+        <rect x="70" y="256" width="200" height="44" rx="6" class="uml-box" fill="#ebe2d1"/><text x="170" y="283" text-anchor="middle" class="uml-text" font-weight="600">OS / libraries</text>
+        <line x1="170" y1="90" x2="170" y2="116" class="uml-line" marker-end="url(#cl-arrow)"/>
+        <line x1="170" y1="160" x2="170" y2="186" class="uml-line" marker-end="url(#cl-arrow)"/>
+        <line x1="170" y1="230" x2="170" y2="256" class="uml-line" marker-end="url(#cl-arrow)"/>
+        <text x="560" y="28" text-anchor="middle" class="uml-text-stereo" font-size="12" fill="#b85c38">Open &middot; indirect addressing</text>
+        <rect x="460" y="46" width="200" height="44" rx="6" class="uml-box" fill="white" data-tip="<strong>L1</strong><br>May call L2, L3 or the OS layer directly, skipping intermediates. Faster, but L1 now depends on several lower layers, so coupling rises."/><text x="560" y="73" text-anchor="middle" class="uml-text" font-weight="600">Layer 1</text>
+        <rect x="460" y="116" width="200" height="44" rx="6" class="uml-box" fill="white"/><text x="560" y="143" text-anchor="middle" class="uml-text" font-weight="600">Layer 2</text>
+        <rect x="460" y="186" width="200" height="44" rx="6" class="uml-box" fill="white"/><text x="560" y="213" text-anchor="middle" class="uml-text" font-weight="600">Layer 3</text>
+        <rect x="460" y="256" width="200" height="44" rx="6" class="uml-box" fill="#ebe2d1"/><text x="560" y="283" text-anchor="middle" class="uml-text" font-weight="600">OS / libraries</text>
+        <line x1="560" y1="90" x2="560" y2="116" class="uml-line" marker-end="url(#cl-arrow)"/>
+        <path d="M 600 90 Q 700 150 632 186" class="uml-line" fill="none" marker-end="url(#cl-arrow)"/>
+        <path d="M 520 90 Q 410 170 488 256" class="uml-line" fill="none" marker-end="url(#cl-arrow)"/>
+      </svg>
+      <div class="figure-note">Closed layering minimises coupling and maximises portability and maintainability; open layering minimises call overhead and maximises runtime efficiency. The choice is made by reading which design goal leads: maintainability and flexibility point to closed, raw runtime efficiency points to open.</div>
+    </div>
+
+    <h3 class="subhead-small">Hierarchical relationships: depends-on versus calls</h3>
+    <p class="body">Two different relationships connect layers, and UML draws them with different lines, a point worth getting right because it is examinable:</p>
+    <ul class="body">
+      <li>Layer A <strong>"depends on"</strong> layer B is a <strong>compile-time dependency</strong>: B must be compiled and available before A can be built (build tools such as make, ant and maven compute exactly this order). UML convention: a <strong>solid line</strong>.</li>
+      <li>Layer A <strong>"calls"</strong> layer B is a <strong>runtime dependency</strong>: at execution A invokes B (for example, a web browser calls a web server). UML convention: a <strong>dashed line</strong>.</li>
+    </ul>
+    <p class="note">A single pair of subsystems can have both relationships at once: A may both depend on B at build time and call B at run time, drawn as a solid <em>and</em> a dashed line between the same two boxes.</p>
 
     <h3 class="subhead">Client-server</h3>
     <p class="body">Client-server is a special case of the layered style in which the layers are split across machines. One or more <strong>servers</strong> provide a service; many <strong>clients</strong> call on it. The server owns the shared data and the logic that protects it; each client owns its own user interface and calls the server when it needs the service.</p>
@@ -661,6 +724,24 @@
       </svg>
       <div class="figure-note"><strong>When to use:</strong> data in a shared database must be reached from many places. <strong>Cost and limits:</strong> the server centralises control and is a single point of failure and a performance bottleneck; clients cannot talk to each other, and the server cannot push to clients when data changes (it can only answer requests). Those last two limits are exactly what the peer-to-peer style removes.</div>
     </div>
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Client-server</th></tr>
+      <tr><td>Description</td><td>The functionality of the system is organised into services, with each service delivered from a separate server. Clients are users of these services and access servers to make use of them.</td></tr>
+      <tr><td>When used</td><td>When data in a shared database has to be accessed from a range of locations. Because servers can be replicated, it may also be used when the load on a system is variable.</td></tr>
+      <tr><td>Advantages</td><td>Servers can be distributed across a network. General functionality (e.g. a printing service) can be available to all clients and need not be implemented by all services.</td></tr>
+      <tr><td>Disadvantages</td><td>Each service is a single point of failure, so susceptible to denial-of-service attacks or server failure. Performance may be unpredictable because it depends on the network as well as the system. There may be management problems if servers are owned by different organisations.</td></tr>
+    </table></div>
+    <p class="body">Read against the design goals, the client-server style scores as follows (the deck's feature assessment):</p>
+    <div class="table-card"><table class="body-table">
+      <thead><tr><th>Design feature</th><th>Level</th><th>Why</th></tr></thead><tbody>
+        <tr><td><strong>Service portability</strong></td><td>High</td><td>The server runs on many operating systems and networking environments.</td></tr>
+        <tr><td><strong>Location transparency</strong></td><td>Reasonable</td><td>The server might itself be distributed, but presents a single "logical" service to the user.</td></tr>
+        <tr><td><strong>Performance</strong></td><td>Reasonable</td><td>The client is optimised for interactive, display-intensive tasks; the server for CPU-intensive operations.</td></tr>
+        <tr><td><strong>Scalability</strong></td><td>High</td><td>One server can handle a large number of clients.</td></tr>
+        <tr><td><strong>Client portability</strong></td><td>Reasonable</td><td>The client interface can support a variety of end devices (phone, laptop, wearable).</td></tr>
+        <tr><td><strong>Reliability</strong></td><td>Reasonable</td><td>The server survives some client and communication failures; one client crashing does not bring the system down.</td></tr>
+      </tbody></table></div>
+    <p class="note">In UML the relationship is drawn as an association between <code>Client</code> (role <em>requester</em>) and <code>Server</code> (role <em>provider</em>), with the server exposing its public operations <code>service1()&hellip;serviceN()</code>. The client knows the server's interface; the server does not need to know the client's.</p>
 
     <h3 class="subhead">Peer-to-peer</h3>
     <p class="body">Peer-to-peer generalises client-server by collapsing the two roles into one. A <strong>peer</strong> is both client and server: it requests services from other peers and provides services to them. There is no central authority, so there is no single bottleneck and no single point of failure, and peers can communicate directly.</p>
@@ -683,6 +764,7 @@
       </svg>
       <div class="figure-note">Two readings of "peer" are current: a peer can be <em>either</em> a client or a server at a given moment, or a peer can be <em>both at once</em>. <strong>When to use:</strong> no natural central authority, and resilience or scale matters (file sharing, blockchains, messaging). <strong>Cost:</strong> consistency, discovery, and security are all harder without a central point to enforce them.</div>
     </div>
+    <p class="body"><strong>Modelling "a peer can be a client as well as a server".</strong> Two inheritance models are proposed, and only one is correct. <strong>Model 1</strong> makes <code>Peer</code> the parent and has <code>Client</code> and <code>Server</code> inherit from it: this reads "a peer is <em>either</em> a client or a server", which is not what peer-to-peer means. <strong>Model 2</strong> (correct) makes <code>Peer</code> inherit from <em>both</em> <code>Client</code> and <code>Server</code>: this reads "a peer is a client <em>as well as</em> a server", which is the definition. The right model is the one whose inheritance, read aloud, states the requirement.</p>
 
     <h3 class="subhead">Three-tier, four-tier: layer versus tier</h3>
     <p class="body">A <strong>layer</strong> is a logical type: a subsystem at one level of abstraction. A <strong>tier</strong> is a physical allocation: the node a layer is deployed on. The two are often used interchangeably, but the distinction is exact. A <strong>three-layered</strong> style becomes a <strong>three-tier architecture</strong> only when its three layers are placed on three separate nodes:</p>
@@ -710,7 +792,13 @@
     </div>
 
     <h3 class="subhead">Model-View-Controller (MVC)</h3>
-    <p class="body">MVC decouples the system's data from its presentation and from the handling of user input, by splitting an interactive application into three roles. It is the dominant style for user interfaces.</p>
+    <p class="body"><strong>The problem.</strong> In an interactive system the presentation (the boundary objects: screens, forms, reports) and the data (the entity objects) tend to become tightly coupled. Change the data and you are forced to change every screen that shows it; change a screen and you reach into the data objects. The user interface cannot be re-implemented without touching the data representation, and the data cannot be reorganised without touching the interface. That coupling is exactly what makes such systems expensive to change.</p>
+    <p class="body"><strong>The solution: decouple.</strong> MVC separates presentation and interaction from the system data by splitting an interactive application into three logical components, so that data can change independently of its representation and the same data can be shown in several ways at once. It is the dominant style for user interfaces.</p>
+    <ul class="body">
+      <li><strong>Model</strong> (the entity objects): provides the application-domain knowledge, manages the system data and the operations on that data. It knows nothing about how it is displayed.</li>
+      <li><strong>View</strong> (the boundary objects): defines and manages how the data is presented to the user. There may be several views of one model at the same time.</li>
+      <li><strong>Controller</strong>: manages the user interaction (keystrokes, mouse clicks, selections), passing those interactions to the Model and the View, and notifying views of changes in the model.</li>
+    </ul>
     <div class="figure">
       <div class="figure-caption">Figure 7</div>
       <div class="figure-title">MVC: three roles in a triangle, not a stack. Hover a role.</div>
@@ -732,6 +820,16 @@
       <div class="figure-note"><strong>Sequence of one interaction:</strong> the user acts on the View; the View passes the action to the Controller; the Controller updates the Model; the Model notifies the View, which re-reads the Model and redraws. <strong>MVC vs three-tier:</strong> MVC is <em>non-hierarchical</em> (triangular) - the View is updated directly from the Model; three-tier is <em>hierarchical</em> (linear) - the presentation layer never talks to the data layer directly, every call passes through the middle layer. MVC dates from the late 1970s (Smalltalk); three-tier from 1990s web applications.</div>
     </div>
 
+    <p class="body"><strong>How a view stays current: subscribe and notify.</strong> The Model does not call the views; that would couple it back to the presentation it is meant to be independent of. Instead each View <em>subscribes</em> to the Model. When the Model's data changes, it <em>notifies</em> its subscribers, and each notified View re-reads the Model and redraws itself. This is the observer mechanism, and it is what lets several views of one model (a table, a chart, a summary) all refresh from a single change without the Model knowing any of them by name. It is also why the relationship is drawn as a triangle rather than a stack: the View is updated <em>directly</em> from the Model, not through the Controller.</p>
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Model-View-Controller (MVC)</th></tr>
+      <tr><td>Description</td><td>Separates presentation and interaction from the system data. The system is structured into three logical components that interact with each other. The Model component manages the system data and associated operations on that data. The View component defines and manages how the data is presented to the user. The Controller component manages user interaction (keystrokes, mouse clicks, etc.) and passes these interactions to the View and the Model.</td></tr>
+      <tr><td>When used</td><td>Used when there are multiple ways to view and interact with the same data. Also used when the future requirements for interaction and presentation of the data are not known.</td></tr>
+      <tr><td>Advantages</td><td>Allows the data to change independently of its representation and vice versa. Supports presentation of the same data in different ways, with a change made in one representation shown in all of them.</td></tr>
+      <tr><td>Disadvantages</td><td>Can involve additional code and code complexity when the data model and the interactions are simple.</td></tr>
+    </table></div>
+    <p class="note">Which design goal does MVC buy? <strong>Modifiability</strong>: by decoupling the entity objects from the boundary objects it removes the coupling that makes interactive systems expensive to change, at the price of extra structure (the disadvantage above) when the interface is trivial. That is the trade-off the <a href="#goals">design-goals</a> table calls out: you spend simplicity to buy independent change.</p>
+
     <h3 class="subhead">Repository</h3>
     <p class="body">In the repository style, all shared data is held in one central store, and the subsystems interact <em>only</em> through it; none calls another directly. The subsystems are therefore loosely coupled to each other (they are coupled only to the repository's schema), and the repository is the single source of truth.</p>
     <div class="figure">
@@ -752,6 +850,13 @@
       </svg>
       <div class="figure-note">The classic example is an IDE: editor, compiler, analyser, and debugger all work on one shared project model, and a change one tool makes is immediately visible to the others. <strong>When to use:</strong> tools or components that must share a large, evolving body of data. <strong>Cost:</strong> the repository is a single point of failure and a bottleneck, and every subsystem is coupled to its schema, so the schema is hard to change.</div>
     </div>
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Repository</th></tr>
+      <tr><td>Description</td><td>All data in a system is managed in a central repository that is accessible to all system components. Components do not interact directly, only through the repository.</td></tr>
+      <tr><td>When used</td><td>When you have a system in which large volumes of information are generated that has to be stored for a long time. Also used in data-driven systems where the inclusion of data in the repository triggers an action or tool.</td></tr>
+      <tr><td>Advantages</td><td>Components can be independent: they need not know of the existence of other components. Changes made by one component can be propagated to all components. All data can be managed consistently (e.g. backups done at the same time) as it is all in one place.</td></tr>
+      <tr><td>Disadvantages</td><td>The repository is a single point of failure, so problems in it affect the whole system. There may be inefficiencies in organising all communication through the repository. Distributing the repository across several computers may be difficult.</td></tr>
+    </table></div>
 
     <h3 class="subhead">Pipe-and-filter</h3>
     <p class="body">In the pipe-and-filter style, data flows through a chain of independent <strong>filters</strong>, each transforming its input and passing the result down a <strong>pipe</strong> to the next. Filters share nothing but the stream between them, so each can be developed, replaced, or reordered on its own.</p>
@@ -772,6 +877,14 @@
       </svg>
       <div class="figure-note"><strong>When to use:</strong> batch or stream processing where work is a sequence of transforms (Unix pipelines, compilers, data-processing pipelines). <strong>Cost:</strong> poor fit for interactive systems, and a common data format has to be agreed for the stream that passes between filters.</div>
     </div>
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Pipe and filter</th></tr>
+      <tr><td>Description</td><td>The processing of the data is organised so that each processing component (filter) is discrete and carries out one type of data transformation. The data flows (as in a pipe) from one component to another for processing.</td></tr>
+      <tr><td>When used</td><td>Commonly used in data-processing applications (both batch- and transaction-based) where inputs are processed in separate stages to generate related outputs.</td></tr>
+      <tr><td>Advantages</td><td>Easy to understand and supports transformation reuse. The workflow style matches the structure of many business processes. Evolution by adding transformations is straightforward. Can be implemented as a sequential or a concurrent system.</td></tr>
+      <tr><td>Disadvantages</td><td>The data-transfer format has to be agreed between communicating transformations. Each transformation must parse its input and unparse its output to the agreed form, which increases overhead and may make it impossible to reuse transformations that use incompatible data structures.</td></tr>
+    </table></div>
+    <p class="note">Two canonical examples: the Unix shell command <code>ls -a | cat</code>, where <code>ls</code> and <code>cat</code> are filters and the <code>|</code> is the pipe; and an invoice/payments system, where "read issued invoices" feeds "identify payments", which forks to "issue receipts" and to "find payments due &rarr; issue payment reminder".</p>
 
     <h3 class="subhead">Service-oriented (SOA) and microservices</h3>
     <p class="body">In a service-oriented architecture the system is built from independent <strong>services</strong>, each owning a slice of functionality and communicating over the network through published interfaces. Microservices are the modern, fine-grained form. Because each service is deployed and scaled on its own, the style buys independent evolution and elastic scale; the price is operational complexity and the distributed-system problems (partial failure, latency, eventual consistency) that a single-process design never has. It is best read as client-server generalised to many small, independently deployable servers.</p>
@@ -861,10 +974,59 @@
   </div>
 </section>
 
-<!-- ============= 13. References ============= -->
+<!-- ============= 13. Exam practice ============= -->
+<section class="block" id="exam">
+  <div class="container">
+    <div class="section-eyebrow"><span class="num">13.</span>Exam practice</div>
+    <h2 class="section-title">Exam practice: <em>the questions this chapter is examined by</em>.</h2>
+    <p class="section-intro">Midterm-style questions over the examinable points of system design. Work each one before opening the answer; the answers are deliberately tight, in the form a marker expects.</p>
+
+    <details class="worked"><summary><span class="we-tag">Q1</span><span class="we-title">Define cohesion and coupling. For each, say whether a good design seeks it high or low, and give one reason.</span></summary><div class="worked-body">
+      <p class="body"><strong>Cohesion</strong> measures the strength of functional relatedness among the classes within one subsystem; a good design seeks it <strong>high</strong>, because a subsystem that does one related thing is easier to understand, maintain, and reuse. <strong>Coupling</strong> measures the degree of interdependence between subsystems; a good design seeks it <strong>low</strong>, because then a change to one subsystem has minimal or no effect on the others, so each can be understood, tested, and replaced on its own. High cohesion tends to produce low coupling, because gathering related work into one subsystem keeps most interaction internal.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q2</span><span class="we-title">Distinguish a layer from a partition.</span></summary><div class="worked-body">
+      <p class="body">A <strong>layer</strong> is a subsystem that provides a service to the layer above and uses the service of the layer below; layers divide the system <em>vertically</em>, by level of abstraction, and a layer depends only on lower layers and has no knowledge of higher ones. A <strong>partition</strong> divides one layer <em>horizontally</em> into several independent, same-level subsystems (weakly coupled peers) that provide services to one another; partitions divide by area of responsibility, not level of abstraction.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q3</span><span class="we-title">Closed versus open layering: define direct and indirect addressing, and state the design goal each serves.</span></summary><div class="worked-body">
+      <p class="body"><strong>Closed (opaque) layering</strong> uses <strong>direct addressing</strong>: a layer may call operations only from the layer directly below it. It is more portable and gives low coupling, serving <strong>maintainability and flexibility</strong>. <strong>Open (transparent) layering</strong> uses <strong>indirect addressing</strong>: a layer may call operations from any layer below it. It is more efficient but increases coupling, serving <strong>runtime efficiency</strong>.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q4</span><span class="we-title">Distinguish "depends on" from "calls" between subsystems, and give the UML line convention for each.</span></summary><div class="worked-body">
+      <p class="body"><strong>"Depends on"</strong> is a <strong>compile-time dependency</strong>: the depended-on subsystem must be built first (the relationship a build tool such as make or maven orders). UML draws it with a <strong>solid line</strong>. <strong>"Calls"</strong> is a <strong>runtime dependency</strong>: at execution one subsystem invokes another (a browser calls a web server). UML draws it with a <strong>dashed line</strong>. The same pair may have both at once.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q5</span><span class="we-title">Distinguish architectural style from software architecture, and relate both to subsystem decomposition.</span></summary><div class="worked-body">
+      <p class="body"><strong>Subsystem decomposition</strong> is the identification of subsystems, services, and their relationships. An <strong>architectural style</strong> is a <em>pattern</em> for a subsystem decomposition (layered, client-server, repository, etc.). A <strong>software architecture</strong> is an <em>instance</em> of an architectural style applied to one specific system. Style is to architecture as class is to object.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q6</span><span class="we-title">For performance, security, availability and maintainability, state how each is achieved architecturally. Why can you not maximise performance and maintainability at once?</span></summary><div class="worked-body">
+      <p class="body"><strong>Performance:</strong> localise critical operations, minimise inter-component communication, and use large (coarse-grain) components. <strong>Security:</strong> use a layered architecture with the critical assets in the inner layers. <strong>Availability:</strong> include redundant components and fault-tolerance mechanisms. <strong>Maintainability:</strong> use fine-grain, replaceable components. Performance and maintainability conflict directly: performance wants <em>large</em> components and few calls, maintainability wants <em>fine-grain</em> replaceable ones, so the two goals must be prioritised rather than both maximised.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q7</span><span class="we-title">What limitation of client-server does peer-to-peer remove? Using inheritance, model "a peer is a client as well as a server", and say why the alternative model is wrong.</span></summary><div class="worked-body">
+      <p class="body">Client-server provides no peer-to-peer communication: calls are triggered only by a client, never by the server, so the server cannot, for example, notify a client when shared data changes. Peer-to-peer removes this by making every node both client and server. The correct model has <code>Peer</code> inherit from <em>both</em> <code>Client</code> and <code>Server</code> ("a peer is a client as well as a server"). The wrong model makes <code>Peer</code> the parent of <code>Client</code> and <code>Server</code>, which reads "a peer is <em>either</em> a client or a server", not what peer-to-peer means.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q8</span><span class="we-title">Distinguish a layer from a tier. What turns a three-layered style into a three-tier architecture?</span></summary><div class="worked-body">
+      <p class="body">A <strong>layer</strong> is a logical type (a subsystem at one level of abstraction); a <strong>tier</strong> is its physical allocation (the hardware node it runs on). A three-layered style (user interface, middleware, database) becomes a <strong>three-tier architecture</strong> only when its three layers are deployed on three separate hardware nodes. A four-tier architecture inserts a further node, typically an application server for session management and dynamic content between the web server and the database.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q9</span><span class="we-title">MVC versus three-tier: which is hierarchical and which is not, and what does that mean for how the view gets its data?</span></summary><div class="worked-body">
+      <p class="body"><strong>MVC is non-hierarchical (triangular):</strong> the View sends user actions to the Controller, the Controller updates the Model, and the View is updated <em>directly</em> from the Model. <strong>Three-tier is hierarchical (linear):</strong> the presentation layer never communicates directly with the data layer; all communication passes through the middle (middleware) layer. So in MVC the view reads the model directly; in three-tier the presentation tier must go through the middle tier to reach data.</p>
+    </div></details>
+
+    <details class="worked"><summary><span class="we-tag">Q10</span><span class="we-title">A development environment has an editor, a compiler, an analyser and a debugger that must all work on one large, evolving project model. Name the most suitable architectural style and justify it, then state its main risk.</span></summary><div class="worked-body">
+      <p class="body">The <strong>repository</strong> style: all the tools read and write a single central project repository and never call each other directly, so they are loosely coupled and a change one tool makes is immediately available to the others, exactly what is needed when components share a large, evolving body of data. Its main risk is that the repository is a single point of failure and a potential bottleneck, and every tool is coupled to its schema, so the schema becomes hard to change.</p>
+    </div></details>
+  </div>
+</section>
+
+<!-- ============= 14. References ============= -->
 <section class="block" id="refs">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">13.</span>References</div>
+    <div class="section-eyebrow"><span class="num">14.</span>References</div>
     <h2 class="section-title"><em>References</em>.</h2>
     <p class="section-intro">Bruegge and Dutoit's system-design framework and Sommerville's chapter on architectural design anchor this material; the works below are those directly referenced, alongside the standard practitioner references.</p>
     <ul class="body">
@@ -874,7 +1036,7 @@
       <li>Bass, L., Clements, P. and Kazman, R. <em>Software Architecture in Practice.</em> 4th ed., Addison-Wesley, 2021.</li>
       <li>Buschmann, F. et al. <em>Pattern-Oriented Software Architecture, Volume 1: A System of Patterns.</em> Wiley, 1996. (MVC, layers, pipes-and-filters, broker.)</li>
       <li>Fowler, M. <em>Patterns of Enterprise Application Architecture.</em> Addison-Wesley, 2002. (Layering, MVC, the repository pattern in practice.)</li>
-      <li>Taweel, A. COMP433 Lecture 5, System Design (course slides).</li>
+      <li>Taweel, A. <em>COMP433 Lecture 5: System Design</em> (course slides, after Bruegge &amp; Dutoit ch.7 and Sommerville 9th ed. ch.6). <a class="inline" href="L5-System%20Design-v0.21.pdf">Download the lecture deck (PDF)</a>.</li>
     </ul>
   </div>
 </section>
