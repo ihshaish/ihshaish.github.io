@@ -432,11 +432,12 @@
     <h3 class="subhead">Stakeholders want different goals</h3>
     <p class="body">The goals are not shared equally. Different stakeholders press for different, often opposing, qualities, and the designer's first job is to surface the conflict rather than pretend it away:</p>
     <div class="table-card"><table class="body-table">
-      <thead><tr><th>Stakeholder</th><th>Tends to prioritise</th></tr></thead><tbody>
-        <tr><td><strong>Customer</strong> (who pays)</td><td>Low cost, delivery on schedule, low running cost, functionality.</td></tr>
-        <tr><td><strong>End user</strong> (who operates)</td><td>Usability, performance, reliability, ease of learning.</td></tr>
-        <tr><td><strong>Developer</strong> (who builds and maintains)</td><td>Minimal complexity, well-defined interfaces, reuse, maintainability, portability.</td></tr>
+      <thead><tr><th>Stakeholder</th><th>The design goals they tend to prioritise</th></tr></thead><tbody>
+        <tr><td><strong>End user</strong> (who operates)</td><td>Functionality, usability, user-friendliness, ease of learning, ease of use, ease of remembering, runtime efficiency (performance), reliability, fault tolerance, robustness.</td></tr>
+        <tr><td><strong>Customer / client</strong> (who pays)</td><td>Low cost and cost-effectiveness, delivery on schedule and rapid development, increased productivity, functionality, flexibility, portability, backward compatibility, traceability of requirements, good documentation.</td></tr>
+        <tr><td><strong>Developer / maintainer</strong> (who builds and maintains)</td><td>Minimum number of errors, maintainability (modifiability), readability, understandability, reusability and reuse of components, adaptability, well-defined interfaces, reliability, portability, minimal complexity.</td></tr>
       </tbody></table></div>
+    <p class="body">That is the full catalogue of design goals worth knowing, sorted by the stakeholder who cares most. Several goals (reliability, portability, functionality) matter to more than one stakeholder, which is exactly why they collide. A design lists the ones that matter for <em>this</em> system, attributes each to a stakeholder, and prioritises them; the next two tables show why prioritising is unavoidable.</p>
 
     <h3 class="subhead">Goals trade off against each other</h3>
     <p class="body">Because resources are finite, raising one quality usually lowers another. Recognising these trade-offs, and deciding which way to resolve each one for <em>this</em> system, is the substance of design:</p>
@@ -597,14 +598,18 @@
     </ul>
 
     <h3 class="subhead">Architectural design decisions</h3>
-    <p class="body">Architectural design is a creative process, so it cannot be reduced to a fixed procedure; but the same questions recur, and the answers are the architectural decisions that shape the non-functional behaviour:</p>
-    <ul class="body">
-      <li>Is there a <strong>generic architecture</strong> (an architectural style) that can act as the template for the system being designed?</li>
-      <li>How will the system be <strong>decomposed into subsystems</strong>?</li>
-      <li>How is the architecture <strong>distributed across hardware</strong> (the layer-to-tier mapping)?</li>
-      <li>What <strong>architectural style or styles</strong> best serve the prioritised design goals?</li>
-      <li>How will the architecture be <strong>documented and evaluated</strong> against those goals?</li>
-    </ul>
+    <p class="body">Architectural design is a creative process, so it cannot be reduced to a fixed procedure; but a small set of questions recurs across every design process, and the answers are the architectural decisions that shape the system's non-functional behaviour. Sommerville frames them as eight:</p>
+    <ol class="body">
+      <li>Is there a <strong>generic application architecture</strong> (an architectural style) that can act as a template for the system being designed?</li>
+      <li>What will be the <strong>fundamental approach</strong> used to structure the system?</li>
+      <li>How will the structural components in the system be <strong>decomposed into sub-components</strong> (subsystems)?</li>
+      <li>What <strong>strategy will be used to control</strong> the operation of the components in the system?</li>
+      <li>How will the system be <strong>distributed across hardware</strong> cores or processors (the layer-to-tier mapping)?</li>
+      <li>What <strong>architectural pattern or style</strong> might be used?</li>
+      <li>What architectural organisation is <strong>best for delivering the non-functional requirements</strong> of the system?</li>
+      <li>How should the architecture of the system be <strong>documented</strong> (and evaluated against the design goals)?</li>
+    </ol>
+    <p class="note">Every one of these answers affects the non-functional characteristics, which is why architectural design is where most design goals are won or lost. (Source: Sommerville, 9th ed.)</p>
   </div>
 </section>
 
