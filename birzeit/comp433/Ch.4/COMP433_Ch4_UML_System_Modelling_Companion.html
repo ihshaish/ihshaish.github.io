@@ -2092,7 +2092,7 @@
 
     <h3 class="subhead">Analysis classes vs design classes</h3>
     <p class="body">An <strong>analysis class</strong> abstracts one or more classes of the eventual design; it models the problem domain, not the solution. Conceptually it carries responsibilities, domain-level attributes, and the relationships it takes part in. The <strong>first-cut analysis class diagram</strong>, though, is drawn as a deliberate skeleton: <strong>classes, associations and multiplicities only, with no attributes and no methods</strong>. It fixes the domain's vocabulary and structure before any commitment to data or behaviour. Detail is added in two later steps: <strong>attributes</strong> when the analysis model is fleshed out, then <strong>method signatures, types, tightened visibility, infrastructure classes (persistence, controllers, factories), patterns and navigability</strong> when it becomes a <strong>design class diagram</strong>.</p>
-    <div class="lifecycle-note"><span class="lc-tag">Analysis vs design: draw the one asked for</span><p>The two forms are examined separately, and each task names which it wants. An <strong>analysis class diagram</strong> shows classes, associations and multiplicities <em>only</em>, no attributes and no methods (that is the skeleton in Figure 6a). A <strong>detailed</strong> or <strong>design class diagram</strong> shows the full boxes: attributes <em>and</em> method signatures, with types and visibility. Putting attributes or operations on an analysis class diagram has jumped ahead to design; leaving them off a detailed class diagram is under-specified. Read the instruction and draw exactly that form.</p></div>
+    <div class="lifecycle-note"><span class="lc-tag">Analysis vs design: draw the one asked for</span><p>The two forms are asked for separately, and each task names which it wants. An <strong>analysis class diagram</strong> shows classes, associations and multiplicities <em>only</em>, no attributes and no methods (that is the skeleton in Figure 6a). A <strong>detailed</strong> or <strong>design class diagram</strong> shows the full boxes: attributes <em>and</em> method signatures, with types and visibility. Putting attributes or operations on an analysis class diagram has jumped ahead to design; leaving them off a detailed class diagram is under-specified. Read the instruction and draw exactly that form.</p></div>
     <details class="worked">
       <summary><span class="we-tag">Worked example</span><span class="we-title">The Library, by noun analysis</span></summary>
       <div class="worked-body">
@@ -2812,7 +2812,7 @@
         <tr><td><strong>Weak at</strong></td><td>showing the network of who-talks-to-whom</td><td>long sequences; control flow gets cramped</td></tr>
       </tbody>
     </table></div>
-    <p class="note">The two are formally interchangeable for a single scenario: any communication diagram can be redrawn as a sequence diagram and vice versa, because they hold the same information. Choose by the question you are answering. In modern practice the sequence diagram dominates; the communication diagram is worth knowing because it makes the link-to-association correspondence visible, and because it still appears in older designs and in exam questions.</p>
+    <p class="note">The two are formally interchangeable for a single scenario: any communication diagram can be redrawn as a sequence diagram and vice versa, because they hold the same information. Choose by the question you are answering. In modern practice the sequence diagram dominates; the communication diagram is worth knowing because it makes the link-to-association correspondence visible, and because it still appears in older designs.</p>
 
     <div class="context-card">
       <div class="ctx-eyebrow">Context</div>
@@ -3346,63 +3346,70 @@
     <div class="figure">
       <div class="figure-caption">Figure 10a</div>
       <div class="figure-title">Co-located servers, a redundant backup, and two clients sharing them. Hover any node or path.</div>
-      <svg viewBox="0 0 1000 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Deployment: a tablet and a PC both reach one hardware server that nests a web-server and a database-server execution environment; a backup server replicates it">
+      <svg viewBox="0 0 1040 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Deployment: a tablet and a PC both reach one hardware server that nests a web-server and a database-server execution environment; a backup server replicates it. Nodes drawn as three-dimensional boxes.">
         <defs><marker id="dep2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
-        <!-- Client 1: Tablet -->
-        <rect x="30" y="55" width="180" height="96" class="uml-box" fill="#f3ede2" data-tip="<strong>Node «device»: Tablet</strong><br>One kind of client hardware. Two unlike clients (this tablet and the PC below) can share the same servers, so both appear as separate device nodes."/>
-        <g transform="translate(182,63)"><rect x="0" y="4" width="14" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="0,4 14,4 17,1 3,1" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="14,4 17,1 17,10 14,13" fill="white" stroke="#2c3540" stroke-width="1"/></g>
-        <text x="120" y="80" text-anchor="middle" class="uml-text" font-weight="600">Tablet</text>
-        <text x="120" y="98" text-anchor="middle" class="uml-text-stereo">&lt;&lt;device&gt;&gt;</text>
-        <rect x="46" y="108" width="148" height="34" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="120" y="123" text-anchor="middle" class="uml-text-stereo" font-size="9.5">&lt;&lt;component&gt;&gt;</text>
-        <text x="120" y="137" text-anchor="middle" class="uml-text" font-size="12">AdminApp</text>
-        <!-- Client 2: PC -->
-        <rect x="30" y="290" width="180" height="96" class="uml-box" fill="#f3ede2" data-tip="<strong>Node «device»: PC</strong><br>A second, different client that reaches the same server. Modelling both clients shows the server is shared."/>
-        <g transform="translate(182,298)"><rect x="0" y="4" width="14" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="0,4 14,4 17,1 3,1" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="14,4 17,1 17,10 14,13" fill="white" stroke="#2c3540" stroke-width="1"/></g>
-        <text x="120" y="315" text-anchor="middle" class="uml-text" font-weight="600">PC</text>
-        <text x="120" y="333" text-anchor="middle" class="uml-text-stereo">&lt;&lt;device&gt;&gt;</text>
-        <rect x="46" y="343" width="148" height="34" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="120" y="358" text-anchor="middle" class="uml-text-stereo" font-size="9.5">&lt;&lt;component&gt;&gt;</text>
-        <text x="120" y="372" text-anchor="middle" class="uml-text" font-size="12">Browser</text>
-        <!-- Primary hardware server (device) with two nested execution environments -->
-        <rect x="400" y="70" width="350" height="300" class="uml-box" fill="#f3ede2" data-tip="<strong>Node «device»: Campus Server (one physical machine)</strong><br>It hosts two nested «executionEnvironment» nodes, so two logical servers run on one box. This is how you model 'the web server and the database server are on one hardware server'."/>
-        <g transform="translate(720,80)"><rect x="0" y="4" width="14" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="0,4 14,4 17,1 3,1" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="14,4 17,1 17,10 14,13" fill="white" stroke="#2c3540" stroke-width="1"/></g>
-        <text x="415" y="94" class="uml-text" font-weight="700">Campus Server</text>
-        <text x="415" y="112" class="uml-text-stereo">&lt;&lt;device&gt;&gt;</text>
-        <!-- nested exec env 1: Web Server -->
-        <rect x="428" y="128" width="294" height="98" class="uml-box" fill="white" data-tip="<strong>Node «executionEnvironment»: Web Server</strong><br>Software that hosts other software. The web-application artifact (seminar.war) is deployed and runs here, inside the Campus Server device."/>
-        <text x="575" y="150" text-anchor="middle" class="uml-text" font-weight="600">Web Server</text>
-        <text x="575" y="168" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;executionEnvironment&gt;&gt;</text>
-        <rect x="500" y="180" width="150" height="34" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="575" y="195" text-anchor="middle" class="uml-text-stereo" font-size="9.5">&lt;&lt;artifact&gt;&gt;</text>
-        <text x="575" y="209" text-anchor="middle" class="uml-text-mono" font-size="11">seminar.war</text>
-        <!-- nested exec env 2: DB Server -->
-        <rect x="428" y="246" width="294" height="98" class="uml-box" fill="white" data-tip="<strong>Node «executionEnvironment»: DB Server</strong><br>The database engine, hosting the university.db artifact. It is nested in the same device as the web server, so the two 'servers' share one machine."/>
-        <text x="575" y="268" text-anchor="middle" class="uml-text" font-weight="600">DB Server</text>
-        <text x="575" y="286" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;executionEnvironment&gt;&gt;</text>
-        <rect x="500" y="298" width="150" height="34" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="575" y="313" text-anchor="middle" class="uml-text-stereo" font-size="9.5">&lt;&lt;artifact&gt;&gt;</text>
-        <text x="575" y="327" text-anchor="middle" class="uml-text-mono" font-size="11">university.db</text>
+        <!-- ===== Client 1: Tablet (3D node) ===== -->
+        <polygon points="40,72 56,56 228,56 212,72" fill="#e9dec9" stroke="#2c3540" stroke-width="1.2"/>
+        <polygon points="212,72 228,56 228,140 212,156" fill="#ded1b8" stroke="#2c3540" stroke-width="1.2"/>
+        <rect x="40" y="72" width="172" height="84" fill="#f3ede2" stroke="#2c3540" stroke-width="1.2" data-tip="<strong>Node «device»: Tablet</strong><br>Client hardware, drawn as a 3-D box (Adel's node notation). Two unlike clients (this tablet and the PC below) share the same servers, so each is its own device node."/>
+        <text x="126" y="95" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <text x="126" y="111" text-anchor="middle" class="uml-text" font-weight="600" font-size="14">Tablet</text>
+        <rect x="58" y="120" width="140" height="30" fill="white" stroke="#2c3540" stroke-width="1"/>
+        <g transform="translate(178,124)"><rect x="0" y="3" width="13" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><rect x="-3" y="5" width="5" height="2.5" fill="white" stroke="#2c3540" stroke-width="1"/><rect x="-3" y="8.5" width="5" height="2.5" fill="white" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="120" y="139" text-anchor="middle" class="uml-text" font-size="12">AdminApp</text>
+        <!-- ===== Client 2: PC (3D node) ===== -->
+        <polygon points="40,300 56,284 228,284 212,300" fill="#e9dec9" stroke="#2c3540" stroke-width="1.2"/>
+        <polygon points="212,300 228,284 228,368 212,384" fill="#ded1b8" stroke="#2c3540" stroke-width="1.2"/>
+        <rect x="40" y="300" width="172" height="84" fill="#f3ede2" stroke="#2c3540" stroke-width="1.2" data-tip="<strong>Node «device»: PC</strong><br>A second, different client reaching the same server. Modelling both clients on the diagram is what shows the server is shared."/>
+        <text x="126" y="323" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <text x="126" y="339" text-anchor="middle" class="uml-text" font-weight="600" font-size="14">PC</text>
+        <rect x="58" y="348" width="140" height="30" fill="white" stroke="#2c3540" stroke-width="1"/>
+        <g transform="translate(178,352)"><rect x="0" y="3" width="13" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><rect x="-3" y="5" width="5" height="2.5" fill="white" stroke="#2c3540" stroke-width="1"/><rect x="-3" y="8.5" width="5" height="2.5" fill="white" stroke="#2c3540" stroke-width="1"/></g>
+        <text x="120" y="367" text-anchor="middle" class="uml-text" font-size="12">Browser</text>
+        <!-- ===== Primary device: Campus Server (3D) with two nested execution-environment nodes ===== -->
+        <polygon points="420,64 436,48 760,48 744,64" fill="#e9dec9" stroke="#2c3540" stroke-width="1.2"/>
+        <polygon points="744,64 760,48 760,372 744,388" fill="#ded1b8" stroke="#2c3540" stroke-width="1.2"/>
+        <rect x="420" y="64" width="324" height="324" fill="#f3ede2" stroke="#2c3540" stroke-width="1.2" data-tip="<strong>Node «device»: Campus Server (one physical machine)</strong><br>It contains two nested «executionEnvironment» nodes, so two logical servers run on one box. This is how 'the web server and the database server are on one hardware server' is drawn."/>
+        <text x="432" y="84" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <text x="432" y="101" class="uml-text" font-weight="700" font-size="14">Campus Server</text>
+        <!-- nested exec env 1: Web Server (3D) -->
+        <polygon points="452,120 462,110 718,110 708,120" fill="#eef3f6" stroke="#2c3540" stroke-width="1"/>
+        <polygon points="708,120 718,110 718,210 708,220" fill="#dde7ee" stroke="#2c3540" stroke-width="1"/>
+        <rect x="452" y="120" width="256" height="100" fill="white" stroke="#2c3540" stroke-width="1" data-tip="<strong>Node «executionEnvironment»: Web Server</strong><br>Software that hosts other software. The web-application artifact (seminar.war) is deployed and runs here, inside the Campus Server device."/>
+        <text x="580" y="140" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;executionEnvironment&gt;&gt;</text>
+        <text x="580" y="156" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Web Server</text>
+        <rect x="505" y="172" width="150" height="34" fill="#faf7f2" stroke="#2c3540" stroke-width="1"/>
+        <text x="580" y="187" text-anchor="middle" class="uml-text-stereo" font-size="9">&lt;&lt;artifact&gt;&gt;</text>
+        <text x="580" y="200" text-anchor="middle" class="uml-text-mono" font-size="11">seminar.war</text>
+        <!-- nested exec env 2: DB Server (3D) -->
+        <polygon points="452,248 462,238 718,238 708,248" fill="#eef3f6" stroke="#2c3540" stroke-width="1"/>
+        <polygon points="708,248 718,238 718,338 708,348" fill="#dde7ee" stroke="#2c3540" stroke-width="1"/>
+        <rect x="452" y="248" width="256" height="100" fill="white" stroke="#2c3540" stroke-width="1" data-tip="<strong>Node «executionEnvironment»: DB Server</strong><br>The database engine, hosting the university.db artifact. Nested in the same device as the web server, so the two servers share one machine."/>
+        <text x="580" y="268" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;executionEnvironment&gt;&gt;</text>
+        <text x="580" y="284" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">DB Server</text>
+        <rect x="505" y="300" width="150" height="34" fill="#faf7f2" stroke="#2c3540" stroke-width="1"/>
+        <text x="580" y="315" text-anchor="middle" class="uml-text-stereo" font-size="9">&lt;&lt;artifact&gt;&gt;</text>
+        <text x="580" y="328" text-anchor="middle" class="uml-text-mono" font-size="11">university.db</text>
         <!-- internal JDBC between the two exec envs -->
-        <line x1="470" y1="226" x2="470" y2="246" class="uml-line" data-tip="<strong>Internal path «JDBC»</strong><br>The web server reaches the database. Both ends sit inside one device, so this link is internal to the machine."/>
-        <text x="486" y="240" class="uml-text-mono" font-size="10">&lt;&lt;JDBC&gt;&gt;</text>
-        <!-- Backup server (redundant) -->
-        <rect x="810" y="120" width="170" height="200" class="uml-box" fill="#efe7d9" data-tip="<strong>Node «device»: Backup Server (redundant)</strong><br>A standby replica of the web and database servers, kept in another location. Redundancy is how a deployment delivers the availability and fault-tolerance goals."/>
-        <g transform="translate(950,128)"><rect x="0" y="4" width="14" height="9" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="0,4 14,4 17,1 3,1" fill="white" stroke="#2c3540" stroke-width="1"/><polygon points="14,4 17,1 17,10 14,13" fill="white" stroke="#2c3540" stroke-width="1"/></g>
-        <text x="895" y="146" text-anchor="middle" class="uml-text" font-weight="600">Backup Server</text>
-        <text x="895" y="164" text-anchor="middle" class="uml-text-stereo">&lt;&lt;device&gt;&gt;</text>
-        <rect x="828" y="182" width="134" height="52" fill="white" stroke="#2c3540" stroke-width="1"/>
-        <text x="895" y="202" text-anchor="middle" class="uml-text-stereo" font-size="9.5">&lt;&lt;artifact&gt;&gt;</text>
-        <text x="895" y="220" text-anchor="middle" class="uml-text-mono" font-size="10.5">web + DB replicas</text>
-        <text x="895" y="256" text-anchor="middle" class="uml-text-italic" font-size="11">standby / failover</text>
-        <!-- comm paths: clients to web server -->
-        <line x1="210" y1="100" x2="428" y2="160" class="uml-line" marker-end="url(#dep2-arrow)" data-tip="<strong>Communication path «HTTPS»</strong><br>The tablet reaches the web server. Paths are labelled with the protocol."/>
-        <text x="315" y="118" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;HTTPS&gt;&gt;</text>
-        <line x1="210" y1="330" x2="428" y2="196" class="uml-line" marker-end="url(#dep2-arrow)" data-tip="<strong>Communication path «HTTPS»</strong><br>The PC's browser reaches the same web server. One shared server, two clients."/>
-        <text x="300" y="290" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;HTTPS&gt;&gt;</text>
-        <!-- replication path to backup -->
-        <line x1="750" y1="200" x2="810" y2="200" class="uml-line" marker-end="url(#dep2-arrow)" data-tip="<strong>Communication path «replication»</strong><br>Keeps the standby in sync with the primary for failover. This is the deployment-level move that buys availability."/>
-        <text x="780" y="192" text-anchor="middle" class="uml-text-mono" font-size="10">&lt;&lt;replication&gt;&gt;</text>
+        <line x1="490" y1="220" x2="490" y2="248" class="uml-line" data-tip="<strong>Internal path «JDBC»</strong><br>The web server reaches the database. Both ends sit inside one device, so this link is internal to the machine."/>
+        <text x="508" y="238" class="uml-text-mono" font-size="10">&lt;&lt;JDBC&gt;&gt;</text>
+        <!-- ===== Backup Server (3D, redundant) ===== -->
+        <polygon points="806,120 822,104 1012,104 996,120" fill="#e8ddc8" stroke="#2c3540" stroke-width="1.2"/>
+        <polygon points="996,120 1012,104 1012,300 996,316" fill="#dccfb4" stroke="#2c3540" stroke-width="1.2"/>
+        <rect x="806" y="120" width="190" height="196" fill="#efe7d9" stroke="#2c3540" stroke-width="1.2" data-tip="<strong>Node «device»: Backup Server (redundant)</strong><br>A standby replica of the web and database servers, kept in another location. Redundancy is how a deployment delivers the availability and fault-tolerance goals."/>
+        <text x="901" y="144" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <text x="901" y="160" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Backup Server</text>
+        <rect x="826" y="176" width="150" height="48" fill="white" stroke="#2c3540" stroke-width="1"/>
+        <text x="901" y="194" text-anchor="middle" class="uml-text-stereo" font-size="9">&lt;&lt;artifact&gt;&gt;</text>
+        <text x="901" y="210" text-anchor="middle" class="uml-text-mono" font-size="10.5">web + DB replicas</text>
+        <text x="901" y="250" text-anchor="middle" class="uml-text-italic" font-size="11">standby / failover</text>
+        <!-- ===== communication paths ===== -->
+        <line x1="212" y1="110" x2="420" y2="150" class="uml-line" marker-end="url(#dep2-arrow)" data-tip="<strong>Communication path «HTTPS»</strong><br>The tablet reaches the server. Paths between nodes are labelled with the protocol."/>
+        <text x="316" y="120" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;HTTPS&gt;&gt;</text>
+        <line x1="212" y1="338" x2="420" y2="300" class="uml-line" marker-end="url(#dep2-arrow)" data-tip="<strong>Communication path «HTTPS»</strong><br>The PC's browser reaches the same server. One shared server, two clients."/>
+        <text x="316" y="332" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;HTTPS&gt;&gt;</text>
+        <line x1="744" y1="200" x2="806" y2="200" class="uml-line" marker-end="url(#dep2-arrow)" data-tip="<strong>Communication path «replication»</strong><br>Keeps the standby in sync with the primary for failover, the deployment-level move that buys availability."/>
+        <text x="775" y="192" text-anchor="middle" class="uml-text-mono" font-size="10">&lt;&lt;replication&gt;&gt;</text>
       </svg>
       <div class="figure-note">All three shapes on one diagram. <strong>Co-location:</strong> the Web Server and DB Server are two <code>&lt;&lt;executionEnvironment&gt;&gt;</code> nodes nested inside the one <code>&lt;&lt;device&gt;&gt;</code> (Campus Server), which is how a single physical machine running two logical servers is drawn. <strong>Redundancy:</strong> the Backup Server device replicates them over a <code>&lt;&lt;replication&gt;&gt;</code> path, the deployment move that delivers availability. <strong>Shared servers:</strong> a Tablet and a PC, two different <code>&lt;&lt;device&gt;&gt;</code> clients, both reach the web server over <code>&lt;&lt;HTTPS&gt;&gt;</code>. A hardware-software mapping question is answered by exactly these pieces: devices, nested execution environments, the artifacts they host, and labelled communication paths.</div>
     </div>

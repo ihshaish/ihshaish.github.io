@@ -350,7 +350,7 @@
       <a href="#views">10. 4+1 views</a>
       <a href="#worked">11. Worked example</a>
       <a href="#pitfalls">12. Pitfalls</a>
-      <a href="#exam">13. Exam practice</a>
+      <a href="#practice">13. Practice questions</a>
       <a href="#refs">14. References</a>
     </nav>
   </div>
@@ -384,7 +384,7 @@
       <li><span class="toc-num">10.</span><a href="#views">The 4+1 view model</a></li>
       <li><span class="toc-num">11.</span><a href="#worked">Worked example: designing an architecture</a></li>
       <li><span class="toc-num">12.</span><a href="#pitfalls">Pitfalls</a></li>
-      <li><span class="toc-num">13.</span><a href="#exam">Exam practice</a></li>
+      <li><span class="toc-num">13.</span><a href="#practice">Practice questions</a></li>
       <li><span class="toc-num">14.</span><a href="#refs">References</a></li>
     </ul>
   </details>
@@ -692,7 +692,7 @@
       <tr><td>Advantages</td><td>Allows replacement of entire layers so long as the interface is maintained. Redundant facilities (e.g. authentication) can be provided in each layer to increase the dependability of the system.</td></tr>
       <tr><td>Disadvantages</td><td>In practice, providing a clean separation between layers is often difficult, and a high-level layer may have to interact directly with lower-level layers rather than through the one immediately below it. Performance can be a problem because of the multiple levels of interpretation of a service request as it is processed at each layer.</td></tr>
     </table></div>
-    <p class="note">The pattern table above is Sommerville's standard form (name, description, when used, advantages, disadvantages); the same form is given for each of the styles below, because it is the form examined.</p>
+    <p class="note">The pattern table above is Sommerville's standard form (name, description, when used, advantages, disadvantages); the same form is given for each of the styles below, so the whole catalogue reads consistently.</p>
 
     <h3 class="subhead-small">Closed (opaque) versus open (transparent) layering</h3>
     <p class="body">A layered architecture comes in two variants that differ only in <em>which</em> lower layers a layer is allowed to call. The choice is a direct trade between coupling and runtime efficiency, and it is tied to different design goals.</p>
@@ -726,7 +726,7 @@
     </div>
 
     <h3 class="subhead-small">Hierarchical relationships: depends-on versus calls</h3>
-    <p class="body">Two different relationships connect layers, and UML draws them with different lines, a point worth getting right because it is examinable:</p>
+    <p class="body">Two different relationships connect layers, and UML draws them with different lines, a point worth getting exactly right:</p>
     <ul class="body">
       <li>Layer A <strong>"depends on"</strong> layer B is a <strong>compile-time dependency</strong>: B must be compiled and available before A can be built (build tools such as make, ant and maven compute exactly this order). UML convention: a <strong>solid line</strong>.</li>
       <li>Layer A <strong>"calls"</strong> layer B is a <strong>runtime dependency</strong>: at execution A invokes B (for example, a web browser calls a web server). UML convention: a <strong>dashed line</strong>.</li>
@@ -880,7 +880,7 @@
         <polyline points="710,336 710,362 100,362 100,222" class="uml-line" fill="none" marker-end="url(#mvcw-arrow)" data-tip="<strong>5. HTTP response</strong><br>The View's rendered HTML page is returned to the browser, which displays it. One request in, one page out."/>
         <text x="400" y="356" text-anchor="middle" class="uml-text-mono" font-size="11">5: HTTP response (HTML page)</text>
       </svg>
-      <div class="figure-note">The same three roles as the triangle, now placed in a web application, which is the concrete form Q-style questions ask you to draw. The <strong>browser</strong> is the client; the <strong>Controller</strong>, <strong>Model</strong> and <strong>View</strong> all run on the web server. One request flows 1 to 5: the browser sends an <strong>HTTP request</strong> to the Controller (1); the Controller <strong>updates the Model</strong> (2) and <strong>selects a View</strong> (4); the View reads the Model's <strong>state</strong> (3) and returns the rendered <strong>HTML page</strong> to the browser (5). The Model still holds all business logic and never formats HTML; the View never holds business rules; the Controller owns the request-to-action mapping.</div>
+      <div class="figure-note">The same three roles as the triangle, now placed in a web application, which is the concrete form you are commonly asked to draw. The <strong>browser</strong> is the client; the <strong>Controller</strong>, <strong>Model</strong> and <strong>View</strong> all run on the web server. One request flows 1 to 5: the browser sends an <strong>HTTP request</strong> to the Controller (1); the Controller <strong>updates the Model</strong> (2) and <strong>selects a View</strong> (4); the View reads the Model's <strong>state</strong> (3) and returns the rendered <strong>HTML page</strong> to the browser (5). The Model still holds all business logic and never formats HTML; the View never holds business rules; the Controller owns the request-to-action mapping.</div>
     </div>
 
     <p class="body"><strong>How a view stays current: subscribe and notify.</strong> The Model does not call the views; that would couple it back to the presentation it is meant to be independent of. Instead each View <em>subscribes</em> to the Model. When the Model's data changes, it <em>notifies</em> its subscribers, and each notified View re-reads the Model and redraws itself. This is the observer mechanism, and it is what lets several views of one model (a table, a chart, a summary) all refresh from a single change without the Model knowing any of them by name. It is also why the relationship is drawn as a triangle rather than a stack: the View is updated <em>directly</em> from the Model, not through the Controller.</p>
@@ -1037,12 +1037,12 @@
   </div>
 </section>
 
-<!-- ============= 13. Exam practice ============= -->
-<section class="block" id="exam">
+<!-- ============= 13. Practice questions ============= -->
+<section class="block" id="practice">
   <div class="container">
-    <div class="section-eyebrow"><span class="num">13.</span>Exam practice</div>
-    <h2 class="section-title">Exam practice: <em>the questions this chapter is examined by</em>.</h2>
-    <p class="section-intro">Midterm-style questions over the examinable points of system design. Work each one before opening the answer; the answers are deliberately tight, in the form a marker expects.</p>
+    <div class="section-eyebrow"><span class="num">13.</span>Practice questions</div>
+    <h2 class="section-title">Practice questions: <em>work each one, then check yourself</em>.</h2>
+    <p class="section-intro">Questions across the main points of system design, from precise definitions to distinguishing concepts to reasoning about a scenario. Work each one fully before opening the answer; the answers are deliberately tight, in the form a strong solution takes.</p>
 
     <details class="worked"><summary><span class="we-tag">Q1</span><span class="we-title">Define cohesion and coupling. For each, say whether a good design seeks it high or low, and give one reason.</span></summary><div class="worked-body">
       <p class="body"><strong>Cohesion</strong> measures the strength of functional relatedness among the classes within one subsystem; a good design seeks it <strong>high</strong>, because a subsystem that does one related thing is easier to understand, maintain, and reuse. <strong>Coupling</strong> measures the degree of interdependence between subsystems; a good design seeks it <strong>low</strong>, because then a change to one subsystem has minimal or no effect on the others, so each can be understood, tested, and replaced on its own. High cohesion tends to produce low coupling, because gathering related work into one subsystem keeps most interaction internal.</p>
@@ -1082,6 +1082,20 @@
 
     <details class="worked"><summary><span class="we-tag">Q10</span><span class="we-title">A development environment has an editor, a compiler, an analyser and a debugger that must all work on one large, evolving project model. Name the most suitable architectural style and justify it, then state its main risk.</span></summary><div class="worked-body">
       <p class="body">The <strong>repository</strong> style: all the tools read and write a single central project repository and never call each other directly, so they are loosely coupled and a change one tool makes is immediately available to the others, exactly what is needed when components share a large, evolving body of data. Its main risk is that the repository is a single point of failure and a potential bottleneck, and every tool is coupled to its schema, so the schema becomes hard to change.</p>
+    </div></details>
+
+    <h3 class="subhead">Single-best-answer questions</h3>
+    <p class="body">Choose the one best answer for each, then check the answers below. (More than one answer marked is wrong.)</p>
+    <ol class="body">
+      <li>Between two subsystems, a <em>runtime</em> &ldquo;calls&rdquo; dependency is drawn in UML as: (a)&nbsp;a solid line; (b)&nbsp;a dashed line; (c)&nbsp;a hollow triangle; (d)&nbsp;a filled diamond.</li>
+      <li>In a closed (opaque) layered architecture, a layer may call operations from: (a)&nbsp;any layer below it; (b)&nbsp;only the layer directly below it; (c)&nbsp;any layer, above or below; (d)&nbsp;only the layer directly above it.</li>
+      <li>Which architectural style is non-hierarchical (triangular), with the view updated directly from the model? (a)&nbsp;three-tier; (b)&nbsp;pipe-and-filter; (c)&nbsp;model-view-controller; (d)&nbsp;layered.</li>
+      <li>Subsystems that share data only through one central store, and never call one another directly, use the ______ style: (a)&nbsp;client-server; (b)&nbsp;repository; (c)&nbsp;peer-to-peer; (d)&nbsp;pipe-and-filter.</li>
+      <li>Localising critical operations and using large-grain components, to minimise communication between components, chiefly serves: (a)&nbsp;maintainability; (b)&nbsp;security; (c)&nbsp;performance; (d)&nbsp;portability.</li>
+      <li>A style becomes a <em>tiered</em> architecture only when its layers are: (a)&nbsp;drawn with dashed lines; (b)&nbsp;allocated to separate hardware nodes; (c)&nbsp;made highly cohesive; (d)&nbsp;merged into one subsystem.</li>
+    </ol>
+    <details class="worked"><summary><span class="we-tag">Answers</span><span class="we-title">Answers, with the one-line reason</span></summary><div class="worked-body">
+      <p class="body"><strong>1&nbsp;(b)</strong> a dashed line marks a runtime call; a solid line marks a compile-time &ldquo;depends on&rdquo;. <strong>2&nbsp;(b)</strong> closed layering is direct addressing, the layer directly below only. <strong>3&nbsp;(c)</strong> MVC is triangular, the view reads the model directly; three-tier is linear. <strong>4&nbsp;(b)</strong> a single central store with no direct calls is the repository. <strong>5&nbsp;(c)</strong> coarse-grain components and fewer calls serve performance (and pull against maintainability). <strong>6&nbsp;(b)</strong> layers are logical; a tier is a layer allocated to its own hardware node.</p>
     </div></details>
   </div>
 </section>
