@@ -442,26 +442,25 @@
     <h3 class="subhead">Goals trade off against each other</h3>
     <p class="body">Because resources are finite, raising one quality usually lowers another. Recognising these trade-offs, and deciding which way to resolve each one for <em>this</em> system, is the substance of design:</p>
     <div class="table-card"><table class="body-table">
-      <thead><tr><th>Raising this&hellip;</th><th>&hellip;tends to cost this</th></tr></thead><tbody>
-        <tr><td>Functionality</td><td>Usability and simplicity: more features make a busier, harder system.</td></tr>
-        <tr><td>Low cost</td><td>Robustness, performance headroom, maintainability.</td></tr>
-        <tr><td>Performance (efficiency)</td><td>Portability and readability: hand-tuned, machine-specific code.</td></tr>
-        <tr><td>Robustness</td><td>Efficiency: the redundant components, extra validation and fault-tolerance that make a system robust all add runtime overhead. Robustness is bought at the cost of efficiency.</td></tr>
-        <tr><td>Security</td><td>Usability and performance: extra checks and extra hops.</td></tr>
-        <tr><td>Short delivery time</td><td>Functionality, or the long-term cost of the design debt incurred.</td></tr>
+      <thead><tr><th style="width:15%;">Raising this&hellip;</th><th style="width:23%;">&hellip;tends to cost this</th><th>Why, with a concrete example</th></tr></thead><tbody>
+        <tr><td><strong>Robustness</strong></td><td>Efficiency</td><td>The redundancy, extra validation and fault-tolerance that make a system robust all cost runtime work. <em>Example:</em> a payment service that re-validates every request, retries failed calls and keeps a hot standby survives a crashed node, but each payment does more work and it needs roughly twice the hardware of a single-instance, trust-the-input design that is faster but falls over on the first fault.</td></tr>
+        <tr><td><strong>Functionality</strong></td><td>Usability and simplicity</td><td>Every feature adds a control, a mode, a path to test. <em>Example:</em> a camera app that also edits video, manages files and posts to social media buries the one-tap shutter under menus; the stripped-down camera is easier to use precisely because it does less.</td></tr>
+        <tr><td><strong>Performance</strong> (efficiency)</td><td>Portability and readability</td><td>Speed often means code tied to one machine and hard to follow. <em>Example:</em> rewriting an image filter in hand-tuned CPU-specific SIMD assembly can double throughput, but it no longer compiles elsewhere and few on the team can safely change it.</td></tr>
+        <tr><td><strong>Security</strong></td><td>Usability and performance</td><td>Every check is a step for the user and a cost per call. <em>Example:</em> two-factor login plus an authorisation check on every request keeps intruders out, but adds a login step for the user and a permission lookup on each call.</td></tr>
+        <tr><td><strong>Low cost / fast delivery</strong></td><td>Robustness and maintainability</td><td>Shortcuts ship sooner and cheaper, then charge interest. <em>Example:</em> dropping the test suite and staging server to hit a demo date works once, but the first production outage, and every feature slowed by the shortcut schema afterwards, costs more than they would have.</td></tr>
       </tbody></table></div>
 
     <h3 class="subhead">How each goal is achieved in the architecture</h3>
     <p class="body">A goal is only worth stating if there is a structural move that serves it. The architecture is where most non-functional goals are won or lost, so each one points to a recognised technique:</p>
     <div class="table-card"><table class="body-table">
-      <thead><tr><th>Design goal</th><th>How to achieve it (architecturally)</th></tr></thead><tbody>
-        <tr><td><strong>Performance</strong></td><td>Localise critical operations and minimise communication between components; use large rather than fine-grain components.</td></tr>
-        <tr><td><strong>Security</strong></td><td>Use a layered architecture with the critical assets in the inner layers.</td></tr>
-        <tr><td><strong>Safety</strong></td><td>Localise the safety-critical features in a small number of subsystems.</td></tr>
-        <tr><td><strong>Availability</strong> (and robustness)</td><td>Include redundant components and mechanisms for fault tolerance.</td></tr>
-        <tr><td><strong>Maintainability</strong></td><td>Use fine-grain, replaceable components.</td></tr>
+      <thead><tr><th style="width:18%;">Design goal</th><th style="width:34%;">How to achieve it (architecturally)</th><th>What that looks like in practice</th></tr></thead><tbody>
+        <tr><td><strong>Performance</strong></td><td>Localise critical operations and minimise communication between components; use large rather than fine-grain components.</td><td>Group the ten steps of checkout into one coarse <code>CheckoutService</code> so a purchase is a single in-process call, instead of ten chatty calls hopping across the network, each paying latency.</td></tr>
+        <tr><td><strong>Security</strong></td><td>Use a layered architecture with the critical assets in the inner layers.</td><td>Put patient records in the innermost layer, so every request has to pass through the authentication and authorisation layers above before it can reach them; there is no shortcut to the data.</td></tr>
+        <tr><td><strong>Safety</strong></td><td>Localise the safety-critical features in a small number of subsystems.</td><td>Confine an infusion pump's dosage-calculation logic to one small, heavily reviewed subsystem, rather than scattering it, so the safety case only has to certify that one part.</td></tr>
+        <tr><td><strong>Availability</strong> (and robustness)</td><td>Include redundant components and mechanisms for fault tolerance.</td><td>Run two web servers behind a load balancer with a replicated database, so one node failing does not take the service down (this is the backup node in the deployment diagram).</td></tr>
+        <tr><td><strong>Maintainability</strong></td><td>Use fine-grain, replaceable components.</td><td>Keep each tax rule in its own small, replaceable component, so a rate change touches one component and its tests, not a tangled monolith.</td></tr>
       </tbody></table></div>
-    <p class="note">These pull against each other: performance wants <em>large</em> components and few calls, while maintainability wants <em>fine-grain</em> replaceable ones. That direct conflict is why the goals must be prioritised, not merely listed.</p>
+    <p class="note">Notice these techniques pull against each other, which is the whole point of prioritising. Performance wants <em>large</em> components and few calls; maintainability wants <em>fine-grain</em> replaceable ones. You cannot maximise both, so the design commits: the <code>CheckoutService</code> that makes a purchase fast is the very coarseness that makes it harder to change one step of it later. Naming which goal wins for <em>this</em> system is the decision the architecture records.</p>
 
     <p class="body">A design goal is only useful if it can be attributed to a stakeholder and, ideally, measured. "The system should be secure" is not yet a goal; "an unauthenticated request must never reach the patient record, enforced at a single gateway" is one a design can be checked against.</p>
   </div>
