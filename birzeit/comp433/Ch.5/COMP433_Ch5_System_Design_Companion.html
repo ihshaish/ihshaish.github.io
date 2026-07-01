@@ -451,8 +451,16 @@
     <h2 class="section-title">Design goals: <em>naming what matters, before it conflicts</em>.</h2>
     <p class="section-intro">A design goal is a quality the design must optimise, drawn from the non-functional requirements and from general engineering principles. Goals are made explicit precisely because they conflict, and a design is a defensible set of trade-offs between them.</p>
 
-    <h3 class="subhead">Where goals come from</h3>
-    <p class="body">Most design goals are non-functional requirements made operational: a performance requirement becomes a response-time goal, a security requirement becomes an access-control goal, a maintainability requirement becomes a goal of well-defined interfaces and low coupling. Others are general principles that hold for almost any system: reliability, modifiability, portability, and reuse of existing components.</p>
+    <h3 class="subhead">Goal, requirement, design goal: the distinction</h3>
+    <p class="body">Three terms are easy to blur, and keeping them apart is what lets a design be checked. A <strong>goal</strong> is a general, often imprecise and <em>non-verifiable</em> statement of intent, usually about a quality: &ldquo;the system should be secure&rdquo;, &ldquo;it should be fast&rdquo;. A <strong>non-functional requirement</strong> sharpens that same quality into something <em>precise and verifiable</em>: &ldquo;an unauthenticated request must never reach a patient record&rdquo;, &ldquo;95% of searches return in under 200&nbsp;ms&rdquo;. A <strong>design goal</strong> is that quality carried into design as a property the <em>structure</em> must optimise. So the chain runs <strong>goal (intent) &rarr; non-functional requirement (precise, verifiable) &rarr; design goal (what the architecture optimises)</strong>. This is also why a bare goal is not yet checkable and a good design goal usually is.</p>
+
+    <h3 class="subhead">Where design goals come from: two sources</h3>
+    <p class="body">Design goals arise from two places, and a complete design weighs both:</p>
+    <ul class="body">
+      <li><strong>System-specific goals</strong>, made operational from <em>this</em> system's non-functional requirements: a performance requirement becomes a response-time goal, a security requirement becomes an access-control goal, an availability requirement becomes a redundancy goal. These change from system to system.</li>
+      <li><strong>General goals (principles)</strong> that hold for almost any system. Foremost are <strong>cohesion and coupling</strong> (developed in the <a href="#cohesion">next section</a>), the two measures every decomposition is judged by; alongside them sit reliability, modifiability, portability, and reuse of existing components.</li>
+    </ul>
+    <p class="body">Cohesion and coupling are therefore not a separate topic from design goals: they <em>are</em> the general design goals, the ones you pursue on every project, while the system-specific goals come from the non-functional requirements of the system in front of you.</p>
 
     <h3 class="subhead">Stakeholders want different goals</h3>
     <p class="body">The goals are not shared equally. Different stakeholders press for different, often opposing, qualities, and the designer's first job is to surface the conflict rather than pretend it away:</p>
@@ -496,7 +504,7 @@
   <div class="container">
     <div class="section-eyebrow"><span class="num">4.</span>Cohesion and coupling</div>
     <h2 class="section-title">Cohesion and coupling: <em>the two measures of a decomposition</em>.</h2>
-    <p class="section-intro">Every decomposition is judged by two measures. Cohesion looks <em>inside</em> a subsystem; coupling looks <em>between</em> subsystems. A good design maximises the first and minimises the second.</p>
+    <p class="section-intro">These two are the <strong>general design goals</strong> promised in the previous section, the ones pursued on every project regardless of its non-functional requirements. Every decomposition is judged by them: cohesion looks <em>inside</em> a subsystem, coupling looks <em>between</em> subsystems. A good design maximises the first and minimises the second, and doing so is what reduces overall complexity while keeping the system open to change.</p>
 
     <h3 class="subhead">Cohesion: relatedness within a subsystem</h3>
     <p class="body"><strong>Cohesion</strong> measures the strength of functional relatedness among the classes inside one subsystem. <strong>High cohesion</strong> means the classes perform similar or related tasks and clearly belong together. <strong>Low cohesion</strong> means unrelated classes have been grouped with no clear theme, usually a sign that the subsystem is really several subsystems in disguise.</p>
