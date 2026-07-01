@@ -304,6 +304,31 @@
     .figure svg .lab { font-family: var(--sans); font-size: 13px; fill: #5a6473; }
     .figure svg .seqmsg { opacity: 1; }  /* static figures: reveal all messages */
     .figure svg.objfig{width:100%;height:auto;}
+
+  /* Collapsible Contents + mobile layout */
+  .toc-summary { list-style: none; }
+  .toc-summary::-webkit-details-marker { display: none; }
+  @media (min-width: 761px) { .toc-summary { pointer-events: none; } }
+  @media (max-width: 760px) {
+    .toc { padding: 18px 14px 8px; }
+    .toc-card { padding: 16px 18px; }
+    .toc-summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .toc-summary h3 { margin-bottom: 0; }
+    .toc-summary::after { content: "\25BE"; color: var(--steel); font-size: 15px; line-height: 1; }
+    details.toc-card:not([open]) .toc-summary::after { content: "\25B8"; }
+    .toc-list { grid-template-columns: 1fr; gap: 2px 0; }
+    .toc-list li { padding: 7px 0; }
+    /* The top bar's section-anchor pills duplicate the Contents card; hide them on phones and keep the site links. */
+    .topbar-inner { flex-wrap: wrap; gap: 8px 12px; padding: 0 16px; }
+    .topbar .nav a[href^="#"] { display: none; }
+    .nav { gap: 4px; }
+    .container { padding: 0 18px; }
+    section.block { padding: 42px 0; }
+    .hero { padding: 40px 18px 30px; }
+    .brand { font-size: 14px; gap: 8px; }
+    .table-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    body { overflow-x: hidden; }
+  }
 </style>
 </head>
 <body>
@@ -382,8 +407,8 @@
 </section>
 
 <div class="toc">
-  <div class="toc-card">
-    <h3>Contents</h3>
+  <details class="toc-card" id="tocCard" open>
+    <summary class="toc-summary"><h3>Contents</h3></summary>
     <div style="background:#fbeee4; border:1px solid #e3a878; border-left:5px solid var(--accent); border-radius:10px; padding:14px 18px; margin:0 0 22px;">
       <div style="font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:6px;">Short on time?</div>
       <p style="margin:0; color:var(--ink-soft); font-size:14.5px; line-height:1.55;">Focus on three sections: <a href="#usecase" style="color:var(--accent); font-weight:600;">Use case diagrams (Section 7)</a>, <a href="#activity" style="color:var(--accent); font-weight:600;">Activity diagrams (Section 9)</a>, and the <a href="#casestudy" style="color:var(--accent); font-weight:600;">back-to-back case study (Section 9b)</a>, which draws both diagrams from one set of requirements. Sections 1 to 6 are background and 10 to 16 are wider breadth.</p>
@@ -409,7 +434,7 @@
       <li><span class="toc-num">15.</span><a href="#pitfalls">Common pitfalls</a></li>
       <li><span class="toc-num">16.</span><a href="#refs">References and further reading</a></li>
     </ul>
-  </div>
+  </details>
 </div>
 
 <!-- ===================================================================== -->
@@ -3785,6 +3810,12 @@ function stLogEntry(msg) {
   document.getElementById("stLog").innerHTML = "Current state: <b>" + stCurrent + "</b>. " + msg;
 }
 stRender();
+
+/* Collapse the Contents index on phones so it does not fill the screen. */
+(function () {
+  var t = document.getElementById('tocCard');
+  if (t && window.matchMedia('(max-width: 760px)').matches) t.removeAttribute('open');
+})();
 
 /* ===================================================================== */
 /* Diagram hotspot tooltips: any element with a `data-tip` attribute inside a
