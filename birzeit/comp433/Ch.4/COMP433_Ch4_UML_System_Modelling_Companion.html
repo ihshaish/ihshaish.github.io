@@ -2814,35 +2814,7 @@
     </table></div>
     <p class="note">The two are formally interchangeable for a single scenario: any communication diagram can be redrawn as a sequence diagram and vice versa, because they hold the same information. Choose by the question you are answering. In modern practice the sequence diagram dominates; the communication diagram is worth knowing because it makes the link-to-association correspondence visible, and because it still appears in older designs.</p>
 
-    <div class="context-card">
-      <div class="ctx-eyebrow">Context</div>
-      <h4 class="ctx-title">Where communication diagrams earn their place</h4>
-      <div class="ctx-grid">
-        <div class="ctx-block">
-          <h5>Problem they solve</h5>
-          <p>Showing, for one scenario, which objects are connected and how a piece of work fans out across those links - a structural view of an interaction that a sequence diagram cannot give at a glance.</p>
-        </div>
-        <div class="ctx-block">
-          <h5>Domains where they still appear</h5>
-          <ul>
-            <li><strong>Tracing links back to associations.</strong> The cleanest way to show that an interaction's links are instances of the class diagram's associations.</li>
-            <li><strong>Embedded and control systems.</strong> Small, fixed sets of collaborating components where the wiring matters more than the timeline.</li>
-            <li><strong>Legacy UML&nbsp;1.x models</strong> where &ldquo;collaboration diagram&rdquo; is the original term.</li>
-          </ul>
-        </div>
-        <div class="ctx-block">
-          <h5>Problems they do not solve</h5>
-          <p>Long or branch-heavy flows (use a sequence diagram with fragments), an object's whole lifecycle (state machine), or static structure (class diagram). Numbered messages get unreadable past a dozen steps.</p>
-        </div>
-        <div class="ctx-block">
-          <h5>Tooling in current use</h5>
-          <p>Most UML tools (Visual Paradigm, StarUML, Enterprise Architect) switch a sequence diagram to its communication form automatically, since the two hold the same information. Text-driven tools such as PlantUML support communication-style diagrams directly.</p>
-        </div>
-      </div>
-      <div class="ctx-foot">
-        <strong>Naming note.</strong> &ldquo;Collaboration diagram&rdquo; (UML&nbsp;1.x) and &ldquo;communication diagram&rdquo; (UML&nbsp;2.x, current) are the same diagram; Fowler's <em>UML Distilled</em> and Sommerville both treat it as a structural re-projection of the sequence diagram.
-      </div>
-    </div>
+    <p class="note"><strong>Where it earns its place.</strong> Reach for a communication diagram in one situation: to show, for a single scenario, which objects are linked and how the work fans out across those links, and to check that every link is an instance of an association in the class diagram. It does not scale to long or branch-heavy flows (use a sequence diagram) and its numbered messages become unreadable past a dozen steps. <strong>Naming note:</strong> UML&nbsp;1.x called it a <em>collaboration diagram</em>, UML&nbsp;2.x renamed it a <em>communication diagram</em>; both are the same structural re-projection of the sequence diagram, and most tools convert between the two automatically.</p>
 
     <div class="project-note">
       <strong>Project link.</strong> You are not asked to submit communication diagrams for the project, but drawing one for a single use case is a fast way to confirm that every message in your sequence diagram travels along a link that exists as an association in your class diagram. A message with no association to ride on means the class model is missing a relationship.
@@ -2962,37 +2934,7 @@
 
     <p class="body">Most classes do <em>not</em> need a state machine. Data carriers, value objects, and pure functions have no state in this sense. Drawing a state machine for them is over-engineering. Conversely, every domain object whose lifecycle is meaningful (Order, Loan, Ticket, Patient, Account) is a candidate.</p>
 
-    <div class="context-card">
-      <div class="ctx-eyebrow">Context</div>
-      <h4 class="ctx-title">Where state machines earn their place</h4>
-      <div class="ctx-grid">
-        <div class="ctx-block">
-          <h5>Problem they solve</h5>
-          <p>Making the lifecycle of a single object or system explicit. Every state, every event, every guard, every action laid out so a reviewer can answer: "Is there a state where event E does nothing?" "Is there an unreachable state?" "Can the system get stuck?" These questions are central to safety and protocol correctness.</p>
-        </div>
-        <div class="ctx-block">
-          <h5>Domains where they dominate</h5>
-          <ul>
-            <li><strong>Embedded and safety-critical systems.</strong> Aircraft engine control (FADEC), automotive ECUs, pacemaker firmware are all state-machine-driven. MATLAB Stateflow is the industry standard for safety-critical state modelling.</li>
-            <li><strong>Network protocols.</strong> TCP's 11-state machine in RFC 793 is the canonical example; every IETF protocol since uses similar state diagrams.</li>
-            <li><strong>UI state management.</strong> XState (JavaScript) has popularised statecharts (Harel 1987) as the way to manage complex UI state in React, Vue, and Svelte applications.</li>
-            <li><strong>Game AI.</strong> Finite state machines and their behaviour-tree extensions are the default model for non-player-character behaviour in commercial game engines.</li>
-            <li><strong>Domain object lifecycles.</strong> Order management, ticket workflows, loan tracking, patient admission states.</li>
-          </ul>
-        </div>
-        <div class="ctx-block">
-          <h5>Problems they do not solve</h5>
-          <p>Interactions between multiple objects (use sequence diagrams), static structure (use class diagrams), or business workflow across actors (use activity diagrams). State machines are about <em>one object's life</em>, not the system as a whole.</p>
-        </div>
-        <div class="ctx-block">
-          <h5>Tooling in current use</h5>
-          <p>MATLAB Stateflow for safety-critical embedded work; XState (and Statecharts.dev) for web applications; PlantUML and Mermaid for documentation; Yakindu and SCXML for executable statecharts in industry. AWS Step Functions are an executable, cloud-hosted state machine implementation.</p>
-        </div>
-      </div>
-      <div class="ctx-foot">
-        <strong>Documented industrial use.</strong> The TCP state machine in <em>RFC 793</em> (1981) is the foundational example; every textbook on networking re-uses it. David Harel's <em>Statecharts: A Visual Formalism</em> (1987) extended classical FSMs to hierarchical states and is the basis of UML state machines. XState's documentation and case studies (Microsoft, Netflix, Khan Academy) describe production-scale UI state management. Stateflow is mandated in DO-178C / ISO 26262 toolchains for certified avionics and automotive software.
-      </div>
-    </div>
+    <p class="note"><strong>Where it earns its place.</strong> A state machine pays off when an object's allowed behaviour depends on its current state, so a reviewer can ask &ldquo;is there a state where this event does nothing?&rdquo;, &ldquo;is any state unreachable?&rdquo;, &ldquo;can it get stuck?&rdquo;. It dominates in <strong>embedded and safety-critical</strong> systems (engine control, pacemakers; MATLAB Stateflow under DO-178C / ISO&nbsp;26262), <strong>network protocols</strong> (TCP's state machine in RFC&nbsp;793), <strong>UI state management</strong> (Harel statecharts, XState), and <strong>domain-object lifecycles</strong> (order, loan, ticket). It does not model interactions between objects (sequence diagram), static structure (class diagram), or workflow across actors (activity diagram): it is about one object's life.</p>
 
     <div class="project-note">
       <strong>In practice.</strong> Most systems have one or two domain objects with a meaningful lifecycle (a Loan, an Appointment, an Order, a Booking). Draw a state machine for each of those. Drawing one for a passive data class (e.g., a Patient record) is usually unnecessary; if you find yourself drawing it, ask whether the lifecycle is about the record or about something else (the consultation, the registration).
