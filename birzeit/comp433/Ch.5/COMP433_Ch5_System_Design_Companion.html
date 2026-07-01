@@ -446,6 +446,7 @@
         <tr><td>Functionality</td><td>Usability and simplicity: more features make a busier, harder system.</td></tr>
         <tr><td>Low cost</td><td>Robustness, performance headroom, maintainability.</td></tr>
         <tr><td>Performance (efficiency)</td><td>Portability and readability: hand-tuned, machine-specific code.</td></tr>
+        <tr><td>Robustness</td><td>Efficiency: the redundant components, extra validation and fault-tolerance that make a system robust all add runtime overhead. Robustness is bought at the cost of efficiency.</td></tr>
         <tr><td>Security</td><td>Usability and performance: extra checks and extra hops.</td></tr>
         <tr><td>Short delivery time</td><td>Functionality, or the long-term cost of the design debt incurred.</td></tr>
       </tbody></table></div>
@@ -823,6 +824,39 @@
         <text x="565" y="266" text-anchor="middle" class="uml-text" font-weight="600">Model</text>
       </svg>
       <div class="figure-note"><strong>Sequence of one interaction:</strong> the user acts on the View; the View passes the action to the Controller; the Controller updates the Model; the Model notifies the View, which re-reads the Model and redraws. <strong>MVC vs three-tier:</strong> MVC is <em>non-hierarchical</em> (triangular) - the View is updated directly from the Model; three-tier is <em>hierarchical</em> (linear) - the presentation layer never talks to the data layer directly, every call passes through the middle layer. MVC dates from the late 1970s (Smalltalk); three-tier from 1990s web applications.</div>
+    </div>
+
+    <div class="figure">
+      <div class="figure-caption">Figure 7b</div>
+      <div class="figure-title">MVC in a web application: the three roles mapped onto a browser and a web server. Hover any box or arrow.</div>
+      <svg viewBox="0 0 880 400" class="objfig" role="img" aria-label="Web application using MVC: the browser sends an HTTP request to the controller, which updates the model and selects the view; the view reads the model and returns an HTML page to the browser">
+        <defs><marker id="mvcw-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
+        <rect x="30" y="150" width="140" height="72" rx="8" class="uml-box" fill="#eef3f6" data-tip="<strong>Browser (client)</strong><br>Runs on the user's machine. It sends HTTP requests (a clicked link, a submitted form) and displays the HTML pages it receives. It holds no business logic."/>
+        <text x="100" y="182" text-anchor="middle" class="uml-text" font-weight="600">Browser</text>
+        <text x="100" y="202" text-anchor="middle" class="uml-text-stereo">&lt;&lt;client&gt;&gt;</text>
+        <rect x="250" y="40" width="600" height="330" rx="10" fill="none" stroke="#c9bfa8" stroke-dasharray="6,5"/>
+        <text x="266" y="62" class="uml-text-stereo" font-size="11">web server</text>
+        <rect x="440" y="80" width="180" height="66" rx="8" class="uml-box" fill="white" data-tip="<strong>Controller</strong><br>The entry point on the server. It receives the HTTP request, interprets the user's action, calls the Model to change state, and chooses which View renders the reply."/>
+        <text x="530" y="110" text-anchor="middle" class="uml-text" font-weight="600">Controller</text>
+        <text x="530" y="130" text-anchor="middle" class="uml-text-mono" font-size="11">maps requests to actions</text>
+        <rect x="300" y="270" width="180" height="66" rx="8" class="uml-box" fill="white" data-tip="<strong>Model</strong><br>The business logic and data, usually backed by a database. It applies the change the Controller asks for and exposes the resulting state to the View. It knows nothing about HTML."/>
+        <text x="390" y="300" text-anchor="middle" class="uml-text" font-weight="600">Model</text>
+        <text x="390" y="320" text-anchor="middle" class="uml-text-mono" font-size="11">business logic + database</text>
+        <rect x="620" y="270" width="180" height="66" rx="8" class="uml-box" fill="white" data-tip="<strong>View</strong><br>Reads the Model's current state and renders the HTML page (and forms) sent back to the browser. Several views can render the same model."/>
+        <text x="710" y="300" text-anchor="middle" class="uml-text" font-weight="600">View</text>
+        <text x="710" y="320" text-anchor="middle" class="uml-text-mono" font-size="11">renders HTML / forms</text>
+        <line x1="170" y1="175" x2="440" y2="108" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>1. HTTP request</strong><br>The browser sends the user's action (a GET or POST) to the Controller."/>
+        <text x="300" y="126" text-anchor="middle" class="uml-text-mono" font-size="11">1: HTTP request</text>
+        <line x1="500" y1="146" x2="428" y2="270" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>2. update the model</strong><br>The Controller calls operations on the Model to apply the change the user asked for."/>
+        <text x="418" y="214" text-anchor="middle" class="uml-text-mono" font-size="11">2: update</text>
+        <line x1="480" y1="303" x2="620" y2="303" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>3. read state</strong><br>The View reads the Model's new state. In a desktop app this is push (notify/subscribe); in a web app the View queries the Model as the page is built."/>
+        <text x="550" y="295" text-anchor="middle" class="uml-text-mono" font-size="11">3: state</text>
+        <line x1="560" y1="146" x2="702" y2="270" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>4. select the view</strong><br>The Controller chooses which View should render the response."/>
+        <text x="658" y="214" text-anchor="middle" class="uml-text-mono" font-size="11">4: select view</text>
+        <polyline points="710,336 710,362 100,362 100,222" class="uml-line" fill="none" marker-end="url(#mvcw-arrow)" data-tip="<strong>5. HTTP response</strong><br>The View's rendered HTML page is returned to the browser, which displays it. One request in, one page out."/>
+        <text x="400" y="356" text-anchor="middle" class="uml-text-mono" font-size="11">5: HTTP response (HTML page)</text>
+      </svg>
+      <div class="figure-note">The same three roles as the triangle, now placed in a web application, which is the concrete form Q-style questions ask you to draw. The <strong>browser</strong> is the client; the <strong>Controller</strong>, <strong>Model</strong> and <strong>View</strong> all run on the web server. One request flows 1 to 5: the browser sends an <strong>HTTP request</strong> to the Controller (1); the Controller <strong>updates the Model</strong> (2) and <strong>selects a View</strong> (4); the View reads the Model's <strong>state</strong> (3) and returns the rendered <strong>HTML page</strong> to the browser (5). The Model still holds all business logic and never formats HTML; the View never holds business rules; the Controller owns the request-to-action mapping.</div>
     </div>
 
     <p class="body"><strong>How a view stays current: subscribe and notify.</strong> The Model does not call the views; that would couple it back to the presentation it is meant to be independent of. Instead each View <em>subscribes</em> to the Model. When the Model's data changes, it <em>notifies</em> its subscribers, and each notified View re-reads the Model and redraws itself. This is the observer mechanism, and it is what lets several views of one model (a table, a chart, a summary) all refresh from a single change without the Model knowing any of them by name. It is also why the relationship is drawn as a triangle rather than a stack: the View is updated <em>directly</em> from the Model, not through the Controller.</p>
