@@ -304,6 +304,31 @@
     .figure svg .lab { font-family: var(--sans); font-size: 13px; fill: #5a6473; }
     .figure svg .seqmsg { opacity: 1; }  /* static figures: reveal all messages */
     .figure svg.objfig{width:100%;height:auto;}
+
+  /* Collapsible Contents + mobile layout */
+  .toc-summary { list-style: none; }
+  .toc-summary::-webkit-details-marker { display: none; }
+  @media (min-width: 761px) { .toc-summary { pointer-events: none; } }
+  @media (max-width: 760px) {
+    .toc { padding: 18px 14px 8px; }
+    .toc-card { padding: 16px 18px; }
+    .toc-summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .toc-summary h3 { margin-bottom: 0; }
+    .toc-summary::after { content: "\25BE"; color: var(--steel); font-size: 15px; line-height: 1; }
+    details.toc-card:not([open]) .toc-summary::after { content: "\25B8"; }
+    .toc-list { grid-template-columns: 1fr; gap: 2px 0; }
+    .toc-list li { padding: 7px 0; }
+    /* The top bar's section-anchor pills duplicate the Contents card; hide them on phones and keep the site links. */
+    .topbar-inner { flex-wrap: wrap; gap: 8px 12px; padding: 0 16px; }
+    .topbar .nav a[href^="#"] { display: none; }
+    .nav { gap: 4px; }
+    .container { padding: 0 18px; }
+    section.block { padding: 42px 0; }
+    .hero { padding: 40px 18px 30px; }
+    .brand { font-size: 14px; gap: 8px; }
+    .table-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    body { overflow-x: hidden; }
+  }
 </style>
 <body>
 
@@ -344,8 +369,8 @@
 </div>
 
 <div class="toc">
-  <div class="toc-card">
-    <h3>Contents</h3>
+  <details class="toc-card" id="tocCard" open>
+    <summary class="toc-summary"><h3>Contents</h3></summary>
     <ul class="toc-list">
       <li><span class="toc-num">1.</span><a href="#design">From analysis to design</a></li>
       <li><span class="toc-num">2.</span><a href="#issues">The issues of system design</a></li>
@@ -362,7 +387,7 @@
       <li><span class="toc-num">13.</span><a href="#exam">Exam practice</a></li>
       <li><span class="toc-num">14.</span><a href="#refs">References</a></li>
     </ul>
-  </div>
+  </details>
 </div>
 
 <!-- ============= 1. From analysis to design ============= -->
@@ -1087,6 +1112,12 @@
 </footer>
 
 <script>
+/* Collapse the Contents index on phones so it does not fill the screen. */
+(function () {
+  var t = document.getElementById('tocCard');
+  if (t && window.matchMedia('(max-width: 760px)').matches) t.removeAttribute('open');
+})();
+
 /* ===================================================================== */
 /* Diagram hotspot tooltips: any element with a `data-tip` attribute inside a
    wired container shows a single floating tooltip next to the pointer. The tip
