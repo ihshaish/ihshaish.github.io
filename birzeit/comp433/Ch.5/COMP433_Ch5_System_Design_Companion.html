@@ -1030,12 +1030,42 @@
     <h2 class="section-title">From goals to a justified architecture: <em>the seminar system</em>.</h2>
     <p class="section-intro">The pieces in order, on one system: read the goals, decompose, choose styles whose trade-offs serve the goals, and justify each choice. The realised structure is the seminar-registration architecture drawn in the Chapter 4 companion.</p>
 
-    <details class="worked">
-      <summary><span class="we-tag">Worked example</span><span class="we-title">Designing the seminar-registration architecture</span></summary>
-      <div class="worked-body">
-    <p class="body"><strong>1. Design goals (from the non-functional requirements).</strong> The system holds student records, serves many concurrent users at registration time, and must outlive several rounds of interface change. The prioritised goals are: <em>security</em> of student data, <em>maintainability</em> (the interface will change often), <em>independent scaling</em> of the web front under load, and <em>reuse</em> of the university's existing authentication and database.</p>
-    <p class="body"><strong>2. Subsystem decomposition.</strong> Group classes for high cohesion and low coupling: a <code>&lt;&lt;UI&gt;&gt;</code> presentation subsystem; business-domain subsystems (<code>Seminar</code>, <code>Schedule</code>, <code>Student</code>); and shared <code>&lt;&lt;infrastructure&gt;&gt;</code> subsystems (<code>Security</code>, <code>Persistence</code>). Each business component reaches the data layer only through the <code>Persistence</code> interface and security only through <code>AccessControl</code>, keeping coupling at the interface width.</p>
-    <p class="body"><strong>3. Chosen styles, each tied to a goal.</strong></p>
+    <h3 class="subhead">Stage 1: Design goals, from the non-functional requirements</h3>
+    <p class="body">The system holds student records, serves many concurrent users at registration time, and must outlive several rounds of interface change. Turning those non-functional requirements into prioritised design goals gives: <strong>security</strong> of student data; <strong>maintainability</strong> (the interface will change often); <strong>independent scaling</strong> of the web front under load; and <strong>reuse</strong> of the university's existing authentication and database. These are the goals every later decision is justified against.</p>
+
+    <h3 class="subhead">Stage 2: Subsystem decomposition (cohesion and coupling)</h3>
+    <p class="body">Group classes for high cohesion and low coupling: a <code>&lt;&lt;UI&gt;&gt;</code> presentation subsystem; three business-domain subsystems (<code>Seminar</code>, <code>Schedule</code>, <code>Student</code>), each cohesive around one concept; and shared <code>&lt;&lt;infrastructure&gt;&gt;</code> subsystems (<code>Security</code>, <code>Persistence</code>). Each business component reaches data only through the <code>Persistence</code> interface and security only through <code>AccessControl</code>, so coupling is held to the width of those interfaces.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 10</div>
+      <div class="figure-title">Realised architecture: three layers, with MVC in the presentation layer. Hover any part.</div>
+      <svg viewBox="0 0 880 380" class="objfig" role="img" aria-label="Layered architecture of the seminar system: presentation (MVC) over business components over infrastructure and data">
+        <defs><marker id="wa-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker></defs>
+        <rect x="30" y="34" width="820" height="86" fill="#f7f1e7" stroke="#d9cdb8" stroke-dasharray="5,4"/>
+        <text x="44" y="52" class="uml-text-stereo" font-size="11">presentation layer (MVC)</text>
+        <rect x="330" y="60" width="220" height="48" class="uml-box" fill="white" data-tip="<strong>Presentation layer</strong><br>Built as MVC: the view renders the registration pages, the controller handles the requests, and the model is the business layer below. MVC keeps the changing UI decoupled from the stable domain."/>
+        <text x="440" y="80" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Registration UI</text>
+        <text x="440" y="98" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;UI, MVC&gt;&gt;</text>
+        <rect x="30" y="146" width="820" height="86" fill="#f3ede2" stroke="#d9cdb8" stroke-dasharray="5,4"/>
+        <text x="44" y="164" class="uml-text-stereo" font-size="11">business-domain layer</text>
+        <rect x="110" y="170" width="180" height="48" class="uml-box" fill="white" data-tip="<strong>Business component</strong><br>Seminar owns the seminar concept and its rules; cohesive around one domain idea, coupled to the others only through interfaces."/><text x="200" y="190" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Seminar</text><text x="200" y="208" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;component&gt;&gt;</text>
+        <rect x="350" y="170" width="180" height="48" class="uml-box" fill="white"/><text x="440" y="190" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Schedule</text><text x="440" y="208" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;component&gt;&gt;</text>
+        <rect x="590" y="170" width="180" height="48" class="uml-box" fill="white"/><text x="680" y="190" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Student</text><text x="680" y="208" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;component&gt;&gt;</text>
+        <rect x="30" y="258" width="820" height="98" fill="#eee7da" stroke="#d9cdb8" stroke-dasharray="5,4"/>
+        <text x="44" y="276" class="uml-text-stereo" font-size="11">infrastructure &amp; data layer</text>
+        <rect x="110" y="284" width="180" height="52" class="uml-box" fill="white" data-tip="<strong>Infrastructure: Security</strong><br>A cross-cutting subsystem providing AccessControl, one enforcement point reused across the layers (reuse + security goals)."/><text x="200" y="306" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Security</text><text x="200" y="324" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;infrastructure&gt;&gt;</text>
+        <rect x="350" y="284" width="180" height="52" class="uml-box" fill="white" data-tip="<strong>Infrastructure: Persistence</strong><br>Provides the DataAccess interface every business component uses to reach the store; the only path to the database (repository style)."/><text x="440" y="306" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Persistence</text><text x="440" y="324" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;infrastructure&gt;&gt;</text>
+        <rect x="590" y="284" width="180" height="52" class="uml-box" fill="white" data-tip="<strong>Data: University DB</strong><br>One shared database, the single source of truth for student records (repository style, reuse goal)."/><text x="680" y="306" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">University DB</text><text x="680" y="324" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;database&gt;&gt;</text>
+        <line x1="440" y1="108" x2="440" y2="170" class="uml-line-dashed" marker-end="url(#wa-open)"/><text x="452" y="140" class="uml-text-mono" font-size="10">uses</text>
+        <line x1="200" y1="218" x2="420" y2="284" class="uml-line-dashed" marker-end="url(#wa-open)"/>
+        <line x1="440" y1="218" x2="440" y2="284" class="uml-line-dashed" marker-end="url(#wa-open)"/>
+        <line x1="680" y1="218" x2="460" y2="284" class="uml-line-dashed" marker-end="url(#wa-open)"/>
+        <text x="452" y="252" class="uml-text-mono" font-size="10">DataAccess</text>
+        <line x1="530" y1="310" x2="590" y2="310" class="uml-line-dashed" marker-end="url(#wa-open)"/><text x="560" y="302" text-anchor="middle" class="uml-text-mono" font-size="10">&lt;&lt;JDBC&gt;&gt;</text>
+      </svg>
+      <div class="figure-note">The decomposition, laid out as the three layers. The presentation layer is built <strong>MVC</strong>; the three business components are cohesive around one concept each and reach data only through the <strong>Persistence</strong> component's <code>DataAccess</code> interface (repository style, one shared <code>University DB</code>); <strong>Security</strong> is the cross-cutting infrastructure component. This is the structural view; the reasoning for why it takes this shape is the table below.</div>
+    </div>
+
+    <h3 class="subhead">Stage 3: Chosen styles, each tied to a goal</h3>
     <div class="table-card"><table class="body-table">
       <thead><tr><th>Decision</th><th>Style</th><th>Goal it serves</th></tr></thead><tbody>
         <tr><td>Three layers overall (presentation, business, data)</td><td>Layered</td><td>Maintainability: the interface layer can be rebuilt behind a stable interface without touching business logic.</td></tr>
@@ -1044,10 +1074,31 @@
         <tr><td>Layers deployed on separate client, application, and database nodes</td><td>Three-tier</td><td>Independent scaling of the web front; security, since the database sits behind the application tier and is never exposed to the client.</td></tr>
         <tr><td>Authentication delegated to a shared Security component</td><td>infrastructure subsystem</td><td>Reuse of the university identity service; one enforcement point for access control.</td></tr>
       </tbody></table></div>
-    <p class="body"><strong>4. The realised architecture.</strong> The decomposition is the <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html#archi">seminar component diagram</a> (UI, business, and infrastructure layers with their interfaces), and the three-tier allocation is the <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html#archi">deployment diagram</a> (client, web server, database server over HTTPS and JDBC). Those diagrams are the notation; the goals-to-style reasoning above is the justification for why they take that shape.</p>
-    <p class="body"><strong>5. The trade-offs accepted.</strong> Three tiers add two network hops and two more nodes to operate, accepted for the scaling and security they buy. Layering adds a call through the middle layer on every data access, accepted for the maintainability. Naming the trade-off, rather than hiding it, is what makes the design defensible.</p>
-      </div>
-    </details>
+
+    <h3 class="subhead">Stage 4: Deployment (the three tiers)</h3>
+    <p class="body">The three layers are allocated to three separate nodes: presentation on the client, the business logic on an application server, and the data on a database server. That allocation is what makes the layered design a <em>three-tier</em> architecture, and it is drawn as a deployment diagram.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 11</div>
+      <div class="figure-title">Three-tier deployment of the seminar system.</div>
+      <svg viewBox="0 0 880 210" class="objfig" role="img" aria-label="Three-tier deployment: client browser, application server holding seminar.war, and database server holding university.db">
+        <defs><marker id="wa-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
+        <polygon points="40,70 54,56 220,56 206,70" class="uml-box" fill="#f3ede2"/><polygon points="206,70 220,56 220,156 206,170" class="uml-box" fill="#ebe2d1"/>
+        <rect x="40" y="70" width="166" height="100" class="uml-box" fill="white"/><text x="123" y="100" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Client</text><text x="123" y="118" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <rect x="56" y="128" width="134" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="123" y="147" text-anchor="middle" class="uml-text-mono" font-size="10">Browser</text>
+        <polygon points="340,70 354,56 540,56 526,70" class="uml-box" fill="#f3ede2"/><polygon points="526,70 540,56 540,156 526,170" class="uml-box" fill="#ebe2d1"/>
+        <rect x="340" y="70" width="186" height="100" class="uml-box" fill="white"/><text x="433" y="100" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Application Server</text><text x="433" y="118" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <rect x="356" y="128" width="154" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="433" y="147" text-anchor="middle" class="uml-text-mono" font-size="10">seminar.war</text>
+        <polygon points="660,70 674,56 850,56 836,70" class="uml-box" fill="#f3ede2"/><polygon points="836,70 850,56 850,156 836,170" class="uml-box" fill="#ebe2d1"/>
+        <rect x="660" y="70" width="176" height="100" class="uml-box" fill="white"/><text x="748" y="100" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Database Server</text><text x="748" y="118" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <rect x="676" y="128" width="144" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="748" y="147" text-anchor="middle" class="uml-text-mono" font-size="10">university.db</text>
+        <line x1="206" y1="112" x2="340" y2="112" class="uml-line"/><text x="273" y="104" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;HTTPS&gt;&gt;</text>
+        <line x1="526" y1="112" x2="660" y2="112" class="uml-line"/><text x="593" y="104" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;JDBC&gt;&gt;</text>
+      </svg>
+      <div class="figure-note">Each layer on its own node: the client runs the browser, the application server holds the deployed <code>seminar.war</code>, and the database server holds <code>university.db</code>. The client reaches the application server over <code>&lt;&lt;HTTPS&gt;&gt;</code> and never touches the database directly, that opaque path is the security the third tier buys.</div>
+    </div>
+
+    <h3 class="subhead">Stage 5: The trade-offs accepted</h3>
+    <p class="body">Three tiers add two network hops and two more nodes to operate, accepted for the scaling and security they buy. Layering adds a call through the middle layer on every data access, accepted for the maintainability. Naming the trade-off, rather than hiding it, is what makes the design defensible: the goals in Stage 1 are the standard each of these costs is judged against.</p>
   </div>
 </section>
 
