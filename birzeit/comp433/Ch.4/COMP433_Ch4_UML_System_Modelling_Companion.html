@@ -1447,13 +1447,13 @@
 
         <!-- Decision: new patient? -->
         <g data-tip="<strong>Decision node.</strong> Diamond with ONE input and TWO or more outputs, each labelled with a guard in square brackets. Exactly one branch fires per execution. The guards must be mutually exclusive and exhaustive.">
-          <polygon points="180,150 222,180 180,210 138,180" class="uml-box" fill="white"/>
+          <polygon points="180,148 242,180 180,212 118,180" class="uml-box" fill="white"/>
           <text x="180" y="184" text-anchor="middle" class="uml-text" font-size="13">New patient?</text>
         </g>
 
         <!-- ===== Receptionist lane: two branches from Patient's decision ===== -->
         <!-- [yes] crosses to "Create patient record" -->
-        <line x1="222" y1="180" x2="380" y2="170" class="uml-line" marker-end="url(#act-arrow)"/>
+        <line x1="242" y1="180" x2="380" y2="170" class="uml-line" marker-end="url(#act-arrow)"/>
         <text x="245" y="170" class="uml-text" font-size="13">[yes]</text>
         <g data-tip="<strong>Action node.</strong> Rounded rectangle. A unit of work performed by the actor whose lane it is in. Labelled with a verb phrase (Create&hellip;, Search&hellip;, Record&hellip;).">
           <rect x="380" y="148" width="200" height="44" rx="22" class="uml-box" fill="white"/>
@@ -1497,14 +1497,14 @@
 
         <!-- Decision: medication in menu? -->
         <g data-tip="<strong>Decision node (nested).</strong> Within the Nurse's activity, a sub-decision: does the prescribed medication exist in the system's coded menu? Two guards split the flow.">
-          <polygon points="800,420 858,452 800,484 742,452" class="uml-box" fill="white"/>
+          <polygon points="800,418 880,452 800,486 720,452" class="uml-box" fill="white"/>
           <text x="800" y="450" text-anchor="middle" class="uml-text" font-size="12">Medication in</text>
-          <text x="800" y="462" text-anchor="middle" class="uml-text" font-size="12">menu?</text>
+          <text x="800" y="464" text-anchor="middle" class="uml-text" font-size="12">menu?</text>
         </g>
-        <line x1="800" y1="402" x2="800" y2="420" class="uml-line" marker-end="url(#act-arrow)"/>
+        <line x1="800" y1="400" x2="800" y2="418" class="uml-line" marker-end="url(#act-arrow)"/>
 
         <!-- [found] left branch: Record as code -->
-        <line x1="742" y1="452" x2="700" y2="452" class="uml-line"/>
+        <line x1="720" y1="452" x2="700" y2="452" class="uml-line"/>
         <line x1="700" y1="452" x2="700" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
         <text x="690" y="445" class="uml-text" font-size="13" text-anchor="end">[found]</text>
         <g data-tip="<strong>Action node.</strong> Codified branch: the medication is in the menu, so record it as a code. Cheaper to analyse later (consistent vocabulary), harder for the nurse to enter (must match a menu item).">
@@ -1513,7 +1513,7 @@
         </g>
 
         <!-- [not found] right branch: Record as free text -->
-        <line x1="858" y1="452" x2="900" y2="452" class="uml-line"/>
+        <line x1="880" y1="452" x2="900" y2="452" class="uml-line"/>
         <line x1="900" y1="452" x2="900" y2="495" class="uml-line" marker-end="url(#act-arrow)"/>
         <text x="868" y="445" class="uml-text" font-size="13">[not found]</text>
         <g data-tip="<strong>Action node.</strong> Free-text branch: the medication is unknown to the system, so write a free-text description. Easier to enter, harder to aggregate later. This is a real trade-off that clinical systems wrestle with.">
