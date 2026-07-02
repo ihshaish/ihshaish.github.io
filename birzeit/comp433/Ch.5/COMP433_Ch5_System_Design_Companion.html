@@ -804,6 +804,13 @@
       <div class="figure-note">Two readings of "peer" are current: a peer can be <em>either</em> a client or a server at a given moment, or a peer can be <em>both at once</em>. <strong>When to use:</strong> no natural central authority, and resilience or scale matters (file sharing, blockchains, messaging). <strong>Cost:</strong> consistency, discovery, and security are all harder without a central point to enforce them.</div>
     </div>
     <p class="body"><strong>Modelling "a peer can be a client as well as a server".</strong> Two inheritance models are proposed, and only one is correct. <strong>Model 1</strong> makes <code>Peer</code> the parent and has <code>Client</code> and <code>Server</code> inherit from it: this reads "a peer is <em>either</em> a client or a server", which is not what peer-to-peer means. <strong>Model 2</strong> (correct) makes <code>Peer</code> inherit from <em>both</em> <code>Client</code> and <code>Server</code>: this reads "a peer is a client <em>as well as</em> a server", which is the definition. The right model is the one whose inheritance, read aloud, states the requirement.</p>
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Peer-to-peer (P2P)</th></tr>
+      <tr><td>Description</td><td>The system is organised as a set of equal nodes (peers), each acting as both client and server, that communicate directly with one another rather than through a central server. Any peer may initiate a request to any other.</td></tr>
+      <tr><td>When used</td><td>When there is no natural central authority, or a central server is to be avoided, and the data or load is spread across many equal participants: file sharing, blockchains, and some messaging and collaboration systems.</td></tr>
+      <tr><td>Advantages</td><td>No single point of failure and no central bottleneck; the system scales with the number of peers; storage and compute are pooled across the nodes.</td></tr>
+      <tr><td>Disadvantages</td><td>Security, consistency and peer discovery are all harder with no central point to enforce them; the overall behaviour is harder to reason about; every node must implement both roles.</td></tr>
+    </table></div>
 
     <h3 class="subhead">Three-tier, four-tier: layer versus tier</h3>
     <p class="body">A <strong>layer</strong> is a logical type: a subsystem at one level of abstraction. A <strong>tier</strong> is a physical allocation: the node a layer is deployed on. The two are often used interchangeably, but the distinction is exact. A <strong>three-layered</strong> style becomes a <strong>three-tier architecture</strong> only when its three layers are placed on three separate nodes:</p>
@@ -829,6 +836,13 @@
       </svg>
       <div class="figure-note">The same three layers can be deployed two-tier (layers share fewer nodes), three-tier (one node each), or four-tier (an extra web or security tier in front). More tiers buy independent scaling and isolation at the cost of network hops and operational complexity. The choice of tiers is a deployment decision over a fixed layer design, which is why the <a href="/birzeit/comp433/Ch.4/COMP433_Ch4_UML_System_Modelling_Companion.html#archi">deployment diagram</a> is where it is drawn.</div>
     </div>
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Three-tier (and four-tier)</th></tr>
+      <tr><td>Description</td><td>A layered architecture whose layers are allocated to separate hardware nodes (tiers): presentation on the client, application and business logic on a middle server, and data on a database server. A four-tier variant inserts a further node, typically a web or security/gateway tier, in front of the application tier.</td></tr>
+      <tr><td>When used</td><td>For distributed, usually web-based, systems where presentation, logic and data must run on separate machines for scale, security or manageability, and many clients are served at once.</td></tr>
+      <tr><td>Advantages</td><td>Each tier can be scaled, secured and replaced on its own; the presentation tier never reaches the database directly (an opaque, layered path); supports large numbers of concurrent clients.</td></tr>
+      <tr><td>Disadvantages</td><td>More infrastructure to deploy and operate; every request crosses tier boundaries, adding latency; the middle tier can become a bottleneck and must be sized for the load.</td></tr>
+    </table></div>
 
     <h3 class="subhead">Model-View-Controller (MVC)</h3>
     <p class="body"><strong>The problem.</strong> In an interactive system the presentation (the boundary objects: screens, forms, reports) and the data (the entity objects) tend to become tightly coupled. Change the data and you are forced to change every screen that shows it; change a screen and you reach into the data objects. The user interface cannot be re-implemented without touching the data representation, and the data cannot be reorganised without touching the interface. That coupling is exactly what makes such systems expensive to change.</p>
@@ -960,6 +974,13 @@
 
     <h3 class="subhead">Service-oriented (SOA) and microservices</h3>
     <p class="body">In a service-oriented architecture the system is built from independent <strong>services</strong>, each owning a slice of functionality and communicating over the network through published interfaces. Microservices are the modern, fine-grained form. Because each service is deployed and scaled on its own, the style buys independent evolution and elastic scale; the price is operational complexity and the distributed-system problems (partial failure, latency, eventual consistency) that a single-process design never has. It is best read as client-server generalised to many small, independently deployable servers.</p>
+    <div class="struct-spec"><table>
+      <tr><th>Name</th><th>Service-oriented architecture (SOA) / microservices</th></tr>
+      <tr><td>Description</td><td>The system is decomposed into independent services, each owning one capability and exposing it through a published, network-accessible interface. Services are composed to deliver the application and may be developed, deployed and scaled independently; microservices are the fine-grained modern form.</td></tr>
+      <tr><td>When used</td><td>For large systems that must evolve and scale part by part, be built and owned by several independent teams, or reuse capabilities across more than one application.</td></tr>
+      <tr><td>Advantages</td><td>Each service can be developed, deployed, scaled and replaced on its own; teams work independently; services may use different technologies and be reused across systems.</td></tr>
+      <tr><td>Disadvantages</td><td>Full distributed-system complexity: partial failure, network latency and eventual consistency; harder to test and monitor end to end; the operational overhead of many independently deployed units.</td></tr>
+    </table></div>
   </div>
 </section>
 
