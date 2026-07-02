@@ -893,13 +893,13 @@
         <text x="710" y="300" text-anchor="middle" class="uml-text" font-weight="600">View</text>
         <text x="710" y="320" text-anchor="middle" class="uml-text-mono" font-size="11">renders HTML / forms</text>
         <line x1="170" y1="175" x2="440" y2="108" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>1. HTTP request</strong><br>The browser sends the user's action (a GET or POST) to the Controller."/>
-        <text x="300" y="126" text-anchor="middle" class="uml-text-mono" font-size="11">1: HTTP request</text>
+        <text x="300" y="126" text-anchor="middle" class="uml-text-mono" font-size="11" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">1: HTTP request</text>
         <line x1="500" y1="146" x2="428" y2="270" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>2. update the model</strong><br>The Controller calls operations on the Model to apply the change the user asked for."/>
-        <text x="418" y="214" text-anchor="middle" class="uml-text-mono" font-size="11">2: update</text>
+        <text x="418" y="214" text-anchor="middle" class="uml-text-mono" font-size="11" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">2: update</text>
         <line x1="480" y1="303" x2="620" y2="303" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>3. read state</strong><br>The View reads the Model's new state. In a desktop app this is push (notify/subscribe); in a web app the View queries the Model as the page is built."/>
         <text x="550" y="295" text-anchor="middle" class="uml-text-mono" font-size="11">3: state</text>
         <line x1="560" y1="146" x2="702" y2="270" class="uml-line" marker-end="url(#mvcw-arrow)" data-tip="<strong>4. select the view</strong><br>The Controller chooses which View should render the response."/>
-        <text x="658" y="214" text-anchor="middle" class="uml-text-mono" font-size="11">4: select view</text>
+        <text x="658" y="214" text-anchor="middle" class="uml-text-mono" font-size="11" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">4: select view</text>
         <polyline points="710,336 710,362 100,362 100,222" class="uml-line" fill="none" marker-end="url(#mvcw-arrow)" data-tip="<strong>5. HTTP response</strong><br>The View's rendered HTML page is returned to the browser, which displays it. One request in, one page out."/>
         <text x="400" y="356" text-anchor="middle" class="uml-text-mono" font-size="11">5: HTTP response (HTML page)</text>
       </svg>
@@ -1060,7 +1060,7 @@
         <line x1="440" y1="218" x2="440" y2="284" class="uml-line-dashed" marker-end="url(#wa-open)"/>
         <line x1="680" y1="218" x2="460" y2="284" class="uml-line-dashed" marker-end="url(#wa-open)"/>
         <text x="452" y="252" class="uml-text-mono" font-size="10">DataAccess</text>
-        <line x1="530" y1="310" x2="590" y2="310" class="uml-line-dashed" marker-end="url(#wa-open)"/><text x="560" y="302" text-anchor="middle" class="uml-text-mono" font-size="10">&lt;&lt;JDBC&gt;&gt;</text>
+        <line x1="530" y1="322" x2="590" y2="322" class="uml-line-dashed" marker-end="url(#wa-open)"/><text x="560" y="304" text-anchor="middle" class="uml-text-mono" font-size="10" paint-order="stroke" stroke="white" stroke-width="6" stroke-linejoin="round">&lt;&lt;JDBC&gt;&gt;</text>
       </svg>
       <div class="figure-note">The decomposition, laid out as the three layers. The presentation layer is built <strong>MVC</strong>; the three business components are cohesive around one concept each and reach data only through the <strong>Persistence</strong> component's <code>DataAccess</code> interface (repository style, one shared <code>University DB</code>); <strong>Security</strong> is the cross-cutting infrastructure component. This is the structural view; the reasoning for why it takes this shape is the table below.</div>
     </div>
@@ -1084,13 +1084,13 @@
         <defs><marker id="wa-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
         <polygon points="40,70 54,56 220,56 206,70" class="uml-box" fill="#f3ede2"/><polygon points="206,70 220,56 220,156 206,170" class="uml-box" fill="#ebe2d1"/>
         <rect x="40" y="70" width="166" height="100" class="uml-box" fill="white"/><text x="123" y="100" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Client</text><text x="123" y="118" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
-        <rect x="56" y="128" width="134" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="123" y="147" text-anchor="middle" class="uml-text-mono" font-size="10">Browser</text>
+        <rect x="56" y="124" width="134" height="42" fill="white" stroke="#2c3540" stroke-width="1"/><g transform="translate(168,128)"><path d="M0,0 H12 L16,4 V18 H0 Z" fill="white" stroke="#2c3540" stroke-width="1"/><polyline points="12,0 12,4 16,4" fill="none" stroke="#2c3540" stroke-width="1"/></g><text x="118" y="139" text-anchor="middle" class="uml-text-stereo" font-size="9">&lt;&lt;artifact&gt;&gt;</text><text x="118" y="157" text-anchor="middle" class="uml-text-mono" font-size="10">Browser</text>
         <polygon points="340,70 354,56 540,56 526,70" class="uml-box" fill="#f3ede2"/><polygon points="526,70 540,56 540,156 526,170" class="uml-box" fill="#ebe2d1"/>
         <rect x="340" y="70" width="186" height="100" class="uml-box" fill="white"/><text x="433" y="100" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Application Server</text><text x="433" y="118" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
-        <rect x="356" y="128" width="154" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="433" y="147" text-anchor="middle" class="uml-text-mono" font-size="10">seminar.war</text>
+        <rect x="356" y="124" width="154" height="42" fill="white" stroke="#2c3540" stroke-width="1"/><g transform="translate(488,128)"><path d="M0,0 H12 L16,4 V18 H0 Z" fill="white" stroke="#2c3540" stroke-width="1"/><polyline points="12,0 12,4 16,4" fill="none" stroke="#2c3540" stroke-width="1"/></g><text x="428" y="139" text-anchor="middle" class="uml-text-stereo" font-size="9">&lt;&lt;artifact&gt;&gt;</text><text x="428" y="157" text-anchor="middle" class="uml-text-mono" font-size="10">seminar.war</text>
         <polygon points="660,70 674,56 850,56 836,70" class="uml-box" fill="#f3ede2"/><polygon points="836,70 850,56 850,156 836,170" class="uml-box" fill="#ebe2d1"/>
         <rect x="660" y="70" width="176" height="100" class="uml-box" fill="white"/><text x="748" y="100" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Database Server</text><text x="748" y="118" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
-        <rect x="676" y="128" width="144" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="748" y="147" text-anchor="middle" class="uml-text-mono" font-size="10">university.db</text>
+        <rect x="676" y="124" width="144" height="42" fill="white" stroke="#2c3540" stroke-width="1"/><g transform="translate(798,128)"><path d="M0,0 H12 L16,4 V18 H0 Z" fill="white" stroke="#2c3540" stroke-width="1"/><polyline points="12,0 12,4 16,4" fill="none" stroke="#2c3540" stroke-width="1"/></g><text x="743" y="139" text-anchor="middle" class="uml-text-stereo" font-size="9">&lt;&lt;artifact&gt;&gt;</text><text x="743" y="157" text-anchor="middle" class="uml-text-mono" font-size="10">university.db</text>
         <line x1="206" y1="112" x2="340" y2="112" class="uml-line"/><text x="273" y="104" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;HTTPS&gt;&gt;</text>
         <line x1="526" y1="112" x2="660" y2="112" class="uml-line"/><text x="593" y="104" text-anchor="middle" class="uml-text-mono" font-size="11">&lt;&lt;JDBC&gt;&gt;</text>
       </svg>
