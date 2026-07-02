@@ -3528,8 +3528,216 @@
       <li><strong>The class fragment surfaces a question the requirements missed.</strong> The Loan association class implies a Loan has a single member at a time. But what about historical loans (a copy borrowed by two members at different times)? The class diagram makes the team ask whether Loan instances are kept after return, and at the point that question is asked, the team goes back to UR3 and adds: "the system shall keep loan history for at least seven years for audit." That is the iteration loop in figure 1 made concrete.</li>
     </ul>
 
+    <h3 class="subhead">Stage 6: Design classes (analysis to design)</h3>
+    <p class="body">The first-cut model in Stage 5 is an <em>analysis</em> fragment. Taking it to <strong>design</strong> adds the solution-side classes the requirements never mention: a <code>&laquo;boundary&raquo;</code> class for the desk screen the Librarian uses, a <code>&laquo;control&raquo;</code> class that runs the borrow use case, and the <code>&laquo;entity&raquo;</code> classes carried over from analysis. This boundary/control/entity split is what keeps the UI, the use-case logic, and the data independent, and it is the seam the sequence diagram in Stage 8 sends its messages across.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 12</div>
+      <div class="figure-title">Design classes for Borrow: a boundary, a control, and the entities. Hover any class.</div>
+      <svg viewBox="0 0 900 250" class="objfig" role="img" aria-label="Design classes: BorrowScreen boundary, BorrowController control, and LibraryMember, BookCopy, Loan entities">
+        <defs><marker id="wex-open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#2c3540" stroke-width="1.3"/></marker></defs>
+        <rect x="30" y="90" width="200" height="70" class="uml-box" fill="white" data-tip="<strong>Boundary class</strong><br>BorrowScreen is the desk UI the Librarian uses. Boundary classes hold no business rules; they collect input and show results, and forward user actions to the controller."/>
+        <text x="130" y="112" text-anchor="middle" class="uml-text-stereo" font-size="11">&lt;&lt;boundary&gt;&gt;</text>
+        <text x="130" y="130" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">BorrowScreen</text>
+        <line x1="30" y1="140" x2="230" y2="140" class="uml-line"/>
+        <text x="44" y="156" class="uml-text-mono" font-size="11">+ scan(barcode)</text>
+        <rect x="340" y="90" width="210" height="70" class="uml-box" fill="white" data-tip="<strong>Control class</strong><br>BorrowController runs the Borrow use case: it orchestrates the steps (retrieve, count, record) and enforces the rules. One control class per use case is a common design heuristic."/>
+        <text x="445" y="112" text-anchor="middle" class="uml-text-stereo" font-size="11">&lt;&lt;control&gt;&gt;</text>
+        <text x="445" y="130" text-anchor="middle" class="uml-text" font-weight="700" font-size="14">BorrowController</text>
+        <line x1="340" y1="140" x2="550" y2="140" class="uml-line"/>
+        <text x="354" y="156" class="uml-text-mono" font-size="11">+ borrow(barcode)</text>
+        <rect x="670" y="40" width="200" height="56" class="uml-box" fill="#f6f2ea" data-tip="<strong>Entity class</strong><br>LibraryMember, BookCopy and Loan are the entities from the analysis fragment (Stage 5), now carrying typed attributes and operations. They hold the data and the rules that belong to the data."/>
+        <text x="770" y="60" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;entity&gt;&gt;</text>
+        <text x="770" y="78" text-anchor="middle" class="uml-text" font-weight="700" font-size="13">LibraryMember</text>
+        <rect x="670" y="110" width="200" height="40" class="uml-box" fill="#f6f2ea"/>
+        <text x="770" y="128" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;entity&gt;&gt;</text>
+        <text x="770" y="143" text-anchor="middle" class="uml-text" font-weight="700" font-size="13">BookCopy</text>
+        <rect x="670" y="164" width="200" height="40" class="uml-box" fill="#f6f2ea"/>
+        <text x="770" y="182" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;entity&gt;&gt;</text>
+        <text x="770" y="197" text-anchor="middle" class="uml-text" font-weight="700" font-size="13">Loan</text>
+        <line x1="230" y1="125" x2="340" y2="125" class="uml-line-dashed" marker-end="url(#wex-open)"/>
+        <text x="285" y="118" text-anchor="middle" class="uml-text-mono" font-size="10">uses</text>
+        <line x1="550" y1="118" x2="668" y2="80" class="uml-line-dashed" marker-end="url(#wex-open)"/>
+        <line x1="550" y1="128" x2="668" y2="130" class="uml-line-dashed" marker-end="url(#wex-open)"/>
+        <line x1="550" y1="138" x2="668" y2="180" class="uml-line-dashed" marker-end="url(#wex-open)"/>
+      </svg>
+      <div class="figure-note">The Librarian works the <strong>boundary</strong> (BorrowScreen); it calls the <strong>control</strong> (BorrowController), which drives the <strong>entities</strong> (LibraryMember, BookCopy, Loan) from Stage 5. Dashed arrows are dependencies (uses). This is the design-level class diagram; the analysis fragment had no boundary or control class because those are solution decisions, not domain facts.</div>
+    </div>
+
+    <h3 class="subhead">Stage 7: Activity diagram (the Borrow workflow)</h3>
+    <p class="body">The use-case description in Stage 4 is a numbered list; the <strong>activity diagram</strong> draws it as a flow, and makes the actor responsible for each step explicit through swimlanes. The <code>System</code> lane holds the automated steps (retrieve, count, record), and the decision node is where SR3.1 (the six-item limit) is enforced.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 13</div>
+      <div class="figure-title">Activity diagram for Borrow, across Librarian and System lanes.</div>
+      <svg viewBox="0 0 760 600" role="img" aria-label="Activity diagram of the Borrow workflow with Librarian and System swimlanes and the six-loan decision">
+        <defs><marker id="wex-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs>
+        <rect x="30" y="40" width="330" height="540" fill="#faf7f2" stroke="#d8cfc0"/>
+        <rect x="360" y="40" width="370" height="540" fill="#f3ede2" stroke="#d8cfc0"/>
+        <text x="195" y="66" text-anchor="middle" class="uml-text" font-weight="700">Librarian</text>
+        <text x="545" y="66" text-anchor="middle" class="uml-text" font-weight="700">System</text>
+        <line x1="360" y1="76" x2="360" y2="580" stroke="#d8cfc0"/>
+        <circle cx="130" cy="100" r="9" fill="#0f1419"/>
+        <line x1="130" y1="109" x2="130" y2="128" class="uml-line" marker-end="url(#wex-a)"/>
+        <rect x="45" y="128" width="200" height="46" rx="14" class="uml-box" fill="white"/>
+        <text x="145" y="156" text-anchor="middle" class="uml-text">Scan copy barcode</text>
+        <line x1="245" y1="151" x2="430" y2="151" class="uml-line" marker-end="url(#wex-a)"/>
+        <rect x="430" y="128" width="270" height="46" rx="14" class="uml-box" fill="white"/>
+        <text x="565" y="156" text-anchor="middle" class="uml-text">Retrieve copy and book</text>
+        <line x1="565" y1="174" x2="565" y2="200" class="uml-line" marker-end="url(#wex-a)"/>
+        <rect x="430" y="200" width="270" height="46" rx="14" class="uml-box" fill="white"/>
+        <text x="565" y="228" text-anchor="middle" class="uml-text">Count member's loans</text>
+        <line x1="565" y1="246" x2="565" y2="278" class="uml-line" marker-end="url(#wex-a)"/>
+        <polygon points="565,278 675,326 565,374 455,326" class="uml-box" fill="white"/>
+        <text x="565" y="330" text-anchor="middle" class="uml-text" font-size="13">loans &lt; 6 ?</text>
+        <line x1="565" y1="374" x2="565" y2="406" class="uml-line" marker-end="url(#wex-a)"/>
+        <text x="578" y="396" class="uml-text-mono" font-size="12">[yes]</text>
+        <rect x="430" y="406" width="270" height="58" rx="14" class="uml-box" fill="white"/>
+        <text x="565" y="430" text-anchor="middle" class="uml-text" font-size="13">Record Loan, set copy OnLoan,</text>
+        <text x="565" y="450" text-anchor="middle" class="uml-text" font-size="13">compute return date</text>
+        <polyline points="455,326 405,326 405,501 428,501" class="uml-line" fill="none" marker-end="url(#wex-a)"/>
+        <text x="410" y="316" class="uml-text-mono" font-size="12">[no]</text>
+        <rect x="430" y="478" width="210" height="46" rx="14" class="uml-box" fill="white"/>
+        <text x="535" y="506" text-anchor="middle" class="uml-text" font-size="13">Refuse loan, notify member</text>
+        <polygon points="565,538 583,550 565,562 547,550" class="uml-box" fill="white"/>
+        <polyline points="680,464 680,550 583,550" class="uml-line" fill="none" marker-end="url(#wex-a)"/>
+        <polyline points="535,524 535,550 547,550" class="uml-line" fill="none" marker-end="url(#wex-a)"/>
+        <circle cx="565" cy="574" r="8" fill="white" stroke="#0f1419" stroke-width="1.4"/><circle cx="565" cy="574" r="4.5" fill="#0f1419"/>
+        <line x1="565" y1="562" x2="565" y2="566" class="uml-line" marker-end="url(#wex-a)"/>
+      </svg>
+      <div class="figure-note">One decision (<code>loans &lt; 6 ?</code>) enforces SR3.1; its two guards are mutually exclusive and rejoin at a merge before the final node. The automated steps sit in the <strong>System</strong> lane and the manual step (scanning) in the Librarian's, so the one cross-lane arrow marks the hand-off. The barcode-unreadable path (SR3.3) is omitted here to keep the figure readable; it is an alternative entry to <em>Scan copy barcode</em>.</div>
+    </div>
+
+    <h3 class="subhead">Stage 8: Object diagram (a snapshot mid-borrow)</h3>
+    <p class="body">To check the class model of Stages 5 and 6 holds, populate it with one concrete case: member <em>Adel</em> borrowing copy <em>BC-42</em>, with the Loan that records it.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 14</div>
+      <div class="figure-title">Object diagram: one member, one copy, one loan.</div>
+      <svg viewBox="0 0 900 200" class="objfig" role="img" aria-label="Object snapshot: adel LibraryMember linked through loan99 Loan to copy42 BookCopy">
+        <rect x="30" y="70" width="220" height="80" class="uml-box"/>
+        <text x="140" y="96" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">adel : LibraryMember</text>
+        <line x1="30" y1="108" x2="250" y2="108" class="uml-line"/>
+        <text x="44" y="128" class="uml-text-mono" font-size="12">memberId = "M-1007"</text>
+        <text x="44" y="144" class="uml-text-mono" font-size="12">loanCount = 3</text>
+        <rect x="340" y="70" width="200" height="80" class="uml-box" fill="#faf7f2"/>
+        <text x="440" y="96" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">loan99 : Loan</text>
+        <line x1="340" y1="108" x2="540" y2="108" class="uml-line"/>
+        <text x="354" y="128" class="uml-text-mono" font-size="12">startDate = 14 Mar</text>
+        <text x="354" y="144" class="uml-text-mono" font-size="12">returnDate = 28 Mar</text>
+        <rect x="650" y="70" width="220" height="80" class="uml-box"/>
+        <text x="760" y="96" text-anchor="middle" class="uml-text" font-weight="700" text-decoration="underline">copy42 : BookCopy</text>
+        <line x1="650" y1="108" x2="870" y2="108" class="uml-line"/>
+        <text x="664" y="128" class="uml-text-mono" font-size="12">barcode = "BC-42"</text>
+        <text x="664" y="144" class="uml-text-mono" font-size="12">status = OnLoan</text>
+        <line x1="250" y1="110" x2="340" y2="110" class="uml-line"/>
+        <line x1="540" y1="110" x2="650" y2="110" class="uml-line"/>
+      </svg>
+      <div class="figure-note">Every value has a home and every link has a matching association from Stage 5: <code>adel</code> is linked through <code>loan99</code> to <code>copy42</code>, whose <code>status</code> is now <code>OnLoan</code> and whose member's <code>loanCount</code> is 3 (under the limit). If any value had nowhere to sit, the class model would be wrong.</div>
+    </div>
+
+    <h3 class="subhead">Stage 9: Sequence diagram (the messages, in order)</h3>
+    <p class="body">The activity diagram shows <em>what</em> happens; the <strong>sequence diagram</strong> shows <em>who tells whom</em>, in order, across the design classes of Stage 6. Time runs down; the <code>alt</code> fragment carries the six-loan branch.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 15</div>
+      <div class="figure-title">Sequence diagram for Borrow, with an alt fragment on the loan limit.</div>
+      <svg viewBox="0 0 820 470" role="img" aria-label="Sequence diagram: Librarian to BorrowScreen to BorrowController to BookCopy and Loan, with an alt fragment for the six-loan limit">
+        <defs><marker id="wex-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#0f1419"/></marker></defs>
+        <rect x="40" y="30" width="130" height="40" class="uml-box"/><text x="105" y="55" text-anchor="middle" class="uml-text" font-weight="600">Librarian</text>
+        <rect x="220" y="30" width="130" height="40" class="uml-box"/><text x="285" y="55" text-anchor="middle" class="uml-text" font-weight="600">: BorrowScreen</text>
+        <rect x="410" y="30" width="150" height="40" class="uml-box"/><text x="485" y="55" text-anchor="middle" class="uml-text" font-weight="600">: BorrowController</text>
+        <rect x="620" y="30" width="150" height="40" class="uml-box"/><text x="695" y="55" text-anchor="middle" class="uml-text" font-weight="600">: BookCopy / Loan</text>
+        <line x1="105" y1="70" x2="105" y2="440" stroke="#9aa4b0" stroke-dasharray="4,4"/>
+        <line x1="285" y1="70" x2="285" y2="440" stroke="#9aa4b0" stroke-dasharray="4,4"/>
+        <line x1="485" y1="70" x2="485" y2="440" stroke="#9aa4b0" stroke-dasharray="4,4"/>
+        <line x1="695" y1="70" x2="695" y2="440" stroke="#9aa4b0" stroke-dasharray="4,4"/>
+        <line x1="105" y1="95" x2="285" y2="95" class="uml-line" marker-end="url(#wex-s)"/><text x="195" y="88" text-anchor="middle" class="uml-text-mono" font-size="11">scan(barcode)</text>
+        <line x1="285" y1="125" x2="485" y2="125" class="uml-line" marker-end="url(#wex-s)"/><text x="385" y="118" text-anchor="middle" class="uml-text-mono" font-size="11">borrow(barcode)</text>
+        <line x1="485" y1="155" x2="695" y2="155" class="uml-line" marker-end="url(#wex-s)"/><text x="590" y="148" text-anchor="middle" class="uml-text-mono" font-size="11">find(barcode)</text>
+        <line x1="485" y1="185" x2="695" y2="185" class="uml-line" marker-end="url(#wex-s)"/><text x="590" y="178" text-anchor="middle" class="uml-text-mono" font-size="11">countLoans(member)</text>
+        <rect x="360" y="215" width="410" height="180" fill="none" stroke="#b85c38" stroke-dasharray="3,3"/>
+        <text x="372" y="230" class="uml-text-mono" font-size="11" fill="#b85c38">alt  [loans &lt; 6]</text>
+        <line x1="485" y1="255" x2="695" y2="255" class="uml-line" marker-end="url(#wex-s)"/><text x="590" y="248" text-anchor="middle" class="uml-text-mono" font-size="11">createLoan(); setOnLoan()</text>
+        <line x1="695" y1="285" x2="485" y2="285" class="uml-line-dashed" marker-end="url(#wex-s)"/><text x="590" y="278" text-anchor="middle" class="uml-text-mono" font-size="11">loan confirmed</text>
+        <line x1="360" y1="305" x2="770" y2="305" stroke="#b85c38" stroke-dasharray="3,3"/>
+        <text x="372" y="322" class="uml-text-mono" font-size="11" fill="#b85c38">[else]</text>
+        <line x1="485" y1="350" x2="285" y2="350" class="uml-line-dashed" marker-end="url(#wex-s)"/><text x="385" y="343" text-anchor="middle" class="uml-text-mono" font-size="11">refuse(limit reached)</text>
+        <line x1="285" y1="420" x2="105" y2="420" class="uml-line-dashed" marker-end="url(#wex-s)"/><text x="195" y="413" text-anchor="middle" class="uml-text-mono" font-size="11">show result</text>
+      </svg>
+      <div class="figure-note">The messages cross the boundary/control/entity seam from Stage 6: the Librarian drives <code>BorrowScreen</code>, which calls <code>BorrowController</code>, which queries and updates the entities. The <strong>alt</strong> fragment is the six-loan decision from the activity diagram, now expressed as two message paths. Solid arrows are calls; dashed arrows are returns.</div>
+    </div>
+
+    <h3 class="subhead">Stage 10: Communication diagram (same interaction, structural view)</h3>
+    <p class="body">The very same Borrow interaction, redrawn as links with Dewey-numbered messages. It confirms that every message rides on an association that exists in the class model.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 16</div>
+      <div class="figure-title">Communication diagram for Borrow (structural twin of Figure 15).</div>
+      <svg viewBox="0 0 860 210" class="objfig" role="img" aria-label="Communication diagram: Librarian, BorrowScreen, BorrowController and the entities linked, with numbered messages">
+        <defs><marker id="wex-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2c3540"/></marker></defs>
+        <rect x="20" y="90" width="130" height="44" class="uml-box"/><text x="85" y="117" text-anchor="middle" class="uml-text" font-weight="600">Librarian</text>
+        <rect x="240" y="90" width="150" height="44" class="uml-box"/><text x="315" y="117" text-anchor="middle" class="uml-text" font-weight="600">: BorrowScreen</text>
+        <rect x="470" y="90" width="160" height="44" class="uml-box"/><text x="550" y="117" text-anchor="middle" class="uml-text" font-weight="600">: BorrowController</text>
+        <rect x="700" y="90" width="150" height="44" class="uml-box"/><text x="775" y="117" text-anchor="middle" class="uml-text" font-weight="600">: BookCopy / Loan</text>
+        <line x1="150" y1="112" x2="240" y2="112" class="uml-line"/>
+        <line x1="390" y1="112" x2="470" y2="112" class="uml-line"/>
+        <line x1="630" y1="112" x2="700" y2="112" class="uml-line"/>
+        <line x1="175" y1="96" x2="215" y2="96" class="uml-line" marker-end="url(#wex-c)"/><text x="195" y="82" text-anchor="middle" class="uml-text-mono" font-size="11">1: scan()</text>
+        <line x1="405" y1="96" x2="445" y2="96" class="uml-line" marker-end="url(#wex-c)"/><text x="425" y="82" text-anchor="middle" class="uml-text-mono" font-size="11">2: borrow()</text>
+        <line x1="645" y1="96" x2="685" y2="96" class="uml-line" marker-end="url(#wex-c)"/><text x="668" y="70" text-anchor="middle" class="uml-text-mono" font-size="11">2.1: find()</text>
+        <text x="668" y="150" text-anchor="middle" class="uml-text-mono" font-size="11">2.2: countLoans()</text>
+        <text x="668" y="166" text-anchor="middle" class="uml-text-mono" font-size="11">2.3: createLoan()</text>
+      </svg>
+      <div class="figure-note">The numbers carry the order the sequence diagram showed by vertical position: <code>1</code> then <code>2</code>, with <code>2.1</code>&ndash;<code>2.3</code> nested inside <code>2</code> (the controller's work). Each plain line is a link, an instance of an association in the class model; if a message had no association to ride on, the class model of Stage 5 would be missing a relationship.</div>
+    </div>
+
+    <h3 class="subhead">Stage 11: State machine (the copy's lifecycle)</h3>
+    <p class="body">One entity in this thread has a state-dependent life worth its own diagram: the <code>BookCopy</code>. Borrowing is one transition in that lifecycle.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 17</div>
+      <div class="figure-title">State machine for BookCopy: Borrow is the Available to OnLoan transition.</div>
+      <svg viewBox="0 0 820 200" role="img" aria-label="State machine: Available, OnLoan, Overdue and Lost states for a BookCopy">
+        <defs><marker id="wex-st" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2c3540"/></marker></defs>
+        <circle cx="34" cy="90" r="8" fill="#0f1419"/><line x1="42" y1="90" x2="80" y2="90" class="uml-line" marker-end="url(#wex-st)"/>
+        <rect x="80" y="66" width="150" height="48" rx="14" class="uml-box"/><text x="155" y="95" text-anchor="middle" class="uml-text" font-weight="600">Available</text>
+        <rect x="340" y="66" width="150" height="48" rx="14" class="uml-box"/><text x="415" y="95" text-anchor="middle" class="uml-text" font-weight="600">OnLoan</text>
+        <rect x="600" y="66" width="150" height="48" rx="14" class="uml-box"/><text x="675" y="95" text-anchor="middle" class="uml-text" font-weight="600">Overdue</text>
+        <line x1="230" y1="80" x2="340" y2="80" class="uml-line" marker-end="url(#wex-st)"/><text x="285" y="72" text-anchor="middle" class="uml-text-mono" font-size="11">borrow()</text>
+        <line x1="340" y1="100" x2="230" y2="100" class="uml-line" marker-end="url(#wex-st)"/><text x="285" y="114" text-anchor="middle" class="uml-text-mono" font-size="11">return()</text>
+        <line x1="490" y1="82" x2="600" y2="82" class="uml-line" marker-end="url(#wex-st)"/><text x="545" y="74" text-anchor="middle" class="uml-text-mono" font-size="11">after(due)</text>
+        <polyline points="600,98 545,150 270,150 230,114" class="uml-line" fill="none" marker-end="url(#wex-st)"/><text x="420" y="166" text-anchor="middle" class="uml-text-mono" font-size="11">return()</text>
+      </svg>
+      <div class="figure-note">The <code>borrow()</code> call that Stage 9 sent to the copy is the <strong>Available to OnLoan</strong> transition here. The diagram also answers a question the earlier stages did not: what happens when a loan runs past its date (<code>after(due)</code> to Overdue) and how <code>return()</code> is legal from both OnLoan and Overdue. State is the model that makes &ldquo;which operations are legal now?&rdquo; explicit.</div>
+    </div>
+
+    <h3 class="subhead">Stage 12: Component and deployment (build-time and run-time structure)</h3>
+    <p class="body">The last two models leave behaviour behind and ask what the system is <em>made of</em> and <em>where it runs</em>. The Borrow logic lives in a Loans component that requires a persistence interface; at run time the desk client reaches a library server that holds the database.</p>
+    <div class="figure">
+      <div class="figure-caption">Figure 18</div>
+      <div class="figure-title">Component view (left) and deployment view (right) for the library system.</div>
+      <svg viewBox="0 0 900 260" class="objfig" role="img" aria-label="Component diagram of the Loans and Persistence components, and a deployment diagram of the desk client, library server and database">
+        <defs><marker id="wex-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#2c3540" stroke-width="1.4"/></marker></defs>
+        <text x="200" y="26" text-anchor="middle" class="uml-text-stereo" font-size="11">component view</text>
+        <rect x="40" y="60" width="180" height="70" class="uml-box" fill="white" data-tip="<strong>Component: Loans</strong><br>Groups the boundary/control/entity classes for borrowing into one replaceable build unit. It requires a persistence service, drawn as a socket."/>
+        <text x="130" y="90" text-anchor="middle" class="uml-text" font-weight="600">Loans</text>
+        <text x="130" y="110" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <rect x="260" y="60" width="180" height="70" class="uml-box" fill="white" data-tip="<strong>Component: Persistence</strong><br>Provides the DataAccess interface (the lollipop) that Loans requires. Programming to this interface is what lets the store be swapped without touching Loans."/>
+        <text x="350" y="90" text-anchor="middle" class="uml-text" font-weight="600">Persistence</text>
+        <text x="350" y="110" text-anchor="middle" class="uml-text-stereo">&lt;&lt;component&gt;&gt;</text>
+        <path d="M 220 95 A 12 12 0 0 1 220 119" class="uml-line" fill="none" transform="translate(0,-12)"/>
+        <line x1="220" y1="95" x2="238" y2="95" class="uml-line-dashed" marker-end="url(#wex-d)"/>
+        <line x1="260" y1="95" x2="250" y2="95" class="uml-line"/><circle cx="242" cy="95" r="8" class="uml-line" fill="white"/>
+        <text x="240" y="140" text-anchor="middle" class="uml-text-mono" font-size="10">DataAccess</text>
+        <text x="700" y="26" text-anchor="middle" class="uml-text-stereo" font-size="11">deployment view</text>
+        <polygon points="500,70 512,58 640,58 628,70" class="uml-box" fill="#f3ede2"/><polygon points="628,70 640,58 640,128 628,140" class="uml-box" fill="#ebe2d1"/>
+        <rect x="500" y="70" width="128" height="70" class="uml-box" fill="white"/><text x="564" y="100" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Desk PC</text><text x="564" y="118" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <polygon points="700,70 712,58 860,58 848,70" class="uml-box" fill="#f3ede2"/><polygon points="848,70 860,58 860,190 848,202" class="uml-box" fill="#ebe2d1"/>
+        <rect x="700" y="70" width="148" height="132" class="uml-box" fill="white"/><text x="774" y="92" text-anchor="middle" class="uml-text" font-weight="600" font-size="13">Library Server</text><text x="774" y="108" text-anchor="middle" class="uml-text-stereo" font-size="10">&lt;&lt;device&gt;&gt;</text>
+        <rect x="716" y="120" width="116" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="774" y="139" text-anchor="middle" class="uml-text-mono" font-size="10">loans.war</text>
+        <rect x="716" y="158" width="116" height="30" fill="white" stroke="#2c3540" stroke-width="1"/><text x="774" y="177" text-anchor="middle" class="uml-text-mono" font-size="10">library.db</text>
+        <line x1="628" y1="105" x2="700" y2="105" class="uml-line"/><text x="664" y="98" text-anchor="middle" class="uml-text-mono" font-size="10">&lt;&lt;HTTPS&gt;&gt;</text>
+      </svg>
+      <div class="figure-note">Left, the <strong>component</strong> view: the <code>Loans</code> component requires the <code>DataAccess</code> interface that <code>Persistence</code> provides (socket into lollipop). Right, the <strong>deployment</strong> view: the <code>Desk PC</code> reaches the <code>Library Server</code> over HTTPS, and the server holds the <code>loans.war</code> artifact and the <code>library.db</code> database. Build-time parts on the left, run-time nodes on the right.</div>
+    </div>
+
     <h3 class="subhead">What this thread illustrates</h3>
-    <p class="body">One requirement, five artefacts, each refining the previous and each surfacing questions the previous stage missed. The work of UML modelling is not drawing pretty ellipses; it is the disciplined re-asking, at progressively finer detail, of "what exactly does the system do?". A model that lets you skip the re-asking is not a useful model. A model that forces the re-asking, and lets the team write the answers down so they survive the project, is the artefact this chapter is teaching you to produce.</p>
+    <p class="body">One requirement, followed the whole way: from an interview to a use case and its description, an activity, a class model taken to design, a snapshot, the interaction as a sequence and a communication diagram, a state machine, and finally the component and deployment structure. Each model refines the previous and each surfaces questions the previous stage missed. The work of UML modelling is not drawing pretty ellipses; it is the disciplined re-asking, at progressively finer detail, of "what exactly does the system do?". A model that lets you skip the re-asking is not a useful model. A model that forces the re-asking, and lets the team write the answers down so they survive the project, is the artefact this chapter is teaching you to produce.</p>
   </div>
 </section>
 
