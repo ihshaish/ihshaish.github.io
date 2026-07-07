@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true}, {left:'$',right:'$',display:false}], throwOnError: false });"></script>
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#bf360c" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Second Exam (Section 9, 2025/2026), Chapters 5 and 6, with worked solutions." />
+
+  <title>COMP233 Second Exam &amp; Answers</title>
+
+  <style>
+    :root {
+      --c-primary: #1565c0;
+      --c-primary-dark: #0d47a1;
+      --c-primary-light: #e3f2fd;
+      --c-accent: #bf360c;
+      --c-accent-dark: #7f1f06;
+      --c-accent-light: #fbe9e7;
+      --c-true: #2e7d32;
+      --c-true-bg: #e8f5e9;
+      --c-false: #c62828;
+      --c-false-bg: #ffebee;
+      --c-border: #e0e0e0;
+      --c-muted: #777;
+      --c-text: #333;
+      --c-card-bg: #fff;
+      --c-page-bg: #fafbfc;
+    }
+    body.dark {
+      --c-primary: #64b5f6;
+      --c-primary-dark: #90caf9;
+      --c-primary-light: #1e3a5f;
+      --c-accent: #ff8a65;
+      --c-accent-dark: #ffab91;
+      --c-accent-light: #bf360c;
+      --c-true: #81c784;
+      --c-true-bg: #1b3a23;
+      --c-false: #ef9a9a;
+      --c-false-bg: #3a1b1b;
+      --c-border: #333;
+      --c-muted: #999;
+      --c-text: #e0e0e0;
+      --c-card-bg: #1a1a2e;
+      --c-page-bg: #0f0f1a;
+    }
+
+    .exam-hero {
+      text-align: center; padding: 30px 0 12px;
+    }
+    .exam-hero .eyebrow {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-accent);
+      text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px;
+    }
+    .exam-hero h1 {
+      font-size: 1.9rem; font-weight: 700; color: var(--c-text); margin-bottom: 8px;
+    }
+    .exam-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 14px; }
+    .exam-hero .back-link {
+      font-size: 0.88rem; color: var(--c-accent); text-decoration: none; font-weight: 700;
+    }
+    .exam-hero .back-link:hover { text-decoration: underline; }
+
+    .meta-card {
+      background: linear-gradient(180deg, var(--c-accent-light) 0%, var(--c-card-bg) 100%);
+      border: 2px solid var(--c-accent); border-radius: 12px;
+      padding: 18px 24px; margin: 26px 0 28px;
+      box-shadow: 0 2px 12px rgba(191, 54, 12, 0.10);
+    }
+    body.dark .meta-card { background: linear-gradient(180deg, rgba(255,138,101,0.10) 0%, var(--c-card-bg) 100%); }
+    .meta-card h4 {
+      margin: 0 0 8px; font-size: 0.78rem; font-weight: 800;
+      color: var(--c-accent); text-transform: uppercase; letter-spacing: 0.7px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .meta-card .meta-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px 22px;
+      font-size: 0.92rem; line-height: 1.55;
+    }
+    .meta-card .meta-item .meta-label {
+      font-size: 0.72rem; font-weight: 700; color: var(--c-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .meta-card .meta-item .meta-value {
+      color: var(--c-text); font-weight: 600;
+    }
+
+    .question-block {
+      margin-top: 38px;
+    }
+    .question-block .q-head {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 3px solid var(--c-accent);
+    }
+    .question-block .q-num {
+      background: var(--c-accent); color: #fff;
+      padding: 6px 14px; border-radius: 6px;
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      font-size: 0.9rem; letter-spacing: 0.5px;
+    }
+    .question-block .q-title {
+      flex: 1;
+      font-size: 1.15rem; font-weight: 700; color: var(--c-text);
+    }
+    .question-block .q-marks {
+      font-size: 0.84rem; color: var(--c-muted); font-weight: 600;
+    }
+
+    .q-instruction {
+      font-size: 0.92rem; color: var(--c-text); line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    /* Sub-question card */
+    .subq {
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-accent);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin-bottom: 16px;
+    }
+    .subq .subq-head {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .subq .subq-label {
+      font-size: 0.78rem; font-weight: 800; color: var(--c-accent);
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .subq .subq-marks {
+      font-size: 0.74rem; color: var(--c-muted); font-weight: 600;
+      padding: 1px 8px; background: var(--c-accent-light); color: var(--c-accent);
+      border-radius: 9px;
+    }
+    body.dark .subq .subq-marks { background: var(--c-accent-light); }
+    .subq .subq-stmt {
+      font-size: 0.96rem; color: var(--c-text); line-height: 1.65; margin-bottom: 12px;
+    }
+    .subq .subq-stmt code, .subq .subq-stmt .mono {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-page-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.9em;
+    }
+    .subq blockquote {
+      margin: 8px 0; padding: 6px 14px;
+      border-left: 3px solid var(--c-border); font-style: italic;
+      color: var(--c-text); font-size: 0.92rem; line-height: 1.55;
+    }
+
+    /* MCQ */
+    .mcq-options { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 0; }
+    .mcq-option {
+      display: flex; align-items: center; gap: 12px;
+      padding: 9px 14px; border: 1px solid var(--c-border); border-radius: 6px;
+      cursor: pointer; transition: background 0.12s, border-color 0.12s;
+      font-size: 0.92rem; user-select: none;
+    }
+    .mcq-option:hover { background: var(--c-accent-light); border-color: var(--c-accent); }
+    .mcq-option .letter {
+      font-family: 'Roboto Mono', monospace; font-weight: 800;
+      width: 24px; text-align: center; color: var(--c-muted); flex-shrink: 0;
+    }
+    .mcq-option.correct { background: var(--c-true-bg); border-color: var(--c-true); color: var(--c-true); }
+    .mcq-option.correct .letter { color: var(--c-true); }
+    .mcq-option.wrong { background: var(--c-false-bg); border-color: var(--c-false); color: var(--c-false); }
+    .mcq-option.wrong .letter { color: var(--c-false); }
+    .mcq-feedback {
+      margin-top: 12px; padding: 12px 16px;
+      background: var(--c-page-bg); border-radius: 6px;
+      font-size: 0.9rem; line-height: 1.65; display: none;
+    }
+    .mcq-feedback.open { display: block; }
+    .mcq-feedback strong { color: var(--c-accent); }
+    .mcq-feedback.fb-correct strong { color: var(--c-true); }
+    .mcq-feedback.fb-wrong strong { color: var(--c-false); }
+    .mcq-feedback.fb-correct { border-left: 3px solid var(--c-true); padding-left: 12px; }
+    .mcq-feedback.fb-wrong { border-left: 3px solid var(--c-false); padding-left: 12px; }
+
+    /* Solution */
+    .solution-btn {
+      background: var(--c-accent-light); color: var(--c-accent);
+      border: 1px solid var(--c-accent); padding: 7px 16px; border-radius: 6px;
+      font-size: 0.86rem; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .solution-btn:hover { background: var(--c-accent); color: #fff; }
+    .solution-btn.open { background: var(--c-accent); color: #fff; }
+    .solution {
+      margin-top: 14px; padding: 16px 20px;
+      background: var(--c-page-bg); border-radius: 8px;
+      border-left: 3px solid var(--c-true);
+      font-size: 0.92rem; line-height: 1.7; color: var(--c-text); display: none;
+    }
+    .solution.open { display: block; }
+    .solution h5 {
+      margin: 0 0 8px; font-size: 0.74rem; font-weight: 800;
+      color: var(--c-true); text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .solution p { margin: 6px 0; }
+    .solution .mono, .solution code {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 1px 6px; border-radius: 3px; font-size: 0.92em;
+    }
+    .solution .step {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--c-card-bg); padding: 8px 12px; border-radius: 6px;
+      margin: 6px 0; font-size: 0.88rem; line-height: 1.7;
+      overflow-x: auto;
+    }
+    .solution .step-block {
+      display: flex; gap: 12px; align-items: baseline;
+      padding: 4px 0;
+    }
+    .solution .step-block .step-tag {
+      min-width: 90px;
+      font-size: 0.72rem; font-weight: 700; color: var(--c-muted);
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .solution .end-of-proof {
+      font-weight: 800; color: var(--c-true); float: right;
+    }
+    .solution strong { color: var(--c-accent); }
+
+    /* Truth table for Q4.B */
+    .truth-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'Roboto Mono', monospace; font-size: 0.86rem;
+      margin: 10px 0;
+    }
+    .truth-table th, .truth-table td {
+      padding: 6px 10px; border: 1px solid var(--c-border);
+      text-align: center;
+    }
+    .truth-table th {
+      background: var(--c-page-bg); color: var(--c-text); font-weight: 800;
+      font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .truth-table th.prem { background: var(--c-accent-light); color: var(--c-accent); }
+    .truth-table th.concl { background: var(--c-primary-light); color: var(--c-primary); }
+    .truth-table td.t { background: var(--c-true-bg); color: var(--c-true); font-weight: 700; }
+    .truth-table td.f { background: var(--c-false-bg); color: var(--c-false); font-weight: 700; }
+    .truth-table tr.critical td { box-shadow: inset 0 0 0 9999px #fff9c4; color: #5d4037 !important; }
+    body.dark .truth-table tr.critical td { box-shadow: inset 0 0 0 9999px #4e4322; color: #ffe082 !important; }
+    .truth-table tr.critical td.t { background: var(--c-true-bg); color: var(--c-true) !important; box-shadow: none; }
+
+    .verdict {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 16px;
+      font-size: 0.88rem; font-weight: 700; margin-top: 10px;
+    }
+    .verdict.ok { background: var(--c-true-bg); color: var(--c-true); }
+    .verdict.no { background: var(--c-false-bg); color: var(--c-false); }
+
+    .nav-fab {
+      position: fixed; top: 100px; right: 18px; z-index: 30;
+      display: flex; flex-direction: column; gap: 6px;
+      max-width: 220px;
+    }
+    .nav-fab a {
+      display: inline-block; padding: 6px 12px;
+      background: var(--c-card-bg); border: 1px solid var(--c-border);
+      border-radius: 6px; font-size: 0.82rem;
+      color: var(--c-text); text-decoration: none; text-align: left;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .nav-fab a:hover {
+      background: var(--c-accent); color: #fff; border-color: var(--c-accent);
+      text-decoration: none;
+    }
+    .nav-fab .nav-fab-label {
+      font-size: 0.66rem; font-weight: 800; color: var(--c-accent);
+      text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 0 8px 4px;
+    }
+    @media (max-width: 980px) { .nav-fab { position: static; max-width: 100%; flex-direction: row; flex-wrap: wrap; margin: 18px 0 0; } }
+
+    @media (max-width: 640px) {
+      .exam-hero h1 { font-size: 1.4rem; }
+      .subq { padding: 14px 16px; }
+    }
+
+    /* Print / key-mode layout */
+    @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+    @media print {
+      .page-header, .page-footer, .nav-fab, .solution-btn, .exam-hero .back-link { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .page-body { padding-top: 0 !important; }
+      .home-section { padding-top: 0 !important; }
+      .question-block { break-inside: avoid; page-break-inside: avoid; }
+      .subq { break-inside: avoid; page-break-inside: avoid; }
+      .solution { display: block !important; }
+      .mcq-feedback { display: block !important; }
+      a { color: inherit !important; text-decoration: none !important; }
+      .exam-hero h1 { font-size: 1.6rem; }
+    }
+    body.key-mode .page-header,
+    body.key-mode .page-footer,
+    body.key-mode .nav-fab,
+    body.key-mode .exam-hero .back-link { display: none !important; }
+    body.key-mode .page-body { padding-top: 20px !important; }
+  </style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <aside class="nav-fab" id="nav-fab">
+    <div class="nav-fab-label">Jump to</div>
+    <a href="#result">Your result</a>
+    <a href="#q1">Question 1 &middot; MCQ</a>
+    <a href="#q2">Question 2 &middot; Sequences</a>
+    <a href="#q3">Question 3 &middot; Sets</a>
+    <a href="#q4">Question 4 &middot; Induction &amp; sets</a>
+  </aside>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="exam-hero">
+          <div class="eyebrow"><i class="fas fa-file-signature"></i> &nbsp;COMP233 &middot; Second Exam &amp; Answers</div>
+          <h1>Second Exam: Worked Solutions</h1>
+          <div class="subtitle">Discrete Mathematics (COMP 233) &middot; Section 9 &middot; Second Semester 2025/2026</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="meta-card">
+          <h4><i class="fas fa-info-circle"></i> About this paper</h4>
+          <p style="margin:0 0 14px;font-size:0.95rem;line-height:1.65;color:var(--c-text);"><strong style="color:var(--c-accent);">Now posted:</strong> worked solutions to every question, plus your own mark and my feedback (sign in with your Birzeit ID to see yours). This is the Second Exam, covering <strong>Chapters 5 and 6</strong>: sequences and summation, mathematical induction, and set theory. Below are worked solutions to every question in the way we did them in class, each tied to the Epp section it draws on. Work each question on paper first, then click <em>Show solution</em>; for Q1, click any option to check it.</p>
+          <div class="meta-grid">
+            <div class="meta-item"><div class="meta-label">Course</div><div class="meta-value">Discrete Mathematics (COMP 233)</div></div>
+            <div class="meta-item"><div class="meta-label">Section</div><div class="meta-value">9</div></div>
+            <div class="meta-item"><div class="meta-label">Semester</div><div class="meta-value">Second Semester 2025/2026</div></div>
+            <div class="meta-item"><div class="meta-label">Chapters</div><div class="meta-value">Epp Ch 5 (Sequences &amp; Induction), Ch 6 (Set Theory)</div></div>
+            <div class="meta-item"><div class="meta-label">Questions</div><div class="meta-value">4</div></div>
+            <div class="meta-item"><div class="meta-label">Total</div><div class="meta-value">100 marks &middot; 60 minutes</div></div>
+          </div>
+        </div>
+
+        <!-- ==================== YOUR RESULT ==================== -->
+        <div class="meta-card" id="result" style="border-color:var(--c-primary);background:linear-gradient(180deg,var(--c-primary-light) 0%,var(--c-card-bg) 100%);">
+          <h4 style="color:var(--c-primary);"><i class="fas fa-user-graduate"></i> Your result &amp; feedback</h4>
+          <p style="margin:0 0 12px;font-size:0.95rem;line-height:1.6;color:var(--c-text);">You are signed in with your Birzeit ID. Load your own mark and my feedback for this paper below. Only your own row is fetched, and nothing is kept on this page. This personal view is available until 9 July 2026.</p>
+          <div id="resultBody">
+            <button id="loadResultBtn" type="button" class="solution-btn">Show my result</button>
+            <div id="resultOut" style="margin-top:14px;"></div>
+          </div>
+        </div>
+
+        <!-- ==================== Q1 MCQ ==================== -->
+        <div class="question-block" id="q1">
+          <div class="q-head"><div class="q-num">Q1</div><div class="q-title">Multiple choice</div><div class="q-marks">[ 21 marks ]</div></div>
+          <div class="q-instruction">Fill one correct answer for each branch (3 marks each). Click any option to check it.</div>
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.1</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">Which A(an) <u>&nbsp;&nbsp;&nbsp;&nbsp;</u> is a sequence of the form <code>a + ar + ar&sup2; + &hellip; + ar<sup>n</sup> + &hellip;</code>?</div>
+            <div class="mcq-options" data-q="1">
+            <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>Arithmetic progression</span></div>
+<div class="mcq-option" data-i="1"><span class="letter">b.</span><span>Geometric progression</span></div>
+<div class="mcq-option" data-i="2"><span class="letter">c.</span><span>Fibonacci</span></div>
+<div class="mcq-option" data-i="3"><span class="letter">d.</span><span>Floor function</span></div>
+</div>
+            <div class="mcq-feedback"></div>
+          </div><div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.2</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">Which set identity is the correct translation of the Logical <strong>Absorption Law</strong> into set theory?</div>
+            <div class="mcq-options" data-q="2">
+            <div class="mcq-option" data-i="0"><span class="letter">a.</span><span><code>A &cup; (A &cap; B) = A</code></span></div>
+<div class="mcq-option" data-i="1"><span class="letter">b.</span><span><code>A &cap; (B &cup; C) = (A &cap; B) &cup; (A &cap; C)</code></span></div>
+<div class="mcq-option" data-i="2"><span class="letter">c.</span><span><code>A &minus; B = A &cap; B<sup>c</sup></code></span></div>
+<div class="mcq-option" data-i="3"><span class="letter">d.</span><span><code>(A &cup; B)<sup>c</sup> = A<sup>c</sup> &cap; B<sup>c</sup></code></span></div>
+</div>
+            <div class="mcq-feedback"></div>
+          </div><div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.3</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">The set <code>S</code> of odd positive integers less than 7 in set-builder notation is:</div>
+            <div class="mcq-options" data-q="3">
+            <div class="mcq-option" data-i="0"><span class="letter">a.</span><span><code>S = {x &isin; R<sup>+</sup> | x is odd and x &lt; 7}</code></span></div>
+<div class="mcq-option" data-i="1"><span class="letter">b.</span><span><code>S = {x &isin; Z<sup>+</sup> | x is odd and x &lt; 7}</code></span></div>
+<div class="mcq-option" data-i="2"><span class="letter">c.</span><span><code>S = {x | x is odd and x &lt; 7}</code></span></div>
+<div class="mcq-option" data-i="3"><span class="letter">d.</span><span><code>S = &empty;</code></span></div>
+</div>
+            <div class="mcq-feedback"></div>
+          </div><div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.4</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">If <code>|P(A)| = 32</code> and <code>|P(B)| = 8</code>, then <code>|A &times; B|</code> is:</div>
+            <div class="mcq-options" data-q="4">
+            <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>15 elements</span></div>
+<div class="mcq-option" data-i="1"><span class="letter">b.</span><span>40 elements</span></div>
+<div class="mcq-option" data-i="2"><span class="letter">c.</span><span>256 elements</span></div>
+<div class="mcq-option" data-i="3"><span class="letter">d.</span><span>24 elements</span></div>
+</div>
+            <div class="mcq-feedback"></div>
+          </div><div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.5</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">In the inductive step of proving <code>1&middot;2 + 2&middot;3 + &hellip; + n(n+1) = n(n+1)(n+2)/3</code>, which term is added to both sides to go from <code>P(k)</code> to <code>P(k+1)</code>?</div>
+            <div class="mcq-options" data-q="5">
+            <div class="mcq-option" data-i="0"><span class="letter">a.</span><span><code>k(k+1)</code></span></div>
+<div class="mcq-option" data-i="1"><span class="letter">b.</span><span><code>(k+1)(k+2)</code></span></div>
+<div class="mcq-option" data-i="2"><span class="letter">c.</span><span><code>k(k+2)</code></span></div>
+<div class="mcq-option" data-i="3"><span class="letter">d.</span><span><code>(k+1)&sup2;</code></span></div>
+</div>
+            <div class="mcq-feedback"></div>
+          </div><div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.6</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">The double sum <code>&Sigma;<sub>i=0</sub><sup>2</sup> &Sigma;<sub>j=0</sub><sup>3</sup> j</code> equals:</div>
+            <div class="mcq-options" data-q="6">
+            <div class="mcq-option" data-i="0"><span class="letter">a.</span><span>18</span></div>
+<div class="mcq-option" data-i="1"><span class="letter">b.</span><span>6i</span></div>
+<div class="mcq-option" data-i="2"><span class="letter">c.</span><span>6j</span></div>
+<div class="mcq-option" data-i="3"><span class="letter">d.</span><span>12</span></div>
+</div>
+            <div class="mcq-feedback"></div>
+          </div><div class="subq">
+            <div class="subq-head"><div class="subq-label">Q1.7</div><div class="subq-marks">3 marks</div></div>
+            <div class="subq-stmt">Most simplified form of the Boolean expression <code>(A + B&#773;)(A + C&#773;)(B + C)</code>.</div>
+            <div class="mcq-feedback open" style="display:block;"><strong>Solution under review.</strong> This branch is being checked against the paper before the worked answer is posted. It will appear here shortly.</div>
+          </div>
+        </div>
+
+        <!-- ==================== Q2 ==================== -->
+        <div class="question-block" id="q2">
+          <div class="q-head"><div class="q-num">Q2</div><div class="q-title">Sequences and summation</div><div class="q-marks">[ 15 marks ]</div></div>
+          <div class="q-instruction">The number of ancestors a node can trace back at level <code>k</code> is <code>A<sub>k</sub> = 2<sup>k</sup></code>.</div>
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q2.a.1</div><div class="subq-marks">5 marks</div></div>
+            <div class="subq-stmt">Express the total number of ancestors across all levels from 1 to <code>n</code> using a single summation.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2a1">Show solution</button>
+            <div class="solution" id="sol-q2a1"><h5>Worked solution</h5>
+              <p>Level <code>k</code> contributes <code>A<sub>k</sub> = 2<sup>k</sup></code> ancestors. Summing over the levels <code>k = 1</code> to <code>n</code>:</p>
+              <p style="text-align:center;">$$\text{Total} = \sum_{k=1}^{n} 2^{k}$$</p>
+              <p style="font-size:0.8rem;color:var(--c-muted);margin-top:12px;"><i class="fas fa-book"></i> &nbsp;Epp, Section 5.1 (Sequences and summation notation).</p>
+            </div>
+          </div>
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q2.a.2</div><div class="subq-marks">10 marks</div></div>
+            <div class="subq-stmt">Prove, by expanding the terms and applying the geometric-series formula, that this sum has the closed form <code>2<sup>n+1</sup> &minus; 2</code>.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2a2">Show solution</button>
+            <div class="solution" id="sol-q2a2"><h5>Worked solution</h5>
+              <p>The terms <code>2 + 4 + 8 + &hellip; + 2<sup>n</sup></code> form a geometric series with first term <code>a = 2</code>, common ratio <code>r = 2</code>, and <code>n</code> terms. The geometric-sum formula gives:</p>
+              <p style="text-align:center;">$$\sum_{k=1}^{n} 2^{k} = a\cdot\frac{r^{n}-1}{r-1} = 2\cdot\frac{2^{n}-1}{2-1} = 2(2^{n}-1) = 2^{n+1}-2.$$</p>
+              <p>The same result follows by expansion: <code>2 + 4 + &hellip; + 2<sup>n</sup></code> doubles and telescopes to <code>2<sup>n+1</sup> &minus; 2</code>. &#8718;</p>
+              <p style="font-size:0.8rem;color:var(--c-muted);margin-top:12px;"><i class="fas fa-book"></i> &nbsp;Epp, Section 5.2 (Sums of geometric sequences).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== Q3 ==================== -->
+        <div class="question-block" id="q3">
+          <div class="q-head"><div class="q-num">Q3</div><div class="q-title">Factorials and set theory</div><div class="q-marks">[ 35 marks ]</div></div>
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q3.a</div><div class="subq-marks">10 marks</div></div>
+            <div class="subq-stmt">Prove algebraically that for any integer <code>n &ge; 1</code>, <code>(2n)! / (2(n&minus;1))! = 4n&sup2; &minus; 2n</code>, using the recursive meaning of factorial and no factorial notation in the final answer.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3a">Show solution</button>
+            <div class="solution" id="sol-q3a"><h5>Worked solution</h5>
+              <p>First simplify the denominator: <code>2(n &minus; 1) = 2n &minus; 2</code>, so we have <code>(2n)! / (2n&minus;2)!</code>.</p>
+              <p>Unfold the top two factors of <code>(2n)!</code> down to <code>(2n&minus;2)!</code>:</p>
+              <p style="text-align:center;">$$\frac{(2n)!}{(2n-2)!} = \frac{(2n)(2n-1)\,(2n-2)!}{(2n-2)!} = (2n)(2n-1).$$</p>
+              <p>The <code>(2n&minus;2)!</code> cancels, leaving <code>(2n)(2n &minus; 1) = 4n&sup2; &minus; 2n</code>. &#8718;</p>
+              <p style="font-size:0.8rem;color:var(--c-muted);margin-top:12px;"><i class="fas fa-book"></i> &nbsp;Epp, Section 5.1 (Factorial and the recursive definition).</p>
+            </div>
+          </div>
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q3.b</div><div class="subq-marks">25 marks</div></div>
+            <div class="subq-stmt">Universal set <code>Z</code>. <code>A = {x &isin; Z | 1 &le; x &le; 6}</code>, <code>B = {x &isin; A | x is even}</code>, <code>C = {x &isin; Z | x = 2k+1 for some integer k}</code> (the odd integers).</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3b">Show solution</button>
+            <div class="solution" id="sol-q3b"><h5>Worked solution</h5>
+              <p><strong>(1) Roster form.</strong> <code>A = {1,2,3,4,5,6}</code>, so the even members give <code>B = {2, 4, 6}</code>. The odd integers intersected with <code>A</code> give <code>A &cap; C = {1, 3, 5}</code>.</p>
+              <p><strong>(2) Set difference and its relationship.</strong> <code>A &minus; B = {1, 3, 5}</code> (the members of <code>A</code> not in <code>B</code>). By the definition of set difference,</p>
+              <p style="text-align:center;">$$A - B = A \cap B^{c},$$</p>
+              <p>the elements that are in <code>A</code> <em>and</em> not in <code>B</code>. Here that set also happens to equal <code>A &cap; C = {1,3,5}</code>, since within <code>A</code> "not even" and "odd" describe the same elements.</p>
+              <p><strong>(3) Is <code>&#119964; = {B, A&minus;B}</code> a partition of <code>A</code>?</strong> Yes. With <code>B = {2,4,6}</code> and <code>A&minus;B = {1,3,5}</code>, all three partition conditions hold:</p>
+              <ul style="font-size:0.9rem;line-height:1.7;">
+                <li><strong>Non-empty blocks:</strong> both <code>{2,4,6}</code> and <code>{1,3,5}</code> are non-empty.</li>
+                <li><strong>Mutually disjoint:</strong> <code>B &cap; (A&minus;B) = &empty;</code>.</li>
+                <li><strong>Union covers A:</strong> <code>{2,4,6} &cup; {1,3,5} = {1,2,3,4,5,6} = A</code>.</li>
+              </ul>
+              <p>All three hold, so <code>&#119964;</code> is a valid partition of <code>A</code>. &#8718;</p>
+              <p style="font-size:0.8rem;color:var(--c-muted);margin-top:12px;"><i class="fas fa-book"></i> &nbsp;Epp, Section 6.1 (Set operations, difference, and partitions).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== Q4 ==================== -->
+        <div class="question-block" id="q4">
+          <div class="q-head"><div class="q-num">Q4</div><div class="q-title">Induction and set identities</div><div class="q-marks">[ 30 marks ]</div></div>
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q4.a</div><div class="subq-marks">20 marks</div></div>
+            <div class="subq-stmt">Prove by mathematical induction that for all integers <code>n &ge; 1</code>, <code>1&sup3; + 2&sup3; + &hellip; + n&sup3; = [n(n+1)/2]&sup2;</code>. Label the basis, hypothesis, and inductive step.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q4a">Show solution</button>
+            <div class="solution" id="sol-q4a"><h5>Worked solution</h5>
+              <p><strong>Basis (n = 1).</strong> LHS <code>= 1&sup3; = 1</code>; RHS <code>= [1&middot;2/2]&sup2; = 1</code>. They agree. &#10004;</p>
+              <p><strong>Inductive hypothesis.</strong> Assume for some <code>k &ge; 1</code> that <code>&Sigma;<sub>i=1</sub><sup>k</sup> i&sup3; = [k(k+1)/2]&sup2;</code>.</p>
+              <p><strong>Inductive step.</strong> Add <code>(k+1)&sup3;</code> to both sides:</p>
+              <p style="text-align:center;">$$\sum_{i=1}^{k+1} i^{3} = \left[\frac{k(k+1)}{2}\right]^{2} + (k+1)^{3} = (k+1)^{2}\left[\frac{k^{2}}{4} + (k+1)\right] = (k+1)^{2}\cdot\frac{k^{2}+4k+4}{4} = \left[\frac{(k+1)(k+2)}{2}\right]^{2}.$$</p>
+              <p>This is the formula at <code>n = k+1</code>. By the principle of mathematical induction it holds for all <code>n &ge; 1</code>. &#8718;</p>
+              <p style="font-size:0.8rem;color:var(--c-muted);margin-top:12px;"><i class="fas fa-book"></i> &nbsp;Epp, Section 5.3 (Mathematical induction).</p>
+            </div>
+          </div>
+          <div class="subq">
+            <div class="subq-head"><div class="subq-label">Q4.b</div><div class="subq-marks">10 marks</div></div>
+            <div class="subq-stmt">Prove the set identity <code>(A &cup; B) &cap; (A &cup; B<sup>c</sup>) = A</code> algebraically, naming the law used at each step.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q4b">Show solution</button>
+            <div class="solution" id="sol-q4b"><h5>Worked solution</h5>
+              <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin:6px 0;">
+                <tr><td style="padding:6px 10px;border-bottom:1px solid var(--c-border);"><code>(A &cup; B) &cap; (A &cup; B<sup>c</sup>) = A &cup; (B &cap; B<sup>c</sup>)</code></td><td style="padding:6px 10px;border-bottom:1px solid var(--c-border);color:var(--c-muted);">Distributive law</td></tr>
+                <tr><td style="padding:6px 10px;border-bottom:1px solid var(--c-border);"><code>= A &cup; &empty;</code></td><td style="padding:6px 10px;border-bottom:1px solid var(--c-border);color:var(--c-muted);">Complement law</td></tr>
+                <tr><td style="padding:6px 10px;"><code>= A</code></td><td style="padding:6px 10px;color:var(--c-muted);">Identity law</td></tr>
+              </table>
+              <p>Hence <code>(A &cup; B) &cap; (A &cup; B<sup>c</sup>) = A</code>. &#8718;</p>
+              <p style="font-size:0.8rem;color:var(--c-muted);margin-top:12px;"><i class="fas fa-book"></i> &nbsp;Epp, Section 6.2 (Set identities and Boolean algebra).</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+
+    /* MCQ interactivity */
+    const ANSWERS = {
+      1: { correct: 1, why: 'A sum of the form <code>a + ar + ar&sup2; + &hellip;</code> multiplies by a fixed ratio <code>r</code> each step, so it is a <strong>(b) geometric progression</strong>. An arithmetic progression <em>adds</em> a fixed amount each step.' },
+      2: { correct: 0, why: 'The absorption law is <code>A &cup; (A &cap; B) = A</code> (and dually <code>A &cap; (A &cup; B) = A</code>): the inner term is absorbed. So <strong>(a)</strong>. Option (b) is the distributive law, (c) the definition of difference, (d) a De Morgan law.' },
+      3: { correct: 1, why: '"Odd positive integers less than 7" needs the universe of positive integers, <code>Z<sup>+</sup></code>, with the conditions "odd" and <code>x &lt; 7</code>. So <strong>(b)</strong>. Option (a) uses the reals <code>R<sup>+</sup></code>, which is too wide; (c) leaves the universe unstated.' },
+      4: { correct: 0, why: 'From <code>|P(A)| = 2<sup>|A|</sup> = 32</code> we get <code>|A| = 5</code>; from <code>|P(B)| = 2<sup>|B|</sup> = 8</code> we get <code>|B| = 3</code>. Then <code>|A &times; B| = |A|&middot;|B| = 5&middot;3 = 15</code>. So <strong>(a) 15</strong>.' },
+      5: { correct: 1, why: 'The general term of the sum is <code>i(i+1)</code>, so going from <code>P(k)</code> to <code>P(k+1)</code> adds the <code>(k+1)</code>-th term: <code>(k+1)((k+1)+1) = (k+1)(k+2)</code>. So <strong>(b)</strong>.' },
+      6: { correct: 0, why: 'The inner sum does not depend on <code>i</code>: <code>&Sigma;<sub>j=0</sub><sup>3</sup> j = 0+1+2+3 = 6</code>. The outer index runs <code>i = 0,1,2</code>, i.e. three copies: <code>3 &times; 6 = 18</code>. So <strong>(a) 18</strong>. Options (b) and (c) wrongly keep a free index in a fully evaluated sum.' },
+    };
+
+    document.querySelectorAll('.mcq-options').forEach(function (group) {
+      const qNum = +group.dataset.q;
+      const ans = ANSWERS[qNum];
+      const feedback = group.parentElement.querySelector('.mcq-feedback');
+      group.querySelectorAll('.mcq-option').forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          const choice = +opt.dataset.i;
+          group.querySelectorAll('.mcq-option').forEach(function (o) { o.classList.remove('correct'); o.classList.remove('wrong'); });
+          const isCorrect = choice === ans.correct;
+          if (isCorrect) {
+            opt.classList.add('correct');
+          } else {
+            opt.classList.add('wrong');
+            const right = group.querySelectorAll('.mcq-option')[ans.correct];
+            right.classList.add('correct');
+          }
+          feedback.classList.remove('fb-correct', 'fb-wrong');
+          feedback.classList.add(isCorrect ? 'fb-correct' : 'fb-wrong');
+          feedback.innerHTML = '<strong>' + (isCorrect ? '✓ Correct.' : '✗ Incorrect.') + '</strong> ' + ans.why;
+          feedback.classList.add('open');
+        });
+      });
+    });
+
+    /* Solution toggles */
+    document.querySelectorAll('[data-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const sol = document.getElementById(btn.dataset.toggle);
+        const isOpen = sol.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.textContent = isOpen ? 'Hide solution' : 'Show solution';
+      });
+    });
+
+    /* Key/print mode: ?key=1 expands every solution and marks the correct MCQ. */
+    if (/[?&]key=1/.test(window.location.search)) {
+      document.body.classList.add('key-mode');
+      document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('open'); });
+      document.querySelectorAll('.solution-btn').forEach(function (b) { b.style.display = 'none'; });
+      document.querySelectorAll('.mcq-options').forEach(function (group) {
+        const qNum = +group.dataset.q;
+        const ans = ANSWERS[qNum];
+        if (!ans) return;
+        const feedback = group.parentElement.querySelector('.mcq-feedback');
+        const right = group.querySelectorAll('.mcq-option')[ans.correct];
+        right.classList.add('correct');
+        feedback.classList.add('fb-correct');
+        feedback.innerHTML = '<strong>✓ Answer.</strong> ' + ans.why;
+        feedback.classList.add('open');
+      });
+    }
+  </script>
+
+  <script>
+  (function(){
+    'use strict';
+    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoJo0jG7fu2ccTBQj_FmdCxaEm9zdi7je1LvF9XB1C_ndWrHbaH5MCcCEqY8ZrRuHKYA/exec';
+    var EXAM = 'second';
+    var btn = document.getElementById('loadResultBtn');
+    var out = document.getElementById('resultOut');
+    if(!btn) return;
+    function esc(s){ var d=document.createElement('div'); d.textContent = (s==null?'':String(s)); return d.innerHTML; }
+    function storedId(){ try { return localStorage.getItem('birzeit_visitor_id'); } catch(e){ return null; } }
+    function box(msg,kind){
+      var c = kind==='err' ? 'var(--c-false)' : 'var(--c-muted)';
+      return '<div style="font-size:0.92rem;color:'+c+';">'+msg+'</div>';
+    }
+    function render(d){
+      if(!d || !d.found){
+        out.innerHTML = box('No result was found for that ID. If you think this is a mistake, please contact the instructor.','err');
+        return;
+      }
+      var rows = [['Q1 &middot; MCQ', d.q1, 21],['Q2 &middot; Sequences', d.q2, 15],['Q3 &middot; Sets', d.q3, 35],['Q4 &middot; Induction &amp; sets', d.q4, 30]];
+      var t = '<table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin:10px 0;">';
+      rows.forEach(function(r){
+        t += '<tr><td style="padding:5px 10px;border-bottom:1px solid var(--c-border);">'+r[0]+'</td>'
+          +  '<td style="padding:5px 10px;border-bottom:1px solid var(--c-border);text-align:right;font-family:Roboto Mono,monospace;">'
+          +  (r[1]==null||r[1]===''?'&ndash;':esc(r[1]))+' <span style="color:var(--c-muted);">/ '+r[2]+'</span></td></tr>';
+      });
+      t += '</table>';
+      var fb = d.feedback ? '<div style="margin-top:12px;padding:12px 14px;background:var(--c-accent-light);border-left:3px solid var(--c-accent);border-radius:6px;font-size:0.92rem;line-height:1.6;color:var(--c-text);">'+esc(d.feedback)+'</div>' : '';
+      out.innerHTML = '<div style="font-size:1.6rem;font-weight:700;color:var(--c-primary);margin-bottom:4px;">'+esc(d.mark)+' <span style="font-size:1rem;color:var(--c-muted);font-weight:400;">/ 100</span></div>'+t+fb;
+    }
+    function getIp(cb){
+      var done=false;
+      function fin(v){ if(!done){ done=true; cb(v||''); } }
+      try{
+        var x=new XMLHttpRequest();
+        x.open('GET','https://api.ipify.org?format=json',true);
+        x.timeout=3000;
+        x.onreadystatechange=function(){ if(x.readyState===4){ var ip=''; try{ ip=JSON.parse(x.responseText).ip||''; }catch(e){} fin(ip); } };
+        x.onerror=function(){ fin(''); };
+        x.ontimeout=function(){ fin(''); };
+        x.send();
+      }catch(e){ fin(''); }
+      setTimeout(function(){ fin(''); },3500);
+    }
+    function load(){
+      var id = storedId();
+      if(!id || !/^\d{7}$/.test(id)){
+        out.innerHTML = box('Please sign in with your 7-digit Birzeit ID first (reload the page if the sign-in box did not appear).','err');
+        return;
+      }
+      out.innerHTML = box('Loading your result&hellip;');
+      getIp(function(ip){
+        var cb = '__cmp233res_' + Date.now();
+        var done = false;
+        var s = document.createElement('script');
+        var timer = setTimeout(function(){ if(!done){ cleanup(); out.innerHTML = box('Could not reach the results service just now. Please try again in a moment.','err'); } }, 12000);
+        function cleanup(){ done=true; clearTimeout(timer); try{ delete window[cb]; }catch(e){ window[cb]=undefined; } if(s.parentNode) s.parentNode.removeChild(s); }
+        window[cb] = function(data){ cleanup(); render(data); };
+        s.onerror = function(){ cleanup(); out.innerHTML = box('Could not reach the results service just now. Please try again in a moment.','err'); };
+        s.src = APPS_SCRIPT_URL + '?action=result&exam=' + encodeURIComponent(EXAM) + '&id=' + encodeURIComponent(id) + '&ip=' + encodeURIComponent(ip) + '&callback=' + cb;
+        document.body.appendChild(s);
+      });
+    }
+    btn.addEventListener('click', load);
+  })();
+  </script>
+</body>
+</html>
