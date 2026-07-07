@@ -49,23 +49,45 @@
     return null;
   }
 
+  // Best-effort public-IP lookup (Apps Script cannot read the client IP itself).
+  // Used mainly to attach an IP to visitors whose ID is not on the roster.
+  function getIp(cb) {
+    var done = false;
+    function fin(v) { if (!done) { done = true; cb(v || ''); } }
+    try {
+      var x = new XMLHttpRequest();
+      x.open('GET', 'https://api.ipify.org?format=json', true);
+      x.timeout = 3000;
+      x.onreadystatechange = function () {
+        if (x.readyState === 4) { var ip = ''; try { ip = JSON.parse(x.responseText).ip || ''; } catch (e) {} fin(ip); }
+      };
+      x.onerror = function () { fin(''); };
+      x.ontimeout = function () { fin(''); };
+      x.send();
+    } catch (e) { fin(''); }
+    setTimeout(function () { fin(''); }, 3500);
+  }
+
   function logVisit(id) {
     if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('PASTE_') === 0) return;
-    try {
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          id: id,
-          page: location.pathname,
-          ts: new Date().toISOString(),
-          ua: navigator.userAgent,
-          ref: document.referrer || ''
-        }),
-        keepalive: true
-      });
-    } catch (e) { /* silent: gate must not block the page if logging fails */ }
+    getIp(function (ip) {
+      try {
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            id: id,
+            ip: ip,
+            page: location.pathname,
+            ts: new Date().toISOString(),
+            ua: navigator.userAgent,
+            ref: document.referrer || ''
+          }),
+          keepalive: true
+        });
+      } catch (e) { /* silent: gate must not block the page if logging fails */ }
+    });
   }
 
   function reveal() {
