@@ -660,16 +660,24 @@
         out.innerHTML = box('No result was found for that ID. If you think this is a mistake, please contact the instructor.','err');
         return;
       }
-      var rows = [['Q1 &middot; MCQ', d.q1, 21],['Q2 &middot; Sequences', d.q2, 15],['Q3 &middot; Sets', d.q3, 35],['Q4 &middot; Induction &amp; sets', d.q4, 30]];
-      var t = '<table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin:10px 0;">';
-      rows.forEach(function(r){
-        t += '<tr><td style="padding:5px 10px;border-bottom:1px solid var(--c-border);">'+r[0]+'</td>'
-          +  '<td style="padding:5px 10px;border-bottom:1px solid var(--c-border);text-align:right;font-family:Roboto Mono,monospace;">'
-          +  (r[1]==null||r[1]===''?'&ndash;':esc(r[1]))+' <span style="color:var(--c-muted);">/ '+r[2]+'</span></td></tr>';
+      var qs = [
+        ['Q1 &middot; Multiple choice', d.q1, 21, d.q1_note],
+        ['Q2 &middot; Sequences', d.q2, 15, d.q2_note],
+        ['Q3 &middot; Factorials &amp; sets', d.q3, 35, d.q3_note],
+        ['Q4 &middot; Induction &amp; set laws', d.q4, 30, d.q4_note]
+      ];
+      var body = '';
+      qs.forEach(function(q){
+        var score = (q[1]==null||q[1]==='') ? '&ndash;' : esc(q[1]);
+        var note = q[3] ? '<div style="font-size:0.86rem;line-height:1.5;color:var(--c-muted);margin-top:3px;">'+esc(q[3])+'</div>' : '';
+        body += '<div style="padding:9px 0;border-bottom:1px solid var(--c-border);">'
+          + '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">'
+          + '<span style="font-weight:600;color:var(--c-text);">'+q[0]+'</span>'
+          + '<span style="font-family:Roboto Mono,monospace;white-space:nowrap;color:var(--c-text);">'+score+' <span style="color:var(--c-muted);">/ '+q[2]+'</span></span>'
+          + '</div>' + note + '</div>';
       });
-      t += '</table>';
-      var fb = d.feedback ? '<div style="margin-top:12px;padding:12px 14px;background:var(--c-accent-light);border-left:3px solid var(--c-accent);border-radius:6px;font-size:0.92rem;line-height:1.6;color:var(--c-text);">'+esc(d.feedback)+'</div>' : '';
-      out.innerHTML = '<div style="font-size:1.6rem;font-weight:700;color:var(--c-primary);margin-bottom:4px;">'+esc(d.mark)+' <span style="font-size:1rem;color:var(--c-muted);font-weight:400;">/ 100</span></div>'+t+fb;
+      var overall = d.note ? '<div style="margin-top:12px;padding:10px 14px;background:var(--c-accent-light);border-left:3px solid var(--c-accent);border-radius:6px;font-size:0.9rem;line-height:1.55;color:var(--c-text);">'+esc(d.note)+'</div>' : '';
+      out.innerHTML = '<div style="font-size:1.7rem;font-weight:700;color:var(--c-primary);margin-bottom:8px;">'+esc(d.mark)+' <span style="font-size:1rem;color:var(--c-muted);font-weight:400;">/ 100</span></div>'+body+overall;
     }
     function getIp(cb){
       var done=false;
