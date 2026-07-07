@@ -9,7 +9,7 @@
  * If a visitor never passed a gate, id is 'anon'.
  */
 (function () {
-  var ENDPOINT = "https://script.google.com/macros/s/AKfycbxoJo0jG7fu2ccTBQj_FmdCxaEm9zdi7je1LvF9XB1C_ndWrHbaH5MCcCEqY8ZrRuHKYA/exec";
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbyrcxlN6GvNYsGdTAafVFV4Fy7t6USf_mUdrHSVAGdquyKzryaDKG-hYNSYi-0a_9yfJA/exec";
 
   function vid() {
     try { return localStorage.getItem('birzeit_visitor_id') || 'anon'; }

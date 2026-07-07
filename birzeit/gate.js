@@ -24,7 +24,7 @@
   var INSTRUCTOR_TOKEN = 'HI-2386';
   // PASTE the deployed Apps Script /exec URL between the quotes.
   // Until this is filled in, the gate still works locally; logging is skipped.
-  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoJo0jG7fu2ccTBQj_FmdCxaEm9zdi7je1LvF9XB1C_ndWrHbaH5MCcCEqY8ZrRuHKYA/exec';
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrcxlN6GvNYsGdTAafVFV4Fy7t6USf_mUdrHSVAGdquyKzryaDKG-hYNSYi-0a_9yfJA/exec';
   // --------------------------------
 
   var stored = null;
