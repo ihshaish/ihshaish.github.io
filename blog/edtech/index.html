@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="Education Technology library: curated papers, news, videos and examples of technology in teaching and learning." />
+
+  <title>Education Technology | Blog | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+        <div class="blog-hero">
+          <p style="margin-bottom:0.3rem; font-size:0.88rem;"><a href="/blog/">Blog</a> / Education Technology</p>
+          <h1>Education Technology</h1>
+          <p>
+            A curated library on technology in teaching and learning: papers worth reading, news worth
+            knowing about, videos worth the time, and examples worth studying. Curated means selective;
+            an item is here because it changed how I think about teaching with technology, not because it
+            is recent.
+          </p>
+        </div>
+
+        <div style="max-width: 780px; margin: 0 auto;">
+
+          <div class="lib-filters" id="lib-filters">
+            <button data-type="all" class="active">All</button>
+            <button data-type="paper">Papers</button>
+            <button data-type="news">News &amp; reports</button>
+            <button data-type="video">Videos</button>
+            <button data-type="example">Examples</button>
+          </div>
+
+          <div id="library"><p style="color:#767574;">Loading the library&hellip;</p></div>
+
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    var MONTHS = ["January","February","March","April","May","June",
+                  "July","August","September","October","November","December"];
+    var items = [];
+
+    function fmtDate(d) {
+      if (!d) return "";
+      var parts = d.split("-");
+      var y = parts[0], m = parseInt(parts[1], 10);
+      return (m >= 1 && m <= 12 ? MONTHS[m - 1] + " " : "") + y;
+    }
+
+    function esc(s) {
+      var div = document.createElement("div");
+      div.appendChild(document.createTextNode(s || ""));
+      return div.innerHTML;
+    }
+
+    function ytId(url) {
+      var m = (url || "").match(/(?:youtube(?:-nocookie)?\.com\/watch\?v=|youtu\.be\/|youtube(?:-nocookie)?\.com\/embed\/)([\w-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    function render(filter) {
+      var out = items.filter(function (it) {
+        return filter === "all" || it.type === filter;
+      }).map(function (it) {
+        var meta = [esc(it.source), fmtDate(it.date)].filter(Boolean).join(" &middot; ");
+        var html = '<div class="lib-item' + (it.featured ? ' featured' : '') + '">' +
+          '<h3><a href="' + esc(it.url) + '" target="_blank" rel="noopener">' + esc(it.title) + '</a></h3>' +
+          '<div class="lib-meta">' + meta + '</div>';
+        if (it.quote) {
+          html += '<div class="lib-quote">&ldquo;' + esc(it.quote) + '&rdquo;</div>';
+        }
+        var vid = it.type === "video" ? ytId(it.url) : null;
+        if (vid) {
+          html += '<div class="lib-video"><iframe src="https://www.youtube-nocookie.com/embed/' + vid + '"' +
+            ' title="' + esc(it.title) + '" loading="lazy" allowfullscreen' +
+            ' allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>';
+        }
+        if (it.blurb) {
+          html += '<p class="blurb">' + esc(it.blurb) + '</p>';
+        }
+        if (it.links && it.links.length) {
+          html += '<div class="lib-links">' + it.links.map(function (l) {
+            return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + ' &rarr;</a>';
+          }).join("") + '</div>';
+        }
+        return html + '</div>';
+      }).join("");
+      document.getElementById("library").innerHTML =
+        out || '<p style="color:#767574;">Nothing in this category yet.</p>';
+    }
+
+    document.getElementById("lib-filters").addEventListener("click", function (e) {
+      var btn = e.target.closest("button");
+      if (!btn) return;
+      this.querySelectorAll("button").forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      render(btn.getAttribute("data-type"));
+    });
+
+    fetch("/blog/edtech/library.json")
+      .then(function (r) { return r.json(); })
+      .then(function (data) { items = data.items || []; render("all"); })
+      .catch(function () {
+        document.getElementById("library").innerHTML =
+          '<p style="color:#767574;">The library could not be loaded. If you are viewing this page from the filesystem, serve it over HTTP instead.</p>';
+      });
+  })();
+  </script>
+
+</body>
+</html>

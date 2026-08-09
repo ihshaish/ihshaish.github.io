@@ -1,0 +1,103 @@
+{
+  "_readme": "Education Technology library. Add new items to the top of the list. Fields: type (paper | news | video | example), title, url, source, date (YYYY-MM, approximate is fine), blurb. The page renders and filters this file.",
+  "items": [
+    {
+      "type": "news",
+      "title": "How can we better identify when a child needs more challenge, or more support?",
+      "url": "https://www.linkedin.com/posts/explore-learning_how-can-we-better-identify-when-a-child-needs-activity-7483467808668909568-6Msn",
+      "source": "Explore Learning at the UK Festival of Education, Wellington College",
+      "date": "2026-07",
+      "blurb": "Our talk at this year's Festival of Education (2 and 3 July), summarised in this post: the work I lead at Explore Learning on an algorithm for finding each child's optimal zone of proximal development, pairing data science with educator judgement to decide what support, when, and why. We are looking for schools, trusts and research partners to test it with."
+    },
+    {
+      "type": "news",
+      "featured": true,
+      "title": "Compass named Adaptive Learning Solution of the Year, 2026 EdTech Breakthrough Awards",
+      "url": "https://www.linkedin.com/posts/explore-learning_edtech-edtechawards-edtechbreakthrough-activity-7470769840014733328-fOE4",
+      "source": "EdTech Breakthrough Awards",
+      "date": "2026-06",
+      "quote": "We're thrilled to share that Explore Learning's Compass has been named Adaptive Learning Solution of the Year at the 2026 EdTech Breakthrough Awards.",
+      "blurb": "Some context from my side of it. Compass is Explore Learning's adaptive learning platform, and underneath it sits the Aptitude model, which my team and I developed: the machinery that continuously estimates where a child is and what they are ready for next. The award programme drew over 3,000 entries this year, so the recognition says something about the approach, evidence-led modelling paired with expert tutors, rather than just the product. The white paper below sets out the thinking that drove the build.",
+      "links": [
+        { "label": "The announcement on LinkedIn", "url": "https://www.linkedin.com/posts/explore-learning_edtech-edtechawards-edtechbreakthrough-activity-7470769840014733328-fOE4" },
+        { "label": "Full winners list, June 2026", "url": "https://www.globenewswire.com/news-release/2026/06/10/3309859/0/en/global-educational-technology-innovators-honored-in-2026-edtech-breakthrough-awards-program.html" }
+      ]
+    },
+    {
+      "type": "paper",
+      "title": "The Evidence Imperative: why evidence must come first in AI and children's education",
+      "url": "https://assets.ctfassets.net/aj53l2bs72uc/6E7fY0f8nDwFMH9lQ0Sy2H/4dedad9368e517a3ca3de90a9c62db69/Explore-Learning_The_Evidence_Imperative_Feb-2026.pdf",
+      "source": "Explore Learning white paper, written by me",
+      "date": "2026-02",
+      "blurb": "I wrote this for Explore Learning before the Compass work went public. It is a company publication and it carries a marketing narrative in places, I will say that myself. The premise underneath is a valid one, though, and it is the premise that drove the development: personalisation only helps if the system continuously knows the child it claims to support, so put technology where precision and responsiveness pay off, and keep human tutors where judgement and encouragement do. Read it with the UNESCO report in this library as the sceptical counterweight.",
+      "links": [
+        { "label": "Download the paper (PDF)", "url": "https://assets.ctfassets.net/aj53l2bs72uc/6E7fY0f8nDwFMH9lQ0Sy2H/4dedad9368e517a3ca3de90a9c62db69/Explore-Learning_The_Evidence_Imperative_Feb-2026.pdf" },
+        { "label": "Launch note on explorelearning.co.uk", "url": "https://www.explorelearning.co.uk/explore-learning-launch-ai-in-education-whitepaper/" }
+      ]
+    },
+    {
+      "type": "paper",
+      "title": "Mind in Society: the development of higher psychological processes",
+      "url": "https://www.hup.harvard.edu/books/9780674576292",
+      "source": "Vygotsky, Harvard University Press",
+      "date": "1978-01",
+      "blurb": "Where the zone of proximal development comes from: the band between what a child can do alone and what they can do with the right help. Chapter 6 is the one to read, and it is striking how directly a 1930s idea specifies what an adaptive learning system should actually optimise."
+    },
+    {
+      "type": "news",
+      "title": "Technology in education: a tool on whose terms?",
+      "url": "https://www.unesco.org/gem-report/en/technology",
+      "source": "UNESCO Global Education Monitoring Report",
+      "date": "2023-07",
+      "blurb": "The most thorough recent stocktake of technology in classrooms worldwide. Sceptical where the evidence is thin, and useful precisely for that: it separates what is known about learning outcomes from what is marketed."
+    },
+    {
+      "type": "paper",
+      "title": "The 2 Sigma Problem: the search for methods of group instruction as effective as one-to-one tutoring",
+      "url": "https://doi.org/10.3102/0013189X013006004",
+      "source": "Bloom, Educational Researcher 13(6)",
+      "date": "1984-06",
+      "blurb": "The paper behind almost every pitch for AI tutoring: tutored students outperformed conventional classes by two standard deviations. Whether software can close that gap remains the live question, but this is where the number comes from."
+    },
+    {
+      "type": "paper",
+      "title": "Test-enhanced learning: taking memory tests improves long-term retention",
+      "url": "https://doi.org/10.1111/j.1467-9280.2006.01693.x",
+      "source": "Roediger and Karpicke, Psychological Science 17(3)",
+      "date": "2006-03",
+      "blurb": "The retrieval practice result: being tested on material beats re-studying it for long-term retention. The single most actionable finding in the learning sciences for anyone designing quizzes, flashcards or spaced repetition tools."
+    },
+    {
+      "type": "paper",
+      "title": "Active learning increases student performance in science, engineering, and mathematics",
+      "url": "https://doi.org/10.1073/pnas.1319030111",
+      "source": "Freeman et al., PNAS 111(23)",
+      "date": "2014-06",
+      "blurb": "A meta-analysis of 225 studies: exam scores rise and failure rates drop when lecturing gives way to active learning. The evidential baseline any classroom technology should be measured against."
+    },
+    {
+      "type": "video",
+      "title": "The Most Persistent Myth (originally: This Will Revolutionize Education)",
+      "url": "https://www.youtube.com/watch?v=GEmuEWjHr5c",
+      "source": "Veritasium (Derek Muller)",
+      "date": "2014-12",
+      "blurb": "Muller's short history of technologies that were each going to transform education (film, radio, television, computers) and why the teacher-student relationship survived them all. He has since retitled it, aptly. Aged remarkably well as a lens for AI-in-education claims."
+    },
+    {
+      "type": "example",
+      "title": "PhET Interactive Simulations",
+      "url": "https://phet.colorado.edu/",
+      "source": "University of Colorado Boulder",
+      "date": "2002-01",
+      "blurb": "Free, research-tested simulations for physics, maths and chemistry, running for over two decades. A model of what evidence-led education technology looks like: built around how students explore, then studied and iterated."
+    },
+    {
+      "type": "example",
+      "title": "Khanmigo",
+      "url": "https://www.khanmigo.ai/",
+      "source": "Khan Academy",
+      "date": "2023-03",
+      "blurb": "Khan Academy's AI tutor, deliberately built to guide with questions rather than hand over answers. Worth watching as a live experiment in whether LLM tutoring moves the needle Bloom measured."
+    }
+  ]
+}

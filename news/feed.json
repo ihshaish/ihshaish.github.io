@@ -1,0 +1,40 @@
+{
+  "_readme": "Homepage news feed. Add new items to the top of the list. Fields: date (YYYY-MM-DD), tag (Blog | Site | Talk | Publication | Teaching | Event), title, href, summary (optional). The homepage sorts by date, newest first.",
+  "items": [
+    {
+      "date": "2026-07-28",
+      "tag": "Blog",
+      "title": "Continual learning: what it is, and what I've learned working with it",
+      "href": "/blog/ml/continual-learning/",
+      "summary": "First post on the Machine Learning blog, prompted by reviewing my PhD student's final thesis draft: catastrophic forgetting, which remedies to trust, how to read the literature's numbers, and a notebook you can run in two minutes."
+    },
+    {
+      "date": "2022-10-12",
+      "tag": "Event",
+      "title": "FinTech West Talent Showcase Event",
+      "href": "/post/fintechwest/",
+      "summary": "FinTech West's inaugural Talent Showcase, hosted in partnership with the University of Bristol and UWE Bristol."
+    },
+    {
+      "date": "2022-09-21",
+      "tag": "Talk",
+      "title": "Presentation: ML, Analytics, Data Science and FinTech",
+      "href": "/post/rbi/",
+      "summary": ""
+    },
+    {
+      "date": "2022-09-09",
+      "tag": "Event",
+      "title": "31st International Conference on Artificial Neural Networks (ICANN)",
+      "href": "/post/icann-conf/",
+      "summary": ""
+    },
+    {
+      "date": "2022-08-31",
+      "tag": "Publication",
+      "title": "Integrating wind variability to modelling wind-ramp events using a non-binary ramp function and deep learning models",
+      "href": "/post/sharp/",
+      "summary": ""
+    }
+  ]
+}

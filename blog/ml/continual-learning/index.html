@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="A working introduction to continual learning: catastrophic forgetting, the remedies and which to trust, how to read the literature's numbers, and a two-minute experiment to run yourself." />
+
+  <title>Continual learning: what it is, and what I've learned working with it | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+        <article class="blog-article">
+
+          <h1>Continual learning: what it is, and what I've learned working with it</h1>
+          <div class="post-meta">
+            Hisham Ihshaish &middot; <a href="/blog/ml/">Machine Learning</a> &middot; 28 July 2026 &middot; 15 min read
+          </div>
+
+          <p class="post-lede">
+            I came to write this while reviewing the final draft of my PhD student's thesis. Peter's PhD
+            is on embedding frameworks for avionics health monitoring, and the models in it do their job
+            well. But the data they describe spans decades, and the question I kept scribbling in the
+            margins was one the thesis was never asked to answer: these models were trained once and
+            evaluated once. What happens when a model has to <em>live through</em> those decades instead,
+            learning as it goes? That question has a name, continual learning, and a paper trail going
+            back fifty years. Peter and I are now writing a paper of our own in this area, so I have
+            spent the past months living in that paper trail. This post is the map I wish someone had
+            handed me at the start: what the problem is, which remedies to trust, how to read the
+            literature without being misled, and a small experiment you can run yourself to make all of
+            it concrete.
+          </p>
+
+          <div class="toc-box">
+            <strong>In this post</strong>
+            <ol>
+              <li><a href="#forgetting">The failure that started the field</a></li>
+              <li><a href="#definition">What counts as continual learning, and what does not</a></li>
+              <li><a href="#methods">The remedies, and which ones I trust</a></li>
+              <li><a href="#evaluation">How to read the numbers</a></li>
+              <li><a href="#demo">Watching it happen on your own laptop</a></li>
+              <li><a href="#experience">The problem keeps finding me</a></li>
+              <li><a href="#pitfalls">What I would check before building one</a></li>
+              <li><a href="#reading">A reading path</a></li>
+            </ol>
+          </div>
+
+          <p>
+            First, the plain definition. Continual learning is the problem of training a model on a
+            stream of data it cannot freely revisit: new tasks, new classes, new distributions arriving
+            over time, with the model expected to absorb them without losing what it already knows.
+            Stated like that it sounds like an engineering detail. It is closer to a foundational open
+            problem, because the standard training recipe for neural networks fails at it in a
+            spectacular and well-documented way. That failure is where any honest account has to start.
+          </p>
+
+          <h2 id="forgetting">1. The failure that started the field</h2>
+
+          <p>
+            In 1989, McCloskey and Cohen trained a small connectionist network to add ones (1+1, 1+2, and
+            so on), then trained the same network to add twos. It learned the twos and, in the process,
+            lost the ones almost entirely. They called the effect <em>catastrophic interference</em>
+            [<a href="#ref-mccloskey">1</a>], and Ratcliff confirmed it across a range of architectures
+            the following year [<a href="#ref-ratcliff">2</a>]. At the time this was an argument about
+            psychology: connectionist networks were being proposed as models of human memory, and here
+            they were forgetting arithmetic in a way no child does.
+          </p>
+
+          <p>
+            The mechanism is not mysterious, and I find it clarifies everything that follows. A network
+            stores what it knows in shared weights, and gradient descent adjusts those weights to reduce
+            the loss on whatever data it is currently shown. Once the old task's data is gone, nothing in
+            the objective speaks for it. The same distributed representations that give networks their
+            power to generalise are exactly what makes them vulnerable: every update that helps the new
+            task moves weights the old task depended on. If you read one thing from the early
+            literature, make it French's short review [<a href="#ref-french">3</a>]: twenty minutes, no
+            equations to speak of, and it settles why this trade-off is structural rather than a bug
+            someone will eventually fix. Grossberg had already named the underlying tension in the 1980s,
+            the <em>stability-plasticity dilemma</em> [<a href="#ref-grossberg">4</a>]: plastic enough to
+            learn, stable enough to retain, and the two pull in opposite directions.
+          </p>
+
+          <p>
+            Brains manage this trade-off, and the leading account of how has been unusually productive
+            for our field. Complementary Learning Systems theory [<a href="#ref-cls">5</a>] proposes a
+            division of labour: the hippocampus learns quickly from single episodes, and during rest and
+            sleep it replays those episodes to the neocortex, which integrates them slowly, interleaved
+            with existing knowledge. Interleaving is the load-bearing word. The neocortex is never asked
+            to learn new material in a block, on its own, which is precisely the regime that breaks
+            artificial networks. Keep that in mind for the remedies below, because the most effective of
+            them is a direct imitation of it.
+          </p>
+
+          <h2 id="definition">2. What counts as continual learning, and what does not</h2>
+
+          <p>
+            A continual learning problem has three ingredients: data arrives as a sequence whose
+            distribution shifts over time; the learner cannot freely revisit everything it has seen
+            (storage, privacy, licensing or scale forbid it); and it is judged on all of it, old and new,
+            under a bounded memory and compute budget. The goals are to retain, to learn, and ideally to
+            have the old and the new help each other rather than compete.
+          </p>
+
+          <p>
+            The terms around it get used loosely, so it is worth drawing the borders.
+            <em>Transfer learning</em> is a single handoff: pretrain on A, fine-tune on B, and nobody
+            checks performance on A afterwards. <em>Domain adaptation</em> handles one shift, not an
+            open-ended sequence. <em>Online learning</em> shares the streaming setting but is classically
+            judged on the current distribution, not on retention. And <em>periodic retraining</em>, the
+            industrial default, sidesteps the problem entirely by keeping all the data and paying for a
+            fresh model whenever drift bites. Continual learning is what you need when that sidestep is
+            unavailable, and being clear-eyed about whether it actually is unavailable in your case is
+            half the battle. I will come back to this in the <a href="#pitfalls">checklist</a>.
+          </p>
+
+          <p>
+            One more distinction does a great deal of work, and if you are new to the area I would learn
+            it before reading any results at all. van de Ven and Tolias [<a href="#ref-scenarios">6</a>]
+            noticed that "continual learning" experiments were being run under three quietly different
+            protocols, and that results do not transfer between them:
+            <strong>task-incremental</strong>, where the model is told at test time which task an input
+            belongs to and can keep a separate output head per task; <strong>domain-incremental</strong>,
+            where the classes stay fixed but the input distribution shifts under them; and
+            <strong>class-incremental</strong>, where new classes keep arriving, there is one shared
+            output layer, and no task label at test time. The first is the easiest and the third the
+            hardest. Their paper is short and the taxonomy earns its keep every time I read a new
+            result; the journal version [<a href="#ref-threetypes">29</a>] is the polished statement if
+            you prefer one reference to hold on to. I would add an observation from my own recent
+            experience: real streams rarely announce task boundaries at all. Drift arrives gradually and
+            unlabelled, a regime the benchmarks barely touch, and you should notice when a paper's tidy
+            task sequence looks nothing like your data.
+          </p>
+
+          <h2 id="methods">3. The remedies, and which ones I trust</h2>
+
+          <p>
+            The three classic families are easiest to keep apart if you look at <em>where</em> each one
+            intervenes in the training loop. Data arrives as a stream; whatever has already passed is
+            gone, or nearly so; the model is updated on the current batch and, after every task,
+            evaluated on everything seen so far. Each family defends a different part of that loop: one
+            guards the weights, one smuggles the past into the batch, one gives new tasks somewhere else
+            to live.
+          </p>
+
+          <figure>
+            <svg viewBox="0 0 990 415" role="img" style="width:100%; height:auto; font-family: Georgia, 'Times New Roman', serif;"
+                 aria-label="Diagram of the continual learning training loop: a stream of tasks feeds a training batch, which updates a model; a replay buffer feeds past examples into the batch; a regularisation penalty guards the model's weights; architecture methods add task-specific parameters; after every task the model is evaluated on all tasks seen so far, filling an accuracy matrix.">
+              <defs>
+                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 1 L 9 5 L 0 9 z" fill="#666666"></path>
+                </marker>
+                <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 1 L 9 5 L 0 9 z" fill="#009E73"></path>
+                </marker>
+              </defs>
+
+              <!-- task stream -->
+              <text x="30" y="28" font-size="12.5" fill="#666666" font-style="italic">the stream: tasks arrive, then their data is gone</text>
+              <g font-size="13.5" text-anchor="middle">
+                <rect x="30" y="40" width="66" height="34" rx="4" fill="#eef3f8" stroke="#9ab2c8"></rect>
+                <text x="63" y="62" fill="#1a1a1a">T1</text>
+                <rect x="112" y="40" width="66" height="34" rx="4" fill="#eef3f8" stroke="#9ab2c8"></rect>
+                <text x="145" y="62" fill="#1a1a1a">T2</text>
+                <rect x="194" y="40" width="66" height="34" rx="4" fill="#0072B2" stroke="#0072B2"></rect>
+                <text x="227" y="62" fill="#ffffff">T3</text>
+                <rect x="276" y="40" width="66" height="34" rx="4" fill="none" stroke="#bbbbbb" stroke-dasharray="4 3"></rect>
+                <text x="309" y="62" fill="#999999">T4</text>
+                <rect x="358" y="40" width="66" height="34" rx="4" fill="none" stroke="#bbbbbb" stroke-dasharray="4 3"></rect>
+                <text x="391" y="62" fill="#999999">T5</text>
+              </g>
+              <line x1="440" y1="57" x2="500" y2="57" stroke="#666666" stroke-width="1.2" marker-end="url(#arr)"></line>
+              <text x="508" y="61" font-size="12" fill="#666666" font-style="italic">time</text>
+              <text x="227" y="94" font-size="11.5" fill="#0072B2" text-anchor="middle" font-style="italic">training now</text>
+
+              <!-- current task to batch -->
+              <line x1="227" y1="100" x2="227" y2="132" stroke="#666666" stroke-width="1.2" marker-end="url(#arr)"></line>
+              <rect x="157" y="136" width="140" height="40" rx="4" fill="#ffffff" stroke="#666666"></rect>
+              <text x="227" y="161" font-size="13.5" fill="#1a1a1a" text-anchor="middle">training batch</text>
+
+              <!-- replay buffer -->
+              <rect x="20" y="136" width="104" height="40" rx="4" fill="#eaf6f1" stroke="#009E73"></rect>
+              <text x="72" y="161" font-size="13" fill="#00654e" text-anchor="middle">buffer</text>
+              <path d="M 63 74 C 55 105, 58 118, 66 133" fill="none" stroke="#009E73" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrg)"></path>
+              <path d="M 145 74 C 130 100, 110 118, 96 133" fill="none" stroke="#009E73" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrg)"></path>
+              <line x1="124" y1="156" x2="152" y2="156" stroke="#009E73" stroke-width="1.4" marker-end="url(#arrg)"></line>
+              <text x="20" y="200" font-size="12" fill="#00654e"><tspan x="20" dy="0">replay: keep a few past examples,</tspan><tspan x="20" dy="15">mix them into every batch</tspan></text>
+
+              <!-- batch to model -->
+              <line x1="297" y1="156" x2="395" y2="156" stroke="#666666" stroke-width="1.2" marker-end="url(#arr)"></line>
+
+              <!-- model glyph -->
+              <rect x="400" y="108" width="170" height="132" rx="6" fill="#ffffff" stroke="#666666"></rect>
+              <g stroke="#c9c9c9" stroke-width="0.7">
+                <line x1="432" y1="138" x2="482" y2="128"></line><line x1="432" y1="138" x2="482" y2="158"></line><line x1="432" y1="138" x2="482" y2="188"></line>
+                <line x1="432" y1="172" x2="482" y2="128"></line><line x1="432" y1="172" x2="482" y2="158"></line><line x1="432" y1="172" x2="482" y2="188"></line>
+                <line x1="432" y1="206" x2="482" y2="158"></line><line x1="432" y1="206" x2="482" y2="188"></line><line x1="432" y1="206" x2="482" y2="128"></line>
+                <line x1="482" y1="128" x2="532" y2="152"></line><line x1="482" y1="158" x2="532" y2="152"></line><line x1="482" y1="188" x2="532" y2="152"></line>
+                <line x1="482" y1="128" x2="532" y2="186"></line><line x1="482" y1="158" x2="532" y2="186"></line><line x1="482" y1="188" x2="532" y2="186"></line>
+              </g>
+              <g fill="#5b8db8">
+                <circle cx="432" cy="138" r="6"></circle><circle cx="432" cy="172" r="6"></circle><circle cx="432" cy="206" r="6"></circle>
+                <circle cx="482" cy="128" r="6"></circle><circle cx="482" cy="158" r="6"></circle><circle cx="482" cy="188" r="6"></circle>
+                <circle cx="532" cy="152" r="6"></circle><circle cx="532" cy="186" r="6"></circle>
+              </g>
+              <text x="485" y="258" font-size="13" fill="#1a1a1a" text-anchor="middle">model, shared weights</text>
+
+              <!-- architecture add-on column -->
+              <g>
+                <rect x="576" y="120" width="34" height="108" rx="5" fill="none" stroke="#888888" stroke-dasharray="4 3"></rect>
+                <g fill="none" stroke="#888888">
+                  <circle cx="593" cy="142" r="6"></circle><circle cx="593" cy="174" r="6"></circle><circle cx="593" cy="206" r="6"></circle>
+                </g>
+                <text x="620" y="142" font-size="12" fill="#555555"><tspan x="620" dy="0">architecture: add new</tspan><tspan x="620" dy="15">parameters per task,</tspan><tspan x="620" dy="15">freeze the rest</tspan></text>
+              </g>
+
+              <!-- loss + gradient loop -->
+              <line x1="485" y1="270" x2="485" y2="296" stroke="#666666" stroke-width="1.2" marker-end="url(#arr)"></line>
+              <rect x="440" y="300" width="90" height="36" rx="4" fill="#ffffff" stroke="#666666"></rect>
+              <text x="485" y="323" font-size="13" fill="#1a1a1a" text-anchor="middle">loss</text>
+              <path d="M 438 318 C 340 318, 330 240, 396 210" fill="none" stroke="#666666" stroke-width="1.2" marker-end="url(#arr)"></path>
+              <text x="322" y="298" font-size="12" fill="#666666" font-style="italic" text-anchor="middle">gradient update</text>
+
+              <!-- regularisation callout -->
+              <path d="M 532 336 C 560 356, 590 362, 620 364" fill="none" stroke="#D55E00" stroke-width="1.1" stroke-dasharray="4 3"></path>
+              <text x="628" y="360" font-size="12" fill="#a34700"><tspan x="628" dy="0">regularisation (EWC): add a penalty to</tspan><tspan x="628" dy="15">the loss for moving weights that</tspan><tspan x="628" dy="15">earlier tasks relied on</tspan></text>
+
+              <!-- evaluation panel -->
+              <line x1="614" y1="205" x2="770" y2="205" stroke="#666666" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#arr)"></line>
+              <text x="692" y="197" font-size="11.5" fill="#666666" font-style="italic" text-anchor="middle">after every task</text>
+              <text x="776" y="120" font-size="12.5" fill="#1a1a1a"><tspan x="776" dy="0">evaluate on all tasks seen so far:</tspan></text>
+              <g transform="translate(776,130)">
+                <g>
+                  <rect x="0" y="0" width="20" height="20" fill="#1b4e8f"></rect>
+                  <rect x="22" y="0" width="20" height="20" fill="#f2f5f9"></rect><rect x="44" y="0" width="20" height="20" fill="#f2f5f9"></rect><rect x="66" y="0" width="20" height="20" fill="#f2f5f9"></rect><rect x="88" y="0" width="20" height="20" fill="#f2f5f9"></rect>
+                  <rect x="0" y="22" width="20" height="20" fill="#7da7cd"></rect><rect x="22" y="22" width="20" height="20" fill="#1b4e8f"></rect>
+                  <rect x="44" y="22" width="20" height="20" fill="#f2f5f9"></rect><rect x="66" y="22" width="20" height="20" fill="#f2f5f9"></rect><rect x="88" y="22" width="20" height="20" fill="#f2f5f9"></rect>
+                  <rect x="0" y="44" width="20" height="20" fill="#7da7cd"></rect><rect x="22" y="44" width="20" height="20" fill="#7da7cd"></rect><rect x="44" y="44" width="20" height="20" fill="#1b4e8f"></rect>
+                  <rect x="66" y="44" width="20" height="20" fill="#f2f5f9"></rect><rect x="88" y="44" width="20" height="20" fill="#f2f5f9"></rect>
+                  <rect x="0" y="66" width="20" height="20" fill="#7da7cd"></rect><rect x="22" y="66" width="20" height="20" fill="#7da7cd"></rect><rect x="44" y="66" width="20" height="20" fill="#7da7cd"></rect><rect x="66" y="66" width="20" height="20" fill="#1b4e8f"></rect>
+                  <rect x="88" y="66" width="20" height="20" fill="#f2f5f9"></rect>
+                  <rect x="0" y="88" width="20" height="20" fill="#7da7cd"></rect><rect x="22" y="88" width="20" height="20" fill="#7da7cd"></rect><rect x="44" y="88" width="20" height="20" fill="#7da7cd"></rect><rect x="66" y="88" width="20" height="20" fill="#7da7cd"></rect><rect x="88" y="88" width="20" height="20" fill="#1b4e8f"></rect>
+                </g>
+              </g>
+              <text x="776" y="262" font-size="12" fill="#666666"><tspan x="776" dy="0">the accuracy matrix: rows fill in as</tspan><tspan x="776" dy="15">training proceeds; columns record</tspan><tspan x="776" dy="15">what happens to each task after</tspan><tspan x="776" dy="15">its data is gone</tspan></text>
+            </svg>
+            <figcaption>
+              The training loop and where each family of methods intervenes. Replay (green) defends the
+              batch, regularisation (vermillion) defends the weights, architecture methods (dashed) add
+              parameters instead of sharing them. Whatever the method, evaluation is the same: after
+              every task, test on everything seen so far and fill in one more row of the accuracy
+              matrix.
+            </figcaption>
+          </figure>
+
+          <h3>Regularisation: protect the weights that mattered</h3>
+
+          <p>
+            If forgetting happens because new gradients trample old weights, an obvious response is to
+            slow the trampling down. Elastic Weight Consolidation [<a href="#ref-ewc">7</a>] estimates,
+            per weight, how much the old tasks care about it (via the diagonal of the Fisher information
+            matrix) and anchors important weights near their old values with a quadratic penalty. The
+            paper is worth reading whatever you build, for the way it connects the idea to synaptic
+            consolidation in biology; just read it alongside the caveat coming in the demo. Synaptic
+            Intelligence [<a href="#ref-si">8</a>] computes a similar importance measure online, and
+            Learning without Forgetting [<a href="#ref-lwf">9</a>] reaches the same goal through
+            distillation, penalising changes to the model's old <em>outputs</em> rather than its
+            weights. These methods are cheap, elegant, and need no stored data, which is why EWC became
+            famous. Their honest report card is less flattering: helpful when each task keeps its own
+            output head, largely ineffective in the class-incremental setting most deployments actually
+            face. You will see exactly that below.
+          </p>
+
+          <h3>Replay: keep a little of the past</h3>
+
+          <p>
+            The second family does what the hippocampus does: it interleaves. Keep a small buffer of past
+            examples and mix them into every new batch. This is <em>experience replay</em>, and if you
+            take one practical recommendation from this post, it is that replay is where you start and
+            the baseline any clever alternative must beat. My experience so far is consistent with the
+            published record: it is embarrassingly hard to beat. Refinements worth knowing: Gradient
+            Episodic Memory [<a href="#ref-gem">10</a>], which uses the buffer to forbid updates that
+            would worsen past tasks and, along the way, gave the field its standard metrics (read its
+            section 3 even if you never use the method); the cheaper A-GEM
+            [<a href="#ref-agem">11</a>]; and Dark Experience Replay [<a href="#ref-der">12</a>], which
+            replays stored logits alongside labels and is the strongest simple baseline in recent
+            comparisons. Where storing raw data is off the table, generative replay
+            [<a href="#ref-genreplay">13</a>] trains a generator to produce pseudo-examples of the past
+            instead, an idea lifted straight from the CLS account of dreaming.
+          </p>
+
+          <h3>Architecture: give each task its own parameters</h3>
+
+          <p>
+            The third family sidesteps interference by making sure tasks do not share the weights that
+            matter: Progressive Networks [<a href="#ref-prognets">14</a>] freeze old columns and grow a
+            new one per task, PackNet [<a href="#ref-packnet">15</a>] prunes and re-packs a fixed network
+            so each task claims a subnetwork, Hard Attention to the Task [<a href="#ref-hat">16</a>]
+            learns near-binary masks. These can eliminate forgetting outright, at the price of parameter
+            counts that grow with the sequence, and most need the task identity at test time. I rarely
+            reach for them, but when the task structure really is discrete and known, they are the right
+            tool and it would be snobbish to pretend otherwise.
+          </p>
+
+          <h3>The pretrained era</h3>
+
+          <p>
+            Foundation models changed the economics of all of the above. Ramasesh and colleagues showed
+            that large pretrained networks simply forget less; their representations are wide and
+            redundant enough that new tasks settle into relatively empty corners
+            [<a href="#ref-scale">17</a>]. If your problem sits on top of a pretrained backbone, read
+            that paper before designing anything; it may dissolve half your problem. Much recent work
+            keeps the backbone frozen and learns small task-specific components, as in Learning to
+            Prompt [<a href="#ref-l2p">18</a>]. And at the largest scale, continually pretraining an LLM
+            on fresh data is now a serious engineering discipline; Ibrahim and colleagues
+            [<a href="#ref-llmcpt">19</a>] is the reference I hand people who need a working recipe
+            (learning-rate re-warming plus a modest replay fraction), and notice what that recipe is:
+            experience replay, wearing industrial clothes. The vocabulary of the small-network
+            literature survived; only the budgets grew more zeros.
+          </p>
+
+          <h2 id="evaluation">4. How to read the numbers</h2>
+
+          <p>
+            The field's standard instrument is the <em>accuracy matrix</em>: after finishing each task,
+            evaluate on the test set of every task, so that reading down a column shows what happened to
+            a task after its data disappeared. From it come the standard metrics, introduced by
+            Lopez-Paz and Ranzato [<a href="#ref-gem">10</a>] and refined by Chaudhry and colleagues
+            [<a href="#ref-rwalk">20</a>]: average accuracy at the end, forgetting (how far each task
+            fell from its own peak), and forward transfer. My advice is blunt: build the matrix into
+            your harness on day one, whatever else you do. It costs one loop, and every diagnosis I have
+            ever needed started there.
+          </p>
+
+          <p>
+            Reading other people's numbers needs more care than producing your own, and I have settled
+            into three habits. I find the scenario before I let myself look at the results table,
+            because a task-incremental score tells you nothing about a class-incremental deployment and
+            the paper will not always volunteer which it ran. I look for how hyperparameters were
+            chosen, because a method tuned by peeking at the whole task sequence has used information
+            no deployed learner will ever have; Farquhar and Gal [<a href="#ref-farquhar">21</a>] show
+            how much of the published record that habit inflates, and their paper is the corrective I
+            would save for when you have formed opinions of your own and want them sharpened. And I
+            have grown suspicious of any claim carried entirely by a thresholded metric on a drifting
+            stream. The clinical prediction literature documents the reason with care, Davis and
+            colleagues [<a href="#ref-davis">22</a>] being a good example: models whose ability to rank
+            cases holds steady while their calibration drifts with the population, so that a fixed
+            decision threshold quietly converts the second problem into what looks like the first. Keep
+            discrimination and calibration in separate ledgers for any long-lived model and a whole
+            family of wrong conclusions never gets written.
+          </p>
+
+          <p>
+            This section is where our own work lives, and I will hold back the story deliberately: the
+            paper Peter and I are writing asks what the standard forgetting narrative looks like on a
+            real, decades-long operational text stream rather than a benchmark sliced into artificial
+            tasks, with NASA's Aviation Safety Reporting System as the setting. Working with a stream
+            like that, where the drift is measured rather than constructed, has already changed how I
+            read every results table in the field, and the early findings are the kind that make you
+            re-run everything twice before you believe yourself. That is all I will say until the paper
+            has been through review. Watch this space.
+          </p>
+
+          <h2 id="demo">5. Watching it happen on your own laptop</h2>
+
+          <p>
+            Reading about forgetting is one thing; watching a model you trained five minutes ago lose a
+            task completely is another, and I would not have written this post without giving you a way
+            to feel it. The notebook below runs the whole story on scikit-learn's small digits dataset
+            in about two minutes, no GPU: five tasks of two digit classes each, a small MLP with a shared
+            output head (the hard, class-incremental scenario), and four strategies compared like for
+            like.
+          </p>
+
+          <style>
+            .cl-anim { border: 1px solid #e6e5e2; border-radius: 6px; padding: 1.1rem 1.3rem 0.9rem; margin: 1.8rem 0; background: #fdfdfc; }
+            .cl-anim-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 0.7rem; }
+            .cl-strats { display: flex; flex-wrap: wrap; gap: 6px; }
+            .cl-anim button { font-family: inherit; font-size: 0.85rem; border-radius: 4px; border: 1px solid #cccbc8; background: #fff; color: #444; padding: 0.25rem 0.7rem; cursor: pointer; }
+            .cl-strats button[aria-pressed="true"] { color: #fff; border-color: transparent; }
+            .cl-stagebar { display: flex; gap: 6px; margin-bottom: 1rem; }
+            .cl-stagebar button { font-size: 0.78rem; padding: 0.15rem 0.5rem; color: #767574; }
+            .cl-stagebar button[aria-pressed="true"] { border-color: #1a1a1a; color: #1a1a1a; font-weight: 600; }
+            .cl-bars { display: flex; gap: 4%; align-items: flex-end; height: 230px; padding: 0 2%; }
+            .cl-barwrap { flex: 1; position: relative; height: 200px; align-self: flex-end; border-bottom: 1px solid #999; }
+            .cl-fill { position: absolute; bottom: 0; left: 12%; width: 76%; background: #0072B2; transition: height 0.55s ease, background 0.3s; }
+            .cl-barwrap.unseen .cl-fill { background: #f0efec; }
+            .cl-val { position: absolute; left: 0; width: 100%; text-align: center; font-family: Georgia, serif; font-size: 0.85rem; color: #1a1a1a; transition: bottom 0.55s ease; }
+            .cl-tlabel { text-align: center; font-family: Georgia, serif; font-size: 0.85rem; color: #666; margin-top: 6px; }
+            .cl-tlabel .now { color: #1a1a1a; font-weight: 700; }
+            .cl-cols { display: flex; gap: 4%; padding: 0 2%; }
+            .cl-cols > div { flex: 1; }
+            .cl-readout { font-size: 0.9rem; color: #444; margin-top: 0.9rem; }
+            .cl-foot { font-size: 0.82rem; color: #767574; margin-top: 0.3rem; }
+            @media (prefers-reduced-motion: reduce) {
+              .cl-fill, .cl-val { transition: none; }
+            }
+          </style>
+
+          <div class="cl-anim" id="cl-anim">
+            <div class="cl-anim-head">
+              <div class="cl-strats" id="cl-strats" role="group" aria-label="Choose a strategy"></div>
+              <button id="cl-play" aria-label="Pause the animation">Pause</button>
+            </div>
+            <div class="cl-stagebar" id="cl-stagebar" role="group" aria-label="Jump to a training stage"></div>
+            <div class="cl-bars" id="cl-bars"></div>
+            <div class="cl-cols" id="cl-labels"></div>
+            <div class="cl-readout" id="cl-readout"></div>
+            <div class="cl-foot">Accuracy per task as training moves through the sequence. These are the actual numbers from the notebook run below, not an illustration.</div>
+          </div>
+
+          <script>
+          (function () {
+            var R = {
+              "Naive": [[100,0,0,0,0],[0,100,0,0,0],[0,0,99,0,0],[0,0,0,100,0],[0,0,0,0,100]],
+              "EWC":   [[100,0,0,0,0],[0,100,0,0,0],[0,0,99,0,0],[0,0,0,100,0],[0,0,0,0,93]],
+              "Replay":[[100,0,0,0,0],[91,99,0,0,0],[96,96,98,0,0],[95,95,96,99,0],[92,89,93,94,96]],
+              "Joint": [[100,0,0,0,0],[100,99,0,0,0],[99,99,98,0,0],[99,98,98,99,0],[98,98,96,99,95]]
+            };
+            var COLOR = { "Naive": "#0072B2", "EWC": "#D55E00", "Replay": "#009E73", "Joint": "#888888" };
+            var strat = "Naive", stage = 0;
+            var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            var playing = !reduced, timer = null;
+
+            var bars = [], vals = [], wraps = [];
+            var barBox = document.getElementById("cl-bars");
+            var labBox = document.getElementById("cl-labels");
+            for (var j = 0; j < 5; j++) {
+              var w = document.createElement("div"); w.className = "cl-barwrap";
+              var f = document.createElement("div"); f.className = "cl-fill";
+              var v = document.createElement("div"); v.className = "cl-val";
+              w.appendChild(f); w.appendChild(v); barBox.appendChild(w);
+              var l = document.createElement("div"); l.className = "cl-tlabel";
+              l.innerHTML = "Task " + (j + 1); labBox.appendChild(l);
+              bars.push(f); vals.push(v); wraps.push(w);
+            }
+
+            var stratBox = document.getElementById("cl-strats");
+            Object.keys(R).forEach(function (name) {
+              var b = document.createElement("button");
+              b.textContent = name;
+              b.addEventListener("click", function () { strat = name; render(); });
+              stratBox.appendChild(b);
+            });
+
+            var stageBox = document.getElementById("cl-stagebar");
+            for (var s = 0; s < 5; s++) (function (s) {
+              var b = document.createElement("button");
+              b.textContent = "after T" + (s + 1);
+              b.addEventListener("click", function () { stage = s; stopPlay(); render(); });
+              stageBox.appendChild(b);
+            })(s);
+
+            var playBtn = document.getElementById("cl-play");
+            playBtn.addEventListener("click", function () { playing ? stopPlay() : startPlay(); });
+            function startPlay() { playing = true; playBtn.textContent = "Pause"; schedule(); }
+            function stopPlay() { playing = false; playBtn.textContent = "Play"; if (timer) clearTimeout(timer); }
+            function schedule() {
+              if (!playing) return;
+              if (timer) clearTimeout(timer);
+              timer = setTimeout(function () { stage = (stage + 1) % 5; render(); schedule(); }, 1700);
+            }
+
+            function render() {
+              var row = R[strat][stage], seenSum = 0;
+              for (var j = 0; j < 5; j++) {
+                var seen = j <= stage;
+                wraps[j].className = "cl-barwrap" + (seen ? "" : " unseen");
+                var h = seen ? row[j] : 100;
+                bars[j].style.height = (h * 2) + "px";
+                bars[j].style.background = seen ? COLOR[strat] : "#f0efec";
+                vals[j].textContent = seen ? row[j] + "%" : "–";
+                vals[j].style.bottom = ((seen ? row[j] : 100) * 2 + 4) + "px";
+                vals[j].style.color = seen ? "#1a1a1a" : "#aaa";
+                var lab = labBox.children[j];
+                lab.innerHTML = (j === stage) ? "Task " + (j + 1) + "<div class='now'>training</div>" : "Task " + (j + 1);
+                if (seen) seenSum += row[j];
+              }
+              document.getElementById("cl-readout").innerHTML =
+                "<strong>" + strat + "</strong>, after training on task " + (stage + 1) +
+                ": average accuracy over the " + (stage + 1) + " task" + (stage ? "s" : "") +
+                " seen so far is <strong>" + Math.round(seenSum / (stage + 1)) + "%</strong>.";
+              stratBox.querySelectorAll("button").forEach(function (b) {
+                var on = b.textContent === strat;
+                b.setAttribute("aria-pressed", on);
+                b.style.background = on ? COLOR[strat] : "#fff";
+                b.style.color = on ? "#fff" : "#444";
+              });
+              stageBox.querySelectorAll("button").forEach(function (b, i) {
+                b.setAttribute("aria-pressed", i === stage);
+              });
+            }
+
+            render();
+            if (playing) schedule(); else stopPlay();
+          })();
+          </script>
+
+          <p>
+            Watching the naive run cycle is the fastest way I know to convey the phenomenon: each new
+            task rises to near-perfect accuracy while every bar behind it drops to the floor. Switch to
+            Replay and the difference is immediate; the past stays standing. The panel replays the
+            experiment's actual accuracy matrices; the notebook that produced them, and the static
+            record of the same numbers, follow below.
+          </p>
+
+          <figure>
+            <img src="figs/forgetting_curve.png"
+                 alt="Line chart showing accuracy on task 1 as training progresses through five tasks. Naive fine-tuning and EWC collapse to zero after task 2; replay stays above 90 percent, close to the joint upper bound." />
+            <figcaption>
+              Accuracy on the first task (digits 0 vs 1) as training moves through the sequence. Naive
+              fine-tuning and EWC collapse to zero the moment task 2 arrives and never recover. Replay,
+              storing just 20 images per class, tracks the joint-training upper bound.
+            </figcaption>
+          </figure>
+
+          <p>
+            The collapse is not gradual decay; one task after the data disappears, accuracy on it is
+            zero. The shared output head has reassigned its logits to the new classes and nothing pushed
+            back. The line worth staring at is EWC's. With the anchoring penalty doing exactly what its
+            authors intended, it ends level with doing nothing at all, which replicates van de Ven and
+            Tolias [<a href="#ref-scenarios">6</a>]: weight protection cannot teach an output layer to
+            separate classes it never saw together. No value of the penalty strength fixes it, and I
+            encourage you to try, because feeling that failure teaches you more than my telling you
+            about it. Meanwhile replay, the crudest idea in the field, recovers 93% average accuracy
+            against a 97% joint-training ceiling with a buffer of at most 200 images.
+          </p>
+
+          <figure>
+            <img src="figs/accuracy_matrices.png"
+                 alt="Four annotated heatmaps of accuracy matrices for naive fine-tuning, EWC, replay and joint training. Naive and EWC matrices are diagonal; replay and joint matrices are filled below the diagonal." />
+            <figcaption>
+              The full accuracy matrices: rows are training stages, columns are tasks. Naive fine-tuning
+              and EWC are diagonal matrices, meaning the model only ever knows the task it just saw.
+              Replay fills in below the diagonal, which is what retention looks like.
+            </figcaption>
+          </figure>
+
+          <div class="nb-links">
+            <a href="notebook.html">Read the rendered notebook</a>
+            <a href="continual_learning_split_digits.ipynb" download>Download the .ipynb</a>
+            <a href="https://colab.research.google.com/github/ihshaish/ihshaish.github.io/blob/main/blog/ml/continual-learning/continual_learning_split_digits.ipynb" target="_blank" rel="noopener">Open in Colab</a>
+          </div>
+
+          <p>
+            Everything in it is deliberately minimal (a 64-100-100-10 MLP, thirty epochs per task, fixed
+            seeds) so the effects are attributable to the strategies rather than to tuning. Good
+            exercises if you want to go further: vary the replay buffer size and find where retention
+            gives out; give each task its own output head and watch EWC start working, which is the
+            three-scenarios lesson happening in front of you; and reorder the tasks to see how much the
+            sequence itself was carrying.
+          </p>
+
+          <h2 id="experience">6. The problem keeps finding me</h2>
+
+          <p>
+            I did not go looking for continual learning; versions of it keep turning up in whatever I
+            happen to be working on, which is a reasonable test of whether a problem is real. And
+            lining those encounters up has taught me something the papers rarely say out loud: the
+            pressure almost never comes from the model. It comes from some rule about the data, about
+            who may keep it, for how long, and where it may travel. Find that rule and you have found
+            why the easy exit of retraining from scratch is closed; fail to find it and you probably do
+            not have a continual learning problem at all.
+          </p>
+
+          <p>
+            Aviation, where this post began, is the cleanest illustration I know. Safety reports and
+            maintenance records accumulate over decades while aircraft, procedures and reporting
+            conventions change underneath them; the question being asked of the text stays fixed while
+            the language answering it drifts. What struck me most when Peter and I first sat with the
+            ASRS archive is that nothing in it announces a task boundary. The benchmarks' crisp
+            handovers from task to task are a convenience of experimental construction, not a property
+            of the world, and the setting the world actually serves up, gradual, unlabelled,
+            vocabulary-first drift, is the one the literature has studied least.
+          </p>
+
+          <p>
+            My work at Explore Learning shows me the same structure wearing a different face. A model
+            of a child's ability has to follow months of progress: the struggling reader of September
+            is not the same distribution in March, and updating for where the learner is now must not
+            erase what the model learned about how they got there, because that history is the raw
+            material personalisation is made of. Push the same problem onto the device, as keyboards,
+            speech and health sensing do, and the data rule sharpens to its extreme: the raw data never
+            leaves the phone, there is no server-side dataset to retrain from, and continual learning
+            stops being one option among several.
+          </p>
+
+          <p>
+            Medicine is the encounter I know only from the literature, and it is the best-documented
+            of the lot. Finlayson and colleagues [<a href="#ref-finlayson">23</a>] take five pages to
+            show how dataset shift quietly breaks deployed clinical models, and the external validation
+            of a widely used sepsis predictor [<a href="#ref-sepsis">24</a>] shows what that costs in
+            practice: performance far below the advertised numbers, discovered only when someone
+            outside checked. I find the regulatory response the most telling part. The FDA now lets
+            manufacturers pre-specify how a model will change after approval, which is a regulator
+            conceding, in its own language, that a medical model which stops learning is a defect
+            rather than a comfort. The data rule here is governance: hospitals often cannot pool or
+            indefinitely retain the records a full retrain would need.
+          </p>
+
+          <p>
+            Fraud detection adds the twist that the drift shoots back. Patterns change
+            <em>because</em> the model caught the last ones, labels arrive weeks late as chargebacks,
+            and old transaction data ages out under retention rules, which leaves teams asking
+            precisely the continual learning question: what minimal summary of the past must be kept
+            so the model does not forget attack families that will, reliably, return? And large
+            language models complete the picture from the opposite direction: the knowledge cutoff is
+            catastrophic forgetting's mirror image, a model that has not forgotten but was never told.
+            Of the three routes to keeping one current, retrieval augmentation is the right first
+            answer for facts; fine-tuning is cheap but measurably erodes earlier capabilities, and
+            Luo and colleagues [<a href="#ref-llmforget">25</a>] is the empirical read I would put in
+            front of anyone proposing to "just fine-tune it monthly"; continual pretraining
+            [<a href="#ref-llmcpt">19</a>] is the principled route for whole corpora, and its working
+            recipe is the one this post keeps arriving at, replay under another name. Different
+            domains, then, but the same grammar every time: a fixed task, a moving world, and a rule
+            about data that closes the easy exit.
+          </p>
+
+          <h2 id="pitfalls">7. What I would check before building one</h2>
+
+          <p>
+            When a continual learning proposal lands in front of me, a student's, a collaborator's,
+            occasionally my own, I have learned to ask the same questions in the same order, because
+            each one is cheaper to answer than the one after it and any of them can end the
+            conversation early.
+          </p>
+
+          <p>
+            The first is whether the machinery is needed at all. If you can store your data and afford
+            scheduled retrains, periodic retraining is simpler, safer and far easier to audit, and the
+            honest move is to do that and go home. Continual learning earns its complexity only when a
+            named constraint, privacy, retention, edge deployment, sheer scale, removes that option, so
+            I ask for the constraint in writing. More projects have died of this question, in my
+            experience, than of any technical failure that came later, and dying at this stage is
+            cheap.
+          </p>
+
+          <p>
+            If the constraint is real, the next question is which setting you are actually in:
+            task-incremental, domain-incremental, class-incremental, or the gradual boundary-free drift
+            that real streams mostly serve up. Everything downstream, the methods worth trying, the
+            papers whose conclusions you may import, inherits from this answer, and mismatching it is
+            the single most common way I watch practitioners get burned. The EWC collapse in the demo
+            is what the mismatch looks like from the inside.
+          </p>
+
+          <p>
+            Then I want to know what a falling score is actually made of before anyone names it
+            forgetting. A model's ability to rank and the place its thresholds sit come apart under
+            drift, as the calibration literature has long documented [<a href="#ref-davis">22</a>], and
+            they are different diseases with very different prices of medicine. This check costs an
+            afternoon; skipping it can cost a replay infrastructure built to cure a problem a
+            recalibration would have fixed.
+          </p>
+
+          <p>
+            Two checks are about honesty with yourself. Build the accuracy matrix into the harness on
+            day one, because an average over tasks can stay flattering while individual tasks quietly
+            collapse to zero, and the matrix answers most questions before they are asked. And tune the
+            way a deployed learner would have to: hyperparameters selected by how well the finished run
+            performs across all tasks have used information no real system will ever have, so tune on a
+            held-out prefix of the sequence and say so when you report.
+          </p>
+
+          <p>
+            The last two are about the system around the model. A replay buffer is a copy of production
+            data that outlives its source, so whatever retention rules and consent withdrawals bind the
+            original records bind the buffer too; feature-level replay, generative replay and
+            differentially private training exist precisely for that gap, and choosing among them is as
+            much a policy decision as a technical one. And before any of it goes live, the monitoring
+            has to exist, because a model that updates itself will happily learn from a broken upstream
+            pipeline. Drift detection and rollback are prerequisites for continual learning in
+            production, not accessories to it.
+          </p>
+
+          <h2 id="reading">8. A reading path</h2>
+
+          <p>
+            If you are starting from zero, this is the order I would actually read things in, rather
+            than an alphabetical pile. Begin with French [<a href="#ref-french">3</a>] for the problem
+            and van de Ven and Tolias [<a href="#ref-scenarios">6</a>] for the vocabulary; together they
+            take an afternoon and inoculate you against most misreadings. Then Kirkpatrick and
+            colleagues [<a href="#ref-ewc">7</a>] and Lopez-Paz and Ranzato [<a href="#ref-gem">10</a>]
+            as the two classics, one per family, reading the latter as much for its metrics as its
+            method. For surveys, pick by need: Parisi and colleagues [<a href="#ref-parisi">26</a>] if
+            the biological connection interests you, De Lange and colleagues
+            [<a href="#ref-delange">27</a>] for a disciplined comparison of the classic methods, Wang
+            and colleagues [<a href="#ref-wangsurvey">28</a>] for the current, foundation-model-aware
+            state of the field. When you want to build,
+            <a href="https://avalanche.continualai.org/" target="_blank" rel="noopener">Avalanche</a>
+            [<a href="#ref-avalanche">30</a>] gives you benchmarks, strategies and correct metric
+            implementations out of the box, and the
+            <a href="https://www.continualai.org/" target="_blank" rel="noopener">ContinualAI</a>
+            community that maintains it is welcoming to newcomers. And when the ASRS paper is out, I
+            will write it up properly here, numbers and all.
+          </p>
+
+          <p>
+            Stepping back from the reading list, one thing about this field keeps striking me. Between
+            McCloskey and Cohen's arithmetic network and this year's continually pretrained language
+            models lie thirty-seven years, perhaps twelve orders of magnitude of compute, and the shape
+            of the best answer has barely moved: keep a little of the past, interleave it with the
+            present, and measure retention as carefully as acquisition. The budgets changed; the idea
+            did not. That the field's oldest and plainest remedy is still the one to beat could be read
+            as an embarrassment or as a comfort, and depending on the day I have read it both ways.
+            Mostly, now, I read it as a hint that the remedy is tracking something true about how
+            learning under scarcity has to work, in machines and, if the Complementary Learning Systems
+            people are right, in us.
+          </p>
+
+          <h2>References</h2>
+
+          <ol class="ref-list">
+            <li id="ref-mccloskey">McCloskey, M. and Cohen, N. J. (1989). Catastrophic interference in connectionist networks: the sequential learning problem. <em>Psychology of Learning and Motivation</em>, 24, 109-165.</li>
+            <li id="ref-ratcliff">Ratcliff, R. (1990). Connectionist models of recognition memory: constraints imposed by learning and forgetting functions. <em>Psychological Review</em>, 97(2), 285-308.</li>
+            <li id="ref-french">French, R. M. (1999). Catastrophic forgetting in connectionist networks. <em>Trends in Cognitive Sciences</em>, 3(4), 128-135.</li>
+            <li id="ref-grossberg">Grossberg, S. (1987). Competitive learning: from interactive activation to adaptive resonance. <em>Cognitive Science</em>, 11(1), 23-63.</li>
+            <li id="ref-cls">McClelland, J. L., McNaughton, B. L. and O'Reilly, R. C. (1995). Why there are complementary learning systems in the hippocampus and neocortex. <em>Psychological Review</em>, 102(3), 419-457.</li>
+            <li id="ref-scenarios">van de Ven, G. M. and Tolias, A. S. (2019). Three scenarios for continual learning. <a href="https://arxiv.org/abs/1904.07734" target="_blank" rel="noopener">arXiv:1904.07734</a>.</li>
+            <li id="ref-ewc">Kirkpatrick, J. et al. (2017). Overcoming catastrophic forgetting in neural networks. <em>PNAS</em>, 114(13), 3521-3526. <a href="https://arxiv.org/abs/1612.00796" target="_blank" rel="noopener">arXiv:1612.00796</a>.</li>
+            <li id="ref-si">Zenke, F., Poole, B. and Ganguli, S. (2017). Continual learning through synaptic intelligence. <em>ICML</em>. <a href="https://arxiv.org/abs/1703.04200" target="_blank" rel="noopener">arXiv:1703.04200</a>.</li>
+            <li id="ref-lwf">Li, Z. and Hoiem, D. (2017). Learning without forgetting. <em>IEEE TPAMI</em>, 40(12), 2935-2947. <a href="https://arxiv.org/abs/1606.09282" target="_blank" rel="noopener">arXiv:1606.09282</a>.</li>
+            <li id="ref-gem">Lopez-Paz, D. and Ranzato, M. (2017). Gradient episodic memory for continual learning. <em>NeurIPS</em>. <a href="https://arxiv.org/abs/1706.08840" target="_blank" rel="noopener">arXiv:1706.08840</a>.</li>
+            <li id="ref-agem">Chaudhry, A. et al. (2019). Efficient lifelong learning with A-GEM. <em>ICLR</em>. <a href="https://arxiv.org/abs/1812.00420" target="_blank" rel="noopener">arXiv:1812.00420</a>.</li>
+            <li id="ref-der">Buzzega, P. et al. (2020). Dark experience for general continual learning: a strong, simple baseline. <em>NeurIPS</em>. <a href="https://arxiv.org/abs/2004.07211" target="_blank" rel="noopener">arXiv:2004.07211</a>.</li>
+            <li id="ref-genreplay">Shin, H. et al. (2017). Continual learning with deep generative replay. <em>NeurIPS</em>. <a href="https://arxiv.org/abs/1705.08690" target="_blank" rel="noopener">arXiv:1705.08690</a>.</li>
+            <li id="ref-prognets">Rusu, A. A. et al. (2016). Progressive neural networks. <a href="https://arxiv.org/abs/1606.04671" target="_blank" rel="noopener">arXiv:1606.04671</a>.</li>
+            <li id="ref-packnet">Mallya, A. and Lazebnik, S. (2018). PackNet: adding multiple tasks to a single network by iterative pruning. <em>CVPR</em>. <a href="https://arxiv.org/abs/1711.05769" target="_blank" rel="noopener">arXiv:1711.05769</a>.</li>
+            <li id="ref-hat">Serra, J. et al. (2018). Overcoming catastrophic forgetting with hard attention to the task. <em>ICML</em>. <a href="https://arxiv.org/abs/1801.01423" target="_blank" rel="noopener">arXiv:1801.01423</a>.</li>
+            <li id="ref-scale">Ramasesh, V. V., Lewkowycz, A. and Dyer, E. (2022). Effect of scale on catastrophic forgetting in neural networks. <em>ICLR</em>. <a href="https://openreview.net/forum?id=GhVS8_yPeEa" target="_blank" rel="noopener">OpenReview</a>.</li>
+            <li id="ref-l2p">Wang, Z. et al. (2022). Learning to prompt for continual learning. <em>CVPR</em>. <a href="https://arxiv.org/abs/2112.08654" target="_blank" rel="noopener">arXiv:2112.08654</a>.</li>
+            <li id="ref-llmcpt">Ibrahim, A. et al. (2024). Simple and scalable strategies to continually pre-train large language models. <a href="https://arxiv.org/abs/2403.08763" target="_blank" rel="noopener">arXiv:2403.08763</a>.</li>
+            <li id="ref-rwalk">Chaudhry, A. et al. (2018). Riemannian walk for incremental learning: understanding forgetting and intransigence. <em>ECCV</em>. <a href="https://arxiv.org/abs/1801.10112" target="_blank" rel="noopener">arXiv:1801.10112</a>.</li>
+            <li id="ref-farquhar">Farquhar, S. and Gal, Y. (2018). Towards robust evaluations of continual learning. <a href="https://arxiv.org/abs/1805.09733" target="_blank" rel="noopener">arXiv:1805.09733</a>.</li>
+            <li id="ref-davis">Davis, S. E. et al. (2017). Calibration drift in regression and machine learning models for acute kidney injury. <em>Journal of the American Medical Informatics Association</em>, 24(6), 1052-1061.</li>
+            <li id="ref-finlayson">Finlayson, S. G. et al. (2021). The clinician and dataset shift in artificial intelligence. <em>New England Journal of Medicine</em>, 385(3), 283-286.</li>
+            <li id="ref-sepsis">Wong, A. et al. (2021). External validation of a widely implemented proprietary sepsis prediction model in hospitalized patients. <em>JAMA Internal Medicine</em>, 181(8), 1065-1070.</li>
+            <li id="ref-llmforget">Luo, Y. et al. (2023). An empirical study of catastrophic forgetting in large language models during continual fine-tuning. <a href="https://arxiv.org/abs/2308.08747" target="_blank" rel="noopener">arXiv:2308.08747</a>.</li>
+            <li id="ref-parisi">Parisi, G. I. et al. (2019). Continual lifelong learning with neural networks: a review. <em>Neural Networks</em>, 113, 54-71. <a href="https://arxiv.org/abs/1802.07569" target="_blank" rel="noopener">arXiv:1802.07569</a>.</li>
+            <li id="ref-delange">De Lange, M. et al. (2021). A continual learning survey: defying forgetting in classification tasks. <em>IEEE TPAMI</em>, 44(7), 3366-3385. <a href="https://arxiv.org/abs/1909.08383" target="_blank" rel="noopener">arXiv:1909.08383</a>.</li>
+            <li id="ref-wangsurvey">Wang, L. et al. (2024). A comprehensive survey of continual learning: theory, method and application. <em>IEEE TPAMI</em>, 46(8), 5362-5383. <a href="https://arxiv.org/abs/2302.00487" target="_blank" rel="noopener">arXiv:2302.00487</a>.</li>
+            <li id="ref-threetypes">van de Ven, G. M., Tuytelaars, T. and Tolias, A. S. (2022). Three types of incremental learning. <em>Nature Machine Intelligence</em>, 4, 1185-1197.</li>
+            <li id="ref-avalanche">Lomonaco, V. et al. (2021). Avalanche: an end-to-end library for continual learning. <em>CVPR Workshops</em>. <a href="https://avalanche.continualai.org/" target="_blank" rel="noopener">avalanche.continualai.org</a>.</li>
+          </ol>
+
+          <hr>
+          <p style="font-size:0.9rem; color:#767574;">
+            Corrections and disagreements are welcome:
+            <a href="mailto:hisham.ihshaish@uwe.ac.uk">hisham.ihshaish@uwe.ac.uk</a>.
+            Back to the <a href="/blog/ml/">Machine Learning blog</a>.
+          </p>
+
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
