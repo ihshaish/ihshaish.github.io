@@ -1,5 +1,5 @@
 {
-  "_readme": "Education Technology library. Add new items to the top of the list. Fields: type (paper | news | video | example), title, url, source, date (YYYY-MM, approximate is fine), blurb. The page renders and filters this file.",
+  "_readme": "Education Technology library. Fields: type (paper | news | video | example), title, url, source, date (YYYY-MM), blurb, and optionally image/imageAlt (self-hosted under media/), quote, featured (accent card), links [{label,url}]. The page sorts by date, newest first; the blurb must say why the item earns its place, critically and in my voice.",
   "items": [
     {
       "type": "news",
@@ -7,6 +7,8 @@
       "url": "https://www.linkedin.com/posts/explore-learning_how-can-we-better-identify-when-a-child-needs-activity-7483467808668909568-6Msn",
       "source": "Explore Learning at the UK Festival of Education, Wellington College",
       "date": "2026-07",
+      "image": "/blog/edtech/media/festival-talk-video.jpg",
+      "imageAlt": "Speaking at the Festival of Education: are pupils learning, or just coping?",
       "blurb": "Our talk at this year's Festival of Education (2 and 3 July), summarised in this post: the work I lead at Explore Learning on an algorithm for finding each child's optimal zone of proximal development, pairing data science with educator judgement to decide what support, when, and why. We are looking for schools, trusts and research partners to test it with."
     },
     {
@@ -16,6 +18,8 @@
       "url": "https://www.linkedin.com/posts/explore-learning_edtech-edtechawards-edtechbreakthrough-activity-7470769840014733328-fOE4",
       "source": "EdTech Breakthrough Awards",
       "date": "2026-06",
+      "image": "/blog/edtech/media/compass-award.jpg",
+      "imageAlt": "EdTech Breakthrough Award 2026: Adaptive Learning Solution of the Year",
       "quote": "We're thrilled to share that Explore Learning's Compass has been named Adaptive Learning Solution of the Year at the 2026 EdTech Breakthrough Awards.",
       "blurb": "Some context from my side of it. Compass is Explore Learning's adaptive learning platform, and underneath it sits the Aptitude model, which my team and I developed: the machinery that continuously estimates where a child is and what they are ready for next. The award programme drew over 3,000 entries this year, so the recognition says something about the approach, evidence-led modelling paired with expert tutors, rather than just the product. The white paper below sets out the thinking that drove the build.",
       "links": [
@@ -36,12 +40,15 @@
       ]
     },
     {
-      "type": "paper",
-      "title": "Mind in Society: the development of higher psychological processes",
-      "url": "https://www.hup.harvard.edu/books/9780674576292",
-      "source": "Vygotsky, Harvard University Press",
-      "date": "1978-01",
-      "blurb": "Where the zone of proximal development comes from: the band between what a child can do alone and what they can do with the right help. Chapter 6 is the one to read, and it is striking how directly a 1930s idea specifies what an adaptive learning system should actually optimise."
+      "type": "example",
+      "title": "Compass: the smart learning tool behind the award",
+      "url": "https://www.explorelearning.co.uk/news/explore-learning-launches-compass-2-0/",
+      "source": "Explore Learning",
+      "date": "2025-09",
+      "blurb": "Included with an obvious declaration of interest: my team builds its models. Compass 2.0 launched in September 2025, places a child's level from around fifteen questions, and forecasts each learner's route to mastery from over half a billion learning interactions. The link explains it in plain terms and the white paper above gives the reasoning; judge it by the standards the rest of this library sets, Bloom's gap, retrieval practice, Freeman's baseline, because that is the bar we hold ourselves to.",
+      "links": [
+        { "label": "How the smart learning tool works", "url": "https://www.explorelearning.co.uk/why-trust-us/smart-learning/" }
+      ]
     },
     {
       "type": "news",
@@ -49,31 +56,7 @@
       "url": "https://www.unesco.org/gem-report/en/technology",
       "source": "UNESCO Global Education Monitoring Report",
       "date": "2023-07",
-      "blurb": "The most thorough recent stocktake of technology in classrooms worldwide. Sceptical where the evidence is thin, and useful precisely for that: it separates what is known about learning outcomes from what is marketed."
-    },
-    {
-      "type": "paper",
-      "title": "The 2 Sigma Problem: the search for methods of group instruction as effective as one-to-one tutoring",
-      "url": "https://doi.org/10.3102/0013189X013006004",
-      "source": "Bloom, Educational Researcher 13(6)",
-      "date": "1984-06",
-      "blurb": "The paper behind almost every pitch for AI tutoring: tutored students outperformed conventional classes by two standard deviations. Whether software can close that gap remains the live question, but this is where the number comes from."
-    },
-    {
-      "type": "paper",
-      "title": "Test-enhanced learning: taking memory tests improves long-term retention",
-      "url": "https://doi.org/10.1111/j.1467-9280.2006.01693.x",
-      "source": "Roediger and Karpicke, Psychological Science 17(3)",
-      "date": "2006-03",
-      "blurb": "The retrieval practice result: being tested on material beats re-studying it for long-term retention. The single most actionable finding in the learning sciences for anyone designing quizzes, flashcards or spaced repetition tools."
-    },
-    {
-      "type": "paper",
-      "title": "Active learning increases student performance in science, engineering, and mathematics",
-      "url": "https://doi.org/10.1073/pnas.1319030111",
-      "source": "Freeman et al., PNAS 111(23)",
-      "date": "2014-06",
-      "blurb": "A meta-analysis of 225 studies: exam scores rise and failure rates drop when lecturing gives way to active learning. The evidential baseline any classroom technology should be measured against."
+      "blurb": "The most thorough recent stocktake of technology in classrooms, and the most sceptical. I do not accept all of its conclusions, parts of it read as policy positioning, but its central question, on whose terms technology enters the classroom, is one every vendor should be made to answer, myself included. It sits in this library as the counterweight to everything of mine above it."
     },
     {
       "type": "video",
@@ -81,7 +64,23 @@
       "url": "https://www.youtube.com/watch?v=GEmuEWjHr5c",
       "source": "Veritasium (Derek Muller)",
       "date": "2014-12",
-      "blurb": "Muller's short history of technologies that were each going to transform education (film, radio, television, computers) and why the teacher-student relationship survived them all. He has since retitled it, aptly. Aged remarkably well as a lens for AI-in-education claims."
+      "blurb": "Twelve years old and it could have been filmed this morning. Muller walks through a century of technologies that were each going to revolutionise education, film, radio, television, computers, and reaches the conclusion my white paper argues from the other direction: the technology is never the mechanism, the learning relationship is. I keep it here as a test for my own claims. When an AI-in-education pitch cannot say why this time is different, it is this video playing again."
+    },
+    {
+      "type": "paper",
+      "title": "Active learning increases student performance in science, engineering, and mathematics",
+      "url": "https://doi.org/10.1073/pnas.1319030111",
+      "source": "Freeman et al., PNAS 111(23)",
+      "date": "2014-06",
+      "blurb": "A meta-analysis of 225 studies: exam scores rise and failure rates fall when lecturing gives way to active learning. I treat it as the evidential baseline for this whole field. A classroom technology that cannot at least match well-run active learning, a cheap, human, decades-old intervention, is decoration, whatever its demo looks like."
+    },
+    {
+      "type": "paper",
+      "title": "Test-enhanced learning: taking memory tests improves long-term retention",
+      "url": "https://doi.org/10.1111/j.1467-9280.2006.01693.x",
+      "source": "Roediger and Karpicke, Psychological Science 17(3)",
+      "date": "2006-03",
+      "blurb": "Retrieval practice: being tested on material beats re-studying it for long-term retention. It is the cheapest, best-replicated effect in the learning sciences, and the first thing I check in any adaptive platform, ours included, is whether its practice is actually retrieval or just re-exposure dressed up as practice. More products fail that check than would admit it."
     },
     {
       "type": "example",
@@ -89,15 +88,23 @@
       "url": "https://phet.colorado.edu/",
       "source": "University of Colorado Boulder",
       "date": "2002-01",
-      "blurb": "Free, research-tested simulations for physics, maths and chemistry, running for over two decades. A model of what evidence-led education technology looks like: built around how students explore, then studied and iterated."
+      "blurb": "Free simulations for physics, maths and chemistry, built, studied and iterated for over two decades. What earns it a place here is the method rather than the product: design around how learners actually explore, measure, revise, repeat. Most of the industry, in a hurry, skips the middle two steps. This is what not skipping them looks like."
     },
     {
-      "type": "example",
-      "title": "Khanmigo",
-      "url": "https://www.khanmigo.ai/",
-      "source": "Khan Academy",
-      "date": "2023-03",
-      "blurb": "Khan Academy's AI tutor, deliberately built to guide with questions rather than hand over answers. Worth watching as a live experiment in whether LLM tutoring moves the needle Bloom measured."
+      "type": "paper",
+      "title": "The 2 Sigma Problem: the search for methods of group instruction as effective as one-to-one tutoring",
+      "url": "https://doi.org/10.3102/0013189X013006004",
+      "source": "Bloom, Educational Researcher 13(6)",
+      "date": "1984-06",
+      "blurb": "The paper behind almost every pitch for AI tutoring, mine not excepted: tutored students outperforming conventional classes by two standard deviations. I cite it with care. Two sigma was the best case from small studies and later replications land well below it, but even the conservative reading leaves a gap worth building for, and it is the gap adaptive systems are chasing. Read it as a target, not a promise."
+    },
+    {
+      "type": "paper",
+      "title": "Mind in Society: the development of higher psychological processes",
+      "url": "https://www.hup.harvard.edu/books/9780674576292",
+      "source": "Vygotsky, Harvard University Press",
+      "date": "1978-01",
+      "blurb": "Where the zone of proximal development comes from: the band between what a child can do alone and what they can do with the right help. Chapter 6 is the one to read, and it is striking how directly a 1930s idea specifies what an adaptive learning system should actually optimise. It is the theoretical spine of the algorithm I talked about at the Festival of Education."
     }
   ]
 }
