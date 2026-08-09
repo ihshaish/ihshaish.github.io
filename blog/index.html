@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="Blog: essays on machine learning, and a curated Education Technology library of papers, news, videos and examples." />
+
+  <title>Blog | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+        <div class="blog-hero">
+          <h1>Blog</h1>
+          <p>
+            Two tracks. The first is essays on machine learning: grounded in the literature, honest about
+            what works, and wherever possible accompanied by code you can run. The second collects
+            material on education technology: papers, news, videos and worked examples, curated rather
+            than exhaustive.
+          </p>
+        </div>
+
+        <div class="row" style="max-width: 820px; margin: 0 auto 2.5rem;">
+          <div class="col-md-6 mb-4">
+            <a href="/blog/ml/" style="text-decoration:none; color:inherit; display:block; height:100%;">
+              <div class="card track-card">
+                <div class="card-body">
+                  <h4 class="card-title"><i class="fas fa-brain mr-2" style="color:#1565c0;"></i>Machine Learning</h4>
+                  <p class="card-text" style="color:#555; font-size:0.95rem;">
+                    Long-form pieces on how learning systems work and fail, with runnable notebooks.
+                  </p>
+                  <span style="font-size:0.88rem; color:#1565c0; font-weight:600;">Read the essays <i class="fas fa-arrow-right" style="font-size:0.75rem;"></i></span>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-6 mb-4">
+            <a href="/blog/edtech/" style="text-decoration:none; color:inherit; display:block; height:100%;">
+              <div class="card track-card edtech">
+                <div class="card-body">
+                  <h4 class="card-title"><i class="fas fa-chalkboard-teacher mr-2" style="color:#1baf7a;"></i>Education Technology</h4>
+                  <p class="card-text" style="color:#555; font-size:0.95rem;">
+                    A curated library: papers, news, videos and examples of technology in teaching.
+                  </p>
+                  <span style="font-size:0.88rem; color:#0d7a53; font-weight:600;">Browse the library <i class="fas fa-arrow-right" style="font-size:0.75rem;"></i></span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="blog-hero" style="margin-bottom: 0;">
+          <h2 style="font-size:1.3rem;">Latest</h2>
+          <div class="post-list-item">
+            <h3><a href="/blog/ml/continual-learning/">Continual learning: what it is, and what I've learned working with it</a></h3>
+            <div class="meta">Machine Learning &middot; 28 July 2026 &middot; 15 min read &middot; includes a notebook</div>
+            <p class="summary">
+              Reviewing my PhD student's final thesis draft left me with a question his models were never
+              asked to answer: what happens when a model has to live through decades of drifting data?
+              The map I wish someone had handed me at the start: catastrophic forgetting and which
+              remedies to trust, how to read the literature without being misled, a reading path, and a
+              two-minute experiment in which a network forgets everything and a 200-image memory saves it.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
