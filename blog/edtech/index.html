@@ -118,13 +118,21 @@
     }
 
     function render(filter) {
-      var out = items.filter(function (it) {
+      var shown = items.filter(function (it) {
         return filter === "all" || it.type === filter;
-      }).map(function (it) {
-        var meta = [esc(it.source), fmtDate(it.date)].filter(Boolean).join(" &middot; ");
+      }).slice().sort(function (a, b) {
+        return (b.date || "").localeCompare(a.date || "");
+      });
+      var out = shown.map(function (it, i) {
         var html = '<div class="lib-item' + (it.featured ? ' featured' : '') + '">' +
           '<h3><a href="' + esc(it.url) + '" target="_blank" rel="noopener">' + esc(it.title) + '</a></h3>' +
-          '<div class="lib-meta">' + meta + '</div>';
+          '<div class="lib-meta">' + (i === 0 ? '<span class="lib-latest">Latest</span>' : '') +
+          '<strong>' + fmtDate(it.date) + '</strong>' +
+          (it.source ? ' &middot; ' + esc(it.source) : '') + '</div>';
+        if (it.image) {
+          html += '<a class="lib-image" href="' + esc(it.url) + '" target="_blank" rel="noopener">' +
+            '<img src="' + esc(it.image) + '" alt="' + esc(it.imageAlt || it.title) + '" loading="lazy"></a>';
+        }
         if (it.quote) {
           html += '<div class="lib-quote">&ldquo;' + esc(it.quote) + '&rdquo;</div>';
         }

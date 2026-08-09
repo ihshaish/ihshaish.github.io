@@ -260,6 +260,31 @@
   background: #fbfefd;
 }
 
+.lib-latest {
+  display: inline-block;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0d7a53;
+  margin-right: 0.6rem;
+}
+
+.lib-meta strong { color: #2b2b2b; font-weight: 600; }
+
+.lib-image {
+  display: block;
+  margin: 0.8rem 0;
+}
+
+.lib-image img {
+  max-width: min(100%, 420px);
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid #e6e5e2;
+}
+
 .lib-quote {
   border-left: 3px solid #cde9dd;
   margin: 0.7rem 0;
