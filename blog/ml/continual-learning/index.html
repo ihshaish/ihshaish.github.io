@@ -145,7 +145,7 @@
             for our field. Complementary Learning Systems theory [<a href="#ref-cls">5</a>] proposes a
             division of labour: the hippocampus learns quickly from single episodes, and during rest and
             sleep it replays those episodes to the neocortex, which integrates them slowly, interleaved
-            with existing knowledge. Interleaving is the load-bearing word. The neocortex is never asked
+            with existing knowledge. The word to keep is <em>interleaving</em>. The neocortex is never asked
             to learn new material in a block, on its own, which is precisely the regime that breaks
             artificial networks. Keep that in mind for the remedies below, because the most effective of
             them is a direct imitation of it.
@@ -221,7 +221,7 @@
 
           <p>
             The remedies fall out of the same toy. EWC<sup class="fn"><a href="#note-a">a</a></sup>
-            adds its anchor to B's loss, minimising
+            adds its penalty to B's loss, minimising
             ½(<em>w</em> &minus; <em>b</em>)² + (λ<em>F</em>/2)(<em>w</em> &minus; <em>a</em>)², where
             <em>F</em> is task A's curvature<sup class="fn"><a href="#note-b">b</a></sup>, how sharply
             A cares. Set the derivative to zero and out comes
@@ -477,14 +477,12 @@
             </figcaption>
           </figure>
 
-          <h3>Regularisation: protect the weights that mattered</h3>
+          <h3>Regularisation: slow the overwriting down</h3>
 
           <p>
-            If forgetting happens because new gradients trample old weights, an obvious response is to
-            slow the trampling down. Elastic Weight Consolidation [<a href="#ref-ewc">7</a>] estimates,
-            per weight, how much the old tasks care about it (via the diagonal of the Fisher information
-            matrix) and anchors important weights near their old values with a quadratic penalty. The
-            paper is worth reading whatever you build, for the way it connects the idea to synaptic
+            You met this family in the toy: EWC [<a href="#ref-ewc">7</a>] is that quadratic penalty
+            scaled up, with the diagonal of the Fisher information supplying the per-weight strengths.
+            The paper is worth reading whatever you build, for the way it connects the idea to synaptic
             consolidation in biology; just read it alongside the caveat coming in the demo. Synaptic
             Intelligence [<a href="#ref-si">8</a>] computes a similar importance measure online, and
             Learning without Forgetting [<a href="#ref-lwf">9</a>] reaches the same goal through
@@ -527,25 +525,21 @@
           </p>
 
           <p>
-            Sit with the contrast between these first two families for a moment, because I think it
-            explains most of the scoreboard. What you actually want to preserve is not the weights, it
-            is the <em>function</em>: the model's behaviour on the inputs the old tasks care about.
-            Weights are a proxy for that, and a poor one, since a deep network can move a long way in
-            weight space without changing its behaviour and a short way while changing it completely.
-            Regularisation methods guard the proxy; replay guards the thing itself, re-asserting the
-            desired outputs at exactly the inputs where they are defined. Dark Experience Replay makes
-            the point almost explicitly by replaying old logits rather than just labels, and GEM makes
-            it in gradient space, using stored examples to veto any update whose dot product with the
-            past is negative, the interference geometry from section 1 turned into a constraint. Once I
-            started sorting methods this way, weight space against function space, the empirical
-            rankings stopped looking like accidents.
+            Sit with the contrast between these two families for a moment, because I think it explains
+            most of the scoreboard, and it is the toy's ghost-versus-real distinction grown up. What
+            you want to preserve is not the weights but the <em>function</em>: the model's behaviour on
+            the inputs the old tasks care about. Weights are a poor proxy, since a deep network can
+            move far in weight space without changing its behaviour, and barely at all while changing
+            it completely. Regularisation guards the proxy; replay guards the thing itself,
+            re-asserting the desired outputs at the very inputs where they are defined. Once I started
+            sorting methods this way, the empirical rankings stopped looking like accidents.
           </p>
 
           <h3>Architecture: give each task its own parameters</h3>
 
           <p>
-            The third family sidesteps interference by making sure tasks do not share the weights that
-            matter: Progressive Networks [<a href="#ref-prognets">14</a>] freeze old columns and grow a
+            The third family sidesteps interference by not letting tasks share parameters in the first
+            place: Progressive Networks [<a href="#ref-prognets">14</a>] freeze old columns and grow a
             new one per task, PackNet [<a href="#ref-packnet">15</a>] prunes and re-packs a fixed network
             so each task claims a subnetwork, Hard Attention to the Task [<a href="#ref-hat">16</a>]
             learns near-binary masks. These can eliminate forgetting outright, at the price of parameter
@@ -776,7 +770,7 @@
           <p>
             The collapse is not gradual decay; one task after the data disappears, accuracy on it is
             zero. The shared output head has reassigned its logits to the new classes and nothing pushed
-            back. The line worth staring at is EWC's. With the anchoring penalty doing exactly what its
+            back. The line worth staring at is EWC's. With the quadratic penalty doing exactly what its
             authors intended, it ends level with doing nothing at all, which replicates van de Ven and
             Tolias [<a href="#ref-scenarios">6</a>]: weight protection cannot teach an output layer to
             separate classes it never saw together. No value of the penalty strength fixes it, and I
@@ -892,15 +886,15 @@
             Of the three routes to keeping one current, retrieval augmentation is the right first
             answer for facts; fine-tuning is cheap but measurably erodes earlier capabilities, and
             Luo and colleagues [<a href="#ref-llmforget">25</a>] is the empirical read I would put in
-            front of anyone proposing to "just fine-tune it monthly"; continual pretraining
-            [<a href="#ref-llmcpt">19</a>] is the principled route for whole corpora, and its working
-            recipe is the one this post keeps arriving at, replay under another name. There is a fourth
+            front of anyone proposing to "just fine-tune it monthly"; and for absorbing whole corpora,
+            the continual pretraining recipe from section 4 [<a href="#ref-llmcpt">19</a>] is the
+            principled route. There is a fourth
             route I watch with interest but do not yet trust: model editing, surgically rewriting
             specific facts in place [<a href="#ref-rome">31</a>]. The published methods can change what
             a model says about one fact reliably; apply edits in batches, though, and neighbouring
             knowledge degrades in ways that are hard to predict, which is catastrophic interference
             again, now at the scale of individual memories. It feels to me the way EWC felt in 2017:
-            elegant, principled, and not yet load-bearing. Different domains, then, but the same
+            elegant, principled, and not yet something I would lean on. Different domains, then, but the same
             grammar every time: a fixed task, a moving world, and a rule about data that closes the
             easy exit.
           </p>
@@ -1001,12 +995,12 @@
 
           <ol class="ref-list note-list">
             <li id="note-a">EWC, Elastic Weight Consolidation: the best-known regularisation method in
-              continual learning. It estimates how much each weight mattered to earlier tasks and
-              penalises moving those weights. Properly introduced in section 4; in the toy, all that
-              survives of it is the quadratic anchor.</li>
+              continual learning. It estimates how strongly earlier tasks depend on each weight and
+              penalises changes to those weights. Properly introduced in section 4; in the toy it
+              reduces to the quadratic penalty term.</li>
             <li id="note-b">Curvature here stands in for the Fisher information: a per-weight estimate
               of how sharply the loss worsens when that weight moves. In one dimension it really is
-              just the parabola's steepness; EWC uses it to decide which weights are load-bearing.</li>
+              just the parabola's steepness; EWC uses it to decide which weights the old tasks cannot afford to lose.</li>
             <li id="note-c">Distillation: training a model to match another model's output scores
               rather than hard labels. In Learning without Forgetting, the teacher is the model's own
               younger self.</li>
