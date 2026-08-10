@@ -7476,19 +7476,19 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f1cb57f0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=661de2f4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Watching-a-neural-network-forget">Watching a neural network forget<a class="anchor-link" href="#Watching-a-neural-network-forget">¶</a></h1><p>This notebook accompanies my post <a href="https://ihshaish.github.io/blog/ml/continual-learning/">Continual learning: what it is, and what I've learned working with it</a>. I wrote it because I think forgetting is something you should watch happen at least once, on a model you trained yourself, rather than take from a survey table. Everything here runs end to end in about two minutes on a laptop, no GPU.</p>
-<p>The claim under test: train a network on a sequence of tasks, one after another, and it overwrites what it learned earlier. McCloskey and Cohen named this <em>catastrophic interference</em> back in 1989, and I want to see it, then compare three standard responses side by side. Naive fine-tuning, which is just carrying on training and hoping. Elastic Weight Consolidation (Kirkpatrick et al., 2017), which anchors the weights that earlier tasks relied on. And experience replay, which keeps a small buffer of old examples and mixes them into every new batch. As the ceiling to measure everyone against, I also train a model jointly on all data seen so far, which is what you would do if storage and access were unlimited.</p>
+<p>The claim under test: train a network on a sequence of tasks, one after another, and it overwrites what it learned earlier. McCloskey and Cohen named this <em>catastrophic interference</em> back in 1989, and I want to see it, then compare three standard responses side by side. Naive fine-tuning, which is just carrying on training and hoping. Elastic Weight Consolidation (Kirkpatrick et al., 2017), which penalises moving the weights that earlier tasks relied on. And experience replay, which keeps a small buffer of old examples and mixes them into every new batch. As the ceiling to measure everyone against, I also train a model jointly on all data seen so far, which is what you would do if storage and access were unlimited.</p>
 <p>My setup, chosen for speed and clarity rather than glory: scikit-learn's digits dataset (1,797 images of handwritten digits, 8 by 8 pixels), split into five tasks of two classes each, {0,1} through {8,9}. The model is a small multilayer perceptron with a single 10-way output head, and at test time it is <em>not</em> told which task an image came from. That makes this the <strong>class-incremental</strong> scenario in van de Ven and Tolias's taxonomy (2019), deliberately: it is the hardest of the three standard scenarios, the closest to real deployments, and, as you will see, the one where a famous method falls over.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8fb1afa9">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=79d7d52e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7544,7 +7544,7 @@ Test samples per task:     [109, 108, 109, 108, 106]
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ac7cf20a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7b08da01">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7554,7 +7554,7 @@ Test samples per task:     [109, 108, 109, 108, 106]
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7e0c5466">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=d443b304">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7593,7 +7593,7 @@ Test samples per task:     [109, 108, 109, 108, 106]
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e9f045b4">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=14b0d282">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7603,7 +7603,7 @@ Test samples per task:     [109, 108, 109, 108, 106]
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2376067e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9c0ac01d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7640,19 +7640,19 @@ Test samples per task:     [109, 108, 109, 108, 106]
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b50ce3fb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6c3c10cc">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>I have run this cell dozens of times now and the row of zeros still lands. Near-perfect accuracy on the most recent pair of digits, essentially nothing on every pair before it, and not a slow fade either; one task after the data disappears, it is gone. The gradients from the new task point wherever the new loss surface wants them to, and nothing in the objective speaks for the past.</p>
-<h2 id="Strategy-2:-Elastic-Weight-Consolidation">Strategy 2: Elastic Weight Consolidation<a class="anchor-link" href="#Strategy-2:-Elastic-Weight-Consolidation">¶</a></h2><p>EWC is the method I most wanted to work when I first met it, because the idea is lovely: estimate, per weight, how much the earlier tasks care about it, using the diagonal of the Fisher information matrix, then anchor the important weights near the values they had when the earlier task finished:</p>
+<h2 id="Strategy-2:-Elastic-Weight-Consolidation">Strategy 2: Elastic Weight Consolidation<a class="anchor-link" href="#Strategy-2:-Elastic-Weight-Consolidation">¶</a></h2><p>EWC is the method I most wanted to work when I first met it, because the idea is lovely: estimate, per weight, how much the earlier tasks care about it, using the diagonal of the Fisher information matrix, then hold the important weights near the values they had when the earlier task finished:</p>
 $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambda}{2} \sum_i F_i^{(t)} \, (\theta_i - \theta_i^{(t)*})^2$$<p>where $F^{(t)}$ is the Fisher diagonal for task $t$ and $\theta^{(t)*}$ the weights at the end of that task. (If you like Bayesian readings, this is a Laplace approximation: the old task's posterior recycled as the new task's prior. I say more about that in the post.)</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2669f6d8">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ea241bb6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7674,17 +7674,17 @@ $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambd
 <span class="k">class</span> <span class="nc">EWC</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">anchors</span> <span class="o">=</span> <span class="p">[]</span>   <span class="c1"># list of (fisher, weights_star) per finished task</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span> <span class="o">=</span> <span class="p">[]</span>   <span class="c1"># one (fisher, weights_star) pair per finished task</span>
 
     <span class="k">def</span> <span class="nf">add_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">Xa</span><span class="p">,</span> <span class="n">ya</span><span class="p">):</span>
         <span class="n">star</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">anchors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">fisher_diagonal</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">Xa</span><span class="p">,</span> <span class="n">ya</span><span class="p">),</span> <span class="n">star</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">fisher_diagonal</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">Xa</span><span class="p">,</span> <span class="n">ya</span><span class="p">),</span> <span class="n">star</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">penalty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">anchors</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="k">for</span> <span class="n">fisher</span><span class="p">,</span> <span class="n">star</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">anchors</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">fisher</span><span class="p">,</span> <span class="n">star</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">snapshots</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ps</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fisher</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">star</span><span class="p">):</span>
                 <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="p">(</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">ps</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">total</span>
@@ -7720,7 +7720,7 @@ $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambd
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=282cdcef">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=063ee3c6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7731,7 +7731,7 @@ $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambd
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=81032654">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2e664352">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7780,7 +7780,7 @@ $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambd
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6113032c">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9485a1f5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7790,7 +7790,7 @@ $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambd
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e7b8e615">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6be320cf">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7829,7 +7829,7 @@ $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambd
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=83a6cb18">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1553abcb">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7839,7 +7839,7 @@ $$\mathcal{L}(\theta) = \mathcal{L}_{\text{new}}(\theta) + \sum_{t} \frac{\lambd
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f81013ed">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ca46d9be">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7886,7 +7886,7 @@ Joint (upper bound)           97.4%       1.1%
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7a98b206">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=41a91430">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7972,7 +7972,7 @@ Joint (upper bound)           97.4%       1.1%
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a33368f1">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=cc9f7acc">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8020,7 +8020,7 @@ Joint (upper bound)           97.4%       1.1%
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d3fff4d6">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9675cc34">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8062,7 +8062,7 @@ Joint (upper bound)           97.4%       1.1%
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=19fc6426">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=79807a95">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
