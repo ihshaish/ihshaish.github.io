@@ -185,30 +185,31 @@
             output layer, and no task label at test time. The first is the easiest and the third the
             hardest. Their paper is short and the taxonomy earns its keep every time I read a new
             result; the journal version [<a href="#ref-threetypes">29</a>] is the polished statement if
-            you prefer one reference to hold on to. I would add an observation from my own recent
-            experience: real streams rarely announce task boundaries at all. Drift arrives gradually and
-            unlabelled, a regime the benchmarks barely touch, and you should notice when a paper's tidy
-            task sequence looks nothing like your data.
+            you prefer one reference to hold on to. One observation from recent experience to carry
+            with you: real streams rarely announce their task boundaries at all, so notice when a
+            paper's tidy task sequence looks nothing like your data.
           </p>
 
           <h2 id="miniature">3. One weight, two tasks: the whole problem in miniature</h2>
 
           <p>
-            Before the method families, a detour I always take when I teach this, because it turns the
-            problem from a phenomenon you read about into one you can compute on the back of an
-            envelope. It starts, like section 1, in psychology. The learning sciences have a
-            long-standing result that mirrors catastrophic forgetting almost exactly: <em>blocked</em>
-            practice, drilling one topic to fluency before moving to the next, feels effective and
-            decays quickly, while <em>interleaved</em> practice, mixing problem types within a session,
-            feels harder and lasts [<a href="#ref-interleave">32</a>]. Students who revise in blocks
-            are confident right up until the mixed exam. A fine-tuned model is the student who revised
-            in blocks: its training curriculum was one topic at a time, its final exam is all topics at
-            once, and it fails the exam for the same structural reason.
+            Before the method families, the back-of-envelope version. I worked this toy out for myself
+            when I was new to the area and the papers were starting to blur together, and it turned the
+            problem from a phenomenon I read about into one I could compute while the kettle boiled. It
+            starts, like section 1, in psychology. The learning sciences have a long-standing result
+            that mirrors catastrophic forgetting almost exactly: <em>blocked</em> practice, drilling
+            one topic to fluency before moving to the next, feels effective and decays quickly, while
+            <em>interleaved</em> practice, mixing problem types within a session, feels harder and
+            lasts [<a href="#ref-interleave">32</a>]. Students who revise in blocks are confident right
+            up until the mixed exam. A fine-tuned model is the student who revised in blocks: its
+            curriculum was one topic at a time, its final exam is all topics at once, and it fails for
+            the same structural reason.
           </p>
 
           <p>
             Now shrink the machine learning version until nothing is left but the mechanism. Take a
-            model with a single weight <em>w</em>. Task A's loss is ½(<em>w</em> &minus; <em>a</em>)²,
+            model with a single weight <em>w</em> (one weight; somewhere a marketing department is
+            calling this a nano-model). Task A's loss is ½(<em>w</em> &minus; <em>a</em>)²,
             so A wants <em>w</em> = <em>a</em>; task B's is ½(<em>w</em> &minus; <em>b</em>)², so B
             wants <em>w</em> = <em>b</em>. Train on A and you sit at <em>a</em>, perfectly. Now B's
             data arrives, A's is gone, and gradient descent on B's loss alone walks <em>w</em>
@@ -219,10 +220,11 @@
           </p>
 
           <p>
-            The remedies fall out of the same toy. EWC adds its anchor to B's loss, minimising
+            The remedies fall out of the same toy. EWC<sup class="fn"><a href="#note-a">a</a></sup>
+            adds its anchor to B's loss, minimising
             ½(<em>w</em> &minus; <em>b</em>)² + (λ<em>F</em>/2)(<em>w</em> &minus; <em>a</em>)², where
-            <em>F</em> is task A's curvature, how sharply A cares. Set the derivative to zero and out
-            comes
+            <em>F</em> is task A's curvature<sup class="fn"><a href="#note-b">b</a></sup>, how sharply
+            A cares. Set the derivative to zero and out comes
           </p>
 
           <div style="text-align:center; margin:1.3rem 0; font-size:1.08rem;">
@@ -246,6 +248,95 @@
             <em>w</em> can serve both, and the honest fix is a second weight, which is the architecture
             family in miniature.
           </p>
+
+          <figure>
+            <div class="cl-anim" style="padding-bottom: 1.1rem;">
+              <svg id="toy-svg" viewBox="0 0 640 258" style="width:100%; height:auto; font-family: Georgia, 'Times New Roman', serif;"
+                   role="img" aria-label="Two parabolas, task A's loss centred at a and task B's at b, with a movable marker showing the compromise weight and its error on each task.">
+                <line x1="50" y1="215" x2="610" y2="215" stroke="#666" stroke-width="1"></line>
+                <text x="616" y="219" font-size="13" font-style="italic" fill="#1a1a1a">w</text>
+                <path id="toy-pa" fill="none" stroke="#0072B2" stroke-width="1.8"></path>
+                <path id="toy-pb" fill="none" stroke="#D55E00" stroke-width="1.8"></path>
+                <text x="98" y="52" font-size="12.5" fill="#D55E00">task B's loss</text>
+                <text x="482" y="52" font-size="12.5" fill="#0072B2">task A's loss</text>
+                <line id="toy-ja" x1="0" y1="210" x2="0" y2="220" stroke="#666" stroke-width="1"></line>
+                <text id="toy-la" y="234" font-size="13" font-style="italic" fill="#1a1a1a" text-anchor="middle">a</text>
+                <line id="toy-jb" x1="0" y1="210" x2="0" y2="220" stroke="#666" stroke-width="1"></line>
+                <text id="toy-lb" y="234" font-size="13" font-style="italic" fill="#1a1a1a" text-anchor="middle">b</text>
+                <line id="toy-jm" x1="0" y1="70" x2="0" y2="215" stroke="#aaa" stroke-width="1" stroke-dasharray="3 4"></line>
+                <text id="toy-lm" y="64" font-size="11" fill="#888" text-anchor="middle">joint would sit here</text>
+                <line id="toy-wline" x1="0" y1="70" x2="0" y2="215" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="5 3"></line>
+                <circle id="toy-dot" cy="215" r="5" fill="#1a1a1a"></circle>
+                <circle id="toy-da" r="4.5" fill="#0072B2"></circle>
+                <circle id="toy-db" r="4.5" fill="#D55E00"></circle>
+                <text id="toy-lw" y="252" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="bold">w*</text>
+              </svg>
+              <input type="range" id="toy-q" min="0" max="100" value="0"
+                     style="width:100%; margin-top:0.4rem;" aria-label="Stability-plasticity dial">
+              <div style="display:flex; justify-content:space-between; font-size:0.82rem; color:#767574; font-family:Georgia,serif;">
+                <span>all plasticity &middot; naive (&lambda; = 0)</span>
+                <span>all stability &middot; refuse to learn (&lambda; &rarr; &infin;)</span>
+              </div>
+              <div id="toy-read" style="margin-top:0.6rem; font-size:0.95rem; color:#2b2b2b;"></div>
+            </div>
+            <figcaption>
+              The stability-plasticity dilemma as a dial you can actually drag. The slider is
+              λ<em>F</em>/(1 + λ<em>F</em>) for EWC and the mixing fraction <em>p</em> for replay, the
+              same number in this one-dimensional world. Naive fine-tuning is the far left; refusing to
+              learn is the far right; everything between is a compromise, priced live in the two error
+              readouts. No position wins both games at once, which is the whole field in one slider.
+            </figcaption>
+          </figure>
+
+          <script>
+          (function () {
+            var A = 3, B = 7, X0 = 50, X1 = 610, Y0 = 215, K = 6.2;
+            function wx(w) { return X0 + (X1 - X0) * w / 10; }
+            function ly(L) { return Y0 - L * K; }
+            function lossPath(c) {
+              var pts = [];
+              for (var w = 0; w <= 10.001; w += 0.2) {
+                var L = (w - c) * (w - c) / 2;
+                if (L * K <= 165) pts.push((pts.length ? "L" : "M") + wx(w).toFixed(1) + " " + ly(L).toFixed(1));
+              }
+              return pts.join(" ");
+            }
+            document.getElementById("toy-pa").setAttribute("d", lossPath(A));
+            document.getElementById("toy-pb").setAttribute("d", lossPath(B));
+            [["toy-ja", A, "toy-la"], ["toy-jb", B, "toy-lb"]].forEach(function (t) {
+              var x = wx(t[1]);
+              var tick = document.getElementById(t[0]);
+              tick.setAttribute("x1", x); tick.setAttribute("x2", x);
+              document.getElementById(t[2]).setAttribute("x", x);
+            });
+            var mid = wx((A + B) / 2);
+            var jm = document.getElementById("toy-jm");
+            jm.setAttribute("x1", mid); jm.setAttribute("x2", mid);
+            document.getElementById("toy-lm").setAttribute("x", mid);
+
+            var slider = document.getElementById("toy-q");
+            function update() {
+              var q = slider.value / 100;
+              var w = q * A + (1 - q) * B;
+              var x = wx(w);
+              var LA = (w - A) * (w - A) / 2, LB = (w - B) * (w - B) / 2;
+              var wl = document.getElementById("toy-wline");
+              wl.setAttribute("x1", x); wl.setAttribute("x2", x);
+              document.getElementById("toy-dot").setAttribute("cx", x);
+              document.getElementById("toy-lw").setAttribute("x", x);
+              var da = document.getElementById("toy-da");
+              da.setAttribute("cx", x); da.setAttribute("cy", ly(LA));
+              var db = document.getElementById("toy-db");
+              db.setAttribute("cx", x); db.setAttribute("cy", ly(LB));
+              document.getElementById("toy-read").innerHTML =
+                "w* = <strong>" + w.toFixed(1) + "</strong> &nbsp;&middot;&nbsp; " +
+                "error on task A: <strong style='color:#0072B2'>" + LA.toFixed(1) + "</strong>" +
+                " &nbsp;&middot;&nbsp; error on task B: <strong style='color:#D55E00'>" + LB.toFixed(1) + "</strong>";
+            }
+            slider.addEventListener("input", update);
+            update();
+          })();
+          </script>
 
           <p>
             Now dress the toy in work clothes, because this exact structure is probably running
@@ -397,13 +488,13 @@
             consolidation in biology; just read it alongside the caveat coming in the demo. Synaptic
             Intelligence [<a href="#ref-si">8</a>] computes a similar importance measure online, and
             Learning without Forgetting [<a href="#ref-lwf">9</a>] reaches the same goal through
-            distillation, penalising changes to the model's old <em>outputs</em> rather than its
+            distillation<sup class="fn"><a href="#note-c">c</a></sup>, penalising changes to the model's old <em>outputs</em> rather than its
             weights.
           </p>
 
           <p>
-            There is a clean way to see what EWC is really claiming, and it is the reason I still teach
-            it even though I rarely deploy it: it is sequential Bayes, approximated. The posterior over
+            There is a clean way to see what EWC is really claiming, and it is what finally made the
+            method click for me: it is sequential Bayes, approximated. The posterior over
             weights after one task ought to become the prior for the next; EWC approximates that
             posterior with a Gaussian centred on the trained weights, with curvature estimated by the
             Fisher information, and the famous penalty simply falls out as the log of that prior. Every
@@ -429,7 +520,7 @@
             would worsen past tasks and, along the way, gave the field its standard metrics (read its
             section 3 even if you never use the method); the cheaper A-GEM
             [<a href="#ref-agem">11</a>]; and Dark Experience Replay [<a href="#ref-der">12</a>], which
-            replays stored logits alongside labels and is the strongest simple baseline in recent
+            replays stored logits<sup class="fn"><a href="#note-d">d</a></sup> alongside labels and is the strongest simple baseline in recent
             comparisons. Where storing raw data is off the table, generative replay
             [<a href="#ref-genreplay">13</a>] trains a generator to produce pseudo-examples of the past
             instead, an idea lifted straight from the CLS account of dreaming.
@@ -535,7 +626,7 @@
             Reading about forgetting is one thing; watching a model you trained five minutes ago lose a
             task completely is another, and I would not have written this post without giving you a way
             to feel it. The notebook below runs the whole story on scikit-learn's small digits dataset
-            in about two minutes, no GPU: five tasks of two digit classes each, a small MLP with a shared
+            in about two minutes, no GPU: five tasks of two digit classes each, a small MLP<sup class="fn"><a href="#note-e">e</a></sup> with a shared
             output head (the hard, class-incremental scenario), and four strategies compared like for
             like.
           </p>
@@ -712,7 +803,8 @@
 
           <p>
             Everything in it is deliberately minimal (a 64-100-100-10 MLP, thirty epochs per task, fixed
-            seeds) so the effects are attributable to the strategies rather than to tuning. Good
+            seeds, and no hyperparameter was tuned in the making of these figures) so the effects are
+            attributable to the strategies rather than to my thumb on the scale. Good
             exercises if you want to go further: vary the replay buffer size and find where retention
             gives out; give each task its own output head and watch EWC start working, which is the
             three-scenarios lesson happening in front of you; and reorder the tasks to see how much the
@@ -904,6 +996,26 @@
             learning under scarcity has to work, in machines and, if the Complementary Learning Systems
             people are right, in us.
           </p>
+
+          <h2>Notes</h2>
+
+          <ol class="ref-list note-list">
+            <li id="note-a">EWC, Elastic Weight Consolidation: the best-known regularisation method in
+              continual learning. It estimates how much each weight mattered to earlier tasks and
+              penalises moving those weights. Properly introduced in section 4; in the toy, all that
+              survives of it is the quadratic anchor.</li>
+            <li id="note-b">Curvature here stands in for the Fisher information: a per-weight estimate
+              of how sharply the loss worsens when that weight moves. In one dimension it really is
+              just the parabola's steepness; EWC uses it to decide which weights are load-bearing.</li>
+            <li id="note-c">Distillation: training a model to match another model's output scores
+              rather than hard labels. In Learning without Forgetting, the teacher is the model's own
+              younger self.</li>
+            <li id="note-d">Logits: the raw scores a classifier produces before they are squashed into
+              probabilities. Matching logits preserves more information about what the old model
+              believed than matching its final answers.</li>
+            <li id="note-e">MLP, multilayer perceptron: the plainest neural network there is, layers of
+              weighted sums and nonlinearities. No convolutions, no attention, nothing to blame.</li>
+          </ol>
 
           <h2>References</h2>
 
