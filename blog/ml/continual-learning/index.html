@@ -59,7 +59,7 @@
 
           <h1>Continual learning: what it is, and what I've learned working with it</h1>
           <div class="post-meta">
-            Hisham Ihshaish &middot; <a href="/blog/ml/">Machine Learning</a> &middot; 28 July 2026 &middot; 18 min read
+            Hisham Ihshaish &middot; <a href="/blog/ml/">Machine Learning</a> &middot; 28 July 2026 &middot; 19 min read
           </div>
 
           <p class="post-lede">
@@ -81,6 +81,7 @@
             <ol>
               <li><a href="#forgetting">The failure that started the field</a></li>
               <li><a href="#definition">What counts as continual learning, and what does not</a></li>
+              <li><a href="#miniature">One weight, two tasks: the whole problem in miniature</a></li>
               <li><a href="#methods">The remedies, and which ones I trust</a></li>
               <li><a href="#evaluation">How to read the numbers</a></li>
               <li><a href="#demo">Watching it happen on your own laptop</a></li>
@@ -190,7 +191,81 @@
             task sequence looks nothing like your data.
           </p>
 
-          <h2 id="methods">3. The remedies, and which ones I trust</h2>
+          <h2 id="miniature">3. One weight, two tasks: the whole problem in miniature</h2>
+
+          <p>
+            Before the method families, a detour I always take when I teach this, because it turns the
+            problem from a phenomenon you read about into one you can compute on the back of an
+            envelope. It starts, like section 1, in psychology. The learning sciences have a
+            long-standing result that mirrors catastrophic forgetting almost exactly: <em>blocked</em>
+            practice, drilling one topic to fluency before moving to the next, feels effective and
+            decays quickly, while <em>interleaved</em> practice, mixing problem types within a session,
+            feels harder and lasts [<a href="#ref-interleave">32</a>]. Students who revise in blocks
+            are confident right up until the mixed exam. A fine-tuned model is the student who revised
+            in blocks: its training curriculum was one topic at a time, its final exam is all topics at
+            once, and it fails the exam for the same structural reason.
+          </p>
+
+          <p>
+            Now shrink the machine learning version until nothing is left but the mechanism. Take a
+            model with a single weight <em>w</em>. Task A's loss is ½(<em>w</em> &minus; <em>a</em>)²,
+            so A wants <em>w</em> = <em>a</em>; task B's is ½(<em>w</em> &minus; <em>b</em>)², so B
+            wants <em>w</em> = <em>b</em>. Train on A and you sit at <em>a</em>, perfectly. Now B's
+            data arrives, A's is gone, and gradient descent on B's loss alone walks <em>w</em>
+            straight to <em>b</em>, where A's error is ½(<em>b</em> &minus; <em>a</em>)². That is
+            catastrophic forgetting in one line: the damage to the old task equals the squared distance
+            between what the two tasks wanted, and nothing in B's objective even records that A
+            existed. No malice, no mystery, just an objective with no term for the past.
+          </p>
+
+          <p>
+            The remedies fall out of the same toy. EWC adds its anchor to B's loss, minimising
+            ½(<em>w</em> &minus; <em>b</em>)² + (λ<em>F</em>/2)(<em>w</em> &minus; <em>a</em>)², where
+            <em>F</em> is task A's curvature, how sharply A cares. Set the derivative to zero and out
+            comes
+          </p>
+
+          <div style="text-align:center; margin:1.3rem 0; font-size:1.08rem;">
+            <em>w</em>* = (<em>b</em> + λ<em>F</em>&thinsp;<em>a</em>) / (1 + λ<em>F</em>)
+          </div>
+
+          <p>
+            a precision-weighted average of the two optima. The stability-plasticity dilemma is
+            literally the dial λ: at zero you get <em>b</em> and total forgetting, at infinity you get
+            <em>a</em> and refuse to learn, and everywhere in between you sit at a compromise that is
+            optimal for neither task if <em>a</em> and <em>b</em> are far apart. Replay with a mixing
+            fraction <em>p</em> minimises (1 &minus; <em>p</em>)·½(<em>w</em> &minus; <em>b</em>)² +
+            <em>p</em>·½(<em>w</em> &minus; <em>a</em>)², landing at <em>w</em> =
+            (1 &minus; <em>p</em>)<em>b</em> + <em>p</em>&thinsp;<em>a</em>. In one dimension the two
+            answers look identical, and that near-identity is the sharpest way I know to say where the
+            families really differ: EWC's extra term is a frozen quadratic <em>guess</em> about what A
+            wants, while replay's is A's actual loss, re-evaluated at every step. In a world that is
+            exactly quadratic the guess is perfect; in any real network it is not, and the gap between
+            the ghost and the real thing is the empirical gap between the families. Even the toy knows
+            about the third family too: if <em>a</em> and <em>b</em> are far apart, no single
+            <em>w</em> can serve both, and the honest fix is a second weight, which is the architecture
+            family in miniature.
+          </p>
+
+          <p>
+            Now dress the toy in work clothes, because this exact structure is probably running
+            somewhere near you. Say you own a support-ticket classifier and every quarter a new product
+            line arrives with new vocabulary and new categories. Fine-tuning on each quarter's tickets
+            is blocked practice, and the toy predicts what follows: the old categories' optima recede,
+            and accuracy on them collapses in proportion to how far the new quarter pulled the weights.
+            What I would actually do, and it is deliberately unglamorous: keep a stratified buffer of a
+            couple of hundred tickets per old category, mix roughly one part old to three parts new in
+            every batch, so the exam and the curriculum finally match; refit the decision thresholds on
+            a small labelled sample after each quarter, since class frequencies will have shifted even
+            where knowledge has not; and keep the accuracy matrix by quarter so any collapse is visible
+            the week it happens rather than at the annual review. Only when the buffer itself is
+            illegal, retention rules, privacy, would I reach for generative or feature-level replay,
+            and only when the quarters are so unlike each other that no shared model is honest would I
+            give each its own head. That is most of my practical advice compressed into one scenario,
+            and every piece of it was already sitting in the one-weight toy.
+          </p>
+
+          <h2 id="methods">4. The remedies, and which ones I trust</h2>
 
           <p>
             The three classic families are easiest to keep apart if you look at <em>where</em> each one
@@ -405,7 +480,7 @@
             literature survived; only the budgets grew more zeros.
           </p>
 
-          <h2 id="evaluation">4. How to read the numbers</h2>
+          <h2 id="evaluation">5. How to read the numbers</h2>
 
           <p>
             The field's standard instrument is the <em>accuracy matrix</em>: after finishing each task,
@@ -454,7 +529,7 @@
             has been through review. Watch this space.
           </p>
 
-          <h2 id="demo">5. Watching it happen on your own laptop</h2>
+          <h2 id="demo">6. Watching it happen on your own laptop</h2>
 
           <p>
             Reading about forgetting is one thing; watching a model you trained five minutes ago lose a
@@ -644,7 +719,7 @@
             sequence itself was carrying.
           </p>
 
-          <h2 id="experience">6. The problem keeps finding me</h2>
+          <h2 id="experience">7. The problem keeps finding me</h2>
 
           <p>
             I did not go looking for continual learning; versions of it keep turning up in whatever I
@@ -738,7 +813,7 @@
             easy exit.
           </p>
 
-          <h2 id="pitfalls">7. What I would check before building one</h2>
+          <h2 id="pitfalls">8. What I would check before building one</h2>
 
           <p>
             When a continual learning proposal lands in front of me, a student's, a collaborator's,
@@ -795,7 +870,7 @@
             production, not accessories to it.
           </p>
 
-          <h2 id="reading">8. A reading path</h2>
+          <h2 id="reading">9. A reading path</h2>
 
           <p>
             If you are starting from zero, this is the order I would actually read things in, rather
@@ -864,6 +939,7 @@
             <li id="ref-threetypes">van de Ven, G. M., Tuytelaars, T. and Tolias, A. S. (2022). Three types of incremental learning. <em>Nature Machine Intelligence</em>, 4, 1185-1197.</li>
             <li id="ref-avalanche">Lomonaco, V. et al. (2021). Avalanche: an end-to-end library for continual learning. <em>CVPR Workshops</em>. <a href="https://avalanche.continualai.org/" target="_blank" rel="noopener">avalanche.continualai.org</a>.</li>
             <li id="ref-rome">Meng, K. et al. (2022). Locating and editing factual associations in GPT. <em>NeurIPS</em>. <a href="https://arxiv.org/abs/2202.05262" target="_blank" rel="noopener">arXiv:2202.05262</a>.</li>
+            <li id="ref-interleave">Rohrer, D. and Taylor, K. (2007). The shuffling of mathematics problems improves learning. <em>Instructional Science</em>, 35, 481-498.</li>
           </ol>
 
           <hr>
