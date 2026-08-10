@@ -59,7 +59,7 @@
 
           <h1>Continual learning: what it is, and what I've learned working with it</h1>
           <div class="post-meta">
-            Hisham Ihshaish &middot; <a href="/blog/ml/">Machine Learning</a> &middot; 28 July 2026 &middot; 15 min read
+            Hisham Ihshaish &middot; <a href="/blog/ml/">Machine Learning</a> &middot; 28 July 2026 &middot; 18 min read
           </div>
 
           <p class="post-lede">
@@ -123,6 +123,20 @@
             someone will eventually fix. Grossberg had already named the underlying tension in the 1980s,
             the <em>stability-plasticity dilemma</em> [<a href="#ref-grossberg">4</a>]: plastic enough to
             learn, stable enough to retain, and the two pull in opposite directions.
+          </p>
+
+          <p>
+            It is worth one more level of depth here, because the geometry pays off later. Two tasks
+            interfere to the extent that they press on the same weights in opposite directions: an
+            update helps the new task and harms an old one when the gradient it follows points against
+            the old task's, when the dot product between the two tasks' gradients is negative. That one
+            sentence contains half the field. French was already arguing in the 1990s that the fix is
+            representations that overlap less, sparser and more localised codes
+            [<a href="#ref-french">3</a>], which is the architecture family of methods in embryo. And
+            once you phrase interference as a bad dot product, you can imagine measuring it and refusing
+            the update, which is precisely what Gradient Episodic Memory does two decades later
+            [<a href="#ref-gem">10</a>]. Very little in this literature is new under the sun; mostly the
+            ideas sat waiting for the compute.
           </p>
 
           <p>
@@ -309,10 +323,23 @@
             Intelligence [<a href="#ref-si">8</a>] computes a similar importance measure online, and
             Learning without Forgetting [<a href="#ref-lwf">9</a>] reaches the same goal through
             distillation, penalising changes to the model's old <em>outputs</em> rather than its
-            weights. These methods are cheap, elegant, and need no stored data, which is why EWC became
-            famous. Their honest report card is less flattering: helpful when each task keeps its own
-            output head, largely ineffective in the class-incremental setting most deployments actually
-            face. You will see exactly that below.
+            weights.
+          </p>
+
+          <p>
+            There is a clean way to see what EWC is really claiming, and it is the reason I still teach
+            it even though I rarely deploy it: it is sequential Bayes, approximated. The posterior over
+            weights after one task ought to become the prior for the next; EWC approximates that
+            posterior with a Gaussian centred on the trained weights, with curvature estimated by the
+            Fisher information, and the famous penalty simply falls out as the log of that prior. Every
+            weakness of the method is visible from the same vantage point. The approximation is local,
+            so it knows nothing about better basins elsewhere in weight space; the diagonal Fisher
+            throws away correlations between weights, which is exactly where deep networks keep their
+            redundancy; and stacking one quadratic penalty per task makes the model progressively
+            stiffer until, many tasks in, it can barely learn at all. These methods are cheap, elegant,
+            and need no stored data, which is why EWC became famous. Their honest report card is less
+            flattering: helpful when each task keeps its own output head, largely ineffective in the
+            class-incremental setting most deployments actually face. You will see exactly that below.
           </p>
 
           <h3>Replay: keep a little of the past</h3>
@@ -331,6 +358,21 @@
             comparisons. Where storing raw data is off the table, generative replay
             [<a href="#ref-genreplay">13</a>] trains a generator to produce pseudo-examples of the past
             instead, an idea lifted straight from the CLS account of dreaming.
+          </p>
+
+          <p>
+            Sit with the contrast between these first two families for a moment, because I think it
+            explains most of the scoreboard. What you actually want to preserve is not the weights, it
+            is the <em>function</em>: the model's behaviour on the inputs the old tasks care about.
+            Weights are a proxy for that, and a poor one, since a deep network can move a long way in
+            weight space without changing its behaviour and a short way while changing it completely.
+            Regularisation methods guard the proxy; replay guards the thing itself, re-asserting the
+            desired outputs at exactly the inputs where they are defined. Dark Experience Replay makes
+            the point almost explicitly by replaying old logits rather than just labels, and GEM makes
+            it in gradient space, using stored examples to veto any update whose dot product with the
+            past is negative, the interference geometry from section 1 turned into a constraint. Once I
+            started sorting methods this way, weight space against function space, the empirical
+            rankings stopped looking like accidents.
           </p>
 
           <h3>Architecture: give each task its own parameters</h3>
@@ -371,9 +413,16 @@
             a task after its data disappeared. From it come the standard metrics, introduced by
             Lopez-Paz and Ranzato [<a href="#ref-gem">10</a>] and refined by Chaudhry and colleagues
             [<a href="#ref-rwalk">20</a>]: average accuracy at the end, forgetting (how far each task
-            fell from its own peak), and forward transfer. My advice is blunt: build the matrix into
-            your harness on day one, whatever else you do. It costs one loop, and every diagnosis I have
-            ever needed started there.
+            fell from its own peak), and forward transfer. The definitions are worth having precisely,
+            since they are all cheap arithmetic on the matrix. Write R<sub>i,j</sub> for accuracy on
+            task j after training on task i: final average accuracy is the mean of the last row;
+            forgetting is how far each column has fallen from its own maximum by the end, averaged over
+            columns; backward transfer is the signed version of the same quantity, negative when new
+            learning harmed old tasks and positive in the rare, prized case where it helped; and
+            forward transfer compares R<sub>i,j</sub> for tasks not yet trained against a fresh model,
+            asking whether the past prepared the model for what is coming. My advice is blunt: build
+            the matrix into your harness on day one, whatever else you do. It costs one loop, and every
+            diagnosis I have ever needed started there.
           </p>
 
           <p>
@@ -615,7 +664,14 @@
             ASRS archive is that nothing in it announces a task boundary. The benchmarks' crisp
             handovers from task to task are a convenience of experimental construction, not a property
             of the world, and the setting the world actually serves up, gradual, unlabelled,
-            vocabulary-first drift, is the one the literature has studied least.
+            vocabulary-first drift, is the one the literature has studied least. The texture of that
+            drift surprised me too. I had pictured something smooth, vocabulary sliding as fleets turn
+            over, and some of it is exactly that, new airframes and procedures seeping into the
+            language year by year. But institutional events punctuate it: in mid-2009 the ASRS
+            programme overhauled its reporting taxonomy and text processing in a single administrative
+            stroke, and the archive changes dialect almost overnight. A deployed system has to survive
+            both kinds of change, the seep and the step, and a benchmark's uniform task sequence
+            rehearses you for neither.
           </p>
 
           <p>
@@ -623,10 +679,20 @@
             of a child's ability has to follow months of progress: the struggling reader of September
             is not the same distribution in March, and updating for where the learner is now must not
             erase what the model learned about how they got there, because that history is the raw
-            material personalisation is made of. Push the same problem onto the device, as keyboards,
-            speech and health sensing do, and the data rule sharpens to its extreme: the raw data never
-            leaves the phone, there is no server-side dataset to retrain from, and continual learning
-            stops being one option among several.
+            material personalisation is made of. What makes this case theoretically interesting, and
+            it took me a while to articulate it, is that here the target is <em>supposed</em> to move.
+            In most continual learning the world drifts and the model chases; in a learner model,
+            changing the child is the entire point of the product, so the system must separate three
+            kinds of change it experiences as a single stream: the child learning, which it should
+            embrace; the child having an off week, which it should ride out; and the cohort shifting
+            underneath, which it should adapt to slowly. Forgetting is not even uniformly bad here.
+            Evidence about what a child could not do in September ought to decay once it stops
+            describing them, and getting a model to forget the right things at the right rate turns out
+            to be a harder design question than getting it to remember, one the benchmark literature
+            never asks. Push the same problem onto the device, as keyboards, speech and health sensing
+            do, and the data rule sharpens to its extreme: the raw data never leaves the phone, there
+            is no server-side dataset to retrain from, and continual learning stops being one option
+            among several.
           </p>
 
           <p>
@@ -638,8 +704,14 @@
             outside checked. I find the regulatory response the most telling part. The FDA now lets
             manufacturers pre-specify how a model will change after approval, which is a regulator
             conceding, in its own language, that a medical model which stops learning is a defect
-            rather than a comfort. The data rule here is governance: hospitals often cannot pool or
-            indefinitely retain the records a full retrain would need.
+            rather than a comfort. The mechanism is worth knowing by name, a predetermined change
+            control plan: the manufacturer sets out in advance what may change, on what data, validated
+            by what protocol, with what rollback, and the regulator approves the <em>process</em>
+            rather than each frozen artefact. That is continual learning as a regulatory object, and my
+            expectation is that anyone deploying self-updating models in a regulated domain, finance
+            and aviation included, ends up writing that document eventually. The data rule here is
+            governance: hospitals often cannot pool or indefinitely retain the records a full retrain
+            would need.
           </p>
 
           <p>
@@ -655,9 +727,15 @@
             Luo and colleagues [<a href="#ref-llmforget">25</a>] is the empirical read I would put in
             front of anyone proposing to "just fine-tune it monthly"; continual pretraining
             [<a href="#ref-llmcpt">19</a>] is the principled route for whole corpora, and its working
-            recipe is the one this post keeps arriving at, replay under another name. Different
-            domains, then, but the same grammar every time: a fixed task, a moving world, and a rule
-            about data that closes the easy exit.
+            recipe is the one this post keeps arriving at, replay under another name. There is a fourth
+            route I watch with interest but do not yet trust: model editing, surgically rewriting
+            specific facts in place [<a href="#ref-rome">31</a>]. The published methods can change what
+            a model says about one fact reliably; apply edits in batches, though, and neighbouring
+            knowledge degrades in ways that are hard to predict, which is catastrophic interference
+            again, now at the scale of individual memories. It feels to me the way EWC felt in 2017:
+            elegant, principled, and not yet load-bearing. Different domains, then, but the same
+            grammar every time: a fixed task, a moving world, and a rule about data that closes the
+            easy exit.
           </p>
 
           <h2 id="pitfalls">7. What I would check before building one</h2>
@@ -785,6 +863,7 @@
             <li id="ref-wangsurvey">Wang, L. et al. (2024). A comprehensive survey of continual learning: theory, method and application. <em>IEEE TPAMI</em>, 46(8), 5362-5383. <a href="https://arxiv.org/abs/2302.00487" target="_blank" rel="noopener">arXiv:2302.00487</a>.</li>
             <li id="ref-threetypes">van de Ven, G. M., Tuytelaars, T. and Tolias, A. S. (2022). Three types of incremental learning. <em>Nature Machine Intelligence</em>, 4, 1185-1197.</li>
             <li id="ref-avalanche">Lomonaco, V. et al. (2021). Avalanche: an end-to-end library for continual learning. <em>CVPR Workshops</em>. <a href="https://avalanche.continualai.org/" target="_blank" rel="noopener">avalanche.continualai.org</a>.</li>
+            <li id="ref-rome">Meng, K. et al. (2022). Locating and editing factual associations in GPT. <em>NeurIPS</em>. <a href="https://arxiv.org/abs/2202.05262" target="_blank" rel="noopener">arXiv:2202.05262</a>.</li>
           </ol>
 
           <hr>
