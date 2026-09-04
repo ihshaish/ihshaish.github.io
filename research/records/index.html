@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="Change which record of a case a model reads, and the evaluation can change its mind: measured on maintenance and safety text spanning decades." />
+
+  <title>The record is part of the task | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/research/"><span>Research</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+<article class="blog-article tp-article">
+<style>
+:root { --tp-ink:#212121; --tp-muted:#6b6a68; --tp-accent:#1565c0; --tp-rule:#e6e4e0; --tp-note:#f4f7fb; }
+.tp-article { max-width: 720px; margin: 0 auto; font-family: "Source Serif 4", Georgia, serif; font-size: 1.09rem; line-height: 1.72; color: var(--tp-ink); }
+.tp-article a { color: var(--tp-accent); }
+.tp-eyebrow { font-family: "Roboto Mono", monospace; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); display:flex; flex-wrap:wrap; gap:0.3rem 0.9rem; }
+.tp-eyebrow .st { color: var(--tp-accent); }
+.tp-article h1 { font-family: "Montserrat", sans-serif; font-size: 2rem; line-height: 1.22; margin: 0.35rem 0 0.4rem; }
+.tp-meta { font-size: 0.92rem; color: var(--tp-muted); font-family: "Montserrat", sans-serif; margin-bottom: 1.9rem; }
+.tp-article h2.tp-sec { font-family: "Montserrat", sans-serif; font-size: 1.18rem; margin: 2.7rem 0 0.8rem; }
+.tp-article h2.tp-sec .n { font-family: "Roboto Mono", monospace; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); display:block; margin-bottom: 0.25rem; }
+.tp-div { text-align:center; color:var(--tp-muted); letter-spacing: 0.7em; margin: 2.4rem 0 0; }
+.tp-article .open-list { padding-left: 1.2rem; margin: 0.4rem 0; }
+.tp-article .open-list li { margin: 0.55rem 0; }
+.scale { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tp-accent); border: 1px solid var(--tp-accent); border-radius: 3px; padding: 0 0.35em; margin-left: 0.35em; white-space: nowrap; vertical-align: 0.1em; }
+.note, .status-line { background: var(--tp-note); border-left: 4px solid var(--tp-accent); border-radius: 0 4px 4px 0; padding: 0.8rem 1.1rem; margin: 1.5rem 0; font-size: 0.98rem; }
+.exhibit { margin: 1.8rem 0; }
+.exhibit img { max-width: 100%; height: auto; border: 1px solid var(--tp-rule); border-radius: 4px; background:#fff; display:block; }
+.exhibit.narrow img { max-width: 360px; margin: 0 auto; }
+.exhibit.narrow figcaption { max-width: 360px; margin-left:auto; margin-right:auto; }
+.exhibit figcaption { font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.6rem; line-height: 1.5; }
+.exhibit figcaption .unpub { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--tp-accent); display:inline-block; margin-right: 0.4rem; }
+.exhibit-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; margin: 1.8rem 0; }
+.exhibit-row .exhibit { margin: 0; }
+blockquote.epigraph { border-left: 3px solid var(--tp-rule); margin: 1.4rem 0; padding: 0.2rem 0 0.2rem 1.2rem; color: var(--tp-muted); font-style: italic; }
+blockquote.epigraph cite { display:block; font-style: normal; font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.3rem; }
+sup.c { font-size: 0.7em; line-height: 0; } sup.c a { color: var(--tp-accent); text-decoration: none; }
+sup.fn { font-size: 0.72em; line-height: 0; } sup.fn a { color: var(--tp-accent); text-decoration: none; }
+.tp-notes { border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1rem; font-size: 0.92rem; color: var(--tp-muted); }
+.tp-notes h2, .tp-refs h2 { font-family: "Montserrat", sans-serif; font-size: 1rem; }
+.ref-list { padding-left: 1.6rem; font-size: 0.92rem; line-height: 1.55; }
+.ref-list li { margin: 0.35rem 0; }
+.ref-list a { color: var(--tp-accent); word-break: break-word; }
+.tp-nav { display:flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1.1rem; font-family: "Montserrat", sans-serif; font-size: 0.92rem; }
+.tp-nav a { color: var(--tp-accent); text-decoration: none; }
+.tp-nav a:hover { text-decoration: underline; }
+.tp-stand { font-style: italic; font-size: 1.04rem; color: var(--tp-muted); border-left: 3px solid var(--tp-accent); padding: 0.15rem 0 0.15rem 0.95rem; margin: 0 0 1.9rem; }
+.tp-article h2.tp-sec { border-top: 1px solid var(--tp-rule); padding-top: 1.7rem; margin-top: 2.4rem; }
+.note .nlabel { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 0.3rem; }
+.tp-nav { align-items: baseline; }
+.tp-nav .dir { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); }
+
+.table-wrap { overflow-x:auto; }
+.tp-article h1 { font-weight: 700; }
+.tp-article h2.tp-sec { font-weight: 600; }
+.tp-nav > a { white-space: nowrap; }
+.exhibit figcaption { text-align: left; }
+.exhibit-row { align-items: start; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+  <div class="tp-eyebrow"><span>Applied machine learning</span><span class="st">Active &middot; manuscript with a journal</span></div>
+  <h1>The record is part of the task</h1>
+  <div class="tp-meta">Hisham Ihshaish &middot; <a href="../">Research themes</a></div>
+  <p class="tp-stand">One case, several records of it, and which one the model reads turns out to be part of the experiment.</p>
+
+
+      <h2 class="tp-sec"><span class="n">One</span>A measurement question</h2>
+      <p>
+        Take one repair of a cockpit display unit. When the unit comes off the aircraft the operator writes
+        "display blanks intermittently in flight". After diagnosis the shop technician writes a finding that
+        names the failed board. The parts system records what was replaced. Three records, one case, produced
+        at different points of the workflow by people who knew different things. A classifier<sup class="fn"><a href="#fn1" id="fnr1">a</a></sup> trained to
+        predict the repair from text can be evaluated on any of the three. The literature normally picks one,
+        silently, before the model comparison starts, and treats the pick as data preparation. This theme
+        asks what that pick does to the result, and what it should do to how results are reported.
+      </p>
+
+      <blockquote class="epigraph">
+        "In this method of observation every observer differs slightly in his judgment of the instant that
+        the star crosses the wire, and his estimation differs from the truth by a certain constant quantity
+        which he must always allow for; this error is called his personal equation."
+        <cite>J. Norman Lockyer, <em>Stargazing: Past and Present</em>, 1878 <sup class="c">[<a href="#ref1">1</a>]</sup></cite>
+      </blockquote>
+
+      <figure class="exhibit narrow">
+        <img src="../media/lockyer_chronograph.jpg" alt="Victorian engraving of a drum chronograph, the rotating recording instrument on which transit observations were registered" width="480" height="438">
+        <figcaption>The chronograph, from Lockyer (1878), public domain. The star crossing each
+        wire is the event. In 1796 the Astronomer Royal dismissed his assistant because the two of them, watching
+        the same crossings, wrote down different instants <sup class="c">[<a href="#ref2">2</a>]</sup>. Astronomy's answer was to
+        measure the observer, and later to build the chronograph, an instrument that made the record itself.
+        Operational records have observers too, and there is more than one of them per case.</figcaption>
+      </figure>
+
+      <h2 class="tp-sec"><span class="n">Two</span>What hangs on it</h2>
+      <p>
+        Maintenance and safety text is one of the largest written accounts we have of how engineered systems fail,
+        and the technical language processing agenda exists because so little of it is used
+        <sup class="c">[<a href="#ref3">3</a>]</sup>. Every published claim about which model reads such text best is a claim
+        relative to a record. If the record moves the score more than the model does, then rankings
+        established on one field do not transfer to another, and a system evaluated on a record written
+        after the outcome will look better than it can ever be at the point where a decision is taken.
+        Studies of data quality in work orders <sup class="c">[<a href="#ref4">4</a>]</sup> and of provenance confounding in clinical
+        notes <sup class="c">[<a href="#ref5">5</a>]</sup> point the same way from other fields. The astronomers' lesson is older still:
+        a measurement carries the process that produced it, and the honest response is to characterise
+        that process, not to pretend it away <sup class="c">[<a href="#ref2">2</a>]</sup>.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Three</span>The neighbouring evidence</h2>
+      <p>
+        Aviation safety reports have been classified by machine for a decade, usually from the analyst's
+        synopsis or the reporter's narrative, seldom from both <sup class="c">[<a href="#ref6">6</a>, <a href="#ref7">7</a>]</sup>. Work-order
+        research has shown that field quality dominates downstream analysis <sup class="c">[<a href="#ref4">4</a>]</sup>, and clinical
+        NLP has begun to treat the institution that wrote a note as a confounder to adjust for
+        <sup class="c">[<a href="#ref5">5</a>]</sup>. What was missing was a design that holds the case, the label and the split fixed
+        and varies only the record, so that the record effect can be put on the same scale as the effects
+        of representation and architecture that papers normally report.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Four</span>What we found</h2>
+      <p>
+        Peter Mayhew's PhD with GE Aerospace, which I supervise, produced the first study
+        <sup class="c">[<a href="#ref8">8</a>]</sup>. The manuscript that followed <sup class="c">[<a href="#ref9">9</a>]</sup> compares matched records of the same
+        cases in three reporting systems: GE repair events, NASA's Aviation Safety Reporting System, and
+        the NHTSA vehicle recall database. On the industrial events, reading a different field of the same
+        events moved held-out<sup class="fn"><a href="#fnb" id="fnrb">b</a></sup> performance by more than any representation or architecture change we
+        tested, and two fields written before the outcome was known differed by a wide margin. The public
+        systems showed that record effects take different forms. In NHTSA one field stays strongest under
+        every model family. In ASRS the analyst's synopsis beats the reporter's narrative, but only under
+        models that read sequence. Some conclusions about modelling approaches flipped with the record.
+        Earlier work on construction cost documents <sup class="c">[<a href="#ref10">10</a>]</sup> and on helpdesk tickets
+        <sup class="c">[<a href="#ref11">11</a>]</sup> had taught me the same lesson from a different direction: the field you are
+        handed is a design decision someone else made.
+      </p>
+
+      <figure class="exhibit">
+        <img src="../media/recordA_views.png" alt="Three panels: synopsis advantage over narrative by model family on ASRS; the deficit of the supplemental narrative against the primary narrative by account length; and NHTSA recall fields under three model families with and without label-vocabulary masking" width="1516" height="464">
+        <figcaption><span class="unpub">Unpublished manuscript figure</span> Public-data panels from the manuscript <sup class="c">[<a href="#ref9">9</a>]</sup>. Left: on ASRS the analyst's
+        synopsis helps sequence models and not lexical ones. Middle: the second narrative on the same report
+        is only worse when it is short. Right: on NHTSA the defect summary stays strongest under every model,
+        and masking the label vocabulary does not change the order. Not yet peer reviewed.</figcaption>
+      </figure>
+
+      <h2 class="tp-sec"><span class="n">Five</span>Where a project could start</h2>
+      <ul class="open-list">
+        <li><strong>Evaluation at the decision point:</strong> A protocol that scores a classifier on the
+          record that exists when the decision is actually taken, and reports how record and label were
+          produced, instead of on the richest record in the archive. <span class="scale">PhD</span></li>
+        <li><strong>Label provenance:</strong> How much of a score is the label-generating process, and how
+          to audit that before comparing models at all. <span class="scale">MSc or PhD</span></li>
+        <li><strong>The same design in another domain:</strong> Clinical notes, incident reports, insurance
+          claims and support tickets all have the multi-record structure. Is the record effect as large
+          there, and does it take the NHTSA form or the ASRS form? <span class="scale">MSc</span></li>
+        <li><strong>Summaries as records:</strong> An analyst synopsis is itself a model of the case, and it
+          won under some models and lost under others. Where summaries written by large language models sit
+          in this picture is open, and rather urgent. <span class="scale">MSc or PhD</span></li>
+        <li><strong>Documentation as a design lever:</strong> If the field written before the outcome
+          carries most of the usable signal, what should we be asking people to write down, and how short
+          can it be? <span class="scale">PhD</span></li>
+      </ul>
+
+      <div class="status-line">The manuscript is complete and with a journal. I can provide access to the
+        preprint and the codebase for those interested. The public-data reproduction is at
+        <a href="https://github.com/ihshaish/source-variation" target="_blank" rel="noopener">github.com/ihshaish/source-variation</a>.</div>
+    
+<div class="tp-notes"><h2>Notes</h2><p id="fn1"><sup>a</sup> By a classifier I mean a machine learning model that assigns each input, here a piece of text, to one of a set of categories. <a href="#fnr1">&#8617;</a></p><p id="fnb"><sup>b</sup> Held-out cases are set aside before any training and used only for the final score, so the model is judged on data it has never seen. <a href="#fnrb">&#8617;</a></p></div>
+<div class="tp-refs"><h2 id="references">References</h2><ol class="ref-list">
+  <li id="ref1">Lockyer, J. N. (1878). <em>Stargazing: Past and Present</em>. Macmillan, London. Project Gutenberg ebook 53172. <a href="https://www.gutenberg.org/ebooks/53172">gutenberg.org/ebooks/53172</a></li>
+  <li id="ref2">Schaffer, S. (1988). Astronomers mark time: discipline and the personal equation. <em>Science in Context</em>, 2(1).</li>
+  <li id="ref3">Brundage, M. P., Sexton, T., Hodkiewicz, M., Dima, A. and Lukens, S. (2021). Technical language processing: unlocking maintenance knowledge. <em>Manufacturing Letters</em>, 27, 42-46. <a href="https://doi.org/10.1016/j.mfglet.2020.11.001">doi:10.1016/j.mfglet.2020.11.001</a></li>
+  <li id="ref4">Conte, A., Bolland, C., Phan, L., Brundage, M. and Sexton, T. (2021). The impact of data quality on maintenance work order analysis: a case study in historical HVAC maintenance work orders. <em>Proceedings of the PHM Society European Conference</em>. <a href="https://doi.org/10.36001/phme.2021.v6i1.2814">doi:10.36001/phme.2021.v6i1.2814</a></li>
+  <li id="ref5">Ding, X., Sheng, Z., Yetişgen, M. and Chen, T. (2023). Backdoor adjustment of confounding by provenance for robust text classification of multi-institutional clinical notes. <em>AMIA Annual Symposium Proceedings</em>.</li>
+  <li id="ref6">Tanguy, L., Tulechki, N., Urieli, A., Hermann, E. and Raynal, C. (2016). Natural language processing for aviation safety reports: from classification to interactive analysis. <em>Computers in Industry</em>, 78. <a href="https://doi.org/10.1016/j.compind.2015.09.005">doi:10.1016/j.compind.2015.09.005</a></li>
+  <li id="ref7">Robinson, S. D., Irwin, W. J., Kelly, T. K. and Wu, X. O. (2015). Application of machine learning to mapping primary causal factors in self-reported safety narratives. <em>Safety Science</em>, 75. <a href="https://doi.org/10.1016/j.ssci.2015.02.003">doi:10.1016/j.ssci.2015.02.003</a></li>
+  <li id="ref8">Mayhew, P., Ihshaish, H., Deza, J. I. and del Amo, A. (2023). Maintenance automation using deep learning methods: a case study from the aerospace industry. <em>Artificial Neural Networks and Machine Learning, ICANN 2023</em>, LNCS 14263, 295-307. <a href="https://doi.org/10.1007/978-3-031-44204-9_25">doi:10.1007/978-3-031-44204-9_25</a></li>
+  <li id="ref9">Ihshaish, H., Mayhew, P., Zayet, T. M. A. and del Amo, A. (2026). The record is part of the task: matched-record evaluation of text classifiers across maintenance, safety, and recall reporting. Manuscript, with a journal. Not yet peer reviewed. Preprint and codebase on request; public-data reproduction at <a href="https://github.com/ihshaish/source-variation">github.com/ihshaish/source-variation</a>.</li>
+  <li id="ref10">Deza, J. I., Ihshaish, H. and Mahdjoubi, L. (2022). A machine learning approach to classifying construction cost documents into the International Construction Measurement Standard. <a href="https://arxiv.org/abs/2211.07705">arXiv:2211.07705</a>. Code: <a href="https://github.com/ihshaish/BoQ-classifier-ICMS">github.com/ihshaish/BoQ-classifier-ICMS</a></li>
+  <li id="ref11">Nicholls, R., Fellows, R., Battle, S. and Ihshaish, H. (2022). Problem classification for tailored helpdesk auto-replies. <em>ICANN 2022</em>. <a href="https://doi.org/10.1007/978-3-031-15937-4_37">doi:10.1007/978-3-031-15937-4_37</a></li>
+</ol></div>
+<div class="tp-nav"><span></span><a href="../">All themes</a><span style="text-align:right"><span class="dir">next &rarr;</span><a href="../drift/">Forgetting versus operating-point drift</a></span></div>
+</article>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
