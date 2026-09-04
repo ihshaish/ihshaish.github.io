@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="How much of what deployed models seem to forget is really a decision threshold going stale, and how to tell." />
+
+  <title>Forgetting versus operating-point drift | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/research/"><span>Research</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+<article class="blog-article tp-article">
+<style>
+:root { --tp-ink:#212121; --tp-muted:#6b6a68; --tp-accent:#1565c0; --tp-rule:#e6e4e0; --tp-note:#f4f7fb; }
+.tp-article { max-width: 720px; margin: 0 auto; font-family: "Source Serif 4", Georgia, serif; font-size: 1.09rem; line-height: 1.72; color: var(--tp-ink); }
+.tp-article a { color: var(--tp-accent); }
+.tp-eyebrow { font-family: "Roboto Mono", monospace; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); display:flex; flex-wrap:wrap; gap:0.3rem 0.9rem; }
+.tp-eyebrow .st { color: var(--tp-accent); }
+.tp-article h1 { font-family: "Montserrat", sans-serif; font-size: 2rem; line-height: 1.22; margin: 0.35rem 0 0.4rem; }
+.tp-meta { font-size: 0.92rem; color: var(--tp-muted); font-family: "Montserrat", sans-serif; margin-bottom: 1.9rem; }
+.tp-article h2.tp-sec { font-family: "Montserrat", sans-serif; font-size: 1.18rem; margin: 2.7rem 0 0.8rem; }
+.tp-article h2.tp-sec .n { font-family: "Roboto Mono", monospace; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); display:block; margin-bottom: 0.25rem; }
+.tp-div { text-align:center; color:var(--tp-muted); letter-spacing: 0.7em; margin: 2.4rem 0 0; }
+.tp-article .open-list { padding-left: 1.2rem; margin: 0.4rem 0; }
+.tp-article .open-list li { margin: 0.55rem 0; }
+.scale { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tp-accent); border: 1px solid var(--tp-accent); border-radius: 3px; padding: 0 0.35em; margin-left: 0.35em; white-space: nowrap; vertical-align: 0.1em; }
+.note, .status-line { background: var(--tp-note); border-left: 4px solid var(--tp-accent); border-radius: 0 4px 4px 0; padding: 0.8rem 1.1rem; margin: 1.5rem 0; font-size: 0.98rem; }
+.exhibit { margin: 1.8rem 0; }
+.exhibit img { max-width: 100%; height: auto; border: 1px solid var(--tp-rule); border-radius: 4px; background:#fff; display:block; }
+.exhibit.narrow img { max-width: 360px; margin: 0 auto; }
+.exhibit.narrow figcaption { max-width: 360px; margin-left:auto; margin-right:auto; }
+.exhibit figcaption { font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.6rem; line-height: 1.5; }
+.exhibit figcaption .unpub { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--tp-accent); display:inline-block; margin-right: 0.4rem; }
+.exhibit-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; margin: 1.8rem 0; }
+.exhibit-row .exhibit { margin: 0; }
+blockquote.epigraph { border-left: 3px solid var(--tp-rule); margin: 1.4rem 0; padding: 0.2rem 0 0.2rem 1.2rem; color: var(--tp-muted); font-style: italic; }
+blockquote.epigraph cite { display:block; font-style: normal; font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.3rem; }
+sup.c { font-size: 0.7em; line-height: 0; } sup.c a { color: var(--tp-accent); text-decoration: none; }
+sup.fn { font-size: 0.72em; line-height: 0; } sup.fn a { color: var(--tp-accent); text-decoration: none; }
+.tp-notes { border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1rem; font-size: 0.92rem; color: var(--tp-muted); }
+.tp-notes h2, .tp-refs h2 { font-family: "Montserrat", sans-serif; font-size: 1rem; }
+.ref-list { padding-left: 1.6rem; font-size: 0.92rem; line-height: 1.55; }
+.ref-list li { margin: 0.35rem 0; }
+.ref-list a { color: var(--tp-accent); word-break: break-word; }
+.tp-nav { display:flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1.1rem; font-family: "Montserrat", sans-serif; font-size: 0.92rem; }
+.tp-nav a { color: var(--tp-accent); text-decoration: none; }
+.tp-nav a:hover { text-decoration: underline; }
+.tp-stand { font-style: italic; font-size: 1.04rem; color: var(--tp-muted); border-left: 3px solid var(--tp-accent); padding: 0.15rem 0 0.15rem 0.95rem; margin: 0 0 1.9rem; }
+.tp-article h2.tp-sec { border-top: 1px solid var(--tp-rule); padding-top: 1.7rem; margin-top: 2.4rem; }
+.note .nlabel { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 0.3rem; }
+.tp-nav { align-items: baseline; }
+.tp-nav .dir { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); }
+
+.table-wrap { overflow-x:auto; }
+.tp-article h1 { font-weight: 700; }
+.tp-article h2.tp-sec { font-weight: 600; }
+.tp-nav > a { white-space: nowrap; }
+.exhibit figcaption { text-align: left; }
+.exhibit-row { align-items: start; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+  <div class="tp-eyebrow"><span>Applied machine learning</span><span class="st">Active &middot; manuscript in final preparation</span></div>
+  <h1>Forgetting versus operating-point drift</h1>
+  <div class="tp-meta">Hisham Ihshaish &middot; <a href="../">Research themes</a></div>
+  <p class="tp-stand">Before paying for a continual-learning remedy, check whether the model forgot or its thresholds went stale.</p>
+
+
+      <p>
+        Learning under change is one of the oldest unsolved problems in machine learning. Train a
+        network on one task and then on a second, and the first degrades. That is catastrophic
+        forgetting, documented since the late 1980s <sup class="c">[<a href="#ref1">1</a>,
+        <a href="#ref2">2</a>]</sup>, and it is still the central obstacle to models that learn
+        from a stream instead of a frozen dataset. I wrote a long
+        <a href="/blog/ml/continual-learning/">primer on this field</a>, what forgetting is, which
+        remedies hold up, and how to read the literature's numbers. This theme grew out of writing
+        that primer, because a measurement problem was hiding inside the field's own bookkeeping,
+        and operational text, aviation safety reports spanning four decades, turned out to be the
+        right place to catch it.
+      </p>
+      <h2 class="tp-sec"><span class="n">One</span>The measurement problem</h2>
+      <p>
+        Deploy a multi-label classifier<sup class="fn"><a href="#fn1" id="fnr1">a</a></sup> over aviation safety reports in 1999. Retrain it as new reports
+        arrive, and each time score it again on the period it was first trained on. The score on the old
+        period falls, a little more with each retraining. Continual learning calls this negative backward
+        transfer and reads it as forgetting <sup class="c">[<a href="#ref1">1</a>, <a href="#ref2">2</a>, <a href="#ref3">3</a>]</sup>. But macro-F1<sup class="fn"><a href="#fnb" id="fnrb">b</a></sup> is
+        not a property of the model. It is a property of the model together with a vector of decision
+        thresholds<sup class="fn"><a href="#fnc" id="fnrc">c</a></sup>, one per label, and the threshold that maximises F1 for a label moves with that label's
+        prevalence, the share of cases that carry it <sup class="c">[<a href="#ref4">4</a>]</sup>. If the thresholds were fitted once and carried forward, the score
+        can fall while the model's ranking of cases is untouched. The theme asks how much of what we call
+        forgetting is that, and what to do about the part that is not.
+      </p>
+
+      <figure class="exhibit">
+        <img src="../media/driftB_framework.png" alt="Three panels: F1 against threshold for one label in two periods with the held threshold marked; the sequential evaluation grid with the final row scored under the inherited thresholds; and the decomposition of the deficit into an attainable term and an operating-point term" width="1121" height="350">
+        <figcaption><span class="unpub">Unpublished manuscript figure</span> The measurement design from the manuscript <sup class="c">[<a href="#ref5">5</a>]</sup>. Left: one label, two
+        periods. The threshold fitted in the first period sits well away from the later period's optimum.
+        Middle: the usual sequential evaluation, final row scored under inherited thresholds. Right: the
+        deficit against a contemporary reference split into what a better-placed threshold would recover
+        and what it would not. Not yet peer reviewed.</figcaption>
+      </figure>
+
+      <h2 class="tp-sec"><span class="n">Two</span>Why the distinction pays</h2>
+      <p>
+        Models in operation are retrained on schedules, and the remedies the continual-learning literature
+        offers for forgetting, replay buffers, regularisers, architectural growth, cost compute, labels and
+        engineering time <sup class="c">[<a href="#ref6">6</a>, <a href="#ref7">7</a>, <a href="#ref3">3</a>]</sup>. A threshold refit costs a few
+        hundred labelled records. If a large share of the measured deficit sits at the operating point, then
+        the field is scoring expensive interventions against a metric that a cheap one would have repaired,
+        and it is crediting any method that happens to rebalance the effective prior as if it had preserved
+        knowledge. Clinical prediction already knows this pattern under another name: discrimination, the
+        model's ability to rank cases correctly, holds
+        while calibration<sup class="fn"><a href="#fnd" id="fnrd">d</a></sup> drifts with case-mix, and the recommended response is to update, not to retrain
+        <sup class="c">[<a href="#ref8">8</a>, <a href="#ref9">9</a>, <a href="#ref10">10</a>]</sup>. Nobody had carried that regularity into the
+        continual-learning measurement itself, quantified it, and validated the separation on streams where
+        the cause of the deficit was known by construction.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Three</span>The state of the field</h2>
+      <p>
+        Catastrophic interference has a paper trail reaching back to the late 1980s <sup class="c">[<a href="#ref1">1</a>, <a href="#ref2">2</a>]</sup>, and the
+        modern remedies are well surveyed <sup class="c">[<a href="#ref3">3</a>]</sup>. Class-incremental vision found long ago that part
+        of the damage lives in the last layer and can be repaired with a small validation set
+        <sup class="c">[<a href="#ref11">11</a>]</sup>. Language-model work has just started calling some measured forgetting spurious
+        <sup class="c">[<a href="#ref12">12</a>]</sup>. The label-shift literature supplies the estimators for a changed prior
+        <sup class="c">[<a href="#ref13">13</a>, <a href="#ref14">14</a>]</sup>, and the F1-optimal threshold has a known dependence on prevalence
+        <sup class="c">[<a href="#ref4">4</a>]</sup>. These pieces sat in different fields. None of them had been assembled into a
+        decomposition of a thresholded backward-transfer deficit, and none had been tested causally.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Four</span>Our contribution</h2>
+      <p>
+        The manuscript <sup class="c">[<a href="#ref5">5</a>]</sup> separates the change in attainable performance from the mismatch of
+        the inherited decision rule, estimates the attainable term by split-half cross-fitting over
+        score-induced thresholds, and validates the separation on controlled failure modes with a known
+        cause: a reweighted prior, which should land almost entirely at the operating point, and a
+        reassigned vocabulary, which should not. On 38 years of ASRS reports most of what the standard metric
+        reported as backward degradation sat at the operating point, and a threshold update on a few hundred
+        labelled records removed it with no change to the model's weights. A preregistered experiment
+        crossing embedding plasticity with optimisation exposure then found the regime in which real
+        attainable degradation does appear, so the claim is bounded rather than universal.
+      </p>
+
+      <div class="exhibit-row">
+        <figure class="exhibit">
+          <img src="../media/driftB_mechanism.png" alt="Scatter of the F1-optimal threshold against label prevalence, both centred within label, with a fitted negative slope and a bootstrap band" width="778" height="421">
+          <figcaption><span class="unpub">Unpublished manuscript figure</span> The mechanism: a label's F1-optimal threshold tracks its own prevalence
+          <sup class="c">[<a href="#ref5">5</a>]</sup>. Prevalence moves, the old threshold stays, the score falls.</figcaption>
+        </figure>
+        <figure class="exhibit">
+          <img src="../media/driftB_recalibration.png" alt="Change in mean historical macro-F1 against the number of labelled records used to update thresholds, with labels from the scored period and with labels lagging one period" width="1007" height="423">
+          <figcaption><span class="unpub">Unpublished manuscript figure</span> The repair: how much of the attainable improvement a threshold update captures
+          as a function of labelled records <sup class="c">[<a href="#ref5">5</a>]</sup>, with contemporary labels and with labels one period
+          stale.</figcaption>
+        </figure>
+      </div>
+
+      <div class="note"><span class="nlabel">A negative result worth keeping</span><p style="margin:0">One branch of this work was closed the day it opened, on purpose. We asked whether the part of the
+        deficit we call irreducible was really information still present in the scores but out of reach of
+        a single threshold, which would have meant a richer decision rule could recover it. On this system it
+        could not. The exercise left two lessons I now apply everywhere. The concave envelope of a ROC curve, the curve
+        tracing a classifier's trade-off between true and false positives as its threshold moves,
+        is what randomising between two thresholds attains, not the optimal rule, which reassembles score
+        regions in likelihood-ratio order <sup class="c">[<a href="#ref15">15</a>, <a href="#ref16">16</a>]</sup>. And a structural defect
+        in a score is not the same thing as a defect that costs anything at the decision. A negative result
+        that took a day is a good day.</p></div>
+
+      <h2 class="tp-sec"><span class="n">Five</span>Open directions</h2>
+      <ul class="open-list">
+        <li><strong>What continual-learning methods actually repair:</strong> A method that improves a
+          thresholded score is scored the same today whether it preserved knowledge or moved the operating
+          point. Streams whose deficit has a known cause make that attribution testable for the first
+          time. <span class="scale">PhD</span></li>
+        <li><strong>Repair-depth routing:</strong> A maintenance policy that tries the cheapest repair
+          first, threshold refit, then recalibration, then retraining, with the labelled-record budget as the
+          explicit cost and a stopping rule for each rung. <span class="scale">MSc or PhD</span></li>
+        <li><strong>Beyond one threshold per label:</strong> The same decomposition for argmax, top-K and
+          conformal decision rules, which return the single best label, the best K, or a set of labels
+          with a coverage guarantee, so the operating point is no longer a single cutoff. <span class="scale">PhD</span></li>
+        <li><strong>Which decision rules survive which drift:</strong> Rank-based decisions are untouched
+          by shifts that wreck a fixed threshold. A general account of which decision-rule invariances match
+          which kinds of drift is the question I would most like to open next. <span class="scale">PhD</span></li>
+        <li><strong>The same decomposition on another long-lived stream:</strong> Support tickets, clinical
+          coding, construction defect logs. Build the stream, run the decomposition, report the
+          share. <span class="scale">MSc</span></li>
+      </ul>
+
+      <div class="status-line">The manuscript is in final preparation. I can provide access to the preprint
+        and the codebase for those interested. The code, the stream builders and the registration will be
+        released with the paper. The background reading is in
+        <a href="/blog/ml/continual-learning/">my post on continual learning</a>.</div>
+    
+<div class="tp-notes"><h2>Notes</h2><p id="fn1"><sup>a</sup> By a classifier I mean a machine learning model that assigns each input, here a piece of text, to one of a set of categories; deployed means it runs inside a real workflow rather than an experiment. <a href="#fnr1">&#8617;</a></p><p id="fnb"><sup>b</sup> Macro-F1 is a standard summary of classification quality, the F1 score averaged over labels with equal weight, so rare labels count as much as common ones. <a href="#fnrb">&#8617;</a></p><p id="fnc"><sup>c</sup> A decision threshold is the cutoff that turns a model's score into a yes or no; the set of cutoffs a system runs with is its operating point. <a href="#fnrc">&#8617;</a></p>
+<p id="fnd"><sup>d</sup> A model is calibrated when its probabilities mean what they say: events given thirty per cent happen about thirty per cent of the time. <a href="#fnrd">&#8617;</a></p></div>
+<div class="tp-refs"><h2 id="references">References</h2><ol class="ref-list">
+  <li id="ref1">McCloskey, M. and Cohen, N. J. (1989). Catastrophic interference in connectionist networks: the sequential learning problem. <em>Psychology of Learning and Motivation</em>, 24, 109-165.</li>
+  <li id="ref2">French, R. M. (1999). Catastrophic forgetting in connectionist networks. <em>Trends in Cognitive Sciences</em>, 3(4), 128-135.</li>
+  <li id="ref3">Wang, L., Zhang, X., Su, H. and Zhu, J. (2024). A comprehensive survey of continual learning: theory, method and application. <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, 46(8), 5362-5383. <a href="https://doi.org/10.1109/TPAMI.2024.3367329">doi:10.1109/TPAMI.2024.3367329</a></li>
+  <li id="ref4">Lipton, Z. C., Elkan, C. and Narayanaswamy, B. (2014). Optimal thresholding of classifiers to maximize F1 measure. <em>Machine Learning and Knowledge Discovery in Databases (ECML-PKDD)</em>.</li>
+  <li id="ref5">Ihshaish, H., Mayhew, P. and Aydin, M. (2026). When thresholded backward transfer does not identify forgetting: attainable performance and operating-point drift in sequential multi-label text classification. Manuscript in final preparation. Not yet peer reviewed. Preprint and codebase on request.</li>
+  <li id="ref6">Kirkpatrick, J. et al. (2017). Overcoming catastrophic forgetting in neural networks. <em>PNAS</em>, 114(13), 3521-3526. <a href="https://doi.org/10.1073/pnas.1611835114">doi:10.1073/pnas.1611835114</a></li>
+  <li id="ref7">Lopez-Paz, D. and Ranzato, M. (2017). Gradient episodic memory for continual learning. <em>Advances in Neural Information Processing Systems</em>.</li>
+  <li id="ref8">Davis, S. E., Lasko, T. A., Chen, G., Siew, E. D. and Matheny, M. E. (2017). Calibration drift in regression and machine learning models for acute kidney injury. <em>Journal of the American Medical Informatics Association</em>, 24(6), 1052-1061. <a href="https://doi.org/10.1093/jamia/ocx030">doi:10.1093/jamia/ocx030</a></li>
+  <li id="ref9">Su, T.-L., Jaki, T., Hickey, G. L., Buchan, I. and Sperrin, M. (2018). A review of statistical updating methods for clinical prediction models. <em>Statistical Methods in Medical Research</em>.</li>
+  <li id="ref10">van Amsterdam, W. A. C. (2024). A causal viewpoint on prediction model performance under changes in case-mix: discrimination and calibration respond differently for prognosis and diagnosis predictions. <a href="https://arxiv.org/abs/2409.01444">arXiv:2409.01444</a></li>
+  <li id="ref11">Wu, Y., Chen, Y., Wang, L., Ye, Y., Liu, Z., Guo, Y. and Fu, Y. (2019). Large scale incremental learning. <em>IEEE/CVF Conference on Computer Vision and Pattern Recognition</em>.</li>
+  <li id="ref12">Zheng, J., Cai, X., Qiu, S. and Ma, Q. (2025). Spurious forgetting in continual learning of language models. <em>International Conference on Learning Representations</em>. <a href="https://arxiv.org/abs/2501.13453">arXiv:2501.13453</a></li>
+  <li id="ref13">Saerens, M., Latinne, P. and Decaestecker, C. (2002). Adjusting the outputs of a classifier to new a priori probabilities: a simple procedure. <em>Neural Computation</em>, 14(1), 21-41. <a href="https://doi.org/10.1162/089976602753284446">doi:10.1162/089976602753284446</a></li>
+  <li id="ref14">Lipton, Z. C., Wang, Y.-X. and Smola, A. (2018). Detecting and correcting for label shift with black box predictors. <em>International Conference on Machine Learning</em>.</li>
+  <li id="ref15">Provost, F. and Fawcett, T. (2001). Robust classification for imprecise environments. <em>Machine Learning</em>, 42, 203-231. <a href="https://doi.org/10.1023/A:1007601015854">doi:10.1023/A:1007601015854</a></li>
+  <li id="ref16">Medlock, C. and Oppenheim, A. (2020). Optimal ROC curves from score variable threshold tests. <a href="https://arxiv.org/abs/2012.08391">arXiv:2012.08391</a></li>
+</ol></div>
+<div class="tp-nav"><span><span class="dir">&larr; previous</span><a href="../records/">The record is part of the task</a></span><a href="../">All themes</a><span style="text-align:right"><span class="dir">next &rarr;</span><a href="../language/">Technical language automation with industry</a></span></div>
+</article>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

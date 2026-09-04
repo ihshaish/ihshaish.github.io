@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="Hisham Ihshaish's research themes for prospective Masters and PhD researchers: evaluation on operational records, model maintenance under drift, wind power ramps, non-Gaussian noise and synthetic time series, climate networks, and AI in education." />
+
+  <title>Research Themes | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/research/"><span>Research</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+<article class="blog-article research-article">
+<style>
+:root { --ri-ink:#2b2b2b; --ri-muted-ink:#444; --ri-muted:#767574; --ri-accent:#1565c0; --ri-rule:#e8e7e4; --ri-box:#f8f8f6; }
+.research-article { max-width: 860px; margin: 0 auto; font-size: 1.05rem; line-height: 1.7; color: var(--ri-ink); }
+.research-article .lede { font-size: 1.14rem; color: var(--ri-muted-ink); margin-bottom: 1.4rem; }
+.hero { margin: 1.6rem 0 1.8rem; }
+.research-article .hero img { width: 100%; height: 340px; object-fit: contain; background: var(--ri-box); padding: 0.9rem; box-sizing: border-box; border: 1px solid var(--ri-rule); border-radius: 6px; display: block; }
+.hero figcaption { font-size: 0.85rem; color: var(--ri-muted); margin-top: 0.5rem; }
+.note-box, .note { background: #f4f7fb; border-left: 4px solid var(--ri-accent); border-radius: 0 4px 4px 0; padding: 0.8rem 1.1rem; margin: 1.4rem 0; font-size: 0.97rem; }
+.note-box a, .note a { color: var(--ri-accent); }
+.rc-group { margin-top: 3rem; padding-top: 1.1rem; border-top: 2px solid var(--ri-ink); }
+.rc-eyebrow { font-family: "Roboto Mono", monospace; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ri-muted); margin-bottom: 0.25rem; }
+.rc-group h2 { font-family: "Montserrat", sans-serif; font-size: 1.45rem; margin: 0.1rem 0 0.6rem; text-wrap: balance; }
+.rc-intro { color: var(--ri-muted-ink); max-width: 46rem; }
+.rc-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.3rem; }
+.rc-card { display: flex; flex-direction: column; gap: 0.45rem; border: 1px solid var(--ri-rule); border-radius: 6px; padding: 1.05rem 1.15rem; text-decoration: none; color: var(--ri-ink); background: #fff; transition: box-shadow .15s ease, transform .15s ease; }
+.rc-card:hover { box-shadow: 0 4px 18px rgba(20,40,70,.10); transform: translateY(-2px); text-decoration: none; color: var(--ri-ink); }
+.rc-card.active { border-top: 3px solid var(--ri-accent); }
+.rc-card.open { background: var(--ri-box); }
+.rc-card.published { background: var(--ri-box); opacity: 0.92; }
+.rc-status { font-family: "Montserrat", sans-serif; font-size: 0.78rem; color: var(--ri-muted); display: flex; align-items: center; gap: 0.45rem; }
+.rc-status::before { content: ""; width: 0.55rem; height: 0.55rem; border-radius: 50%; flex: none; border: 2px solid var(--ri-accent); background: transparent; }
+.rc-card.active .rc-status::before { background: var(--ri-accent); }
+.rc-card.published .rc-status::before { border-color: var(--ri-muted); }
+.rc-card.active .rc-status { color: var(--ri-accent); font-weight: 600; }
+.rc-title { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 1.02rem; line-height: 1.35; }
+.rc-hook { font-size: 0.92rem; color: var(--ri-muted-ink); line-height: 1.55; flex: 1; }
+.rc-go { font-family: "Montserrat", sans-serif; font-size: 0.85rem; color: var(--ri-accent); }
+.threads { padding-left: 1.2rem; } .threads li { margin: 0.5rem 0; }
+sup.c { font-size: 0.7em; line-height: 0; } sup.c a { color: var(--ri-accent); text-decoration: none; }
+sup.fn { font-size: 0.72em; line-height: 0; } sup.fn a { color: var(--ri-accent); text-decoration: none; }
+.tp-notes { border-top: 1px solid var(--ri-rule); margin-top: 2.4rem; padding-top: 1rem; font-size: 0.92rem; color: var(--ri-muted); }
+.ref-list { padding-left: 1.6rem; font-size: 0.92rem; line-height: 1.55; } .ref-list li { margin: 0.35rem 0; } .ref-list a { color: var(--ri-accent); word-break: break-word; }
+.scope-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 1rem 0; }
+.scope-table th, .scope-table td { text-align: left; vertical-align: top; padding: 0.5rem 0.6rem; border-top: 1px solid var(--ri-rule); }
+.scope-table th { font-family: "Montserrat", sans-serif; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ri-muted); border-top: 0; }
+.table-wrap { overflow-x: auto; }
+h2#origin, h2#threads-h, h2#working { font-family: "Montserrat", sans-serif; font-size: 1.45rem; margin-top: 2.6rem; }
+.research-article p, .research-article .threads, .research-article figcaption { font-family: "Source Serif 4", Georgia, serif; }
+.research-article p { max-width: 46rem; }
+.research-article .lede { font-size: 1.16rem; line-height: 1.72; color: var(--ri-ink); }
+.research-article h1 { font-family: "Montserrat", sans-serif; font-weight: 700; }
+.rc-group h2, h2#origin, h2#threads-h, h2#working { font-weight: 700; }
+.note-box { max-width: 46rem; box-sizing: border-box; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+  <h1>Research Themes</h1>
+<div class="post-meta">Hisham Ihshaish &middot; UWE Bristol and Birzeit University &middot; September 2026 &middot; written for prospective Masters and PhD researchers</div>
+
+<figure class="hero">
+    <img src="media/lockyer_transit_wires.jpg" alt="Victorian engraving of the reticle wires in a transit telescope eyepiece, the grid against which nineteenth-century astronomers timed a star's crossing">
+    <figcaption>The wires of a transit instrument, from Lockyer's <em>Stargazing: Past and Present</em>
+    (1878). Two careful observers watching the same star through these wires wrote down different
+    times, and astronomy had to learn that the observer is part of the measurement. Most of my
+    research keeps meeting the same lesson in modern systems.</figcaption>
+  </figure>
+
+<p class="lede">
+    These are the questions I keep returning to, written for anyone thinking about doing research
+    with me, whether that is a Masters project or a PhD. I have tried to tell each one the way I
+    would over a coffee: where it comes from, what is scientifically at stake, and where a project
+    could take it. If one of them catches you, write to me at
+    <a href="mailto:hihshaish@birzeit.edu">hihshaish@birzeit.edu</a> or
+    <a href="mailto:hisham.ihshaish@uwe.ac.uk">hisham.ihshaish@uwe.ac.uk</a>.
+  </p>
+
+<div class="note-box">
+    <p>Two of the themes below rest on manuscripts, one now with a journal and one in final
+    preparation, and one on a framework paper with a companion study in
+    preparation. None has been peer reviewed yet, and the figures shown from them are marked as such.
+    Where I cannot yet share a paper publicly, I can provide access to the preprint and the codebase for
+    those interested. Write to <a href="mailto:hihshaish@birzeit.edu">hihshaish@birzeit.edu</a> or <a href="mailto:hisham.ihshaish@uwe.ac.uk">hisham.ihshaish@uwe.ac.uk</a>.</p>
+  </div>
+
+<h2 id="origin">Where this comes from</h2>
+  <p>
+    Most of my research has started inside a live system, with a partner who needed something to
+    work: repair records at GE Aerospace, bills of quantities for an Innovate UK programme, a wind
+    farm in north-eastern France, a university helpdesk, farmers' complaints in Egypt, and the adaptive
+    learning platform I now lead data and AI for. In almost every one of them, the hard part turned out to
+    be the measurement, not the model. What was written down, by whom, at what stage, and against
+    which labels quietly decided what the score meant. The three groups below are what that lesson
+    turned into.
+  </p>
+
+  <section class="rc-group" id="applied-ml">
+    <div class="rc-eyebrow">Group 1</div>
+    <h2>Applied machine learning: measuring and maintaining models that live in operations</h2>
+    <p class="rc-intro">
+      Text classifiers have moved out of the benchmark literature and into daily operations:
+      maintenance shops, safety programmes, procurement offices and helpdesks now run models over the
+      text their staff write. Once a model lives there, the question stops being how good it is and
+      becomes how anyone would know, because the evaluation has to be built from the records the work
+      itself produces. A deployed classifier<sup class="fn"><a href="#fn1" id="fnr1">a</a></sup> is judged by a
+      number, and the number depends on things the model never sees: which record of the case was
+      read, which labels were used, and which decision rule turned scores into decisions. The two active themes
+      here ask what the number would have been had those choices been made differently, worked out on
+      maintenance and safety reports spanning decades.
+    </p>
+      <div class="rc-cards">
+        <a class="rc-card active" id="record" href="records/">
+          <span class="rc-status">Active &middot; manuscript with a journal</span>
+          <span class="rc-title">The record is part of the task</span>
+          <span class="rc-hook">Change which record of a case a model reads, and the evaluation can change its mind. Measured on maintenance and safety text spanning decades.</span>
+          <span class="rc-go">Read the theme &rarr;</span>
+        </a>
+        <a class="rc-card active" id="drift" href="drift/">
+          <span class="rc-status">Active &middot; manuscript in final preparation</span>
+          <span class="rc-title">Forgetting versus operating-point drift</span>
+          <span class="rc-hook">How much of what deployed models seem to forget is really a decision threshold going stale, and how to tell the difference.</span>
+          <span class="rc-go">Read the theme &rarr;</span>
+        </a>
+        <a class="rc-card published" id="lineage" href="language/">
+          <span class="rc-status">Published work</span>
+          <span class="rc-title">Technical language automation with industry</span>
+          <span class="rc-hook">The applied projects, in aviation, construction, helpdesks and agriculture, where the questions behind the active themes first showed up.</span>
+          <span class="rc-go">Read the theme &rarr;</span>
+        </a>
+      </div>
+  </section>
+
+  <section class="rc-group" id="stochastic">
+    <div class="rc-eyebrow">Group 2</div>
+    <h2>Stochastic modelling and time series</h2>
+    <p class="rc-intro">
+      This is the older thread, from a PhD in parallel computing and a postdoc in climate networks, and it
+      is the one that keeps supplying tools to the other two. The common object is a time series whose
+      statistics are not Gaussian, whose memory is long, and whose interesting structure only appears at large system size or in the tails.
+    </p>
+      <div class="rc-cards">
+        <a class="rc-card open" id="noise" href="noise/">
+          <span class="rc-status">Open &middot; looking for the next study</span>
+          <span class="rc-title">Non-Gaussian noise and synthetic time series</span>
+          <span class="rc-hook">Generating noise with heavy tails and memory, and what honest synthetic series are good for.</span>
+          <span class="rc-go">Read the theme &rarr;</span>
+        </a>
+        <a class="rc-card open" id="networks" href="networks/">
+          <span class="rc-status">Open &middot; a tool worth reviving</span>
+          <span class="rc-title">Networks from large time-series collections</span>
+          <span class="rc-hook">Turning decades of climate fields into analysable interaction networks, with a parallel toolkit oceanographers still use.</span>
+          <span class="rc-go">Read the theme &rarr;</span>
+        </a>
+        <a class="rc-card open" id="ramps" href="ramps/">
+          <span class="rc-status">Open &middot; a thesis to build on</span>
+          <span class="rc-title">Wind power ramps: forecasting the swings that stress a grid</span>
+          <span class="rc-hook">Sustainable-energy forecasting with open data, a non-binary ramp function, and a Masters thesis to build on.</span>
+          <span class="rc-go">Read the theme &rarr;</span>
+        </a>
+      </div>
+  </section>
+
+  <section class="rc-group" id="people">
+    <div class="rc-eyebrow">Group 3</div>
+    <h2>Learning systems with people in them</h2>
+    <p class="rc-intro">
+      The third category is where the measurement problem includes the person being measured. The system adapts to a person, the
+      person adapts to the system, and the record of what happened in a session is not the record of what
+      the person can now do.
+    </p>
+      <div class="rc-cards">
+        <a class="rc-card active" id="education" href="education/">
+          <span class="rc-status">Active &middot; framework paper complete</span>
+          <span class="rc-title">Adaptive learning and AI in education</span>
+          <span class="rc-hook">What adaptive practice provably adds to learning, and what the session record hides about it.</span>
+          <span class="rc-go">Read the theme &rarr;</span>
+        </a>
+      </div>
+  </section>
+
+<section class="rc-group" id="threads">
+    <div class="rc-eyebrow">Across categories</div>
+    <h2 id="threads-h">Smaller threads I still return to</h2>
+    <ul class="threads">
+      <li><strong>Task-oriented dialogue systems,</strong> and the tension between the performance optimum
+        and the quality optimum, from Ryan Fellows' PhD <sup class="c">[<a href="#lref1">1</a>]</sup>. The question has aged well: the
+        systems are now much better at the first and no better at the second.</li>
+      <li><strong>Characterising search spaces</strong> so that an optimiser can pick its own operators,
+        with Mehmet Aydin and Rafet Durgut <sup class="c">[<a href="#lref2">2</a>, <a href="#lref3">3</a>]</sup>. A measurement problem again: which
+        measurable features of a search space predict which operator will work.</li>
+      <li><strong>Estimating defection in subscription markets,</strong> an empirical study from scholarly
+        publishing with Michael Roberts and Ignacio Deza <sup class="c">[<a href="#lref4">4</a>]</sup>. Machine-learning prediction of
+        which institutional customers will leave, from their usage records, before the cancellation arrives.</li>
+      <li><strong>Synthetic personalities for autonomous objects, and the Moral Machine:</strong> An
+        internally funded project in 2020 and 2021 on what it means to give an object a character, and the
+        questions about machine ethics that the Moral Machine experiment made empirical <sup class="c">[<a href="#lref5">5</a>]</sup>.</li>
+    </ul>
+  </section>
+
+  <h2 id="working">Working with me</h2>
+  <p>
+    A project with me usually starts from a measurement question inside a system someone actually runs,
+    with data we can get and a partner who will use the answer. We write the analysis plan down before the
+    results arrive, we release the code, and we say what did not work. The table below is how I think about
+    scale. If one of the questions above reads like something you want to spend a semester or three years
+    on, or you have a system with the same shape, email me at either address,
+    <a href="mailto:hihshaish@birzeit.edu">hihshaish@birzeit.edu</a> or <a href="mailto:hisham.ihshaish@uwe.ac.uk">hisham.ihshaish@uwe.ac.uk</a>. I am at UWE Bristol, and I
+    also teach at Birzeit University.
+  </p>
+  <div class="table-wrap">
+  <table class="scope-table">
+    <thead><tr><th>Scale</th><th>What it looks like</th><th>What you need to bring</th></tr></thead>
+    <tbody>
+      <tr><td>Masters project</td><td>One question, one existing dataset or a public one, a registered
+        analysis plan, a result either way, a repository.</td><td>Python, some statistics, and the patience
+        to read the data before modelling it.</td></tr>
+      <tr><td>PhD</td><td>A measurement problem in a live system, a partner, a chain of three or four
+        studies that each change what the next one asks.</td><td>The above, plus a taste for finding out
+        that the obvious explanation is wrong.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+<div class="tp-notes"><h2>Notes</h2><p id="fn1"><sup>a</sup> By a classifier I mean a machine learning model that assigns each input, here a piece of text, to one of a set of categories; deployed means it runs inside a real workflow rather than an experiment. <a href="#fnr1">&#8617;</a></p></div>
+
+  <h2 id="references" style="font-family:Montserrat,sans-serif;font-size:1.2rem;">References for this page</h2>
+  <ol class="ref-list">
+    <li id="lref1">Fellows, R., Ihshaish, H., Battle, S., Haines, C., Mayhew, P. and Deza, J. I. (2022). Task-oriented dialogue systems: performance vs quality-optima, a review. <em>Computer Science and Information Technology (CS and IT)</em>. <a href="https://doi.org/10.5121/csit.2022.121306">doi:10.5121/csit.2022.121306</a></li>
+    <li id="lref2">Aydin, M. E., Durgut, R., Rakib, A. and Ihshaish, H. (2024). Feature-based search space characterisation for data-driven adaptive operator selection. <em>Evolving Systems</em>, 15(1), 99-114. <a href="https://doi.org/10.1007/s12530-023-09560-7">doi:10.1007/s12530-023-09560-7</a></li>
+    <li id="lref3">Durgut, R., Aydin, M., Ihshaish, H. and Rakib, A. (2022). Analysing the predictivity of features to characterise the search space. <em>ICANN 2022</em>. <a href="https://doi.org/10.1007/978-3-031-15937-4_1">doi:10.1007/978-3-031-15937-4_1</a></li>
+    <li id="lref4">Roberts, M., Deza, J. I., Ihshaish, H. and Zhu, Y. (2022). Estimating defection in subscription-type markets: empirical analysis from the scholarly publishing industry. <a href="https://arxiv.org/abs/2211.09970">arXiv:2211.09970</a></li>
+    <li id="lref5">Awad, E., Dsouza, S., Kim, R., Schulz, J., Henrich, J., Shariff, A., Bonnefon, J.-F. and Rahwan, I. (2018). The Moral Machine experiment. <em>Nature</em>, 563, 59-64. <a href="https://doi.org/10.1038/s41586-018-0637-6">doi:10.1038/s41586-018-0637-6</a></li>
+  </ol>
+</article>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
