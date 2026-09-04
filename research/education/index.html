@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="What adaptive practice provably adds to learning, and what the session record hides about it." />
+
+  <title>Adaptive learning and AI in education | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/research/"><span>Research</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+<article class="blog-article tp-article">
+<style>
+:root { --tp-ink:#212121; --tp-muted:#6b6a68; --tp-accent:#1565c0; --tp-rule:#e6e4e0; --tp-note:#f4f7fb; }
+.tp-article { max-width: 720px; margin: 0 auto; font-family: "Source Serif 4", Georgia, serif; font-size: 1.09rem; line-height: 1.72; color: var(--tp-ink); }
+.tp-article a { color: var(--tp-accent); }
+.tp-eyebrow { font-family: "Roboto Mono", monospace; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); display:flex; flex-wrap:wrap; gap:0.3rem 0.9rem; }
+.tp-eyebrow .st { color: var(--tp-accent); }
+.tp-article h1 { font-family: "Montserrat", sans-serif; font-size: 2rem; line-height: 1.22; margin: 0.35rem 0 0.4rem; }
+.tp-meta { font-size: 0.92rem; color: var(--tp-muted); font-family: "Montserrat", sans-serif; margin-bottom: 1.9rem; }
+.tp-article h2.tp-sec { font-family: "Montserrat", sans-serif; font-size: 1.18rem; margin: 2.7rem 0 0.8rem; }
+.tp-article h2.tp-sec .n { font-family: "Roboto Mono", monospace; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); display:block; margin-bottom: 0.25rem; }
+.tp-div { text-align:center; color:var(--tp-muted); letter-spacing: 0.7em; margin: 2.4rem 0 0; }
+.tp-article .open-list { padding-left: 1.2rem; margin: 0.4rem 0; }
+.tp-article .open-list li { margin: 0.55rem 0; }
+.scale { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tp-accent); border: 1px solid var(--tp-accent); border-radius: 3px; padding: 0 0.35em; margin-left: 0.35em; white-space: nowrap; vertical-align: 0.1em; }
+.note, .status-line { background: var(--tp-note); border-left: 4px solid var(--tp-accent); border-radius: 0 4px 4px 0; padding: 0.8rem 1.1rem; margin: 1.5rem 0; font-size: 0.98rem; }
+.exhibit { margin: 1.8rem 0; }
+.exhibit img { max-width: 100%; height: auto; border: 1px solid var(--tp-rule); border-radius: 4px; background:#fff; display:block; }
+.exhibit.narrow img { max-width: 360px; margin: 0 auto; }
+.exhibit.narrow figcaption { max-width: 360px; margin-left:auto; margin-right:auto; }
+.exhibit figcaption { font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.6rem; line-height: 1.5; }
+.exhibit figcaption .unpub { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--tp-accent); display:inline-block; margin-right: 0.4rem; }
+.exhibit-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; margin: 1.8rem 0; }
+.exhibit-row .exhibit { margin: 0; }
+blockquote.epigraph { border-left: 3px solid var(--tp-rule); margin: 1.4rem 0; padding: 0.2rem 0 0.2rem 1.2rem; color: var(--tp-muted); font-style: italic; }
+blockquote.epigraph cite { display:block; font-style: normal; font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.3rem; }
+sup.c { font-size: 0.7em; line-height: 0; } sup.c a { color: var(--tp-accent); text-decoration: none; }
+sup.fn { font-size: 0.72em; line-height: 0; } sup.fn a { color: var(--tp-accent); text-decoration: none; }
+.tp-notes { border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1rem; font-size: 0.92rem; color: var(--tp-muted); }
+.tp-notes h2, .tp-refs h2 { font-family: "Montserrat", sans-serif; font-size: 1rem; }
+.ref-list { padding-left: 1.6rem; font-size: 0.92rem; line-height: 1.55; }
+.ref-list li { margin: 0.35rem 0; }
+.ref-list a { color: var(--tp-accent); word-break: break-word; }
+.tp-nav { display:flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1.1rem; font-family: "Montserrat", sans-serif; font-size: 0.92rem; }
+.tp-nav a { color: var(--tp-accent); text-decoration: none; }
+.tp-nav a:hover { text-decoration: underline; }
+.tp-stand { font-style: italic; font-size: 1.04rem; color: var(--tp-muted); border-left: 3px solid var(--tp-accent); padding: 0.15rem 0 0.15rem 0.95rem; margin: 0 0 1.9rem; }
+.tp-article h2.tp-sec { border-top: 1px solid var(--tp-rule); padding-top: 1.7rem; margin-top: 2.4rem; }
+.note .nlabel { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 0.3rem; }
+.tp-nav { align-items: baseline; }
+.tp-nav .dir { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); }
+
+.table-wrap { overflow-x:auto; }
+.tp-article h1 { font-weight: 700; }
+.tp-article h2.tp-sec { font-weight: 600; }
+.tp-nav > a { white-space: nowrap; }
+.exhibit figcaption { text-align: left; }
+.exhibit-row { align-items: start; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+  <div class="tp-eyebrow"><span>Learning systems with people in them</span><span class="st">Active &middot; framework paper complete</span></div>
+  <h1>Adaptive learning and AI in education</h1>
+  <div class="tp-meta">Hisham Ihshaish &middot; <a href="../">Research themes</a></div>
+  <p class="tp-stand">More right answers during the session is not the same as more learning.</p>
+
+
+      <h2 class="tp-sec"><span class="n">One</span>The phenomenon</h2>
+      <p>
+        Give a class of high-school students a generative AI helper for their maths practice. They get more
+        answers right during the session and, with the helper removed, do worse on the exam than the class
+        that never had it <sup class="c">[<a href="#ref1">1</a>]</sup>. Give a university physics class a carefully designed AI tutor
+        and they learn more, in less time, than the same class in a well-run active-learning session
+        <sup class="c">[<a href="#ref2">2</a>]</sup>. Meta-analyses of the older intelligent tutoring systems report effects that
+        approach human tutoring <sup class="c">[<a href="#ref3">3</a>, <a href="#ref4">4</a>]</sup>, the target Bloom set forty years ago
+        <sup class="c">[<a href="#ref5">5</a>]</sup>. All of these are called AI in education. The problem is that the category is doing
+        no work: it groups systems that share an interface and almost nothing of pedagogical substance, and
+        the evidence contradicts itself because the category does.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Two</span>The stakes</h2>
+      <p>
+        Governments are moving faster than the evidence. National guidance, grant funding, product-safety
+        testbeds and, in one case, an age-graded ban have arrived within two years of each other, and a
+        procurement decision in a school today is made with no shared way of saying what kind of system is
+        being bought. A distinction the learning sciences settled decades ago, between performance during
+        practice and learning that survives a delay <sup class="c">[<a href="#ref6">6</a>]</sup>, is exactly the distinction the
+        session record cannot see. And the assistance dilemma, how much help is too much, was mapped in the
+        cognitive tutors long before a model could write the answer for you <sup class="c">[<a href="#ref7">7</a>]</sup>.
+      </p>
+
+      <figure class="exhibit">
+        <img src="../media/edu_policy_map.png" alt="World map shading countries by their policy stance on AI in schools: EU high-risk classification, UK testbeds, US federal funding, national guidance in Japan and Australia, AI as a school subject in China, UAE, Saudi Arabia and India, a revoked mandate in South Korea, a state-built system in Singapore and Estonia, teacher-facilitated trials in Nigeria and Ghana, and an age-graded ban in China" width="1632" height="1051">
+        <figcaption><span class="unpub">Unpublished manuscript figure</span> Where policy stands, mid-2026, from the framework paper <sup class="c">[<a href="#ref8">8</a>]</sup>. Every
+        colour is a decision taken about systems the evidence has not yet sorted. Not yet peer reviewed.</figcaption>
+      </figure>
+
+      <h2 class="tp-sec"><span class="n">Three</span>The evidence so far</h2>
+      <p>
+        The learner model has a long history, from knowledge tracing <sup class="c">[<a href="#ref9">9</a>]</sup> to the cognitive
+        tutors whose effects were measured across many classrooms, and the meta-analytic record on those systems is
+        positive and reasonably stable <sup class="c">[<a href="#ref3">3</a>, <a href="#ref4">4</a>]</sup>. The randomised<sup class="fn"><a href="#fna" id="fnra">a</a></sup> evidence on
+        generative systems is young and split <sup class="c">[<a href="#ref1">1</a>, <a href="#ref2">2</a>]</sup>. What the two halves of the
+        literature share is that neither codes the systems it evaluates by what they know about the learner
+        or by who decides when help is withdrawn.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Four</span>What we built</h2>
+      <p>
+        Day to day I lead data and AI at Explore Learning, where we build personalisation for a tutoring
+        platform used by thousands of learners, and I co-founded Siraj, a guidance platform for
+        secondary-school students in Palestine. The framework paper <sup class="c">[<a href="#ref8">8</a>]</sup> came out of trying to
+        reconcile what the literature says with what I see in deployment. It classifies systems along four
+        axes. The first is epistemic warrant, the depth of the learner model, in five cumulative levels
+        from a within-session trace to a calibrated estimate of supported and independent capability. The
+        second is the adaptation mechanism, coded separately for content production, learner-state
+        estimation and pedagogical decision policy. The third is the locus of agency for each function,
+        with the withdrawal of assistance weighted most. The fourth is the grade and direction of
+        evidence, recorded apart and never merged. Read that way, the landmark evidence is
+        consistent with a danger configuration, generative adaptation on a shallow learner model with no
+        evidence of durable benefit, and with a slide of deployed systems towards it. Five falsifiable
+        hypotheses and five procurement propositions follow.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Five</span>Questions a project could answer</h2>
+      <ul class="open-list">
+        <li><strong>The companion coding study:</strong> Apply the codebook to the evidence corpus with
+          independent raters, report agreement, and test the danger-configuration hypothesis against the
+          outcomes. <span class="scale">MSc or PhD</span></li>
+        <li><strong>Durable outcome against session performance</strong> in a live platform. This is <a href="../records/">the record theme</a> in a classroom: the record a tutor sees is not the record that predicts what a child retains,
+          and the two can be measured side by side. <span class="scale">PhD</span></li>
+        <li><strong>Calibrated estimates of supported and independent capability,</strong> the deepest level
+          of the learner model. What does it cost in items and time to obtain one, and how quickly does it go
+          stale? <span class="scale">PhD</span></li>
+        <li><strong>Drift in learner populations and in content,</strong> which brings <a href="../drift/">the drift theme</a> into the classroom: does a mastery threshold fitted last year still mean mastery this year? <span class="scale">MSc</span></li>
+      </ul>
+
+      <div class="status-line">The framework paper is complete and the companion study is in preparation.
+        Preprint on request. Some of the thinking is in
+        <a href="/blog/edtech/">the education technology library</a> on this site.</div>
+    
+
+<div class="tp-notes"><h2>Notes</h2><p id="fna"><sup>a</sup> A randomised controlled trial assigns learners to receive the tool or not by chance, so the comparison is not confounded by who chose to use it. <a href="#fnra">&#8617;</a></p></div>
+<div class="tp-refs"><h2 id="references">References</h2><ol class="ref-list">
+  <li id="ref1">Bastani, H., Bastani, O., Sungu, A., Ge, H., Kabakcı, Ö. and Mariman, R. (2025). Generative AI without guardrails can harm learning: evidence from high school mathematics. <em>PNAS</em>, 122(26), e2422633122. <a href="https://doi.org/10.1073/pnas.2422633122">doi:10.1073/pnas.2422633122</a></li>
+  <li id="ref2">Kestin, G., Miller, K., Klales, A., Milbourne, T. and Ponti, G. (2025). AI tutoring outperforms in-class active learning: an RCT introducing a novel research-based design in an authentic educational setting. <em>Scientific Reports</em>, 15, 17458. <a href="https://doi.org/10.1038/s41598-025-97652-6">doi:10.1038/s41598-025-97652-6</a></li>
+  <li id="ref3">Kulik, J. A. and Fletcher, J. D. (2016). Effectiveness of intelligent tutoring systems: a meta-analytic review. <em>Review of Educational Research</em>, 86(1), 42-78. <a href="https://doi.org/10.3102/0034654315581420">doi:10.3102/0034654315581420</a></li>
+  <li id="ref4">VanLehn, K. (2011). The relative effectiveness of human tutoring, intelligent tutoring systems, and other tutoring systems. <em>Educational Psychologist</em>, 46(4), 197-221. <a href="https://doi.org/10.1080/00461520.2011.611369">doi:10.1080/00461520.2011.611369</a></li>
+  <li id="ref5">Bloom, B. S. (1984). The 2 sigma problem: the search for methods of group instruction as effective as one-to-one tutoring. <em>Educational Researcher</em>, 13(6), 4-16. <a href="https://doi.org/10.3102/0013189X013006004">doi:10.3102/0013189X013006004</a></li>
+  <li id="ref6">Soderstrom, N. C. and Bjork, R. A. (2015). Learning versus performance: an integrative review. <em>Perspectives on Psychological Science</em>, 10(2), 176-199. <a href="https://doi.org/10.1177/1745691615569000">doi:10.1177/1745691615569000</a></li>
+  <li id="ref7">Koedinger, K. R. and Aleven, V. (2007). Exploring the assistance dilemma in experiments with cognitive tutors. <em>Educational Psychology Review</em>, 19(3), 239-264. <a href="https://doi.org/10.1007/s10648-007-9049-0">doi:10.1007/s10648-007-9049-0</a></li>
+  <li id="ref8">Ihshaish, H. (2026). The empty learner model: classifying artificial intelligence in education by epistemic warrant. Manuscript; a companion multi-coder evidence study is in preparation. Not yet peer reviewed. Preprint on request.</li>
+  <li id="ref9">Corbett, A. T. and Anderson, J. R. (1995). Knowledge tracing: modeling the acquisition of procedural knowledge. <em>User Modeling and User-Adapted Interaction</em>, 4(4), 253-278. <a href="https://doi.org/10.1007/BF01099821">doi:10.1007/BF01099821</a></li>
+</ol></div>
+<div class="tp-nav"><span><span class="dir">&larr; previous</span><a href="../ramps/">Wind power ramps: forecasting the swings that stress a grid</a></span><a href="../">All themes</a><span style="text-align:right"></span></div>
+</article>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

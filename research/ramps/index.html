@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="Forecasting the swings in wind power that stress a grid, with open data and a Masters thesis to build on." />
+
+  <title>Wind power ramps: forecasting the swings that stress a grid | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/research/"><span>Research</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+<article class="blog-article tp-article">
+<style>
+:root { --tp-ink:#212121; --tp-muted:#6b6a68; --tp-accent:#1565c0; --tp-rule:#e6e4e0; --tp-note:#f4f7fb; }
+.tp-article { max-width: 720px; margin: 0 auto; font-family: "Source Serif 4", Georgia, serif; font-size: 1.09rem; line-height: 1.72; color: var(--tp-ink); }
+.tp-article a { color: var(--tp-accent); }
+.tp-eyebrow { font-family: "Roboto Mono", monospace; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); display:flex; flex-wrap:wrap; gap:0.3rem 0.9rem; }
+.tp-eyebrow .st { color: var(--tp-accent); }
+.tp-article h1 { font-family: "Montserrat", sans-serif; font-size: 2rem; line-height: 1.22; margin: 0.35rem 0 0.4rem; }
+.tp-meta { font-size: 0.92rem; color: var(--tp-muted); font-family: "Montserrat", sans-serif; margin-bottom: 1.9rem; }
+.tp-article h2.tp-sec { font-family: "Montserrat", sans-serif; font-size: 1.18rem; margin: 2.7rem 0 0.8rem; }
+.tp-article h2.tp-sec .n { font-family: "Roboto Mono", monospace; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); display:block; margin-bottom: 0.25rem; }
+.tp-div { text-align:center; color:var(--tp-muted); letter-spacing: 0.7em; margin: 2.4rem 0 0; }
+.tp-article .open-list { padding-left: 1.2rem; margin: 0.4rem 0; }
+.tp-article .open-list li { margin: 0.55rem 0; }
+.scale { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tp-accent); border: 1px solid var(--tp-accent); border-radius: 3px; padding: 0 0.35em; margin-left: 0.35em; white-space: nowrap; vertical-align: 0.1em; }
+.note, .status-line { background: var(--tp-note); border-left: 4px solid var(--tp-accent); border-radius: 0 4px 4px 0; padding: 0.8rem 1.1rem; margin: 1.5rem 0; font-size: 0.98rem; }
+.exhibit { margin: 1.8rem 0; }
+.exhibit img { max-width: 100%; height: auto; border: 1px solid var(--tp-rule); border-radius: 4px; background:#fff; display:block; }
+.exhibit.narrow img { max-width: 360px; margin: 0 auto; }
+.exhibit.narrow figcaption { max-width: 360px; margin-left:auto; margin-right:auto; }
+.exhibit figcaption { font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.6rem; line-height: 1.5; }
+.exhibit figcaption .unpub { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--tp-accent); display:inline-block; margin-right: 0.4rem; }
+.exhibit-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; margin: 1.8rem 0; }
+.exhibit-row .exhibit { margin: 0; }
+blockquote.epigraph { border-left: 3px solid var(--tp-rule); margin: 1.4rem 0; padding: 0.2rem 0 0.2rem 1.2rem; color: var(--tp-muted); font-style: italic; }
+blockquote.epigraph cite { display:block; font-style: normal; font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.3rem; }
+sup.c { font-size: 0.7em; line-height: 0; } sup.c a { color: var(--tp-accent); text-decoration: none; }
+sup.fn { font-size: 0.72em; line-height: 0; } sup.fn a { color: var(--tp-accent); text-decoration: none; }
+.tp-notes { border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1rem; font-size: 0.92rem; color: var(--tp-muted); }
+.tp-notes h2, .tp-refs h2 { font-family: "Montserrat", sans-serif; font-size: 1rem; }
+.ref-list { padding-left: 1.6rem; font-size: 0.92rem; line-height: 1.55; }
+.ref-list li { margin: 0.35rem 0; }
+.ref-list a { color: var(--tp-accent); word-break: break-word; }
+.tp-nav { display:flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1.1rem; font-family: "Montserrat", sans-serif; font-size: 0.92rem; }
+.tp-nav a { color: var(--tp-accent); text-decoration: none; }
+.tp-nav a:hover { text-decoration: underline; }
+.tp-stand { font-style: italic; font-size: 1.04rem; color: var(--tp-muted); border-left: 3px solid var(--tp-accent); padding: 0.15rem 0 0.15rem 0.95rem; margin: 0 0 1.9rem; }
+.tp-article h2.tp-sec { border-top: 1px solid var(--tp-rule); padding-top: 1.7rem; margin-top: 2.4rem; }
+.note .nlabel { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 0.3rem; }
+.tp-nav { align-items: baseline; }
+.tp-nav .dir { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); }
+
+.table-wrap { overflow-x:auto; }
+.tp-article h1 { font-weight: 700; }
+.tp-article h2.tp-sec { font-weight: 600; }
+.tp-nav > a { white-space: nowrap; }
+.exhibit figcaption { text-align: left; }
+.exhibit-row { align-items: start; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+  <div class="tp-eyebrow"><span>Stochastic modelling and time series</span><span class="st">Open &middot; a thesis to build on</span></div>
+  <h1>Wind power ramps: forecasting the swings that stress a grid</h1>
+  <div class="tp-meta">Hisham Ihshaish &middot; <a href="../">Research themes</a></div>
+  <p class="tp-stand">Grid operators fear the swing, not the average: wind ramps forecast as continuous events.</p>
+
+
+    <p>
+      Wind is now a first-order component of the world's electricity: installed capacity passed one
+      terawatt in 2023 <sup class="c">[<a href="#ref1">1</a>]</sup>, and every gigawatt of it
+      inherits the atmosphere's moods. The event that operators fear is not low wind but the ramp,
+      a large change in a farm's output over minutes to hours, because reserves have to be scheduled
+      against it and a missed ramp is paid for at the balancing market<sup class="fn"><a href="#fna" id="fnra">a</a></sup>'s worst prices. Forecasting
+      ramps is a young, awkward problem with its own review literature
+      <sup class="c">[<a href="#ref2">2</a>]</sup>, and it sits between three fields I
+      care about: time-series modelling, the physics of turbulent driving (<a href="../noise/">the noise theme</a>), and
+      machine learning that must answer an operational question rather than win a benchmark.
+    </p>
+
+    <h2 class="tp-sec"><span class="n">One</span>What makes it scientifically hard</h2>
+    <p>
+      The field's first difficulty is that a ramp is not a natural kind. The standard approach picks
+      a threshold, forty per cent of capacity in an hour, say, and turns a continuous swing into a
+      binary event, which throws away exactly the information an operator wants: how hard, how fast,
+      and how certain. Working with Ignacio Deza and our student Russell Sharp, we treated ramps with
+      a non-binary ramp function instead, so the model learns the intensity of the swing rather than
+      a yes or no <sup class="c">[<a href="#ref3">3</a>, <a href="#ref4">4</a>]</sup>. The second
+      difficulty connects to <a href="../noise/">the noise theme</a>: gusts are not Gaussian, and the tail behaviour of
+      the driving wind is precisely what decides the worst ramps.
+    </p>
+
+    <h2 class="tp-sec"><span class="n">Two</span>Where we got to</h2>
+    <p>
+      The characterisation and forecasting study, at an operating wind farm in north-eastern France, was
+      written for the climate-change workshop at NeurIPS 2021 <sup class="c">[<a href="#ref3">3</a>]</sup>, and
+      Russell's Masters thesis carried the non-binary formulation through deep-learning forecasters
+      and presented it at SEEDS <sup class="c">[<a href="#ref4">4</a>]</sup>. The thesis is on this
+      site in full (<a href="/uploads/sharp-thesis.pdf" target="_blank" rel="noopener">PDF</a>, with
+      a <a href="/post/sharp/">summary</a>), and it is a real starting point: the formulation
+      works, and nobody has pushed it as far as it goes.
+    </p>
+
+    <h2 class="tp-sec"><span class="n">Three</span>Data you can start with today</h2>
+    <div class="note"><span class="nlabel">Start here</span>
+      This theme needs no data agreement. The NREL WIND Toolkit provides simulated power and
+      meteorology for more than one hundred thousand sites <sup class="c">[<a href="#ref5">5</a>]</sup>,
+      and the GEFCom2014 competition data give ten wind farms with hourly power and weather
+      forecasts, together with a published account of what forecasting methods won and why
+      <sup class="c">[<a href="#ref6">6</a>]</sup>. A Masters project can be running within a week
+      of starting.
+    </div>
+
+    <h2 class="tp-sec"><span class="n">Four</span>Where a project could go</h2>
+    <ul class="open-list">
+      <li><strong>Ramp-aware objectives:</strong> Train forecasters whose loss weights the swing
+        by its operational cost, and compare against the binary-event literature on its own
+        metrics as well as ours. <span class="scale">MSc</span></li>
+      <li><strong>Characterisation before classification:</strong> Fit the distribution of ramp
+        intensities per site and season, connect its tails to the non-Gaussian noise machinery of
+        <a href="../noise/">the noise theme</a>, and ask which sites are predictable at all. <span class="scale">MSc or PhD</span></li>
+      <li><strong>Transfer across farms:</strong> A forecaster trained on one farm meets another
+        farm's terrain and turbines: what carries, what breaks, and can the ramp function be made
+        site-invariant? <span class="scale">PhD</span></li>
+    </ul>
+  
+
+<div class="tp-notes"><h2>Notes</h2><p id="fna"><sup>a</sup> Reserves are generation held ready to cover sudden shortfalls; the balancing market is where a grid buys that cover at short notice, at a premium. <a href="#fnra">&#8617;</a></p></div>
+<div class="tp-refs"><h2 id="references">References</h2><ol class="ref-list">
+  <li id="ref1">Global Wind Energy Council (2024). <em>Global Wind Report 2024</em>. Cumulative installed wind capacity reached 1,021 GW at the end of 2023. <a href="https://www.gwec.net/reports/globalwindreport" target="_blank" rel="noopener">gwec.net/reports/globalwindreport</a></li>
+  <li id="ref2">Gallego-Castillo, C., Cuerva-Tejero, A. and Lopez-Garcia, O. (2015). A review on the recent history of wind power ramp forecasting. <em>Renewable and Sustainable Energy Reviews</em>, 52, 1148-1157. <a href="https://doi.org/10.1016/j.rser.2015.07.154">doi:10.1016/j.rser.2015.07.154</a></li>
+  <li id="ref3">Sharp, R., Ihshaish, H. and Deza, J. I. (2021). Wind power ramp characterisation and forecasting using numerical weather prediction and machine learning models. Preprint, <a href="https://ssrn.com/abstract=3997702">SSRN 3997702</a>, written for the Tackling Climate Change with Machine Learning workshop at NeurIPS 2021.</li>
+  <li id="ref4">Sharp, R., Ihshaish, H. and Deza, J. I. (2022). Integrating wind variability to modelling wind-ramp events using a non-binary ramp function and deep learning models. <em>SEEDS 2022, International Conference for Sustainable Ecological Engineering Design for Society</em>. Thesis: <a href="/post/sharp/">ihshaish.github.io/post/sharp</a></li>
+  <li id="ref5">Draxl, C., Clifton, A., Hodge, B.-M. and McCaa, J. (2015). The Wind Integration National Dataset (WIND) Toolkit. <em>Applied Energy</em>, 151, 355-366. <a href="https://doi.org/10.1016/j.apenergy.2015.03.121">doi:10.1016/j.apenergy.2015.03.121</a></li>
+  <li id="ref6">Hong, T., Pinson, P., Fan, S., Zareipour, H., Troccoli, A. and Hyndman, R. J. (2016). Probabilistic energy forecasting: Global Energy Forecasting Competition 2014 and beyond. <em>International Journal of Forecasting</em>, 32(3), 896-913. <a href="https://doi.org/10.1016/j.ijforecast.2016.02.001">doi:10.1016/j.ijforecast.2016.02.001</a></li>
+</ol></div>
+<div class="tp-nav"><span><span class="dir">&larr; previous</span><a href="../networks/">Networks from large time-series collections</a></span><a href="../">All themes</a><span style="text-align:right"><span class="dir">next &rarr;</span><a href="../education/">Adaptive learning and AI in education</a></span></div>
+</article>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

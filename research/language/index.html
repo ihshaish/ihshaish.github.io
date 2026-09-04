@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+  <link rel="stylesheet" href="/blog/blog.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="The applied text-classification projects, in aviation, construction, helpdesks and agriculture, and the questions each one left behind." />
+
+  <title>Technical language automation with industry | Hisham Ihshaish</title>
+</head>
+
+<body id="top" class="page-wrapper">
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link active" href="/research/"><span>Research</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#posts"><span>News</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/blog/"><span>Blog</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="blog-page">
+      <div class="container">
+
+<article class="blog-article tp-article">
+<style>
+:root { --tp-ink:#212121; --tp-muted:#6b6a68; --tp-accent:#1565c0; --tp-rule:#e6e4e0; --tp-note:#f4f7fb; }
+.tp-article { max-width: 720px; margin: 0 auto; font-family: "Source Serif 4", Georgia, serif; font-size: 1.09rem; line-height: 1.72; color: var(--tp-ink); }
+.tp-article a { color: var(--tp-accent); }
+.tp-eyebrow { font-family: "Roboto Mono", monospace; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); display:flex; flex-wrap:wrap; gap:0.3rem 0.9rem; }
+.tp-eyebrow .st { color: var(--tp-accent); }
+.tp-article h1 { font-family: "Montserrat", sans-serif; font-size: 2rem; line-height: 1.22; margin: 0.35rem 0 0.4rem; }
+.tp-meta { font-size: 0.92rem; color: var(--tp-muted); font-family: "Montserrat", sans-serif; margin-bottom: 1.9rem; }
+.tp-article h2.tp-sec { font-family: "Montserrat", sans-serif; font-size: 1.18rem; margin: 2.7rem 0 0.8rem; }
+.tp-article h2.tp-sec .n { font-family: "Roboto Mono", monospace; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); display:block; margin-bottom: 0.25rem; }
+.tp-div { text-align:center; color:var(--tp-muted); letter-spacing: 0.7em; margin: 2.4rem 0 0; }
+.tp-article .open-list { padding-left: 1.2rem; margin: 0.4rem 0; }
+.tp-article .open-list li { margin: 0.55rem 0; }
+.scale { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tp-accent); border: 1px solid var(--tp-accent); border-radius: 3px; padding: 0 0.35em; margin-left: 0.35em; white-space: nowrap; vertical-align: 0.1em; }
+.note, .status-line { background: var(--tp-note); border-left: 4px solid var(--tp-accent); border-radius: 0 4px 4px 0; padding: 0.8rem 1.1rem; margin: 1.5rem 0; font-size: 0.98rem; }
+.exhibit { margin: 1.8rem 0; }
+.exhibit img { max-width: 100%; height: auto; border: 1px solid var(--tp-rule); border-radius: 4px; background:#fff; display:block; }
+.exhibit.narrow img { max-width: 360px; margin: 0 auto; }
+.exhibit.narrow figcaption { max-width: 360px; margin-left:auto; margin-right:auto; }
+.exhibit figcaption { font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.6rem; line-height: 1.5; }
+.exhibit figcaption .unpub { font-family: "Roboto Mono", monospace; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--tp-accent); display:inline-block; margin-right: 0.4rem; }
+.exhibit-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; margin: 1.8rem 0; }
+.exhibit-row .exhibit { margin: 0; }
+blockquote.epigraph { border-left: 3px solid var(--tp-rule); margin: 1.4rem 0; padding: 0.2rem 0 0.2rem 1.2rem; color: var(--tp-muted); font-style: italic; }
+blockquote.epigraph cite { display:block; font-style: normal; font-size: 0.88rem; color: var(--tp-muted); margin-top: 0.3rem; }
+sup.c { font-size: 0.7em; line-height: 0; } sup.c a { color: var(--tp-accent); text-decoration: none; }
+sup.fn { font-size: 0.72em; line-height: 0; } sup.fn a { color: var(--tp-accent); text-decoration: none; }
+.tp-notes { border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1rem; font-size: 0.92rem; color: var(--tp-muted); }
+.tp-notes h2, .tp-refs h2 { font-family: "Montserrat", sans-serif; font-size: 1rem; }
+.ref-list { padding-left: 1.6rem; font-size: 0.92rem; line-height: 1.55; }
+.ref-list li { margin: 0.35rem 0; }
+.ref-list a { color: var(--tp-accent); word-break: break-word; }
+.tp-nav { display:flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--tp-rule); margin-top: 2.6rem; padding-top: 1.1rem; font-family: "Montserrat", sans-serif; font-size: 0.92rem; }
+.tp-nav a { color: var(--tp-accent); text-decoration: none; }
+.tp-nav a:hover { text-decoration: underline; }
+.tp-stand { font-style: italic; font-size: 1.04rem; color: var(--tp-muted); border-left: 3px solid var(--tp-accent); padding: 0.15rem 0 0.15rem 0.95rem; margin: 0 0 1.9rem; }
+.tp-article h2.tp-sec { border-top: 1px solid var(--tp-rule); padding-top: 1.7rem; margin-top: 2.4rem; }
+.note .nlabel { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 0.3rem; }
+.tp-nav { align-items: baseline; }
+.tp-nav .dir { display:block; font-family: "Roboto Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tp-muted); }
+
+.table-wrap { overflow-x:auto; }
+.tp-article h1 { font-weight: 700; }
+.tp-article h2.tp-sec { font-weight: 600; }
+.tp-nav > a { white-space: nowrap; }
+.exhibit figcaption { text-align: left; }
+.exhibit-row { align-items: start; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+  <div class="tp-eyebrow"><span>Applied machine learning</span><span class="st">Published work</span></div>
+  <h1>Technical language automation with industry</h1>
+  <div class="tp-meta">Hisham Ihshaish &middot; <a href="../">Research themes</a></div>
+  <p class="tp-stand">Before there were themes there were projects, each of which put a text classifier into a working system and left a question its paper does not contain.</p>
+  <h2 class="tp-sec"><span class="n">One</span>The projects</h2>
+
+      <p>
+        Technical text, the terse, abbreviation-heavy language of repair logs, cost documents and support
+        tickets, is where I have done most of my applied work, always with a partner who needed the
+        classifier to run. Avionics maintenance text with GE Aerospace, where TF-IDF and pre-trained word
+        embeddings were compared inside sequence classifiers<sup class="fn"><a href="#fna" id="fnra">a</a></sup> for predicting the maintenance
+        action from the repair narrative <sup class="c">[<a href="#ref1">1</a>]</sup>. Bills of quantities in construction, where free-text cost lines were mapped onto
+        the International Construction Measurement Standard for an Innovate UK programme, with a £1.2M UWE
+        share, and the trained model was released publicly for the industry to use <sup class="c">[<a href="#ref2">2</a>]</sup>. University helpdesk tickets, classified so that
+        the auto-reply could be tailored to the problem <sup class="c">[<a href="#ref3">3</a>]</sup>. Farmers' complaints in Egypt,
+        routed through a cloud decision-support system built with Fayoum University under a Newton-Mosharafa programme
+        <sup class="c">[<a href="#ref4">4</a>]</sup>.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Two</span>What they left behind</h2>
+      <p>
+        The aerospace work left the observation
+        that a single repair generates several records, written by different people at different stages of
+        the workflow, and that which of them a model reads is settled before any model comparison starts;
+        that observation grew into <a href="../records/">the records theme</a>. The construction work made
+        the labels the interesting part: the categories came from a published measurement standard rather
+        than from the data, so the fit between what a cost line says and what the standard can express was
+        itself the problem being solved. The helpdesk work tied the classes to the replies the service
+        could send, so the decision the system had to take shaped the label set from the start. Working
+        inside these systems, rather than on benchmark data, is what turned measurement into my research
+        question.
+      </p>
+
+      <h2 class="tp-sec"><span class="n">Three</span>Where they could restart</h2>
+      <ul class="open-list">
+        <li><strong>The construction classifier, rebuilt:</strong> The code is public <sup class="c">[<a href="#ref2">2</a>]</sup>. Put a
+          current fine-tuned encoder against the published baseline on the same task and report what four
+          more years of language models actually buy on short, telegraphic cost lines. <span class="scale">MSc</span></li>
+        <li><strong>A record audit in a new industry:</strong> Take a domain with a working classifier,
+          map which records of a case exist, who writes each one and at what stage, and which of them the
+          model reads. It is the fieldwork behind <a href="../records/">the records theme</a>, done fresh
+          where nobody has looked. <span class="scale">MSc</span></li>
+        <li><strong>Helpdesk replies judged at the decision:</strong> Tailored auto-replies evaluated on
+          whether the problem was resolved, not on whether the class was right, extending the label-set
+          question the helpdesk project opened <sup class="c">[<a href="#ref3">3</a>]</sup>. <span class="scale">MSc or PhD</span></li>
+      </ul>
+
+
+<div class="tp-notes"><h2>Notes</h2><p id="fna"><sup>a</sup> An embedding represents each word as a vector of numbers, placed so that words used in similar ways sit near one another; TF-IDF is the older approach of weighting each word by how distinctive it is. A sequence classifier reads those vectors in order to assign the whole passage a category. <a href="#fnra">&#8617;</a></p></div>
+<div class="tp-refs"><h2 id="references">References</h2><ol class="ref-list">
+  <li id="ref1">Mayhew, P., Ihshaish, H., Deza, J. I. and del Amo, A. (2023). Maintenance automation using deep learning methods: a case study from the aerospace industry. <em>Artificial Neural Networks and Machine Learning, ICANN 2023</em>, LNCS 14263, 295-307. <a href="https://doi.org/10.1007/978-3-031-44204-9_25">doi:10.1007/978-3-031-44204-9_25</a></li>
+  <li id="ref2">Deza, J. I., Ihshaish, H. and Mahdjoubi, L. (2022). A machine learning approach to classifying construction cost documents into the International Construction Measurement Standard. <a href="https://arxiv.org/abs/2211.07705">arXiv:2211.07705</a>. Code: <a href="https://github.com/ihshaish/BoQ-classifier-ICMS">github.com/ihshaish/BoQ-classifier-ICMS</a></li>
+  <li id="ref3">Nicholls, R., Fellows, R., Battle, S. and Ihshaish, H. (2022). Problem classification for tailored helpdesk auto-replies. <em>ICANN 2022</em>. <a href="https://doi.org/10.1007/978-3-031-15937-4_37">doi:10.1007/978-3-031-15937-4_37</a></li>
+  <li id="ref4">Munir, K., Ghafoor, M., Khafagy, M. and Ihshaish, H. (2022). AgroSupportAnalytics: a cloud-based complaints management and decision support system for sustainable farming in Egypt. <em>Egyptian Informatics Journal</em>, 23(1), 73-82. <a href="https://doi.org/10.1016/j.eij.2021.06.002">doi:10.1016/j.eij.2021.06.002</a></li>
+</ol></div>
+<div class="tp-nav"><span><span class="dir">&larr; previous</span><a href="../drift/">Forgetting versus operating-point drift</a></span><a href="../">All themes</a><span style="text-align:right"><span class="dir">next &rarr;</span><a href="../noise/">Non-Gaussian noise and synthetic time series</a></span></div>
+</article>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by" style="text-align:center; font-size:0.85rem; color:#767574;">
+        &copy; Hisham Ihshaish, 2026
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
