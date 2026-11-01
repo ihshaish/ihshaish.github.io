@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/birzeit/gate.js"></script>
+<title>COMP1310 Computer Basics Companion</title>
+<meta name="author" content="Hisham Ihshaish">
+<meta name="description" content="COMP1310 Lecture 1 companion: what a computer is, the CPU, memory, input and output, and the operating system, explained as one connected story.">
+<meta name="theme-color" content="#1565c0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1565c0;
+    --blue-dark: #0d47a1;
+    --blue-light: #e3f2fd;
+    --teal: #00695c;
+    --teal-light: #e0f2f1;
+    --ok: #2e7d32;
+    --ok-bg: #e8f5e9;
+    --bad: #c62828;
+    --bad-bg: #ffebee;
+    --text: #263238;
+    --muted: #607d8b;
+    --border: #dfe3e8;
+    --card: #ffffff;
+    --page: #f7f9fb;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--page); color: var(--text);
+    font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 17px; line-height: 1.65;
+  }
+  .topbar {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+  }
+  .topbar a {
+    display: inline-flex; align-items: center; min-height: 44px;
+    color: var(--blue); text-decoration: none; font-family: 'Montserrat', sans-serif;
+    font-weight: 600; font-size: 0.9rem;
+  }
+  .topbar a:hover { text-decoration: underline; }
+  main { max-width: 760px; margin: 0 auto; padding: 8px 16px 64px; }
+  header.intro { padding: 28px 0 8px; }
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--teal); margin: 0 0 6px;
+  }
+  h1 {
+    font-family: 'Montserrat', sans-serif; font-size: 1.75rem; line-height: 1.25;
+    color: var(--blue-dark); margin: 0 0 10px;
+  }
+  h2 {
+    font-family: 'Montserrat', sans-serif; font-size: 1.3rem; line-height: 1.3;
+    color: var(--blue); margin: 44px 0 10px; padding-top: 8px;
+  }
+  h2 .num { font-family: 'Roboto Mono', monospace; color: var(--teal); font-weight: 500; margin-right: 8px; }
+  h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: var(--text); margin: 24px 0 6px; }
+  p { margin: 0 0 14px; }
+  ul, ol { padding-left: 22px; margin: 0 0 14px; }
+  li { margin-bottom: 6px; }
+  .ar { font-family: 'Segoe UI', Tahoma, sans-serif; color: var(--teal); white-space: nowrap; }
+  code, .mono { font-family: 'Roboto Mono', monospace; font-size: 0.92em; }
+  .lede { font-size: 1.05rem; color: #37474f; }
+  .toc {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 16px; margin: 18px 0 0; font-size: 0.95rem;
+  }
+  .toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+  @media (max-width: 560px) { .toc ol { columns: 1; } }
+  .toc a { color: var(--blue); text-decoration: none; display: inline-block; padding: 4px 0; }
+  .toc a:hover { text-decoration: underline; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 18px; margin: 16px 0;
+  }
+  .note {
+    background: var(--teal-light); border-left: 4px solid var(--teal); border-radius: 6px;
+    padding: 12px 16px; margin: 16px 0; font-size: 0.96rem;
+  }
+  .note p:last-child { margin-bottom: 0; }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.94rem; background: var(--card); }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--blue-light); color: var(--blue-dark); font-family: 'Montserrat', sans-serif; font-size: 0.85rem; }
+  .marks {
+    font-family: 'Roboto Mono', monospace; font-size: 0.88rem; color: #455a64;
+    background: #fafafa; border: 1px dashed var(--border); border-radius: 6px;
+    padding: 10px 12px; word-break: break-word;
+  }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  @media (max-width: 560px) { .twocol { grid-template-columns: 1fr; } }
+  .twocol .card { margin: 0; }
+  .label {
+    font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.8px; text-transform: uppercase; color: var(--teal); margin-bottom: 6px;
+  }
+  figure { margin: 18px 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  .boot-tall { display: none !important; max-width: 340px; margin: 0 auto; }
+  @media (max-width: 560px) { .boot-wide { display: none !important; } .boot-tall { display: block !important; } }
+  figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 6px; }
+
+  /* buttons */
+  button {
+    font: inherit; font-size: 0.95rem; min-height: 44px; padding: 8px 16px;
+    border-radius: 6px; border: 1px solid var(--blue); background: var(--card); color: var(--blue);
+    cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600;
+  }
+  button:hover:not(:disabled) { background: var(--blue-light); }
+  button.primary { background: var(--blue); color: #fff; }
+  button.primary:hover:not(:disabled) { background: var(--blue-dark); }
+  button:disabled { opacity: 0.45; cursor: default; }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+  /* CPU stepper */
+  .cpu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .cpu-grid { grid-template-columns: 1fr; } }
+  .box { border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; background: #fcfdfe; }
+  .box h4 { margin: 0 0 6px; font-family: 'Montserrat', sans-serif; font-size: 0.78rem; letter-spacing: 0.6px; text-transform: uppercase; color: var(--blue); }
+  .box table { font-size: 0.86rem; }
+  .box td { padding: 4px 8px; font-family: 'Roboto Mono', monospace; }
+  .box td.k { color: var(--muted); font-family: 'Roboto', sans-serif; }
+  .hl { background: #fff59d; transition: background 0.3s; }
+  .cur td { background: var(--blue-light); }
+  .phase {
+    display: inline-block; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.78rem;
+    letter-spacing: 0.6px; text-transform: uppercase; padding: 3px 10px; border-radius: 12px;
+    background: var(--teal-light); color: var(--teal); margin-right: 8px;
+  }
+  .stepmsg { min-height: 4.8em; margin: 12px 0 0; }
+  .stepcount { font-size: 0.85rem; color: var(--muted); }
+
+  /* sorter */
+  .sort-item { border-top: 1px solid var(--border); padding: 12px 0; }
+  .sort-item:first-child { border-top: none; padding-top: 0; }
+  .sort-q { font-weight: 700; margin-bottom: 8px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choices button { flex: 1 1 120px; }
+  .choices button.right { background: var(--ok-bg); border-color: var(--ok); color: var(--ok); }
+  .choices button.wrong { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .fb { font-size: 0.93rem; margin-top: 8px; min-height: 0; }
+  .fb.ok { color: var(--ok); }
+  .fb.no { color: var(--bad); }
+  .score { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--teal); margin-top: 10px; }
+
+  details {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    margin: 10px 0; padding: 0 16px;
+  }
+  summary {
+    cursor: pointer; padding: 12px 0; min-height: 44px; font-weight: 700; list-style-position: outside;
+  }
+  details[open] summary { border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+  details > div { padding-bottom: 12px; }
+  footer { margin-top: 48px; font-size: 0.88rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
+  a { color: var(--blue); }
+</style>
+</head>
+<body>
+
+<nav class="topbar"><a href="/birzeit/comp1310/">&larr; COMP1310 course page</a></nav>
+
+<main>
+<header class="intro">
+  <p class="eyebrow">COMP1310 &middot; Lecture 1 companion</p>
+  <h1>Computer Basics</h1>
+  <p class="lede">The slides give you the vocabulary. This page puts it together, so you can see how the parts of a computer depend on each other. Read it once from top to bottom; it should take about fifteen minutes.</p>
+  <nav class="toc" aria-label="Contents">
+    <ol>
+      <li><a href="#what">What a computer does</a></li>
+      <li><a href="#traits">Why we use them</a></li>
+      <li><a href="#system">Hardware, software, people</a></li>
+      <li><a href="#classes">Kinds of computers</a></li>
+      <li><a href="#cpu">The CPU</a></li>
+      <li><a href="#bits">Bits and bytes</a></li>
+      <li><a href="#memory">Main and secondary memory</a></li>
+      <li><a href="#io">Input and output</a></li>
+      <li><a href="#os">The operating system</a></li>
+      <li><a href="#check">Check yourself</a></li>
+    </ol>
+  </nav>
+</header>
+
+<section id="what">
+<h2><span class="num">1</span>What a computer does</h2>
+<p>A computer (<span class="ar" lang="ar">حاسوب</span>) is a machine that <b>takes in</b> data, <b>stores</b> it, <b>processes</b> it into something useful, and <b>gives the result out</b>. Everything else in this lecture is about one of those four jobs: the CPU processes, memory stores, input and output devices bring data in and send results out, and the operating system organises all of it.</p>
+<p>The difference between <b>data</b> and <b>information</b> is the difference between what goes in and what comes out.</p>
+<div class="twocol">
+  <div class="card">
+    <div class="label">Data: raw facts</div>
+    <div class="marks">70 78 64 85 43 62 74 67 82 55 73 71 76 68 55 53 71 66 64 60 85 86 97 70 70 85 75 93 60 72</div>
+    <p style="margin:8px 0 0;font-size:0.92rem">Thirty marks from a quiz. All correct, and on their own not much use.</p>
+  </div>
+  <div class="card">
+    <div class="label">Information: organised and meaningful</div>
+    <p style="margin:0">The class average is <b>71</b>. The top mark is 97. <b>Four students</b> scored below 60 and need help before the midterm.</p>
+  </div>
+</div>
+<p>The second box was produced from the first by processing: adding, dividing, comparing each mark with 60. Doing that by hand for thirty marks takes you a few minutes.</p>
+</section>
+
+<section id="traits">
+<h2><span class="num">2</span>Why we use computers</h2>
+<p>Three properties make computers worth having.</p>
+<ul>
+  <li><b>Speed.</b> A modern processor carries out billions of simple operations every second. The thirty-mark average above takes it far less than a millionth of a second.</li>
+  <li><b>Reliability.</b> Given the same program and the same data, a computer gives the same answer every time, and it does not get tired at 2 a.m. When a result is wrong, the cause is almost always a mistake in the program or in the data, not the machine.</li>
+  <li><b>Storage capability.</b> It can keep huge amounts of data and find any part of it quickly. Your phone holds thousands of photos and can show you any one of them in a moment.</li>
+</ul>
+</section>
+
+<section id="system">
+<h2><span class="num">3</span>Hardware, software, people</h2>
+<p>A computer system has three components.</p>
+<ul>
+  <li><b>Hardware</b> (<span class="ar" lang="ar">المكونات المادية</span>) is the physical part, anything you can touch: screen, keyboard, processor, memory chips, the storage drive.</li>
+  <li><b>Software</b> (<span class="ar" lang="ar">البرمجيات</span>) is the programs: sets of instructions telling the hardware what to do. A web browser, Microsoft Word, WhatsApp.</li>
+  <li><b>People.</b> A <b>programmer</b> writes software. An <b>end-user</b> uses it. Later in this course you will be both: you will write small C programs and then run them yourself.</li>
+</ul>
+<p>A laptop with no programs installed is a box that lights up; WhatsApp with no phone to run on is just a file.</p>
+</section>
+
+<section id="classes">
+<h2><span class="num">4</span>Kinds of computers</h2>
+<p>All computers have a processor, memory, and some way to get data in and out. They differ in size, cost, power, and what they are for.</p>
+<div class="scroll">
+<table>
+  <tr><th>Class</th><th>What it is</th><th>Examples you know</th></tr>
+  <tr><td>Personal computer</td><td>A desktop machine for one person at a time</td><td>The PCs in the university labs</td></tr>
+  <tr><td>Portable</td><td>A personal computer you can carry, running on a battery</td><td>Laptops, tablets</td></tr>
+  <tr><td>Handheld</td><td>Small enough to hold in one hand, always with you</td><td>Smartphones, smartwatches</td></tr>
+  <tr><td>Server</td><td>Runs all day and night, answering requests from many users over a network</td><td>The servers behind Ritaj, a bank's online banking, Google</td></tr>
+  <tr><td>Supercomputer</td><td>Thousands of processors working on one huge calculation; very expensive</td><td>Weather forecasting, climate models, designing aircraft and medicines</td></tr>
+  <tr><td>Embedded system</td><td>A computer built inside another device to control it; you rarely notice it is there</td><td>A washing machine's controller, a car's anti-lock brakes (ABS), a microwave, a traffic light</td></tr>
+</table>
+</div>
+<p>Embedded systems are by far the most numerous. A modern car alone contains dozens of small computers. (The slides also mention <i>palmtops</i>; that was the name for pocket computers in the 1990s and early 2000s. The smartphone replaced them.)</p>
+</section>
+
+<section id="cpu">
+<h2><span class="num">5</span>The CPU: where the processing happens</h2>
+<p>The <b>central processing unit</b>, or <b>processor</b> (<span class="ar" lang="ar">المعالج</span>), is the part that actually runs programs. It is a single chip made of electronic circuits, and it has three main parts.</p>
+<ul>
+  <li><b>Control unit (CU).</b> The coordinator. It fetches the next instruction of the program from memory, works out what that instruction asks for, and directs the other parts to carry it out.</li>
+  <li><b>Arithmetic logic unit (ALU).</b> The part that calculates. It does <b>arithmetic operations</b> (add, subtract, multiply, divide) and <b>logical operations</b>: comparisons (equal, less than, greater than) and combining true/false results with AND, OR, NOT. Comparing each quiz mark with 60 is a logical operation.</li>
+  <li><b>Registers.</b> A handful of very small, very fast storage locations <i>inside</i> the CPU. They hold the numbers being calculated with and two special values. The <b>instruction register</b> holds the instruction being carried out right now. The <b>program counter</b> holds the address of the next one.</li>
+</ul>
+<p>&ldquo;Address&rdquo; needs a word of explanation. Main memory (RAM, section 7) is a long row of numbered boxes. Each box holds a number or an instruction, and its number is its address, like a house number on a street. In the demo below, <code>[200]</code> means &ldquo;the box at address 200&rdquo;.</p>
+<p>A program is a list of simple instructions sitting in memory. The CPU repeats the same three steps for each one, billions of times a second:</p>
+<ol>
+  <li><b>Fetch</b>: copy the next instruction from memory into the CPU.</li>
+  <li><b>Decode</b>: the control unit works out what the instruction means.</li>
+  <li><b>Execute</b>: carry it out, using the ALU if there is calculating to do.</li>
+</ol>
+<p>Step through a tiny program below that adds two numbers. Watch which part is busy at each step. The instructions are simplified, but real processors work this way.</p>
+
+<div class="card" id="cpuDemo">
+  <div class="cpu-grid">
+    <div class="box">
+      <h4>Inside the CPU</h4>
+      <table>
+        <tr><td class="k">Program counter</td><td id="r-pc"></td></tr>
+        <tr><td class="k">Instruction register</td><td id="r-ir"></td></tr>
+        <tr><td class="k">R1</td><td id="r-r1"></td></tr>
+        <tr><td class="k">R2</td><td id="r-r2"></td></tr>
+        <tr><td class="k">R3</td><td id="r-r3"></td></tr>
+        <tr><td class="k">ALU</td><td id="r-alu"></td></tr>
+      </table>
+    </div>
+    <div class="box">
+      <h4>Main memory (RAM)</h4>
+      <table id="memTable">
+        <tr data-addr="100"><td class="k">100</td><td>LOAD R1, [200]</td></tr>
+        <tr data-addr="101"><td class="k">101</td><td>LOAD R2, [201]</td></tr>
+        <tr data-addr="102"><td class="k">102</td><td>ADD R3, R1, R2</td></tr>
+        <tr data-addr="103"><td class="k">103</td><td>STORE R3, [202]</td></tr>
+        <tr data-addr="200"><td class="k">200</td><td id="m200">45</td></tr>
+        <tr data-addr="201"><td class="k">201</td><td id="m201">26</td></tr>
+        <tr data-addr="202"><td class="k">202</td><td id="m202"></td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="stepmsg" id="stepMsg" aria-live="polite"></p>
+  <div class="btnrow">
+    <button type="button" id="btnBack">Back</button>
+    <button type="button" class="primary" id="btnNext">Next step</button>
+    <button type="button" id="btnReset">Start again</button>
+    <span class="stepcount" id="stepCount" style="align-self:center"></span>
+  </div>
+</div>
+<p>Notice the pattern: the ALU never works on numbers while they sit in RAM. They are first copied into registers, the ALU works on them there, and the result is written back. Why the extra copying? Compared with the CPU, RAM is slow: fetching one number from it can take as long as a hundred additions or more. Registers sit right next to the ALU, so the CPU keeps the values it is working on right now in them.</p>
+</section>
+
+<section id="bits">
+<h2><span class="num">6</span>Bits and bytes</h2>
+<p>Inside the hardware, everything is stored as a pattern of two states: voltage or no voltage, a switch on or off. We write the two states as <b>1</b> and <b>0</b>. One such 0-or-1 digit is a <b>bit</b> (binary digit). Numbers, text, photos, music and programs are all, in the end, long rows of bits. Lecture 2 is about exactly how numbers are written this way.</p>
+<p>A single bit can only say yes or no, so bits are grouped. Eight bits make a <b>byte</b>. Each of the 8 bits has 2 possible values, so a byte has 2 &times; 2 &times; 2 &times; 2 &times; 2 &times; 2 &times; 2 &times; 2 = 2<sup>8</sup> = <b>256</b> different patterns, from <code>00000000</code> to <code>11111111</code>. That is enough to give every English letter, digit and punctuation mark its own pattern, which is why we say one byte holds one character. An Arabic letter usually takes two bytes, and an emoji four, because there are far more characters to give patterns to; &ldquo;about one byte per character&rdquo; is still a fair rule for English text.</p>
+<p class="note" style="display:block">If your copy of the slides says a byte represents &ldquo;28 = 256&rdquo; values, read it as 2<sup>8</sup>: the superscript was lost.</p>
+<p>Memory and storage sizes are counted in bytes, with prefixes for large amounts:</p>
+<div class="scroll">
+<table>
+  <tr><th>Unit</th><th>About</th><th>Roughly holds</th></tr>
+  <tr><td>1 byte (B)</td><td>8 bits</td><td>one character, such as <code>A</code></td></tr>
+  <tr><td>kilobyte (KB)</td><td>a thousand bytes (&asymp;&nbsp;1,000 characters)</td><td>a short paragraph or two</td></tr>
+  <tr><td>megabyte (MB)</td><td>a million bytes (&asymp;&nbsp;1 million characters)</td><td>a whole book of plain text; one phone photo is a few MB</td></tr>
+  <tr><td>gigabyte (GB)</td><td>a billion bytes (&asymp;&nbsp;1 billion characters)</td><td>a small library of books; a few hundred phone photos</td></tr>
+  <tr><td>terabyte (TB)</td><td>a trillion bytes (&asymp;&nbsp;1 trillion characters)</td><td>a very large library; a typical external backup drive</td></tr>
+</table>
+</div>
+<div class="note">
+  <p><b>Why does a 1 TB drive show only about 931 GB in Windows?</b> Two ways of counting. Storage makers use powers of ten: 1 KB = 1000 bytes, 1 GB = 1,000,000,000 bytes. Windows counts in powers of two: 1024 bytes, then 1024 &times; 1024, and so on, so its &ldquo;GB&rdquo; is 1024 &times; 1024 &times; 1024 = 1,073,741,824 bytes (strictly called a GiB). 1,000,000,000,000 &divide; 1,073,741,824 &asymp; 931. Same bytes, different ruler. Phones usually count in powers of ten; there, the space you seem to lose is taken by the operating system and the apps that come preinstalled.</p>
+</div>
+</section>
+
+<section id="memory">
+<h2><span class="num">7</span>Main memory and secondary memory</h2>
+<p>Memory (<span class="ar" lang="ar">الذاكرة</span>) is where programs and data are kept. A computer uses several kinds, because no single kind is fast, large, cheap and permanent at once. You trade one property against another.</p>
+<div class="scroll">
+<table>
+  <tr><th></th><th>Main (primary) memory</th><th>Secondary storage</th></tr>
+  <tr><td>Speed</td><td>Fast; the CPU reads it directly</td><td>Much slower</td></tr>
+  <tr><td>Cost per GB</td><td>Expensive</td><td>Cheap</td></tr>
+  <tr><td>Typical size</td><td>8 to 16 GB in a laptop</td><td>256 GB to a few TB</td></tr>
+  <tr><td>Power off</td><td>RAM forgets everything (<b>volatile</b>); ROM keeps its contents</td><td>Keeps everything (<b>non-volatile</b>)</td></tr>
+  <tr><td>Examples</td><td>RAM, ROM</td><td>SSD, hard disk, USB flash drive, memory card</td></tr>
+</table>
+</div>
+<p>Think of RAM as your desk and secondary storage as the bookshelf. You can only work on what is on the desk, and the desk is cleared every night when the power goes off. Anything you want to keep must go back on the shelf. That is what <b>Save</b> does: it copies your document from RAM to the SSD or disk. If the power cuts before you save, the work in RAM is gone.</p>
+
+<h3>RAM and ROM</h3>
+<p>Both are main memory, but they do different jobs.</p>
+<ul>
+  <li><b>RAM</b> (Random Access Memory) is read <i>and</i> write, and volatile. It holds the programs you are running right now and the data they are using. More RAM means more programs and files can be open at once without slowing down.</li>
+  <li><b>ROM</b> (Read-Only Memory) is non-volatile and, in normal use, only read. It keeps its contents with the power off, so it holds the small start-up program (the <b>firmware</b>, called BIOS or UEFI on a PC) that the computer needs before anything else can happen. In modern machines this lives on a flash chip that can be updated occasionally, but its role is the same.</li>
+</ul>
+
+<h3>Secondary storage today</h3>
+<p>Hard disks store bits as magnetic patterns on spinning platters; they are cheap for very large amounts. Most laptops and every phone now use <b>SSDs and flash memory</b> instead: no moving parts, much faster, and tougher if dropped. CDs and DVDs, which store bits as reflective spots read by a laser, are mostly history.</p>
+
+<h3>Switching on: the boot sequence</h3>
+<p>When you press the power button, RAM is empty, and the operating system is sitting on the SSD, where the CPU cannot run it directly.</p>
+<figure>
+<svg class="boot-wide" viewBox="0 0 640 150" role="img" aria-label="Boot sequence: firmware in ROM runs, it finds the operating system on the SSD and copies it into RAM, then the CPU runs the operating system from RAM.">
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#00695c"/></marker></defs>
+  <rect x="10" y="50" width="150" height="80" rx="8" fill="#e3f2fd" stroke="#1565c0"/>
+  <text x="85" y="82" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="16" fill="#0d47a1">ROM</text>
+  <text x="85" y="106" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="#37474f">start-up firmware</text>
+  <rect x="245" y="50" width="150" height="80" rx="8" fill="#fff" stroke="#607d8b"/>
+  <text x="320" y="82" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="16" fill="#263238">SSD / disk</text>
+  <text x="320" y="106" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="#37474f">operating system</text>
+  <rect x="480" y="50" width="150" height="80" rx="8" fill="#e0f2f1" stroke="#00695c"/>
+  <text x="555" y="82" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="16" fill="#00695c">RAM</text>
+  <text x="555" y="106" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="#37474f">CPU runs the OS</text>
+  <line x1="160" y1="90" x2="243" y2="90" stroke="#00695c" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="395" y1="90" x2="478" y2="90" stroke="#00695c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="202" y="80" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="#00695c">finds the OS</text>
+  <text x="437" y="80" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="#00695c">copies it</text>
+  <circle cx="85" cy="28" r="13" fill="#1565c0"/><text x="85" y="33" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="14" fill="#fff">1</text>
+  <circle cx="320" cy="28" r="13" fill="#1565c0"/><text x="320" y="33" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="14" fill="#fff">2</text>
+  <circle cx="555" cy="28" r="13" fill="#1565c0"/><text x="555" y="33" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="14" fill="#fff">3</text>
+</svg>
+<svg class="boot-tall" viewBox="0 0 320 400" role="img" aria-label="Boot sequence: firmware in ROM runs, it finds the operating system on the SSD and copies it into RAM, then the CPU runs the operating system from RAM.">
+  <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#00695c"/></marker></defs>
+  <rect x="44" y="10" width="232" height="84" rx="8" fill="#e3f2fd" stroke="#1565c0"/>
+  <text x="160" y="44" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="20" fill="#0d47a1">ROM</text>
+  <text x="160" y="72" text-anchor="middle" font-family="Roboto, sans-serif" font-size="16" fill="#37474f">start-up firmware</text>
+  <rect x="44" y="158" width="232" height="84" rx="8" fill="#fff" stroke="#607d8b"/>
+  <text x="160" y="192" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="20" fill="#263238">SSD / disk</text>
+  <text x="160" y="220" text-anchor="middle" font-family="Roboto, sans-serif" font-size="16" fill="#37474f">operating system</text>
+  <rect x="44" y="306" width="232" height="84" rx="8" fill="#e0f2f1" stroke="#00695c"/>
+  <text x="160" y="340" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="20" fill="#00695c">RAM</text>
+  <text x="160" y="368" text-anchor="middle" font-family="Roboto, sans-serif" font-size="16" fill="#37474f">CPU runs the OS</text>
+  <line x1="110" y1="94" x2="110" y2="156" stroke="#00695c" stroke-width="2.5" marker-end="url(#arr2)"/>
+  <line x1="110" y1="242" x2="110" y2="304" stroke="#00695c" stroke-width="2.5" marker-end="url(#arr2)"/>
+  <text x="124" y="131" font-family="Roboto, sans-serif" font-size="16" fill="#00695c">finds the OS</text>
+  <text x="124" y="279" font-family="Roboto, sans-serif" font-size="16" fill="#00695c">copies it</text>
+  <circle cx="20" cy="52" r="15" fill="#1565c0"/><text x="20" y="57" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="16" fill="#fff">1</text>
+  <circle cx="20" cy="200" r="15" fill="#1565c0"/><text x="20" y="205" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="16" fill="#fff">2</text>
+  <circle cx="20" cy="348" r="15" fill="#1565c0"/><text x="20" y="353" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="16" fill="#fff">3</text>
+</svg>
+<figcaption>The CPU can only run instructions from main memory, so the OS has to be copied into RAM first.</figcaption>
+</figure>
+<ol>
+  <li>The CPU starts by running the firmware in ROM. It is the only program available, because ROM is the only main memory that kept anything while the power was off. The firmware checks the hardware.</li>
+  <li>The firmware finds the operating system on the SSD or disk and starts copying it into RAM.</li>
+  <li>Once the operating system is in RAM, the CPU runs it, and the OS takes over the machine. Now you see the login screen.</li>
+</ol>
+<p>This is also why a computer with an SSD starts much faster than one with a hard disk: step 2 is mostly waiting for the storage to deliver the OS.</p>
+
+<h3>Where does it live?</h3>
+<p>Try placing each item. Tap the place where it lives at that moment.</p>
+<div class="card" id="sorter"></div>
+</section>
+
+<section id="io">
+<h2><span class="num">8</span>Input and output</h2>
+<p>Input (<span class="ar" lang="ar">الإدخال</span>) devices bring data from the outside world into the computer: keyboard, mouse, microphone, camera, scanner, a fingerprint sensor. Output (<span class="ar" lang="ar">الإخراج</span>) devices send results back out: screen, speakers, printer, headphones.</p>
+<p>Some devices do both. A phone's <b>touchscreen</b> shows you pictures (output) and senses your finger (input) on the same piece of glass. A network card sends and receives.</p>
+</section>
+
+<section id="os">
+<h2><span class="num">9</span>Software and the operating system</h2>
+<p>A program is a collection of instructions the computer carries out to finish some task. Most software you use is <b>application software</b>: Word, Excel, a browser, Photoshop, a game. Each application does one kind of job for you.</p>
+<p>Underneath all of them is the <b>operating system</b> (<span class="ar" lang="ar">نظام التشغيل</span>). It is <b>system software</b>: software that runs the computer itself rather than doing a job for you. It stands between the hardware and the applications, and it shares out the computer's limited resources. Concretely, the OS:</p>
+<ul>
+  <li><b>shares the CPU</b> between programs, switching between them so fast that music, a browser and WhatsApp all seem to run at once;</li>
+  <li><b>manages memory</b>: decides which program gets which part of RAM, loads programs from storage when you open them, and frees the space when you close them;</li>
+  <li><b>controls devices</b>: the keyboard, screen, printer, Wi-Fi, so that each application does not have to know how every printer works;</li>
+  <li><b>organises files</b> into folders on the storage drive and remembers where each one is;</li>
+  <li><b>gives you an interface</b>: the desktop, windows, icons and touch gestures you use to work with the computer (a <b>GUI</b>, graphical user interface).</li>
+</ul>
+<p>Desktops and laptops mostly run <b>Windows</b>, <b>macOS</b> or <b>Linux</b>. Phones run <b>Android</b> or <b>iOS</b>. Most of the world's servers run Linux. Your first lab is about using an operating system.</p>
+<div class="note">
+  <p><b>Labs.</b> The lab plan on the Lecture 1 slides is from an older semester. For this semester's lab topics and quiz dates, use the <a href="/birzeit/comp1310/COMP1310_Course_Outline_Fall2026.pdf">course outline (PDF)</a>.</p>
+</div>
+</section>
+
+<section id="check">
+<h2><span class="num">10</span>Check yourself</h2>
+<p>Answer in your head first, then open the answer.</p>
+
+<details><summary>1. A shop's till records every item sold today. Which is data and which is information: the list of 600 sales, or &ldquo;bread was the best seller and sales fell after 6 p.m.&rdquo;?</summary>
+<div>The list of sales is data: raw facts. The sentence is information: the data has been processed (counted, compared) into something the shop owner can act on.</div></details>
+
+<details><summary>2. Name the three parts of the CPU, and say which one compares two numbers.</summary>
+<div>Control unit, arithmetic logic unit (ALU), registers. Comparing is a logical operation, done by the ALU.</div></details>
+
+<details><summary>3. What does the program counter hold, and why does the CPU need it?</summary>
+<div>The memory address of the next instruction to fetch. Without it, the CPU would not know where in memory the program continues after each instruction.</div></details>
+
+<details><summary>4. How many different values can 8 bits represent? What about 4 bits?</summary>
+<div>8 bits: 2<sup>8</sup> = 256. 4 bits: 2<sup>4</sup> = 16. Each extra bit doubles the number of patterns.</div></details>
+
+<details><summary>5. You are typing an essay and the electricity cuts out before you press Save. Why is the essay lost, but the copy you saved yesterday is safe?</summary>
+<div>Today's unsaved text was only in RAM, which is volatile and loses everything without power. Yesterday's version was copied to the SSD or disk, which is non-volatile.</div></details>
+
+<details><summary>6. Why can the computer not simply start by running the operating system straight away?</summary>
+<div>When the power comes on, RAM is empty and the OS is on secondary storage, which the CPU cannot run from directly. The start-up firmware in ROM runs first, and its job is to copy the OS into RAM.</div></details>
+
+<details><summary>7. Which class of computer is inside a washing machine? And what kind of computer answers you when you log in to Ritaj?</summary>
+<div>An embedded system controls the washing machine. Ritaj runs on servers, which handle requests from many users over the network.</div></details>
+
+<details><summary>8. Give two jobs an operating system does that you would notice if it stopped doing them.</summary>
+<div>Any two of: sharing the CPU so several programs run together, managing memory, controlling devices such as the screen and keyboard, organising files and folders, providing the user interface.</div></details>
+</section>
+
+<footer>
+  COMP1310 &middot; Introduction to Computers and Computing Ethics &middot; Birzeit University, First Semester 2026/27 &middot; Dr. Hisham Ihshaish. This page accompanies the Lecture 1 slides; it does not replace them.
+</footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Fetch, decode, execute stepper ---------- */
+  var STEPS = [
+    { phase: "Ready", pc: "100", ir: "", r1: "", r2: "", r3: "", alu: "", m202: "", row: "100", hl: ["r-pc"],
+      msg: "The program is already in RAM at addresses 100 to 103. The two numbers to add, 45 and 26, are at 200 and 201. The program counter points at 100, the first instruction." },
+    { phase: "Fetch", pc: "101", ir: "LOAD R1, [200]", r1: "", r2: "", r3: "", alu: "", m202: "", row: "100", hl: ["r-ir", "r-pc"],
+      msg: "The control unit fetches the instruction at address 100 into the instruction register, and the program counter moves on to 101." },
+    { phase: "Decode", pc: "101", ir: "LOAD R1, [200]", r1: "", r2: "", r3: "", alu: "", m202: "", row: "100", hl: ["r-ir"],
+      msg: "The control unit decodes it: “copy the number at memory address 200 into register R1”. No calculation, so the ALU is not needed." },
+    { phase: "Execute", pc: "101", ir: "LOAD R1, [200]", r1: "45", r2: "", r3: "", alu: "", m202: "", row: "200", hl: ["r-r1"],
+      msg: "45 is copied from RAM into R1." },
+    { phase: "Fetch → Execute", pc: "102", ir: "LOAD R2, [201]", r1: "45", r2: "26", r3: "", alu: "", m202: "", row: ["101", "201"], hl: ["r-ir", "r-pc", "r-r2"],
+      msg: "Same cycle for the instruction at 101 (shown in one step this time): fetch it, decode it, execute it. Now R2 holds 26." },
+    { phase: "Fetch", pc: "103", ir: "ADD R3, R1, R2", r1: "45", r2: "26", r3: "", alu: "", m202: "", row: "102", hl: ["r-ir", "r-pc"],
+      msg: "The instruction at 102 is fetched. The program counter moves to 103." },
+    { phase: "Decode", pc: "103", ir: "ADD R3, R1, R2", r1: "45", r2: "26", r3: "", alu: "", m202: "", row: "102", hl: ["r-ir"],
+      msg: "Decoded: “add R1 and R2, put the answer in R3”. This one needs arithmetic, so the control unit will send the values to the ALU." },
+    { phase: "Execute", pc: "103", ir: "ADD R3, R1, R2", r1: "45", r2: "26", r3: "71", alu: "45 + 26 = 71", m202: "", row: "102", hl: ["r-alu", "r-r3"],
+      msg: "The ALU adds 45 and 26 and the result, 71, goes into R3. This is the only step where the ALU does anything." },
+    { phase: "Fetch → Execute", pc: "104", ir: "STORE R3, [202]", r1: "45", r2: "26", r3: "71", alu: "", m202: "71", row: ["103", "202"], hl: ["m202", "r-pc", "r-ir"],
+      msg: "The last instruction copies R3 back out to RAM at address 202. The result is now in main memory, where other parts of the program (or the screen) can use it." }
+  ];
+  var FIELDS = ["pc", "ir", "r1", "r2", "r3", "alu"];
+  var step = 0;
+
+  function el(id) { return document.getElementById(id); }
+
+  function renderStep() {
+    var s = STEPS[step];
+    FIELDS.forEach(function (f) {
+      var cell = el("r-" + f);
+      cell.textContent = s[f] === "" ? "–" : s[f];
+      cell.classList.remove("hl");
+    });
+    var m = el("m202");
+    m.textContent = s.m202 === "" ? "–" : s.m202;
+    m.classList.remove("hl");
+    s.hl.forEach(function (id) { el(id).classList.add("hl"); });
+    var rows = el("memTable").querySelectorAll("tr");
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].classList.toggle("cur", [].concat(s.row).indexOf(rows[i].getAttribute("data-addr")) !== -1);
+    }
+    el("stepMsg").innerHTML = '<span class="phase">' + s.phase + "</span>" + s.msg;
+    el("stepCount").textContent = "Step " + (step + 1) + " of " + STEPS.length;
+    el("btnBack").disabled = step === 0;
+    el("btnNext").disabled = step === STEPS.length - 1;
+  }
+
+  el("btnNext").addEventListener("click", function () { if (step < STEPS.length - 1) { step++; renderStep(); } });
+  el("btnBack").addEventListener("click", function () { if (step > 0) { step--; renderStep(); } });
+  el("btnReset").addEventListener("click", function () { step = 0; renderStep(); });
+  renderStep();
+
+  /* ---------- Where does it live? ---------- */
+  var PLACES = ["Register", "RAM", "ROM", "SSD / disk"];
+  var ITEMS = [
+    { q: "The two numbers the ALU is adding at this instant", a: "Register",
+      why: "The ALU works on values held in registers inside the CPU." },
+    { q: "The browser tab you are reading right now", a: "RAM",
+      why: "A running program and its data are held in RAM while you use them." },
+    { q: "An essay you have typed but not yet saved", a: "RAM",
+      why: "Unsaved work exists only in RAM, which is why a power cut loses it." },
+    { q: "Your photos from last summer", a: "SSD / disk",
+      why: "Files you keep are on secondary storage, which does not forget when the power is off." },
+    { q: "The program that runs the moment you press the power button", a: "ROM",
+      why: "The start-up firmware is in ROM, the only main memory that keeps its contents without power." },
+    { q: "An app you installed but have not opened today", a: "SSD / disk",
+      why: "Installed programs wait on secondary storage. They are copied into RAM only when you open them." },
+    { q: "The address of the next instruction to run", a: "Register",
+      why: "The program counter, a register in the CPU, holds it." }
+  ];
+  var solved = {};
+  var missed = {};
+  var sorter = el("sorter");
+  var score = document.createElement("div");
+  score.className = "score";
+
+  function updateScore() {
+    var done = 0, first = 0;
+    for (var i = 0; i < ITEMS.length; i++) {
+      if (solved[i]) { done++; if (!missed[i]) { first++; } }
+    }
+    score.textContent = done === ITEMS.length
+      ? "All " + ITEMS.length + " placed, " + first + " of them right on the first try."
+      : done + " of " + ITEMS.length + " placed.";
+  }
+
+  ITEMS.forEach(function (item, i) {
+    var wrap = document.createElement("div");
+    wrap.className = "sort-item";
+    var q = document.createElement("div");
+    q.className = "sort-q";
+    q.textContent = item.q;
+    var choices = document.createElement("div");
+    choices.className = "choices";
+    var fb = document.createElement("div");
+    fb.className = "fb";
+    fb.setAttribute("aria-live", "polite");
+    PLACES.forEach(function (p) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = p;
+      b.addEventListener("click", function () {
+        if (solved[i]) { return; }
+        var btns = choices.querySelectorAll("button");
+        for (var k = 0; k < btns.length; k++) { btns[k].classList.remove("right", "wrong"); }
+        if (p === item.a) {
+          solved[i] = true;
+          b.classList.add("right");
+          fb.className = "fb ok";
+          fb.textContent = "Yes. " + item.why;
+          for (var j = 0; j < btns.length; j++) { if (btns[j] !== b) { btns[j].disabled = true; } }
+        } else {
+          missed[i] = true;
+          b.classList.add("wrong");
+          fb.className = "fb no";
+          fb.textContent = "Not quite. Ask three things: does it have to survive the power going off? Does the CPU need it this very instant? Is it the start-up program, needed before anything else is loaded?";
+        }
+        updateScore();
+      });
+      choices.appendChild(b);
+    });
+    wrap.appendChild(q);
+    wrap.appendChild(choices);
+    wrap.appendChild(fb);
+    sorter.appendChild(wrap);
+  });
+  sorter.appendChild(score);
+  updateScore();
+})();
+</script>
+</body>
+</html>

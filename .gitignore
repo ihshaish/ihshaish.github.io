@@ -3,6 +3,10 @@
 # Private course material — never publish
 birzeit/participants/
 birzeit/**/*_participants.csv
+# Ritaj roster exports dropped anywhere in the repo (they belong in ../_private/participants/)
+*participants*.csv
+COMP*.csv
+Comp*.csv
 birzeit/**/Midterm*.pdf
 birzeit/**/midterm*.pdf
 birzeit/**/Midterm/
@@ -35,3 +39,13 @@ Hisham_I_academia_CV.pdf
 action_download_template_template_sullivan_business_report_overleaf-4.pdf
 pics/China, 2025.HEIC
 birzeit/comp233/textbook/
+
+# Scanned student papers, quizzes and marking outputs (never publish)
+birzeit/comp338/_Ai_quiz1/
+birzeit/comp233/Exams/
+birzeit/**/*MarkingGuide*
+birzeit/**/*MarkingCrib*
+birzeit/**/*MarkDistribution*
+birzeit/**/*AnswerKey*
+birzeit/**/marks*.csv
+birzeit/**/*_marks.csv

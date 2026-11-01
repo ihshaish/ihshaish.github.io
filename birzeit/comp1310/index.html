@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP1310: Introduction to Computers and Computing Ethics, First Semester 2026/27, Birzeit University" />
+
+  <title>COMP1310: Introduction to Computers and Computing Ethics</title>
+
+  <style>
+    .course-header {
+      text-align: center;
+      padding: 30px 0 10px;
+    }
+    .course-header img.course-logo {
+      max-width: 90px;
+      margin-bottom: 16px;
+    }
+    .course-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1565c0;
+      margin-bottom: 6px;
+    }
+    .course-header .semester {
+      font-size: 1.05rem;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .course-header .instructor {
+      font-size: 1.05rem;
+      color: #333;
+      margin-bottom: 2px;
+    }
+    .course-header .dept {
+      font-size: 0.95rem;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .section-heading {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1565c0;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 8px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .companion-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      background: #fafbfc;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .companion-card:hover {
+      box-shadow: 0 4px 14px rgba(0,137,123,0.08);
+      border-color: #b2dfdb;
+    }
+    .companion-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #00695c;
+      margin: 0 0 6px;
+    }
+    .companion-card .companion-desc {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+    .companion-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e0f2f1;
+      color: #00695c;
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      border: 1px solid #b2dfdb;
+    }
+    .companion-btn:hover {
+      background: #b2dfdb;
+      color: #004d40;
+      border-color: #00897b;
+      text-decoration: none;
+    }
+    .companion-btn i { color: #00897b; }
+    .companion-btn:hover i { color: #004d40; }
+
+    .lecture-block {
+      border-left: 4px solid #1565c0;
+      background: #fafbfc;
+      border-radius: 0 8px 8px 0;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+    }
+    .lecture-block h3 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+      color: #1565c0;
+      font-weight: 700;
+    }
+    .lecture-block .lecture-files {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .pdf-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .pdf-link:hover {
+      border-color: #1565c0;
+      color: #1565c0;
+      text-decoration: none;
+    }
+    .pdf-link i { color: #c62828; }
+    .lecture-note {
+      font-size: 0.88rem;
+      color: #555;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .lecture-note a {
+      color: #00695c;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px dotted #00897b;
+    }
+    .lecture-note a:hover { color: #004d40; border-bottom-style: solid; }
+    .lecture-intro {
+      font-size: 0.92rem;
+      color: #555;
+      margin: 0 0 18px;
+      line-height: 1.55;
+      padding: 12px 16px;
+      background: #fff8e7;
+      border-left: 3px solid #b8893d;
+      border-radius: 0 6px 6px 0;
+    }
+    .lecture-intro a {
+      color: #1565c0;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px dotted #1565c0;
+    }
+    .lecture-intro a:hover { border-bottom-style: solid; }
+
+    /* Announcements: "What's New" card */
+    .course-alerts {
+      max-width: 440px; margin: 18px auto 4px;
+      background: linear-gradient(140deg, #f2f8ff 0%, #e3f0ff 100%);
+      border: 1px solid #bbdefb; border-radius: 10px;
+      padding: 14px 18px 16px; box-shadow: 0 4px 14px rgba(21,101,192,0.12);
+      position: relative;
+    }
+    .course-alerts::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+      background: linear-gradient(180deg, #1565c0 0%, #64b5f6 100%); border-radius: 10px 0 0 10px;
+    }
+    .course-alerts .alerts-head { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+    .course-alerts .alerts-icon {
+      flex-shrink: 0; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+      background: #1565c0; color: #fff; border-radius: 50%; font-size: 0.78rem;
+      box-shadow: 0 0 0 4px rgba(21,101,192,0.15); animation: alertsRing 2.6s ease-in-out infinite;
+    }
+    @keyframes alertsRing { 0%,100% { box-shadow: 0 0 0 4px rgba(21,101,192,0.15); } 50% { box-shadow: 0 0 0 8px rgba(21,101,192,0.05); } }
+    .course-alerts h4 { margin: 0; font-size: 0.82rem; font-weight: 800; color: #1565c0; text-transform: uppercase; letter-spacing: 1px; flex: 1; }
+    .course-alerts .new-pill {
+      display: inline-flex; align-items: center; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.8px;
+      color: #fff; background: #1565c0; padding: 2px 8px; border-radius: 10px; text-transform: uppercase;
+      animation: alertsPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes alertsPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .course-alerts ul { list-style: none; margin: 0; padding: 0; font-size: 0.9rem; color: #333; line-height: 1.5; }
+    .course-alerts li { padding: 2px 0; }
+    .course-alerts li .alert-date {
+      display: inline-block; font-size: 0.7rem; font-weight: 800; color: #fff; background: #1565c0;
+      padding: 2px 8px; border-radius: 10px; margin-right: 8px; vertical-align: 1px; white-space: nowrap;
+    }
+    .course-alerts li a { color: #0d47a1; font-weight: 700; text-decoration: none; border-bottom: 1px dotted #64b5f6; }
+    .course-alerts li a:hover { color: #08306b; border-bottom-color: #1565c0; }
+
+    /* Jarrar-style lecture list (Part blocks) */
+    .part-credit { font-size: 0.92rem; color: #555; margin: 0 0 18px; line-height: 1.55; padding: 12px 16px; background: #fff8e7; border-left: 3px solid #b8893d; border-radius: 0 6px 6px 0; }
+    .part-credit a { color: #1565c0; font-weight: 600; text-decoration: none; border-bottom: 1px dotted #1565c0; }
+    .part-credit a:hover { border-bottom-style: solid; }
+    .jl-list { border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+    .jl-row { display: flex; align-items: center; gap: 14px; padding: 13px 18px; background: #fff; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+    .jl-row:last-child { border-bottom: none; }
+    .jl-row:hover { background: #fafbfc; }
+    .jl-n { font-family: 'Roboto Mono', monospace; font-weight: 700; color: #1565c0; font-size: 0.85rem; width: 20px; flex-shrink: 0; }
+    .jl-topic { flex: 1; min-width: 220px; font-weight: 600; color: #333; font-size: 1rem; }
+    .jl-topic small { display: block; font-weight: 400; color: #888; font-size: 0.8rem; margin-top: 2px; }
+    .jl-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .jl-slides, .jl-comp { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; text-decoration: none; padding: 6px 13px; border-radius: 6px; white-space: nowrap; }
+    .jl-slides { background: #fff; border: 1px solid #e0e0e0; color: #333; }
+    .jl-slides:hover { border-color: #1565c0; color: #1565c0; }
+    .jl-slides i { color: #c62828; }
+    .jl-comp { background: #e0f2f1; border: 1px solid #b2dfdb; color: #00695c; }
+    .jl-comp:hover { background: #b2dfdb; color: #004d40; }
+    .jl-comp i { color: #00897b; }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .info-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 14px 18px; background: #fafbfc; font-size: 0.9rem; color: #444; line-height: 1.5; }
+    .info-card h3 { font-size: 0.95rem; font-weight: 700; color: #1565c0; margin: 0 0 6px; }
+    .info-card table { width: 100%; font-size: 0.88rem; }
+    .info-card td { padding: 2px 0; }
+    .info-card td:last-child { text-align: right; font-weight: 600; }
+  </style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex">
+            <a class="navbar-brand" href="/">Academic</a>
+          </div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item">
+                <a class="nav-link" href="/#about"><span>Home</span></a>
+              </li>
+
+          <li class="nav-item">
+            <a class="nav-link " href="/research/"><span>Research</span></a>
+          </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/#posts"><span>News</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/#projects"><span>Projects</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.cems.uwe.ac.uk/~h-ihshaish/Teaching.html" target="_blank" rel="noopener"><span>Teaching</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container">
+
+        <div class="course-header">
+          <a href="https://www.birzeit.edu/" target="_blank" rel="noopener">
+            <img src="/media/birzeit-university-logo.svg" alt="Birzeit University" class="course-logo">
+          </a>
+          <h1>COMP1310: Introduction to Computers and Computing Ethics</h1>
+          <div class="semester">First Semester 2026/27</div>
+          <div class="instructor">Hisham Ihshaish</div>
+          <div class="dept">Department of Computer Science, Birzeit University</div>
+        </div>
+
+        <!-- Announcements -->
+        <aside class="course-alerts" role="status" aria-label="Latest updates">
+          <div class="alerts-head">
+            <span class="alerts-icon" aria-hidden="true"><i class="fas fa-bullhorn"></i></span>
+            <h4>What's New</h4>
+            <span class="new-pill" aria-hidden="true">New</span>
+          </div>
+          <ul>
+            <li class="latest"><span class="alert-date">1 Nov 2026</span>The <a href="/birzeit/comp1310/COMP1310_Numbering_Systems_Companion.html" target="_blank" rel="noopener">Numbering Systems companion</a> is up: binary, octal and hex, conversions, negative numbers and how data sits in memory, with interactive tools and practice questions.</li>
+            <li class="prev"><span class="alert-date">1 Nov 2026</span>Slides for the first three lectures and a <a href="/birzeit/comp1310/COMP1310_Computer_Basics_Companion.html" target="_blank" rel="noopener">Computer Basics companion</a> are posted below.</li>
+          </ul>
+        </aside>
+
+        <h2 class="section-heading"><i class="fas fa-info-circle" style="margin-right: 8px;"></i>About the Course</h2>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>What it covers</h3>
+            How a computer is built and how it represents data, numbering systems, algorithms and pseudocode, and an introduction to programming in C, alongside the ethics of computing. Weekly labs cover MS Office, algorithms and C.
+          </div>
+          <div class="info-card">
+            <h3>Assessment</h3>
+            <table>
+              <tr><td>Midterm exam</td><td>30%</td></tr>
+              <tr><td>Lab work (5 quizzes + mini project)</td><td>30%</td></tr>
+              <tr><td>Final exam</td><td>40%</td></tr>
+            </table>
+          </div>
+          <div class="info-card">
+            <h3>Textbooks</h3>
+            David Reed, <em>A Balanced Introduction to Computer Science</em>, 3rd ed.<br>
+            Hanly &amp; Koffman, <em>Problem Solving and Program Design in C</em>, 7th ed.
+          </div>
+        </div>
+
+        <p style="margin-top: 16px;">
+          <a class="pdf-link" href="/birzeit/comp1310/COMP1310_Course_Outline_Fall2026.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Course outline (topics, lab schedule, regulations)</a>
+        </p>
+
+        <h2 class="section-heading"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Lectures</h2>
+
+        <div class="jl-list">
+          <div class="jl-row">
+            <span class="jl-n">1</span>
+            <span class="jl-topic">Computer Basics<small>What a computer is, hardware and software, the CPU, memory, input/output, the operating system</small></span>
+            <span class="jl-links">
+              <a class="jl-slides" href="/birzeit/comp1310/slides/L1_Computer_Basics.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+              <a class="jl-comp" href="/birzeit/comp1310/COMP1310_Computer_Basics_Companion.html" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Companion</a>
+            </span>
+          </div>
+          <div class="jl-row">
+            <span class="jl-n">2</span>
+            <span class="jl-topic">Responsible AI Use<small>What AI and generative AI are, how they learn, and how to use them to support your learning. Slides by Dr. Sobhi Ahmed</small></span>
+            <span class="jl-links">
+              <a class="jl-slides" href="/birzeit/comp1310/slides/Responsible_AI.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+            </span>
+          </div>
+          <div class="jl-row">
+            <span class="jl-n">3</span>
+            <span class="jl-topic">Numbering Systems I<small>Decimal, binary, octal and hex; conversions; binary addition; signed numbers</small></span>
+            <span class="jl-links">
+              <a class="jl-slides" href="/birzeit/comp1310/slides/L2.1_Numbering_Systems.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+              <a class="jl-comp" href="/birzeit/comp1310/COMP1310_Numbering_Systems_Companion.html" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Companion</a>
+            </span>
+          </div>
+          <div class="jl-row">
+            <span class="jl-n">4</span>
+            <span class="jl-topic">Numbering Systems II<small>Fractions, subtraction with two's complement, characters, integers and floating point in memory</small></span>
+            <span class="jl-links">
+              <a class="jl-slides" href="/birzeit/comp1310/slides/L2.2_Numbering_Systems.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Slides</a>
+              <a class="jl-comp" href="/birzeit/comp1310/COMP1310_Numbering_Systems_Companion.html" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Companion</a>
+            </span>
+          </div>
+        </div>
+
+        <p class="lecture-note" style="margin-top: 12px;">Lecture 1 and Numbering Systems slides are shared departmental material (with thanks to Mr. Abdallah Karakra). The companions follow the same topics, worked through step by step.</p>
+
+        <h2 class="section-heading"><i class="fas fa-atlas" style="margin-right: 8px; color: #00897b;"></i>Study Companions</h2>
+
+        <div class="companion-card">
+          <h3>Computer Basics</h3>
+          <p class="companion-desc">A short walk through Lecture 1: what happens between a key press and a result on the screen, what the CPU and the different kinds of memory each do, how a computer starts up, and what the operating system is for. Ends with self-check questions.</p>
+          <a class="companion-btn" href="/birzeit/comp1310/COMP1310_Computer_Basics_Companion.html" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Open companion</a>
+        </div>
+
+        <div class="companion-card">
+          <h3>Numbering Systems</h3>
+          <p class="companion-desc">Both numbering lectures in one place, built up from the question of why computers count in binary. Covers converting between bases (and why the methods work), fractions, binary addition and subtraction, negative numbers in two's complement, and how integers, characters and real numbers are stored. Includes a bit board, step-by-step converters and practice questions with answers.</p>
+          <a class="companion-btn" href="/birzeit/comp1310/COMP1310_Numbering_Systems_Companion.html" target="_blank" rel="noopener"><i class="fas fa-atlas"></i> Open companion</a>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/" style="color: #999;">Back to main site</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/birzeit/gate.js"></script>
+<title>COMP1310 Numbering Systems Companion</title>
+<meta name="author" content="Hisham Ihshaish">
+<meta name="description" content="COMP1310 companion to Lectures 2.1 and 2.2: positional number systems, binary, octal and hexadecimal, conversions, binary arithmetic, two's complement, and how integers, characters and real numbers are stored.">
+<meta name="theme-color" content="#1565c0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1565c0;
+    --blue-dark: #0d47a1;
+    --blue-light: #e3f2fd;
+    --teal: #00695c;
+    --teal-light: #e0f2f1;
+    --amber-light: #fff8e1;
+    --amber: #8d6e00;
+    --red: #c62828;
+    --red-light: #ffebee;
+    --text: #263238;
+    --muted: #5f6f7a;
+    --border: #dfe3e8;
+    --card: #ffffff;
+    --page: #fafbfc;
+    --mono: 'Roboto Mono', ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--page); color: var(--text);
+    font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 17px; line-height: 1.65;
+  }
+  .topbar {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 0 16px; position: sticky; top: 0; z-index: 10;
+  }
+  .topbar-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; min-height: 48px; gap: 12px; }
+  .topbar a { color: var(--blue); text-decoration: none; font-weight: 700; font-family: 'Montserrat', sans-serif; font-size: 0.86rem; padding: 12px 0; }
+  .topbar a:hover { text-decoration: underline; }
+  .topbar .tag { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+  @media (max-width: 420px) { .topbar .tag { display: none; } }
+
+  main { max-width: 820px; margin: 0 auto; padding: 8px 16px 64px; }
+  h1, h2, h3 { font-family: 'Montserrat', sans-serif; line-height: 1.3; }
+  h1 { font-size: 1.7rem; color: var(--text); margin: 28px 0 6px; }
+  .lede { color: var(--muted); margin: 0 0 18px; }
+  h2 { font-size: 1.35rem; color: var(--blue); margin: 52px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  h2 .n { font-family: var(--mono); color: var(--muted); font-size: 1rem; margin-right: 8px; }
+  h3 { font-size: 1.05rem; color: var(--blue-dark); margin: 28px 0 8px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin: 0 0 14px; }
+  li { margin-bottom: 4px; }
+  code, .m { font-family: var(--mono); font-size: 0.9em; }
+  .m { white-space: nowrap; }
+  sub, sup { font-size: 0.72em; line-height: 0; }
+  .ar { font-family: 'Roboto', 'Segoe UI', Tahoma, sans-serif; color: var(--teal); white-space: nowrap; unicode-bidi: isolate; }
+
+  .contents { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; margin: 18px 0 8px; }
+  .contents p { margin: 0 0 6px; font-weight: 700; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; color: var(--blue); }
+  .contents ol { margin: 0; padding-left: 24px; columns: 2; column-gap: 28px; }
+  .contents li { margin: 0; break-inside: avoid; }
+  .contents a { display: inline-block; padding: 8px 0; text-decoration: none; }
+  .contents a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .contents ol { columns: 1; } }
+
+  .eq {
+    font-family: var(--mono); background: var(--card); border: 1px solid var(--border);
+    border-left: 4px solid var(--teal); border-radius: 6px; padding: 10px 14px; margin: 0 0 16px;
+    overflow-x: auto; white-space: pre; font-size: 0.92rem; line-height: 1.7;
+  }
+  .note { background: var(--teal-light); border-radius: 6px; padding: 10px 14px; margin: 0 0 16px; font-size: 0.95rem; }
+  .note b { color: var(--teal); }
+  .aside { background: var(--amber-light); border-radius: 6px; padding: 10px 14px; margin: 0 0 16px; font-size: 0.93rem; color: #4e4300; }
+
+  .tw { overflow-x: auto; margin: 0 0 16px; -webkit-overflow-scrolling: touch; }
+  table { border-collapse: collapse; background: var(--card); font-size: 0.93rem; }
+  th, td { border: 1px solid var(--border); padding: 5px 10px; text-align: center; }
+  th { background: var(--blue-light); color: var(--blue-dark); font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; }
+  td.mono, td .mono { font-family: var(--mono); }
+  tr.hl td { background: var(--teal-light); }
+  td.l { text-align: left; }
+  .neg { color: var(--red); }
+
+  /* interactive cards */
+  .widget { background: var(--card); border: 1px solid var(--border); border-top: 4px solid var(--blue); border-radius: 8px; padding: 16px; margin: 20px 0 22px; }
+  .widget h3 { margin-top: 0; color: var(--blue); }
+  .widget .hint { font-size: 0.92rem; color: var(--muted); margin-bottom: 12px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  label { font-size: 0.9rem; font-weight: 700; }
+  input[type=text], select {
+    font-family: var(--mono); font-size: 1rem; min-height: 44px; padding: 6px 10px;
+    border: 1px solid #b0bec5; border-radius: 6px; background: #fff; color: var(--text); max-width: 100%;
+  }
+  input[type=text] { width: 13em; }
+  input[type=text]:focus, select:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+  button {
+    font-family: 'Roboto', sans-serif; font-size: 0.92rem; min-height: 44px; min-width: 44px; padding: 6px 14px;
+    border: 1px solid var(--blue); background: #fff; color: var(--blue); border-radius: 6px; cursor: pointer; font-weight: 700;
+  }
+  button:hover { background: var(--blue-light); }
+  button.primary { background: var(--blue); color: #fff; }
+  button.primary:hover { background: var(--blue-dark); }
+  .seg { display: inline-flex; border: 1px solid var(--blue); border-radius: 6px; overflow: hidden; }
+  .seg button { border: none; border-radius: 0; min-width: 0; }
+  .seg button + button { border-left: 1px solid var(--blue); }
+  .seg button[aria-pressed=true] { background: var(--blue); color: #fff; }
+  .err { color: var(--red); background: var(--red-light); border-radius: 6px; padding: 8px 12px; font-size: 0.93rem; margin: 8px 0; }
+  .out { margin-top: 10px; }
+  .result { font-family: var(--mono); font-size: 1.05rem; background: var(--teal-light); border-radius: 6px; padding: 8px 12px; display: inline-block; margin: 6px 0; overflow-wrap: anywhere; }
+
+  /* bit board */
+  .bits { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin: 6px 0 4px; }
+  .bit {
+    min-height: 56px; padding: 4px 0; font-family: var(--mono); font-size: 1.35rem; border-radius: 6px;
+    border: 1px solid #b0bec5; background: #fff; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1;
+  }
+  .bit.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .bit:hover { background: var(--blue-light); }
+  .bit.on:hover { background: var(--blue-dark); }
+  .bit small { font-size: 0.66rem; font-family: 'Roboto', sans-serif; opacity: 0.85; margin-top: 2px; }
+  .bit.gap { margin-left: 6px; }
+  @media (max-width: 440px) {
+    .bits { grid-template-columns: repeat(4, 1fr); }
+    .bit.gap { margin-left: 0; }
+  }
+  .readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 12px 0; }
+  .readout div { background: var(--page); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; }
+  .readout span { display: block; font-size: 0.75rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .readout b { font-family: var(--mono); font-size: 1.15rem; }
+  .msg { min-height: 1.6em; font-size: 0.93rem; color: var(--teal); }
+
+  /* groups */
+  .groups { font-family: var(--mono); display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-end; margin: 6px 0 10px; }
+  .grp { text-align: center; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; background: var(--page); }
+  .grp .b { font-size: 1rem; letter-spacing: 0.06em; }
+  .grp .d { font-size: 1.15rem; font-weight: 600; color: var(--blue); border-top: 1px solid var(--border); margin-top: 2px; }
+  .grp .pad { color: #b0bec5; }
+  .pt { font-size: 1.4rem; font-weight: 700; padding: 0 2px; align-self: center; }
+
+  /* float */
+  .fl { display: flex; flex-wrap: wrap; gap: 4px; font-family: var(--mono); margin: 8px 0; }
+  .fl > div { border-radius: 6px; padding: 4px 8px; overflow-wrap: anywhere; }
+  .fl .s { background: var(--red-light); }
+  .fl .e { background: var(--teal-light); }
+  .fl .f { background: var(--blue-light); flex: 1 1 200px; }
+  .fl small { display: block; font-family: 'Roboto', sans-serif; font-size: 0.72rem; color: var(--muted); }
+
+  pre.sum { font-family: var(--mono); background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; margin: 0 0 16px; overflow-x: auto; line-height: 1.5; font-size: 0.95rem; }
+  pre.sum .c { color: var(--teal); }
+  pre.sum .x { color: var(--red); }
+
+  details { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin: 0 0 10px; }
+  details > summary { cursor: pointer; padding: 10px 14px; min-height: 44px; font-weight: 700; color: var(--blue); list-style-position: inside; }
+  details > div { padding: 0 14px 12px; }
+  .q { margin: 18px 0 6px; }
+  .q b { font-family: 'Montserrat', sans-serif; color: var(--blue-dark); }
+
+  footer { margin-top: 56px; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+  <a href="/birzeit/comp1310/">&larr; COMP1310 course page</a>
+  <span class="tag">Lectures 2.1 and 2.2</span>
+</div></div>
+
+<main>
+<h1>Numbering Systems: a companion</h1>
+<p class="lede">COMP1310 Introduction to Computers and Computing Ethics &middot; First Semester 2026/27</p>
+
+<p>This page goes with the two lectures on numbering systems. Read it with a pen and paper next to you. The sections build on each other, so read them in order the first time. There are four small tools to play with, and the practice questions at the end have their answers hidden until you open them.</p>
+
+<nav class="contents" aria-label="Contents">
+  <p>Contents</p>
+  <ol>
+    <li><a href="#why">Why two symbols</a></li>
+    <li><a href="#place">What 754 really means</a></li>
+    <li><a href="#binary">Counting in binary</a></li>
+    <li><a href="#todec">Any base to decimal</a></li>
+    <li><a href="#fromdec">Decimal to any base</a></li>
+    <li><a href="#group">Octal and hex: binary in short</a></li>
+    <li><a href="#frac">Fractions</a></li>
+    <li><a href="#add">Binary addition</a></li>
+    <li><a href="#neg">Negative numbers</a></li>
+    <li><a href="#sub">Subtraction and overflow</a></li>
+    <li><a href="#memory">Integers and characters in memory</a></li>
+    <li><a href="#float">Real numbers: floating point</a></li>
+    <li><a href="#practice">Practice</a></li>
+  </ol>
+</nav>
+
+<!-- 1 -->
+<h2 id="why"><span class="n">1</span>Why two symbols</h2>
+<p>Inside your phone's processor there are billions of tiny electronic switches (transistors). Each one either lets current through or it doesn't. You could try to build a switch that holds ten different voltage levels, one for each decimal digit, but telling ten levels apart reliably, billions of times a second, with heat and electrical noise around, is hard. Telling "on" from "off" is easy. So computers store everything using two symbols: 1 for on, 0 for off.</p>
+<p>That leaves a real problem. How do you write 22, or 297, or &minus;75, or 26.75, using only 0 and 1? You already know the method: you use it every day, with ten symbols. Once you see what our ordinary decimal system is actually doing, binary turns out to be the same idea with fewer symbols.</p>
+
+<!-- 2 -->
+<h2 id="place"><span class="n">2</span>What 754 really means</h2>
+<p>The 7 in 754 does not mean seven. It means seven <em>hundreds</em>, because of where it sits. Every position has a <strong>place value</strong> <span class="ar" lang="ar" dir="rtl">(القيمة المكانية)</span>, and in decimal <span class="ar" lang="ar" dir="rtl">(النظام العشري)</span> the place values are powers of 10:</p>
+<div class="eq">754 = 7&times;100 + 5&times;10 + 4&times;1
+    = 7&times;10&sup2; + 5&times;10&sup1; + 4&times;10&#8304;</div>
+<p>Where do the place values come from? Think of the distance counter (odometer) in a car. The right-hand wheel shows 0, 1, 2, &hellip; 9. There is no symbol after 9, so the wheel rolls back to 0 and pushes the next wheel on by one: 09 becomes 10. That push is the <strong>carry</strong>. The second wheel moves once every 10 steps, so it counts tens. The third moves once every 10&times;10 = 100 steps, so it counts hundreds. Each place is worth 10 times the place to its right.</p>
+<p>The number 10 is the <strong>base</strong> <span class="ar" lang="ar" dir="rtl">(الأساس)</span> of the system, and it does three jobs at once:</p>
+<ul>
+  <li>it is how many symbols you have (0 to 9);</li>
+  <li>it is the point where a wheel rolls over and carries;</li>
+  <li>it is what you multiply by to get from one place value to the next.</li>
+</ul>
+<p>Change the base and everything else follows. When more than one base is around, write the base as a small number after the brackets: <span class="m">(754)<sub>10</sub></span>, <span class="m">(10110)<sub>2</sub></span>. The slides also use a programmer's shorthand: a letter after the number, <span class="m">10110b</span> for binary and <span class="m">27h</span> for hexadecimal.</p>
+
+<!-- 3 -->
+<h2 id="binary"><span class="n">3</span>Counting in binary</h2>
+<p>Now give every wheel of the odometer only two symbols, 0 and 1. A wheel rolls over after every 2 steps instead of 10. Count from zero and watch the binary <span class="ar" lang="ar" dir="rtl">(النظام الثنائي)</span> column. Ignore the Octal and Hex columns for now; they will make sense a few paragraphs down, when we meet bases 8 and 16.</p>
+<div class="tw"><table>
+  <tr><th>Decimal</th><th>Binary</th><th>Octal</th><th>Hex</th></tr>
+  <tr><td>0</td><td class="mono">0</td><td class="mono">0</td><td class="mono">0</td></tr>
+  <tr><td>1</td><td class="mono">1</td><td class="mono">1</td><td class="mono">1</td></tr>
+  <tr class="hl"><td>2</td><td class="mono">10</td><td class="mono">2</td><td class="mono">2</td></tr>
+  <tr><td>3</td><td class="mono">11</td><td class="mono">3</td><td class="mono">3</td></tr>
+  <tr class="hl"><td>4</td><td class="mono">100</td><td class="mono">4</td><td class="mono">4</td></tr>
+  <tr><td>5</td><td class="mono">101</td><td class="mono">5</td><td class="mono">5</td></tr>
+  <tr><td>6</td><td class="mono">110</td><td class="mono">6</td><td class="mono">6</td></tr>
+  <tr><td>7</td><td class="mono">111</td><td class="mono">7</td><td class="mono">7</td></tr>
+  <tr class="hl"><td>8</td><td class="mono">1000</td><td class="mono">10</td><td class="mono">8</td></tr>
+  <tr><td>9</td><td class="mono">1001</td><td class="mono">11</td><td class="mono">9</td></tr>
+  <tr><td>10</td><td class="mono">1010</td><td class="mono">12</td><td class="mono">A</td></tr>
+  <tr><td>11</td><td class="mono">1011</td><td class="mono">13</td><td class="mono">B</td></tr>
+  <tr><td>12</td><td class="mono">1100</td><td class="mono">14</td><td class="mono">C</td></tr>
+  <tr><td>13</td><td class="mono">1101</td><td class="mono">15</td><td class="mono">D</td></tr>
+  <tr><td>14</td><td class="mono">1110</td><td class="mono">16</td><td class="mono">E</td></tr>
+  <tr><td>15</td><td class="mono">1111</td><td class="mono">17</td><td class="mono">F</td></tr>
+  <tr class="hl"><td>16</td><td class="mono">10000</td><td class="mono">20</td><td class="mono">10</td></tr>
+</table></div>
+<p>The highlighted rows are where binary gets a new wheel: at 2, 4, 8, 16. Each wheel moves half as often as the one on its right, so the binary place values are powers of 2:</p>
+<div class="eq">place:   2&#8311;  2&#8310;  2&#8309;  2&#8308;  2&sup3;  2&sup2;  2&sup1;  2&#8304;
+value:  128  64  32  16   8   4   2   1</div>
+<p>Each binary digit is called a <strong>bit</strong> (short for <em>bi</em>nary digi<em>t</em>). Bits come in named groups: 4 bits make a <strong>nibble</strong>, 8 bits make a <strong>byte</strong>, and in this course 2 bytes (16 bits) make a <strong>word</strong>. (How big a "word" is really depends on the machine; we use the lecture's definition.) So <span class="m">1010 0011</span> is 8 bits, 2 nibbles, 1 byte.</p>
+
+<h3>How many values fit in n bits?</h3>
+<p>One bit has 2 patterns: 0 and 1. Add a second bit and you can put a 0 or a 1 in front of each of those, so you get 4. Every extra bit doubles the count:</p>
+<div class="eq">1 bit: 2    2 bits: 4    3 bits: 8    4 bits: 16    8 bits: 256
+n bits: 2&#8319; patterns, from 0 up to 2&#8319; &minus; 1</div>
+<p>A byte can hold 2<sup>8</sup> = 256 different patterns, so as a plain (unsigned) number it runs from 0 to 255. The largest is 2<sup>8</sup> &minus; 1 for the same reason the largest 3-digit decimal number is 999 = 10<sup>3</sup> &minus; 1.</p>
+
+<h3>Other bases work the same way</h3>
+<p>Nothing here is special to 2 or 10. Base 8, <strong>octal</strong> <span class="ar" lang="ar" dir="rtl">(النظام الثماني)</span>, uses the digits 0 to 7 and carries at 8 (look at the octal column above: 7, then 10). Base 5 uses 0 to 4, base 7 uses 0 to 6, base 3 uses 0, 1, 2. A base-b system always has exactly b digits, from 0 to b&minus;1. So <span class="m">(35)<sub>7</sub></span> is a real number, but <span class="m">(37)<sub>7</sub></span> is not: there is no digit 7 in base 7.</p>
+<p>Base 16, <strong>hexadecimal</strong> or "hex" <span class="ar" lang="ar" dir="rtl">(النظام السداسي عشر)</span>, needs sixteen digits, and we only have ten numerals. So after 9 it borrows letters: A=10, B=11, C=12, D=13, E=14, F=15. In hex, F + 1 rolls over to 10, which is sixteen.</p>
+
+<div class="widget" id="bitboard">
+  <h3>Try it: the bit board</h3>
+  <p class="hint">Tap a bit to switch it on or off. Switch on one bit at a time and read its place value. Switch all eight on to see 255. Then press +1 and watch every wheel roll over. Ignore the "signed" box for now; it comes back in section 9.</p>
+  <div class="bits" id="bb-bits"></div>
+  <div class="readout">
+    <div><span>Unsigned decimal</span><b id="bb-u">0</b></div>
+    <div><span>Hex</span><b id="bb-h">00</b></div>
+    <div><span>Octal</span><b id="bb-o">0</b></div>
+    <div><span>Signed (two's complement)</span><b id="bb-s">0</b></div>
+  </div>
+  <div class="msg" id="bb-msg" aria-live="polite"></div>
+  <div class="row">
+    <button type="button" id="bb-inc">+1</button>
+    <button type="button" id="bb-dec">&minus;1</button>
+    <button type="button" id="bb-flip">Flip all bits</button>
+    <button type="button" id="bb-neg">Flip and add 1</button>
+    <button type="button" id="bb-clr">Clear</button>
+  </div>
+</div>
+
+<!-- 4 -->
+<h2 id="todec"><span class="n">4</span>Any base to decimal</h2>
+<p>You already have everything you need. Each digit means <em>digit &times; place value</em>, so to find the value of a number in any base, write out those products and add them. The place values are powers of the base, counted from 0 at the right.</p>
+<div class="eq">(10110)<sub>2</sub> = 1&times;16 + 0&times;8 + 1&times;4 + 1&times;2 + 0&times;1 = 22
+(47)<sub>8</sub>    = 4&times;8 + 7&times;1 = 32 + 7 = 39
+(27)<sub>16</sub>   = 2&times;16 + 7&times;1 = 32 + 7 = 39
+(DE1)<sub>16</sub>  = D&times;16&sup2; + E&times;16 + 1&times;1
+           = 13&times;256 + 14&times;16 + 1 = 3328 + 224 + 1 = 3553   (D = 13, E = 14)</div>
+<p>Look at the middle two. <span class="m">(47)<sub>8</sub></span> and <span class="m">(27)<sub>16</sub></span> are the same number, 39. The digits alone don't tell you the value; you also need the base. That is why we write the subscript.</p>
+<p>For binary there is a quicker way: each digit is 0 or 1, so just add up the place values that sit under a 1. For <span class="m">10110</span> that is 16 + 4 + 2 = 22.</p>
+
+<!-- 5 -->
+<h2 id="fromdec"><span class="n">5</span>Decimal to any base</h2>
+<p>Going the other way, you have a value and need to find its digits. The method: <strong>divide by the base and write down the remainder</strong> <span class="ar" lang="ar" dir="rtl">(باقي القسمة)</span>. Divide the quotient by the base again, and keep going until the quotient is 0. Then read the remainders <strong>from the bottom up</strong>.</p>
+<div class="tw"><table>
+  <tr><th>Divide</th><th>Quotient</th><th>Remainder</th></tr>
+  <tr><td class="mono">22 &divide; 2</td><td class="mono">11</td><td class="mono">0</td></tr>
+  <tr><td class="mono">11 &divide; 2</td><td class="mono">5</td><td class="mono">1</td></tr>
+  <tr><td class="mono">5 &divide; 2</td><td class="mono">2</td><td class="mono">1</td></tr>
+  <tr><td class="mono">2 &divide; 2</td><td class="mono">1</td><td class="mono">0</td></tr>
+  <tr><td class="mono">1 &divide; 2</td><td class="mono">0</td><td class="mono">1 &uarr;</td></tr>
+</table></div>
+<p>Reading up: <span class="m">(22)<sub>10</sub> = (10110)<sub>2</sub></span>, which matches section 4.</p>
+
+<h3>Why bottom-up? Check it on a number you know</h3>
+<p>Do the same thing to 754 with base 10. 754 &divide; 10 gives quotient 75, remainder 4. The remainder is the <em>last digit</em>, and the quotient is the number with that digit chopped off. Next, 75 &divide; 10 gives 7 remainder 5. Then 7 &divide; 10 gives 0 remainder 7. The remainders came out 4, 5, 7: the digits of 754, last digit first.</p>
+<p>That is all repeated division does, in any base. Dividing by the base splits off the rightmost digit as the remainder and shifts everything else one place to the right. Dividing 22 by 2 gives remainder 0, which is the last bit of <span class="m">10110</span>, and quotient 11, which is <span class="m">1011</span>. Because the digits come out right-to-left, you read the column upwards.</p>
+
+<p>Two more worked out. Remainders can be anything from 0 to base&minus;1, so in hex a remainder of 10 to 15 is written A to F.</p>
+<div class="eq">39 to octal:   39 &divide; 8 = 4 r 7      4 &divide; 8 = 0 r 4        &rarr; (47)<sub>8</sub>
+39 to hex:     39 &divide; 16 = 2 r 7     2 &divide; 16 = 0 r 2       &rarr; (27)<sub>16</sub>
+220 to binary: remainders 0,0,1,1,1,0,1,1 (top to bottom)  &rarr; (11011100)<sub>2</sub></div>
+<p>Always check by converting back with section 4: 128 + 64 + 16 + 8 + 4 = 220.</p>
+
+<div class="widget" id="conv">
+  <h3>Try it: step-by-step converter</h3>
+  <p class="hint">Type a number, choose the base, and the tool shows every step. Do one by hand first and use this to check.</p>
+  <div class="row">
+    <div class="seg" role="group" aria-label="Direction">
+      <button type="button" id="cv-m1" aria-pressed="true">Decimal &rarr; base</button>
+      <button type="button" id="cv-m2" aria-pressed="false">Base &rarr; decimal</button>
+    </div>
+  </div>
+  <div class="row">
+    <label for="cv-in" id="cv-lab">Decimal number</label>
+    <input type="text" id="cv-in" value="220" autocomplete="off" spellcheck="false" inputmode="text">
+    <label for="cv-base">Base</label>
+    <select id="cv-base"></select>
+    <button type="button" class="primary" id="cv-go">Convert</button>
+  </div>
+  <div class="out" id="cv-out" aria-live="polite"></div>
+</div>
+
+<!-- 6 -->
+<h2 id="group"><span class="n">6</span>Octal and hex: binary in short</h2>
+<p>To convert binary to octal you could go through decimal, but there is a much shorter route, and it is the reason octal and hex are used in computing at all.</p>
+<p>Here is why it works, on one number. Take <span class="m">101110<sub>2</sub></span> = 32 + 8 + 4 + 2 = 46, and split it into <span class="m">101 | 110</span>. The left three bits are worth 32, 16, 8, which is 8 &times; (4, 2, 1), so they count eights: 101 = 5 eights. The right three bits count ones: 110 = 6. So 46 = 5&times;8 + 6 = (56)<sub>8</sub>. Because 8 = 2<sup>3</sup>, <strong>each octal digit is exactly 3 bits</strong>. In the same way 16 = 2<sup>4</sup>, so <strong>each hex digit is exactly 4 bits</strong>.</p>
+<p>The rule: starting from the right (or from the binary point, if there is one), cut the bits into groups of 3 for octal or 4 for hex. If the last group on the left is short, pad it with zeros. Then replace each group with its digit.</p>
+<div class="eq">100 101 010           &rarr;  4 5 2       (452)<sub>8</sub>
+1001 0101             &rarr;  9 5         (95)<sub>16</sub>
+1110 0011             &rarr;  E 3         (E3)<sub>16</sub>
+1 0110 1011  = 0001 0110 1011  &rarr;  1 6 B   (16B)<sub>16</sub></div>
+<p>You only need the 16 patterns below, and the first 8 patterns, 0 to 7 (dropping the leading 0), are the octal table too.</p>
+<div class="tw"><table>
+  <tr><th>Hex</th><td class="mono">0</td><td class="mono">1</td><td class="mono">2</td><td class="mono">3</td><td class="mono">4</td><td class="mono">5</td><td class="mono">6</td><td class="mono">7</td></tr>
+  <tr><th>Bits</th><td class="mono">0000</td><td class="mono">0001</td><td class="mono">0010</td><td class="mono">0011</td><td class="mono">0100</td><td class="mono">0101</td><td class="mono">0110</td><td class="mono">0111</td></tr>
+  <tr><th>Hex</th><td class="mono">8</td><td class="mono">9</td><td class="mono">A</td><td class="mono">B</td><td class="mono">C</td><td class="mono">D</td><td class="mono">E</td><td class="mono">F</td></tr>
+  <tr><th>Bits</th><td class="mono">1000</td><td class="mono">1001</td><td class="mono">1010</td><td class="mono">1011</td><td class="mono">1100</td><td class="mono">1101</td><td class="mono">1110</td><td class="mono">1111</td></tr>
+</table></div>
+<p>This is why programmers like hex. A byte is exactly two hex digits, 00 to FF, so a long string of bits becomes short and readable without losing anything. <span class="m">1101 0001</span> is hard to read aloud; <span class="m">D1</span> is not. You will see memory written this way in section 11.</p>
+
+<h3>Between two bases that are not decimal</h3>
+<p>If both bases are powers of 2 (2, 4, 8, 16), go through binary: expand each digit into bits, then regroup.</p>
+<div class="eq">(72E)<sub>16</sub> = 0111 0010 1110
+         = 011 100 101 110 = (3456)<sub>8</sub></div>
+<p>Base 4 = 2<sup>2</sup>, so each base-4 digit is 2 bits. If one of the bases is not a power of 2, such as 7, go through decimal: <span class="m">(35)<sub>7</sub> = 3&times;7 + 5 = 26 = (32)<sub>8</sub></span>.</p>
+
+<div class="widget" id="grp">
+  <h3>Try it: grouping view</h3>
+  <p class="hint">Type a number in binary, octal or hex (a point is allowed, e.g. <code>11010.11</code>). The grey zeros are padding added to complete a group.</p>
+  <div class="row">
+    <label for="gp-in">Number</label>
+    <input type="text" id="gp-in" value="101101011" autocomplete="off" spellcheck="false">
+    <label for="gp-base">written in</label>
+    <select id="gp-base"><option value="2" selected>binary</option><option value="8">octal</option><option value="16">hex</option></select>
+    <button type="button" class="primary" id="gp-go">Show groups</button>
+  </div>
+  <div class="out" id="gp-out" aria-live="polite"></div>
+</div>
+
+<!-- 7 -->
+<h2 id="frac"><span class="n">7</span>Fractions</h2>
+<p>Place values carry on past the point. In decimal, the places after the point are tenths, hundredths, and so on: 0.25 = 2&times;10<sup>&minus;1</sup> + 5&times;10<sup>&minus;2</sup>. In binary they are halves, quarters, eighths:</p>
+<div class="eq">2&#8315;&sup1; = 0.5     2&#8315;&sup2; = 0.25     2&#8315;&sup3; = 0.125     2&#8315;&#8308; = 0.0625
+
+(1011.011)<sub>2</sub> = 8 + 2 + 1 + 0.25 + 0.125 = 11.375</div>
+
+<h3>Decimal fraction to binary: multiply by 2</h3>
+<p>Convert the whole part and the fraction part separately. The whole part uses division, as before (11 = 1011). For the fraction part: multiply it by 2. The whole-number part of the answer (0 or 1) is the next bit. Keep only the fraction and repeat until it becomes 0. Read the bits <strong>top-down</strong>.</p>
+<div class="tw"><table>
+  <tr><th>Multiply</th><th>Result</th><th>Bit</th></tr>
+  <tr><td class="mono">0.375 &times; 2</td><td class="mono">0.75</td><td class="mono">0 &darr;</td></tr>
+  <tr><td class="mono">0.75 &times; 2</td><td class="mono">1.5</td><td class="mono">1</td></tr>
+  <tr><td class="mono">0.5 &times; 2</td><td class="mono">1.0</td><td class="mono">1</td></tr>
+</table></div>
+<p>So 0.375 = <span class="m">(0.011)<sub>2</sub></span> and 11.375 = <span class="m">(1011.011)<sub>2</sub></span>.</p>
+<p><strong>Why it works.</strong> Multiplying by 10 moves a decimal point one place right: 0.375 &times; 10 = 3.75, and the first digit after the point has jumped across it. Multiplying by 2 does the same thing to a binary point. 0.375 is <span class="m">0.011</span> in binary. Doubling it gives 0.75, which is <span class="m">0.11</span>: the first bit after the point, a 0, has crossed over and become the whole part. Doubling 0.75 gives 1.5, which is <span class="m">1.1</span>: the next bit, a 1, has crossed over. Each time you write down the bit that crossed, throw it away, and double again. The bits come out first-to-last, which is why this time you read downwards.</p>
+<p>Same method for 26.75: 26 = <span class="m">11010</span>, and 0.75 &times; 2 = 1.5 (bit 1), 0.5 &times; 2 = 1.0 (bit 1). So 26.75 = <span class="m">(11010.11)<sub>2</sub></span>. Keep this one; we store it in memory in section 12.</p>
+
+<h3>Some fractions never end</h3>
+<p>Try 0.2:</p>
+<div class="tw"><table>
+  <tr><th>Multiply</th><th>Result</th><th>Bit</th></tr>
+  <tr><td class="mono">0.2 &times; 2</td><td class="mono">0.4</td><td class="mono">0</td></tr>
+  <tr><td class="mono">0.4 &times; 2</td><td class="mono">0.8</td><td class="mono">0</td></tr>
+  <tr><td class="mono">0.8 &times; 2</td><td class="mono">1.6</td><td class="mono">1</td></tr>
+  <tr><td class="mono">0.6 &times; 2</td><td class="mono">1.2</td><td class="mono">1</td></tr>
+  <tr class="hl"><td class="mono">0.2 &times; 2</td><td class="mono">0.4</td><td class="mono">0 &nbsp;(back to the start)</td></tr>
+</table></div>
+<p>We are back at 0.2, so the same four bits repeat forever: 0.2 = <span class="m">(0.0011 0011 0011&hellip;)<sub>2</sub></span>. Likewise 0.3 = <span class="m">(0.0 1001 1001 1001&hellip;)<sub>2</sub></span>. The lecture's answers, 0.0011 and 0.01001, are these same expansions cut off after a few bits.</p>
+<p>This is the binary version of 1/3 = 0.3333&hellip; in decimal. A fraction has a finite binary form only if, written in lowest terms, its denominator is a power of 2. 0.375 = 3/8 ends; 0.2 = 1/5 and 0.1 = 1/10 do not. A computer has a fixed number of bits, so it cannot store 0.1 or 0.2 exactly. It stores the nearest value it can. That is why, in many programming languages, <code>0.1 + 0.2</code> prints <code>0.30000000000000004</code>.</p>
+
+<!-- 8 -->
+<h2 id="add"><span class="n">8</span>Binary addition</h2>
+<p>It is the column method you learned in primary school. The only change is that a column "fills up" at 2 instead of 10:</p>
+<div class="eq">0 + 0 = 0       0 + 1 = 1       1 + 1 = 10  (write 0, carry 1)
+1 + 1 + 1 = 11  (write 1, carry 1; this happens when a carry arrives on top of 1 + 1)</div>
+<p>Carries are shown in teal on the top line.</p>
+<pre class="sum"><span class="c"> 111  </span>    carries
+ 01111       15
++00110     +  6
+------     ----
+ 10101       21</pre>
+<pre class="sum"><span class="c">11 1 11  </span>    carries
+ 11010011     211
++01010110   +  86
+---------   -----
+100101001     297</pre>
+<p>The second answer has 9 bits even though both inputs had 8: 297 is bigger than 255, the most a byte can hold. Keep that in mind for section 10.</p>
+<p>With fractions, line up the points first and pad with zeros so both numbers have the same number of places, then add as usual:</p>
+<pre class="sum"><span class="c">     1  </span>   carries
+ 110.010      6.25
++001.011    + 1.375
+--------    -------
+ 111.101      7.625</pre>
+
+<!-- 9 -->
+<h2 id="neg"><span class="n">9</span>Negative numbers</h2>
+<p>On paper you just write a minus sign. A computer has no minus sign, only bits. And there is one more fact about hardware you need first: <strong>it stores numbers in a fixed number of bits</strong>, such as 8, 16 or 32. Before we can talk about negative numbers we have to agree on the width. That is why everything below says "4-bit" or "8-bit". The same pattern <span class="m">1101</span> means different things under different agreements.</p>
+
+<h3>Idea 1: sign-magnitude</h3>
+<p>Use the leftmost bit as a <strong>sign bit</strong> <span class="ar" lang="ar" dir="rtl">(بت الإشارة)</span>: 0 for +, 1 for &minus;. The other bits hold the size. In 4 bits, +5 = <span class="m">0101</span> and &minus;5 = <span class="m">1101</span>. But read <span class="m">1101</span> as a plain unsigned number and it is 13. The bits don't carry their meaning with them; the program has to know which agreement is in use.</p>
+<p>Sign-magnitude has two problems. It has two zeros (<span class="m">0000</span> = +0 and <span class="m">1000</span> = &minus;0). And ordinary addition gives wrong answers: 5 + (&minus;5) = <span class="m">0101 + 1101 = 1 0010</span>, which in 4 bits is <span class="m">0010</span> = 2, not 0.</p>
+
+<h3>Idea 2: one's complement</h3>
+<p>To make &minus;x, flip every bit of x. In 4 bits, 5 = <span class="m">0101</span> so &minus;5 = <span class="m">1010</span>, and &minus;1 = <span class="m">1110</span>. Better, but there are still two zeros: <span class="m">0000</span> and <span class="m">1111</span>.</p>
+
+<h3>Idea 3: two's complement (what computers actually use)</h3>
+<p>Flip every bit, <strong>then add 1</strong>. For &minus;5 in 4 bits: <span class="m">0101 &rarr; 1010 &rarr; 1011</span>.</p>
+<p>Why this particular recipe? Go back to the odometer, a 4-bit one showing <span class="m">0000</span>, and turn it <em>backwards</em> one step. Every wheel rolls back from 0 to 1: you get <span class="m">1111</span>. One step below zero is &minus;1, so <span class="m">1111</span> should mean &minus;1. One more step back gives <span class="m">1110</span> = &minus;2, then <span class="m">1101</span> = &minus;3, <span class="m">1100</span> = &minus;4, <span class="m">1011</span> = &minus;5. That is exactly what flip-and-add-1 produced.</p>
+<p>And why does the recipe always land on the right pattern? Add x to its flipped version: every column is 1 + 0, so you get <span class="m">1111</span>. Add 1 more and the odometer rolls over to <span class="m">0000</span>. So flipped-x + 1 is the number that, added to x, gives zero, which is exactly what &minus;x should do. (As a check: in 4 bits, &minus;5 is stored as the pattern for 16 &minus; 5 = 11 = <span class="m">1011</span>.)</p>
+<p>A second way to see it, often quicker for reading a pattern: in two's complement the leftmost bit is worth <em>minus</em> its usual place value. In 4 bits it is worth &minus;8 instead of 8:</p>
+<div class="eq">1011 = &minus;8 + 0 + 2 + 1 = &minus;5        (in 8 bits the leftmost bit is worth &minus;128)</div>
+<p>Here are all sixteen 4-bit patterns under each agreement:</p>
+<div class="tw"><table>
+  <tr><th>Bits</th><th>Unsigned</th><th>Sign-magnitude</th><th>One's comp.</th><th>Two's comp.</th></tr>
+  <tr><td class="mono">0000</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td class="mono">0001</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+  <tr><td class="mono">0010</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+  <tr><td class="mono">0011</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+  <tr><td class="mono">0100</td><td>4</td><td>4</td><td>4</td><td>4</td></tr>
+  <tr><td class="mono">0101</td><td>5</td><td>5</td><td>5</td><td>5</td></tr>
+  <tr><td class="mono">0110</td><td>6</td><td>6</td><td>6</td><td>6</td></tr>
+  <tr><td class="mono">0111</td><td>7</td><td>7</td><td>7</td><td>7</td></tr>
+  <tr><td class="mono">1000</td><td>8</td><td class="neg">&minus;0</td><td class="neg">&minus;7</td><td class="neg">&minus;8</td></tr>
+  <tr><td class="mono">1001</td><td>9</td><td class="neg">&minus;1</td><td class="neg">&minus;6</td><td class="neg">&minus;7</td></tr>
+  <tr><td class="mono">1010</td><td>10</td><td class="neg">&minus;2</td><td class="neg">&minus;5</td><td class="neg">&minus;6</td></tr>
+  <tr><td class="mono">1011</td><td>11</td><td class="neg">&minus;3</td><td class="neg">&minus;4</td><td class="neg">&minus;5</td></tr>
+  <tr><td class="mono">1100</td><td>12</td><td class="neg">&minus;4</td><td class="neg">&minus;3</td><td class="neg">&minus;4</td></tr>
+  <tr><td class="mono">1101</td><td>13</td><td class="neg">&minus;5</td><td class="neg">&minus;2</td><td class="neg">&minus;3</td></tr>
+  <tr><td class="mono">1110</td><td>14</td><td class="neg">&minus;6</td><td class="neg">&minus;1</td><td class="neg">&minus;2</td></tr>
+  <tr><td class="mono">1111</td><td>15</td><td class="neg">&minus;7</td><td class="neg">&minus;0</td><td class="neg">&minus;1</td></tr>
+</table></div>
+<p>Three things to read off the table:</p>
+<ul>
+  <li>In every signed scheme, <strong>a leftmost 1 means negative</strong> (apart from the extra &minus;0 in the first two schemes). That is your quick sign check.</li>
+  <li>Two's complement has one zero, so its 16 patterns cover &minus;8 to 7: one more negative than positive.</li>
+  <li>To find the size of a negative two's complement number, take its two's complement again: <span class="m">1011 &rarr; 0100 &rarr; 0101</span> = 5, so <span class="m">1011</span> is &minus;5.</li>
+</ul>
+<p>For n bits, two's complement covers &minus;2<sup>n&minus;1</sup> to 2<sup>n&minus;1</sup> &minus; 1:</p>
+<div class="eq"> 4 bits:     &minus;8 to 7
+ 8 bits:   &minus;128 to 127
+16 bits: &minus;32768 to 32767</div>
+<p>Go back to the <a href="#bitboard">bit board</a> and watch the "signed" box. Set <span class="m">11111111</span> (&minus;1) and <span class="m">10000000</span> (&minus;128). Press "Flip and add 1" on any pattern to negate it, and press it twice to get back where you started.</p>
+
+<!-- 10 -->
+<h2 id="sub"><span class="n">10</span>Subtraction and overflow</h2>
+<p>This is why computers use two's complement: subtraction needs no circuit of its own, <strong>a &minus; b = a + (&minus;b)</strong>. Make &minus;b with flip-and-add-1, then add normally, keeping only n bits.</p>
+
+<h3>Example 1: 01111111 &minus; 76, in 8 bits</h3>
+<div class="eq">76            = 01001100
+flip          = 10110011
+add 1  &rarr;  &minus;76 = 10110100</div>
+<pre class="sum"><span class="c">111111   </span>    carries
+ 01111111     127
++10110100   +(&minus;76)
+---------   ------
+<span class="x">1</span>00110011      51</pre>
+<p>The sum has a ninth bit. It is a carry out of the 8-bit width, and you simply drop it: the answer is <span class="m">00110011</span> = 51, which is 127 &minus; 76. Dropping that carry is correct; it is the odometer rolling past zero.</p>
+<p class="aside">The lecture slide labels this ninth bit "overflow". In two's complement it is called a <em>carry out</em>, and it is dropped, because the answer is right. Overflow means something else, below.</p>
+
+<h3>Example 2: 00110010 + (&minus;125), in 8 bits</h3>
+<div class="eq">125            = 01111101
+flip           = 10000010
+add 1  &rarr;  &minus;125 = 10000011</div>
+<pre class="sum"><span class="c">      1  </span>    carries
+ 00110010      50
++10000011   +(&minus;125)
+---------   -------
+ 10110101     &minus;75</pre>
+<p>No carry out this time. The leftmost bit is 1, so the result is negative. Its size is the two's complement of <span class="m">10110101</span>: flip to <span class="m">01001010</span>, add 1, get <span class="m">01001011</span> = 75. So the answer is &minus;75, and 50 &minus; 125 = &minus;75.</p>
+
+<h3>Overflow: when the answer does not fit</h3>
+<p>In 4 bits the largest number is 7. Ask for 6 + 3:</p>
+<pre class="sum"><span class="c"> 11  </span>    carries
+ 0110      6
++0011    + 3
+-----    ---
+ 1001     &minus;7 ?</pre>
+<p>The true answer, 9, does not fit in 4-bit two's complement, so the pattern wraps round into the negatives. This is <strong>overflow</strong> <span class="ar" lang="ar" dir="rtl">(الفيضان)</span>. The rule for spotting it: <em>overflow happens when you add two numbers of the same sign and the result has the opposite sign.</em> Two positives giving a negative, or two negatives giving a positive. Adding a positive and a negative can never overflow, because the answer lies between the two. You can see it on the bit board too: <span class="m">01111111</span> + 1 jumps from 127 to &minus;128.</p>
+
+<!-- 11 -->
+<h2 id="memory"><span class="n">11</span>Integers and characters in memory</h2>
+<p>Memory is a long row of bytes, each 8 bits. The bits have no meaning on their own. <span class="m">01000001</span> could be the number 65, the letter A, or part of a real number; it depends on what the program has decided that byte is.</p>
+
+<h3>Integers in 2 bytes</h3>
+<p>Store 92 in a 16-bit word. 92 = 64 + 16 + 8 + 4 = <span class="m">1011100</span>. Pad on the left to 16 bits and group into nibbles:</p>
+<div class="eq">92  = 0000 0000 0101 1100  =  0 0 5 C   &rarr;  005C</div>
+<p>Store &minus;94 in two's complement, 16 bits:</p>
+<div class="eq">94          = 0000 0000 0101 1110
+flip        = 1111 1111 1010 0001
+add 1       = 1111 1111 1010 0010  =  F F A 2  &rarr;  FFA2</div>
+<p>A check: FFA2 as unsigned is 65442, and 65536 &minus; 94 = 65442. That is the 2<sup>n</sup> &minus; x rule from section 9 with n = 16.</p>
+
+<h3>Characters: ASCII</h3>
+<p>Letters are stored as numbers. ASCII (American Standard Code for Information Interchange) is a table that gives each character a code: A = 65, B = 66, &hellip;, Z = 90; a = 97, b = 98, &hellip;; the digit "0" = 48; a space = 32. Compare a capital and small letter in binary:</p>
+<div class="eq">A = 65 = 0100 0001
+a = 97 = 0110 0001        differ by 32 = one bit</div>
+<p>Capital and small versions of every letter differ in exactly the bit worth 32. ASCII codes go from 0 to 127, so they need only 7 bits, which leaves the leftmost bit of a byte free.</p>
+
+<h3>The parity bit: a simple error check</h3>
+<p>When data is sent or stored, a bit can occasionally flip. A <strong>parity bit</strong> is one extra bit, chosen so that the total number of 1s is even (<em>even parity</em>) or odd (<em>odd parity</em>). Here it goes in that free leftmost bit.</p>
+<p>Store Q (ASCII 81) with even parity:</p>
+<div class="eq">81            = 0101 0001     three 1s (odd)
+even parity   &rarr; set the parity bit to 1 to make four 1s
+stored        = 1101 0001  =  D1</div>
+<p>With odd parity, Q already has an odd count, so the parity bit is 0 and the byte is <span class="m">0101 0001</span> = (51)<sub>16</sub>, still 81 in decimal.</p>
+<p>The receiver counts the 1s. If one bit flipped on the way, the count is now wrong and the error is caught. If two bits flipped, the count is right again and the error slips through. Parity also cannot tell you <em>which</em> bit flipped, so it detects a single error but cannot fix it.</p>
+
+<!-- 12 -->
+<h2 id="float"><span class="n">12</span>Real numbers: floating point</h2>
+<p>Integers cannot hold 26.75, or a very small value like 0.000003. For those, computers use <strong>floating point</strong> <span class="ar" lang="ar" dir="rtl">(الفاصلة العائمة)</span>, which is scientific notation in base 2. In decimal, 26750 = 2.675 &times; 10<sup>4</sup>: one digit before the point, and the power of 10 says where the point really belongs. In binary:</p>
+<div class="eq">26.75 = (11010.11)<sub>2</sub> = 1.101011 &times; 2&#8308;      (point moved 4 places left)</div>
+<p>Writing it with exactly one 1 before the point is called <em>normalising</em>. Every number except 0 can be normalised this way, because in binary the first nonzero digit is always 1.</p>
+
+<h3>The 32-bit layout (single precision, IEEE 754)</h3>
+<div class="fl" aria-label="32-bit layout">
+  <div class="s">S<small>sign, 1 bit</small></div>
+  <div class="e">EEEEEEEE<small>exponent, 8 bits</small></div>
+  <div class="f">MMMMMMMMMMMMMMMMMMMMMMM<small>mantissa (fraction), 23 bits</small></div>
+</div>
+<ul>
+  <li><strong>Sign:</strong> 0 for positive, 1 for negative.</li>
+  <li><strong>Exponent, with a bias of 127:</strong> the exponent can be negative (0.375 = 1.1 &times; 2<sup>&minus;2</sup>), but there is no separate sign bit for it. Instead we store <em>exponent + 127</em>. So the exponent 4 is stored as 131, and the exponent &minus;2 as 125. Why 127? It is roughly the middle of 0 to 255, so about half the stored values mean negative exponents and half mean positive ones. Stored values 0 and 255 are kept for special cases (zero, infinity and a few others), so ordinary numbers use exponents from &minus;126 to 127.</li>
+  <li><strong>Mantissa:</strong> the bits after the point in 1.xxxx. The leading 1 is not stored, because every normalised number has it; leaving it out buys one extra bit of precision. Pad with zeros on the right to fill 23 bits.</li>
+</ul>
+
+<h3>Worked: 26.75</h3>
+<div class="eq">1. binary:        26.75 = 11010.11
+2. normalise:     1.101011 &times; 2&#8308;
+3. sign:          positive  &rarr; 0
+4. exponent:      4 + 127 = 131 = 10000011
+5. mantissa:      101011 then 17 zeros = 10101100000000000000000
+6. the word:      0 10000011 10101100000000000000000
+7. in hex:        0100 0001 1101 0110 0000 0000 0000 0000 = 41D60000</div>
+
+<div class="widget" id="flt">
+  <h3>Try it: 32-bit float encoder</h3>
+  <p class="hint">Type a decimal number such as <code>26.75</code>, <code>-26.75</code>, <code>11.375</code> or <code>0.1</code>. The tool shows the three fields and the word in hex, and tells you if the number could not be stored exactly.</p>
+  <div class="row">
+    <label for="fl-in">Number</label>
+    <input type="text" id="fl-in" value="26.75" autocomplete="off" spellcheck="false" inputmode="decimal">
+    <button type="button" class="primary" id="fl-go">Encode</button>
+  </div>
+  <div class="out" id="fl-out" aria-live="polite"></div>
+</div>
+<p>Try 0.1 in the encoder. Its binary form repeats forever (section 7), and only 23 bits after the point are kept, so the stored value is a tiny bit off. With 24 bits of precision (23 stored plus the hidden 1), single precision keeps about 7 significant decimal digits.</p>
+
+<!-- 13 -->
+<h2 id="practice"><span class="n">13</span>Practice</h2>
+<p>Do each one on paper before opening the answer. Several are the homework questions from the lectures.</p>
+
+<p class="q"><b>1.</b> Convert (21)<sub>10</sub> and (15)<sub>10</sub> to binary, and (200)<sub>10</sub> to hex.</p>
+<details><summary>Show answer</summary><div>
+<p>21: 21&divide;2 = 10 r 1, 10&divide;2 = 5 r 0, 5&divide;2 = 2 r 1, 2&divide;2 = 1 r 0, 1&divide;2 = 0 r 1. Bottom-up: <span class="m">(10101)<sub>2</sub></span>. Check: 16 + 4 + 1 = 21.</p>
+<p>15: remainders 1, 1, 1, 1, so <span class="m">(1111)<sub>2</sub></span>. 15 = 16 &minus; 1, the largest 4-bit number.</p>
+<p>200: 200&divide;16 = 12 r 8, 12&divide;16 = 0 r 12. Remainder 12 is the digit C, so bottom-up: <span class="m">(C8)<sub>16</sub></span>. Check: 12&times;16 + 8 = 200.</p>
+</div></details>
+
+<p class="q"><b>2.</b> Convert 1010b, 0010b and 101b to decimal.</p>
+<details><summary>Show answer</summary><div>
+<p>1010b = 8 + 2 = 10. 0010b = 2 (leading zeros change nothing). 101b = 4 + 1 = 5.</p>
+</div></details>
+
+<p class="q"><b>3.</b> Convert to octal: 101101011<sub>2</sub> and 100101001<sub>2</sub>.</p>
+<details><summary>Show answer</summary><div>
+<p><span class="m">101 101 011 &rarr; (553)<sub>8</sub></span>. <span class="m">100 101 001 &rarr; (451)<sub>8</sub></span>. (Check the first: 5&times;64 + 5&times;8 + 3 = 363, and 256 + 64 + 32 + 8 + 2 + 1 = 363.)</p>
+</div></details>
+
+<p class="q"><b>4.</b> Convert to decimal: (72)<sub>8</sub>, (72)<sub>16</sub>, (DE1)<sub>16</sub>.</p>
+<details><summary>Show answer</summary><div>
+<p>(72)<sub>8</sub> = 7&times;8 + 2 = 58. (72)<sub>16</sub> = 7&times;16 + 2 = 114. (DE1)<sub>16</sub> = 13&times;256 + 14&times;16 + 1 = 3553. Same digits, different bases, different values.</p>
+</div></details>
+
+<p class="q"><b>5.</b> (AB)<sub>16</sub> = ( ? )<sub>2</sub></p>
+<details><summary>Show answer</summary><div>
+<p>A = 1010, B = 1011, so <span class="m">(10101011)<sub>2</sub></span>. (That is 171.)</p>
+</div></details>
+
+<p class="q"><b>6.</b> (23)<sub>4</sub> = ( ? )<sub>8</sub></p>
+<details><summary>Show answer</summary><div>
+<p>Via decimal: 2&times;4 + 3 = 11 = 1&times;8 + 3, so <span class="m">(13)<sub>8</sub></span>.</p>
+<p>Via binary: base 4 digits are 2 bits each, 2 = 10, 3 = 11, giving 1011; regroup in threes: 001 011 = (13)<sub>8</sub>.</p>
+</div></details>
+
+<p class="q"><b>7.</b> (35)<sub>7</sub> = ( ? )<sub>8</sub></p>
+<details><summary>Show answer</summary><div>
+<p>7 is not a power of 2, so go through decimal: 3&times;7 + 5 = 26. Then 26&divide;8 = 3 r 2, 3&divide;8 = 0 r 3, giving <span class="m">(32)<sub>8</sub></span>.</p>
+</div></details>
+
+<p class="q"><b>8.</b> (72E)<sub>16</sub> = ( ? )<sub>8</sub></p>
+<details><summary>Show answer</summary><div>
+<p>7 = 0111, 2 = 0010, E = 1110: <span class="m">0111 0010 1110</span>. Regroup in threes from the right: <span class="m">011 100 101 110</span> = <span class="m">(3456)<sub>8</sub></span>. (Both are 1838 in decimal.)</p>
+</div></details>
+
+<p class="q"><b>9.</b> Convert 37.375 to binary.</p>
+<details><summary>Show answer</summary><div>
+<p>37 = 32 + 4 + 1 = <span class="m">100101</span>. 0.375: &times;2 = 0.75 (0), &times;2 = 1.5 (1), &times;2 = 1.0 (1), so <span class="m">.011</span>. Answer: <span class="m">(100101.011)<sub>2</sub></span>.</p>
+</div></details>
+
+<p class="q"><b>10.</b> Convert 0.2 to binary. Why can't you finish?</p>
+<details><summary>Show answer</summary><div>
+<p><span class="m">0.0011 0011 0011&hellip;</span> After four steps the fraction is 0.2 again, so the bits repeat forever. 0.2 = 1/5, and 5 is not a power of 2.</p>
+</div></details>
+
+<p class="q"><b>11.</b> Write &minus;5 in 4-bit two's complement, and &minus;76 in 8-bit two's complement.</p>
+<details><summary>Show answer</summary><div>
+<p>&minus;5: <span class="m">0101 &rarr; 1010 &rarr; 1011</span>. Check: &minus;8 + 2 + 1 = &minus;5.</p>
+<p>&minus;76: <span class="m">01001100 &rarr; 10110011 &rarr; 10110100</span>. Check: &minus;128 + 32 + 16 + 4 = &minus;76.</p>
+</div></details>
+
+<p class="q"><b>12.</b> In 4-bit two's complement, work out 0101 + 0100. Is the answer correct?</p>
+<details><summary>Show answer</summary><div>
+<p><span class="m">0101 + 0100 = 1001</span>, which reads as &minus;7. Wrong: 5 + 4 = 9 does not fit in the range &minus;8 to 7. Two positives gave a negative, so this is overflow.</p>
+</div></details>
+
+<p class="q"><b>13.</b> In 8-bit two's complement, work out 45 &minus; 100.</p>
+<details><summary>Show answer</summary><div>
+<div class="eq">45            = 00101101
+100           = 01100100  &rarr; flip 10011011 &rarr; +1 = 10011100  (&minus;100)
+00101101 + 10011100 = 11001001</div>
+<p>No carry out. The leftmost bit is 1, so the answer is negative. Its size: flip <span class="m">00110110</span>, add 1, <span class="m">00110111</span> = 55. So the answer is &minus;55, as it should be. A positive plus a negative cannot overflow.</p>
+</div></details>
+
+<p class="q"><b>14.</b> Represent the integer &minus;1 in 2 bytes, in hex.</p>
+<details><summary>Show answer</summary><div>
+<p>1 = <span class="m">0000 0000 0000 0001</span>; flip: <span class="m">1111 1111 1111 1110</span>; add 1: <span class="m">1111 1111 1111 1111</span> = FFFF. (The odometer one step below zero.)</p>
+</div></details>
+
+<p class="q"><b>15.</b> Store your name in memory in ASCII with odd parity, in hex. Try it with the name "Sami".</p>
+<details><summary>Show answer</summary><div>
+<div class="tw"><table>
+  <tr><th>Char</th><th>ASCII</th><th>7-bit code in a byte</th><th>1s</th><th>Parity bit</th><th>Stored</th><th>Hex</th></tr>
+  <tr><td>S</td><td>83</td><td class="mono">0101 0011</td><td>4</td><td>1</td><td class="mono">1101 0011</td><td class="mono">D3</td></tr>
+  <tr><td>a</td><td>97</td><td class="mono">0110 0001</td><td>3</td><td>0</td><td class="mono">0110 0001</td><td class="mono">61</td></tr>
+  <tr><td>m</td><td>109</td><td class="mono">0110 1101</td><td>5</td><td>0</td><td class="mono">0110 1101</td><td class="mono">6D</td></tr>
+  <tr><td>i</td><td>105</td><td class="mono">0110 1001</td><td>4</td><td>1</td><td class="mono">1110 1001</td><td class="mono">E9</td></tr>
+</table></div>
+<p>Memory: <span class="m">D3 61 6D E9</span>. With odd parity, the bit is 1 only when the count of 1s is even. Now do your own name.</p>
+</div></details>
+
+<p class="q"><b>16.</b> Encode 11.375 as a 32-bit float.</p>
+<details><summary>Show answer</summary><div>
+<p>11.375 = <span class="m">1011.011</span> = <span class="m">1.011011 &times; 2<sup>3</sup></span>. Sign 0. Exponent 3 + 127 = 130 = <span class="m">10000010</span>. Mantissa <span class="m">01101100000000000000000</span>.</p>
+<p>Word, then the same bits in groups of 4, then hex:</p>
+<div class="eq">0 10000010 01101100000000000000000
+0100 0001 0011 0110 0000 0000 0000 0000
+= 41360000</div>
+<p>Check it in the encoder above.</p>
+</div></details>
+
+<footer>
+  Companion to COMP1310 Lectures 2.1 and 2.2 (Numbering Systems), Birzeit University, Dr. Hisham Ihshaish. Back to the <a href="/birzeit/comp1310/">COMP1310 course page</a>.
+</footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var Z0 = typeof BigInt === "function" ? BigInt(0) : 0;
+  var DIGITS = '0123456789ABCDEF';
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function sub(b) { return '<sub>' + b + '</sub>'; }
+  function errBox(msg) { return '<div class="err">' + esc(msg) + '</div>'; }
+
+  /* ---------- pure logic (also unit-tested in node) ---------- */
+  var L = {};
+  // decimal (BigInt) to base b: returns rows and digit string
+  L.toBaseSteps = function (n, b) {
+    var B = BigInt(b), rows = [], digits = '';
+    if (n === Z0) return { rows: [], digits: '0' };
+    while (n > Z0) {
+      var q = n / B, r = n % B;
+      rows.push({ n: n, q: q, r: Number(r) });
+      digits = DIGITS[Number(r)] + digits;
+      n = q;
+    }
+    return { rows: rows, digits: digits };
+  };
+  // parse digit string in base b; returns {ok, value(BigInt), terms} or {ok:false,msg}
+  L.fromBase = function (s, b) {
+    s = s.toUpperCase();
+    if (!/^[0-9A-F]+$/.test(s)) return { ok: false, msg: 'Use only the digits 0-9 and A-F, with no spaces or point.' };
+    var B = BigInt(b), v = Z0, terms = [];
+    for (var i = 0; i < s.length; i++) {
+      var d = DIGITS.indexOf(s[i]);
+      if (d >= b) return { ok: false, msg: 'The digit ' + s[i] + ' does not exist in base ' + b + '. Base ' + b + ' uses only 0 to ' + DIGITS[b - 1] + '.' };
+      var p = s.length - 1 - i, pv = B ** BigInt(p);
+      terms.push({ d: d, ch: s[i], p: p, pv: pv, prod: BigInt(d) * pv });
+      v = v * B + BigInt(d);
+    }
+    return { ok: true, value: v, terms: terms };
+  };
+  // number string in base 2/8/16 (optional point) -> {ok, intBits, fracBits}
+  L.toBinaryParts = function (s, base) {
+    s = s.trim().toUpperCase();
+    if (!/^[0-9A-F]*(\.[0-9A-F]*)?$/.test(s) || s === '' || s === '.') return { ok: false, msg: 'Type digits, with at most one point.' };
+    var w = base === 2 ? 1 : base === 8 ? 3 : 4;
+    var parts = s.split('.'), ip = parts[0], fp = parts.length > 1 ? parts[1] : '';
+    var all = ip + fp;
+    for (var i = 0; i < all.length; i++) {
+      var d = DIGITS.indexOf(all[i]);
+      if (d >= base) return { ok: false, msg: 'The digit ' + all[i] + ' does not exist in base ' + base + '.' };
+    }
+    if (ip.length * w > 64 || fp.length * w > 32) return { ok: false, msg: 'That is too long for this view. Keep it under 64 bits before the point and 32 after.' };
+    function expand(str) { var o = ''; for (var k = 0; k < str.length; k++) o += DIGITS.indexOf(str[k]).toString(2).padStart(w, '0'); return o; }
+    var ib = expand(ip).replace(/^0+/, ''), fb = expand(fp).replace(/0+$/, '');
+    if (ib === '') ib = '0';
+    return { ok: true, intBits: ib, fracBits: fb, digitsInt: ip, digitsFrac: fp, w: w };
+  };
+  // group binary parts into g-bit groups; returns {intGroups:[{bits,pad,digit}], fracGroups, str}
+  L.group = function (ib, fb, g) {
+    var ipad = (g - ib.length % g) % g, fpad = (g - fb.length % g) % g;
+    var I = '0'.repeat(ipad) + ib, F = fb + '0'.repeat(fpad);
+    var ig = [], fg = [], k;
+    for (k = 0; k < I.length; k += g) ig.push({ bits: I.slice(k, k + g), pad: k === 0 ? ipad : 0, padRight: 0, digit: DIGITS[parseInt(I.slice(k, k + g), 2)] });
+    for (k = 0; k < F.length; k += g) fg.push({ bits: F.slice(k, k + g), pad: 0, padRight: k + g === F.length ? fpad : 0, digit: DIGITS[parseInt(F.slice(k, k + g), 2)] });
+    var istr = ig.map(function (x) { return x.digit; }).join('').replace(/^0+(?=.)/, '');
+    var fstr = fg.map(function (x) { return x.digit; }).join('');
+    return { ig: ig, fg: fg, str: istr + (fstr ? '.' + fstr : '') };
+  };
+  // float32 encoding
+  L.MIN_NORMAL = Math.pow(2, -126);
+  L.float32 = function (s) {
+    s = s.trim();
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(s)) return { ok: false, msg: 'Type a decimal number such as 26.75, -0.5 or 6.02e23.' };
+    var sig = s.replace(/^[+-]/, '').replace(/[eE].*$/, '').replace('.', '').replace(/^0+/, '').replace(/0+$/, '');
+    if (sig.length > 15) return { ok: false, msg: 'Keep it to 15 significant digits or fewer.' };
+    var x = Number(s);
+    var f = Math.fround(x);
+    if (!isFinite(f)) return { ok: false, msg: 'That is too large for 32-bit floating point (the largest is about 3.4 × 10^38).' };
+    if (x !== 0 && (f === 0 || Math.abs(f) < L.MIN_NORMAL)) return { ok: false, msg: 'That is too close to zero for the normal format covered here (smallest is about 1.18 × 10^-38).' };
+    var dv = new DataView(new ArrayBuffer(4));
+    dv.setFloat32(0, f);
+    var bits = dv.getUint32(0) >>> 0;
+    var sign = bits >>> 31, ef = (bits >>> 23) & 255, mant = bits & 0x7fffff;
+    return {
+      ok: true, x: x, f: f, sign: sign, expField: ef, e: ef - 127,
+      mant: mant.toString(2).padStart(23, '0'),
+      expBits: ef.toString(2).padStart(8, '0'),
+      hex: bits.toString(16).toUpperCase().padStart(8, '0'),
+      isZero: f === 0, exact: f === x
+    };
+  };
+  if (typeof module !== 'undefined') { module.exports = L; return; }
+
+  /* ---------- bit board ---------- */
+  var v = 0;
+  var bitsEl = $('bb-bits'), btns = [];
+  for (var i = 7; i >= 0; i--) {
+    (function (k) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'bit' + (k === 3 ? ' gap' : '');
+      b.setAttribute('aria-label', 'bit worth ' + (1 << k));
+      b.innerHTML = '<span>0</span><small>' + (1 << k) + '</small>';
+      b.addEventListener('click', function () { v ^= (1 << k); bbMsg(''); bbRender(); });
+      bitsEl.appendChild(b);
+      btns[k] = b;
+    })(i);
+  }
+  function bbMsg(m) { $('bb-msg').textContent = m; }
+  function bbRender() {
+    for (var k = 0; k < 8; k++) {
+      var on = (v >> k) & 1;
+      btns[k].classList.toggle('on', !!on);
+      btns[k].firstChild.textContent = on;
+      btns[k].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    $('bb-u').textContent = v;
+    $('bb-h').textContent = v.toString(16).toUpperCase().padStart(2, '0');
+    $('bb-o').textContent = v.toString(8);
+    var s = v >= 128 ? v - 256 : v;
+    $('bb-s').textContent = (s < 0 ? '−' + (-s) : s) + (v >= 128 ? '  (−128 + ' + (v - 128) + ')' : '');
+  }
+  $('bb-inc').addEventListener('click', function () {
+    var old = v; v = (v + 1) & 255;
+    if (old === 255) bbMsg('Every bit rolled over to 0 and the carry fell off the left end: 255 + 1 does not fit in 8 bits. As a signed number, though, this is just −1 + 1 = 0.');
+    else if (old === 127) bbMsg('127 + 1: unsigned this is 128, but as a signed number it jumped to −128. That is overflow.');
+    else bbMsg('');
+    bbRender();
+  });
+  $('bb-dec').addEventListener('click', function () {
+    var old = v; v = (v + 255) & 255;
+    if (old === 0) bbMsg('0 − 1 rolled every bit back to 1. Unsigned that is 255; signed it is −1.');
+    else if (old === 128) bbMsg('−128 − 1 does not fit in 8-bit signed: it wrapped round to 127. Overflow again.');
+    else bbMsg('');
+    bbRender();
+  });
+  $('bb-flip').addEventListener('click', function () { v ^= 255; bbMsg('One’s complement: every bit flipped.'); bbRender(); });
+  $('bb-neg').addEventListener('click', function () {
+    var old = v; v = (256 - v) & 255;
+    if (old === 128) bbMsg('−128 has no positive partner in 8 bits (the largest is 127), so negating it gives −128 again.');
+    else if (old === 0) bbMsg('The negative of 0 is 0: two’s complement has only one zero.');
+    else bbMsg('Two’s complement: the signed value changed sign.');
+    bbRender();
+  });
+  $('bb-clr').addEventListener('click', function () { v = 0; bbMsg(''); bbRender(); });
+  bbRender();
+
+  /* ---------- converter ---------- */
+  var mode = 1;
+  var baseSel = $('cv-base');
+  for (var bb = 2; bb <= 16; bb++) {
+    var o = document.createElement('option');
+    o.value = bb; o.textContent = bb + (bb === 2 ? ' (binary)' : bb === 8 ? ' (octal)' : bb === 16 ? ' (hex)' : '');
+    if (bb === 2) o.selected = true;
+    baseSel.appendChild(o);
+  }
+  function setMode(m) {
+    mode = m;
+    $('cv-m1').setAttribute('aria-pressed', m === 1 ? 'true' : 'false');
+    $('cv-m2').setAttribute('aria-pressed', m === 2 ? 'true' : 'false');
+    $('cv-lab').textContent = m === 1 ? 'Decimal number' : 'Number in base';
+    $('cv-in').value = m === 1 ? '220' : 'DE1';
+    baseSel.value = m === 1 ? '2' : '16';
+    convert();
+  }
+  function convert() {
+    var out = $('cv-out'), s = $('cv-in').value.trim(), b = parseInt(baseSel.value, 10), h = '';
+    if (typeof BigInt !== 'function') { out.innerHTML = errBox('This converter needs a newer browser. The other tools on this page still work.'); return; }
+    if (mode === 1) {
+      if (!/^\d+$/.test(s)) { out.innerHTML = errBox('Type a whole number of 0 or more, using only the digits 0 to 9.'); return; }
+      if (s.length > 15) { out.innerHTML = errBox('Please keep it to 15 digits or fewer.'); return; }
+      var n = BigInt(s), r = L.toBaseSteps(n, b);
+      if (n === Z0) { out.innerHTML = '<p>0 is written 0 in every base. There is nothing to divide.</p><div class="result">(0)' + sub(10) + ' = (0)' + sub(b) + '</div>'; return; }
+      h += '<div class="tw"><table><tr><th>Divide</th><th>Quotient</th><th>Remainder</th>' + (b > 10 ? '<th>Digit</th>' : '') + '</tr>';
+      r.rows.forEach(function (row, idx) {
+        h += '<tr><td class="mono">' + row.n + ' ÷ ' + b + '</td><td class="mono">' + row.q + '</td><td class="mono">' + row.r + (idx === r.rows.length - 1 ? ' ↑' : '') + '</td>' + (b > 10 ? '<td class="mono">' + DIGITS[row.r] + '</td>' : '') + '</tr>';
+      });
+      h += '</table></div><p>Reading the remainders from the bottom up:</p>';
+      h += '<div class="result">(' + esc(n.toString()) + ')' + sub(10) + ' = (' + r.digits + ')' + sub(b) + '</div>';
+    } else {
+      if (s === '') { out.innerHTML = errBox('Type a number first.'); return; }
+      if (s.length > 16) { out.innerHTML = errBox('Please keep it to 16 digits or fewer.'); return; }
+      var p = L.fromBase(s, b);
+      if (!p.ok) { out.innerHTML = errBox(p.msg); return; }
+      h += '<div class="tw"><table><tr><th>Digit</th><th>Place value</th><th>Digit × place value</th></tr>';
+      p.terms.forEach(function (t) {
+        h += '<tr><td class="mono">' + t.ch + (t.d >= 10 ? ' (=' + t.d + ')' : '') + '</td><td class="mono">' + b + '<sup>' + t.p + '</sup> = ' + t.pv + '</td><td class="mono">' + t.prod + '</td></tr>';
+      });
+      h += '</table></div><p>Add the last column:</p>';
+      h += '<div class="result">(' + esc(s.toUpperCase()) + ')' + sub(b) + ' = ' + p.terms.map(function (t) { return t.prod; }).join(' + ') + ' = (' + p.value + ')' + sub(10) + '</div>';
+    }
+    out.innerHTML = h;
+  }
+  $('cv-m1').addEventListener('click', function () { setMode(1); });
+  $('cv-m2').addEventListener('click', function () { setMode(2); });
+  $('cv-go').addEventListener('click', convert);
+  $('cv-in').addEventListener('keydown', function (e) { if (e.key === 'Enter') convert(); });
+  baseSel.addEventListener('change', convert);
+  convert();
+
+  /* ---------- grouping ---------- */
+  function groupHTML(G, name, b) {
+    function cell(x) {
+      var bits = x.bits, inner;
+      if (x.pad) inner = '<span class="pad">' + bits.slice(0, x.pad) + '</span>' + bits.slice(x.pad);
+      else if (x.padRight) inner = bits.slice(0, bits.length - x.padRight) + '<span class="pad">' + bits.slice(bits.length - x.padRight) + '</span>';
+      else inner = bits;
+      return '<div class="grp"><div class="b">' + inner + '</div><div class="d">' + x.digit + '</div></div>';
+    }
+    var h = '<h3>' + name + '</h3><div class="groups">' + G.ig.map(cell).join('');
+    if (G.fg.length) h += '<span class="pt">.</span>' + G.fg.map(cell).join('');
+    h += '</div><div class="result">= (' + G.str + ')' + sub(b) + '</div>';
+    return h;
+  }
+  function doGroup() {
+    var out = $('gp-out'), b = parseInt($('gp-base').value, 10);
+    var r = L.toBinaryParts($('gp-in').value, b);
+    if (!r.ok) { out.innerHTML = errBox(r.msg); return; }
+    var bin = r.intBits + (r.fracBits ? '.' + r.fracBits : ''), h = '';
+    if (b !== 2) h += '<p>Each ' + (b === 8 ? 'octal' : 'hex') + ' digit becomes exactly ' + r.w + ' bits, so in binary it is:</p>';
+    else h += '<p>Grouping starts at the point and moves outwards, so padding goes on the far left and far right.</p>';
+    h += '<div class="result">(' + bin + ')' + sub(2) + '</div>';
+    if (b !== 8) h += groupHTML(L.group(r.intBits, r.fracBits, 3), 'Groups of 3 → octal', 8);
+    if (b !== 16) h += groupHTML(L.group(r.intBits, r.fracBits, 4), 'Groups of 4 → hex', 16);
+    out.innerHTML = h;
+  }
+  $('gp-go').addEventListener('click', doGroup);
+  $('gp-in').addEventListener('keydown', function (e) { if (e.key === 'Enter') doGroup(); });
+  $('gp-base').addEventListener('change', doGroup);
+  doGroup();
+
+  /* ---------- float ---------- */
+  function doFloat() {
+    var out = $('fl-out'), r = L.float32($('fl-in').value);
+    if (!r.ok) { out.innerHTML = errBox(r.msg); return; }
+    var h = '';
+    if (r.isZero) {
+      h += '<p>Zero cannot be normalised (there is no leading 1), so it is a special case: exponent field and mantissa all 0' + (r.sign ? ', sign 1 for −0' : '') + '.</p>';
+    } else {
+      var m = r.mant.replace(/0+$/, ''), es = r.e < 0 ? '\u2212' + (-r.e) : String(r.e);
+      h += '<p>Normalised: <span class="m">' + (r.sign ? '−' : '') + '1.' + (m || '0') + ' × 2<sup>' + es + '</sup></span>' + (r.exact ? '' : ' (mantissa rounded to 23 bits)') + '</p>';
+      h += '<p>Sign: ' + (r.sign ? 'negative → 1' : 'positive → 0') + '. Exponent: ' + es + ' + 127 = ' + r.expField + ' = <span class="m">' + r.expBits + '</span>.</p>';
+    }
+    h += '<div class="fl"><div class="s">' + r.sign + '<small>sign</small></div><div class="e">' + r.expBits + '<small>exponent</small></div><div class="f">' + r.mant + '<small>mantissa</small></div></div>';
+    var all = String(r.sign) + r.expBits + r.mant, nib = [];
+    for (var k = 0; k < 32; k += 4) nib.push(all.slice(k, k + 4));
+    h += '<p class="m" style="white-space:normal">' + nib.join(' ') + '</p>';
+    h += '<div class="result">' + r.hex.split('').join(' ') + ' → ' + r.hex + '</div>';
+    if (!r.exact) h += '<p class="note"><b>Not exact.</b> This number has no finite binary form with 24 significant bits, so the nearest value that fits is stored: about ' + r.f + '.</p>';
+    else if (!r.isZero) h += '<p class="note"><b>Exact.</b> This number fits in 24 significant bits, so it is stored with no error.</p>';
+    out.innerHTML = h;
+  }
+  $('fl-go').addEventListener('click', doFloat);
+  $('fl-in').addEventListener('keydown', function (e) { if (e.key === 'Enter') doFloat(); });
+  doFloat();
+})();
+</script>
+</body>
+</html>
