@@ -11,6 +11,48 @@
             }
           }
         }
+      },
+      "grouping": {
+        "2026T1": {
+          "pins": {
+            "$sid": {
+              ".write": "auth != null && now < 1794348000000 && !data.exists() && $sid.matches(/^(ROSTER_IDS)$/)",
+              ".validate": "newData.isString() && newData.val().matches(/^[0-9]{6}$/)"
+            }
+          },
+          "sessions": {
+            "$uid": {
+              ".read": "auth != null && auth.uid === $uid",
+              ".write": "auth != null && auth.uid === $uid",
+              ".validate": "newData.hasChildren(['sid','pin']) && newData.child('pin').val() === newData.parent().parent().child('pins/' + newData.child('sid').val()).val()"
+            }
+          },
+          "members": {
+            ".read": "auth != null",
+            "$sid": {
+              ".write": "auth != null && now < 1794348000000 && root.child('comp433/grouping/2026T1/sessions/'+auth.uid+'/sid').val() === $sid && (!data.exists() || (newData.exists() && newData.child('g').val() === data.child('g').val() && newData.child('s').val() === data.child('s').val()) || newData.parent().parent().child('slots/' + data.child('g').val() + '/' + data.child('s').val()).val() !== $sid)",
+              ".validate": "newData.hasChildren(['g','s']) && newData.child('g').isString() && newData.child('g').val().matches(/^[A-L]$/) && newData.child('s').isString() && newData.child('s').val().matches(/^[1-5]$/) && newData.parent().parent().child('slots/' + newData.child('g').val() + '/' + newData.child('s').val()).val() === $sid",
+              "g": {
+                ".validate": true
+              },
+              "s": {
+                ".validate": true
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "slots": {
+            ".read": "auth != null",
+            "$g": {
+              "$s": {
+                ".write": "auth != null && now < 1794348000000 && ((!data.exists() && newData.val() === root.child('comp433/grouping/2026T1/sessions/'+auth.uid+'/sid').val() && newData.parent().parent().parent().child('members/' + newData.val() + '/g').val() === $g && newData.parent().parent().parent().child('members/' + newData.val() + '/s').val() === $s) || (data.exists() && !newData.exists() && data.val() === root.child('comp433/grouping/2026T1/sessions/'+auth.uid+'/sid').val() && (newData.parent().parent().parent().child('members/' + data.val() + '/g').val() !== $g || newData.parent().parent().parent().child('members/' + data.val() + '/s').val() !== $s)))",
+                ".validate": "newData.isString() && $g.matches(/^[A-L]$/) && $s.matches(/^[1-5]$/)"
+              }
+            }
+          }
+        }
       }
     },
     "presentations": {
