@@ -23,8 +23,9 @@ birzeit/**/Sample phase*.pdf
 birzeit/**/sample phase*.pdf
 
 # Private folders and exam drafts (never publish)
-birzeit/**/_Private/
-birzeit/**/_private/
+**/_private/
+**/_Private/
+**/_PRIVATE/
 birzeit/**/*Exam*.pdf
 birzeit/**/*exam*.docx
 
