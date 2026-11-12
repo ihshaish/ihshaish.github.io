@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.16f785cdb553c8c4431db6775122af35.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/wowchemy.878ade60c50fe203421559bd8c505828.css" />
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_3.png" />
+
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="author" content="Hisham Ihshaish" />
+  <meta name="description" content="COMP233 Quiz 1 (Section 4, First Semester 2026/2027): the paper, worked solutions and marking guide." />
+
+  <title>COMP233 Quiz 1 &amp; Answers (Section 4, 2026/27)</title>
+
+  <style>
+    :root {
+      --c-ink: #222;
+      --c-text: #333;
+      --c-muted: #6b7280;
+      --c-line: #dde1e6;
+      --c-soft: #f5f7f9;
+      --c-card: #fff;
+      --c-accent: #1565c0;
+      --c-accent-soft: #eef4fb;
+      --c-ok: #2e7d32;
+    }
+    body.dark {
+      --c-ink: #eceff1;
+      --c-text: #dde1e6;
+      --c-muted: #9aa4ae;
+      --c-line: #34384a;
+      --c-soft: #1c1d2b;
+      --c-card: #161724;
+      --c-accent: #64b5f6;
+      --c-accent-soft: #1b2a3d;
+      --c-ok: #81c784;
+    }
+
+    .quiz-hero { text-align: center; padding: 30px 0 6px; }
+    .quiz-hero .eyebrow { font-size: 0.78rem; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .quiz-hero h1 { font-size: 1.8rem; font-weight: 700; color: var(--c-ink); margin-bottom: 6px; }
+    .quiz-hero .subtitle { font-size: 1rem; color: var(--c-muted); margin-bottom: 12px; }
+    .quiz-hero .back-link { font-size: 0.88rem; color: var(--c-accent); text-decoration: none; font-weight: 700; }
+    .quiz-hero .back-link:hover { text-decoration: underline; }
+
+    .meta-card { border: 1px solid var(--c-line); background: var(--c-soft); border-radius: 8px; padding: 16px 22px; margin: 24px 0 8px; }
+    .meta-card p { margin: 0 0 12px; font-size: 0.95rem; line-height: 1.65; color: var(--c-text); }
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 22px; font-size: 0.92rem; }
+    .meta-label { font-size: 0.7rem; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .meta-value { color: var(--c-ink); font-weight: 600; }
+
+    .downloads { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 6px; }
+    .downloads a { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border: 1px solid var(--c-line); border-radius: 6px; background: var(--c-card); color: var(--c-ink); font-size: 0.88rem; font-weight: 600; text-decoration: none; }
+    .downloads a:hover { border-color: var(--c-accent); color: var(--c-accent); text-decoration: none; }
+    .downloads a i { color: var(--c-accent); }
+    .toggle-all { margin-left: auto; padding: 7px 14px; border: 1px solid var(--c-line); border-radius: 6px; background: var(--c-card); color: var(--c-muted); font-size: 0.86rem; font-weight: 600; cursor: pointer; }
+    .toggle-all:hover { color: var(--c-accent); border-color: var(--c-accent); }
+
+    .notation { font-size: 0.86rem; color: var(--c-muted); margin: 10px 0 0; line-height: 1.6; }
+
+    .question-block { margin-top: 36px; }
+    .q-head { display: flex; align-items: baseline; gap: 14px; padding-bottom: 8px; margin-bottom: 12px; border-bottom: 2px solid var(--c-ink); }
+    .q-num { font-family: 'Roboto Mono', monospace; font-weight: 700; color: var(--c-ink); font-size: 1rem; }
+    .q-title { flex: 1; font-size: 1.1rem; font-weight: 700; color: var(--c-ink); }
+    .q-marks { font-size: 0.86rem; color: var(--c-muted); font-weight: 600; white-space: nowrap; }
+    .q-intro { font-size: 0.96rem; color: var(--c-text); line-height: 1.65; margin: 0 0 14px; }
+
+    .subq { background: var(--c-card); border: 1px solid var(--c-line); border-radius: 8px; padding: 16px 20px; margin-bottom: 14px; }
+    .subq-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .subq-label { font-size: 0.8rem; font-weight: 700; color: var(--c-ink); letter-spacing: 0.4px; }
+    .subq-marks { font-size: 0.78rem; color: var(--c-muted); font-weight: 600; }
+    .subq-stmt { font-size: 0.96rem; color: var(--c-text); line-height: 1.65; margin-bottom: 12px; }
+    .subq-stmt ol, .subq-stmt ul { margin: 6px 0 0; padding-left: 26px; }
+    .subq-stmt blockquote { margin: 8px 0; padding: 4px 14px; border-left: 3px solid var(--c-line); font-style: italic; color: var(--c-text); }
+    .mono, code { font-family: 'Roboto Mono', monospace; font-size: 0.92em; background: var(--c-soft); color: var(--c-ink); padding: 1px 5px; border-radius: 3px; }
+    .formula { font-family: 'Roboto Mono', monospace; background: var(--c-soft); padding: 8px 14px; border-radius: 6px; margin: 8px 0; color: var(--c-ink); }
+
+    .solution-btn { background: var(--c-card); color: var(--c-accent); border: 1px solid var(--c-accent); padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+    .solution-btn:hover, .solution-btn.open { background: var(--c-accent); color: #fff; }
+    .solution { display: none; margin-top: 14px; padding: 14px 18px; background: var(--c-soft); border-left: 3px solid var(--c-ok); border-radius: 0 6px 6px 0; font-size: 0.93rem; line-height: 1.7; color: var(--c-text); }
+    .solution.open { display: block; }
+    .solution h5 { margin: 0 0 6px; font-size: 0.74rem; font-weight: 700; color: var(--c-ok); text-transform: uppercase; letter-spacing: 0.6px; }
+    .solution p { margin: 6px 0; }
+    .solution .mono, .solution code { background: var(--c-card); }
+    .solution .formula { background: var(--c-card); }
+    .answer-line { margin: 8px 0; }
+    .answer-line .lbl { display: inline-block; min-width: 150px; font-weight: 700; color: var(--c-ink); }
+
+    .steps { background: var(--c-card); border-radius: 6px; padding: 8px 14px; margin: 8px 0; overflow-x: auto; }
+    .step-row { display: grid; grid-template-columns: minmax(230px, max-content) 1fr; gap: 16px; padding: 3px 0; }
+    .step-row .form { font-family: 'Roboto Mono', monospace; font-size: 0.9rem; color: var(--c-ink); white-space: nowrap; }
+    .step-row .reason { font-style: italic; color: var(--c-muted); font-size: 0.86rem; }
+    .deriv .step-row { grid-template-columns: 2.2em minmax(90px, max-content) 1fr; }
+    .deriv .num { font-family: 'Roboto Mono', monospace; color: var(--c-muted); font-size: 0.88rem; }
+
+    .truth-table { border-collapse: collapse; font-family: 'Roboto Mono', monospace; font-size: 0.86rem; margin: 10px 0; background: var(--c-card); }
+    .truth-table th, .truth-table td { padding: 5px 12px; border: 1px solid var(--c-line); text-align: center; color: var(--c-ink); }
+    .truth-table th { font-weight: 700; background: var(--c-soft); white-space: nowrap; }
+    .truth-table .cmp { background: var(--c-accent-soft); font-weight: 700; }
+    .truth-table tr.diff-row td { border-top: 2px solid var(--c-muted); border-bottom: 2px solid var(--c-muted); }
+
+    .marking { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--c-line); font-size: 0.85rem; color: var(--c-muted); line-height: 1.6; }
+    .marking strong { color: var(--c-text); }
+    .marking ul { margin: 4px 0 0; padding-left: 22px; }
+
+    .summary { margin-top: 36px; padding: 14px 20px; border: 1px solid var(--c-line); background: var(--c-soft); border-radius: 8px; font-size: 0.92rem; line-height: 1.65; color: var(--c-text); }
+
+    @media (max-width: 640px) {
+      .quiz-hero h1 { font-size: 1.4rem; }
+      .subq { padding: 14px 14px; }
+      .step-row { grid-template-columns: 1fr; gap: 0; }
+      .step-row .form { white-space: normal; }
+      .deriv .step-row { grid-template-columns: 2.2em 1fr; }
+      .deriv .step-row .reason { grid-column: 2; }
+      .answer-line .lbl { display: block; }
+      .toggle-all { margin-left: 0; }
+    }
+
+    @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+    @media print {
+      .page-header, .page-footer, .solution-btn, .toggle-all, .downloads, .quiz-hero .back-link { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .page-body { padding-top: 0 !important; }
+      .home-section { padding-top: 0 !important; }
+      .subq { break-inside: avoid; page-break-inside: avoid; }
+      .solution { display: block !important; }
+      a { color: inherit !important; text-decoration: none !important; }
+    }
+  </style>
+  <script src="/birzeit/gate.js"></script>
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" class="page-wrapper">
+
+  <script src="/js/wowchemy-init.min.ec9d49ca50e4b80bdb08f0417a28ed84.js"></script>
+
+  <div class="page-header header--fixed">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+        <div class="container-xl">
+          <div class="d-none d-lg-inline-flex"><a class="navbar-brand" href="/">Academic</a></div>
+          <button type="button" class="navbar-toggler" data-toggle="collapse"
+                  data-target="#navbar-content" aria-controls="navbar-content"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span><i class="fas fa-bars"></i></span>
+          </button>
+          <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+            <ul class="navbar-nav d-md-inline-flex">
+              <li class="nav-item"><a class="nav-link" href="/#about"><span>Home</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/"><span>Birzeit University</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/birzeit/comp233/"><span>COMP233</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="/#projects"><span>Projects</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="https://scholar.google.com/citations?user=TvDl_aoAAAAJ&hl=es&oi=ao" target="_blank" rel="noopener"><span>Publications</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+  <div class="page-body">
+    <section class="home-section wg-blank" style="padding-top: 80px;">
+      <div class="container" style="max-width: 900px;">
+
+        <div class="quiz-hero">
+          <div class="eyebrow">COMP233 &middot; Section 4 &middot; First Semester 2026/2027</div>
+          <h1>Quiz 1: Paper and Worked Solutions</h1>
+          <div class="subtitle">Chapters 2 and 3 &middot; 100 points &middot; 3 questions</div>
+          <a class="back-link" href="/birzeit/comp233/"><i class="fas fa-arrow-left"></i> Back to COMP233</a>
+        </div>
+
+        <div class="meta-card">
+          <p>Every question below is reproduced word for word from the paper you sat. Under each part you will find my worked solution and the marking guide used to grade it. Try each part on paper first, then open the solution and compare your steps with the marking guide.</p>
+          <div class="meta-grid">
+            <div class="meta-item"><div class="meta-label">Section</div><div class="meta-value">4</div></div>
+            <div class="meta-item"><div class="meta-label">Covers</div><div class="meta-value">Chapters 2 and 3 (2.1&ndash;2.3, 3.1&ndash;3.3)</div></div>
+            <div class="meta-item"><div class="meta-label">Marks</div><div class="meta-value">Q1: 20 &middot; Q2: 35 &middot; Q3: 45</div></div>
+            <div class="meta-item"><div class="meta-label">Time on paper</div><div class="meta-value">30 minutes</div></div>
+          </div>
+          <div class="downloads">
+            <a href="/birzeit/comp233/COMP233_Quiz1_Sec4_Paper.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Quiz paper (PDF)</a>
+            <a href="/birzeit/comp233/COMP233_Quiz1_Sec4_Solutions.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Answer key &amp; marking guide (PDF)</a>
+            <button type="button" class="toggle-all" id="toggle-all">Show all solutions</button>
+          </div>
+          <p class="notation">Notation: <code>¬</code> is &ldquo;not&rdquo;; lower-case <code>c</code> is a contradiction (not the course set <code>C</code> in Q3). In marking, <code>~</code> or <code>∼</code> for <code>¬</code>, and <code>∴</code> or &ldquo;therefore&rdquo; for a conclusion, were all accepted. Any logically equivalent answer earned full marks unless a part says otherwise.</p>
+        </div>
+
+        <!-- ==================== Q1 ==================== -->
+        <div class="question-block" id="q1">
+          <div class="q-head">
+            <div class="q-num">Q1</div>
+            <div class="q-title">Translation, contrapositive and negation</div>
+            <div class="q-marks">20 pts</div>
+          </div>
+          <p class="q-intro">Let <code>p</code> = &ldquo;The battery is charged&rdquo;, <code>q</code> = &ldquo;The device turns on&rdquo;, and <code>r</code> = &ldquo;The device is faulty.&rdquo;</p>
+
+          <div class="subq" id="q1a">
+            <div class="subq-head"><div class="subq-label">Q1.a</div><div class="subq-marks">10 pts (5 each)</div></div>
+            <div class="subq-stmt">Formalise each statement in symbols:
+              <ol type="i">
+                <li>A charged battery is sufficient for the device to turn on.</li>
+                <li>Neither is the battery charged nor does the device turn on.</li>
+              </ol>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q1a">Show solution</button>
+            <div class="solution" id="sol-q1a">
+              <h5>Worked solution</h5>
+              <div class="answer-line"><span class="lbl">(i)</span> <code>p → q</code> &nbsp;(equivalently <code>¬q → ¬p</code>)</div>
+              <p>&ldquo;<em>p</em> is sufficient for <em>q</em>&rdquo; means <code>p → q</code>: whenever the battery is charged, the device turns on.</p>
+              <div class="answer-line"><span class="lbl">(ii)</span> <code>¬p ∧ ¬q</code> &nbsp;(equivalently <code>¬(p ∨ q)</code>)</div>
+              <p>&ldquo;Neither A nor B&rdquo; means &ldquo;not A and not B&rdquo;.</p>
+              <div class="marking">
+                <strong>Marking guide (10 pts).</strong>
+                <ul>
+                  <li><strong>(i) 5 pts.</strong> 0 pts for <code>q → p</code> (direction reversed, which would be &ldquo;necessary&rdquo;). Full marks for any equivalent form.</li>
+                  <li><strong>(ii) 5 pts.</strong> 2 pts for <code>¬p ∨ ¬q</code> or <code>¬(p ∧ q)</code>; 0 pts for other connectives.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="subq" id="q1b">
+            <div class="subq-head"><div class="subq-label">Q1.b</div><div class="subq-marks">10 pts (5 each)</div></div>
+            <div class="subq-stmt">For the proposition &ldquo;If the battery is charged and the device does not turn on, then the device is faulty&rdquo;, write its contrapositive and its negation in symbols. In your final answers, <code>¬</code> should apply only to single variables.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q1b">Show solution</button>
+            <div class="solution" id="sol-q1b">
+              <h5>Worked solution</h5>
+              <div class="answer-line"><span class="lbl">Statement</span> <code>(p ∧ ¬q) → r</code></div>
+              <div class="answer-line"><span class="lbl">Contrapositive</span> <code>¬r → ¬(p ∧ ¬q)</code> &nbsp;≡&nbsp; <code>¬r → (¬p ∨ q)</code></div>
+              <p>Swap and negate both sides, then apply De Morgan&rsquo;s law and double negation so that <code>¬</code> sits on single variables.</p>
+              <div class="answer-line"><span class="lbl">Negation</span> <code>¬((p ∧ ¬q) → r)</code> &nbsp;≡&nbsp; <code>(p ∧ ¬q) ∧ ¬r</code> &nbsp;≡&nbsp; <code>p ∧ ¬q ∧ ¬r</code></div>
+              <p>The negation of <code>A → B</code> is <code>A ∧ ¬B</code>: the hypothesis holds and the conclusion fails. It is not a conditional.</p>
+              <div class="marking">
+                <strong>Marking guide (10 pts).</strong>
+                <ul>
+                  <li><strong>Contrapositive, 5 pts:</strong> 3 for the correct structure <code>¬r → ¬(p ∧ ¬q)</code>, 2 for applying De Morgan&rsquo;s law and double negation to reach <code>¬p ∨ q</code>. 0 pts for the converse or inverse.</li>
+                  <li><strong>Negation, 5 pts:</strong> 2 for <code>¬((p ∧ ¬q) → r)</code> without expansion; full marks for <code>p ∧ ¬q ∧ ¬r</code>. 0 pts if the negation is written as a conditional.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== Q2 ==================== -->
+        <div class="question-block" id="q2">
+          <div class="q-head">
+            <div class="q-num">Q2</div>
+            <div class="q-title">Truth table, simplification and rules of inference</div>
+            <div class="q-marks">35 pts</div>
+          </div>
+          <p class="notation" style="margin: 0 0 12px;">In Q2, <code>p</code>, <code>q</code>, <code>r</code>, <code>s</code> are statement variables; they do not carry the battery meanings from Q1.</p>
+
+          <div class="subq" id="q2a">
+            <div class="subq-head"><div class="subq-label">Q2.a</div><div class="subq-marks">15 pts</div></div>
+            <div class="subq-stmt">Use a complete truth table to check whether <code>p → (q ∨ r)</code> and <code>(p ∧ ¬q) → r</code> are logically equivalent. Explain your conclusion.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2a">Show solution</button>
+            <div class="solution" id="sol-q2a">
+              <h5>Worked solution</h5>
+              <p>Three variables give <code>2³ = 8</code> rows. The two columns being compared are shaded.</p>
+              <div style="overflow-x:auto;">
+                <table class="truth-table">
+                  <thead>
+                    <tr><th>p</th><th>q</th><th>r</th><th>q ∨ r</th><th class="cmp">p → (q ∨ r)</th><th>¬q</th><th>p ∧ ¬q</th><th class="cmp">(p ∧ ¬q) → r</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>T</td><td>T</td><td>T</td><td>T</td><td class="cmp">T</td><td>F</td><td>F</td><td class="cmp">T</td></tr>
+                    <tr><td>T</td><td>T</td><td>F</td><td>T</td><td class="cmp">T</td><td>F</td><td>F</td><td class="cmp">T</td></tr>
+                    <tr><td>T</td><td>F</td><td>T</td><td>T</td><td class="cmp">T</td><td>T</td><td>T</td><td class="cmp">T</td></tr>
+                    <tr class="diff-row"><td>T</td><td>F</td><td>F</td><td>F</td><td class="cmp">F</td><td>T</td><td>T</td><td class="cmp">F</td></tr>
+                    <tr><td>F</td><td>T</td><td>T</td><td>T</td><td class="cmp">T</td><td>F</td><td>F</td><td class="cmp">T</td></tr>
+                    <tr><td>F</td><td>T</td><td>F</td><td>T</td><td class="cmp">T</td><td>F</td><td>F</td><td class="cmp">T</td></tr>
+                    <tr><td>F</td><td>F</td><td>T</td><td>T</td><td class="cmp">T</td><td>T</td><td>F</td><td class="cmp">T</td></tr>
+                    <tr><td>F</td><td>F</td><td>F</td><td>F</td><td class="cmp">T</td><td>T</td><td>F</td><td class="cmp">T</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Conclusion.</strong> The columns for <code>p → (q ∨ r)</code> and <code>(p ∧ ¬q) → r</code> agree in every row. Both are F only in the row <code>p = T, q = F, r = F</code> (outlined) and T elsewhere, so the two statement forms are <strong>logically equivalent</strong>.</p>
+              <div class="marking">
+                <strong>Marking guide (15 pts).</strong>
+                <ul>
+                  <li><strong>2 pts</strong>: all eight rows of truth-value combinations.</li>
+                  <li><strong>3 pts</strong>: the columns <code>q ∨ r</code> and <code>p → (q ∨ r)</code>.</li>
+                  <li><strong>3 pts</strong>: the columns <code>¬q</code> and <code>p ∧ ¬q</code>.</li>
+                  <li><strong>3 pts</strong>: the column <code>(p ∧ ¬q) → r</code>.</li>
+                  <li><strong>4 pts</strong>: the conclusion stating equivalence because the two final columns are identical in every row.</li>
+                </ul>
+                Deduct 1 pt per wrong cell within a column block (minimum 0 for that block). A table with only 4 rows earns at most 5 pts in total. A conclusion with no comparison of the columns earns at most 2 of the 4 pts. If the table is missing entirely: 0 pts.
+              </div>
+            </div>
+          </div>
+
+          <div class="subq" id="q2b">
+            <div class="subq-head"><div class="subq-label">Q2.b</div><div class="subq-marks">10 pts</div></div>
+            <div class="subq-stmt">Simplify <code>(p → q) ∧ (p → ¬q)</code> using logical equivalences. Name the law used at each step. Do not use a truth table.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2b">Show solution</button>
+            <div class="solution" id="sol-q2b">
+              <h5>Worked solution</h5>
+              <div class="steps">
+                <div class="step-row"><span class="form">(p → q) ∧ (p → ¬q)</span><span class="reason">given</span></div>
+                <div class="step-row"><span class="form">≡ (¬p ∨ q) ∧ (¬p ∨ ¬q)</span><span class="reason">implication law (p → q ≡ ¬p ∨ q), applied twice</span></div>
+                <div class="step-row"><span class="form">≡ ¬p ∨ (q ∧ ¬q)</span><span class="reason">distributive law</span></div>
+                <div class="step-row"><span class="form">≡ ¬p ∨ c</span><span class="reason">negation law (q ∧ ¬q ≡ c)</span></div>
+                <div class="step-row"><span class="form">≡ ¬p</span><span class="reason">identity law (¬p ∨ c ≡ ¬p)</span></div>
+              </div>
+              <p><strong>Final answer:</strong> <code>(p → q) ∧ (p → ¬q) ≡ ¬p</code>.</p>
+              <div class="marking">
+                <strong>Marking guide (10 pts).</strong>
+                <ul>
+                  <li><strong>3 pts</strong>: the implication law step.</li>
+                  <li><strong>3 pts</strong>: the distributive step.</li>
+                  <li><strong>2 pts</strong>: the negation law.</li>
+                  <li><strong>2 pts</strong>: the identity law.</li>
+                </ul>
+                Deduct 1 pt per step whose law is not named (max &minus;3). Other correct orders of equivalent steps were accepted. 0 pts if a truth table is used instead.
+              </div>
+            </div>
+          </div>
+
+          <div class="subq" id="q2c">
+            <div class="subq-head"><div class="subq-label">Q2.c</div><div class="subq-marks">10 pts</div></div>
+            <div class="subq-stmt">From the premises <code>p → q</code>, <code>q → r</code>, <code>¬r</code>, and <code>p ∨ s</code>, derive <code>s</code> using rules of inference. Give the rule and the supporting premises or steps for each derived line.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q2c">Show solution</button>
+            <div class="solution" id="sol-q2c">
+              <h5>Worked solution</h5>
+              <p>One valid derivation (others are acceptable):</p>
+              <div class="steps deriv">
+                <div class="step-row"><span class="num">1.</span><span class="form">p → q</span><span class="reason">premise</span></div>
+                <div class="step-row"><span class="num">2.</span><span class="form">q → r</span><span class="reason">premise</span></div>
+                <div class="step-row"><span class="num">3.</span><span class="form">¬r</span><span class="reason">premise</span></div>
+                <div class="step-row"><span class="num">4.</span><span class="form">p ∨ s</span><span class="reason">premise</span></div>
+                <div class="step-row"><span class="num">5.</span><span class="form">¬q</span><span class="reason">modus tollens, 2 and 3</span></div>
+                <div class="step-row"><span class="num">6.</span><span class="form">¬p</span><span class="reason">modus tollens, 1 and 5</span></div>
+                <div class="step-row"><span class="num">7.</span><span class="form">s</span><span class="reason">elimination (disjunctive syllogism), 4 and 6</span></div>
+              </div>
+              <p><strong>Alternative route.</strong> 5. <code>p → r</code> by transitivity (hypothetical syllogism) from 1 and 2; 6. <code>¬p</code> by modus tollens from 5 and 3; 7. <code>s</code> by elimination from 4 and 6.</p>
+              <div class="marking">
+                <strong>Marking guide (10 pts).</strong>
+                <ul>
+                  <li><strong>3 pts</strong>: deriving <code>¬q</code> (or <code>p → r</code>).</li>
+                  <li><strong>3 pts</strong>: deriving <code>¬p</code>.</li>
+                  <li><strong>4 pts</strong>: deriving <code>s</code>.</li>
+                </ul>
+                Each derived line must name the rule and the lines it uses; deduct 1 pt per line with a missing or wrong rule name or missing references. 0 pts for a truth-table argument or for asserting <code>s</code> without steps.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== Q3 ==================== -->
+        <div class="question-block" id="q3">
+          <div class="q-head">
+            <div class="q-num">Q3</div>
+            <div class="q-title">Quantified statements and multiple quantifiers</div>
+            <div class="q-marks">45 pts</div>
+          </div>
+
+          <div class="subq" id="q3a">
+            <div class="subq-head"><div class="subq-label">Q3.a</div><div class="subq-marks">15 pts (5 each)</div></div>
+            <div class="subq-stmt">The domain is all employees of a company. Let <code>M(x)</code> = &ldquo;x is a manager,&rdquo; <code>T(x)</code> = &ldquo;x has completed the security training,&rdquo; and <code>K(x)</code> = &ldquo;x holds a key card.&rdquo; Consider:
+              <blockquote>&ldquo;Every manager who has completed the security training holds a key card.&rdquo;</blockquote>
+              Write in symbols: (i) the statement, (ii) its contrapositive, (iii) its negation, and also give the negation as an English sentence. <code>¬</code> should apply only to predicates.
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3a">Show solution</button>
+            <div class="solution" id="sol-q3a">
+              <h5>Worked solution</h5>
+              <div class="answer-line"><span class="lbl">(i) Statement</span> <code>∀x, (M(x) ∧ T(x)) → K(x)</code></div>
+              <div class="answer-line"><span class="lbl">(ii) Contrapositive</span> <code>∀x, ¬K(x) → ¬(M(x) ∧ T(x))</code> &nbsp;≡&nbsp; <code>∀x, ¬K(x) → (¬M(x) ∨ ¬T(x))</code></div>
+              <div class="answer-line"><span class="lbl">(iii) Negation</span> <code>∃x, M(x) ∧ T(x) ∧ ¬K(x)</code></div>
+              <p><strong>In English:</strong> &ldquo;There is a manager who has completed the security training but does not hold a key card.&rdquo; (Equivalently: some manager who completed the training has no key card.)</p>
+              <p>The negation of <code>∀x, A(x) → B(x)</code> is <code>∃x, A(x) ∧ ¬B(x)</code>: the quantifier flips and the conditional becomes a conjunction.</p>
+              <div class="marking">
+                <strong>Marking guide (15 pts).</strong>
+                <ul>
+                  <li><strong>(i) 5 pts.</strong> 2 pts if <code>∧</code> is used instead of <code>→</code> (<code>∀x, M(x) ∧ T(x) ∧ K(x)</code>); 3 pts if the hypothesis omits one of <code>M(x)</code>, <code>T(x)</code>.</li>
+                  <li><strong>(ii) 5 pts:</strong> 3 for the correct structure, 2 for De Morgan giving <code>¬M(x) ∨ ¬T(x)</code>. 0 pts for the converse or inverse.</li>
+                  <li><strong>(iii) 5 pts:</strong> 3 for the symbolic negation (must be <code>∃</code> with a conjunction; 1 pt if written <code>¬∀x, …</code> without moving the negation inside), 2 for a correct English sentence. 0 pts for the symbolic part if it contains <code>→</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <p class="q-intro" style="margin-top: 18px;">For parts (b)&ndash;(d), let <code>S</code> be a set of students and <code>C</code> a set of courses, and let <code>T(x, y)</code> mean &ldquo;student x has taken course y.&rdquo;</p>
+          <p class="notation" style="margin: -6px 0 14px;">Note: <code>T(x, y)</code> is a new two-place predicate, unrelated to <code>T(x)</code> in part (a).</p>
+
+          <div class="subq" id="q3b">
+            <div class="subq-head"><div class="subq-label">Q3.b</div><div class="subq-marks">10 pts (5 each)</div></div>
+            <div class="subq-stmt">Formalise, using quantifiers with the specified domains:
+              <ol type="i">
+                <li>Every course has been taken by at least one student.</li>
+                <li>Some student has taken every course.</li>
+              </ol>
+            </div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3b">Show solution</button>
+            <div class="solution" id="sol-q3b">
+              <h5>Worked solution</h5>
+              <div class="answer-line"><span class="lbl">(i)</span> <code>∀y ∈ C, ∃x ∈ S, T(x, y)</code></div>
+              <div class="answer-line"><span class="lbl">(ii)</span> <code>∃x ∈ S, ∀y ∈ C, T(x, y)</code></div>
+              <p>Read each formula from the left: in (i) the course is chosen first and the student may depend on it; in (ii) one student is fixed first and must work for every course.</p>
+              <div class="marking">
+                <strong>Marking guide (10 pts, 5 each).</strong> Quantifier order swapped: 2 pts. Domains missing or wrong (e.g., <code>x</code> ranging over <code>C</code>): deduct 1 pt. Both answers identical: at most 5 pts for the pair.
+              </div>
+            </div>
+          </div>
+
+          <div class="subq" id="q3c">
+            <div class="subq-head"><div class="subq-label">Q3.c</div><div class="subq-marks">10 pts</div></div>
+            <div class="subq-stmt">Write the negation of statement (ii) in symbols, with <code>¬</code> moved inside so that it applies only to <code>T(x, y)</code>. Then state the negation as an English sentence.</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3c">Show solution</button>
+            <div class="solution" id="sol-q3c">
+              <h5>Worked solution</h5>
+              <div class="steps">
+                <div class="step-row"><span class="form">¬(∃x ∈ S, ∀y ∈ C, T(x, y))</span><span class="reason">negation of (ii)</span></div>
+                <div class="step-row"><span class="form">≡ ∀x ∈ S, ¬(∀y ∈ C, T(x, y))</span><span class="reason">¬∃ becomes ∀¬</span></div>
+                <div class="step-row"><span class="form">≡ ∀x ∈ S, ∃y ∈ C, ¬T(x, y)</span><span class="reason">¬∀ becomes ∃¬</span></div>
+              </div>
+              <p><strong>In English:</strong> &ldquo;For every student there is at least one course that the student has not taken.&rdquo; (Equivalently: no student has taken every course.)</p>
+              <div class="marking">
+                <strong>Marking guide (10 pts).</strong>
+                <ul>
+                  <li><strong>6 pts</strong>: the symbolic form (each quantifier flipped and <code>¬</code> on <code>T(x, y)</code> only). 2 pts if written as <code>¬∃x ∈ S, ∀y ∈ C, T(x, y)</code> without moving <code>¬</code> inside; 3 pts if one quantifier is not flipped.</li>
+                  <li><strong>4 pts</strong>: the English sentence. It must express &ldquo;for every student, some course not taken&rdquo;; &ldquo;no student has taken any course&rdquo; earns 0 for the English part.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="subq" id="q3d">
+            <div class="subq-head"><div class="subq-label">Q3.d</div><div class="subq-marks">10 pts</div></div>
+            <div class="subq-stmt">Let <code>S = {Ali, Dana, Noor}</code> and <code>C = {Logic, Algebra}</code>. The only courses taken are: Ali took Logic, Dana took Algebra, and Noor took Logic. Determine the truth value of statements (i) and (ii) from part (b), and justify each. What does this example show about whether (i) implies (ii)?</div>
+            <button type="button" class="solution-btn" data-toggle="sol-q3d">Show solution</button>
+            <div class="solution" id="sol-q3d">
+              <h5>Worked solution</h5>
+              <div style="overflow-x:auto;">
+                <table class="truth-table">
+                  <thead><tr><th>Has x taken y?</th><th>Logic</th><th>Algebra</th></tr></thead>
+                  <tbody>
+                    <tr><th>Ali</th><td>T</td><td>F</td></tr>
+                    <tr><th>Dana</th><td>F</td><td>T</td></tr>
+                    <tr><th>Noor</th><td>T</td><td>F</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>(i) True.</strong> Each course has at least one student: Logic was taken by Ali (and Noor); Algebra was taken by Dana. In the table, every column contains a T.</p>
+              <p><strong>(ii) False.</strong> No student has taken both courses: Ali and Noor have not taken Algebra, and Dana has not taken Logic. In the table, no row is all T. Equivalently, the negation from part (c) holds: for every student there is a course not taken.</p>
+              <p><strong>Conclusion.</strong> This example makes (i) true and (ii) false, so (i) does not imply (ii). The order of <code>∀</code> and <code>∃</code> matters: <code>∃x ∀y</code> is stronger than <code>∀y ∃x</code>.</p>
+              <div class="marking">
+                <strong>Marking guide (10 pts).</strong>
+                <ul>
+                  <li><strong>(i) 4 pts</strong>: 1 for True, 3 for naming a student for each course.</li>
+                  <li><strong>(ii) 4 pts</strong>: 1 for False, 3 for showing every student misses some course (or that no student has both).</li>
+                  <li><strong>2 pts</strong>: stating that (i) does not imply (ii).</li>
+                </ul>
+                If your own formalisations in (b) were wrong but your evaluation is consistent with them, at most 2 pts per part.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary">
+          <strong>Summary of marks.</strong>
+          Q1.a 10 &middot; Q1.b 10 &middot; Q2.a 15 &middot; Q2.b 10 &middot; Q2.c 10 &middot; Q3.a 15 &middot; Q3.b 10 &middot; Q3.c 10 &middot; Q3.d 10. <strong>Total: 100 pts.</strong>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="page-footer">
+    <div class="container">
+      <footer class="site-footer">
+        <p class="powered-by" style="text-align: center; color: #999; font-size: 0.85rem; padding: 20px 0;">
+          Hisham Ihshaish &middot; <a href="/birzeit/comp233/" style="color: #999;">Back to COMP233</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/js/vendor-bundle.min.46271ef31da3f018e9cd1b59300aa265.js"></script>
+  <script src="/js/wowchemy-headroom.7234db6845687f82070d57159e82e4fa.js"></script>
+
+  <script>
+    'use strict';
+    var buttons = document.querySelectorAll('.solution-btn[data-toggle]');
+    function setOpen(btn, open) {
+      var sol = document.getElementById(btn.dataset.toggle);
+      sol.classList.toggle('open', open);
+      btn.classList.toggle('open', open);
+      btn.textContent = open ? 'Hide solution' : 'Show solution';
+    }
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setOpen(btn, !btn.classList.contains('open'));
+      });
+    });
+    var all = document.getElementById('toggle-all');
+    all.addEventListener('click', function () {
+      var open = all.dataset.open !== '1';
+      buttons.forEach(function (b) { setOpen(b, open); });
+      all.dataset.open = open ? '1' : '0';
+      all.textContent = open ? 'Hide all solutions' : 'Show all solutions';
+    });
+  </script>
+</body>
+</html>

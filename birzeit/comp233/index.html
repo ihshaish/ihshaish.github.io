@@ -18,7 +18,7 @@
 
   <meta name="theme-color" content="#1565c0" />
   <meta name="author" content="Hisham Ihshaish" />
-  <meta name="description" content="COMP233: Discrete Mathematics, Second Semester 2025/26, Birzeit University" />
+  <meta name="description" content="COMP233: Discrete Mathematics, First Semester 2026/27, Birzeit University" />
 
   <title>COMP233: Discrete Mathematics</title>
 
@@ -699,6 +699,21 @@
     .exam-hint i { font-size: 0.72rem; }
     body.dark .exam-hint { color: #ffab91; }
     .exam-heading[aria-expanded="true"] .exam-hint { display: none; }
+
+    /* Previous-year papers: kept for practice, visually secondary */
+    .prev-year { filter: grayscale(1); opacity: 0.75; transition: opacity 0.15s; }
+    .prev-year:hover, .prev-year:focus-within { opacity: 0.92; }
+    .prev-year .exam-heading { font-size: 1.05rem; letter-spacing: 0.8px; }
+    .prev-year .exam-block { box-shadow: none; }
+    .prev-year-tag {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      color: #fff; background: #6b7280; padding: 2px 9px; border-radius: 10px;
+    }
+    .exam-subdivider { border: 0; border-top: 1px dashed #d5d9de; margin: 22px 0 18px; }
+    body.dark .exam-subdivider { border-top-color: #333; }
+    .quick-link-list.prev-year { margin-top: 10px; }
+    .ql-prev-head { font-size: 0.7rem; font-weight: 700; color: #8a939e; text-transform: uppercase; letter-spacing: 0.5px; margin: 12px 0 4px; }
   </style>
   <script src="/birzeit/gate.js"></script>
 </head>
@@ -760,7 +775,7 @@
             <img src="/media/birzeit-university-logo.svg" alt="Birzeit University" class="course-logo">
           </a>
           <h1>COMP233: Discrete Mathematics</h1>
-          <div class="semester">Second Semester 2025/2026</div>
+          <div class="semester">First Semester 2026/2027</div>
           <div class="instructor">Hisham Ihshaish</div>
           <div class="dept">Department of Computer Science, Birzeit University</div>
         </div>
@@ -773,7 +788,8 @@
             <span class="new-pill" aria-hidden="true">New</span>
           </div>
           <ul>
-            <li class="latest"><span class="alert-date">7 Jul 2026</span><a href="#secondexam" data-quick-jump="secondexam-body">Second Exam paper with worked solutions</a> is now available; sign in with your Birzeit ID to see your own mark and feedback.</li>
+            <li class="latest"><span class="alert-date">12 Nov 2026</span><a href="#quiz1" data-quick-jump="quiz1-body">Quiz 1 (Section 4) paper, worked solutions and marking guide</a> are now available.</li>
+            <li class="prev"><span class="alert-date">7 Jul 2026</span><a href="#secondexam" data-quick-jump="secondexam-body">Second Exam paper with worked solutions</a> (Section 9, 2025/2026).</li>
             <li class="prev"><span class="alert-date">28 Jun 2026</span><a href="#ch8">Chapter 8 (Relations) &amp; Chapter 9.1&ndash;9.2 (Counting &amp; Probability)</a> &ndash; lecture slides, video recordings (Prof. Mustafa Jarrar) and the new interactive companions are now available.</li>
             <li class="prev"><span class="alert-date">7 Jun 2026</span><a href="/birzeit/comp233/COMP233_Chapter5_Companion.html" target="_blank" rel="noopener">Chapter 5 (Sequences &amp; Mathematical Induction)</a> &ndash; lecture slides and the interactive companion with worked exercises are now available.</li>
             <li class="prev"><span class="alert-date">6 Jun 2026</span><a href="/birzeit/comp233/COMP233_Chapter6_Companion.html" target="_blank" rel="noopener">Chapter 6 (Set Theory)</a> &ndash; lecture slides and the interactive companion with worked exercises are now available.</li>
@@ -811,9 +827,13 @@
             <div>
               <h4>Released This Term</h4>
               <ul class="quick-link-list">
-                <li><a href="#quiz1" data-quick-jump="quiz1-body"><span class="ql-label">Quiz #1</span><span class="ql-meta">Chapters 1&ndash;3 &middot; Released 6 May 2026</span></a></li>
-                <li><a href="#firstexam" data-quick-jump="firstexam-body"><span class="ql-label">First Exam</span><span class="ql-meta">12 May 2026 &middot; Released 14 May 2026</span></a></li>
-                <li><a href="#secondexam" data-quick-jump="secondexam-body"><span class="ql-label">Second Exam</span><span class="ql-meta">Chapters 5 &amp; 6 &middot; Released 7 July 2026</span></a></li>
+                <li><a href="#quiz1" data-quick-jump="quiz1-body"><span class="ql-label">Quiz #1</span><span class="ql-meta">Section 4 &middot; Chapters 2&ndash;3 &middot; Released 12 Nov 2026</span></a></li>
+              </ul>
+              <div class="ql-prev-head">Previous year (2025/2026)</div>
+              <ul class="quick-link-list prev-year">
+                <li><a href="#quiz1-prev" data-quick-jump="quiz1-prev-body"><span class="ql-label">Quiz #1</span><span class="ql-meta">Section 9 &middot; Chapters 1&ndash;3</span></a></li>
+                <li><a href="#firstexam" data-quick-jump="firstexam-body"><span class="ql-label">First Exam</span><span class="ql-meta">Section 9 &middot; 12 May 2026</span></a></li>
+                <li><a href="#secondexam" data-quick-jump="secondexam-body"><span class="ql-label">Second Exam</span><span class="ql-meta">Section 9 &middot; Chapters 5 &amp; 6</span></a></li>
               </ul>
             </div>
           </div>
@@ -883,29 +903,56 @@
         <!-- =============== QUIZ #1 SEPARATOR =============== -->
         <hr class="exam-divider" id="quiz1">
 
-        <h2 class="exam-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="quiz1-body" data-exam-toggle="quiz1-body">
+        <h2 class="exam-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="quiz1-body" data-exam-toggle="quiz1-body">
           <i class="fas fa-clipboard-check" style="font-size: 1.2rem;"></i>
           <span>Quiz #1</span>
-          <span class="exam-date-pill">Released 6 May 2026</span>
-          <span class="exam-weight-pill">Weight 10%</span>
+          <span class="exam-date-pill">Released 12 Nov 2026</span>
           <span class="exam-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
           <span class="exam-hint"><i class="fas fa-hand-pointer"></i> Click to expand for the paper and worked solutions</span>
         </h2>
 
-        <div class="exam-collapse" id="quiz1-body" aria-hidden="true">
+        <div class="exam-collapse" id="quiz1-body" aria-hidden="false">
           <div class="exam-block">
-            <div class="exam-tag">Section 9 &middot; Second Semester 2025/2026 &middot; Chapters 1 + 2 + 3</div>
+            <div class="exam-tag">Section 4 &middot; First Semester 2026/2027 &middot; Chapters 2 + 3</div>
             <h3>Quiz #1 &amp; Answers</h3>
             <div class="exam-meta">
-              Here is the Quiz #1 paper, covering <strong>Chapters 1, 2, and 3</strong>, with my worked solutions and the marking criteria. Work each question on paper first, then click <em>Show solution</em>.
+              Here is the Quiz #1 paper, covering <strong>Chapters 2 and 3</strong> (sections 2.1&ndash;2.3 and 3.1&ndash;3.3), with my worked solutions and the marking guide for every part. Work each question on paper first, then click <em>Show solution</em>. The paper and the answer key are also available as PDFs.
             </div>
-            <a class="exam-btn" href="/birzeit/comp233/COMP233_Quiz1.html">
+            <a class="exam-btn" href="/birzeit/comp233/COMP233_Quiz1_Sec4.html">
               <i class="fas fa-arrow-right"></i> View questions &amp; solutions
             </a>
             <div class="exam-features">
-              <span><i class="fas fa-check-circle"></i> Step-by-step simplifications</span>
-              <span><i class="fas fa-check-circle"></i> Worked truth-table tautology</span>
-              <span><i class="fas fa-check-circle"></i> Marking guide for every part</span>
+              <span><i class="fas fa-file-pdf"></i> <a href="/birzeit/comp233/COMP233_Quiz1_Sec4_Paper.pdf" target="_blank" rel="noopener">Quiz paper (PDF)</a></span>
+              <span><i class="fas fa-file-pdf"></i> <a href="/birzeit/comp233/COMP233_Quiz1_Sec4_Solutions.pdf" target="_blank" rel="noopener">Answer key &amp; marking guide (PDF)</a></span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="exam-subdivider" id="quiz1-prev">
+        <div class="prev-year">
+          <h2 class="exam-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="quiz1-prev-body" data-exam-toggle="quiz1-prev-body">
+            <i class="fas fa-clipboard-check" style="font-size: 1.2rem;"></i>
+            <span>Quiz #1</span>
+            <span class="prev-year-tag">Previous year &middot; 2025/2026</span>
+            <span class="exam-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+            <span class="exam-hint"><i class="fas fa-hand-pointer"></i> Click to expand last year&rsquo;s paper (Section 9)</span>
+          </h2>
+
+          <div class="exam-collapse" id="quiz1-prev-body" aria-hidden="true">
+            <div class="exam-block">
+              <div class="exam-tag">Section 9 &middot; Second Semester 2025/2026 &middot; Chapters 1 + 2 + 3</div>
+              <h3>Quiz #1 &amp; Answers</h3>
+              <div class="exam-meta">
+                Here is the Quiz #1 paper, covering <strong>Chapters 1, 2, and 3</strong>, with my worked solutions and the marking criteria. Work each question on paper first, then click <em>Show solution</em>.
+              </div>
+              <a class="exam-btn" href="/birzeit/comp233/COMP233_Quiz1.html">
+                <i class="fas fa-arrow-right"></i> View questions &amp; solutions
+              </a>
+              <div class="exam-features">
+                <span><i class="fas fa-check-circle"></i> Step-by-step simplifications</span>
+                <span><i class="fas fa-check-circle"></i> Worked truth-table tautology</span>
+                <span><i class="fas fa-check-circle"></i> Marking guide for every part</span>
+              </div>
             </div>
           </div>
         </div>
@@ -943,30 +990,31 @@
 
         <!-- =============== FIRST EXAM SEPARATOR =============== -->
         <hr class="exam-divider" id="firstexam">
+        <div class="prev-year">
 
-        <h2 class="exam-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="firstexam-body" data-exam-toggle="firstexam-body">
-          <i class="fas fa-file-signature" style="font-size: 1.2rem;"></i>
-          <span>First Exam</span>
-          <span class="exam-date-pill">Released 14 May 2026</span>
-          <span class="exam-weight-pill">Weight 30%</span>
-          <span class="exam-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
-          <span class="exam-hint"><i class="fas fa-hand-pointer"></i> Click to expand for the paper and worked solutions</span>
-        </h2>
+          <h2 class="exam-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="firstexam-body" data-exam-toggle="firstexam-body">
+            <i class="fas fa-file-signature" style="font-size: 1.2rem;"></i>
+            <span>First Exam</span>
+            <span class="prev-year-tag">Previous year &middot; 2025/2026</span>
+            <span class="exam-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+            <span class="exam-hint"><i class="fas fa-hand-pointer"></i> Click to expand last year&rsquo;s paper (Section 9)</span>
+          </h2>
 
-        <div class="exam-collapse" id="firstexam-body" aria-hidden="true">
-          <div class="exam-block">
-            <div class="exam-tag">Section 9 &middot; Second Semester 2025/2026</div>
-            <h3>First Exam &amp; Answers</h3>
-            <div class="exam-meta">
-              Here is the First Exam paper you sat on <strong>12 May 2026</strong>, with my worked solutions to every question and the full marking criteria. Work each question on paper first, then click <em>Show solution</em>; for Q1 click any option to check your answer.
-            </div>
-            <a class="exam-btn" href="/birzeit/comp233/COMP233_FirstExam.html">
-              <i class="fas fa-arrow-right"></i> View questions &amp; solutions
-            </a>
-            <div class="exam-features">
-              <span><i class="fas fa-check-circle"></i> MCQ with click-to-check answers</span>
-              <span><i class="fas fa-check-circle"></i> Step-by-step worked proofs</span>
-              <span><i class="fas fa-check-circle"></i> Marking guide for every part</span>
+          <div class="exam-collapse" id="firstexam-body" aria-hidden="true">
+            <div class="exam-block">
+              <div class="exam-tag">Section 9 &middot; Second Semester 2025/2026</div>
+              <h3>First Exam &amp; Answers</h3>
+              <div class="exam-meta">
+                Here is the First Exam paper you sat on <strong>12 May 2026</strong>, with my worked solutions to every question and the full marking criteria. Work each question on paper first, then click <em>Show solution</em>; for Q1 click any option to check your answer.
+              </div>
+              <a class="exam-btn" href="/birzeit/comp233/COMP233_FirstExam.html">
+                <i class="fas fa-arrow-right"></i> View questions &amp; solutions
+              </a>
+              <div class="exam-features">
+                <span><i class="fas fa-check-circle"></i> MCQ with click-to-check answers</span>
+                <span><i class="fas fa-check-circle"></i> Step-by-step worked proofs</span>
+                <span><i class="fas fa-check-circle"></i> Marking guide for every part</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1017,29 +1065,31 @@
 
         <!-- =============== SECOND EXAM SEPARATOR =============== -->
         <hr class="exam-divider" id="secondexam">
+        <div class="prev-year">
 
-        <h2 class="exam-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="secondexam-body" data-exam-toggle="secondexam-body">
-          <i class="fas fa-file-signature" style="font-size: 1.2rem;"></i>
-          <span>Second Exam</span>
-          <span class="exam-date-pill">Released 7 July 2026</span>
-          <span class="exam-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
-          <span class="exam-hint"><i class="fas fa-hand-pointer"></i> Click to expand for the paper and worked solutions</span>
-        </h2>
+          <h2 class="exam-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="secondexam-body" data-exam-toggle="secondexam-body">
+            <i class="fas fa-file-signature" style="font-size: 1.2rem;"></i>
+            <span>Second Exam</span>
+            <span class="prev-year-tag">Previous year &middot; 2025/2026</span>
+            <span class="exam-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+            <span class="exam-hint"><i class="fas fa-hand-pointer"></i> Click to expand last year&rsquo;s paper (Section 9)</span>
+          </h2>
 
-        <div class="exam-collapse" id="secondexam-body" aria-hidden="true">
-          <div class="exam-block">
-            <div class="exam-tag">Section 9 &middot; Second Semester 2025/2026 &middot; Chapters 5 &amp; 6</div>
-            <h3>Second Exam &amp; Answers</h3>
-            <div class="exam-meta">
-              Here is the Second Exam, covering <strong>Chapters 5 and 6</strong> (sequences and summation, mathematical induction, and set theory), with my worked solutions to every question. Work each question on paper first, then click <em>Show solution</em>; for Q1 click any option to check your answer. Sign in with your Birzeit ID to see your own mark and my feedback (available until 9 July).
-            </div>
-            <a class="exam-btn" href="/birzeit/comp233/COMP233_SecondExam.html">
-              <i class="fas fa-arrow-right"></i> View questions &amp; solutions
-            </a>
-            <div class="exam-features">
-              <span><i class="fas fa-check-circle"></i> MCQ with click-to-check answers</span>
-              <span><i class="fas fa-check-circle"></i> Worked induction &amp; set-theory proofs</span>
-              <span><i class="fas fa-check-circle"></i> Marking approach shown per question</span>
+          <div class="exam-collapse" id="secondexam-body" aria-hidden="true">
+            <div class="exam-block">
+              <div class="exam-tag">Section 9 &middot; Second Semester 2025/2026 &middot; Chapters 5 &amp; 6</div>
+              <h3>Second Exam &amp; Answers</h3>
+              <div class="exam-meta">
+                Here is the Second Exam, covering <strong>Chapters 5 and 6</strong> (sequences and summation, mathematical induction, and set theory), with my worked solutions to every question. Work each question on paper first, then click <em>Show solution</em>; for Q1 click any option to check your answer.
+              </div>
+              <a class="exam-btn" href="/birzeit/comp233/COMP233_SecondExam.html">
+                <i class="fas fa-arrow-right"></i> View questions &amp; solutions
+              </a>
+              <div class="exam-features">
+                <span><i class="fas fa-check-circle"></i> MCQ with click-to-check answers</span>
+                <span><i class="fas fa-check-circle"></i> Worked induction &amp; set-theory proofs</span>
+                <span><i class="fas fa-check-circle"></i> Marking approach shown per question</span>
+              </div>
             </div>
           </div>
         </div>
